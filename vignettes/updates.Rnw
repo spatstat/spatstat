@@ -2289,6 +2289,12 @@ of potential impact.
    due to a mathematical error.
    \bugger{1.51-0}{may 2017}{1.55-1}{april 2018}
 
+    \item \texttt{Ops.msr}:
+    If the input data contained a pixel image of the smoothed density,
+    this image was not updated; it was copied to the output unchanged.
+    Plots of the resulting measure were incorrect. 
+    \bugger{1.52-0}{august 2017}{1.55-1}{april 2018}
+
   \item \verb![.linnet!: 
     in calculating \verb!L[W]! where \texttt{W} is a window,
     the code ignored segments of \code{L} that crossed \code{W}

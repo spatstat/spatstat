@@ -112,6 +112,8 @@ as.solist <- function(x, ...) {
   return(do.call(solist, append(x, list(...))))
 }
 
+is.solist <- function(x) inherits(x, "solist")
+
 print.solist <- function (x, ...) {
   what <- if(inherits(x, "ppplist")) "point patterns" else
           if(inherits(x, "imlist")) "pixel images" else "spatial objects"
@@ -178,6 +180,8 @@ as.ppplist <- function(x, check=TRUE) {
   return(x)
 }
 
+is.ppplist <- function(x) inherits(x, "ppplist")
+
 as.imlist <- function(x, check=TRUE) {
   if(check) {
     x <- as.solist(x, promote=TRUE, check=TRUE)
@@ -187,6 +191,8 @@ as.imlist <- function(x, check=TRUE) {
   class(x) <- unique(c("imlist", "solist", "anylist", "listof", class(x)))
   return(x)
 }
+
+is.imlist <- function(x) inherits(x, "imlist")
 
 # --------------- counterparts of 'lapply' --------------------
 

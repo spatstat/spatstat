@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.55-0.034
+        CHANGES IN spatstat VERSION 1.55-0.036
 
 OVERVIEW
 
@@ -78,6 +78,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o persp.funxy
     Improved z-axis label.
+
+    o plot.msr
+    Changed the default rule for bandwidth for smoothing the density.
     
 BUG FIXES
 
@@ -88,6 +91,12 @@ BUG FIXES
 
     o leverage.ppm, influence.ppm, dfbetas.ppm
     Calculations were slightly incorrect for models with a hard core.
+    Fixed.
+
+    o Ops.msr
+    If the input data contained a pixel image of the smoothed density,
+    this image was not updated; it was copied to the output unchanged.
+    Plots of the resulting measure were incorrect. 
     Fixed.
     
     o integral.msr

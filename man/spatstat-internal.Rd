@@ -243,6 +243,7 @@
 \alias{is.expandable.rmhmodel}
 \alias{is.fv}
 \alias{is.hyperframe}
+\alias{is.imlist}
 \alias{is.infline}
 \alias{is.interact}
 \alias{is.marked.default}    
@@ -254,12 +255,14 @@
 \alias{is.multitype.quad}    
 \alias{is.multitype.default}    
 \alias{is.poisson.mppm}
+\alias{is.ppplist}
 \alias{is.pp3}
 \alias{is.ppx}
 \alias{is.psp}
 \alias{is.quad}
 \alias{is.scov}
 \alias{is.sob}
+\alias{is.solist}
 \alias{is.tess}
 \alias{is.vanilla}
 \alias{k3engine}
@@ -784,7 +787,7 @@ as.breakpts(\dots)
 as.listof(x)
 \method{as.owin}{lintess}(W, \dots)
 as.unitname(s)
-augment.msr(x, \dots, sigma)
+augment.msr(x, \dots, sigma, recompute)
 avenndist(X)
 BartCalc(fY, fK)
 bbEngine(\dots)
@@ -1034,6 +1037,7 @@ is.expandable(x)
 \method{is.expandable}{rmhmodel}(x) 
 is.fv(x)
 is.hyperframe(x)
+is.imlist(x)
 is.infline(x)
 is.interact(x)
 \method{is.marked}{default}(\dots)  
@@ -1045,11 +1049,13 @@ is.mppm(x)
 \method{is.multitype}{msr}(X, \dots)
 \method{is.multitype}{quad}(X, na.action="warn", \dots)
 \method{is.poisson}{mppm}(x)
+is.ppplist(x)
 is.pp3(x)
 is.ppx(x)
 is.psp(x)
 is.quad(x)
 is.scov(x)
+is.solist(x)
 is.sob(x)
 is.tess(x)
 is.vanilla(u)

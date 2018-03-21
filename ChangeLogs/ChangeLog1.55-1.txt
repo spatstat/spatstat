@@ -711,7 +711,6 @@ Change log from 1.55-0 to 1.55-1
 	
    DESCRIPTION
    NEWS
-   Nickname.txt
         version 1.55-0.034
 	
 ------------- passed R-3.4.3 CMD check ---------------
@@ -719,3 +718,36 @@ Change log from 1.55-0 to 1.55-1
 ------------- committed to GitHub      ---------------
 
 
+21 mar 2018
+
+   measures.R
+        Changed default rule for smoothing bandwidth in augment.msr
+	Save value of smoothing bandwidth in augment.msr
+
+   DESCRIPTION
+   NEWS
+        version 1.55-0.035
+	
+------------- passed R-3.4.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+21 mar 2018
+
+   measures.R
+	Bug fix in Ops.msr
+	
+   measures.R
+   spatstat-internal.Rd
+	augment.msr has new argument 'recompute'
+
+   updates.Rnw
+	updated to cover all the above.
+	
+   DESCRIPTION
+   NEWS
+        version 1.55-0.036
+	
+------------- passed R-3.4.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
