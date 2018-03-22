@@ -1,7 +1,7 @@
 ##
 ## symbolmap.R
 ##
-##   $Revision: 1.35 $  $Date: 2017/08/31 08:48:24 $
+##   $Revision: 1.36 $  $Date: 2018/03/22 00:46:09 $
 ##
 
 symbolmap <- local({
@@ -143,6 +143,15 @@ symbolmap <- local({
 })
 
 symbolmaptype <- function(x) { attr(x, "stuff")$type }
+
+symbolmapdomain <- function(x) {
+  stuff <- attr(x, "stuff")
+  d <- switch(stuff$type,
+              constant = { integer(0) },
+              discrete = { stuff$inputs },
+              continuous = { stuff$range })
+  return(d)
+}
 
 update.symbolmap <- function(object, ...) {
   y <- attr(object, "stuff")

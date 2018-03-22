@@ -650,6 +650,7 @@
 \alias{summary.vblogit}
 \alias{sumsymouter}
 \alias{superimposeMarks}
+\alias{symbolmapdomain}
 \alias{symbolmaptype}
 \alias{tail.hyperframe}
 \alias{tensor1x1}
@@ -1534,6 +1535,7 @@ summarise.trend(trend, w, a)
 \method{summary}{vblogit}(object, \dots)
 sumsymouter(x, w)
 superimposeMarks(arglist, nobj)
+symbolmapdomain(x)
 symbolmaptype(x)
 \method{tail}{hyperframe}(x,n,\dots)
 tensor1x1(A,B)

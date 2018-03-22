@@ -1,7 +1,7 @@
 #
 #	plot.ppp.R
 #
-#	$Revision: 1.94 $	$Date: 2017/12/30 04:46:55 $
+#	$Revision: 1.95 $	$Date: 2018/03/22 00:46:59 $
 #
 #
 #--------------------------------------------------------------------------
@@ -333,7 +333,7 @@ plot.ppp <- local({
   legend <- legend && (symbolmaptype(symap) != "constant") 
   if(legend) {
     ## guess maximum size of symbols
-    maxsize <- invoke.symbolmap(symap, marx,
+    maxsize <- invoke.symbolmap(symap, symbolmapdomain(symap),
                                 corners(as.rectangle(x)),
                                 add=add, do.plot=FALSE)
     sizeguess <- if(maxsize <= 0) NULL else (1.5 * maxsize)

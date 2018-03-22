@@ -763,3 +763,22 @@ Change log from 1.55-0 to 1.55-1
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+22 mar 2018
+
+   symbolmap.R
+   spatstat-internal.Rd
+	New internal function 'symbolmapdomain'
+
+   plot.ppp.R
+	Improved placement of symbol legend for non-default symbol map
+
+   DESCRIPTION
+   NEWS
+   Nickname.txt
+        Nickname 'Potatorship'
+        version 1.55-0.038
+	
+------------- passed R-3.4.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+ 

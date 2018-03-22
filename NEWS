@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.55-0.037
+        CHANGES IN spatstat VERSION 1.55-0.038
 
 OVERVIEW
 
@@ -15,7 +15,7 @@ OVERVIEW
     
     o Minor improvements and bug fixes.
 
-    o Version nickname: "Pierce in Two Places With a Fork"
+    o Version nickname: "Potatorship"
 
 NEW FUNCTIONS
 
@@ -79,6 +79,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o persp.funxy
     Improved z-axis label.
 
+    o plot.ppp
+    Improved placement of symbol legend when argument 'symap' is given.
+    
     o plot.msr
     Changed the default rule for bandwidth for smoothing the density.
     
@@ -94,9 +97,11 @@ BUG FIXES
     Fixed.
 
     o Ops.msr
-    If the input data contained a pixel image of the smoothed density,
+    If the input data contained an auxiliary pixel image of
+    the density component of the measure (attribute "smoothdensity")
     this image was not updated; it was copied to the output unchanged.
-    Plots of the resulting measure were incorrect. 
+    Plots of the resulting measure were incorrect, but calculations
+    with the measure were correct.
     Fixed.
     
     o integral.msr
