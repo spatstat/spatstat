@@ -56,6 +56,11 @@
   The faster function \code{countends} simply counts the number of
   points in the relative boundary.
 
+  Note that \code{countends} requires the linear network \code{L}
+  to be given in the non-sparse matrix format (see the argument
+  \code{sparse} in \code{\link{linnet}} or \code{\link{as.linnet}})
+  while \code{lineardisc} accepts both sparse and non-sparse formats.
+
   The optional threshold \code{toler} is used to suppress numerical
   errors in \code{countends}.
   If the distance from \eqn{u} to a network vertex \eqn{v}
@@ -69,6 +74,7 @@
   \item{endpoints}{Point pattern (object of class \code{"ppp"})
     representing the relative boundary of the disc.
   }
+  
   The value of \code{countends} is an integer giving the number of
   points in the relative boundary.
 }

@@ -1,9 +1,9 @@
 
-        CHANGES IN spatstat VERSION 1.55-0.038
+        CHANGES IN spatstat VERSION 1.55-0.039
 
 OVERVIEW
 
-    o We thank Jens Astrom and Ines Moncada for contributions.
+    o We thank Jens Astrom, Ines Moncada and Mehdi Moradi for contributions.
     
     o Some code runs faster.
 

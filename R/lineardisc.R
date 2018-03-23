@@ -2,7 +2,7 @@
 #
 #   disc.R
 #
-#   $Revision: 1.27 $ $Date: 2017/06/05 10:31:58 $
+#   $Revision: 1.28 $ $Date: 2018/03/23 01:26:43 $
 #
 #   Compute the disc of radius r in a linear network
 #
@@ -149,6 +149,12 @@ countends <- function(L, x=locator(1), r, toler=NULL) {
   # r is the radius of the disc
   #
   stopifnot(inherits(L, "linnet"))
+  sparse <- L$sparse %orifnull% is.null(L$dpath)
+  if(sparse)
+    stop(paste("countends() does not support linear networks",
+               "that are stored in sparse matrix format.",
+               "Please convert the data using as.linnet(sparse=FALSE)"),
+         call.=FALSE)
   # get x
   if(missing(x))
     x <- clickppp(1, Window(L), add=TRUE)
