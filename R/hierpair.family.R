@@ -326,6 +326,7 @@ return(V)
         #'  and therefore changes status if X[i] is deleted.
         deltaInf <- M
         deltaInf[, hits != 1] <- FALSE
+        attr(result, "deltaInf") <- deltaInf
       }
     } else if(is.quad(X)) {
       U <- union.quad(X)
@@ -363,9 +364,9 @@ return(V)
         #'     U[i] is a dummy point,
         #'     U[j] has no conflicts with X.
         deltaInf[!izdat, nhitdata != 0] <- FALSE
+        attr(result, "deltaInf") <- deltaInf
       }
     }
-    attr(result, "deltaInf") <- deltaInf
     return(result)
   }
 ######### end of function $delta2

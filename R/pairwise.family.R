@@ -2,7 +2,7 @@
 #
 #    pairwise.family.S
 #
-#    $Revision: 1.69 $	$Date: 2018/03/13 06:26:16 $
+#    $Revision: 1.70 $	$Date: 2018/03/27 08:42:43 $
 #
 #    The pairwise interaction family of point process models
 #
@@ -417,6 +417,8 @@ return(V)
         #'  and therefore changes status if X[i] is deleted.
         deltaInf <- M
         deltaInf[, hits != 1] <- FALSE
+        #' 
+        attr(result, "deltaInf") <- deltaInf
       }
     } else if(is.quad(X)) {
       U <- union.quad(X)
@@ -454,9 +456,10 @@ return(V)
         #'     U[i] is a dummy point,
         #'     U[j] has no conflicts with X.
         deltaInf[!izdat, nhitdata != 0] <- FALSE
+        #'
+        attr(result, "deltaInf") <- deltaInf
       }
     }
-    attr(result, "deltaInf") <- deltaInf
     return(result)
   }
 ######### end of function $delta2
