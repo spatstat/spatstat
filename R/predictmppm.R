@@ -1,7 +1,7 @@
 #
 #    predictmppm.R
 #
-#	$Revision: 1.9 $	$Date: 2015/10/21 09:06:57 $
+#	$Revision: 1.10 $	$Date: 2018/03/28 07:41:06 $
 #
 #
 # -------------------------------------------------------------------
@@ -144,7 +144,7 @@ predict.mppm <- local({
         if(length(vnames) > 0)
           newdata[, vnames] <- 0
         ## compute fitted values
-        answer$trend <- predict(FIT, newdata=newdata, type="response")
+        answer$trend <- Predict(FIT, newdata=newdata, type="response")
       }
       if(want.cif) {
         warning("Not yet implemented (computation of cif in data frame case)")
@@ -263,18 +263,18 @@ predict.mppm <- local({
       cat("(glm prediction)...")
     values <- moadf[, c("x", "y", "id")]
     if(want.cif)
-      values$cif <- predict(FIT, newdata=moadf, type="response")
+      values$cif <- Predict(FIT, newdata=moadf, type="response")
     if(want.trend) {
       if(length(vnames) == 0) {
         ## Poisson model: trend = cif 
         values$trend <-
           if(want.cif) values$cif else
-          predict(FIT, newdata=moadf, type="response")
+          Predict(FIT, newdata=moadf, type="response")
       } else {
         ## zero the interaction components
         moadf[, vnames] <- 0
         ## compute fitted values
-        values$trend <- predict(FIT, newdata=moadf, type="response")
+        values$trend <- Predict(FIT, newdata=moadf, type="response")
       }
     }
     if(verbose)
@@ -364,6 +364,18 @@ predict.mppm <- local({
     xpredict <- xx[M$m]
     ypredict <- yy[M$m]
     return(ppp(xpredict, ypredict, window=M))
+  }
+
+  Predict <- function(object, newdata, type=c("link", "response")) {
+    type <- match.arg(type)
+    if(inherits(object, "glmmPQL")) {
+      class(object) <- class(object)[-1L]
+      pred <- predict(object, newdata=newdata)
+      if(type == "response") pred <- object$family$linkinv(pred)
+    } else {
+      pred <- predict(object, newdata=newdata, type=type)
+    }
+    return(pred)
   }
   
   predict.mppm

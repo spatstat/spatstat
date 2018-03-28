@@ -1,9 +1,9 @@
 
-        CHANGES IN spatstat VERSION 1.55-0.040
+        CHANGES IN spatstat VERSION 1.55-0.041
 
 OVERVIEW
 
-    o We thank Jens Astrom, Ines Moncada and Mehdi Moradi for contributions.
+    o We thank Jens Astrom, Ines Moncada, Mehdi Moradi and Nicholas Read for contributions.
     
     o Some code runs faster.
 
@@ -15,7 +15,7 @@ OVERVIEW
     
     o Minor improvements and bug fixes.
 
-    o Version nickname: "Potatorship"
+    o Version nickname: "Open Other End"
 
 NEW FUNCTIONS
 
@@ -92,6 +92,12 @@ BUG FIXES
     the results were completely incorrect (and had completely wrong format).
     Fixed.
 
+    o predict.mppm
+    If the model included random effects, and if the library 'MASS' was not loaded,
+    the predictions were on the log scale (i.e. they were logarithms of the correct values).
+    [Spotted by Nicholas Read.]
+    Fixed.
+    
     o leverage.ppm, influence.ppm, dfbetas.ppm
     Calculations were slightly incorrect for models with a hard core.
     Fixed.

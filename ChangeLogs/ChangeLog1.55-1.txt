@@ -814,3 +814,22 @@ Change log from 1.55-0 to 1.55-1
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
++++++++++++++  passed 'make bookcheck'  ++++++++++++++
+
+28 mar 2018
+
+   predictmppm.R
+	Bug fix affecting random effects models.
+	[Thanks to Nick Read]
+
+   DESCRIPTION
+   NEWS
+   Nickname.txt
+	Nickname: "Open Other End"
+        Acknowledged Nick Read
+        version 1.55-0.041
+	
+------------- passed R-3.4.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
