@@ -833,3 +833,21 @@ Change log from 1.55-0 to 1.55-1
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+   tests/vcovppm.R 
+   tests/deltasuffstat.R [New file]
+	More tests of 'deltasuffstat' algorithms
+
+   hierpair.family.R
+	Disabled the $delta2 algorithm as it may be incorrect
+
+   DESCRIPTION
+   NEWS
+        version 1.55-0.042
+	
+------------- passed R-3.4.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+   
+
+

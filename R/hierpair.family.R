@@ -2,7 +2,7 @@
 #
 #    hierpair.family.R
 #
-#    $Revision: 1.7 $	$Date: 2018/03/15 08:51:50 $
+#    $Revision: 1.8 $	$Date: 2018/03/28 08:50:19 $
 #
 #    The family of hierarchical pairwise interactions
 #
@@ -299,7 +299,8 @@ return(V)
   return(result)
   },
 ######### end of function $suffstat
-  delta2 = function(X, inte, correction, ...) {
+  WRONGdelta2 = function(X, inte, correction, ...) {
+  # THE FOLLOWING CODE MAY BE MATHEMATICALLY INCORRECT so it has been disabled
   # Sufficient statistic for second order conditional intensity
   # for hierarchical pairwise interaction processes
   # Equivalent to evaluating pair potential.

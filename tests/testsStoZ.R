@@ -562,7 +562,7 @@ local({
 #
 #  Thanks to Ege Rubak
 #
-#  $Revision: 1.8 $  $Date: 2018/02/01 04:22:12 $
+#  $Revision: 1.9 $  $Date: 2018/03/28 08:41:20 $
 #
 
 require(spatstat)
@@ -638,16 +638,7 @@ local({
   ## Test that 'deltasuffstat' works for Hybrids
   modelHyb <- ppm(japanesepines ~ 1, Hybrid(Strauss(0.05), Strauss(0.1)))
   vHyb <- vcov(modelHyb)
-  
-  ## Compare 'deltasuffstat' algorithms
-  modelS <- ppm(cells ~ x, Strauss(0.13), nd=10)
-  dSS <- deltasuffstat(modelS, sparseOK=TRUE)
-  dBS <- deltasuffstat(modelS, sparseOK=TRUE,  use.special=FALSE, force=TRUE)
-  dBF <- deltasuffstat(modelS, sparseOK=FALSE, use.special=FALSE, force=TRUE)
-  if(disagree(dBS, dSS))
-    stop("Brute force algorithm disagrees with special algorithm")
-  if(disagree(dBF, dBS))
-    stop("Sparse and full versions of brute force algorithm disagree")
+
 })
 #
 # tests/windows.R

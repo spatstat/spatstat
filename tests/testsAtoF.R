@@ -203,6 +203,43 @@ local({
     stop("Algorithms for whist disagree")
   spatstat.options(op)
 })
+#'
+#'    tests/deltasuffstat.R
+#' 
+#'    Explicit tests of 'deltasuffstat'
+#' 
+#' $Revision: 1.2 $ $Date: 2018/03/28 09:04:06 $
+
+require(spatstat)
+local({
+  
+  disagree <- function(x, y, tol=1e-7) { !is.null(x) && !is.null(y) && max(abs(x-y)) > tol }
+
+  flydelta <- function(model, modelname="") {
+    ## Check execution of different algorithms for 'deltasuffstat' 
+    dSS <- deltasuffstat(model, sparseOK=TRUE)
+    dBS <- deltasuffstat(model, sparseOK=TRUE,  use.special=FALSE, force=TRUE)
+    dBF <- deltasuffstat(model, sparseOK=FALSE, use.special=FALSE, force=TRUE)
+    ## Compare results
+    if(disagree(dBS, dSS))
+      stop(paste(modelname, "model: Brute force algorithm disagrees with special algorithm"))
+    if(disagree(dBF, dBS))
+      stop(paste(modelname, "model: Sparse and full versions of brute force algorithm disagree"))
+    return(invisible(NULL))
+  }
+
+  modelS <- ppm(cells ~ x, Strauss(0.13), nd=10)
+  flydelta(modelS, "Strauss")
+
+  antsub <- ants[c(FALSE,TRUE,FALSE)]
+  rmat <- matrix(c(130, 90, 90, 60), 2, 2)
+  
+  modelM <- ppm(antsub ~ 1, MultiStrauss(rmat), nd=16)
+  flydelta(modelM, "MultiStrauss")
+                
+  modelA <- ppm(antsub ~ 1, HierStrauss(rmat, archy=c(2,1)), nd=16)
+  flydelta(modelA, "HierStrauss")
+})
 #
 #  tests/density.R
 #
