@@ -2,7 +2,7 @@
 #
 #    hierpair.family.R
 #
-#    $Revision: 1.8 $	$Date: 2018/03/28 08:50:19 $
+#    $Revision: 1.10 $	$Date: 2018/03/29 04:35:18 $
 #
 #    The family of hierarchical pairwise interactions
 #
@@ -299,8 +299,7 @@ return(V)
   return(result)
   },
 ######### end of function $suffstat
-  WRONGdelta2 = function(X, inte, correction, ...) {
-  # THE FOLLOWING CODE MAY BE MATHEMATICALLY INCORRECT so it has been disabled
+  delta2 = function(X, inte, correction, ...) {
   # Sufficient statistic for second order conditional intensity
   # for hierarchical pairwise interaction processes
   # Equivalent to evaluating pair potential.
@@ -308,16 +307,18 @@ return(V)
       seqX <- seq_len(npoints(X))
       E <- cbind(seqX, seqX)
       R <- reach(inte)
-      result <- hierpair.family$eval(X,X,E,
-                                     inte$pot,inte$par,
-                                     correction,
-                                     pot.only=TRUE,
-                                     Reach=R, splitInf=TRUE)
-      M <- attr(result, "IsNegInf")
+      POT <- hierpair.family$eval(X,X,E,
+                                  inte$pot,inte$par,
+                                  correction,
+                                  pot.only=TRUE,
+                                  Reach=R, splitInf=TRUE)
+      result <- aperm(POT, c(2,1,3))
+      M <- attr(POT, "IsNegInf")
       if(!is.null(M)) {
         #' validate
         if(length(dim(M)) != 3)
           stop("Internal error: IsNegInf is not a 3D array")
+        M <- aperm(M, c(2,1,3))
         #' collapse vector-valued potential, yielding a matrix
         M <- apply(M, c(1,2), any)
         if(!is.matrix(M)) M <- matrix(M, nrow=nX)
@@ -337,16 +338,18 @@ return(V)
       seqU <- seq_len(nU)
       E <- cbind(seqU, seqU)
       R <- reach(inte)
-      result <- hierpair.family$eval(U,U,E,
-                                     inte$pot,inte$par,
-                                     correction,
-                                     pot.only=TRUE,
-                                     Reach=R, splitInf=TRUE)
-      M <- attr(result, "IsNegInf")
+      POT <- hierpair.family$eval(U,U,E,
+                                  inte$pot,inte$par,
+                                  correction,
+                                  pot.only=TRUE,
+                                  Reach=R, splitInf=TRUE)
+      result <- aperm(POT, c(2,1,3))
+      M <- attr(POT, "IsNegInf")
       if(!is.null(M)) {
         #' validate
         if(length(dim(M)) != 3)
           stop("Internal error: IsNegInf is not a 3D array")
+        M <- aperm(M, c(2,1,3))
         #' consider conflicts with data points
         MXU <- M[izdat, , , drop=FALSE]
         #' collapse vector-valued potential, yielding a matrix

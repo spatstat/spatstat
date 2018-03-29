@@ -848,6 +848,22 @@ Change log from 1.55-0 to 1.55-1
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+ 29 march 2018
+ 
+   hierpair.family.R
+	Fixed $delta2 and reinstated it
+
+   DESCRIPTION
+   NEWS
+   Nickname.txt
+        Nickname 'Ground Effect'
+        version 1.55-0.043
+	
+------------- passed R-3.4.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+	
    
 
 
