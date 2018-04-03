@@ -891,5 +891,16 @@ Change log from 1.55-0 to 1.55-1
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+   updates.Rnw
+	Rearranged the section about bug fixes.
+	Mentioned the command 'bugfixes'.
+
+   DESCRIPTION
+   NEWS
+        version 1.55-0.045
+
+------------- passed R-3.4.4 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
 
 

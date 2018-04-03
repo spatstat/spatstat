@@ -34,9 +34,6 @@ options(useFancyQuotes=FALSE)
 This is a summary of changes that have been made 
 to the \spst\ package since the publication of the 
 accompanying book \cite{baddrubaturn15}.
-The book, published in December 2015,
-covers everything in \spst\ up to version \texttt{1.42-0}, 
-released in May 2015.
 
 <<echo=FALSE,results=hide>>=
 readSizeTable <- function(fname) {
@@ -72,12 +69,16 @@ newobj <- changes[["nobjects"]]
 newdat <- changes[["ndatasets"]] + 1  # counting rule doesn't detect redwood3
 @ %$
 
+The book \cite{baddrubaturn15}, published in December 2015,
+covers everything in \spst\ up to version \texttt{1.42-0}, 
+released in May 2015.
 The current version of \spst\ is \texttt{\Sexpr{sversion}}.
 It contains \Sexpr{newobj} new functions
 and \Sexpr{newdat} new datasets
-introduced after May 2015. This document summarises the most important changes.
+introduced after May 2015. 
 
-This document also lists all \emph{important} bugs detected \emph{since 2010}.
+This document summarises the most important changes.
+It also lists all \emph{important} bugs detected \emph{since 2010}.
 
 <<echo=FALSE,results=hide,fig=FALSE>>=
 options(SweaveHooks=list(fig=function() par(mar=0.2+c(2,4,2,0))))
@@ -2097,15 +2098,29 @@ nbugssince <- nrow(news(Version > "1.42-0" & grepl("^BUG", Category),
                    package="spatstat"))
 @ 
 
-Hundreds of bugs have been detected and fixed in \spst.
+\subsection{Bug history}
+
+Thousands of bugs have been detected and fixed in \spst.
 Bugs that may have affected the user are listed in the 
-package \texttt{NEWS} file. To read all these bug reports, type
+package \texttt{NEWS} file, and can be searched
+using the \R\ command \texttt{news} or the \spst\ command \texttt{bugfixes}. 
+To see all bugs in the history of \spst\ that may have affected the user, type
 <<eval=FALSE>>=
-news(grepl("^BUG", Category), package="spatstat")
+bugfixes
 @ 
 which currently produces a list of \Sexpr{nbugs} bugs,
 of which \Sexpr{nbugssince} were detected after publication of the
 book \cite{baddrubaturn15}.
+To see all bugs in \spst\ that were fixed after 30 June 2017, type
+<<eval=FALSE>>=
+bugfixes(sincedate="2017-06-30")
+@ 
+To see all bugs fixed after the book \cite{baddrubaturn15} was written, type
+<<eval=FALSE>>=
+bugfixes(sinceversion="1.42-0")
+@ 
+
+\subsection{Bug history}
 
 Following is a list of the {\bf most serious bugs} only, in order
 of potential impact.
@@ -2115,11 +2130,11 @@ of potential impact.
   {\small (Bug introduced in \texttt{spatstat {#1}}, {#2}; %
     fixed in \texttt{spatstat {#3}}, {#4})}%
 }
-  
+
+  %%% LEVEL 1
+\subsubsection{Serious Bugs, Always Wrong, Broad Impact} 
+
 \begin{itemize}
-  
-  %% LEVEL 1: always completely wrong, broad impact
-  
 \item \texttt{nncross.ppp}:
   Results were completely incorrect if $k > 1$.
   \bugger{1.31-2}{april 2013}{1.35-0}{december 2013}
@@ -2217,8 +2232,12 @@ of potential impact.
    due to a mathematical error.
    \bugger{1.25-0}{december 2011}{1.51-0}{may 2017}
 
-   %% LEVEL 2: often completely wrong, moderate impact
-   
+ \end{itemize}
+ 
+  %%% LEVEL 2
+ \subsubsection{Serious Bugs, Often Completely Wrong, Moderate Impact}
+
+ \begin{itemize}
  \item \texttt{bw.pcf}:
    Results were totally incorrect due to a typo.
    \bugger{1.51-0}{may 2017}{1.52-0}{august 2017}   
@@ -2307,9 +2326,12 @@ of potential impact.
     the code ignored segments of \code{L} that crossed \code{W}
     without having a vertex in \code{W}.
     \bugger{1.53-0}{september 2017}{1.55-1}{april 2015}
+  \end{itemize}
+  
+  %%% LEVEL 3
+  \subsubsection{Bugs, Substantially Incorrect, Moderate Impact}
 
-  %% LEVEL 3: substantially incorrect, moderate impact
-
+  \begin{itemize}
    \item \texttt{simulate.dppm}, \texttt{simulate.detpointprocfamily}:
     In dimensions higher than 2, the result was shifted so that
     it was centred at the origin.
@@ -2369,8 +2391,11 @@ of potential impact.
    Did not correctly handle one-line functions. 
    The resulting objects evaluated the wrong function in some cases.
    \bugger{1.45-0}{march 2016}{1.46-0}{july 2016}   
+ \end{itemize}   
 
-%% LEVEL 4: partially incorrect
+ %% LEVEL 4: 
+ \subsubsection{Partially Incorrect}
+ \begin{itemize}
    
  \item \texttt{model.matrix.ppm}:
    The attribute \texttt{assign} was omitted in some cases.
@@ -2561,7 +2586,6 @@ of potential impact.
   \item \verb![.linim!: the result sometimes had the wrong class.
   \bugger{1.53-0}{september 2017}{1.55-1}{april 2015}
 \end{itemize}
-
 
 \begin{thebibliography}{1}
 \bibitem{badd10wshop}
