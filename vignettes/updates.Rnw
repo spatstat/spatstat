@@ -1623,16 +1623,18 @@ also carries these marks in the \verb!$lines! component.
      \item  The default colour for the points is now a transparent grey,
        if this is supported by the plot device.
      \item For a point pattern with continuous marks (``real numbers'')
-    the colour arguments \texttt{cols}, \texttt{fg}, \texttt{bg} can now 
-    be vectors of colour values, and will be used to determine
-    the default colour map for the marks.
-  \item Now recognises graphics parameters for text, such as 
-    \texttt{family} and \texttt{srt}
-  \item 
-    When \texttt{clipwin} is given, any parts of the boundary 
-    of the window of \texttt{x} that lie inside \texttt{clipwin} 
-    will also be plotted.
-  \end{itemize}
+       the colour arguments \texttt{cols}, \texttt{fg}, \texttt{bg} can now 
+       be vectors of colour values, and will be used to determine
+       the default colour map for the marks.
+     \item Now recognises graphics parameters for text, such as 
+       \texttt{family} and \texttt{srt}
+     \item 
+       When \texttt{clipwin} is given, any parts of the boundary 
+       of the window of \texttt{x} that lie inside \texttt{clipwin} 
+       will also be plotted.
+     \item 
+       Improved placement of symbol map legend when argument \texttt{symap} is given.
+     \end{itemize}
 
   \item \code{plot.tess}:
     This plot method can now fill each tile with a different colour.
@@ -2220,6 +2222,11 @@ of potential impact.
  \item \texttt{bw.pcf}:
    Results were totally incorrect due to a typo.
    \bugger{1.51-0}{may 2017}{1.52-0}{august 2017}   
+
+ \item \texttt{predict.mppm}:
+   If the model included random effects, and if the library \pkg{MASS} was not loaded,
+   the predictions were on the log scale (i.e.\ they were logarithms of the correct values).
+   \bugger{1.43-0}{october 2015}{1.55-1}{april 2018}   
    
  \item \texttt{nnmap}, \texttt{nnmark}:
    Values were incorrect if the resulting pixel image

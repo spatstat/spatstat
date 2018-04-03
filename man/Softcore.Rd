@@ -35,7 +35,8 @@ which can then be fitted to point pattern data.
     exp( - (sigma/d)^(2/kappa) )
   }
   to the density, where \eqn{d} is the distance between the two points.
-
+  See the Examples for a plot of this interaction curve.
+  
   Thus the process has probability density
   \deqn{
     f(x_1,\ldots,x_n) =
@@ -54,20 +55,36 @@ which can then be fitted to point pattern data.
   over all unordered pairs of points of the pattern. 
 
   This model describes an ``ordered'' or ``inhibitive'' process,
-  with the interpoint interaction decreasing smoothly with distance.
-  The strength of interaction is controlled by the
-  parameter \eqn{\sigma}{sigma}, a positive real number,
-  with larger values corresponding
-  to stronger interaction; and by the exponent \eqn{\kappa}{kappa}
-  in the range \eqn{(0,1)}, with larger values corresponding to
-  weaker interaction.
-  If \eqn{\sigma = 0}{sigma = 0}
-  the model reduces to the Poisson point process.
-  If \eqn{\sigma > 0}{sigma > 0},
-  the process is well-defined only for \eqn{\kappa}{kappa} in \eqn{(0,1)}.
-  The limit of the model as \eqn{\kappa \to 0}{kappa -> 0} is the
-  hard core process with hard core distance \eqn{h=\sigma}{h=sigma}.
- 
+  with the strength of inhibition decreasing smoothly with distance.
+  The interaction is controlled by the parameters \eqn{\sigma}{sigma}
+  and \eqn{\kappa}{kappa}.
+  \itemize{
+    \item
+    The \emph{spatial scale} of interaction is controlled by the
+    parameter \eqn{\sigma}{sigma}, which is a positive real number
+    interpreted as a distance, expressed in the same units of distance as
+    the spatial data. The parameter \eqn{\sigma}{sigma} is the distance at which the
+    pair potential reaches the threshold value 0.37.
+    \item
+    The \emph{shape} of the interaction function
+    is controlled by the exponent
+    \eqn{\kappa}{kappa} which is a dimensionless number
+    in the range \eqn{(0,1)}, with larger values corresponding to
+    a flatter shape (or a more gradual decay rate).
+    The process is well-defined only for \eqn{\kappa}{kappa} in
+    \eqn{(0,1)}.
+    The limit of the model as \eqn{\kappa \to 0}{kappa -> 0} is the
+    hard core process with hard core distance \eqn{h=\sigma}{h=sigma}.
+    \item
+    The \dQuote{strength} of the interaction is determined by both of the
+    parameters \eqn{\sigma}{sigma} and \eqn{\kappa}{kappa}.
+    The larger the value of \eqn{\kappa}{kappa}, the wider the range of
+    distances over which the interaction has an effect.
+    If \eqn{\sigma}{sigma} is very small, the interaction is very weak
+    for all practical purposes (theoretically if \eqn{\sigma = 0}{sigma = 0}
+    the model reduces to the Poisson point process).
+  }
+  
   The nonstationary Soft Core process is similar except that 
   the contribution of each individual point \eqn{x_i}{x[i]}
   is a function \eqn{\beta(x_i)}{beta(x[i])}
@@ -114,15 +131,22 @@ which can then be fitted to point pattern data.
   \bold{46}, 496--518.
 }
 \examples{
-   data(cells) 
-   ppm(cells, ~1, Softcore(kappa=0.5), correction="isotropic")
-   # fit the stationary Soft Core process to `cells'
+   # fit the stationary Soft Core process to `cells' 
+   fit5 <- ppm(cells ~1, Softcore(kappa=0.5), correction="isotropic")
+
+   # study shape of interaction and explore effect of parameters
+   fit2 <- update(fit5, Softcore(kappa=0.2))
+   fit8 <- update(fit5, Softcore(kappa=0.8))
+   plot(fitin(fit2), xlim=c(0, 0.4),
+        main="Pair potential (sigma = 0.1)", 
+        xlab=expression(d), ylab=expression(h(d)), legend=FALSE)
+   plot(fitin(fit5), add=TRUE, col=4)
+   plot(fitin(fit8), add=TRUE, col=3)
+   legend("bottomright", col=c(1,4,3), lty=1,
+          legend=expression(kappa==0.2, kappa==0.5, kappa==0.8))
 }
-\author{\adrian
-  
-  
-  and \rolf
-  
+\author{
+  \spatstatAuthors.
 }
 \keyword{spatial}
 \keyword{models}

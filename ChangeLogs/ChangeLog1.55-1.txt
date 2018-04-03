@@ -863,7 +863,33 @@ Change log from 1.55-0 to 1.55-1
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
-	
-   
++++++++++++++  passed 'make bookcheck'  ++++++++++++++
++++++++++++++  installed R 3.4.4        ++++++++++++++
+
+------------- passed R-3.4.4 CMD check ---------------
+------------- installed on laptop      ---------------
+
+------------- passed R-devel CMD check ---------------
+-------------  (2018-03-28 r74482)     ---------------
+
+   updates.Rnw
+	Updated to cover all the above.
+
+ 03 april 2018
+
+    Softcore.Rd
+	Improved explanation.
+	Extended examples.
+
+   DESCRIPTION
+   NEWS
+   Nickname.txt
+	Nickname 'April Fish'
+        version 1.55-0.044
+
+------------- passed R-3.4.4 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
 
 
