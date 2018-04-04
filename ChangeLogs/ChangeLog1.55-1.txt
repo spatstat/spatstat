@@ -903,4 +903,17 @@ Change log from 1.55-0 to 1.55-1
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+ 04 april 2018
+
+   tests/closeshave.R
+	Fixed bug in test, caused by GCC bug 323
+
+   DESCRIPTION
+   NEWS
+        version 1.55-0.046
+
+------------- passed R-3.4.4 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
 

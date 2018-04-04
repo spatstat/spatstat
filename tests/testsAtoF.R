@@ -51,7 +51,7 @@ local({
 ##  tests/closeshave.R
 ## check 'closepairs/crosspairs' code
 ## validity and memory allocation
-## $Revision: 1.6 $ $Date: 2018/02/03 09:41:16 $
+## $Revision: 1.7 $ $Date: 2018/04/04 09:50:30 $
 
 local({
   r <- 0.12
@@ -118,8 +118,10 @@ local({
     colnames(result) <- c("i","j")
     return(result)
   }
-  A <- pclose(redwood, 0.2, "raw")
-  B <- pclose(redwood, 0.2, "C")
+  #' pick a threshold value which avoids GCC bug 323
+  RR <- 0.193
+  A <- pclose(redwood, RR, "raw")
+  B <- pclose(redwood, RR, "C")
   if(!samesame(A,B))
     stop("closepairs.ppp(periodic=TRUE) gives wrong answer")
 })
