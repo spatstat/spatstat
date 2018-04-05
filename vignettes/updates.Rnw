@@ -2427,6 +2427,11 @@ of potential impact.
    correction.
    \bugger{1.25-0}{december 2011}{1.54-0}{november 2017}
 
+ \item \texttt{leverage.ppm}:
+   The mean leverage value (shown as a contour level in \texttt{plot.leverage.ppm})
+   was slightly incorrect for Gibbs models.
+   \bugger{1.25-0}{december 2011}{1.54-0}{november 2017}
+
  \item \texttt{vcov.ppm}, \texttt{suffstat}:
    These functions sometimes gave incorrect values 
    for marked point process models.   

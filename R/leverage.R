@@ -3,7 +3,7 @@
 #
 #  leverage and influence
 #
-#  $Revision: 1.108 $ $Date: 2018/03/20 08:58:41 $
+#  $Revision: 1.109 $ $Date: 2018/04/05 03:30:11 $
 #
 
 leverage <- function(model, ...) {
@@ -788,9 +788,13 @@ ppmInfluenceEngine <- function(fit,
                        dimyx=dimyx, eps=eps)
       levnearest <- solapply(levsplitdum, nnmark, dimyx=dimyx, eps=eps)
     }
-    ## nominal mean level
-    a <- area(Window(loc)) * markspace.integral(loc)
-    levmean <- p/a
+    ## mean level
+    if(fit.is.poisson) {
+      a <- area(Window(loc)) * markspace.integral(loc)
+      levmean <- p/a
+    } else {
+      levmean <- if(!mt) mean(levnearest) else mean(sapply(levnearest, mean))
+    }
     lev <- list(val=levval, smo=levsmo, ave=levmean, nearest=levnearest)
     result$lev <- lev
   }

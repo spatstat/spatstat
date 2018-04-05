@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.55-0.046
+        CHANGES IN spatstat VERSION 1.55-0.047
 
 OVERVIEW
 
@@ -102,6 +102,11 @@ BUG FIXES
     Calculations were slightly incorrect for models with a hard core.
     Fixed.
 
+    o leverage.ppm
+    The mean leverage value (shown as a contour line in plot.leverage.ppm)
+    was slightly incorrect for Gibbs models.
+    Fixed.
+    
     o Ops.msr
     If the input data contained an auxiliary pixel image of
     the density component of the measure (attribute "smoothdensity")

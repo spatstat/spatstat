@@ -916,4 +916,20 @@ Change log from 1.55-0 to 1.55-1
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+ 05 apr 2018
+
+   leverage.R
+	Calculates mean leverage directly (=> correctly) in Gibbs case,
+	rather than using trace formula.
+
+   updates.Rnw
+	Updated to cover all the above.
+	
+   DESCRIPTION
+   NEWS
+        version 1.55-0.047
+
+------------- passed R-3.4.4 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
 
