@@ -1,12 +1,10 @@
 
-        CHANGES IN spatstat VERSION 1.55-0.047
+        CHANGES IN spatstat VERSION 1.55-1
 
 OVERVIEW
 
     o We thank Jens Astrom, Ines Moncada, Mehdi Moradi and Nicholas Read for contributions.
     
-    o Some code runs faster.
-
     o More support for tessellations.
 
     o Improved support for linear networks.
@@ -15,7 +13,7 @@ OVERVIEW
     
     o Minor improvements and bug fixes.
 
-    o Version nickname: "April Fish"
+    o Version nickname: "Gamble Responsibly"
 
 NEW FUNCTIONS
 

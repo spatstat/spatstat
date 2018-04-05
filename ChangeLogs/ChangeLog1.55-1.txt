@@ -933,3 +933,14 @@ Change log from 1.55-0 to 1.55-1
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+   DESCRIPTION
+   NEWS
+   Nickname.txt
+        Nickname 'Gamble Responsibly'
+	version 1.55-1
+
+------------- passed R-3.4.4 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+   
