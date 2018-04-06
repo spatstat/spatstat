@@ -1,0 +1,34 @@
+Change log from 1.55-1 to 1.55-2
+================================
+
+05 april 2018
+
+   DESCRIPTION
+   NEWS
+   Nickname.txt
+	Initialised as version 1.55-1.001
+	Nicknamed 'Supermarket Kiss'
+
+   dfbetas.ppm.Rd
+	Polished examples
+
+06 april 2018
+
+   ppmInfluence.Rd
+	Polished examples
+
+   tests/leverinf.R
+	Added tests of other methods.
+
+   pairwise.family.R
+	delta2() algorithm now returns sparse matrices/arrays, if asked.
+
+   sparse3Darray.R
+	buglet fix
+	
+   DESCRIPTION
+	date incremented
+
+------------- passed R-3.4.4 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------

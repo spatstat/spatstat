@@ -86,10 +86,15 @@
    X <- rpoispp(function(x,y) { exp(3+3*x) })
    fit <- ppm(X ~ x+y)
    fI <- ppmInfluence(fit)
-   fI$influence
-   influence(fI) 
-   fI$leverage
-   fI$dfbetas
+
+   fitlev <- fI$leverage
+   fitlev <- leverage(fI)
+
+   fitinf <- fI$influence
+   fitinf <- influence(fI)
+
+   fitdfb <- fI$dfbetas
+   fitdfb <- dfbetas(fI) 
 }
 \keyword{spatial}
 \keyword{models}

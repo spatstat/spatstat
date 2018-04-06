@@ -1,9 +1,19 @@
 
+        CHANGES IN spatstat VERSION 1.55-1.001
+
+OVERVIEW
+
+    o Nothing yet.
+
+    o Version nickname: "Supermarket Kiss"
+
+
         CHANGES IN spatstat VERSION 1.55-1
 
 OVERVIEW
 
-    o We thank Jens Astrom, Ines Moncada, Mehdi Moradi and Nicholas Read for contributions.
+    o We thank Jens Astrom, Ines Moncada, Mehdi Moradi and Nicholas Read
+    for contributions.
     
     o More support for tessellations.
 

@@ -88,8 +88,8 @@
 \examples{
    \testonly{op <- spatstat.options(npixel=32)}
    X <- rpoispp(function(x,y) { exp(3+3*x) })
-   fit <- ppm(X, ~x+y)
-   \testonly{fit <- ppm(X, ~x+y, nd=16)}
+   fit <- ppm(X ~x+y)
+   \testonly{fit <- ppm(X ~x+y, nd=16)}
    plot(dfbetas(fit))
    plot(Smooth(dfbetas(fit)))
    \testonly{spatstat.options(op)}

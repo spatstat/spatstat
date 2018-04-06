@@ -3,7 +3,7 @@
 #'
 #' Sparse 3D arrays represented as list(i,j,k,x)
 #' 
-#' $Revision: 1.28 $  $Date: 2018/03/01 15:16:09 $
+#' $Revision: 1.29 $  $Date: 2018/04/06 15:06:21 $
 #'
 
 sparse3Darray <- function(i=integer(0), j=integer(0), k=integer(0),
@@ -18,9 +18,9 @@ sparse3Darray <- function(i=integer(0), j=integer(0), k=integer(0),
               "are not yet supported by the Matrix package")
   stopifnot(length(dims) == 3)
   dims <- as.integer(dims)
-  if(!all(inside.range(i, c(1, dims[1])))) stop("indices i are outside range")
-  if(!all(inside.range(j, c(1, dims[2])))) stop("indices j are outside range")
-  if(!all(inside.range(k, c(1, dims[3])))) stop("indices k are outside range")
+  if(!all(i >= 1 & i <= dims[1])) stop("indices i are outside range")
+  if(!all(j >= 1 & j <= dims[2])) stop("indices j are outside range")
+  if(!all(k >= 1 & k <= dims[3])) stop("indices k are outside range")
   if(!is.null(dimnames)) {
     stopifnot(is.list(dimnames))
     stopifnot(length(dimnames) == 3)

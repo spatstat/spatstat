@@ -2,7 +2,7 @@
 #
 #    pairwise.family.S
 #
-#    $Revision: 1.70 $	$Date: 2018/03/27 08:42:43 $
+#    $Revision: 1.71 $	$Date: 2018/04/06 08:55:03 $
 #
 #    The pairwise interaction family of point process models
 #
@@ -390,7 +390,7 @@ return(V)
   return(result)
   },
 ######### end of function $suffstat
-  delta2 = function(X, inte, correction, ...) {
+  delta2 = function(X, inte, correction, ..., sparseOK=FALSE) {
     #' Sufficient statistic for second order conditional intensity
     #' for pairwise interaction processes
     #' Equivalent to evaluating pair potential.
@@ -404,6 +404,8 @@ return(V)
                                      pot.only=TRUE,
                                      Reach=R, splitInf=TRUE)
       M <- attr(result, "IsNegInf")
+      if(sparseOK)
+        result <- as.sparse3Darray(result)
       if(!is.null(M)) {
         #' validate
         if(length(dim(M)) != 3)
@@ -417,6 +419,8 @@ return(V)
         #'  and therefore changes status if X[i] is deleted.
         deltaInf <- M
         deltaInf[, hits != 1] <- FALSE
+        if(sparseOK)
+          deltaInf <- as(deltaInf, "sparseMatrix")
         #' 
         attr(result, "deltaInf") <- deltaInf
       }
@@ -434,6 +438,8 @@ return(V)
                                      pot.only=TRUE,
                                      Reach=R, splitInf=TRUE)
       M <- attr(result, "IsNegInf")
+      if(sparseOK)
+        result <- as.sparse3Darray(result)
       if(!is.null(M)) {
         #' validate
         if(length(dim(M)) != 3)
@@ -456,6 +462,9 @@ return(V)
         #'     U[i] is a dummy point,
         #'     U[j] has no conflicts with X.
         deltaInf[!izdat, nhitdata != 0] <- FALSE
+        #'
+        if(sparseOK)
+          deltaInf <- as(deltaInf, "sparseMatrix")
         #'
         attr(result, "deltaInf") <- deltaInf
       }

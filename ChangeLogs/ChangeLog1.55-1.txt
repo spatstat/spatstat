@@ -943,4 +943,8 @@ Change log from 1.55-0 to 1.55-1
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+------------- passed R-devel CMD check ---------------
+-------------  (2018-04-02 r74505)     ---------------
+!!!!!!!!!!!!  submitted to CRAN        !!!!!!!!!!!!!!!
+
    
