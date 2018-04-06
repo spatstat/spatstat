@@ -3,7 +3,7 @@
 #'
 #' Sparse 3D arrays represented as list(i,j,k,x)
 #' 
-#' $Revision: 1.29 $  $Date: 2018/04/06 15:06:21 $
+#' $Revision: 1.30 $  $Date: 2018/04/06 15:36:44 $
 #'
 
 sparse3Darray <- function(i=integer(0), j=integer(0), k=integer(0),
@@ -156,6 +156,8 @@ print.sparse3Darray <- function(x, ...) {
   cat("Sparse 3D array of dimensions", paste(dimx, collapse="x"), fill=TRUE)
   dn <- dimnames(x) %orifnull% rep(list(NULL), 3)
   d3 <- dimx[3]
+  if(d3 == 0)
+    return(invisible(NULL))
   dn3 <- dn[[3]] %orifnull% as.character(seq_len(d3))
   df <- data.frame(i=x$i, j=x$j, k=x$k, x=x$x)
   pieces <- split(df, factor(df$k, levels=1:d3))

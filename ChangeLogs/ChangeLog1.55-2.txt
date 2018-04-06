@@ -24,10 +24,24 @@ Change log from 1.55-1 to 1.55-2
 	delta2() algorithm now returns sparse matrices/arrays, if asked.
 
    sparse3Darray.R
-	buglet fix
+	buglet fix in trivial case
 	
    DESCRIPTION
 	date incremented
+
+------------- passed R-3.4.4 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+   sparse3Darray.R
+	buglet fix in trivial case
+	
+   tests/sparse3Darrays.R
+	more tests of trivial cases
+
+   DESCRIPTION
+   NEWS
+	version 1.55-1.002
 
 ------------- passed R-3.4.4 CMD check ---------------
 ------------- installed on laptop      ---------------

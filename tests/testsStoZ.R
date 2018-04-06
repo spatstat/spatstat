@@ -135,7 +135,7 @@ local({
 
 #'    tests/sparse3Darrays.R
 #'  Basic tests of code in sparse3Darray.R and sparsecommon.R
-#'  $Revision: 1.10 $ $Date: 2018/03/01 14:39:11 $
+#'  $Revision: 1.11 $ $Date: 2018/04/06 15:53:45 $
 
 require(spatstat)
 local({
@@ -190,6 +190,10 @@ local({
     M[, 3, ]
 
     M[, 3, , drop=FALSE]
+
+    M[c(FALSE,TRUE,FALSE,FALSE,TRUE), , ]
+    
+    M[, , c(FALSE,FALSE), drop=FALSE]
     
     MA <- as.array(M)
     UA <- as.array(U)
