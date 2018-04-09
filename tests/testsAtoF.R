@@ -242,37 +242,45 @@ local({
   modelA <- ppm(antsub ~ 1, HierStrauss(rmat, archy=c(2,1)), nd=16)
   flydelta(modelA, "HierStrauss")
 })
-#
-#  tests/density.R
-#
-#  Test behaviour of density methods and inhomogeneous summary functions
-#
-#  $Revision: 1.12 $  $Date: 2018/02/15 04:43:59 $
-#
+#'
+#'  tests/density.R
+#'
+#'  Test behaviour of density() methods,
+#'                    relrisk(), Smooth()
+#'                    and inhomogeneous summary functions
+#'
+#'  $Revision: 1.14 $  $Date: 2018/04/09 04:22:53 $
+#'
 
 require(spatstat)
 
 local({
 
-  # test all cases of density.ppp
+  # test all cases of density.ppp and densityfun.ppp
   
-  tryit <- function(...) {
+  tryit <- function(..., do.fun=TRUE) {
     Z <- density(cells, ..., at="pixels")
     Z <- density(cells, ..., at="points")
+    if(do.fun) {
+      f <- densityfun(cells, ...)
+      U <- f(0.1, 0.3)
+    }
     return(invisible(NULL))
   }
 
-  V <- diag(c(0.05^2, 0.07^2))
-  wdf <- data.frame(a=1:42,b=42:1)
 
   tryit(0.05)
   tryit(0.05, diggle=TRUE)
   tryit(0.05, se=TRUE)
   tryit(0.05, weights=expression(x))
-  tryit(0.05, weights=wdf)
+
+  V <- diag(c(0.05^2, 0.07^2))
   tryit(varcov=V)
   tryit(varcov=V, weights=expression(x))
-  tryit(varcov=V, weights=wdf)
+
+  wdf <- data.frame(a=1:42,b=42:1)
+  tryit(0.05, weights=wdf, do.fun=FALSE)
+  tryit(varcov=V, weights=wdf, do.fun=FALSE)
 
   # apply different discretisation rules
   Z <- density(cells, 0.05, fractional=TRUE)
@@ -330,13 +338,22 @@ local({
   pants(X=sporophores, at="points")
   pants(X=sporophores, relative=TRUE, at="points")
 
-  ## Smooth.ppp
-  Z <- Smooth(longleaf, 5, diggle=TRUE)
-  Z <- Smooth(longleaf, 1e-6) # generates warning about small bandwidth
+  ## execute Smooth.ppp and Smoothfun.ppp in all cases
+  stroke <- function(...) {
+    Z <- Smooth(longleaf, ..., at="pixels")
+    Z <- Smooth(longleaf, ..., at="points")
+    f <- Smoothfun(longleaf, ...)
+    f(120, 80)
+    return(invisible(NULL))
+  }
+  stroke(5, diggle=TRUE)
+  stroke(1e-6) # generates warning about small bandwidth
+  stroke(varcov=diag(c(25, 36)))
+  stroke(weights=runif(npoints(longleaf)))
+  stroke(weights=expression(x))
 
-  ## Smooth.ppp(at='points')
+  ## validity of Smooth.ppp(at='points')
   Y <- longleaf %mark% runif(npoints(longleaf), min=41, max=43)
-
   Z <- Smooth(Y, 5, at="points", leaveoneout=TRUE)
   rZ <- range(Z)
   if(rZ[1] < 40 || rZ[2] > 44)

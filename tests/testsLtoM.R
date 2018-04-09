@@ -25,7 +25,7 @@ local({
 #'
 #'   leverage and influence for Gibbs models
 #' 
-#'   $Revision: 1.9 $ $Date: 2018/04/06 08:34:41 $
+#'   $Revision: 1.10 $ $Date: 2018/04/08 23:58:27 $
 #' 
 
 require(spatstat)
@@ -110,23 +110,29 @@ local({
   pmiH <- ppmInfluence(fitH, sparseOK=TRUE)
   pmiHx <- ppmInfluence(fitHx, sparseOK=TRUE)
 
-  ## ...........  logistic fits .......................
-  fitSlogi <- ppm(cells ~ x, Strauss(0.12), rbord=0, method="logi")
-  pmiSlogi <- ppmInfluence(fitSlogi)
-  fitGlogi <- ppm(redwood ~ 1, Geyer(0.1, 2), rbord=0, method="logi")
-  pmiGlogi <- ppmInfluence(fitGlogi)
-  fitDlogi <- ppm(cells ~ 1, DiggleGatesStibbard(0.12), rbord=0, method="logi")
-  pmiDlogi <- ppmInfluence(fitDlogi)
-  fitHlogi <- ppm(cells ~ 1, Hardcore(0.07), method="logi")
-  pmiHlogi <- ppmInfluence(fitHlogi)
-  fitHxlogi <- ppm(cells ~ x, Hardcore(0.07), rbord=0, method="logi")
-  pmiHxlogi <- ppmInfluence(fitHxlogi)
-  
   ## other methods for leverage.ppm and influence.ppm, not elsewhere tested
   w <- domain(levS)
   w <- Window(infS)
   vv <- shift(levS, c(1.2, 1.3))
   vv <- shift(infS, c(1.2, 1.3))
+
+  ## ...........  logistic fits .......................
+  #'  special algorithm for delta2
+  fitSlogi <- ppm(cells ~ x, Strauss(0.12), rbord=0, method="logi")
+  pmiSlogi <- ppmInfluence(fitSlogi)
+  #'  special algorithm for delta2
+  fitGlogi <- ppm(redwood ~ 1, Geyer(0.1, 2), rbord=0, method="logi")
+  pmiGlogi <- ppmInfluence(fitGlogi)
+  #'  generic algorithm for delta2
+  fitDlogi <- ppm(cells ~ 1, DiggleGatesStibbard(0.12), rbord=0, method="logi")
+  pmiDlogi <- ppmInfluence(fitDlogi)
+  #'  generic algorithm for delta2 : offset; zero-dimensional 
+  fitHlogi <- ppm(cells ~ 1, Hardcore(0.07), method="logi")
+  pmiHlogi <- ppmInfluence(fitHlogi)
+  #'  generic algorithm for delta2 : offset; 1-dimensional 
+  fitHxlogi <- ppm(cells ~ x, Hardcore(0.07), rbord=0, method="logi")
+  pmiHxlogi <- ppmInfluence(fitHxlogi)
+  
 })
 
 ##

@@ -61,12 +61,8 @@ Smoothfun(X, \dots)
   f(120, 80)
   plot(f)
 }
-\author{\adrian
-  
-  ,
-  \rolf
-  
-  and \ege.
+\author{
+  \spatstatAuthors.
 }
 \keyword{spatial}
 \keyword{methods}

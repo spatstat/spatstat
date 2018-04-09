@@ -9,6 +9,7 @@
 \alias{as.im.funxy}
 \alias{as.im.distfun}
 \alias{as.im.nnfun}
+\alias{as.im.densityfun}
 \alias{as.im.Smoothfun}
 \alias{as.im.data.frame}
 \alias{as.im.default}
@@ -46,6 +47,8 @@
   \method{as.im}{nnfun}(X, W=NULL, \dots,
         eps=NULL, dimyx=NULL, xy=NULL,
         na.replace=NULL)
+
+  \method{as.im}{densityfun}(X, W=NULL, \dots)
 
   \method{as.im}{Smoothfun}(X, W=NULL, \dots)
 

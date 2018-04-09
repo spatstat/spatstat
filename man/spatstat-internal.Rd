@@ -430,6 +430,7 @@
 \alias{print.bw.optim}
 \alias{print.colourmap}
 \alias{print.diagppm}
+\alias{print.densityfun}
 \alias{print.distfun}
 \alias{print.detpointprocfamily}
 \alias{print.detpointprocfamilyfun}
@@ -1290,6 +1291,7 @@ prepareTitle(main)
 \method{print}{bw.frac}(x, \dots)
 \method{print}{bw.optim}(x, \dots)
 \method{print}{colourmap}(x, \dots)
+\method{print}{densityfun}(x, \dots)
 \method{print}{diagppm}(x, \dots)
 \method{print}{distfun}(x, \dots)
 \method{print}{detpointprocfamily}(x, \dots)

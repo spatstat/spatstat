@@ -1,12 +1,30 @@
 
-        CHANGES IN spatstat VERSION 1.55-1.001
+        CHANGES IN spatstat VERSION 1.55-1.003
 
 OVERVIEW
 
-    o Nothing yet.
+    o kernel estimate of intensity as a function(x,y)
 
+    o Further improvements to leverage and influence code.
+    
     o Version nickname: "Supermarket Kiss"
 
+NEW FUNCTIONS
+
+    o densityfun, densityfun.Rd
+    Compute a kernel estimate of intensity of a point pattern
+    and return it as a function of spatial location.
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o leverage.ppm, influence.ppm, dfbetas.ppm
+    Faster computation in some cases.
+    
+BUG FIXES
+
+    o leverage.ppm, influence.ppm, dfbetas.ppm
+    Crashed sometimes if the model was fitted by method="logi".
+    Fixed.
 
         CHANGES IN spatstat VERSION 1.55-1
 

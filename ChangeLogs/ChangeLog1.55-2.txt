@@ -46,3 +46,25 @@ Change log from 1.55-1 to 1.55-2
 ------------- passed R-3.4.4 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
+
+ 09 april 2018
+
+   tests/leverinf.R
+	tweak
+
+   densityfun.R [New file]
+   densityfun.Rd [New file]
+   as.im.Rd
+   spatstat-internal.Rd
+	New generic 'densityfun' with method for ppp
+
+   DESCRIPTION
+   NEWS
+	version 1.55-1.003
+
+------------- passed R-3.4.4 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+
+   

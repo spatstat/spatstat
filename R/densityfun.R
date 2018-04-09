@@ -1,20 +1,18 @@
 ##
-## smoothfun.R
+## densityfun.R
 ##
-## Exact 'funxy' counterpart of Smooth.ppp
+## Exact 'funxy' counterpart of density.ppp
 ##
-##  $Revision: 1.3 $ $Date: 2018/04/09 02:54:42 $
+##  $Revision: 1.3 $ $Date: 2018/04/09 04:08:27 $
 
 
-Smoothfun <- function(X, ...) {
-  UseMethod("Smoothfun")
+densityfun <- function(X, ...) {
+  UseMethod("densityfun")
 }
 
-Smoothfun.ppp <- function(X, sigma=NULL, ...,
+densityfun.ppp <- function(X, sigma=NULL, ...,
                           weights=NULL, edge=TRUE, diggle=FALSE) {
   verifyclass(X, "ppp")
-  if(!is.marked(X, dfok=TRUE))
-    stop("X should be a marked point pattern")
   ## handle weights now
   weightsgiven <- !missing(weights) && !is.null(weights) 
   if(weightsgiven) {
@@ -30,34 +28,31 @@ Smoothfun.ppp <- function(X, sigma=NULL, ...,
     check.nvector(weights, npoints(X))
   } else weights <- NULL
   ## 
-  X <- coerce.marks.numeric(X)
-  ## 
   stuff <- list(X=X, weights=weights, edge=edge, diggle=diggle)
   ## 
   ## determine smoothing parameters
   ker <- resolve.2D.kernel(sigma=sigma, ...,
-                           x=X, bwfun=bw.smoothppp, allow.zero=TRUE)
+                           x=X, bwfun=bw.diggle, allow.zero=TRUE)
   stuff <- append(stuff, ker[c("sigma", "varcov")])
   ##
   g <- function(x, y=NULL) {
     Y <- xy.coords(x, y)[c("x", "y")]
     with(stuff,
-         smoothcrossEngine(Xdata=X,
-                           Xquery=as.ppp(Y, X$window),
-                           values=marks(X),
-                           sigma=sigma,
-                           varcov=varcov, 
-                           weights=weights,
-                           edge=edge, diggle=diggle))
+         densitycrossEngine(Xdata=X,
+                            Xquery=as.ppp(Y, X$window),
+                            sigma=sigma,
+                            varcov=varcov, 
+                            weights=weights,
+                            edge=edge, diggle=diggle))
   }
   g <- funxy(g, as.rectangle(as.owin(X)))
-  class(g) <- c("Smoothfun", class(g))
+  class(g) <- c("densityfun", class(g))
   return(g)
 }
 
-print.Smoothfun <- function(x, ...) {
+print.densityfun <- function(x, ...) {
   cat("function(x,y)", "which returns",
-      "values", "interpolated from", fill=TRUE)
+      "kernel estimate of intensity for", fill=TRUE)
   X <- get("X", envir=environment(x))
   print(X, ...)
   return(invisible(NULL))
@@ -66,10 +61,11 @@ print.Smoothfun <- function(x, ...) {
 ## Method for as.im
 ## (enables plot.funxy, persp.funxy, contour.funxy to work for this class)
 
-as.im.Smoothfun <- function(X, W=NULL, ...) {
+as.im.densityfun <- function(X, W=NULL, ...) {
   stuff <- get("stuff", envir=environment(X))
   if(!is.null(W)) stuff$X <- stuff$X[W]
-  do.call(Smooth, resolve.defaults(list(...), stuff))
+  names(stuff)[names(stuff) == "X"] <- "x"
+  do.call(density, resolve.defaults(list(...), stuff))
 }
 
 
