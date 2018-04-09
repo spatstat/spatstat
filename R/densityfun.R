@@ -3,7 +3,7 @@
 ##
 ## Exact 'funxy' counterpart of density.ppp
 ##
-##  $Revision: 1.3 $ $Date: 2018/04/09 04:08:27 $
+##  $Revision: 1.4 $ $Date: 2018/04/09 07:44:12 $
 
 
 densityfun <- function(X, ...) {
@@ -61,11 +61,18 @@ print.densityfun <- function(x, ...) {
 ## Method for as.im
 ## (enables plot.funxy, persp.funxy, contour.funxy to work for this class)
 
-as.im.densityfun <- function(X, W=NULL, ...) {
-  stuff <- get("stuff", envir=environment(X))
-  if(!is.null(W)) stuff$X <- stuff$X[W]
-  names(stuff)[names(stuff) == "X"] <- "x"
-  do.call(density, resolve.defaults(list(...), stuff))
+as.im.densityfun <- function(X, W=Window(X), ..., approx=TRUE) {
+  if(!approx) {
+    #' evaluate exactly at grid points using as.im.funxy -> as.im.function
+    result <- as.im.function(X, W=W, ...)
+  } else {
+    #' faster, approximate evaluation using FFT
+    stuff <- get("stuff", envir=environment(X))
+    if(!missing(W)) stuff$X <- stuff$X[W]
+    names(stuff)[names(stuff) == "X"] <- "x"
+    result <- do.call(density, resolve.defaults(list(...), stuff))
+  }
+  return(result)
 }
 
 

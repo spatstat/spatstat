@@ -25,7 +25,7 @@ local({
 #'
 #'   leverage and influence for Gibbs models
 #' 
-#'   $Revision: 1.10 $ $Date: 2018/04/08 23:58:27 $
+#'   $Revision: 1.11 $ $Date: 2018/04/09 06:42:03 $
 #' 
 
 require(spatstat)
@@ -106,15 +106,16 @@ local({
   chks(dfbS$val,            dfbSp$val,            "dfbetas$value")
   chks(dfbS$density,        dfbSp$density,        "dfbetas$density")
 
-  # case of zero cif
+  #' case of zero cif
   pmiH <- ppmInfluence(fitH, sparseOK=TRUE)
   pmiHx <- ppmInfluence(fitHx, sparseOK=TRUE)
 
-  ## other methods for leverage.ppm and influence.ppm, not elsewhere tested
-  w <- domain(levS)
-  w <- Window(infS)
-  vv <- shift(levS, c(1.2, 1.3))
-  vv <- shift(infS, c(1.2, 1.3))
+  #' other code blocks - check execution only
+  a <- ppmInfluence(fitS)  # i.e. full set of results
+  a <- ppmInfluence(fitS, method="interpreted") 
+  a <- ppmInfluence(fitS, method="interpreted", entrywise=FALSE)
+  a <- ppmInfluence(fitS,                       entrywise=FALSE) 
+  #' NOTE: code for irregular parameters is tested in 'make bookcheck'
 
   ## ...........  logistic fits .......................
   #'  special algorithm for delta2
@@ -133,6 +134,20 @@ local({
   fitHxlogi <- ppm(cells ~ x, Hardcore(0.07), rbord=0, method="logi")
   pmiHxlogi <- ppmInfluence(fitHxlogi)
   
+  #' other code blocks - check execution only
+  b <- ppmInfluence(fitSlogi)  # i.e. full set of results
+  b <- ppmInfluence(fitSlogi, method="interpreted") 
+  b <- ppmInfluence(fitSlogi, method="interpreted", entrywise=FALSE)
+  b <- ppmInfluence(fitSlogi,                       entrywise=FALSE) 
+
+
+  ## .........   class support .............................
+  ## other methods for classes leverage.ppm and influence.ppm
+  ## not elsewhere tested
+  w <- domain(levS)
+  w <- Window(infS)
+  vv <- shift(levS, c(1.2, 1.3))
+  vv <- shift(infS, c(1.2, 1.3))
 })
 
 ##

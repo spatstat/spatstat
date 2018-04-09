@@ -3,7 +3,7 @@
 #
 #   nearest neighbour function (returns a function of x,y)
 #
-#   $Revision: 1.5 $   $Date: 2014/10/24 00:22:30 $
+#   $Revision: 1.7 $   $Date: 2018/04/09 07:43:26 $
 #
 
 nnfun <- function(X, ...) {
@@ -46,8 +46,8 @@ domain.nnfun <- Window.nnfun <- function(X, ...) { as.owin(X) }
 
 as.im.nnfun <- function(X, W=NULL, ...,
                            eps=NULL, dimyx=NULL, xy=NULL,
-                           na.replace=NULL) {
-  if(is.null(W)) {
+                           na.replace=NULL, approx=TRUE) {
+  if(approx && is.null(W)) {
     env <- environment(X)
     Xdata  <- get("X", envir=env)
     k <- mget("k", envir=env, inherits=FALSE, ifnotfound=list(1))[[1]]
@@ -56,8 +56,11 @@ as.im.nnfun <- function(X, W=NULL, ...,
       Z$v[is.null(Z$v)] <- na.replace
     return(Z)
   }
-  # use as.im.function
-  NextMethod("as.im")
+  if(is.null(W)) W <- Window(X)
+  result <- as.im.function(X, W=W,
+                           eps=eps, dimyx=dimyx, xy=xy,
+                           na.replace=na.replace, ...)
+  return(result)
 }
 
 print.nnfun <- function(x, ...) {

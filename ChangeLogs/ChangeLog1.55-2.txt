@@ -66,5 +66,25 @@ Change log from 1.55-1 to 1.55-2
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+   tests/leverinf.R
+	Added tests for other code blocks, not elsewhere tested
+
+   nnfun.R
+   smoothfun.R
+   densityfun.R
+   as.im.Rd
+	These functions have an argument 'approx'
+	controlling whether the exact or approximate algorithm is used.
+	
+   DESCRIPTION
+   NEWS
+	version 1.55-1.004
+
+------------- passed R-3.4.4 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+
+
 
    

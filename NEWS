@@ -1,12 +1,12 @@
 
-        CHANGES IN spatstat VERSION 1.55-1.003
+        CHANGES IN spatstat VERSION 1.55-1.004
 
 OVERVIEW
 
     o kernel estimate of intensity as a function(x,y)
 
     o Further improvements to leverage and influence code.
-    
+
     o Version nickname: "Supermarket Kiss"
 
 NEW FUNCTIONS
@@ -15,10 +15,17 @@ NEW FUNCTIONS
     Compute a kernel estimate of intensity of a point pattern
     and return it as a function of spatial location.
 
+    o as.im.densityfun
+    Convert function(x,y) to a pixel image.
+    
 SIGNIFICANT USER-VISIBLE CHANGES
 
     o leverage.ppm, influence.ppm, dfbetas.ppm
     Faster computation in some cases.
+
+    o as.im.nnfun, as.im.smoothfun
+    New argument 'approx' chooses between a fast, approximate algorithm
+    and a slow, exact algorithm.
     
 BUG FIXES
 
