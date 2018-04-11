@@ -85,6 +85,29 @@ Change log from 1.55-1 to 1.55-2
 ------------- committed to GitHub      ---------------
 
 
+11 apr 2018
+
+   indices.R
+	bug fix in grokIndexVector
+
+   tests/sparse3Darrays.R
+	Added many more checks of different dimensional cases
+	
+   linim.R
+	buglet fix in plot method
+	[spotted by Suman]
+
+   DESCRIPTION
+   NEWS
+   Nickname.txt
+	Nickname "The Salmon Mousse"
+	version 1.55-1.005
+        Acknowledged Suman.
+
+------------- passed R-3.4.4 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
 
 
    

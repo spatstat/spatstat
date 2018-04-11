@@ -1,7 +1,7 @@
 #
 # linim.R
 #
-#  $Revision: 1.49 $   $Date: 2018/03/07 01:27:14 $
+#  $Revision: 1.50 $   $Date: 2018/04/11 06:10:58 $
 #
 #  Image/function on a linear network
 #
@@ -165,7 +165,8 @@ plot.linim <- local({
       zliminfo <- list(zlim=zlim)
     }
     
-    ribstuff <- list(ribside  = leg.side,
+    ribstuff <- list(ribbon   = legend,
+                     ribside  = leg.side,
                      ribsep   = leg.sep,
                      ribwid   = leg.wid,
                      ribargs  = leg.args,

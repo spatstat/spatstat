@@ -3,7 +3,7 @@
 #'
 #'   Code for handling vector/array indices
 #'
-#'   $Revision: 1.8 $  $Date: 2018/01/31 08:13:22 $
+#'   $Revision: 1.9 $  $Date: 2018/04/11 07:15:31 $
 #'
 
 grokIndexVector <- function(ind, len, nama=NULL) {
@@ -56,7 +56,7 @@ grokIndexVector <- function(ind, len, nama=NULL) {
     }
     if(m == len) {
       n <- sum(lo)
-      result <- list(strict=list(lo=lo, i=which(lo), n=n, s=nama,
+      result <- list(strict=list(lo=lo, i=which(lo), n=n, s=nama[lo],
                        nind=n, map=NULL))
       return(result)
     }
@@ -67,7 +67,7 @@ grokIndexVector <- function(ind, len, nama=NULL) {
     strict <- list(lo=lostrict,
                    i=which(lostrict),
                    n=nstrict,
-                   s=nama,
+                   s=nama[lostrict],
                    nind=nstrict,
                    map=NULL)
     nfull <- sum(lo)
@@ -76,7 +76,7 @@ grokIndexVector <- function(ind, len, nama=NULL) {
                  lo=lo,
                  i=which(lo),
                  n=nfull,
-                 s=if(named) c(nama, rep("", length(newones))) else NULL,
+                 s=if(named) c(nama, rep("", length(newones)))[lo] else NULL,
                  nind=nfull,
                  map=NULL)
     return(list(strict=strict, full=full))

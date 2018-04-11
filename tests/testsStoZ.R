@@ -135,28 +135,63 @@ local({
 
 #'    tests/sparse3Darrays.R
 #'  Basic tests of code in sparse3Darray.R and sparsecommon.R
-#'  $Revision: 1.11 $ $Date: 2018/04/06 15:53:45 $
+#'  $Revision: 1.13 $ $Date: 2018/04/11 07:42:29 $
 
 require(spatstat)
 local({
-
   #' forming arrays
-  A1 <- matrix(c(1,0,0,2,
-                 3,0,4,0,
-                 0,0,0,5),
-               3, 4, byrow=TRUE)
-  A2 <- matrix(c(0,0,1,0,
-                 0,0,0,1,
-                 1,0,0,0),
-               3, 4, byrow=TRUE)
+
+  #' creation by specifying nonzero elements
+  M <- sparse3Darray(i=1:3, j=c(3,1,2), k=4:2,
+                     x=runif(3), dims=rep(4, 3))
+  #' cumulate entries in duplicate positions
+  M <- sparse3Darray(i=c(1,1,2), j=c(2,2,1), k=c(3,3,2),
+                     x=runif(3), dims=rep(3, 3))
+
+  #' print method
+  print(M)
+  
+  #' conversion of other data
+  A <- array(c(1,3,0,0,0,0,0,4,0,2,0,5,
+               0,0,1,0,0,0,1,0,0,0,1,0),
+             dim=c(3,4,2))
+  A1 <- A[,,1]
+  A2 <- A[,,2]
+  Z <- A[integer(0), , ]
+  
+  #' array to sparse array
+  AA <- as.sparse3Darray(A) # positive extent
+  ZZ <- as.sparse3Darray(Z) # zero extent
+  #' list of matrices to sparse array
   AA <- as.sparse3Darray(list(A1, A2))
+  #' matrix to sparse array
+  AA1 <- as.sparse3Darray(A1)
+  #' vector to sparse array
+  A11 <- A[,1,1]
+  AA11 <- as.sparse3Darray(A11)
+
+  #' 
   dim(AA) <- dim(AA) + 1
+
+  I1 <- SparseIndices(A1)
+  I11 <- SparseIndices(A11)
   
   if(require(Matrix)) {
+    #' sparse matrices from Matrix package
     A1 <- as(A1, "sparseMatrix")
     A2 <- as(A2, "sparseMatrix")
+    A11 <- as(A11, "sparseVector")
+    #' convert a list of sparse matrices to sparse array
     AA <- as.sparse3Darray(list(A1, A2))
+    #' sparse matrix to sparse array
+    AA1 <- as.sparse3Darray(A1)
+    #' sparse vector to sparse array
+    AA11 <- as.sparse3Darray(A11)
 
+    #' internals 
+    E1  <- SparseEntries(A1)
+    I1  <- SparseIndices(A1)
+    I11 <- SparseIndices(A11)
     df <- data.frame(i=c(1,3,5), j=3:1, k=rep(2, 3), x=runif(3))
     aa <- EntriesToSparse(df, NULL)
     bb <- EntriesToSparse(df, 7)
@@ -182,24 +217,25 @@ local({
     
     U <- aperm(M, c(1,3,2))
     U
-    
+
+    #' tests of [.sparse3Darray
     M[ 3:4, , ]
-    
     M[ 3:4, 2:4, ]
-    
     M[, 3, ]
-
     M[, 3, , drop=FALSE]
-
     M[c(FALSE,TRUE,FALSE,FALSE,TRUE), , ]
-    
     M[, , c(FALSE,FALSE), drop=FALSE]
+    # matrix index
+    M[cbind(3:5, 3:5, c(1,2,1))]
+    M[cbind(3:5, 3:5, 2)]
+    M[cbind(3:5,   2, 2)]
+    M[cbind(c(2,2,4), c(3,3,2), 1)] # repeated indices
     
     MA <- as.array(M)
     UA <- as.array(U)
 
     ## tests of "[<-.sparse3Darray"
-    Mflip <- Mzero <- MandM <- M
+    Mflip <- Mzero <- MandM <- Mnew <- M
     Mflip[ , , 2:1] <- M
     stopifnot(Mflip[3,1,1] == M[3,1,2])
     Mzero[1:3,1:3,] <- 0
@@ -208,25 +244,37 @@ local({
     M2d <- M[,,2,drop=TRUE]
     MandM[,,1] <- M2a
     MandM[,,1] <- M2d
+    Mnew[cbind(3:5, 3:5, c(1,2,1))] <- 1:3
+    Mnew[cbind(3:5, 3:5, 2)] <- 1:3
+    Mnew[cbind(3:5,   2, 2)] <- 1:3
+    V3 <- sparseVector(x=1, i=2, length=3)
+    Mnew[cbind(3:5, 3:5, c(1,2,1))] <- V3
+    Mnew[cbind(3:5, 3:5, 2)] <- V3
+    Mnew[cbind(3:5,   2, 2)] <- V3
 
-    # matrix index
-    M[cbind(3:5, 2, 2)]
-    
     ## tests of arithmetic (Math, Ops, Summary)
     negM <- -M
     oneM <- 1 * M
+    oneM <- M * 1
     twoM <- M + M
     range(M)
 
     cosM <- cos(M)  # non-sparse
     sinM <- sin(M)  # sparse
-    
+
+    Mpos <- (M > 0) # sparse
+    Mzero <- !Mpos # non-sparse
+
     stopifnot(all((M+M) == 2*M))     # non-sparse
     stopifnot(!any((M+M) != 2*M))    # sparse
 
     ztimesM <- (1:5) * M  # sparse
     zplusM <- (1:5) + M  # non-sparse
-    
+
+    ## reconcile dimensions
+    Msub <- M[,,1,drop=FALSE]
+    Mdif <- M - Msub
+
     ## tensor operator
 
     tenseur(c(1,-1), M, 1, 3)
