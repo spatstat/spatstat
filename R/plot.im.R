@@ -1,7 +1,7 @@
 #
 #   plot.im.R
 #
-#  $Revision: 1.122 $   $Date: 2017/10/11 04:33:39 $
+#  $Revision: 1.123 $   $Date: 2018/04/12 08:44:04 $
 #
 #  Plotting code for pixel images
 #
@@ -137,6 +137,20 @@ plot.im <- local({
     #' same as axisTicks but accepts nint=NULL as if it were missing
     if(!is.null(nint)) return(axisTicks(usr=usr, log=log, nint=nint, ...))
     return(axisTicks(usr=usr, log=log, ...))
+  }
+
+  numericalRange <- function(x, zlim=NULL) {
+    xr <- suppressWarnings(range(x, finite=TRUE))
+    if(!all(is.finite(xr)))
+      warning("All pixel values are NA", call.=FALSE)
+    if(!is.null(zlim)) 
+      xr <- suppressWarnings(range(xr, zlim, finite=TRUE))
+    if(!all(is.finite(xr))) {
+      warning("Cannot determine range of values for colour map",
+              call.=FALSE)
+      xr <- c(0,0)
+    }
+    return(xr)
   }
   
   # main function
@@ -300,8 +314,7 @@ plot.im <- local({
 
     switch(xtype,
            real    = {
-             vrange <- range(x, finite=TRUE)
-             vrange <- range(zlim, vrange)
+             vrange <- numericalRange(x, zlim)
              if(!is.null(colmap)) {
                # explicit colour map
                s <- summary(colmap)
@@ -334,8 +347,7 @@ plot.im <- local({
              values <- as.vector(x$v)
              values <- values[!is.na(values)]
              uv <- unique(values)
-             vrange <- range(uv, finite=TRUE)
-             vrange <- range(zlim, vrange)
+             vrange <- numericalRange(uv, zlim)
              nvalues <- length(uv)
              trivial <- (nvalues < 2)
              if(!trivial){
@@ -527,6 +539,7 @@ plot.im <- local({
                  dotargs,
                  list(useRaster=useRaster, add=add, show.all=show.all),
                  colourinfo,
+                 list(zlim=vrange),
                  list(xlab = "", ylab = ""),
                  list(asp = 1, main = main, axes=FALSE))
 ##      if(add && show.all)
@@ -608,6 +621,7 @@ plot.im <- local({
                dotargs,
                list(useRaster=useRaster),
                colourinfo,
+               list(zlim=vrange),
                list(xlab = "", ylab = ""),
                list(asp = 1, main = main))
 

@@ -68,19 +68,19 @@
   M <- Window(X)
   Y <- as.im(function(x,y){(x+1)/2}, W=M)
   Z <- as.im(function(x,y){(y+1)/2}, W=M)
+  # convert 
   RGB <- rgbim(X, Y, Z, maxColorValue=1)
   HSV <- hsvim(X, Y, Z)
+  opa <- par(mfrow=c(1,2))
   plot(RGB, valuesAreColours=TRUE)
   plot(HSV, valuesAreColours=TRUE)
+  par(opa)
   \testonly{
     spatstat.options(op)
   }
 }
-\author{\adrian
-  
-  
-  and \rolf
-  
+\author{
+  \spatstatAuthors.
 }
 \keyword{spatial}
 \keyword{manip}

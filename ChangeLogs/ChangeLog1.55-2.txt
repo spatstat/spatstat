@@ -108,6 +108,27 @@ Change log from 1.55-1 to 1.55-2
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+12 apr 2018
+
+   images.R
+	Bug fix in raster.xy
+	
+   tests/closeshave.R
+   tests/envelopes.R
+   tests/leverinf.R
+   tests/imageops.R
+	Added tests of code blocks not yet covered.
+
+   plot.im.R
+	Improved behaviour when all pixel values are NA.
+
+   DESCRIPTION
+   NEWS
+	version 1.55-1.006
+
+------------- passed R-3.4.4 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
 
 
    

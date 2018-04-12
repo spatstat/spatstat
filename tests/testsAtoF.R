@@ -51,13 +51,14 @@ local({
 ##  tests/closeshave.R
 ## check 'closepairs/crosspairs' code
 ## validity and memory allocation
-## $Revision: 1.7 $ $Date: 2018/04/04 09:50:30 $
+## $Revision: 1.8 $ $Date: 2018/04/12 06:45:06 $
 
 local({
   r <- 0.12
   close.all <- closepairs(redwood, r)
   close.ij <- closepairs(redwood, r, what="indices")
   close.ijd <- closepairs(redwood, r, what="ijd")
+  close.every <- closepairs(redwood, r, what="all", distinct=FALSE)
   stopifnot(identical(close.ij, close.all[c("i","j")]))
   stopifnot(identical(close.ijd, close.all[c("i","j","d")]))
 
@@ -67,6 +68,7 @@ local({
   cross.all <- crosspairs(on, off, r)
   cross.ij <- crosspairs(on, off, r, what="indices")
   cross.ijd <- crosspairs(on, off, r, what="ijd")
+  cross.every <- crosspairs(on, off, r, what="all", distinct=FALSE)
   stopifnot(identical(cross.ij, cross.all[c("i","j")]))
   stopifnot(identical(cross.ijd, cross.all[c("i","j","d")]))
 
@@ -78,7 +80,6 @@ local({
   if(!identical(cl, clt))
     stop("closepairs and closethresh disagree")
 
-  # compare with older, slower code
   reordered <- function(a) {
     o <- with(a, order(i,j))
     as.list(as.data.frame(a)[o,,drop=FALSE])
@@ -86,12 +87,23 @@ local({
   samesame <- function(a, b) {
     identical(reordered(a), reordered(b))
   }
+  
+  ## ...............................................
+  #' compare with older, slower code
   spatstat.options(closepairs.newcode=FALSE)
+  spatstat.options(crosspairs.newcode=FALSE)
+  ## ...............................................
   old.close.ij <- closepairs(redwood, r, what="indices")
   old.cross.ij <- crosspairs(on, off, r, what="indices")
   stopifnot(samesame(close.ij, old.close.ij))
   stopifnot(samesame(cross.ij, old.cross.ij))
+  # execute only:
+  old.close.every <- closepairs(redwood, r, what="all", distinct=FALSE)
+  old.cross.every <- crosspairs(on, off, r, what="all", distinct=FALSE)
+  ## ...............................................
   spatstat.options(closepairs.newcode=TRUE)
+  spatstat.options(crosspairs.newcode=TRUE)
+  ## ...............................................
   
   # Rasmus' example
   R <- 0.04
@@ -124,6 +136,9 @@ local({
   B <- pclose(redwood, RR, "C")
   if(!samesame(A,B))
     stop("closepairs.ppp(periodic=TRUE) gives wrong answer")
+
+  #' other functions that don't have a help file
+  niets <- crosspairquad(quadscheme(cells), 0.1)
 })
 ## tests/colour.R
 ##
@@ -474,7 +489,7 @@ local({
 #
 #  Test validity of envelope data
 #
-#  $Revision: 1.6 $  $Date: 2018/02/28 03:11:23 $
+#  $Revision: 1.7 $  $Date: 2018/04/12 07:11:14 $
 #
 
 require(spatstat)
@@ -521,15 +536,24 @@ Ep <- envelope(fit, Kest, nsim=4, savepatterns=TRUE, global=TRUE)
 e1 <- envelope(cells, Kest, nsim=4, fix.n=TRUE)
 e2 <- envelope(amacrine, Kest, nsim=4, fix.n=TRUE)
 e3 <- envelope(amacrine, Kcross, nsim=4, fix.marks=TRUE)
+e4 <- envelope(finpines, Kest, nsim=4, fix.n=TRUE) # multiple columns of marks
+e5 <- envelope(finpines, Kest, nsim=4, fix.marks=TRUE)
 fit <- ppm(japanesepines ~ 1, Strauss(0.04))
-e4 <- envelope(fit, Kest, nsim=4, fix.n=TRUE)
+e6 <- envelope(fit, Kest, nsim=4, fix.n=TRUE)
 fit2 <- ppm(amacrine ~ 1, Strauss(0.03))
-e5 <- envelope(fit2, Gcross, nsim=4, fix.marks=TRUE)
+e7 <- envelope(fit2, Gcross, nsim=4, fix.marks=TRUE)
 
 # check pooling of envelopes in global case
 E1 <- envelope(cells, Kest, nsim=5, savefuns=TRUE, global=TRUE)
 E2 <- envelope(cells, Kest, nsim=12, savefuns=TRUE, global=TRUE)
 p12 <- pool(E1, E2)
+p12 <- pool(E1, E2, savefuns=TRUE)
+F1 <- envelope(cells, Kest, nsim=5,
+               savefuns=TRUE, savepatterns=TRUE, global=TRUE)
+F2 <- envelope(cells, Kest, nsim=12,
+               savefuns=TRUE, savepatterns=TRUE, global=TRUE)
+p12 <- pool(F1, F2)
+p12 <- pool(F1, F2, savefuns=TRUE, savepatterns=TRUE)
 E1r <- envelope(cells, Kest, nsim=5, savefuns=TRUE, global=TRUE,
                 ginterval=c(0.05, 0.15))
 E2r <- envelope(cells, Kest, nsim=12, savefuns=TRUE, global=TRUE,
@@ -551,7 +575,20 @@ local({
   A <- envelope(cells, nsim=5, alternative="less",
                 do.pwrong=TRUE, use.theory=FALSE,
                 savepatterns=TRUE, savefuns=TRUE)
+  print(A)
   B <- envelope(A, nsim=5, savefuns=TRUE)
+  #'  envelopes based on sample variance
+  E <- envelope(cells, nsim=8, VARIANCE=TRUE)
+  G <- envelope(cells, nsim=8, VARIANCE=TRUE,
+                use.theory=FALSE, do.pwrong=TRUE)
+  print(G)
+  #' weights argument
+  H <- envelope(cells, nsim=4, weights=npoints)
+  J <- envelope(cells, nsim=4, weights=npoints, VARIANCE=TRUE)
+  #' undocumented/secret
+  K <- envelope(cells, nsim=4, saveresultof=npoints, collectrubbish=TRUE)
+  M <- envelope(cells, nsim=4, patterns.only=TRUE)
+  
 })
 #
 #    tests/factorbugs.R

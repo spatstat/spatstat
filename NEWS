@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.55-1.005
+        CHANGES IN spatstat VERSION 1.55-1.006
 
 OVERVIEW
 
@@ -8,6 +8,8 @@ OVERVIEW
     o kernel estimate of intensity as a function(x,y)
 
     o Further improvements to leverage and influence code.
+
+    o Numerous minor bug fixes.
 
     o Version nickname: "The Salmon Mousse"
 
@@ -28,6 +30,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o as.im.nnfun, as.im.smoothfun
     New argument 'approx' chooses between a fast, approximate algorithm
     and a slow, exact algorithm.
+
+    o plot.im
+    Improved behaviour when all pixel values are NA.
     
 BUG FIXES
 

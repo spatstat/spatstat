@@ -1,7 +1,7 @@
 #
 #       images.R
 #
-#      $Revision: 1.146 $     $Date: 2017/10/24 01:02:35 $
+#      $Revision: 1.147 $     $Date: 2018/04/12 10:05:05 $
 #
 #      The class "im" of raster images
 #
@@ -736,7 +736,7 @@ raster.y <- function(w, drop=FALSE) {
 raster.xy <- function(w, drop=FALSE) {
   if(is.owin(w)) return(rasterxy.mask(w, drop=drop))
   if(!is.im(w)) stop("w should be a window or an image")
-  y <- w$xcol[col(w)]
+  x <- w$xcol[col(w)]
   y <- w$yrow[row(w)]
   if(drop) {
     ok <- !is.na(w$v)

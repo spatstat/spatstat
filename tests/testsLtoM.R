@@ -25,7 +25,7 @@ local({
 #'
 #'   leverage and influence for Gibbs models
 #' 
-#'   $Revision: 1.11 $ $Date: 2018/04/09 06:42:03 $
+#'   $Revision: 1.12 $ $Date: 2018/04/12 07:27:31 $
 #' 
 
 require(spatstat)
@@ -56,6 +56,15 @@ local({
   levHx <- Leverage(fitHx)
   infHx <- Influence(fitHx)
 
+  ## .........   class support .............................
+  ## other methods for classes leverage.ppm and influence.ppm
+  ## not elsewhere tested
+  w <- domain(levS)
+  w <- Window(infS)
+  vv <- shift(levS, c(1.2, 1.3))
+  vv <- shift(infS, c(1.2, 1.3))
+
+  ## ..........  compare algorithms .........................
   ## divide and recombine algorithm
   op <- spatstat.options(maxmatrix=50000)
   ## non-sparse
@@ -140,14 +149,17 @@ local({
   b <- ppmInfluence(fitSlogi, method="interpreted", entrywise=FALSE)
   b <- ppmInfluence(fitSlogi,                       entrywise=FALSE) 
 
-
-  ## .........   class support .............................
-  ## other methods for classes leverage.ppm and influence.ppm
-  ## not elsewhere tested
-  w <- domain(levS)
-  w <- Window(infS)
-  vv <- shift(levS, c(1.2, 1.3))
-  vv <- shift(infS, c(1.2, 1.3))
+  #' irregular parameters
+  ytoa <- function(x,y, alpha=1) { y^alpha }
+  lam <- function(x,y,alpha=1) { exp(4 + y^alpha) }
+  X <- rpoispp(lam, alpha=2)
+  fut <- ippm(X ~ offset(ytoa), start=list(alpha=1))
+  iScore <- list(alpha=function(x,y,alpha) { alpha * y^(alpha-1) } )
+  iHess <- list(alpha=function(x,y,alpha) { alpha * (alpha-1) * y^(alpha-2) } )
+  d <- ppmInfluence(fut)  # i.e. full set of results
+  d <- ppmInfluence(fut, method="interpreted") 
+  d <- ppmInfluence(fut, method="interpreted", entrywise=FALSE)
+  d <- ppmInfluence(fut,                       entrywise=FALSE) 
 })
 
 ##

@@ -59,16 +59,19 @@ local({
 #
 #  tests/imageops.R
 #
-#   $Revision: 1.8 $   $Date: 2018/02/25 03:44:33 $
+#   $Revision: 1.10 $   $Date: 2018/04/12 08:44:19 $
 #
 
 require(spatstat)
 local({
-  A <- as.im(owin())
-  B <- as.im(owin(c(1.1, 1.9), c(0,1)))
+  AA <- A <- as.im(owin())
+  BB <- B <- as.im(owin(c(1.1, 1.9), c(0,1)))
   Z <- imcov(A, B)
   stopifnot(abs(max(Z) - 0.8) < 0.1)
 
+  Frame(AA) <- Frame(B)
+  Frame(BB) <- Frame(A)
+  
   ## handling images with 1 row or column
   ycov <- function(x, y) y
   E <- as.im(ycov, owin(), dimyx = c(2,1))
@@ -83,13 +86,25 @@ local({
   d <- distmap(cells, dimyx=32)
   Z <- connected(d <= 0.06, method="interpreted")
 
+  a <- where.max(d, first=FALSE)
+  a <- where.min(d, first=FALSE)
+
+  dx <- raster.x(d)
+  dy <- raster.y(d)
+  dxy <- raster.xy(d)
+
   ## smudge() and rasterfilter()
   dd <- smudge(d)
+
+  ## rgb/hsv options
+  X <- setcov(owin())
+  M <- Window(X)
+  Y <- as.im(function(x,y) x, W=M)
+  Z <- as.im(function(x,y) y, W=M)
+  # convert after rescaling
+  RGBscal <- rgbim(X, Y, Z, autoscale=TRUE, maxColorValue=1)
+  HSVscal <- hsvim(X, Y, Z, autoscale=TRUE)
 })
-
-
-
-
 #' indices.R
 #' Tests of code for understanding index vectors etc
 #' $Revision: 1.1 $ $Date: 2018/03/01 03:38:07 $
