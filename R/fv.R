@@ -4,7 +4,7 @@
 ##
 ##    class "fv" of function value objects
 ##
-##    $Revision: 1.149 $   $Date: 2017/10/24 01:02:35 $
+##    $Revision: 1.152 $   $Date: 2018/04/13 04:15:41 $
 ##
 ##
 ##    An "fv" object represents one or more related functions
@@ -280,13 +280,21 @@ fvnames <- function(X, a=".") {
              dn <- fvnames(X, "*")
            return(dn)
          },
-         "*"=,
          ".a"={
            ## all column names other than the function argument
            allvars <- names(X)
            argu <- attr(X, "argu")
            nam <- allvars[allvars != argu]
-           nam <- rev(nam) ## convention
+           return(nam)
+         },
+         "*"={
+           ## Not documented at user level
+           ## All column names other than the function argument
+           ##           IN REVERSE ORDER
+           allvars <- names(X)
+           argu <- attr(X, "argu")
+           nam <- allvars[allvars != argu]
+           nam <- rev(nam) # NB
            return(nam)
          },
          {
@@ -307,10 +315,10 @@ fvnames <- function(X, a=".") {
     return(X)
   }
   if(a == ".a" || a == "*") {
-    warning("Column names unchanged: use names(x) <- value to change them")
+    warning("Nothing changed; use names(X) <- value to change names",
+            call.=FALSE)
     return(X)
   }
-
   ## validate the names
   switch(a,
          ".x"=,
@@ -1407,12 +1415,12 @@ bind.ratfv <- function(x, numerator=NULL, denominator=NULL,
     both <- numerator
     denominator <- attr(both, "denominator")
     usenames <- fvnames(both, ".a")
-    numerator   <- as.data.frame(both)[,usenames]
-    denominator <- as.data.frame(denominator)[,usenames]
+    numerator   <- as.data.frame(both)[,usenames,drop=FALSE]
+    denominator <- as.data.frame(denominator)[,usenames,drop=FALSE]
     ##  labels default to those of ratio object
-    if(is.null(labl)) labl <- attr(both, "labl")
-    if(is.null(desc)) desc <- attr(both, "desc")
-    if(is.null(labl)) labl <- attr(both, "labl")
+    ma <- match(usenames, colnames(both))
+    if(is.null(labl)) labl <- attr(both, "labl")[ma]
+    if(is.null(desc)) desc <- attr(both, "desc")[ma]
   }
   # calculate ratio
   #    The argument 'quotient' is rarely needed 

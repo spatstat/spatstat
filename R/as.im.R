@@ -3,7 +3,7 @@
 #
 #    conversion to class "im"
 #
-#    $Revision: 1.48 $   $Date: 2017/09/04 05:03:30 $
+#    $Revision: 1.52 $   $Date: 2018/04/13 07:17:05 $
 #
 #    as.im()
 #
@@ -103,7 +103,7 @@ as.im.funxy <- function(X, W=Window(X), ...) {
 
 as.im.function <- function(X, W=NULL, ...,
                            eps=NULL, dimyx=NULL, xy=NULL,
-                           na.replace=NULL, strict=FALSE) {
+                           na.replace=NULL, strict=FALSE, drop=TRUE) {
   f <- X
   if(is.null(W))
     stop("A window W is required")
@@ -118,37 +118,48 @@ as.im.function <- function(X, W=NULL, ...,
   argh <- list(...)
   if(strict) argh <- argh[names(argh) %in% names(formals(f))]
 
-  # evaluate function value at each pixel 
-  if(!funnywindow) 
+  #' evaluate function value at each pixel 
+  if(!funnywindow) {
     values <- do.call(f, append(list(xx, yy), argh))
-  else {
-    # evaluate only inside window
+    slices <- as.list(as.data.frame(values))
+    ns <- length(slices)
+  } else {
+    #' evaluate only inside window
     inside <- as.vector(m)
-    val <- do.call(f, append(list(xx[inside], yy[inside]), argh))
-    # create space for full matrix
+    values.inside <- do.call(f, append(list(xx[inside], yy[inside]), argh))
+    slices.inside <- as.list(as.data.frame(values.inside))
+    ns <- length(slices.inside)
+    #' pad out
     msize <- length(m)
-    values <-
-      if(!is.factor(val))
-        vector(mode=typeof(val), length=msize)
-      else {
-        lev <- levels(val)
-        factor(rep.int(lev[1L], msize), levels=lev)
-      }
-    # copy values, assigning NA outside window
-    values[inside] <- val
-    values[!inside] <- NA
+    slices <- vector(mode="list", length=ns)
+    for(i in seq_len(ns)) {
+      slice.inside.i <- slices.inside[[i]]
+      #' create space for full matrix
+      slice.i <- vector(mode=typeof(slice.inside.i), length=msize)
+      levels(slice.i) <- levels(slice.inside.i)
+      #' copy values, assigning NA outside window
+      slice.i[inside] <- slice.inside.i
+      slice.i[!inside] <- NA
+      slices[[i]] <- slice.i
+    }
   }
 
+  outlist <- vector(mode="list", length=ns)
   nc <- length(W$xcol)
   nr <- length(W$yrow)
-  if(nr == 1 || nc == 1) {
-    # exception: can't determine pixel width/height from centres
-    out <- im(matrix(values, nr, nc),
-              xrange=W$xrange, yrange=W$yrange, unitname=unitname(W))
-  } else {
-    out <- im(values, W$xcol, W$yrow, unitname=unitname(W))
+  for(i in seq_len(ns)) {
+    if(nr == 1 || nc == 1) {
+      #' exception: can't determine pixel width/height from centres
+      mat.i <- matrix(slices[[i]], nr, nc)
+      levels(mat.i) <- levels(slices[[i]])
+      out.i <- im(mat.i, xrange=W$xrange, yrange=W$yrange, unitname=unitname(W))
+    } else {
+      out.i <- im(slices[[i]], W$xcol, W$yrow, unitname=unitname(W))
+    }
+    outlist[[i]] <- na.handle.im(out.i, na.replace)
   }
-  return(na.handle.im(out, na.replace))
+  if(ns == 1 && drop) return(outlist[[1L]])
+  return(as.imlist(outlist)) 
 }
 
 as.im.matrix <- function(X, W=NULL, ...) {

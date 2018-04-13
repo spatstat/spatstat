@@ -48,15 +48,16 @@ fvnames(X, a = ".") <- value
                 \tab (in order of plotting) \cr
     \code{".s"} \tab the upper and lower limits of shading \cr
                 \tab (for envelopes and confidence intervals)\cr
-    \code{".a"} \tab all function values
+    \code{".a"} \tab all function values (in column order)
   }
   The command \code{fvnames(X, a)} expands the abbreviation \code{a} and returns
   a character vector containing the names of the columns.
 
   The assignment \code{fvnames(X, a) <- value} changes the
-  definition of the abbreviation \code{a} to the character vector
-  \code{value}. It does not change the labels of any columns.
-
+  definition of the abbreviation \code{a} to the character string
+  \code{value} (which should be the name of another column of \code{X}).
+  The column names of \code{X} are not changed.
+  
   Note that \code{fvnames(x, ".")} lists the columns of values that will
   be plotted by default, in the order that they would be plotted, not in
   order of the column position. The order in which curves are plotted

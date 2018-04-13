@@ -3,7 +3,7 @@
 #
 #  Smooth the marks of a point pattern
 # 
-#  $Revision: 1.46 $  $Date: 2018/01/18 05:54:39 $
+#  $Revision: 1.48 $  $Date: 2018/04/13 06:42:11 $
 #
 
 # smooth.ppp <- function(X, ..., weights=rep(1, npoints(X)), at="pixels") {
@@ -642,7 +642,7 @@ smoothcrossEngine <- function(Xdata, Xquery, values, sigma, ...,
     k <- ncol(values)
     stopifnot(nrow(values) == npoints(Xdata))
     values <- as.data.frame(values)
-    result <- matrix(, npoints(Xdata), k)
+    result <- matrix(, npoints(Xquery), k)
     colnames(result) <- colnames(values)
     if(!sorted) {
       ood <- fave.order(Xdata$x)
@@ -705,7 +705,7 @@ smoothcrossEngine <- function(Xdata, Xquery, values, sigma, ...,
                PACKAGE = "spatstat")
       if(sorted) result <- zz$result else result[ooq] <- zz$result
     } else {
-      wtsort <- weights[ood]
+      wtsort <- if(sorted) weights else weights[ood]
       zz <- .C("wtcrsmoopt",
                nquery      = as.integer(nquery),
                xq      = as.double(xq),
@@ -740,7 +740,7 @@ smoothcrossEngine <- function(Xdata, Xquery, values, sigma, ...,
                  PACKAGE = "spatstat")
         if(sorted) result <- zz$result else result[ooq] <- zz$result
       } else {
-        wtsort <- weights[ood]
+        wtsort <- if(sorted) weights else weights[ood]
         zz <- .C("awtcrsmoopt",
                  nquery      = as.integer(nquery),
                  xq      = as.double(xq),

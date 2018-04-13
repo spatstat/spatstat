@@ -1,15 +1,15 @@
 
-        CHANGES IN spatstat VERSION 1.55-1.006
+        CHANGES IN spatstat VERSION 1.55-1.007
 
 OVERVIEW
 
     o We thank Suman Rakshit for contributions.
     
-    o kernel estimate of intensity as a function(x,y)
+    o Kernel estimate of intensity as a function(x,y)
 
     o Further improvements to leverage and influence code.
 
-    o Numerous minor bug fixes.
+    o Numerous bug fixes.
 
     o Version nickname: "The Salmon Mousse"
 
@@ -36,14 +36,20 @@ SIGNIFICANT USER-VISIBLE CHANGES
     
 BUG FIXES
 
+    o plot.linim
+    Ignored argument 'legend' when style="colour".
+    [Spotted by Suman Rakshit.]
+    Fixed.
+
     o leverage.ppm, influence.ppm, dfbetas.ppm
     Crashed sometimes if the model was fitted by method="logi".
     Fixed.
 
-    o plot.linim
-    Ignored argument 'legend' when style="colour".
+    o Smooth.ppp
+    Crashed with some combinations of the arguments varcov and weights
+    when X had several columns of marks.
     Fixed.
-
+    
         CHANGES IN spatstat VERSION 1.55-1
 
 OVERVIEW

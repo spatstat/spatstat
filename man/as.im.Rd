@@ -36,7 +36,7 @@
 
   \method{as.im}{function}(X, W=NULL, \dots,
         eps=NULL, dimyx=NULL, xy=NULL,
-        na.replace=NULL, strict=FALSE)
+        na.replace=NULL, strict=FALSE, drop=TRUE)
 
   \method{as.im}{funxy}(X, W=Window(X), \dots)
 
@@ -99,10 +99,12 @@
     issued and \code{NULL} is returned.
   }
   \item{drop}{
-    Logical value indicating what to do when \code{X}
-    is a data frame with 3 columns. If \code{drop=TRUE} (the default),
-    the result is a pixel image. If \code{drop=FALSE}, the result is
-    a list containing one image.
+    Logical value indicating what to do if the result would
+    normally be a list of pixel images but the list contains
+    only one image.
+    If \code{drop=TRUE} (the default), the pixel image is extracted
+    and the result is a pixel image.
+    If \code{drop=FALSE}, this list is returned as the result.
   }
   \item{approx}{
    Logical value indicating whether to compute an approximate result
@@ -252,9 +254,8 @@
   If \code{m = 3} and \code{drop=TRUE} (the default), then the
   result is a pixel image rather than a list containing this image.
 
-  
-  by using \code{\link{distmap}}, when \code{X} is
-   a distance function.
+  If \code{X} is a \code{function(x,y)} which returns a matrix of
+  values, then \code{as.im(X, W)} will be a list of pixel images.
 }
 \value{
   A pixel image (object of class \code{"im"}),

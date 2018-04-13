@@ -3,7 +3,7 @@
 ##
 ## Exact 'funxy' counterpart of Smooth.ppp
 ##
-##  $Revision: 1.4 $ $Date: 2018/04/09 07:44:18 $
+##  $Revision: 1.6 $ $Date: 2018/04/13 06:24:43 $
 
 
 Smoothfun <- function(X, ...) {
@@ -67,12 +67,12 @@ print.Smoothfun <- function(x, ...) {
 ## (enables plot.funxy, persp.funxy, contour.funxy to work for this class)
 
 as.im.Smoothfun <- function(X, W=Window(X), ..., approx=TRUE) {
+  stuff <- get("stuff", envir=environment(X))
   if(!approx) {
     #' evaluate exactly at grid points 
     result <- as.im.function(X, W=W, ...)
   } else {
     #' faster, approximate evaluation using FFT
-    stuff <- get("stuff", envir=environment(X))
     if(!is.null(W)) stuff$X <- stuff$X[W]
     result <- do.call(Smooth, resolve.defaults(list(...), stuff))
   }

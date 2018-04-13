@@ -130,5 +130,34 @@ Change log from 1.55-1 to 1.55-2
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+13 apr 2018
 
+   tests/fastK.R
+	Added tests of code blocks not yet covered.
+
+   fv.R
+   fvnames.Rd
+	Buglet fixes and tweaks.
+
+   as.im.R
+   as.im.Rd
+	as.im.function now handles matrix-valued functions
+	and has new argument 'drop'.
+	
+   smoothfun.R
+	as.im.smoothfun now handles multiple columns of marks.
+
+   smooth.ppp.R
+	Bug fixes
+
+   tests/density.R
+	More tests of Smooth.ppp and Smoothfun.ppp
+	
+   DESCRIPTION
+   NEWS
+	version 1.55-1.007
+
+------------- passed R-3.4.4 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
    

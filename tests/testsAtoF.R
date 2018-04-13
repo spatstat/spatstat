@@ -264,7 +264,7 @@ local({
 #'                    relrisk(), Smooth()
 #'                    and inhomogeneous summary functions
 #'
-#'  $Revision: 1.14 $  $Date: 2018/04/09 04:22:53 $
+#'  $Revision: 1.16 $  $Date: 2018/04/13 07:06:58 $
 #'
 
 require(spatstat)
@@ -302,7 +302,7 @@ local({
   Z <- density(cells, 0.05, preserve=TRUE)
   Z <- density(cells, 0.05, fractional=TRUE, preserve=TRUE)
         
-  ## compare density.ppp(at="points") results with different algorithms
+  ## compare results with different algorithms
   crosscheque <- function(expr) {
     e <- as.expression(substitute(expr))
     ename <- sQuote(deparse(substitute(expr)))
@@ -326,6 +326,7 @@ local({
     invisible(NULL)
   }
 
+  ## compare results of density(at="points") with different algorithms
   crosscheque(density(redwood, at="points", sigma=0.13, edge=FALSE))
 
   lam <- density(redwood)
@@ -361,11 +362,23 @@ local({
     f(120, 80)
     return(invisible(NULL))
   }
+  stroke()
   stroke(5, diggle=TRUE)
   stroke(1e-6) # generates warning about small bandwidth
   stroke(varcov=diag(c(25, 36)))
-  stroke(weights=runif(npoints(longleaf)))
-  stroke(weights=expression(x))
+  stroke(5, weights=runif(npoints(longleaf)))
+  stroke(5, weights=expression(x))
+  strike <- function(...) {
+    Z <- Smooth(finpines, ..., at="pixels")
+    Z <- Smooth(finpines, ..., at="points")
+    f <- Smoothfun(finpines, ...)
+    f(4, 1)
+    return(invisible(NULL))
+  }
+  strike()
+  strike(varcov=diag(c(1.2, 2.1)))
+  strike(1.5, weights=runif(npoints(finpines)))
+  strike(1.5, weights=expression(y))
 
   ## validity of Smooth.ppp(at='points')
   Y <- longleaf %mark% runif(npoints(longleaf), min=41, max=43)
@@ -381,6 +394,11 @@ local({
 
   ## compare Smooth.ppp results with different algorithms
   crosscheque(Smooth(longleaf, at="points", sigma=6))
+  wt <- runif(npoints(longleaf))
+  vc <- diag(c(25,36))
+  crosscheque(Smooth(longleaf, at="points", sigma=6, weights=wt))
+  crosscheque(Smooth(longleaf, at="points", varcov=vc))
+  crosscheque(Smooth(longleaf, at="points", varcov=vc, weights=wt))
 
   ## drop-dimension coding errors
   X <- longleaf
@@ -667,8 +685,9 @@ local({
 #  tests/fastK.R
 #
 # check fast and slow code for Kest
+#       and options not tested elsewhere
 #
-#   $Revision: 1.3 $   $Date: 2017/07/02 08:41:46 $
+#   $Revision: 1.4 $   $Date: 2018/04/13 04:01:25 $
 #
 require(spatstat)
 local({
@@ -676,8 +695,19 @@ local({
   Kb <- Kest(cells, nlarge=0)
   Ku <- Kest(cells, correction="none")
   Kbu <- Kest(cells, correction=c("none", "border"))
-  ## slow code, full set of corrections, sqrt transformation
-  Ldd <- Lest(unmark(demopat), correction="all", var.approx=TRUE)
+  ## slow code, full set of corrections, sqrt transformation, ratios
+  Ldd <- Lest(unmark(demopat), correction="all", var.approx=TRUE, ratio=TRUE)
+  ## Lotwick-Silverman var approx (rectangular window)
+  Loo <- Lest(cells, correction="all", var.approx=TRUE, ratio=TRUE)
+  ## Code for large dataset
+  nbig <- .Machine$integer.max
+  if(!is.null(nbig)) {
+    nn <- ceiling(sqrt(nbig))
+    if(nn < 1e6) Kbig <- Kest(runifpoint(nn),
+                              correction=c("border", "bord.modif", "none"),
+                              ratio=TRUE)
+  }
+  
   ## Kinhom
   lam <- density(cells, at="points", leaveoneout=TRUE)
   ## fast code
