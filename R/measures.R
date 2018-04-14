@@ -3,7 +3,7 @@
 #
 #  signed/vector valued measures with atomic and diffuse components
 #
-#  $Revision: 1.79 $  $Date: 2018/03/21 15:27:10 $
+#  $Revision: 1.80 $  $Date: 2018/04/14 01:17:03 $
 #
 msr <- function(qscheme, discrete, density, check=TRUE) {
   if(!is.quad(qscheme))
@@ -272,6 +272,15 @@ augment.msr <- function(x, ..., sigma, recompute=FALSE) {
   attr(smo, "sigma") <- sigma
   attr(x, "smoothdensity") <- smo
   return(x)
+}
+
+update.msr <- function(object, ...) {
+  #' reconcile internal data
+  if(!is.null(smo <- attr(object, "smoothdensity"))) {
+    sigma <- attr(smo, "sigma")
+    object <- augment.msr(object, ..., sigma=sigma, recompute=TRUE)
+  }
+  return(object)
 }
 
 plot.msr <- function(x, ..., add=FALSE,
@@ -627,6 +636,7 @@ measurePositive <- function(x) {
   y$discrete <- pmax(0, x$discrete)
   y$density  <- pmax(0, x$density)
   y$val      <- y$discrete + y$wt * y$density
+  y <- update(y)
   return(y)
 }
 
@@ -637,6 +647,7 @@ measureNegative <- function(x) {
   y$discrete <- -pmin(0, x$discrete)
   y$density  <- -pmin(0, x$density)
   y$val      <- y$discrete + y$wt * y$density
+  y <- update(y)
   return(y)
 }
 
@@ -647,11 +658,32 @@ measureVariation <- function(x) {
   y$discrete <- abs(x$discrete)
   y$density  <- abs(x$density)
   y$val      <- y$discrete + y$wt * y$density
+  y <- update(y)
   return(y)
 }
 
 totalVariation <- function(x) integral(measureVariation(x))
-  
+
+measureDiscrete <- function(x) {
+  if(!inherits(x, "msr"))
+    stop("x must be a measure", call.=FALSE)
+  y <- x
+  y$density[]  <- 0
+  y$val        <- y$discrete
+  y <- update(y)
+  return(y)
+}
+
+measureContinuous <- function(x) {
+  if(!inherits(x, "msr"))
+    stop("x must be a measure", call.=FALSE)
+  y <- x
+  y$discrete[] <- 0
+  y$val        <- y$wt * y$density
+  y <- update(y)
+  return(y)
+}
+
 harmonise.msr <- local({
 
   harmonise.msr <- function(...) {

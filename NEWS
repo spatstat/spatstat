@@ -9,9 +9,11 @@ OVERVIEW
 
     o Further improvements to leverage and influence code.
 
+    o Extract discrete and continuous components of a measure.
+    
     o Numerous bug fixes.
 
-    o Version nickname: "The Salmon Mousse"
+    o Version nickname: "Untethered"
 
 NEW FUNCTIONS
 
@@ -21,6 +23,9 @@ NEW FUNCTIONS
 
     o as.im.densityfun
     Convert function(x,y) to a pixel image.
+
+    o measureDiscrete, measureContinuous
+    Extract the discrete and continuous components of a measure.
     
 SIGNIFICANT USER-VISIBLE CHANGES
 

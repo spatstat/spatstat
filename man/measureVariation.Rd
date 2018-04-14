@@ -59,7 +59,8 @@ totalVariation(x)
   \adrian.
 }
 \seealso{
-  \code{\link{msr}}, \code{\link{with.msr}}, \code{\link{split.msr}}
+  \code{\link{msr}}, \code{\link{with.msr}}, \code{\link{split.msr}},
+  \code{\link{measureDiscrete}}
 }
 \examples{
    X <- rpoispp(function(x,y) { exp(3+3*x) })

@@ -670,6 +670,7 @@
 \alias{unstackFilter}
 \alias{update.im}
 \alias{update.ippm}
+\alias{update.msr}
 \alias{update.rmhstart}
 \alias{validradius}
 \alias{validate2Dkernel}
@@ -1558,6 +1559,7 @@ x \%unit\% u
 unstackFilter(x)
 \method{update}{im}(object, \dots) 
 \method{update}{ippm}(object, \dots, envir) 
+\method{update}{msr}(object, \dots) 
 \method{update}{rmhstart}(object, \dots)
 validradius(r, caller)
 validate2Dkernel(kernel, fatal)

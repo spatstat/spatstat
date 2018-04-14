@@ -160,4 +160,24 @@ Change log from 1.55-1 to 1.55-2
 ------------- passed R-3.4.4 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
-   
+
+14 apr 2018
+
+   measures.R
+   spatstat-internal.Rd
+	New method update.msr to reconcile the internal data in a measure.
+	
+   measures.R
+   measureContinuous.Rd [New file]
+   	New functions measureDiscrete() and measureContinuous()
+
+   DESCRIPTION
+   NEWS
+   Nickname.txt
+	Nickname "Untethered"
+	version 1.55-1.008
+
+------------- passed R-3.4.4 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
