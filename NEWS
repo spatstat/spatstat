@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.55-1.007
+        CHANGES IN spatstat VERSION 1.55-1.009
 
 OVERVIEW
 
@@ -53,6 +53,14 @@ BUG FIXES
     o Smooth.ppp
     Crashed with some combinations of the arguments varcov and weights
     when X had several columns of marks.
+    Fixed.
+
+    o plot.tess
+    Crashed sometimes when do.col=TRUE and values=NULL.
+    Fixed.
+
+    o tiles
+    names(tiles(x)) was not always identical to tilenames(x).
     Fixed.
     
         CHANGES IN spatstat VERSION 1.55-1

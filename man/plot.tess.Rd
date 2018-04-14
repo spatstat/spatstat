@@ -84,16 +84,22 @@
   \code{\link{tess}}
 }
 \examples{
-  A <- tess(xgrid=0:4,ygrid=0:4)
-  plot(A, border="blue", lwd=2, lty=2)
-  plot(A, do.col=TRUE, values=runif(16), border="white")
-  B <- A[c(1, 2, 5, 7, 9)]
+  Rect <- tess(xgrid=0:4,ygrid=0:4)
+  Diri <- dirichlet(runifpoint(7))
+  plot(Diri)
+  plot(Rect, border="blue", lwd=2, lty=2)
+  plot(Rect, do.col=TRUE, border="white")
+  plot(Rect, do.col=TRUE, values=runif(16), border="white")
+  B <- Rect[c(1, 2, 5, 7, 9)]
   plot(B, hatch=TRUE)
+  plot(Diri, do.col=TRUE)
+  plot(Diri, do.col=TRUE, do.labels=TRUE, labelargs=list(col="white"),
+             ribbon=FALSE)
   v <- as.im(function(x,y){factor(round(5 * (x^2 + y^2)))}, W=owin())
   levels(v) <- letters[seq(length(levels(v)))]
-  E <- tess(image=v)
-  plot(E)
-  plot(E, col=rainbow(11), ribargs=list(las=1))
+  Img <- tess(image=v)
+  plot(Img)
+  plot(Img, col=rainbow(11), ribargs=list(las=1))
 }
 
 \author{

@@ -181,3 +181,22 @@ Change log from 1.55-1 to 1.55-2
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+   msr.Rd
+   with.msr.Rd
+	Added cross-references.
+
+tess.R
+	Bug fixes in tiles() and plot.tess()
+
+   tess.Rd
+   plot.tess.Rd
+   tests/tessera.R [New file]
+   	More examples and tests of tessellation code.
+
+   DESCRIPTION
+   NEWS
+	version 1.55-1.009
+
+------------- passed R-3.4.4 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------

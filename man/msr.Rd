@@ -121,7 +121,8 @@
   \code{\link{with.msr}},
   \code{\link{split.msr}},
   \code{\link{Ops.msr}},
-  \code{\link{measureVariation}}.
+  \code{\link{measureVariation}},
+  \code{\link{measureContinuous}}.
 }
 \examples{
    X <- rpoispp(function(x,y) { exp(3+3*x) })

@@ -3,7 +3,7 @@
 #
 # support for tessellations
 #
-#   $Revision: 1.78 $ $Date: 2018/03/07 04:06:58 $
+#   $Revision: 1.80 $ $Date: 2018/04/14 03:14:12 $
 #
 tess <- function(..., xgrid=NULL, ygrid=NULL, tiles=NULL, image=NULL,
                  window=NULL, marks=NULL, keepempty=FALSE,
@@ -220,14 +220,16 @@ plot.tess <- local({
                                do.plot=FALSE,
                                show.all=show.all, add=add, main=main,
                                col=col, ribargs=ribargs),
-                          list(...)))
+                          list(...),
+                          list(valuesAreColours=FALSE)
+                          ))
       #' exit if not actually plotting
       if(!do.plot) return(result)
       #' extract info
       colmap <- result
       bbox <- attr(result, "bbox")
       bbox.legend <- attr(result, "bbox.legend")
-      need.legend <- TRUE
+      need.legend <- !is.null(bbox.legend)
     } else {
       result <- NULL
       bbox <- NULL
@@ -391,28 +393,24 @@ tiles <- function(x) {
            yg <- x$ygrid
            nx <- length(xg) - 1
            ny <- length(yg) - 1
-           for(j in rev(seq_len(ny)))
+           for(j in rev(seq_len(ny))) {
              for(i in seq_len(nx)) {
                winij <- owin(xg[c(i,i+1)], yg[c(j,j+1)])
-               dout <- list(winij)
-               names(dout) <- paste("Tile row ", ny-j+1, ", col ", i,
-                                    sep="")
-               out <- append(out, dout)
+               out <- append(out, list(winij))
              }
+           }
          },
          tiled={
            out <- x$tiles
-           if(is.null(names(out)))
-             names(out) <- paste("Tile", seq_along(out))
-         },
+           },
          image={
            out <- list()
            ima <- x$image
            lev <- levels(ima)
            for(i in seq_along(lev))
              out[[i]] <- solutionset(ima == lev[i])
-           names(out) <- paste(lev)
-         })
+           })
+  names(out) <- tilenames(x)
   out <- as.solist(out)
   return(out)
 }

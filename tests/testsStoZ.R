@@ -437,6 +437,39 @@ local({
   invoke.symbolmap(g1, 50, x=numeric(0), y=numeric(0), add=TRUE)
 
 })
+#'   tests/tessera.R
+#'   Tessellation code, not elsewhere tested
+#'   $Revision: 1.1 $ $Date: 2018/04/14 03:25:12 $
+#'
+require(spatstat)
+local({
+  W <- owin()
+  Wsub <- square(0.5)
+  X <- runifpoint(7, W)
+  A <- dirichlet(X)
+  Z <- distmap(letterR, invert=TRUE)[letterR, drop=FALSE]
+  H <- tess(xgrid=0:2, ygrid=0:3)
+  #' discretisation of tiles
+  V <- as.im(A)
+  B <- tess(window=as.mask(W), tiles=tiles(A))
+  #' logical images
+  D <- tess(image=(Z > 0.2))
+  U <- (Z > -0.2) # TRUE or NA
+  E <- tess(image=U, keepempty=TRUE)
+  G <- tess(image=U, keepempty=FALSE)
+  #' methods
+  unitname(B) <- c("metre", "metres")
+  unitname(B)
+  print(B)
+  Bsub <- B[c(3,5,7)]
+  print(Bsub)
+  tilenames(H) <- letters[seq_along(tilenames(H))]
+  #'
+  Pe <- intersect.tess(A, Wsub)
+  Pm <- intersect.tess(A, as.mask(Wsub))
+  b <- bdist.tiles(D)
+  b <- bdist.tiles(A[c(3,5,7)])
+})
 #
 #   tests/testaddvar.R
 #

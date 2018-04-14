@@ -66,7 +66,8 @@
 }
 \seealso{
   \code{\link{msr}},
-  \code{\link{split.msr}}
+  \code{\link{split.msr}},
+  \code{\link{measureContinuous}}, \code{\link{measurePositive}}
 }
 \examples{
    X <- rpoispp(function(x,y) { exp(3+3*x) })
