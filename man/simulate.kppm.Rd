@@ -70,9 +70,10 @@
   See Details.
 }
 \examples{
-  data(redwood)
-  fit <- kppm(redwood, ~1, "Thomas")
+  fit <- kppm(redwood ~1, "Thomas")
   simulate(fit, 2)
+  fitx <- kppm(redwood ~x, "Thomas")
+  simulate(fitx, 2)
 }
 \seealso{
   \code{\link{kppm}},

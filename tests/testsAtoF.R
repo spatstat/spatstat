@@ -264,7 +264,7 @@ local({
 #'                    relrisk(), Smooth()
 #'                    and inhomogeneous summary functions
 #'
-#'  $Revision: 1.16 $  $Date: 2018/04/13 07:06:58 $
+#'  $Revision: 1.18 $  $Date: 2018/04/16 15:59:44 $
 #'
 
 require(spatstat)
@@ -326,8 +326,13 @@ local({
     invisible(NULL)
   }
 
-  ## compare results of density(at="points") with different algorithms
+  ## execute & compare results of density(at="points") with different algorithms
+  wdfr <- cbind(1:npoints(redwood), 2)
   crosscheque(density(redwood, at="points", sigma=0.13, edge=FALSE))
+  crosscheque(density(redwood, at="points", sigma=0.13, edge=FALSE,
+                      weights=wdfr[,1]))
+  crosscheque(density(redwood, at="points", sigma=0.13, edge=FALSE,
+                      weights=wdfr))
 
   lam <- density(redwood)
   K <- Kinhom(redwood, lam)

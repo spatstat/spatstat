@@ -25,11 +25,12 @@ local({
 #'
 #'   leverage and influence for Gibbs models
 #' 
-#'   $Revision: 1.14 $ $Date: 2018/04/16 09:53:51 $
+#'   $Revision: 1.16 $ $Date: 2018/04/16 15:40:53 $
 #' 
 
 require(spatstat)
 local({
+  cat("Running non-sparse algorithm...", fill=TRUE)
   # original non-sparse algorithm
   Leverage <- function(...) leverage(..., sparseOK=FALSE)
   Influence <- function(...) influence(..., sparseOK=FALSE)
@@ -59,6 +60,7 @@ local({
   ## .........   class support .............................
   ## other methods for classes leverage.ppm and influence.ppm
   ## not elsewhere tested
+  cat("Testing class support...", fill=TRUE)
   w <- domain(levS)
   w <- Window(infS)
   vv <- shift(levS, c(1.2, 1.3))
@@ -66,6 +68,7 @@ local({
 
   ## ..........  compare algorithms .........................
   ## divide and recombine algorithm
+  cat("Reduce maximum block side to 50,000 ...", fill=TRUE)
   op <- spatstat.options(maxmatrix=50000)
   ## non-sparse
   levSB <- Leverage(fitS)
@@ -82,12 +85,14 @@ local({
     invisible(NULL)
   }
 
+  cat("Compare single-block to multi-block...", fill=TRUE)
   chk(marks(as.ppp(infS)), marks(as.ppp(infSB)), "influence")
   chk(as.im(levS),         as.im(levSB),         "leverage")
   chk(dfbS$val,            dfbSB$val,            "dfbetas$value")
   chk(dfbS$density,        dfbSB$density,        "dfbetas$density")
 
   # also check case of zero cif
+  cat("Check zero cif cases...", fill=TRUE)
   levHB <- Leverage(fitH)
   infHB <- Influence(fitH)
   dfbHB <- Dfbetas(fitH)
@@ -96,14 +101,17 @@ local({
   dfbHxB <- Dfbetas(fitHx)
   
   ## sparse algorithm, with blocks
+  cat("Run sparse algorithm with blocks...", fill=TRUE)
   pmiSSB <- ppmInfluence(fitS, sparseOK=TRUE)
   # also check case of zero cif
   pmiHSB <- ppmInfluence(fitH, sparseOK=TRUE)
   pmiHxSB <- ppmInfluence(fitHx, sparseOK=TRUE)
 
+  cat("Reinstate maxmatrix...", fill=TRUE)
   spatstat.options(op)
 
   ## sparse algorithm, no blocks
+  cat("Compare sparse and non-sparse results...", fill=TRUE)
   pmi <- ppmInfluence(fitS, sparseOK=TRUE)
   levSp <- pmi$leverage
   infSp <- pmi$influence
@@ -116,10 +124,12 @@ local({
   chks(dfbS$density,        dfbSp$density,        "dfbetas$density")
 
   #' case of zero cif
+  cat("zero cif...", fill=TRUE)
   pmiH <- ppmInfluence(fitH, sparseOK=TRUE)
   pmiHx <- ppmInfluence(fitHx, sparseOK=TRUE)
 
   #' other code blocks - check execution only
+  cat("other code blocks...", fill=TRUE)
   a <- ppmInfluence(fitS)  # i.e. full set of results
   a <- ppmInfluence(fitS, method="interpreted") 
   a <- ppmInfluence(fitS, method="interpreted", entrywise=FALSE)
@@ -127,6 +137,7 @@ local({
   #' NOTE: code for irregular parameters is tested in 'make bookcheck'
 
   ## ...........  logistic fits .......................
+  cat("Logistic fits...", fill=TRUE)
   #'  special algorithm for delta2
   fitSlogi <- ppm(cells ~ x, Strauss(0.12), rbord=0, method="logi")
   pmiSlogi <- ppmInfluence(fitSlogi)
@@ -144,31 +155,37 @@ local({
   pmiHxlogi <- ppmInfluence(fitHxlogi)
   
   #' other code blocks - check execution only
+  cat("Other code blocks...", fill=TRUE)
   b <- ppmInfluence(fitSlogi)  # i.e. full set of results
   b <- ppmInfluence(fitSlogi, method="interpreted") 
   b <- ppmInfluence(fitSlogi, method="interpreted", entrywise=FALSE)
   b <- ppmInfluence(fitSlogi,                       entrywise=FALSE) 
 
   #' irregular parameters
+  cat("Irregular parameters...", fill=TRUE)
   ytoa <- function(x,y, alpha=1) { y^alpha }
   lam <- function(x,y,alpha=1) { exp(4 + y^alpha) }
+  set.seed(90210)
   X <- rpoispp(lam, alpha=2)
   iScor <- list(alpha=function(x,y,alpha) { alpha * y^(alpha-1) } )
   iHess <- list(alpha=function(x,y,alpha) { alpha * (alpha-1) * y^(alpha-2) } )
-  gogo <- function(...) {
+  gogo <- function(tag, ..., iS=iScor, iH=iHess) {
     #' compute full set of results
-    ppmInfluence(..., iScore=iScor, iHessian=iHess)
+    cat(tag, fill=TRUE)
+    ppmInfluence(..., iScore=iS, iHessian=iH)
   }
+  cat("Offset model...", fill=TRUE)
   fut <- ippm(X ~ offset(ytoa), start=list(alpha=1))
-  d <- gogo(fut)
-  d <- gogo(fut, method="interpreted") 
-  d <- gogo(fut, method="interpreted", entrywise=FALSE)
-  d <- gogo(fut,                       entrywise=FALSE) 
+  d <- gogo("a", fut)
+  d <- gogo("b", fut, method="interpreted") 
+  d <- gogo("c", fut, method="interpreted", entrywise=FALSE)
+  d <- gogo("d", fut,                       entrywise=FALSE) 
+  cat("Offset+x model...", fill=TRUE)
   futx <- ippm(X ~ x + offset(ytoa), start=list(alpha=1))
-  d <- gogo(futx) 
-  d <- gogo(futx, method="interpreted") 
-  d <- gogo(futx, method="interpreted", entrywise=FALSE)
-  d <- gogo(futx,                       entrywise=FALSE) 
+  d <- gogo("a", futx) 
+  d <- gogo("b", futx, method="interpreted") 
+  d <- gogo("c", futx, method="interpreted", entrywise=FALSE)
+  d <- gogo("d", futx,                       entrywise=FALSE) 
 })
 
 ##

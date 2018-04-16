@@ -93,6 +93,10 @@ local({
   dy <- raster.y(d)
   dxy <- raster.xy(d)
 
+  ## cases of "[.im"
+  ee  <- d[simplenet, drop=FALSE]
+  eev <- d[simplenet]
+
   ## smudge() and rasterfilter()
   dd <- smudge(d)
 

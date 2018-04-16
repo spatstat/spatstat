@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.55-1.011
+        CHANGES IN spatstat VERSION 1.55-1.012
 
 OVERVIEW
 
@@ -7,10 +7,10 @@ OVERVIEW
     
     o Kernel estimate of intensity as a function(x,y)
 
-    o Further improvements to leverage and influence code.
-
     o Extract discrete and continuous components of a measure.
-    
+
+    o Improvements to leverage and influence code.
+
     o Numerous bug fixes.
 
     o Version nickname: "Untethered"
@@ -29,6 +29,10 @@ NEW FUNCTIONS
     
 SIGNIFICANT USER-VISIBLE CHANGES
 
+    o msr
+    Infinite and NA values are now detected (if check=TRUE)
+    and are reset to zero, with a warning.
+    
     o leverage.ppm, influence.ppm, dfbetas.ppm
     Faster computation in some cases.
 
@@ -38,7 +42,7 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o plot.im
     Improved behaviour when all pixel values are NA.
-    
+
 BUG FIXES
 
     o plot.linim

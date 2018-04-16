@@ -3,7 +3,7 @@
 #
 #  signed/vector valued measures with atomic and diffuse components
 #
-#  $Revision: 1.80 $  $Date: 2018/04/14 01:17:03 $
+#  $Revision: 1.82 $  $Date: 2018/04/16 15:39:01 $
 #
 msr <- function(qscheme, discrete, density, check=TRUE) {
   if(!is.quad(qscheme))
@@ -67,12 +67,22 @@ msr <- function(qscheme, discrete, density, check=TRUE) {
     colnames(discretepad) <- colnames(density)
   }
 
-  #
-  #
-  # Discretised measure (value of measure for each quadrature tile)
+  ##
+  ## Discretised measure (value of measure for each quadrature tile)
+  ## 
   val <- discretepad + wt * density
   if(is.matrix(density)) colnames(val) <- colnames(density)
-  #
+  ##
+  ##
+  
+  if(check && !all(ok <- complete.cases(val))) {
+    warning("Some infinite, NA or NaN increments were removed", call.=FALSE)
+    val         <- ok * val
+    discretepad <- ok * discretepad
+    density     <- ok * density
+  }
+  
+  ## finished
   out <- list(loc = U,
               val = val,
               atoms = Z,
@@ -81,6 +91,9 @@ msr <- function(qscheme, discrete, density, check=TRUE) {
               wt = wt)
   class(out) <- "msr"
   return(out)
+}
+
+weed.msr <- function(x) {
 }
 
 # Translation table for usage of measures
@@ -243,9 +256,13 @@ augment.msr <- function(x, ..., sigma, recompute=FALSE) {
     attr(smo, "sigma") <- sigma
     attr(x, "smoothdensity") <- smo
     return(x)
-  }   
-  ## smooth density unless constant
+  }
+  ## Single-type 
   xdensity <- as.matrix(x$density)
+  ## first weed out Inf, NA, NaN
+  if(!all(ok <- complete.cases(xdensity))) 
+    xdensity <- ok * xdensity
+  ## smooth density unless constant
   ra <- apply(xdensity, 2, range)
   varble <- apply(as.matrix(ra), 2, diff) > sqrt(.Machine$double.eps)
   ##

@@ -1,6 +1,6 @@
 #'  tests/randoms.R
 #'   Further tests of random generation code
-#'  $Revision: 1.1 $ $Date: 2016/04/02 04:03:46 $
+#'  $Revision: 1.2 $ $Date: 2018/04/16 13:56:34 $
 
 require(spatstat)
 local({
@@ -14,7 +14,12 @@ local({
   A <- rstrat(nx=4, nsim=2)
   A <- rsyst(nx=4, nsim=2)
   A <- rthin(cells, P=0.5, nsim=2)
+  A <- rthin(cells, runif(42))
   A <- rjitter(cells, nsim=2, retry=FALSE)
+
+  op <- spatstat.options(fastpois=FALSE)
+  A <- runifpoispp(5, nsim=2)
+  spatstat.options(op)
 })
 
 #'  tests/resid.R

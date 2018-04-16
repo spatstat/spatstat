@@ -240,3 +240,24 @@ Change log from 1.55-1 to 1.55-2
 ------------- passed R-3.4.4 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
+
+   tests/density.R
+   tests/randoms.R
+   tests/leverinf.R
+	More tests.
+
+   tests/leverinf.R
+	set seed in randomised example
+
+   measures.R
+	msr() and augment.msr() now detect Inf and NA increments
+	and set them to zero with a warning.
+	
+   DESCRIPTION
+   NEWS
+	version 1.55-1.012
+
+------------- passed R-3.4.4 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
