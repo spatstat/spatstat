@@ -62,8 +62,9 @@ This is a \emph{spatial point pattern} dataset.
 
 Methods for
 analysing this kind of data are summarised in the
-highly recommended book by Diggle \cite{digg03} and other references
-in the bibliography. \nocite{handbook10,bivapebegome08}
+highly recommended book by Diggle \cite{digg03},
+or our own book \cite{baddrubaturn15}, or other references
+in the bibliography below. \nocite{handbook10,bivapebegome08}
 
 Alternatively the points could be locations in one dimension
 (such as road accidents recorded on a road network) or 
@@ -111,7 +112,7 @@ for example
 as well as some advanced statistical techniques.
 
 \Spst\ is one of the largest packages available for \R,
-containing over 1000 commands. It is the product of 15 years of software 
+containing over 1000 commands. It is the product of 25 years of software 
 development by leading researchers in spatial statistics.
 
 \section*{How do I start using \spst?}
@@ -158,8 +159,9 @@ mydata <- read.csv("myfile.csv")
 @ 
     to read the data from the file and save them in an object called 
     \texttt{mydata} (or whatever you want to call it).
-    You may need to set various options to get this to work
-    for your file format: type \texttt{help(read.csv)} for information.
+    You may need to set various options inside the \texttt{read.csv()} command
+    to get this to work for your file format: 
+    type \texttt{help(read.csv)} for information.
   \end{quote}
 \item Check that \texttt{mydata} contains the data you expect. 
   \begin{quote}
@@ -294,15 +296,9 @@ Information sources for \spst\ include:
     with examples) which can be accessed using the graphical help interface.
     They include a document about \texttt{Handling shapefiles}.
   \end{quote}
-\item workshop notes:
-  \begin{quote}
-    The notes from a two-day workshop 
-    on \spst\ are available online \cite{badd10wshop}.
-    These are now rather out-of-date, but still useful.
-  \end{quote}
 \item book:
   \begin{quote}
-    The forthcoming book \cite{baddrubaturn15} 
+    Our book \cite{baddrubaturn15} 
     contains a complete course on \texttt{spatstat}.
   \end{quote}
 \item website:
@@ -319,13 +315,13 @@ Information sources for \spst\ include:
 \end{itemize}
 
 \begin{thebibliography}{10}
-\bibitem{badd10wshop}
-A. Baddeley.
-\newblock Analysing spatial point patterns in {{R}}.
-\newblock Technical report, CSIRO, 2010.
-\newblock Version 4.
-\newblock URL \texttt{https://research.csiro.au/software/r-workshop-notes/}
-
+% \bibitem{badd10wshop}
+% A. Baddeley.
+% \newblock Analysing spatial point patterns in {{R}}.
+% \newblock Technical report, CSIRO, 2010.
+% \newblock Version 4.
+% \newblock URL \texttt{https://research.csiro.au/software/r-workshop-notes/}
+%
 \bibitem{baddrubaturn15}
 A. Baddeley, E. Rubak, and R. Turner.
 \newblock {\em Spatial Point Patterns: Methodology and Applications with {{R}}}.

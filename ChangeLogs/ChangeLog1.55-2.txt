@@ -185,7 +185,7 @@ Change log from 1.55-1 to 1.55-2
    with.msr.Rd
 	Added cross-references.
 
-tess.R
+   tess.R
 	Bug fixes in tiles() and plot.tess()
 
    tess.Rd
@@ -200,3 +200,20 @@ tess.R
 ------------- passed R-3.4.4 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
+
+   vignettes/getstart.Rnw
+   vignettes/replicated.Rnw
+	Updated
+
+   README.md
+	Changed badge link
+
+   DESCRIPTION
+   NEWS
+	version 1.55-1.010
+
+------------- passed R-3.4.4 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+

@@ -294,9 +294,10 @@ G <- hyperframe(X=1:3, Y=letters[1:3], Z=factor(letters[1:3]),
 G
 @ 
 
-This hyperframe has 3 rows. The columns named \texttt{U} and \texttt{V}
+This hyperframe has 3 rows and 6 columns. 
+The columns named \texttt{U} and \texttt{V}
 are constant (all entries in a column are the same). The column named
-\texttt{Y} is a character vector.
+\texttt{Y} is a character vector while \texttt{Z} is a factor.
 
 \subsection{Hyperframes of data}
 
@@ -396,7 +397,7 @@ H[1,1,drop=TRUE]
 H[1,2,drop=TRUE]
 @ 
 
-Currently there is no method for \verb![<-! that would allow
+There is also a method for \verb![<-! that allows
 you to assign values to a subset of a hyperframe.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -628,9 +629,9 @@ with the \emph{same} intensity 50, say:
 H$X <- with(H, rpoispp(50))
 @ 
 
-(the expression \code{rpoispp(50)} is evaluated once in each row,
+\noindent The expression \code{rpoispp(50)} is evaluated once in each row,
 yielding a different point pattern in each row because of the
-randomness).
+randomness.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -685,6 +686,7 @@ plot(rhos)
 \subsection{Exploring interpoint interaction}
 
 Still to be written.
+See Chapter 16 of \cite{baddrubaturn15}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -1433,6 +1435,8 @@ original data
 \item a hyperframe with one column containing either functions or 
 pixel images.
 \end{itemize}
+
+See Chapter 16 of \cite{baddrubaturn15} for further information.
 
 \newpage
 
