@@ -201,6 +201,8 @@ Change log from 1.55-1 to 1.55-2
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+16 apr 2018
+
    vignettes/getstart.Rnw
    vignettes/replicated.Rnw
 	Updated
@@ -216,4 +218,25 @@ Change log from 1.55-1 to 1.55-2
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+   tests/leverinf.R
+	Corrected/improved the tests of the irregular parameter case.
 
+   mincontrast.R
+	Buglet fix in print method
+
+   clusterfit.Rd
+	More examples
+	
+   tests/kppm.R
+	More checks
+
+   README.md
+	removed Depsy link - no longer supported.
+	
+   DESCRIPTION
+   NEWS
+	version 1.55-1.011
+
+------------- passed R-3.4.4 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------

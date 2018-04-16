@@ -210,13 +210,15 @@ print.minconfit <- function(x, ...) {
       print(mp)
     }
   }
-  if(!is.null(mu <- x$mu)) {
+  if(length(mu <- x$mu)) {
     if(isPCP) {
       splat("Mean cluster size: ",
-            if(!is.im(mu)) paste(signif(mu, digits), "points") else "[pixel image]")
+            if(is.numeric(mu)) paste(signif(mu, digits), "points") else
+            if(is.im(mu)) "[pixel image]" else "[unknown]")
     } else {
-      splat("Fitted mean of log of random intensity:",
-            if(!is.im(mu)) signif(mu, digits) else "[pixel image]")
+      splat("Fitted mean of log of random intensity: ",
+            if(is.numeric(mu)) signif(mu, digits) else
+            if(is.im(mu)) "[pixel image]" else "[unknown]")
     }
   }
   if(waxlyrical('space', terselevel))

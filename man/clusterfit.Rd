@@ -121,13 +121,8 @@ clusterfit(X, clusters, lambda = NULL, startpar = NULL,
   inhomogeneous Neyman-Scott processes.
   \emph{Biometrics} \bold{63} (2007) 252--258.
 }  
-\author{\adrian
-  
-  ,
-  \rolf
-  
-  and \ege
-  
+\author{
+  \spatstatAuthors.
 }
 \seealso{
   \code{\link{kppm}}
@@ -138,6 +133,8 @@ clusterfit(X, clusters, lambda = NULL, startpar = NULL,
   if(interactive()){
     plot(fit)
   }
+  K <- Kest(redwood)
+  fit2 <- clusterfit(K, "MatClust")
 }
 \keyword{spatial}
 \keyword{models}

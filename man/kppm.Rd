@@ -340,6 +340,7 @@
   \code{\link{vcov.kppm}},
   \code{\link[spatstat:methods.kppm]{methods.kppm}},
   \code{\link{as.ppm.kppm}},
+  \code{\link{as.fv.kppm}},
   \code{\link{Kmodel.kppm}},
   \code{\link{pcfmodel.kppm}}.
 

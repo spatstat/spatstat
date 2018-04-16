@@ -25,7 +25,7 @@ local({
 #'
 #'   leverage and influence for Gibbs models
 #' 
-#'   $Revision: 1.12 $ $Date: 2018/04/12 07:27:31 $
+#'   $Revision: 1.14 $ $Date: 2018/04/16 09:53:51 $
 #' 
 
 require(spatstat)
@@ -153,13 +153,22 @@ local({
   ytoa <- function(x,y, alpha=1) { y^alpha }
   lam <- function(x,y,alpha=1) { exp(4 + y^alpha) }
   X <- rpoispp(lam, alpha=2)
-  fut <- ippm(X ~ offset(ytoa), start=list(alpha=1))
-  iScore <- list(alpha=function(x,y,alpha) { alpha * y^(alpha-1) } )
+  iScor <- list(alpha=function(x,y,alpha) { alpha * y^(alpha-1) } )
   iHess <- list(alpha=function(x,y,alpha) { alpha * (alpha-1) * y^(alpha-2) } )
-  d <- ppmInfluence(fut)  # i.e. full set of results
-  d <- ppmInfluence(fut, method="interpreted") 
-  d <- ppmInfluence(fut, method="interpreted", entrywise=FALSE)
-  d <- ppmInfluence(fut,                       entrywise=FALSE) 
+  gogo <- function(...) {
+    #' compute full set of results
+    ppmInfluence(..., iScore=iScor, iHessian=iHess)
+  }
+  fut <- ippm(X ~ offset(ytoa), start=list(alpha=1))
+  d <- gogo(fut)
+  d <- gogo(fut, method="interpreted") 
+  d <- gogo(fut, method="interpreted", entrywise=FALSE)
+  d <- gogo(fut,                       entrywise=FALSE) 
+  futx <- ippm(X ~ x + offset(ytoa), start=list(alpha=1))
+  d <- gogo(futx) 
+  d <- gogo(futx, method="interpreted") 
+  d <- gogo(futx, method="interpreted", entrywise=FALSE)
+  d <- gogo(futx,                       entrywise=FALSE) 
 })
 
 ##
