@@ -261,3 +261,31 @@ Change log from 1.55-1 to 1.55-2
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+18 apr 2018
+
+   psp.R
+   plot.psp.Rd
+	plot.psp now has option style="width"
+	
+   pppmatch.R
+        plot.pppmatching uses plot.psp(style="w")
+
+   pppmatching.Rd
+   matchingdist.Rd
+	Tweaked examples, to cover more code
+
+   predict.ppm.Rd
+	Added example of prediction intervals for tiles of a tessellation
+	Added example of confidence interval images
+
+   predict.ppm.R
+	Bug fix
+	
+   DESCRIPTION
+   NEWS
+	version 1.55-1.013
+
+------------- passed R-3.4.4 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+	

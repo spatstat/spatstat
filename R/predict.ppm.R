@@ -1,7 +1,7 @@
 #
 #    predict.ppm.S
 #
-#	$Revision: 1.104 $	$Date: 2018/03/09 02:43:15 $
+#	$Revision: 1.108 $	$Date: 2018/04/17 02:41:29 $
 #
 #    predict.ppm()
 #	   From fitted model obtained by ppm(),	
@@ -194,14 +194,15 @@ predict.ppm <- local({
         ## quadrats
         tilz <- tiles(window)
         if(!seonly) {
-          est <- unlist(lapply(tilz, predconfPois,
-                               object=model, level=level, what=estimatename))
-          if(interval != "none") # reshape
-            est <- matrix(unlist(est), byrow=TRUE, ncol=2,
-                          dimnames=list(names(est), names(est[[1]])))
+          est <- lapply(tilz, predconfPois,
+                        object=model, level=level, what=estimatename)
+          est <- switch(interval,
+                        none = unlist(est),
+                        confidence =,
+                        prediction = t(simplify2array(est)))
         }
-        if(se) sem <- unlist(lapply(tilz, predconfPois,
-                                    object=model, level=level, what="se"))
+        if(se) sem <- sapply(tilz, predconfPois,
+                             object=model, level=level, what="se")
       } else {
         ## window
         if(!seonly) est <- predconfPois(window, model, level, estimatename)

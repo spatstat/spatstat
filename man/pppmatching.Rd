@@ -61,9 +61,7 @@
   m <- pppmatching(X, Y, am)
   summary(m)
   m$matrix
-  \dontrun{
-    plot(m)
-  }
+  plot(m)
 
   # a random weighted complete matching
   X <- runifpoint(7)
@@ -73,11 +71,9 @@
   m2 <- pppmatching(X, Y, am)
   summary(m2)
   m2$matrix
-  \dontrun{
-    # Note: plotting does currently not distinguish
-    # between different weights
-    plot(m2)
-  }
+  plot(m2)
+  m3 <- pppmatching(X, Y, am, "ace")
+  m4 <- pppmatching(X, Y, am, "mat")
 }
 \keyword{spatial}
 \keyword{datagen}

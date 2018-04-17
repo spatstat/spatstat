@@ -94,12 +94,11 @@
        # is >= the distance obtained for m.opt
        # in most cases strictly >
 
-  \dontrun{
-    par(mfrow=c(1,2))
-    plot(m.opt)
-    plot(m.nn)
-    text(X$x, X$y, 1:20, pos=1, offset=0.3, cex=0.8)
-  }
+  opa <- par(mfrow=c(1,2))
+  plot(m.opt, main="optimal")
+  plot(m.nn,  main="nearest neighbour")
+  text(X, 1:20, pos=1, offset=0.3, cex=0.8)
+  par(opa)
 }
 \keyword{spatial}
 \keyword{math}

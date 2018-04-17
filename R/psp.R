@@ -1,7 +1,7 @@
 #
 #  psp.R
 #
-#  $Revision: 1.90 $ $Date: 2017/10/29 08:30:38 $
+#  $Revision: 1.92 $ $Date: 2018/04/17 02:03:10 $
 #
 # Class "psp" of planar line segment patterns
 #
@@ -328,17 +328,32 @@ plot.psp <- function(x, ..., main, add=FALSE,
                      show.all=!add, 
                      show.window=show.all,
                      which.marks=1,
+                     style=c("colour", "width", "none"),
                      ribbon=show.all, ribsep=0.15, ribwid=0.05, ribn=1024,
                      do.plot=TRUE) {
   if(missing(main) || is.null(main))
     main <- short.deparse(substitute(x))
   verifyclass(x, "psp")
-  #
+  #'
   n <- nsegments(x)
   marx <- marks(x)
-  #
-  use.colour <- !is.null(marx) && (n != 0)
-  do.ribbon <- identical(ribbon, TRUE) && use.colour 
+  #'
+  style <- match.arg(style)
+  use.marks <- !is.null(marx) && (n != 0) && (style != "none")
+  #'
+  if(use.marks && style == "width") {
+    #' plot marks as line width
+    #' temporary cheat using plot.linfun
+    L <- linnet(endpoints.psp(x), edges=cbind(2*(1:n)-1, 2*(1:n)), sparse=TRUE)
+    if(length(dim(marx))) marx <- marx[,which.marks]
+    f <- function(x,y,seg,tp, values=marx) { values[seg] }
+    g <- linfun(f, L)
+    out <- plot(g, style="width", ..., main=main, add=add,
+                show.all=show.all, show.window=show.window, do.plot=do.plot)
+    return(invisible(out))
+  }
+  #' plot marks as colours, if present
+  do.ribbon <- identical(ribbon, TRUE) && use.marks
   ##
   ## ....   initialise plot; draw observation window  ......
   owinpars <- setdiff(graphicsPars("owin"), "col")
@@ -398,7 +413,7 @@ plot.psp <- function(x, ..., main, add=FALSE,
   }
   
   # determine colours if any
-  if(!use.colour) {
+  if(!use.marks) {
     # black
     col <- colmap <- NULL
   } else {

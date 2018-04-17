@@ -7,7 +7,9 @@
 \usage{
   \method{plot}{psp}(x, \dots, main, add=FALSE,
                      show.all=!add, show.window=show.all,
-                     which.marks=1, ribbon=show.all,
+                     which.marks=1,
+                     style=c("colour", "width", "none"),
+                     ribbon=show.all,
                      ribsep=0.15, ribwid=0.05, ribn=1024,
                      do.plot=TRUE)
 }
@@ -44,6 +46,14 @@
     if the marks of \code{x} are a data frame.
     A character string or an integer.
     Defaults to \code{1} indicating the first column of marks.
+  }
+  \item{style}{
+    Character string specifying how to represent the
+    mark value of each segment. If \code{style="colour"} (the default)
+    segments are coloured according to their mark value.
+    If \code{style="width"}, segments are drawn with a width
+    proportional to their mark value.
+    If \code{style="none"} the mark values are ignored.
   }
   \item{ribbon}{
     Logical flag indicating whether to display a ribbon
@@ -110,13 +120,12 @@
   marks(X) <- data.frame(A=1:20, B=factor(lettuce))
   plot(X)
   plot(X, which.marks="B")
+  plot(X, style="width", col="grey")
 }
 
-\author{\adrian
-  
-  
+\author{
+  \adrian
   and \rolf
-  
 }
 \keyword{spatial}
  

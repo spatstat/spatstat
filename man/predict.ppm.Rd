@@ -356,12 +356,15 @@ at new locations.
   \dontrun{
   persp(cif)
   }
-  data(japanesepines)
   mj <- ppm(japanesepines ~ harmonic(x,y,2))
-  se <- predict(mj, se=TRUE)
+  se <- predict(mj, se=TRUE) # image of standard error
+  ci <- predict(mj, interval="c") # two images, confidence interval
 
   # prediction interval for total number of points
   predict(mj, type="count", interval="p")
+
+  # prediction intervals for counts in tiles
+  predict(mj, window=quadrats(japanesepines, 3), type="count", interval="p")
 
   # prediction at arbitrary locations
   predict(mj, locations=data.frame(x=0.3, y=0.4))

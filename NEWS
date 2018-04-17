@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.55-1.012
+        CHANGES IN spatstat VERSION 1.55-1.013
 
 OVERVIEW
 
@@ -11,6 +11,8 @@ OVERVIEW
 
     o Improvements to leverage and influence code.
 
+    o Plot a line segment pattern using line widths.
+    
     o Numerous bug fixes.
 
     o Version nickname: "Untethered"
@@ -28,6 +30,10 @@ NEW FUNCTIONS
     Extract the discrete and continuous components of a measure.
     
 SIGNIFICANT USER-VISIBLE CHANGES
+
+    o plot.psp
+    Segments can be plotted with widths proportional to their mark values.
+    New argument 'style'.
 
     o msr
     Infinite and NA values are now detected (if check=TRUE)
@@ -63,6 +69,11 @@ BUG FIXES
     Crashed sometimes when do.col=TRUE and values=NULL.
     Fixed.
 
+    o predict.ppm
+    Crashed when computing a confidence interval or prediction interval
+    if 'window' was a tessellation.
+    Fixed.
+    
     o tiles
     names(tiles(x)) was not always identical to tilenames(x).
     Fixed.
