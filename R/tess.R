@@ -3,7 +3,7 @@
 #
 # support for tessellations
 #
-#   $Revision: 1.81 $ $Date: 2018/04/18 02:02:33 $
+#   $Revision: 1.82 $ $Date: 2018/04/18 03:38:29 $
 #
 tess <- function(..., xgrid=NULL, ygrid=NULL, tiles=NULL, image=NULL,
                  window=NULL, marks=NULL, keepempty=FALSE,
@@ -199,8 +199,8 @@ plot.tess <- local({
     if(do.col) {
       #' Determine values associated with each tile
       if(is.null(values)) {
-        #' default is tile ID
-        values <- factor(seq_len(x$n))
+        #' default is tile name
+        values <- factor(tilenames(x))
       } else {
         if(is.data.frame(values)) {
           if(ncol(values) > 1)
@@ -968,4 +968,30 @@ as.data.frame.tess <- function(x, ...) {
            warning("Unrecognised type of tessellation")
          })
   return(z)
+}
+
+connected.tess <- function(X, ...) {
+  Xim <- as.im(X, ...)
+  X <- as.tess(Xim)
+  tilesX <- tiles(X)
+  namesX <- names(tilesX)
+  shards <- lapply(tilesX, connected) # list of factor images
+  shardnames <- lapply(shards, levels)
+  nshards <- lengths(shardnames)
+  broken <- (nshards > 1)
+  #' unbroken tiles keep their original tile names
+  shardnames[!broken] <- namesX[!broken]
+  #' shards of broken tiles are named "tilename[i] shard j"
+  shardnames[broken] <- mapply(paste,
+                               namesX[broken], "shard", shardnames[broken],
+                               SIMPLIFY=FALSE)
+  #' rename them
+  shards <- mapply("levels<-", shards, shardnames, SIMPLIFY=FALSE)
+  #' separate them
+  shards <- lapply(lapply(shards, as.tess), tiles)
+  shards <- unlist(shards, recursive=FALSE, use.names=FALSE)
+  names(shards) <- unlist(shardnames)
+  #' form tessellation
+  result <- tess(tiles=shards)
+  result
 }

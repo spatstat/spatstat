@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.55-1.014
+        CHANGES IN spatstat VERSION 1.55-1.015
 
 OVERVIEW
 
@@ -12,6 +12,8 @@ OVERVIEW
     o Improvements to leverage and influence code.
 
     o Plot a line segment pattern using line widths.
+
+    o Find connected components of each tile in a tessellation.
     
     o Numerous bug fixes.
 
@@ -28,6 +30,10 @@ NEW FUNCTIONS
 
     o measureDiscrete, measureContinuous
     Extract the discrete and continuous components of a measure.
+
+    o connected.tess
+    Find connected components of each tile in a tessellation
+    and make a new tessellation composed of these pieces.
     
 SIGNIFICANT USER-VISIBLE CHANGES
 

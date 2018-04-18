@@ -261,7 +261,7 @@ Change log from 1.55-1 to 1.55-2
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
-18 apr 2018
+17 apr 2018
 
    psp.R
    plot.psp.Rd
@@ -289,3 +289,30 @@ Change log from 1.55-1 to 1.55-2
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 	
+18 apr 2018
+
+    tess.R
+	Bug fix
+
+   DESCRIPTION
+   NEWS
+	version 1.55-1.014
+
+------------- passed R-3.4.4 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+    tess.R
+    connected.tess.Rd [New file]
+    	New method 'connected.tess'
+
+    tess.R
+	Tweak to plot method
+	
+   DESCRIPTION
+   NEWS
+	version 1.55-1.015
+
+------------- passed R-3.4.4 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
