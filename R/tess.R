@@ -3,7 +3,7 @@
 #
 # support for tessellations
 #
-#   $Revision: 1.80 $ $Date: 2018/04/14 03:14:12 $
+#   $Revision: 1.81 $ $Date: 2018/04/18 02:02:33 $
 #
 tess <- function(..., xgrid=NULL, ygrid=NULL, tiles=NULL, image=NULL,
                  window=NULL, marks=NULL, keepempty=FALSE,
@@ -231,13 +231,14 @@ plot.tess <- local({
       bbox.legend <- attr(result, "bbox.legend")
       need.legend <- !is.null(bbox.legend)
     } else {
+      y <- NULL
       result <- NULL
       bbox <- NULL
       need.legend <- FALSE
     }
     #' initialise plot region if it is determined
     if(do.plot && !is.null(bbox) && !add) {
-      plot(bbox, main=main, type="n")
+      plot(bbox, main=" ", type="n")
       add <- TRUE
     }
     switch(x$type,
@@ -307,9 +308,10 @@ plot.tess <- local({
              }
            },
            image={
+             if(is.null(y)) y <- x$image
              result <-
                do.call(plot,
-                       resolve.defaults(list(x$image, add=add, main=main,
+                       resolve.defaults(list(y, add=add, main=main,
                                              show.all=show.all,
                                              do.plot=do.plot,
                                              col=col, ribargs=ribargs),

@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.55-1.013
+        CHANGES IN spatstat VERSION 1.55-1.014
 
 OVERVIEW
 
@@ -69,6 +69,10 @@ BUG FIXES
     Crashed sometimes when do.col=TRUE and values=NULL.
     Fixed.
 
+    o plot.tess
+    Ignored the marks of a tessellation defined by a pixel image.
+    Fixed.
+    
     o predict.ppm
     Crashed when computing a confidence interval or prediction interval
     if 'window' was a tessellation.
