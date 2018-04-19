@@ -316,3 +316,35 @@ Change log from 1.55-1 to 1.55-2
 ------------- passed R-3.4.4 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
+
+    tests/kppm.R
+	More tests
+
+    dilation.Rd
+    closing.Rd
+	More examples
+
+    tests/mctests.R [New file]
+    	Tests of dclf.test, mad.test, envelopeTest, etc
+
+    tests/cdf.test.R
+	More tests
+
+    spatialcdf.R
+    spatstat-internal.Rd
+	spatialCDFframe() now jitters the U values as well
+	(avoids warnings about tied values)
+
+   pcfinhom.R
+	Handles correction='good'
+
+   DESCRIPTION
+   NEWS
+	version 1.55-1.016
+
+------------- passed R-3.4.4 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+    
+

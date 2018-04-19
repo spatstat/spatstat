@@ -238,9 +238,7 @@ mad.test(X, \dots,  alternative=c("two.sided", "less", "greater"),
   John Wiley and Sons.
  }
 \author{
-  \adrian
-  
-  ,
+  \adrian,
   Andrew Hardegen and Suman Rakshit.
 }
 \seealso{

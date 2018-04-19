@@ -1,7 +1,7 @@
 #
 #   pcfinhom.R
 #
-#   $Revision: 1.21 $   $Date: 2017/06/05 10:31:58 $
+#   $Revision: 1.22 $   $Date: 2018/04/19 02:31:31 $
 #
 #   inhomogeneous pair correlation function of point pattern 
 #
@@ -34,9 +34,11 @@ pcfinhom <- function(X, lambda=NULL, ..., r=NULL,
                              trans="translate",
                              translate="translate",
                              translation="translate",
+                             good="good",
                              best="best"),
                            multi=TRUE)
-
+  if("good" %in% correction)
+    correction[correction == "good"] <- good.correction.K(X)
   correction <- implemented.for.K(correction, win$type, correction.given)
 
   divisor <- match.arg(divisor)

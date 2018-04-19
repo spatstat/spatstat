@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.55-1.015
+        CHANGES IN spatstat VERSION 1.55-1.016
 
 OVERVIEW
 
@@ -15,7 +15,7 @@ OVERVIEW
 
     o Find connected components of each tile in a tessellation.
     
-    o Numerous bug fixes.
+    o Numerous bug fixes and minor improvements.
 
     o Version nickname: "Untethered"
 
@@ -52,9 +52,16 @@ SIGNIFICANT USER-VISIBLE CHANGES
     New argument 'approx' chooses between a fast, approximate algorithm
     and a slow, exact algorithm.
 
+    o cdf.test
+    More jittering is applied when jitter=TRUE.
+    Warnings about tied values should not occur any more.
+    
     o plot.im
     Improved behaviour when all pixel values are NA.
 
+    o pcfinhom
+    Now handles correction='good'
+    
 BUG FIXES
 
     o plot.linim

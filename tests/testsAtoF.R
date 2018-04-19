@@ -42,10 +42,16 @@ local({
   ## (2) linear networks
   set.seed(42)
   X <- runiflpp(20, simplenet)
+  cdf.test(X, "x")
+  cdf.test(X, "x", "cvm")
   fit <- lppm(X ~1)
   cdf.test(fit, "y")
   cdf.test(fit, "y", "cvm")
   cdf.test(fit, "y", "ad")
+
+  ## (3) Monte Carlo test for Gibbs model
+  fit <- ppm(cells ~ 1, Strauss(0.07))
+  cdf.test(fit, "x", nsim=9)
 })
 
 ##  tests/closeshave.R

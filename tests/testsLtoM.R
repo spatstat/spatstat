@@ -441,6 +441,22 @@ local({
   if(isTRUE(all.equal(MA,MR)))
     stop("Kmark unexpectedly ignores marks")
 })
+#' tests/mctests.R
+#' Monte Carlo tests
+#'        (mad.test, dclf.test, envelopeTest, hasenvelope)
+#' $Revision: 1.1 $ $Date: 2018/04/19 01:33:42 $
+
+require(spatstat)
+local({
+  envelopeTest(cells, Lest, exponent=1, nsim=9, savepatterns=TRUE)
+  (a3 <- envelopeTest(cells, Lest, exponent=3, nsim=9, savepatterns=TRUE))
+
+  envelopeTest(a3, Lest, exponent=3, nsim=9, alternative="less")
+  
+  fitx <- ppm(redwood~x)
+  envelopeTest(fitx, exponent=2, nsim=9, savefuns=TRUE)
+})
+
 #
 # tests/mppm.R
 #

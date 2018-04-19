@@ -1,7 +1,7 @@
 #
 #  cdftest.R
 #
-#  $Revision: 2.18 $  $Date: 2018/02/05 06:42:04 $
+#  $Revision: 2.19 $  $Date: 2018/04/19 02:00:41 $
 #
 #
 
@@ -301,9 +301,9 @@ spatialCDFtestCalc <- function(fra, test=c("ks", "cvm", "ad"), ...,
   return(result)        
 }
 
-spatialCDFframe <- function(model, covariate, ...) {
+spatialCDFframe <- function(model, covariate, ..., jitter=TRUE) {
   # evaluate CDF of covariate values at data points and at pixels
-  stuff <- evalCovar(model, covariate, ...)
+  stuff <- evalCovar(model, covariate, ..., jitter=jitter)
   # extract 
   values <- stuff$values
 #  info   <- stuff$info
@@ -337,6 +337,14 @@ spatialCDFframe <- function(model, covariate, ...) {
   # now apply cdf
   U <- FZ(ZX)
 
+  if(jitter) {
+    ## Z values have already been jittered, but this does not guarantee
+    ## that U values are distinct
+    nU <- length(U)
+    U <- U + runif(nU, -1, 1)/max(100, 2*nU)
+    U <- pmax(0, pmin(1, U))
+  }
+  
   # pack up
   stuff$values$FZ  <- FZ
   stuff$values$FZX <- FZX

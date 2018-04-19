@@ -57,7 +57,9 @@ pcfinhom(X, lambda = NULL, ..., r = NULL,
     see \code{\link{bw.stoyan}}.
   }
   \item{correction}{
-    Choice of edge correction.
+    Character string or character vector
+    specifying the choice of edge correction.
+    See \code{\link{Kest}} for explanation and options.
   }
   \item{divisor}{
     Choice of divisor in the estimation formula:

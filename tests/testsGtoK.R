@@ -181,7 +181,7 @@ local({
 })#
 # tests/kppm.R
 #
-# $Revision: 1.17 $ $Date: 2018/04/16 10:14:55 $
+# $Revision: 1.19 $ $Date: 2018/04/18 14:56:46 $
 #
 # Test functionality of kppm that depends on RandomFields
 # Test update.kppm for old style kppm objects
@@ -197,7 +197,9 @@ local({
 
  #' various methods
  ff <- as.fv(fitx)
+ Y <- simulate(fitx, seed=42)[[1]]
  uu <- unitname(fitx)
+ unitname(fitCx) <- "furlong"
  
  # vcov.kppm different algorithms
  vc  <- vcov(fitx)
@@ -221,7 +223,8 @@ local({
 
  # fit with composite likelihood method [thanks to Abdollah Jalilian]
  fut <- kppm(redwood ~ x, "VarGamma", method="clik2", nu.ker=-3/8)
-
+ kfut <- as.fv(fut)
+ 
  if(require(RandomFields)) {
    fit0 <- kppm(redwood ~1, "LGCP")
    Y0 <- simulate(fit0)[[1]]

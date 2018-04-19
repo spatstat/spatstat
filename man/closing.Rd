@@ -68,17 +68,17 @@
   v <- closing(letterR, 0.25)
   plot(v, main="closing")
   plot(letterR, add=TRUE)
+
+  plot(closing(cells, 0.1))
+  points(cells)
 }
 \references{
   Serra, J. (1982)
   Image analysis and mathematical morphology.
   Academic Press.
 }
-\author{\adrian
-  
-  
-  and \rolf
-  
+\author{
+  \spatstatAuthors.
 }
 \keyword{spatial}
 \keyword{math}

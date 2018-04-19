@@ -1507,7 +1507,7 @@ spatstat.xy.coords(x, y)
 spatstatClusterModelInfo(name, onlyPCP)
 spatstatDPPModelInfo(model)
 spatstatRmhInfo(cifname)
-spatialCDFframe(model, covariate, \dots)
+spatialCDFframe(model, covariate, \dots, jitter)
 spatialCDFtest(model, covariate, test, \dots,
          dimyx, eps, interpolate, jitter,
          nsim, verbose, modelname, covname, dataname)
