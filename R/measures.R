@@ -3,7 +3,7 @@
 #
 #  signed/vector valued measures with atomic and diffuse components
 #
-#  $Revision: 1.82 $  $Date: 2018/04/16 15:39:01 $
+#  $Revision: 1.83 $  $Date: 2018/04/19 09:00:18 $
 #
 msr <- function(qscheme, discrete, density, check=TRUE) {
   if(!is.quad(qscheme))
@@ -477,9 +477,9 @@ plot.msr <- function(x, ..., add=FALSE,
     loc   <- unmark(loci)
     id    <- marks(loci)
     # extract
-    valu  <- valu[id, ]
-    disc  <- disc[id, ]
-    dens  <- dens[id, ]
+    valu  <- valu[id, , drop=FALSE]
+    disc  <- disc[id, , drop=FALSE]
+    dens  <- dens[id, , drop=FALSE]
     wt    <- wt[id]
     atoms <- atoms[id]
   }

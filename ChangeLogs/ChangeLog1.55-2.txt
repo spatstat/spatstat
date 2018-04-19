@@ -357,4 +357,22 @@ Change log from 1.55-1 to 1.55-2
 ------------- passed R-3.4.4 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
-    
+
+   tess.R
+	Bug fix in tess() when the tiles are masks.
+	Improved algorithm for connected.tess
+
+   measures.R
+	Bug fix in subset operator.
+
+   DESCRIPTION
+   NEWS
+   Nickname.txt
+	Nickname "For Predictable Relief"
+	version 1.55-1.018
+
+------------- passed R-3.4.4 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+   

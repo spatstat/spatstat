@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.55-1.017
+        CHANGES IN spatstat VERSION 1.55-1.018
 
 OVERVIEW
 
@@ -17,11 +17,11 @@ OVERVIEW
     
     o Numerous bug fixes and minor improvements.
 
-    o Version nickname: "Untethered"
+    o Version nickname: "For Predictable Relief"
 
 NEW FUNCTIONS
 
-    o densityfun, densityfun.Rd
+    o densityfun, densityfun.ppp
     Compute a kernel estimate of intensity of a point pattern
     and return it as a function of spatial location.
 
@@ -36,7 +36,7 @@ NEW FUNCTIONS
     and make a new tessellation composed of these pieces.
 
     o dffit.ppm
-    Parameter effect diagnostic DFFIT for spatial point process models.
+    Effect change diagnostic DFFIT for spatial point process models.
     
 SIGNIFICANT USER-VISIBLE CHANGES
 
@@ -67,6 +67,15 @@ SIGNIFICANT USER-VISIBLE CHANGES
     
 BUG FIXES
 
+    o "[.msr"
+    Format was mangled if the subset contained exactly one quadrature point.
+    Fixed.
+
+    o tess
+    If a list of tiles was given, and the tiles were pixel images or masks,
+    their pixel resolutions were ignored, and reset to the default 128x128.
+    Fixed.
+    
     o plot.linim
     Ignored argument 'legend' when style="colour".
     [Spotted by Suman Rakshit.]
@@ -93,7 +102,7 @@ BUG FIXES
     Crashed when computing a confidence interval or prediction interval
     if 'window' was a tessellation.
     Fixed.
-    
+
     o tiles
     names(tiles(x)) was not always identical to tilenames(x).
     Fixed.

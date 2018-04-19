@@ -3,7 +3,7 @@
 #
 # support for tessellations
 #
-#   $Revision: 1.82 $ $Date: 2018/04/18 03:38:29 $
+#   $Revision: 1.83 $ $Date: 2018/04/19 09:01:07 $
 #
 tess <- function(..., xgrid=NULL, ygrid=NULL, tiles=NULL, image=NULL,
                  window=NULL, marks=NULL, keepempty=FALSE,
@@ -62,10 +62,10 @@ tess <- function(..., xgrid=NULL, ygrid=NULL, tiles=NULL, image=NULL,
     lev <- if(!is.null(nam) && all(nzchar(nam))) nam else 1:ntiles
     if(is.null(window)) 
       window <- do.call(union.owin, unname(tiles))
-    if(is.mask(window) || any(unlist(lapply(tiles, is.mask)))) {
+    if(is.mask(window) || any(sapply(tiles, is.mask))) {
       # convert to pixel image tessellation
-      window <- as.mask(window)
-      ima <- as.im(window)
+      Grid <- do.call(commonGrid, append(list(window), unname(tiles)))
+      ima <- as.im(window, W=Grid)
       ima$v[] <- NA
       for(i in 1:ntiles)
         ima[tiles[[i]]] <- i
@@ -992,6 +992,6 @@ connected.tess <- function(X, ...) {
   shards <- unlist(shards, recursive=FALSE, use.names=FALSE)
   names(shards) <- unlist(shardnames)
   #' form tessellation
-  result <- tess(tiles=shards)
+  result <- tess(tiles=shards, window=as.owin(Xim))
   result
 }
