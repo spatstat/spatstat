@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.55-1.016
+        CHANGES IN spatstat VERSION 1.55-1.017
 
 OVERVIEW
 
@@ -9,7 +9,7 @@ OVERVIEW
 
     o Extract discrete and continuous components of a measure.
 
-    o Improvements to leverage and influence code.
+    o Improvements and extensions to leverage and influence code.
 
     o Plot a line segment pattern using line widths.
 
@@ -34,6 +34,9 @@ NEW FUNCTIONS
     o connected.tess
     Find connected components of each tile in a tessellation
     and make a new tessellation composed of these pieces.
+
+    o dffit.ppm
+    Parameter effect diagnostic DFFIT for spatial point process models.
     
 SIGNIFICANT USER-VISIBLE CHANGES
 

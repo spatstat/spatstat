@@ -346,5 +346,15 @@ Change log from 1.55-1 to 1.55-2
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
-    
+    dffit.R [New file]
+    dffit.Rd [New file]
+    	Moved dffit() from leverage paper to spatstat.
 
+   DESCRIPTION
+   NEWS
+	version 1.55-1.017
+
+------------- passed R-3.4.4 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+    

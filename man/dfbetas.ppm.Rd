@@ -1,7 +1,7 @@
 \name{dfbetas.ppm}
 \alias{dfbetas.ppm}
 \title{
-  Parameter influence measure
+  Parameter Influence Measure
 }
 \description{
   Computes the deletion influence measure for each parameter
