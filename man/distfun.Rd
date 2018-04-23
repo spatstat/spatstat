@@ -74,13 +74,15 @@
 \value{
   A \code{function} with arguments \code{x,y}.
   The function belongs to the class \code{"distfun"} which has
-  methods for \code{print} and \code{summary}.
+  methods for \code{print} and \code{summary}, and for geometric
+  operations like \code{shift}.
   It also belongs to the class \code{"funxy"} which has methods
   for \code{plot}, \code{contour} and \code{persp}.
 }
 \seealso{
   \code{\link{distmap}},
   \code{\link{summary.distfun}},
+  \code{\link{methods.distfun}},
   \code{\link{methods.funxy}},
   \code{\link{plot.funxy}}
 }

@@ -3,7 +3,7 @@
 #
 #   distance function (returns a function of x,y)
 #
-#   $Revision: 1.24 $   $Date: 2018/01/08 01:08:56 $
+#   $Revision: 1.27 $   $Date: 2018/04/23 05:12:30 $
 #
 
 distfun <- function(X, ...) {
@@ -14,6 +14,7 @@ distfun.ppp <- function(X, ..., k=1, undef=Inf) {
   # this line forces X to be bound
   stopifnot(is.ppp(X))
   stopifnot(length(k) == 1)
+  force(undef)
   g <- function(x,y=NULL) {
     Y <- xy.coords(x, y)[c("x", "y")]
     if(npoints(X) < k) rep(undef, length(Y$x)) else
@@ -22,6 +23,7 @@ distfun.ppp <- function(X, ..., k=1, undef=Inf) {
   attr(g, "Xclass") <- "ppp"
   g <- funxy(g, as.rectangle(as.owin(X)))
   attr(g, "k") <- k
+  attr(g, "extrargs") <- list(k=k, undef=undef)
   class(g) <- c("distfun", class(g))
   return(g)
 }
@@ -36,12 +38,14 @@ distfun.psp <- function(X, ...) {
   attr(g, "Xclass") <- "psp"
   g <- funxy(g, as.rectangle(as.owin(X)))
   class(g) <- c("distfun", class(g))
+  attr(g, "extrargs") <- list()
   return(g)
 }
 
 distfun.owin <- function(X, ..., invert=FALSE) {
   # this line forces X to be bound
   stopifnot(is.owin(X))
+  force(invert)
   #
   P <- edges(X)
   #
@@ -54,6 +58,7 @@ distfun.owin <- function(X, ..., invert=FALSE) {
   }
   attr(g, "Xclass") <- "owin"
   g <- funxy(g, as.rectangle(as.owin(X)))
+  attr(g, "extrargs") <- list(invert=invert)
   class(g) <- c("distfun", class(g))
   return(g)
 }
@@ -167,3 +172,46 @@ print.summary.distfun <- function(x, ...) {
   invisible(NULL)
 }
 
+shift.distfun <- rotate.distfun <- scalardilate.distfun <- 
+  affine.distfun <- function(X, ...) {
+    f <- X
+    extrargs <- attr(f, "extrargs")
+    if(is.null(extrargs))
+      stop(paste("distfun object has outdated format;",
+                 "cannot apply geometrical transformation"),
+           call.=FALSE)
+    Y <- get("X", envir=environment(f))
+    Ynew <- do.call(.Generic, list(Y, ...))
+    fnew <- do.call(distfun, append(list(Ynew), extrargs))
+    return(fnew)
+  }
+
+
+flipxy.distfun <- reflect.distfun <- function(X) {
+  f <- X
+  extrargs <- attr(f, "extrargs")
+  if(is.null(extrargs))
+    stop(paste("distfun object has outdated format;",
+               "cannot apply geometrical transformation"),
+         call.=FALSE)
+  Y <- get("X", envir=environment(f))
+  Ynew <- do.call(.Generic, list(Y))
+  fnew <- do.call(distfun, append(list(Ynew), extrargs))
+  return(fnew)
+}
+
+rescale.distfun <- function(X, s, unitname) {
+  if(missing(s)) s <- NULL
+  if(missing(unitname)) unitname <- NULL
+  f <- X
+  Y <- get("X", envir=environment(f))
+  Ynew <- rescale(Y, s, unitname)
+  extrargs <- attr(f, "extrargs")
+  if(is.null(extrargs))
+    stop(paste("distfun object has outdated format;",
+               "cannot rescale it"),
+         call.=FALSE)
+  fnew <- do.call(distfun, append(list(Ynew), extrargs))
+  return(fnew)
+}
+  

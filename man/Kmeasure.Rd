@@ -154,10 +154,8 @@ from a point pattern in a window of arbitrary shape.
   \code{\link{im.object}}
 }
 \examples{
- data(cells)
  plot(Kmeasure(cells, 0.05))
  # shows pronounced dip around origin consistent with strong inhibition
- data(redwood)
  plot(Kmeasure(redwood, 0.03), col=grey(seq(1,0,length=32)))
  # shows peaks at several places, reflecting clustering and ?periodicity
  M <- Kmeasure(cells, 0.05)
@@ -168,11 +166,9 @@ from a point pattern in a window of arbitrary shape.
  sector <- solutionset(ang > 0 & ang < 1 & rad < 0.6)
  integral.im(M[sector, drop=FALSE])
 }
-\author{\adrian
-  
-  
+\author{
+  \adrian
   and \rolf
-  
 }
 \keyword{spatial}
 \keyword{nonparametric}

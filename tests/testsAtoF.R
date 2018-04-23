@@ -270,7 +270,7 @@ local({
 #'                    relrisk(), Smooth()
 #'                    and inhomogeneous summary functions
 #'
-#'  $Revision: 1.18 $  $Date: 2018/04/16 15:59:44 $
+#'  $Revision: 1.20 $  $Date: 2018/04/23 06:17:17 $
 #'
 
 require(spatstat)
@@ -423,6 +423,19 @@ local({
   UU <- Smooth(X, 5, geometric=TRUE)
   V <- Smooth(longleaf, 5, geometric=TRUE, at="points")
   VV <- Smooth(X, 5, geometric=TRUE, at="points")
+})
+
+local({
+  #' Kmeasure, second.moment.engine
+  #' Expansion of window
+  Zno  <- Kmeasure(redwood, sigma=0.2, expand=FALSE)
+  Zyes <- Kmeasure(redwood, sigma=0.2, expand=TRUE)
+  #' All code blocks
+  A <- second.moment.calc(redwood, 0.1, what="all", debug=TRUE)
+  B <- second.moment.calc(redwood, varcov=diag(c(0.1,0.1)^2), what="all")
+  PR <- pixellate(redwood)
+  DR <- second.moment.calc(list(PR, PR), 0.1, debug=TRUE,
+                             npts=npoints(redwood), obswin=Window(redwood))
 })
 #'
 #'  tests/discarea.R

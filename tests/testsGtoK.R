@@ -59,7 +59,7 @@ local({
 #
 #  tests/imageops.R
 #
-#   $Revision: 1.10 $   $Date: 2018/04/12 08:44:19 $
+#   $Revision: 1.11 $   $Date: 2018/04/20 02:42:19 $
 #
 
 require(spatstat)
@@ -82,6 +82,13 @@ local({
   G12 <- cut(E12, 2)
   H12 <- as.tess(G12)
 
+  AAA <- as.array(AA)
+  EEE <- as.array(E)
+  AAD <- as.double(AA)
+  EED <- as.double(E)
+  aaa <- xtfrm(AAA)
+  eee <- xtfrm(E)
+  
   ##
   d <- distmap(cells, dimyx=32)
   Z <- connected(d <= 0.06, method="interpreted")

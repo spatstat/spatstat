@@ -375,4 +375,27 @@ Change log from 1.55-1 to 1.55-2
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
-   
+20 apr 2018
+
+   tests/density.R
+   tests/imageops.R
+	More tests
+
+
+23 apr 2018
+
+   distfun.R
+   distfunlpp.R
+   methods.distfun.Rd [New file]
+   distfun.Rd
+	Modified internal format of distfun objects.
+	New methods for shift, rotate, etc
+
+   DESCRIPTION
+   NEWS
+	version 1.55-1.019
+
+------------- passed R-3.4.4 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+

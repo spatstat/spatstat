@@ -3,7 +3,7 @@
 #
 #   method for 'distfun' for class 'lpp'
 #
-#   $Revision: 1.2 $ $Date: 2016/02/11 09:36:11 $
+#   $Revision: 1.3 $ $Date: 2018/04/23 04:52:17 $
 #
 
 distfun.lpp <- local({
@@ -24,6 +24,7 @@ distfun.lpp <- local({
     assign("k", k, envir=environment(f))
     assign("X", X, envir=environment(f))
     attr(f, "explain") <- uitleggen
+    attr(f, "extrargs") <- list(k=k)
     return(f)
   }
 

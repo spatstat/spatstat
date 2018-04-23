@@ -62,4 +62,3 @@ rescale.unitname <- function(X, s, unitname) {
   return(X)
 }
 
-
