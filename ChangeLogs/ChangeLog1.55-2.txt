@@ -399,3 +399,30 @@ Change log from 1.55-1 to 1.55-2
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+26 apr 2018
+
+   tests/ppp.R [New file]
+   	Tests of ppp() and related code not covered elsewhere.
+
+27 apr 2018
+
+   tests/undoc.R
+   tests/envelopes.R
+	More tests.
+
+   plot.studpermutest.Rd [New file]
+   spatstat-internal.Rd
+	Documented this existing function, with examples.
+
+   lurking.Rd
+	Tweak examples
+	
+   DESCRIPTION
+   NEWS
+   Nickname.txt
+	Nickname 'Einstein Visa'
+	version 1.55-1.020
+
+------------- passed R-3.4.4 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------

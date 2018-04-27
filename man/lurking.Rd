@@ -304,10 +304,10 @@ lurking(object, \dots)
   \emph{Mathematische Nachrichten}, 151:95--100.
 }
 \examples{
-  lurking(nztrees, expression(x))
-  fit <- ppm(nztrees, ~x, Poisson())
-  lurking(fit, expression(x))
-  lurking(fit, expression(x), cumulative=FALSE)
+  (a <- lurking(nztrees, expression(x), type="raw"))
+  fit <- ppm(nztrees ~x, Poisson(), nd=128)
+  (b <- lurking(fit, expression(x), type="raw"))
+  lurking(fit, expression(x), type="raw", cumulative=FALSE)
 }
 \author{
   \adrian and \rolf.

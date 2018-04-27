@@ -531,7 +531,7 @@ local({
 #
 #  Test validity of envelope data
 #
-#  $Revision: 1.7 $  $Date: 2018/04/12 07:11:14 $
+#  $Revision: 1.9 $  $Date: 2018/04/27 02:45:28 $
 #
 
 require(spatstat)
@@ -630,7 +630,15 @@ local({
   #' undocumented/secret
   K <- envelope(cells, nsim=4, saveresultof=npoints, collectrubbish=TRUE)
   M <- envelope(cells, nsim=4, patterns.only=TRUE)
-  
+})
+
+local({
+  #' envelope computations in other functions
+  P <- lurking(cells, expression(x), envelope=TRUE, nsim=9)
+  print(P)
+  #' re-using envelope objects in other functions
+  A <- envelope(cells, nsim=9, savepatterns=TRUE, savefuns=TRUE)
+  S <- lurking(cells, expression(x), envelope=A, nsim=9)
 })
 #
 #    tests/factorbugs.R

@@ -408,7 +408,6 @@
 \alias{plot.profilepl}
 \alias{plot.qqppm}
 \alias{plot.spatialcdf}
-\alias{plot.studpermutest}
 \alias{ppllengine}
 \alias{ppm.default}
 \alias{ppmCovariates}
@@ -1253,14 +1252,6 @@ plotPolygonBdry(x, \dots)
            monochrome=spatstat.options('monochrome'),
            limcol=if(monochrome) "black" else "red")
 \method{plot}{spatialcdf}(x, \dots, xlab, ylab)
-\method{plot}{studpermutest}(x, fmla, \dots,
-        lty = NULL, col = NULL, lwd = NULL,
-        lty.theo = NULL, col.theo = NULL, lwd.theo = NULL,
-        lwd.mean = if (meanonly) 1 else NULL, lty.mean = lty, col.mean = col, 
-        separately = FALSE, meanonly = FALSE,
-        main = if (meanonly) "group means" else NULL,
-        xlim = NULL, ylim = NULL, ylab = NULL, legend = !add,
-        legendpos = "topleft", lbox = FALSE, add = FALSE)
 ppllengine(X, Y, action="project", check=FALSE)
 \method{ppm}{default}(Q, trend, interaction,
        \dots, covariates, data, covfunargs, subset, clipwin,

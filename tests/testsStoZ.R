@@ -537,8 +537,10 @@ local({
 
 require(spatstat)
 local({
-  # pixellate.ppp accepts a data frame of weights
+  ## pixellate.ppp accepts a data frame of weights
   pixellate(cells, weights=data.frame(a=1:42, b=42:1))
+  ## test parts of 'rmhsnoop' that don't require interaction with user
+  rmhSnoopEnv(cells, Window(cells), 0.1)
 })
 
 

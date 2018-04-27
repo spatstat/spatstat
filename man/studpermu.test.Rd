@@ -106,17 +106,14 @@
   \emph{Journal of the American Statistical Association}
   \bold{107} (498), 754--764.
 }
+\seealso{
+  \code{\link{plot.studpermutest}}
+}
 \author{
   Ute Hahn.
 
   Modified for \code{spatstat} by
-\adrian
-
-
-\rolf
-
-and \ege
-
+  \spatstatAuthors.
 }
 \examples{
   np <- if(interactive()) 99 else 19

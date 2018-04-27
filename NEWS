@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.55-1.019
+        CHANGES IN spatstat VERSION 1.55-1.020
 
 OVERVIEW
 
@@ -19,7 +19,7 @@ OVERVIEW
     
     o Numerous bug fixes and minor improvements.
 
-    o Version nickname: "For Predictable Relief"
+    o Version nickname: "Einstein Visa"
 
 NEW FUNCTIONS
 
@@ -73,6 +73,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o pcfinhom
     Now handles correction='good'
+
+    o plot.studpermutest
+    This existing function now has a help file.
     
 BUG FIXES
 

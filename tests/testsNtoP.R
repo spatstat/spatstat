@@ -502,6 +502,33 @@ local({
   spatstat.options(op)
 })
 
+#'
+#'   tests/ppp.R
+#'
+#'   $Revision: 1.1 $ $Date: 2018/04/26 12:53:29 $
+#'
+#'  Untested cases in ppp() or associated code
+
+require(spatstat)
+local({
+  X <- runifpoint(10, letterR)
+  Y <- runifpoint(3, complement.owin(letterR))
+
+  #' test handling of points out-of-bounds
+  df <- rbind(as.data.frame(X), as.data.frame(Y))
+  A <- ppp(df$x, df$y, window=letterR, marks=1:13)
+  #' test handling of points with bad coordinates
+  B <- ppp(X$x, c(X$y[1:7], c(Inf, NA, NaN)), window=letterR, marks=1:10)
+
+  #' test print method
+  print(A)
+  print(B)
+
+  #' subset operator with logical image
+  Z <- distmap(letterR, invert=TRUE)
+  V <- (Z > 0.2)
+  XV <- X[V]
+})
 #
 # tests/ppx.R
 #
