@@ -504,6 +504,20 @@ PYI <- linearpcfcross.inhom(Y, lambdaI=rep(intensity(Y1), npoints(Y1)),
                     lambdaJ=rep(intensity(Y2), npoints(Y2)))
 
 })
+#'
+#'   tests/dominic.R
+#'
+#'   Additional tests for Dominic Schuhmacher's code
+#'
+#'   $Revision: 1.1 $  $Date: 2018/04/29 11:01:30 $
+
+require(spatstat)
+local({
+  X <- runifpoint(10)
+  Y <- runifpoint(10)
+  d <- pppdist(X, Y, type="ace", show.rprimal=TRUE)
+  m <- pppdist.mat(X, Y, q=Inf, cutoff=0.001)
+})
 #  tests/emptymarks.R
 #
 # test cases where there are no (rows or columns of) marks

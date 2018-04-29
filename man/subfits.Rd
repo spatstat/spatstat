@@ -64,6 +64,8 @@
   H$Wat[[3]] <- rthin(H$Wat[[3]], 0.1)
   fit2 <- mppm(Wat~x, data=H, random=~1|id)
   subfits(fit2)
+
+  \testonly{a <- subfits.new(fit)}
 }
 \references{
   Baddeley, A., Rubak, E. and Turner, R. (2015)

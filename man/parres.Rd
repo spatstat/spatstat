@@ -177,11 +177,8 @@ parres(model, covariate, ...,
   \bold{22}, 886--905.
 }
 \author{
-  \adrian
-  
-  ,
-  \rolf
-  ,
+  \adrian,
+  \rolf,
   Ya-Mei Chang and Yong Song.
 }
 \seealso{
@@ -191,11 +188,12 @@ parres(model, covariate, ...,
 }
 \examples{
   X <-  rpoispp(function(x,y){exp(3+x+2*x^2)})
-  model <- ppm(X, ~x+y)
+  model <- ppm(X ~x+y)
   tra <- parres(model, "x")
   plot(tra)
+  tra
   plot(parres(model, "x", subregion=square(0.5)))
-  model2 <- ppm(X, ~x+I(x^2)+y)
+  model2 <- ppm(X ~x+I(x^2)+y)
   plot(parres(model2, "x"))
   Z <- setcov(owin())
   plot(parres(model2, Z))

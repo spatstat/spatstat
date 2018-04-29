@@ -3,7 +3,7 @@
 #
 # code to plot transformation diagnostic
 #
-#   $Revision: 1.9 $  $Date: 2016/12/30 01:44:07 $
+#   $Revision: 1.10 $  $Date: 2018/04/29 10:26:01 $
 #
 
 parres <- function(model, covariate, ...,
@@ -546,23 +546,21 @@ print.parres <- function(x, ...) {
            isoffset <- s$isoffset
            if(is.null(isoffset)) isoffset <- rep.int(FALSE, length(cancovs))
            ncc <- length(cancovs)
+           nfitted <- sum(!isoffset)
            noff <- sum(isoffset)
-           nother <- sum(!isoffset)
-           explain <-
-             paste(ngettext(ncc, "Fitted effect:", "Fitted effect: sum of"),
-                   if(noff == 0) {
-                     paste(paste(med, collapse=" and "),
-                           ngettext(ncc, "term", "terms"),
-                           commasep(dQuote(cancovs)))
-                   } else {
-                     paste(paste(med[med != "offset"], collapse=" and "),
-                           ngettext(nother, "term", "terms"),
-                           commasep(dQuote(cancovs[!isoffset])),
-                           "and offset",
-                           ngettext(noff, "term", "terms"),
-                           commasep(dQuote(cancovs[isoffset])))
-                   })
-           cat(paste(explain, "\n"))
+           explainfitted <- explainoff <- character(0)
+           if(noff > 0) 
+             explainoff <- paste("offset",
+                                 ngettext(noff, "term", "terms"),
+                                 commasep(dQuote(cancovs[isoffset])))
+           if(nfitted > 0)
+             explainfitted <- paste(
+               paste(med[med != "offset"], collapse=" and "),
+               ngettext(nfitted, "term", "terms"),
+               commasep(dQuote(cancovs[!isoffset])))
+           splat("Fitted effect: ",
+                 if(ncc > 1) "sum of" else NULL,
+                 paste(c(explainfitted, explainoff), collapse=" and "))
          },
          external={
            cat("Note: effect estimate not justified by delta method\n")

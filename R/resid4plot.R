@@ -5,7 +5,7 @@
 #         resid1plot       one or more unrelated individual plots 
 #         resid1panel      one panel of resid1plot
 #
-#   $Revision: 1.34 $    $Date: 2016/04/19 00:11:51 $
+#   $Revision: 1.35 $    $Date: 2018/04/29 11:18:30 $
 #
 #
 
@@ -642,7 +642,8 @@ ploterodewin <- function(W1, W2, col.edge=grey(0.75), col.inside=rgb(1,0,0),
            ok <- inside.owin(x, y, W2)
            Z$v[ok] <- 2
            z <- plot(Z, ..., col=c(col.edge, col.inside),
-                     add=TRUE, ribbon=FALSE, do.plot=do.plot)
+                     add=TRUE, ribbon=FALSE, do.plot=do.plot,
+                     show.all=TRUE)
          }
          )
   return(z)

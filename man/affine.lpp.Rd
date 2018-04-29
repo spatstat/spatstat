@@ -81,16 +81,15 @@
 \examples{
   X <- rpoislpp(2, simplenet)
   U <- rotate(X, pi)
+  V <- shift(X, c(0.1, 0.2))
   stretch <- diag(c(2,3))
   Y <- affine(X, mat=stretch)
   shear <- matrix(c(1,0,0.6,1),ncol=2, nrow=2)
   Z <- affine(X, mat=shear, vec=c(0, 1))
 }
-\author{\adrian
-  
-  
+\author{
+  \adrian
   and \rolf
-  
 }
 \keyword{spatial}
 \keyword{math}

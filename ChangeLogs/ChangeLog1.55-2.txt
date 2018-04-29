@@ -426,3 +426,41 @@ Change log from 1.55-1 to 1.55-2
 ------------- passed R-3.4.4 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
+
+   methods.linim.Rd
+        More examples
+	
+   tests/undoc.R
+	More tests
+
+   DESCRIPTION
+   NEWS
+	version 1.55-1.021
+
+------------- passed R-3.4.4 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+29 apr 2018
+
+   resid4plot.R
+   parres.R
+	Minor bug fixes
+
+   tests/lppstuff.R
+   tests/resid.R
+   tests/dominic.R [New file]
+	More tests
+
+   affine.lpp.Rd
+   connected.lpp.Rd
+   text.ppp.Rd
+	Improved examples
+	
+   DESCRIPTION
+   NEWS
+	version 1.55-1.022
+
+------------- passed R-3.4.4 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------

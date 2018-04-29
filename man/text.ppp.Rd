@@ -62,6 +62,10 @@
   S <- as.psp(simplenet)
   plot(S)
   text(S)
+
+  X <- runiflpp(5, simplenet)
+  plot(X)
+  text(X, pos=2, col="blue")
 }
 \keyword{spatial}
 \keyword{hplot}

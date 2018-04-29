@@ -88,8 +88,11 @@
    M <- as.mask.psp(as.psp(simplenet))
    Z <- as.im(function(x,y) {x-y}, W=M)
    X <- linim(simplenet, Z)
-
+   ## ............  print basic details .........................
    X
+   ## ............  print gory details  .........................
+   summary(X)
+   ## ...........................................................
    shift(X, c(1,1))
    scalardilate(X, 2)
    head(as.data.frame(X))

@@ -34,6 +34,31 @@ local({
   fit <- ppm(cells ~x, Strauss(r=0.15))
   diagnose.ppm(fit, cumulative=FALSE)
   diagnose.ppm(fit, cumulative=FALSE, type="pearson")
+
+  fitoff <- ppm(cells ~ sin(x) + offset(y))
+  plot(a <- parres(fitoff, "x"))
+  plot(b <- parres(fitoff, "y"))
+  print(a)
+  print(b)
+
+  diagnose.ppm(fit, which="marks")
+
+  diagnose.ppm(fit, type="pearson", which="smooth")
+  diagnose.ppm(fit, type="pearson", which="x")
+  diagnose.ppm(fit, type="pearson", which="y")
+  diagnose.ppm(fit, type="pearson", which="x", cumulative=FALSE)
+  diagnose.ppm(fit, type="pearson", which="x", cumulative=FALSE)
+  diagnose.ppm(fit, type="raw", plot.neg="discrete", plot.smooth="image")
+  diagnose.ppm(fit, type="pearson", plot.neg="contour", plot.smooth="contour")
+
+  diagnose.ppm(fitoff, type="raw", which="smooth", plot.smooth="persp")
+  diagnose.ppm(fitoff, type="pearson", plot.neg="imagecontour")
+
+  plot(Frame(letterR), main="")
+  ploterodewin(letterR, erosion(letterR, 0.05), main="jeans")
+  W <- as.mask(letterR)
+  plot(Frame(W), main="")
+  ploterodewin(W, erosion(W, 0.05), main="JeAnS")
 })
 
 

@@ -531,7 +531,7 @@ local({
 #
 #  tests/undoc.R
 #
-#   $Revision: 1.3 $   $Date: 2017/02/20 10:51:56 $
+#   $Revision: 1.5 $   $Date: 2018/04/27 09:31:24 $
 #
 #  Test undocumented hacks, etc
 
@@ -541,6 +541,11 @@ local({
   pixellate(cells, weights=data.frame(a=1:42, b=42:1))
   ## test parts of 'rmhsnoop' that don't require interaction with user
   rmhSnoopEnv(cells, Window(cells), 0.1)
+  ## linim helper functions
+  df <- pointsAlongNetwork(simplenet, 0.2)
+  ## Berman-Turner frame
+  A <- bt.frame(quadscheme(cells), ~x, Strauss(0.07), rbord=0.07)
+  print(A)
 })
 
 
