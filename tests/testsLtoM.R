@@ -387,6 +387,14 @@ local({
   xcoord <- linfun(function(x,y,seg,tp) { x }, domain(chicago))
   xcoord <- as.linim(xcoord, dimyx=32)
   integral(xcoord)
+
+  ## lpp with multiple columns of marks
+  M <- chicago
+  marks(M) <- cbind(type=marks(M), data.frame(distnearest=nndist(M)))
+  plot(M, main="")
+  summary(M)
+
+  ##
 })
 
 ##
