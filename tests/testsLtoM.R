@@ -388,13 +388,17 @@ local({
   xcoord <- as.linim(xcoord, dimyx=32)
   integral(xcoord)
 
+  ## as.linim.linim
+  xxcc <- as.linim(xcoord)
+  
   ## lpp with multiple columns of marks
   M <- chicago
   marks(M) <- cbind(type=marks(M), data.frame(distnearest=nndist(M)))
   plot(M, main="")
   summary(M)
 
-  ##
+  ## lpp utilities
+  df <- pointsAlongNetwork(simplenet, 0.05)
 })
 
 ##

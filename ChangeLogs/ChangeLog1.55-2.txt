@@ -474,4 +474,19 @@ Change log from 1.55-1 to 1.55-2
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
-   
+30 apr 2018
+
+   tests/lppstuff.R
+   tests/prediction.R
+	Yet more tests
+
+   DESCRIPTION
+   NEWS
+	version 1.55-1.024
+
+------------- passed R-3.4.4 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+
+

@@ -559,7 +559,7 @@ local({
 #
 # Things that might go wrong with predict()
 #
-#  $Revision: 1.4 $ $Date: 2016/03/04 03:14:40 $
+#  $Revision: 1.5 $ $Date: 2018/04/30 04:32:49 $
 #
 
 require(spatstat)
@@ -598,7 +598,23 @@ local({
   a <- relrisk(fut, control=2, relative=TRUE)
   a <- relrisk(fut, se=TRUE)
   a <- relrisk(fut, relative=TRUE, se=TRUE)
-  
+
+  ## untested cases of predict.ppm
+  fit0 <- ppm(cells)
+  a <- predict(fit0, interval="confidence")
+  a <- predict(fit0, interval="confidence", type="count")
+  fit  <- ppm(cells ~ x)
+  b <- predict(fit, type="count",                            se=TRUE)
+  b <- predict(fit, type="count", window=square(0.5),        se=TRUE)
+  b <- predict(fit, type="count", window=quadrats(cells, 3), se=TRUE)
+  ## superseded usages
+  b <- predict(fit, type="se", getoutofjail=TRUE)
+  b <- predict(fit, total=TRUE)
+  b <- predict(fit, total=square(0.5))
+  b <- predict(fit, total=quadrats(cells, 3))
+
+  ## supporting code
+  u <- model.se.image(fit, square(0.5), what="cv")
 })
 
 #
