@@ -59,7 +59,7 @@ local({
 #
 #  tests/imageops.R
 #
-#   $Revision: 1.11 $   $Date: 2018/04/20 02:42:19 $
+#   $Revision: 1.12 $   $Date: 2018/04/30 09:13:54 $
 #
 
 require(spatstat)
@@ -103,7 +103,17 @@ local({
   ## cases of "[.im"
   ee  <- d[simplenet, drop=FALSE]
   eev <- d[simplenet]
-
+  Empty <- cells[FALSE]
+  EmptyFun <- ssf(Empty, numeric(0))
+  ff <- d[Empty]
+  ff <- d[EmptyFun]
+  gg <- d[2,]
+  gg <- d[,2]
+  gg <- d[2:4, 3:5]
+  ## cases of "[<-.im"
+  d[Empty] <- 42
+  d[EmptyFun] <- 42
+  
   ## smudge() and rasterfilter()
   dd <- smudge(d)
 
@@ -188,7 +198,7 @@ local({
 })#
 # tests/kppm.R
 #
-# $Revision: 1.19 $ $Date: 2018/04/18 14:56:46 $
+# $Revision: 1.21 $ $Date: 2018/05/01 08:57:17 $
 #
 # Test functionality of kppm that depends on RandomFields
 # Test update.kppm for old style kppm objects
@@ -196,17 +206,23 @@ local({
 require(spatstat)
 local({
 
- fit <- kppm(redwood, ~1, "Thomas")
+ fit <- kppm(redwood, ~1, "Thomas") # sic
  fitx <- update(fit, ~ . + x)
  fitM <- update(fit, clusters="MatClust")
  fitC <- update(fit, cells)
  fitCx <- update(fit, cells ~ x)
 
+ #'
+ Wsub <- owin(c(0, 0.5), c(-0.5, 0))
+ fitsub <- kppm(redwood ~1, "Thomas", subset=Wsub)
+ fitsub
+ 
  #' various methods
  ff <- as.fv(fitx)
  Y <- simulate(fitx, seed=42)[[1]]
  uu <- unitname(fitx)
  unitname(fitCx) <- "furlong"
+ mo <- model.images(fitCx)
  
  # vcov.kppm different algorithms
  vc  <- vcov(fitx)
@@ -237,20 +253,33 @@ local({
    Y0 <- simulate(fit0)[[1]]
    stopifnot(is.ppp(Y0))
 
-   # fit LGCP using K function: slow
+   ## fit LGCP using K function: slow
    fit1 <- kppm(redwood ~x, "LGCP",
                 covmodel=list(model="matern", nu=0.3),
                 control=list(maxit=3))
    Y1 <- simulate(fit1)[[1]]
    stopifnot(is.ppp(Y1))
 
-   # fit LGCP using pcf
+   ## fit LGCP using pcf
    fit1p <- kppm(redwood ~x, "LGCP",
                  covmodel=list(model="matern", nu=0.3),
                  statistic="pcf")
    Y1p <- simulate(fit1p)[[1]]
    stopifnot(is.ppp(Y1p))
-  
+
+   ## .. and using different fitting methods
+   fit1pClik <- update(fit1p, method="clik")
+   fit1pPalm <- update(fit1p, method="palm")
+   
+   ## image covariate (a different code block) 
+   xx <- as.im(function(x,y) x, Window(redwood))
+   fit1xx <- update(fit1p, . ~ xx, data=solist(xx=xx))
+   Y1xx <- simulate(fit1xx)[[1]]
+   stopifnot(is.ppp(Y1xx))
+   fit1xxVG <- update(fit1xx, clusters="VarGamma", nu=-1/4)
+   Y1xxVG <- simulate(fit1xxVG)[[1]]
+   stopifnot(is.ppp(Y1xxVG))
+   
    # ... and Abdollah's code
 
    fit2 <- kppm(redwood ~x, cluster="Cauchy", statistic="K")
@@ -262,3 +291,13 @@ local({
 })
 
 
+local({
+  #'  experimental
+  fut <- kppm(redwood, do.adjust=TRUE)
+  spatstat.options(kppm.canonical=TRUE)
+  fut <- kppm(redwood)
+  fut <- kppm(redwood, do.adjust=TRUE)
+  spatstat.options(kppm.canonical=FALSE)
+})
+
+  

@@ -1,6 +1,6 @@
 #'  perspective plot of 3D 
 #'
-#'  $Revision: 1.5 $ $Date: 2016/09/23 04:57:43 $
+#'  $Revision: 1.6 $ $Date: 2018/04/30 09:31:33 $
 #'
 
 
@@ -185,11 +185,12 @@ plot3Dpoints <- local({
     ind <- if(part == "back") nearback else !nearback
     ## draw lines
     with(edgepairs[ind,],
-         segments(xyvert[from, 1],
-                  xyvert[from, 2],
-                  xyvert[to,   1],
-                  xyvert[to,   2],
-                  ...))
+         do.call.matched(segments,
+                         list(x0=xyvert[from, 1],
+                              y0=xyvert[from, 2],
+                              x1=xyvert[to,   1],
+                              y1=xyvert[to,   2],
+                              ...)))
   }
 
   plot3Dpoints

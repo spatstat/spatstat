@@ -25,7 +25,7 @@ local({
 #'
 #'   leverage and influence for Gibbs models
 #' 
-#'   $Revision: 1.16 $ $Date: 2018/04/16 15:40:53 $
+#'   $Revision: 1.17 $ $Date: 2018/05/01 09:06:09 $
 #' 
 
 require(spatstat)
@@ -56,6 +56,9 @@ local({
   fitHx <- ppm(cells ~ x, Hardcore(0.07), rbord=0)
   levHx <- Leverage(fitHx)
   infHx <- Influence(fitHx)
+  ## multitype 
+  futAm <- ppm(amacrine ~ x + marks, Strauss(0.07))
+  levAm <- leverage(futAm)
 
   ## .........   class support .............................
   ## other methods for classes leverage.ppm and influence.ppm
@@ -65,6 +68,10 @@ local({
   w <- Window(infS)
   vv <- shift(levS, c(1.2, 1.3))
   vv <- shift(infS, c(1.2, 1.3))
+  ## plotting for multitype models
+  plot(levAm)
+  contour(levAm)
+  persp(levAm)
 
   ## ..........  compare algorithms .........................
   ## divide and recombine algorithm

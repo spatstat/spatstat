@@ -488,5 +488,27 @@ Change log from 1.55-1 to 1.55-2
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+   plot3d.R
+	Buglet fix.
 
+   tests/imageops.R
+   tests/ppx.R
+	And more tests 
+
+01 may 2018
+
+   kppm.R
+	print method now reports if the model was fitted to a subset.
+
+   tests/kppm.R
+   tests/leverinf.R
+	And still more tests
+
+   DESCRIPTION
+   NEWS
+	version 1.55-1.025
+
+------------- passed R-3.4.4 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
 

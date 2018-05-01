@@ -534,18 +534,35 @@ local({
 #
 # Test operations for ppx objects
 #
-#  $Revision: 1.3 $ $Date: 2017/03/02 01:19:13 $
+#  $Revision: 1.4 $ $Date: 2018/04/30 09:28:15 $
 #
 
 require(spatstat)
 
 local({
-  df <- data.frame(x=c(1,2,2,1), y=c(1,2,3,1), z=c(2,3,4,2))
+  #' general tests
+  df <- data.frame(x=c(1,2,2,1)/4, y=c(1,2,3,1)/4, z=c(2,3,4,3)/5)
   X <- ppx(data=df, coord.type=rep("s", 3), domain=box3())
   unique(X)
   duplicated(X)
   multiplicity(X)
+  print(X)
+  plot(X)
+  domain(X)
+  unitname(X) <- c("metre", "metres")
+  unitname(X)
+  
+  #' subset operator
+  X[integer(0)]
+  Y <- X %mark% data.frame(a=df$x, b=1:4)
+  Y[1:2]
+  Y[FALSE]
 
+  #' two dimensions
+  A <- ppx(data=df[,1:2], coord.type=rep("s", 2), domain=square(1))
+  plot(A)
+  
+  #' bug
   stopifnot(identical(unmark(chicago[1]),
                       unmark(chicago)[1]))
 
@@ -553,6 +570,7 @@ local({
   U <- chicago[integer(0)]
   V <- U %mark% 1
   V <- U %mark% factor("a")
+
 })
 #
 # tests/prediction.R
