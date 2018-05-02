@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.55-1.026
+        CHANGES IN spatstat VERSION 1.55-1.027
 
 OVERVIEW
 
@@ -19,7 +19,7 @@ OVERVIEW
 
     o A large number of minor bugs have been detected and fixed.
 
-    o Version nickname: "Einstein Visa"
+    o Version nickname: "This Nickname Intentionally Left Blank"
 
 NEW FUNCTIONS
 
@@ -125,6 +125,15 @@ BUG FIXES
     
     o model.images.lppm
     Names or dimnames were missing in some cases.
+    Fixed.
+
+    o plot.colourmap
+    Crashed if the colourmap was defined on an interval of dates or times.
+    Fixed.
+
+    o StraussHard, leverage.ppm, influence.ppm, dfbetas.ppm
+    Leverage and influence calculations generated an error 
+    when applied to models fitted with the StraussHard interaction.
     Fixed.
     
         CHANGES IN spatstat VERSION 1.55-1

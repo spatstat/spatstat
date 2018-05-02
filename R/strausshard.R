@@ -2,7 +2,7 @@
 #
 #    strausshard.S
 #
-#    $Revision: 2.35 $	$Date: 2018/03/19 13:39:26 $
+#    $Revision: 2.37 $	$Date: 2018/05/02 09:38:36 $
 #
 #    The Strauss/hard core process
 #
@@ -177,12 +177,11 @@ StraussHard <- local({
            #' OR
            #'     U[i] is a dummy point,
            #'     U[j] has no conflicts with X.
-           changes <- (hitdata & (nhitdata == 1)) | (!hitdata & (nhitdata == 0))
-           if(any(changes)) {
-             changesJ <- changes[hitj]
+           changesJ <- (hitdata & (nhitdata[jhit] == 1)) |
+                       (!hitdata & (nhitdata[jhit] == 0))
+           if(any(changesJ)) 
              vh <- sparseMatrix(i=ihit[changesJ], j=jhit[changesJ], x=TRUE,
                                 dims=c(nU, nU))
-           }
          } else stop("X should be a ppp or quad object")
 
          # pack up

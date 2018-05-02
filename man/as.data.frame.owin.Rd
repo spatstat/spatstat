@@ -38,7 +38,8 @@
   window. If the boundary consists of several polygons, the data frame
   has additional columns \code{id}, identifying which polygon is being
   traced, and \code{sign}, indicating whether the polygon is an
-  outer or inner boundary (\code{sign=1} and \code{sign=-1} respectively).
+  outer or inner boundary (\code{sign=1} and \code{sign=-1}
+  respectively).
 }
 \value{
   A data frame with columns named \code{x} and \code{y},
@@ -48,7 +49,8 @@
   \spatstatAuthors.
 }
 \seealso{
-  \code{\link{as.data.frame.im}}
+  \code{\link{as.data.frame.im}},
+  \code{\link{as.owin.data.frame}}
 }
 \examples{
    as.data.frame(square(1))
@@ -57,6 +59,9 @@
                         list(x=c(0,10,0), y=c(0,0,10)),
                         list(x=c(2,2,4,4), y=c(2,4,4,2))))
    as.data.frame(holey)
+
+   M <- as.mask(holey, eps=0.5)
+   Mdf <- as.data.frame(M)
 }
 \keyword{spatial}
 \keyword{methods}

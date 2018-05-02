@@ -3,7 +3,7 @@
 #
 # support for colour maps and other lookup tables
 #
-# $Revision: 1.40 $ $Date: 2017/10/11 04:28:46 $
+# $Revision: 1.41 $ $Date: 2018/05/02 05:45:12 $
 #
 
 colourmap <- function(col, ..., range=NULL, breaks=NULL, inputs=NULL, gamma=1) {
@@ -199,8 +199,11 @@ plot.colourmap <- local({
                   "tck", "tcl", "xpd")
 
   linmap <- function(x, from, to) {
-    to[1L] + diff(to) * (x - from[1L])/diff(from)
+    b <- as.numeric(diff(to))/as.numeric(diff(from)) 
+    to[1L] + b * (x - from[1L])
   }
+
+  ensurenumeric <- function(x) { if(is.numeric(x)) x else as.numeric(x) }
 
   # rules to determine the ribbon dimensions when one dimension is given
   widthrule <- function(heightrange, separate, n, gap) {
@@ -284,7 +287,7 @@ plot.colourmap <- local({
                                             axes=FALSE, xlab="", ylab="",
                                             asp=1.0),
                                        list(...)))
-    
+
     if(separate) {
       # ................ plot separate blocks of colour .................
       if(!vertical) {
@@ -296,7 +299,9 @@ plot.colourmap <- local({
         for(i in 1:n) {
           x <- c(xleft[i], xright[i])
           do.call.matched(image.default,
-                      resolve.defaults(list(x=x, y=y, z=z, add=TRUE),
+                          resolve.defaults(list(x=ensurenumeric(x),
+                                                y=ensurenumeric(y),
+                                                z=z, add=TRUE),
                                        list(...),
                                        list(col=col[i])),
                       extrargs=imageparams)
@@ -311,7 +316,9 @@ plot.colourmap <- local({
         for(i in 1:n) {
           y <- c(ylow[i], yupp[i])
           do.call.matched(image.default,
-                      resolve.defaults(list(x=x, y=y, z=z, add=TRUE),
+                          resolve.defaults(list(x=ensurenumeric(x),
+                                                y=ensurenumeric(y),
+                                                z=z, add=TRUE),
                                        list(...),
                                        list(col=col[i])),
                       extrargs=imageparams)
@@ -331,10 +338,25 @@ plot.colourmap <- local({
         z <- matrix(v, nrow=1L)
         x <- xlim
       }
+      #' deal with Date or integer values
+      x <- ensurenumeric(x)
+      if(any(diff(x) == 0)) 
+        x <- seq(from=x[1L], to=x[length(x)], length.out=length(x))
+      y <- ensurenumeric(y)
+      if(any(diff(y) == 0)) 
+        y <- seq(from=y[1L], to=y[length(y)], length.out=length(y))
+      bks <- ensurenumeric(bks)
+      if(any(diff(bks) <= 0)) {
+        ok <- (diff(bks) > 0)
+        bks <- bks[ok]
+        col <- col[ok]
+      }
+
       do.call.matched(image.default,
                       resolve.defaults(list(x=x, y=y, z=z, add=TRUE),
                                        list(...),
-                                       list(breaks=bks, col=col)),
+                                       list(breaks=ensurenumeric(bks),
+                                            col=col)),
                       extrargs=imageparams)
     }
     if(axis) {
@@ -360,7 +382,8 @@ plot.colourmap <- local({
         # draw axis
         do.call.matched(graphics::axis,
                         resolve.defaults(list(...),
-                                         list(side = 1L, pos = pos, at = at),
+                                         list(side = 1L, pos = pos,
+                                              at = ensurenumeric(at)),
                                          list(labels=la, lwd=lwd0)),
                         extrargs=axisparams)
       } else {
@@ -386,7 +409,8 @@ plot.colourmap <- local({
         # draw axis
         do.call.matched(graphics::axis,
                         resolve.defaults(list(...),
-                                         list(side=4, pos=pos, at=at),
+                                         list(side=4, pos=pos,
+                                              at=ensurenumeric(at)),
                                          list(labels=la, lwd=lwd0, las=las0)),
                         extrargs=axisparams)
       }

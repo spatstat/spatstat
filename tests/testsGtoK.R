@@ -59,7 +59,7 @@ local({
 #
 #  tests/imageops.R
 #
-#   $Revision: 1.12 $   $Date: 2018/04/30 09:13:54 $
+#   $Revision: 1.13 $   $Date: 2018/05/02 09:47:46 $
 #
 
 require(spatstat)
@@ -110,6 +110,8 @@ local({
   gg <- d[2,]
   gg <- d[,2]
   gg <- d[2:4, 3:5]
+  hh <- d[2:4, 3:5, rescue=TRUE]
+  if(!is.im(hh)) stop("rectangle was not rescued in [.im")
   ## cases of "[<-.im"
   d[Empty] <- 42
   d[EmptyFun] <- 42

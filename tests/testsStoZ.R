@@ -1,7 +1,7 @@
 #
 #  tests/segments.R
 #
-#  $Revision: 1.11 $  $Date: 2017/02/20 10:15:30 $
+#  $Revision: 1.12 $  $Date: 2018/05/02 05:55:25 $
 
 require(spatstat)
 
@@ -88,6 +88,28 @@ xFI <- max(abs(YF/YI - 1))
 if(xCI > 0.01) stop(paste("density.psp C algorithm relative error =", xCI))
 if(xFI > 0.01) stop(paste("density.psp FFT algorithm relative error =", xFI))
 
+#' as.psp.data.frame
+
+  df <- as.data.frame(matrix(runif(40), ncol=4))
+  A <- as.psp(df, window=square(1))
+  colnames(df) <- c("x0","y0","x1","y1")
+  df <- cbind(df, data.frame(marks=1:nrow(df)))
+  B <- as.psp(df, window=square(1))
+  colnames(df) <- c("xmid", "ymid", "length", "angle", "marks")
+  E <- as.psp(df, window=square(c(-1,2)))
+
+#' print and summary methods
+  A
+  B
+  E
+  summary(B)
+  M <- B
+  marks(M) <- data.frame(id=marks(B), len=lengths.psp(B))
+  M
+  summary(M)
+
+#' undocumented  
+  as.ppp(B)
 })
 #
 ## tests/sigtraceprogress.R
@@ -737,7 +759,7 @@ local({
 #
 # Tests of owin geometry code
 #
-#  $Revision: 1.3 $  $Date: 2015/12/29 08:54:49 $
+#  $Revision: 1.4 $  $Date: 2018/05/02 13:33:27 $
 
 require(spatstat)
 local({
@@ -762,6 +784,11 @@ local({
   R <- as.mask(square(1))
   stopifnot(area(bdry.mask(R)) > 0)
   stopifnot(area(convexhull(R)) > 0)
+
+  #' as.owin.data.frame
+  V <- as.mask(letterR, eps=0.2)
+  Vdf <- as.data.frame(V)
+  Vnew <- as.owin(Vdf)
 })
 
 ##

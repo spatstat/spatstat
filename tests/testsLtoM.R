@@ -25,7 +25,7 @@ local({
 #'
 #'   leverage and influence for Gibbs models
 #' 
-#'   $Revision: 1.17 $ $Date: 2018/05/01 09:06:09 $
+#'   $Revision: 1.19 $ $Date: 2018/05/02 09:26:49 $
 #' 
 
 require(spatstat)
@@ -52,6 +52,10 @@ local({
   fitH <- ppm(cells ~ 1, Hardcore(0.07))
   levH <- Leverage(fitH)
   infH <- Influence(fitH)
+  # ppmInfluence; hard c
+  fitSH <- ppm(cells ~ 1, StraussHard(0.07, 0.01))
+  levSH <- Leverage(fitSH)
+  infSH <- Influence(fitSH)
   # ppmInfluence; offset is present; coefficient vector has length 1
   fitHx <- ppm(cells ~ x, Hardcore(0.07), rbord=0)
   levHx <- Leverage(fitHx)
@@ -112,6 +116,7 @@ local({
   pmiSSB <- ppmInfluence(fitS, sparseOK=TRUE)
   # also check case of zero cif
   pmiHSB <- ppmInfluence(fitH, sparseOK=TRUE)
+  pmiSHSB <- ppmInfluence(fitSH, sparseOK=TRUE)
   pmiHxSB <- ppmInfluence(fitHx, sparseOK=TRUE)
 
   cat("Reinstate maxmatrix...", fill=TRUE)
@@ -133,6 +138,7 @@ local({
   #' case of zero cif
   cat("zero cif...", fill=TRUE)
   pmiH <- ppmInfluence(fitH, sparseOK=TRUE)
+  pmiSH <- ppmInfluence(fitSH, sparseOK=TRUE)
   pmiHx <- ppmInfluence(fitHx, sparseOK=TRUE)
 
   #' other code blocks - check execution only
@@ -192,7 +198,12 @@ local({
   d <- gogo("a", futx) 
   d <- gogo("b", futx, method="interpreted") 
   d <- gogo("c", futx, method="interpreted", entrywise=FALSE)
-  d <- gogo("d", futx,                       entrywise=FALSE) 
+  d <- gogo("d", futx,                       entrywise=FALSE)
+
+  #'
+  set.seed(452)
+  foo <- ppm(cells ~ 1, Strauss(0.15), method="ho", nsim=5)
+  aa <- ppmInfluence(foo)
 })
 
 ##

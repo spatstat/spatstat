@@ -148,7 +148,9 @@ local({
 })
 ## tests/colour.R
 ##
-## $Revision: 1.1 $ $Date: 2015/12/29 08:54:49 $
+##  Colour value manipulation and colour maps
+##
+## $Revision: 1.2 $ $Date: 2018/05/02 05:55:44 $
 ##
 
 require(spatstat)
@@ -156,6 +158,15 @@ require(spatstat)
 local({
    f <- function(n) grey(seq(0,1,length=n))
    z <- to.grey(f)
+
+   a <- colourmap(rainbow(12), range=as.Date(c("2018-01-01", "2018-12-31")))
+   a
+   summary(a)
+
+   b <- colourmap(rainbow(12), inputs=month.name)
+   plot(b, vertical=FALSE)
+   plot(b, vertical=TRUE)
+   
 })
 # tests/correctC.R
 # check for agreement between C and interpreted code
@@ -545,7 +556,7 @@ local({
 #
 #  Test validity of envelope data
 #
-#  $Revision: 1.9 $  $Date: 2018/04/27 02:45:28 $
+#  $Revision: 1.10 $  $Date: 2018/05/02 09:02:43 $
 #
 
 require(spatstat)
@@ -633,14 +644,26 @@ local({
                 savepatterns=TRUE, savefuns=TRUE)
   print(A)
   B <- envelope(A, nsim=5, savefuns=TRUE)
+  D <- envelope(cells, "Lest", nsim=5)
+  fit <- ppm(cells ~ 1, Strauss(0.07))
+  U <- envelope(fit, nsim=3, simulate=expression(runifpoint(20)))
   #'  envelopes based on sample variance
   E <- envelope(cells, nsim=8, VARIANCE=TRUE)
   G <- envelope(cells, nsim=8, VARIANCE=TRUE,
                 use.theory=FALSE, do.pwrong=TRUE)
   print(G)
+  #' summary method
+  summary(E)
+  summary(envelope(cells, nsim=5, simulate=expression(runifpoint(42))))
   #' weights argument
-  H <- envelope(cells, nsim=4, weights=npoints)
+  H1 <- envelope(cells, nsim=4, weights=npoints, savefuns=TRUE)
+  H2 <- envelope(cells, nsim=4, weights=npoints, savefuns=TRUE)
   J <- envelope(cells, nsim=4, weights=npoints, VARIANCE=TRUE)
+  #' pooling with weights
+  H <- pool(H1, H2)
+  #' pooling envelopes with non-identical attributes
+  H0 <- envelope(cells, nsim=4, savefuns=TRUE)
+  HH <- pool(H0, H1)
   #' undocumented/secret
   K <- envelope(cells, nsim=4, saveresultof=npoints, collectrubbish=TRUE)
   M <- envelope(cells, nsim=4, patterns.only=TRUE)
@@ -653,6 +676,9 @@ local({
   #' re-using envelope objects in other functions
   A <- envelope(cells, nsim=9, savepatterns=TRUE, savefuns=TRUE)
   S <- lurking(cells, expression(x), envelope=A, nsim=9)
+  #' envelope.envelope
+  B <- envelope(cells, nsim=5, savepatterns=TRUE, savefuns=FALSE)
+  envelope(B)
 })
 #
 #    tests/factorbugs.R
