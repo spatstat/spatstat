@@ -408,6 +408,56 @@ local({
   df <- pointsAlongNetwork(simplenet, 0.05)
 })
 
+#'
+#'   lppmodels.R
+#'
+#'   Tests of lppm and class support
+#' 
+#'   $Revision$ $Date$
+#'
+
+require(spatstat)
+
+local({
+  fit0 <- lppm(spiders)
+  fit1 <- lppm(spiders ~ x)
+  fit2 <- lppm(chicago ~ x+y)
+  X <- runiflpp(10, simplenet)
+  Z <- distfun(runiflpp(10, simplenet))
+  fit3 <- lppm(X ~ Z)
+
+  summary(fit0)
+  summary(fit1)
+  summary(fit2)
+  summary(fit3)
+  
+  pseudoR2(fit0)
+  pseudoR2(fit1)
+  pseudoR2(fit2)
+  pseudoR2(fit3)
+
+  Window(fit1)
+
+  a <- model.images(fit0)
+  a <- model.images(fit1)
+  a <- model.images(fit2)
+  a <- model.images(fit3)
+
+  b <- model.matrix(fit0)
+  b <- model.matrix(fit1)
+  b <- model.matrix(fit2)
+  b <- model.matrix(fit3)
+
+  is.multitype(fit0)
+  is.multitype(fit1)
+  is.multitype(fit2)
+  is.multitype(fit3)
+
+  fit0e <- emend(fit0)
+  fit1e <- emend(fit1)
+  fit2e <- emend(fit2)
+  fit3e <- emend(fit3)
+})
 ##
 ##     tests/marcelino.R
 ##

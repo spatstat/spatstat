@@ -3,7 +3,7 @@
 #
 #  Point process models on a linear network
 #
-#  $Revision: 1.42 $   $Date: 2018/02/13 02:41:14 $
+#  $Revision: 1.44 $   $Date: 2018/05/02 02:04:45 $
 #
 
 lppm <- function(X, ...) {
@@ -282,26 +282,39 @@ model.images.lppm <- local({
     stopifnot(inherits(object, "lppm"))
     stopifnot(inherits(L, "linnet"))
     m <- model.images(object$fit, W=as.rectangle(L), ...)
-    if(length(m) > 0) {
+    if(length(m)) {
       ## restrict images to L
-      rasta <- as.mask(m[[1L]])
-      DL <- as.mask.psp(as.psp(L), xy=rasta)
-      ZL <- as.im(DL)
-      if(!is.hyperframe) {
-        ## list of images: convert to list of linims
-        m <- tolinims(m, L=L, imL=ZL)
-      } else {
-        ## hyperframe, each column being a list of images
-        mm <- lapply(as.list(m), tolinims, L=L, imL=ZL)
-        m <- do.call(hyperframe, mm)
-      }
+      type <- if(is.hyperframe(m)) "hyperframe" else
+              if(is.imlist(m)) "imlist" else
+              if(is.list(m) && all(sapply(m, is.im))) "imlist" else
+              stop("Internal error: model.images not understood", call.=FALSE)
+      switch(type,
+             imlist = {
+               ## list of images: convert to list of linims
+               ZL <- netmask(L, template=m[[1L]])
+               m <- tolinims(m, L=L, imL=ZL)
+             },
+             hyperframe = {
+               ## hyperframe, each column being a list of images
+               ## extract columns
+               rownam <- row.names(m)
+               m <- as.list(m)
+               ZL <- netmask(L, template=m[[1L]][[1L]])
+               mm <- lapply(m, tolinims, L=L, imL=ZL)
+               m <- do.call(hyperframe, mm)
+               row.names(m) <- rownam
+             })
     }
     return(m)
   }
 
+  netmask <- function(L, template) {
+    as.im(as.mask.psp(as.psp(L), xy=as.mask(template)))
+  }
+    
   tolinim <- function(x, L, imL) linim(L, eval.im(x * imL), restrict=FALSE)
   tolinims <- function(x, L, imL) solapply(x, tolinim, L=L, imL=imL)
-  
+
   model.images.lppm
 })
 

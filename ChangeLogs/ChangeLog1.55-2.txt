@@ -512,3 +512,18 @@ Change log from 1.55-1 to 1.55-2
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+02 may 2018
+
+   lppm.R
+	Bug fixes in model.images.lppm
+
+   tests/lppmodels.R [New file]
+   	Tests of lppm and class infrastructure
+
+   DESCRIPTION
+   NEWS
+	version 1.55-1.026
+
+------------- passed R-3.4.4 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------

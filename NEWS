@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.55-1.025
+        CHANGES IN spatstat VERSION 1.55-1.026
 
 OVERVIEW
 
@@ -16,8 +16,8 @@ OVERVIEW
     o Find connected components of each tile in a tessellation.
 
     o Geometrical operations on 'distfun' objects.
-    
-    o Numerous bug fixes and minor improvements.
+
+    o A large number of minor bugs have been detected and fixed.
 
     o Version nickname: "Einstein Visa"
 
@@ -117,6 +117,14 @@ BUG FIXES
 
     o tiles
     names(tiles(x)) was not always identical to tilenames(x).
+    Fixed.
+
+    o model.images.lppm
+    Crashed in many cases.
+    Fixed.
+    
+    o model.images.lppm
+    Names or dimnames were missing in some cases.
     Fixed.
     
         CHANGES IN spatstat VERSION 1.55-1
