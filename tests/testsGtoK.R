@@ -197,7 +197,37 @@ local({
   Ai <- model.matrix(fit, irregular=TRUE)
   Zr <- model.images(fit)
   Zi <- model.images(fit, irregular=TRUE)
-})#
+})#'
+#'   tests/Kfuns.R
+#'
+#'   Various K and L functions
+#'
+#'   $Revision: 1.1 $  $Date: 2018/05/03 09:03:04 $
+#'
+
+require(spatstat)
+local({
+  #' supporting code
+  implemented.for.K(c("border", "bord.modif", "translate", "good", "best"),
+                    "mask", TRUE)
+  #' Kest special code blocks
+  K <- Kest(cells, var.approx=TRUE, ratio=FALSE)
+  Z <- distmap(cells) + 1
+  Kb <- Kest(cells, correction=c("border","bord.modif"),
+             weights=Z, ratio=TRUE)
+  Kn <- Kest(cells, correction="none",
+             weights=Z, ratio=TRUE)
+  #' inhomogeneous multitype
+  fit <- ppm(amacrine ~ marks)
+  K1 <- Kcross.inhom(amacrine, lambdaX=fit)
+  K2 <- Kcross.inhom(amacrine, lambdaX=densityfun(amacrine))
+  K3 <- Kcross.inhom(amacrine, lambdaX=density(amacrine, at="points"))
+  On <- split(amacrine)$on
+  Off <- split(amacrine)$off
+  K4 <- Kcross.inhom(amacrine, lambdaI=ppm(On), lambdaJ=ppm(Off))
+  K5 <- Kcross.inhom(amacrine, correction="bord.modif")
+})
+#
 # tests/kppm.R
 #
 # $Revision: 1.21 $ $Date: 2018/05/01 08:57:17 $

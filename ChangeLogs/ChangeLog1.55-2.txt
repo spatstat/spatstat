@@ -552,5 +552,25 @@ Change log from 1.55-1 to 1.55-2
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+03 may 2018
 
+   digestCovariates.R
+   util.R
+	Bug fixes
 
+   Kcross.inhom.Rd
+	Typo
+
+   tests/undoc.R
+   tests/Kfuns.R [New file]
+   bugfixes.Rd
+	More examples + tests
+
+   DESCRIPTION
+   NEWS
+   Nickname.txt
+	version 1.55-1.028
+
+------------- passed R-3.4.4 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------

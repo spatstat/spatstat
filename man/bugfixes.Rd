@@ -61,7 +61,8 @@
   \code{\link[utils]{news}}.  
 }
 \examples{
-   # show all bugs reported after publication of the spatstat book
+   bugfixes
+   ## show all bugs reported after publication of the spatstat book
    if(interactive()) bugfixes("1.42-0")
 }
 \keyword{documentation}

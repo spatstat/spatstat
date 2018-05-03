@@ -38,7 +38,7 @@ Kcross.inhom(X, i, j, lambdaI=NULL, lambdaJ=NULL, \dots,  r=NULL, breaks=NULL,
   }
   \item{lambdaI}{
     Optional.
-    Values of the the estimated intensity of the sub-process of
+    Values of the estimated intensity of the sub-process of
     points of type \code{i}.
     Either a pixel image (object of class \code{"im"}),
     a numeric vector containing the intensity values

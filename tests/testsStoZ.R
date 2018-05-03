@@ -568,6 +568,26 @@ local({
   ## Berman-Turner frame
   A <- bt.frame(quadscheme(cells), ~x, Strauss(0.07), rbord=0.07)
   print(A)
+  ## digestCovariates
+  D <- distfun(cells)
+  Z <- distmap(cells)
+  U <- dirichlet(cells)
+  stopifnot(is.scov(D))
+  stopifnot(is.scov(Z))
+  stopifnot(is.scov(U))
+  stopifnot(is.scov("x"))
+  dg <- digestCovariates(D=D,Z=Z,U=U,"x",list(A="x", B=D))
+  ##
+  a <- getfields(dg, c("A", "D", "niets"), fatal=FALSE)
+  ## util.R
+  gg <- pointgrid(owin(), 7)
+  checkbigmatrix(1000000L, 1000000L, FALSE, TRUE)
+  spatstatDiagnostic("whatever")
+  M <- list(list(a=2, b=FALSE),
+            list(a=2, b=TRUE))
+  stopifnot(!allElementsIdentical(M))
+  stopifnot(allElementsIdentical(M, "a"))
+  
 })
 
 
@@ -789,6 +809,29 @@ local({
   V <- as.mask(letterR, eps=0.2)
   Vdf <- as.data.frame(V)
   Vnew <- as.owin(Vdf)
+
+  #' intersections involving masks
+  B1 <- square(1)
+  B2 <- as.mask(shift(B1, c(0.2, 0.3)))
+  o12 <- overlap.owin(B1, B2)
+  o21 <- overlap.owin(B2, B1)
+  i12 <- intersect.owin(B1, B2, eps=0.01)
+  i21 <- intersect.owin(B2, B1, eps=0.01)
+
+  #' geometry
+  inradius(B1)
+  inradius(B2)
+  inradius(letterR)
+  inpoint(B1)
+  inpoint(B2)
+  inpoint(letterR)
+  is.convex(B1)
+  is.convex(B2)
+  is.convex(letterR)
+
+  X <- longleaf[square(50)]
+  marks(X) <- marks(X)/8
+  D <- discs(X, delta=5, separate=TRUE)
 })
 
 ##

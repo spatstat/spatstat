@@ -1,7 +1,7 @@
 #
 #    util.R    miscellaneous utilities
 #
-#    $Revision: 1.237 $    $Date: 2017/06/05 10:31:58 $
+#    $Revision: 1.239 $    $Date: 2018/05/03 09:16:10 $
 #
 
 # common invocation of matrixsample
@@ -65,10 +65,11 @@ onecolumn <- function(m) {
 
 
 checkbigmatrix <- function(n, m, fatal=FALSE, silent=FALSE) {
-  if(n * m <= spatstat.options("maxmatrix"))
+  nm <- as.numeric(n) * as.numeric(m)
+  if(nm <= spatstat.options("maxmatrix"))
     return(TRUE)
   whinge <- paste("Attempted to create binary mask with",
-                  n, "*", m, "=", n * m, "entries")
+                  n, "*", m, "=", nm, "entries")
   if(fatal) stop(whinge, call.=FALSE)
   if(!silent) warning(whinge, call.=FALSE)
   return(FALSE)
@@ -351,7 +352,7 @@ spatstatDiagnostic <- function(msg) {
 
 allElementsIdentical <- function(x, entry=NULL) {
   if(length(x) <= 1) return(TRUE)
-  if(!is.null(entry)) {
+  if(is.null(entry)) {
     x1 <- x[[1]]
     for(i in 2:length(x))
       if(!identical(x[[i]], x1)) return(FALSE)

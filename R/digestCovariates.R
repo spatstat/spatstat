@@ -1,7 +1,7 @@
 #'
 #'    digestCovariates.R
 #'
-#'     $Revision: 1.2 $  $Date: 2017/01/26 00:22:14 $
+#'     $Revision: 1.4 $  $Date: 2018/05/03 08:33:44 $
 #' 
 
 is.scov <- function(x) {
@@ -36,7 +36,7 @@ digestCovariates <- function(..., W = NULL) {
 
   if(any(needW <- !sapply(covs, is.sob))) {
     if(is.null(W)){
-      boxes <- sapply(covs[!needW], Frame, fatal = FALSE)
+      boxes <- lapply(covs[!needW], Frame)
       W <- do.call(boundingbox, boxes)
     } else stopifnot(is.owin(W))
   }
