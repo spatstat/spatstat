@@ -3,7 +3,7 @@
 #'
 #' Sparse 3D arrays represented as list(i,j,k,x)
 #' 
-#' $Revision: 1.31 $  $Date: 2018/04/11 06:37:39 $
+#' $Revision: 1.33 $  $Date: 2018/05/04 03:14:11 $
 #'
 
 sparse3Darray <- function(i=integer(0), j=integer(0), k=integer(0),
@@ -302,18 +302,21 @@ as.array.sparse3Darray <- function(x, ...) {
         outdf <- df
       } else {
         #' invert map to determine output positions (reorder/repeat entries)
-        imap <- Imap %orifnull% df$i
-        jmap <- Jmap %orifnull% df$j
-        kmap <- Kmap %orifnull% df$k
-        sn <- seq_len(nrow(df))
-        whichi <- split(seq_along(imap), factor(imap, levels=sn))
-        whichj <- split(seq_along(jmap), factor(jmap, levels=sn))
-        whichk <- split(seq_along(kmap), factor(kmap, levels=sn))
+        snI <- seq_len(I$n)
+        snJ <- seq_len(J$n)
+        snK <- seq_len(K$n)
+        imap <- Imap %orifnull% snI
+        jmap <- Jmap %orifnull% snJ
+        kmap <- Kmap %orifnull% snK
+        whichi <- split(seq_along(imap), factor(imap, levels=snI))
+        whichj <- split(seq_along(jmap), factor(jmap, levels=snJ))
+        whichk <- split(seq_along(kmap), factor(kmap, levels=snK))
         dat.i <- whichi[df$i]
         dat.j <- whichj[df$j]
         dat.k <- whichk[df$k]
         stuff <- mapply(expandwithdata,
-                        i=dat.i, j=dat.j, k=dat.k, x=df$x)
+                        i=dat.i, j=dat.j, k=dat.k, x=df$x,
+                        SIMPLIFY=FALSE)
         outdf <- rbindCompatibleDataFrames(stuff)
       }
       x <- sparse3Darray(i=outdf$i, j=outdf$j, k=outdf$k, x=outdf$x,

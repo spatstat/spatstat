@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.55-1.028
+        CHANGES IN spatstat VERSION 1.55-1.029
 
 OVERVIEW
 
@@ -17,7 +17,7 @@ OVERVIEW
 
     o Geometrical operations on 'distfun' objects.
 
-    o A large number of minor bugs have been detected and fixed.
+    o A very large number of minor bugs have been detected and fixed.
 
     o Version nickname: "This Nickname Intentionally Left Blank"
 

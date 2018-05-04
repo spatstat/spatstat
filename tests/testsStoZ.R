@@ -157,7 +157,7 @@ local({
 
 #'    tests/sparse3Darrays.R
 #'  Basic tests of code in sparse3Darray.R and sparsecommon.R
-#'  $Revision: 1.13 $ $Date: 2018/04/11 07:42:29 $
+#'  $Revision: 1.14 $ $Date: 2018/05/04 03:13:57 $
 
 require(spatstat)
 local({
@@ -222,6 +222,9 @@ local({
   }
 
   BB <- evalSparse3Dentrywise(AA + AA/2)
+
+  MM <- bind.sparse3Darray(M, M, along=1)
+  MM <- bind.sparse3Darray(M, M, along=2)
 })
 
     
@@ -243,6 +246,7 @@ local({
     #' tests of [.sparse3Darray
     M[ 3:4, , ]
     M[ 3:4, 2:4, ]
+    M[ 4:3, 4:2, 1:2]
     M[, 3, ]
     M[, 3, , drop=FALSE]
     M[c(FALSE,TRUE,FALSE,FALSE,TRUE), , ]
@@ -266,10 +270,20 @@ local({
     M2d <- M[,,2,drop=TRUE]
     MandM[,,1] <- M2a
     MandM[,,1] <- M2d
+    ## slices of different dimensions
+    M[ , 3, 1] <- 1:5
+    M[2,  , 2] <- 1:5
+    M[ 1, 3:5, 2] <- 4:6
+    M[ 2, 5:3, 2] <- 4:6
+    V3 <- sparseVector(x=1, i=2, length=3)
+    M[ 1, 3:5, 2] <- V3
+    M[ 2, 5:3, 2] <- V3
+    M[,,2] <- M2a
+    M[,,2] <- (M2a + 1)
+    ## integer matrix index
     Mnew[cbind(3:5, 3:5, c(1,2,1))] <- 1:3
     Mnew[cbind(3:5, 3:5, 2)] <- 1:3
     Mnew[cbind(3:5,   2, 2)] <- 1:3
-    V3 <- sparseVector(x=1, i=2, length=3)
     Mnew[cbind(3:5, 3:5, c(1,2,1))] <- V3
     Mnew[cbind(3:5, 3:5, 2)] <- V3
     Mnew[cbind(3:5,   2, 2)] <- V3

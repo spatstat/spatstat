@@ -574,3 +574,21 @@ Change log from 1.55-1 to 1.55-2
 ------------- passed R-3.4.4 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
+
+04 may 2018
+
+   sparse3Darray.R
+	Bug fixes in subset operator
+
+   tests/sparse3Darrays.R
+	More tests
+
+   DESCRIPTION
+   NEWS
+   Nickname.txt
+	version 1.55-1.029
+
+------------- passed R-3.4.4 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
