@@ -455,7 +455,7 @@ local({
 #
 #   Plus assorted tricks
 #
-#   $Revision: 1.6 $  $Date: 2018/02/15 04:06:40 $
+#   $Revision: 1.7 $  $Date: 2018/05/05 06:40:30 $
 #
 require(spatstat)
 local({
@@ -498,6 +498,17 @@ local({
   suffstat.poisson(fitP, cells)
   fit0 <- killinteraction(fit)
   suffstat.poisson(fit0, cells)
+
+  ## (7) support for class ppm
+  Z <- as.im(function(x,y){x}, Window(cells))
+  fitZ <- ppm(cells ~ Z)
+  U <- getppmOriginalCovariates(fitZ)
+  fitNot <- ppm(redwood ~1, Strauss(0.1))
+  fitFast <- emend(fitNot, fast=TRUE)
+  logLik(fitZ, absolute=TRUE)
+  
+  fut <- kppm(redwood ~ x)
+  A <- quad.ppm(fut)
   
   spatstat.options(op)
 })
@@ -519,15 +530,28 @@ local({
   A <- ppp(df$x, df$y, window=letterR, marks=1:13)
   #' test handling of points with bad coordinates
   B <- ppp(X$x, c(X$y[1:7], c(Inf, NA, NaN)), window=letterR, marks=1:10)
+  D <- ppp(X$x, c(X$y[1:7], c(Inf, NA, NaN)), window=letterR,
+           marks=data.frame(id=1:10, u=runif(10)))
 
-  #' test print method
+  #' test print/summary methods on these bad objects
   print(A)
   print(B)
-
+  print(D)
+  summary(A)
+  summary(B)
+  summary(D)
+  
   #' subset operator with logical image
   Z <- distmap(letterR, invert=TRUE)
   V <- (Z > 0.2)
   XV <- X[V]
+
+  #' test as.ppp for spatial package if it is not installed
+  FR <- Frame(letterR)
+  as.ppp(list(x=X$x, y=X$y,
+              xl=FR$xrange[1], xu=FR$xrange[2],
+              yl=FR$yrange[1], yu=FR$yrange[2]))
+              
 })
 #
 # tests/ppx.R

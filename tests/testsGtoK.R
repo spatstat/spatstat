@@ -238,7 +238,7 @@ local({
 require(spatstat)
 local({
 
- fit <- kppm(redwood, ~1, "Thomas") # sic
+ fit <- kppm(redwood ~1, "Thomas") # sic
  fitx <- update(fit, ~ . + x)
  fitM <- update(fit, clusters="MatClust")
  fitC <- update(fit, cells)
@@ -325,11 +325,22 @@ local({
 
 local({
   #'  experimental
-  fut <- kppm(redwood, do.adjust=TRUE)
-  spatstat.options(kppm.canonical=TRUE)
-  fut <- kppm(redwood)
-  fut <- kppm(redwood, do.adjust=TRUE)
-  spatstat.options(kppm.canonical=FALSE)
+  spatstat.options(kppm.canonical=TRUE, kppm.adjusted=TRUE)
+  futTT1 <- kppm(redwood)
+  futTT2 <- kppm(redwood, method="palm")
+  futTT3 <- kppm(redwood, method="clik2")
+  spatstat.options(kppm.canonical=TRUE, kppm.adjusted=FALSE)
+  futTF1 <- kppm(redwood)
+  futTF2 <- kppm(redwood, method="palm")
+  futTF3 <- kppm(redwood, method="clik2")
+  spatstat.options(kppm.canonical=FALSE, kppm.adjusted=TRUE)
+  futFT1 <- kppm(redwood)
+  futFT2 <- kppm(redwood, method="palm")
+  futFT3 <- kppm(redwood, method="clik2")
+  spatstat.options(kppm.canonical=FALSE, kppm.adjusted=FALSE)
+  futFF1 <- kppm(redwood)
+  futFF2 <- kppm(redwood, method="palm")
+  futFF3 <- kppm(redwood, method="clik2")
 })
 
   

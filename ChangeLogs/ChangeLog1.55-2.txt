@@ -592,3 +592,19 @@ Change log from 1.55-1 to 1.55-2
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+05 may 2018
+
+   tests/sparse3Darrays.R
+   tests/ppp.R
+   tests/ppmtricks.R
+	More tests
+
+   DESCRIPTION
+   NEWS
+   Nickname.txt
+	version 1.55-1.030
+
+------------- passed R-3.4.4 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+

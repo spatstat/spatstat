@@ -107,7 +107,7 @@ project.ppm(object, \dots, fatal=FALSE, trace=FALSE)
   \code{\link{spatstat.options}}
 }
 \examples{
-   fit <- ppm(redwood, ~1, Strauss(0.1))
+   fit <- ppm(redwood ~1, Strauss(0.1))
    coef(fit)
    fit2 <- emend(fit)
    coef(fit2)

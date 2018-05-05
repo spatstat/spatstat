@@ -157,7 +157,7 @@ local({
 
 #'    tests/sparse3Darrays.R
 #'  Basic tests of code in sparse3Darray.R and sparsecommon.R
-#'  $Revision: 1.14 $ $Date: 2018/05/04 03:13:57 $
+#'  $Revision: 1.15 $ $Date: 2018/05/04 03:56:37 $
 
 require(spatstat)
 local({
@@ -166,9 +166,12 @@ local({
   #' creation by specifying nonzero elements
   M <- sparse3Darray(i=1:3, j=c(3,1,2), k=4:2,
                      x=runif(3), dims=rep(4, 3))
-  #' cumulate entries in duplicate positions
-  M <- sparse3Darray(i=c(1,1,2), j=c(2,2,1), k=c(3,3,2),
+  #' duplicate entries
+  Mn <- sparse3Darray(i=c(1,1,2), j=c(2,2,1), k=c(3,3,2),
                      x=runif(3), dims=rep(3, 3))
+  #' cumulate entries in duplicate positions
+  Ms <- sparse3Darray(i=c(1,1,2), j=c(2,2,1), k=c(3,3,2),
+                      x=runif(3), dims=rep(3, 3), strict=TRUE)
 
   #' print method
   print(M)
