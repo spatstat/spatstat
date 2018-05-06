@@ -627,3 +627,5 @@ Change log from 1.55-1 to 1.55-2
 ------------- passed R-3.4.4 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
++++++++++++++ installed R-3.5.0        +++++++++++++++
+------------- passed R-3.5.0 CMD check ---------------
