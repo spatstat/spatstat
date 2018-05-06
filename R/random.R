@@ -3,7 +3,7 @@
 ##
 ##    Functions for generating random point patterns
 ##
-##    $Revision: 4.92 $   $Date: 2017/06/05 10:31:58 $
+##    $Revision: 4.93 $   $Date: 2018/05/06 17:42:51 $
 ##
 ##
 ##    runifpoint()      n i.i.d. uniform random points ("binomial process")
@@ -44,8 +44,7 @@ runifrect <- function(n, win=owin(c(0,1),c(0,1)), nsim=1, drop=TRUE)
   }
   if(nsim == 1 && drop)
     return(result[[1L]])
-  names(result) <- paste("Simulation", 1:nsim)
-  return(as.ppplist(result))
+  return(as.solist(result, .NameBase="Simulation"))
 }
 
 runifdisc <- function(n, radius=1, centre=c(0,0), ..., nsim=1, drop=TRUE)
@@ -70,8 +69,7 @@ runifdisc <- function(n, radius=1, centre=c(0,0), ..., nsim=1, drop=TRUE)
   }
   if(nsim == 1 && drop)
     return(result[[1L]])
-  names(result) <- paste("Simulation", 1:nsim)
-  return(as.ppplist(result))
+  return(as.solist(result, .NameBase="Simulation"))
 }
 
 
@@ -98,8 +96,7 @@ runifpoint <- function(n, win=owin(c(0,1),c(0,1)),
     emp <- ppp(numeric(0), numeric(0), window=win)
     if(nsim == 1) return(emp)
     result <- rep(list(emp), nsim)
-    names(result) <- paste("Simulation", 1:nsim)
-    return(as.ppplist(result))
+    return(as.solist(result, .NameBase="Simulation"))
   }
 
   if(warn) {
@@ -176,8 +173,7 @@ runifpoint <- function(n, win=owin(c(0,1),c(0,1)),
   ## list of point patterns produced.
   if(nsim == 1 && drop)
     return(result[[1L]])
-  names(result) <- paste("Simulation", 1:nsim)
-  return(as.ppplist(result))
+  return(as.solist(result, .NameBase="Simulation"))
 }
 
 runifpoispp <- function(lambda, win = owin(c(0,1),c(0,1)), ...,
@@ -196,8 +192,7 @@ runifpoispp <- function(lambda, win = owin(c(0,1),c(0,1)), ...,
     emp <- ppp(numeric(0), numeric(0), window=win)
     if(nsim == 1 && drop) return(emp)
     result <- rep(list(emp), nsim)
-    names(result) <- paste("Simulation", 1:nsim)
-    return(as.ppplist(result))
+    return(as.solist(result, .NameBase="Simulation"))
   }
 
   ## will generate Poisson process in enclosing rectangle and trim it
@@ -218,8 +213,7 @@ runifpoispp <- function(lambda, win = owin(c(0,1),c(0,1)), ...,
   }
   if(nsim == 1 && drop)
     return(result[[1L]])
-  names(result) <- paste("Simulation", 1:nsim)
-  return(as.ppplist(result))
+  return(as.solist(result, .NameBase="Simulation"))
 }
 
 rpoint <- function(n, f, fmax=NULL,
@@ -249,8 +243,7 @@ rpoint <- function(n, f, fmax=NULL,
       emp <- ppp(numeric(0), numeric(0), window=wf)
       if(nsim == 1 && drop) return(emp)
       result <- rep(list(emp), nsim)
-      names(result) <- paste("Simulation", 1:nsim)
-      return(as.ppplist(result))
+      return(as.solist(result, .NameBase="Simulation"))
     }
     w <- as.mask(wf)
     M <- w$m
@@ -273,8 +266,7 @@ rpoint <- function(n, f, fmax=NULL,
     }
     if(nsim == 1 && drop)
       return(result[[1L]])
-    names(result) <- paste("Simulation", 1:nsim)
-    return(as.ppplist(result))
+    return(as.solist(result, .NameBase="Simulation"))
   }
 
   ## ------------ FUNCTION  ---------------------  
@@ -287,8 +279,7 @@ rpoint <- function(n, f, fmax=NULL,
     emp <- ppp(numeric(0), numeric(0), window=win)
     if(nsim == 1 && drop) return(emp)
     result <- rep(list(emp), nsim)
-    names(result) <- paste("Simulation", 1:nsim)
-    return(as.ppplist(result))
+    return(as.solist(result, .NameBase="Simulation"))
   }
   
   if(is.null(fmax)) {
@@ -350,8 +341,7 @@ rpoint <- function(n, f, fmax=NULL,
     }
   }
   if(nsim == 1 && drop) return(result[[1L]])
-  names(result) <- paste("Simulation", 1:nsim)
-  return(as.ppplist(result))
+  return(as.solist(result, .NameBase="Simulation"))
 }
 
 rpoispp <- function(lambda, lmax=NULL, win = owin(), ...,
@@ -448,8 +438,7 @@ rpoispp <- function(lambda, lmax=NULL, win = owin(), ...,
         result[[isim]] <- ppp(xx, yy, window=win, check=FALSE)
       }
       if(nsim == 1 && drop) return(result[[1L]])
-      names(result) <- paste("Simulation", 1:nsim)
-      return(as.ppplist(result))
+      return(as.solist(result, .NameBase="Simulation"))
     } else {
       ## old code: thinning
       result <- runifpoispp(lmax, win, nsim=nsim, drop=FALSE)
@@ -609,8 +598,7 @@ rSSI <- function(r, n=Inf, win = square(1),
       if(nsim == 1 && drop)
          return(x.init)
       result <- rep(list(x.init), nsim)
-      names(result) <- paste("Simulation", 1:nsim)
-      return(as.ppplist(result))
+      return(as.solist(result, .NameBase="Simulation"))
     }
   }
   #' validate radius
@@ -646,8 +634,7 @@ rSSI <- function(r, n=Inf, win = square(1),
   }
   if(nsim == 1 && drop)
     return(result[[1L]])
-  names(result) <- paste("Simulation", 1:nsim)
-  return(as.ppplist(result))
+  return(as.solist(result, .NameBase="Simulation"))
 }
 
 rPoissonCluster <-
@@ -737,8 +724,7 @@ rPoissonCluster <-
 
   if(nsim == 1 && drop) return(resultlist[[1]])
 
-  names(resultlist) <- paste("Simulation", 1:nsim)
-  return(as.ppplist(resultlist))
+  return(as.solist(resultlist, .NameBase="Simulation"))
 }  
 
 rGaussPoisson <- local({
@@ -781,8 +767,7 @@ rstrat <- function(win=square(1), nx, ny=nx, k=1, nsim=1, drop=TRUE) {
   }
   if(nsim == 1 && drop)
     return(result[[1L]])
-  names(result) <- paste("Simulation", 1:nsim)
-  return(as.ppplist(result))
+  return(as.solist(result, .NameBase="Simulation"))
 }
 
 xy.grid <- function(xr, yr, nx, ny, dx, dy) {
@@ -846,8 +831,7 @@ rsyst <- function(win=square(1), nx=NULL, ny=nx, ..., dx=NULL, dy=dx,
   }
   if(nsim == 1 && drop)
     return(result[[1L]])
-  names(result) <- paste("Simulation", 1:nsim)
-  return(as.ppplist(result))
+  return(as.solist(result, .NameBase="Simulation"))
 }
 
 rcellnumber <- local({
@@ -922,8 +906,7 @@ rcell <- function(win=square(1), nx=NULL, ny=nx, ...,
     result[[isim]] <- Xbox[win]
   }
   if(nsim == 1 && drop) return(result[[1L]])
-  names(result) <- paste("Simulation", 1:nsim)
-  return(as.ppplist(result))
+  return(as.solist(result, .NameBase="Simulation"))
 }
 
 
@@ -950,9 +933,7 @@ rthin <- function(X, P, ..., nsim=1, drop=TRUE) {
   if(nX == 0) {
     if(nsim == 1 && drop) return(X)
     result <- rep(list(X), nsim)
-    names(result) <- paste("Simulation", 1:nsim)
-    result <- if(is.ppp(X)) as.ppplist(result) else as.solist(result)
-    return(result)
+    return(as.solist(result, .NameBase="Simulation"))
   }
 
   if(is.numeric(P) && length(P) == 1 && spatstat.options("fastthin")) {
@@ -968,9 +949,7 @@ rthin <- function(X, P, ..., nsim=1, drop=TRUE) {
     }
     if(nsim == 1 && drop)
       return(result[[1L]])
-    names(result) <- paste("Simulation", 1:nsim)
-    result <- if(is.ppp(X)) as.ppplist(result) else as.solist(result)
-    return(result)
+    return(as.solist(result, .NameBase="Simulation"))
   }
 
   if(is.numeric(P)) {
@@ -1017,9 +996,7 @@ rthin <- function(X, P, ..., nsim=1, drop=TRUE) {
   }
   if(nsim == 1 && drop)
     return(result[[1L]])
-  names(result) <- paste("Simulation", 1:nsim)
-  result <- if(is.ppp(X)) as.ppplist(result) else as.solist(result)
-  return(result)
+  return(as.solist(result, .NameBase="Simulation"))
 }
 
 
@@ -1040,8 +1017,7 @@ rjitter <- function(X, radius, retry=TRUE, giveup=10000, ...,
   if(nX == 0) {
     if(nsim == 1 && drop) return(X)
     result <- rep(list(X), nsim)
-    names(result) <- paste("Simulation", 1:nsim)
-    return(as.ppplist(result))
+    return(as.solist(result, .NameBase="Simulation"))
   }
   result <- vector(mode="list", length=nsim)
   for(isim in 1:nsim) {
@@ -1078,7 +1054,6 @@ rjitter <- function(X, radius, retry=TRUE, giveup=10000, ...,
   }
   if(nsim == 1 && drop)
     return(result[[1L]])
-  names(result) <- paste("Simulation", 1:nsim)
-  return(as.ppplist(result))
+  return(as.solist(result, .NameBase="Simulation"))
 }
 

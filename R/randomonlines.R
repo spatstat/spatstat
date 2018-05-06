@@ -1,7 +1,7 @@
 #
 # randomOnLines.R
 #
-# $Revision: 1.8 $  $Date: 2014/11/17 04:40:14 $
+# $Revision: 1.9 $  $Date: 2018/05/06 17:49:44 $
 #
 # Generate random points on specified lines
 #
@@ -19,8 +19,7 @@ runifpointOnLines <- function(n, L, nsim=1) {
     result[[i]] <- Y
   }
   if(nsim == 1) return(result[[1]])
-  names(result) <- paste("Simulation", 1:nsim)
-  return(as.solist(result))
+  return(as.solist(result, .NameBase="Simulation"))
 }
 
 datagen.runifpointOnLines <- function(n, L) {
@@ -91,8 +90,7 @@ runifpoisppOnLines <- function(lambda, L, nsim=1) {
     result[[i]] <- Y
   }
   if(nsim == 1) return(result[[1]])
-  names(result) <- paste("Simulation", 1:nsim)
-  return(as.solist(result))
+  return(as.solist(result, .NameBase="Simulation"))
 }
 
 datagen.runifpoisppOnLines <- function(lambda, L) {
@@ -116,8 +114,7 @@ rpoisppOnLines <- function(lambda, L, lmax=NULL, ..., nsim=1) {
     result[[i]] <- Y
   }
   if(nsim == 1) return(result[[1]])
-  names(result) <- paste("Simulation", 1:nsim)
-  return(as.solist(result))
+  return(as.solist(result, .NameBase="Simulation"))
 }
 
 datagen.rpoisppOnLines <- function(lambda, L, lmax=NULL, ..., check=TRUE)  {

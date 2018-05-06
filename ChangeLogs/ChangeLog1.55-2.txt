@@ -629,3 +629,26 @@ Change log from 1.55-1 to 1.55-2
 ------------- committed to GitHub      ---------------
 +++++++++++++ installed R-3.5.0        +++++++++++++++
 ------------- passed R-3.5.0 CMD check ---------------
+
+07 may 2018
+
+   solist.R
+   solist.Rd
+	New argument ".NameBase"
+
+   random.R
+   randomlpp.R
+   randommk.R
+   randomNS.R
+   randomonlines.R
+	Adapted to use .NameBase
+	
+   DESCRIPTION
+   NEWS
+	version 1.55-1.032
+
+------------- passed R-3.5.0 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+   

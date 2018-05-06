@@ -7,7 +7,7 @@
   Make a list of two-dimensional spatial objects.
 }
 \usage{
-solist(\dots, check=TRUE, promote=TRUE, demote=FALSE)
+solist(\dots, check=TRUE, promote=TRUE, demote=FALSE, .NameBase)
 }
 \arguments{
   \item{\dots}{
@@ -28,6 +28,11 @@ solist(\dots, check=TRUE, promote=TRUE, demote=FALSE)
     objects is not a 2D spatial object: if \code{demote=FALSE} (the
     default), a fatal error occurs; if \code{demote=TRUE},
     a list of class \code{"anylist"} is returned.
+  }
+  \item{.NameBase}{
+    Optional. Character string. If the \code{\dots} arguments have no
+    names, then the entries of the resulting list will be given
+    names that start with \code{.NameBase}.
   }
 }
 \details{
@@ -75,13 +80,8 @@ solist(\dots, check=TRUE, promote=TRUE, demote=FALSE)
 \value{
   A list, usually belonging to the class \code{"solist"}.
 }
-\author{\adrian
-  
-  
-  \rolf
-  
-  and \ege
-  
+\author{
+  \spatstatAuthors.
 }
 \seealso{
   \code{\link{as.solist}},
@@ -90,7 +90,7 @@ solist(\dots, check=TRUE, promote=TRUE, demote=FALSE)
 }
 \examples{
   solist(cells, density(cells))
-  solist(cells, japanesepines, redwood)
+  solist(cells, japanesepines, redwood, .NameBase="Pattern")
 }
 \keyword{spatial}
 \keyword{list}

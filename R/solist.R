@@ -80,8 +80,10 @@ is.sob <- local({
   is.sob
 })
   
-solist <- function(..., check=TRUE, promote=TRUE, demote=FALSE) {
+solist <- function(..., check=TRUE, promote=TRUE, demote=FALSE, .NameBase) {
   stuff <- list(...)
+  if(length(stuff) && !missing(.NameBase) && !any(nzchar(names(stuff))))
+    names(stuff) <- paste(.NameBase, seq_along(stuff))
   if((check || demote) && !all(sapply(stuff, is.sob))) {
     if(demote)
       return(as.anylist(stuff))

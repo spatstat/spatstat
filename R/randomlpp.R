@@ -3,7 +3,7 @@
 #
 #  Random point pattern generators for a linear network
 #
-#  $Revision: 1.9 $   $Date: 2016/11/23 07:25:50 $
+#  $Revision: 1.10 $   $Date: 2018/05/06 17:44:04 $
 #
 
 rpoislpp <- function(lambda, L, ..., nsim=1, drop=TRUE) {
@@ -21,8 +21,7 @@ rpoislpp <- function(lambda, L, ..., nsim=1, drop=TRUE) {
     if(bugout) return(Y)
     result[[i]] <- Y
   }
-  result <- as.solist(result)
-  if(nsim > 0) names(result) <- paste("Simulation", 1:nsim)
+  result <- as.solist(result, .NameBase="Simulation")
   return(result)
 }
 
@@ -37,8 +36,7 @@ runiflpp <- function(n, L, nsim=1, drop=TRUE) {
     if(bugout) return(Y)
     result[[i]] <- Y
   }
-  result <- as.solist(result)
-  if(nsim > 0) names(result) <- paste("Simulation", 1:nsim)
+  result <- as.solist(result, .NameBase="Simulation")
   return(result)
 }
 
@@ -96,6 +94,5 @@ rlpp <- function(n, f, ..., nsim=1, drop=TRUE) {
     result[[isim]] <- as.lpp(seg=seg, tp=tp, L=L)
   }
   if(nsim == 1 && drop) return(result[[1]])
-  names(result) <- paste("Simulation", 1:nsim)
-  return(as.solist(result))
+  return(as.solist(result, .NameBase="Simulation"))
 }

@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.55-1.031
+        CHANGES IN spatstat VERSION 1.55-1.032
 
 OVERVIEW
 
@@ -74,9 +74,12 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o pcfinhom
     Now handles correction='good'
 
+    o solist
+    New argument '.NameBase'
+    
     o plot.studpermutest
     This existing function now has a help file.
-    
+
 BUG FIXES
 
     o "[.msr"
