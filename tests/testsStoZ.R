@@ -17,6 +17,9 @@ X <- psp(runif(10),runif(10),runif(10),runif(10), window=owin())
 Z <- as.mask.psp(X)
 Z <- pixellate(X)
 
+#' misc
+PX <- periodify(X, 2)
+
 # more tests of lppm code
 
 fit <- lppm(unmark(chicago) ~ polynom(x,y,2))
@@ -361,7 +364,13 @@ local({
     Vsum <- applySparseEntries(V, sum)
     Bdouble <- applySparseEntries(B, function(x) { 2 * x })
     Mminus <- applySparseEntries(M, function(x) -x)
-    
+
+    #'  -------------- sparselinalg.R -------------------------
+    U <- aperm(M,c(3,1,2))  # 2 x 5 x 5
+    w <- matrix(0, 5, 5)
+    w[cbind(1:3,2:4)] <- 0.5
+    w <- as(w, "sparseMatrix")
+    UU <- sumsymouterSparse(U, w)
   }
 })
 
@@ -497,6 +506,17 @@ local({
   E <- tess(image=U, keepempty=TRUE)
   G <- tess(image=U, keepempty=FALSE)
   #' methods
+  flay <- function(op, ..., Rect=H, Poly=A, Img=E) {
+    a <- do.call(op, list(Rect, ...))
+    b <- do.call(op, list(Poly, ...))
+    e <- do.call(op, list(Img, ...))
+  }
+  flay(reflect)
+  flay(shift, vec=c(1,2))
+  flay(scalardilate, f=2) 
+  flay(rotate, angle=pi/3)
+  flay(affine, mat=matrix(c(1,2,0,1), 2, 2), vec=c(1,2))
+  ## 
   unitname(B) <- c("metre", "metres")
   unitname(B)
   print(B)
@@ -508,6 +528,8 @@ local({
   Pm <- intersect.tess(A, as.mask(Wsub))
   b <- bdist.tiles(D)
   b <- bdist.tiles(A[c(3,5,7)])
+  #'
+  Eim <- as.im(E, W=letterR)
 })
 #
 #   tests/testaddvar.R
@@ -849,6 +871,10 @@ local({
   X <- longleaf[square(50)]
   marks(X) <- marks(X)/8
   D <- discs(X, delta=5, separate=TRUE)
+
+  periodify(B1, 2)
+  periodify(union.owin(B1, B2), 2)
+  periodify(letterR, 2)
 })
 
 ##

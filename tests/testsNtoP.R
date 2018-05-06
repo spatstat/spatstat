@@ -551,7 +551,10 @@ local({
   as.ppp(list(x=X$x, y=X$y,
               xl=FR$xrange[1], xu=FR$xrange[2],
               yl=FR$yrange[1], yu=FR$yrange[2]))
-              
+
+  #' various utilities
+  periodify(cells, 2)
+  periodify(demopat, 2)
 })
 #
 # tests/ppx.R

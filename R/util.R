@@ -1,7 +1,7 @@
 #
 #    util.R    miscellaneous utilities
 #
-#    $Revision: 1.239 $    $Date: 2018/05/03 09:16:10 $
+#    $Revision: 1.240 $    $Date: 2018/05/06 05:18:00 $
 #
 
 # common invocation of matrixsample
@@ -35,7 +35,8 @@ rastersample <- function(X, Y) {
     # inherit pixel data type from X
     Y$type <- Xtype
     if(Xtype == "factor") {
-      Y$v <- factor(Y$v, labels=levels(X))
+      lev <- levels(X)
+      Y$v <- factor(Y$v, labels=lev, levels=seq_along(lev))
       dim(Y$v) <- Y$dim
     }
   } else {

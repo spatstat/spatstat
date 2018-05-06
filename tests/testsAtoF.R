@@ -666,7 +666,8 @@ local({
   HH <- pool(H0, H1)
   #' undocumented/secret
   K <- envelope(cells, nsim=4, saveresultof=npoints, collectrubbish=TRUE)
-  M <- envelope(cells, nsim=4, patterns.only=TRUE)
+  #' so secret I've even forgotten how to do it
+  M <- envelope(cells, nsim=4, internal=list(eject="patterns"))
 })
 
 local({
@@ -981,4 +982,23 @@ local({
   JX <- Jest(X)
 })
 
-  
+## various functionality in fv.R
+
+local({
+  M <- cbind(1:20, matrix(runif(100), 20, 5))
+  A <- as.fv(M)
+  fvlabels(A) <- c("r","%s(r)", "%s[A](r)", "%s[B](r)", "%s[C](r)", "%s[D](r)")
+  A <- rename.fv(A, "M", quote(M(r)))
+  A <- tweak.fv.entry(A, "V1", new.tag="r")
+  A[,3] <- NULL
+  A$hogwash <- runif(nrow(A))
+  #' bind.fv with qualitatively different functions
+  GK <- harmonise(G=Gest(cells), K=Kest(cells))
+  G <- GK$G
+  K <- GK$K
+  ss <- c(rep(TRUE, nrow(K)-10), rep(FALSE, 10))
+  U <- bind.fv(G, K[ss, ], clip=TRUE)
+  #'
+  H <- rebadge.as.crossfun(K, "H", "inhom", 1, 2)
+  H <- rebadge.as.dotfun(K, "H", "inhom", 3)
+})

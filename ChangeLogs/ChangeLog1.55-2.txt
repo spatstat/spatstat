@@ -568,7 +568,6 @@ Change log from 1.55-1 to 1.55-2
 
    DESCRIPTION
    NEWS
-   Nickname.txt
 	version 1.55-1.028
 
 ------------- passed R-3.4.4 CMD check ---------------
@@ -585,7 +584,6 @@ Change log from 1.55-1 to 1.55-2
 
    DESCRIPTION
    NEWS
-   Nickname.txt
 	version 1.55-1.029
 
 ------------- passed R-3.4.4 CMD check ---------------
@@ -601,10 +599,31 @@ Change log from 1.55-1 to 1.55-2
 
    DESCRIPTION
    NEWS
-   Nickname.txt
 	version 1.55-1.030
 
 ------------- passed R-3.4.4 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+06 may 2018
+
+   util.R
+	Bug fix in rastersample
+
+   tests/fvproblems.R
+   tests/Kfuns.R
+   tests/kppm.R
+   tests/ppp.R
+   tests/segments.R
+   tests/tessera.R
+        More tests.
+
+   DESCRIPTION
+   NEWS
+   Nickname.txt
+	Nickname "Glasgow Kiss"
+	version 1.55-1.031
+
+------------- passed R-3.4.4 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------

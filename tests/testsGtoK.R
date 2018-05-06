@@ -202,10 +202,11 @@ local({
 #'
 #'   Various K and L functions
 #'
-#'   $Revision: 1.1 $  $Date: 2018/05/03 09:03:04 $
+#'   $Revision: 1.2 $  $Date: 2018/05/06 05:45:38 $
 #'
 
 require(spatstat)
+myfun <- function(x,y){(x+1) * y }
 local({
   #' supporting code
   implemented.for.K(c("border", "bord.modif", "translate", "good", "best"),
@@ -226,6 +227,13 @@ local({
   Off <- split(amacrine)$off
   K4 <- Kcross.inhom(amacrine, lambdaI=ppm(On), lambdaJ=ppm(Off))
   K5 <- Kcross.inhom(amacrine, correction="bord.modif")
+  #' Kmark, markcorr
+  X <- runifpoint(100) %mark% runif(100)
+  km <- Kmark(X, f=atan2)
+  km <- Kmark(X, f1=sin)
+  km <- Kmark(X, f="myfun")
+  Y <- X %mark% data.frame(u=runif(100), v=runif(100))
+  mk <- markcorr(Y)
 })
 #
 # tests/kppm.R
@@ -322,6 +330,18 @@ local({
 
 })
 
+local({
+  K <- Kest(redwood)
+  a <- matclust.estK(K)
+  a <- thomas.estK(K)
+  a <- cauchy.estK(K)
+  a <- lgcp.estK(K)
+  g <- pcf(redwood)
+  a <- matclust.estpcf(g)
+  a <- thomas.estpcf(g)
+  a <- cauchy.estpcf(g)
+  a <- lgcp.estpcf(g)
+})
 
 local({
   #'  experimental
