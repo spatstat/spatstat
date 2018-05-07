@@ -651,4 +651,28 @@ Change log from 1.55-1 to 1.55-2
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
-   
+   random.R
+   spatstat-internal.Rd
+	New function 'simulationresult'
+	
+   random.R
+   randomlpp.R
+   randommk.R
+   randomNS.R
+   randomonlines.R
+	Adapted to use 'simulationresult'
+
+   randomonlines.R
+   runifpointOnLines.Rd
+   runifpoisppOnLines.Rd
+   spatstat-internal.Rd
+	runifpointOnLines, rpoisppOnLines, runifpoisppOnLines
+	have new argument 'drop'
+
+   DESCRIPTION
+   NEWS
+	version 1.55-1.033
+
+------------- passed R-3.5.0 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------

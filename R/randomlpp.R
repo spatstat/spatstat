@@ -3,7 +3,7 @@
 #
 #  Random point pattern generators for a linear network
 #
-#  $Revision: 1.10 $   $Date: 2018/05/06 17:44:04 $
+#  $Revision: 1.11 $   $Date: 2018/05/07 04:29:19 $
 #
 
 rpoislpp <- function(lambda, L, ..., nsim=1, drop=TRUE) {
@@ -21,7 +21,7 @@ rpoislpp <- function(lambda, L, ..., nsim=1, drop=TRUE) {
     if(bugout) return(Y)
     result[[i]] <- Y
   }
-  result <- as.solist(result, .NameBase="Simulation")
+  result <- simulationresult(result, nsim, drop)
   return(result)
 }
 
@@ -36,7 +36,7 @@ runiflpp <- function(n, L, nsim=1, drop=TRUE) {
     if(bugout) return(Y)
     result[[i]] <- Y
   }
-  result <- as.solist(result, .NameBase="Simulation")
+  result <- simulationresult(result, nsim, drop)
   return(result)
 }
 
@@ -51,8 +51,8 @@ rlpp <- function(n, f, ..., nsim=1, drop=TRUE) {
                 MoreArgs=list(nsim=nsim, drop=FALSE, ...),
                 SIMPLIFY=FALSE)
     Z <- do.call(mapply, c(list(superimpose), Y, list(SIMPLIFY=FALSE)))
-    if(nsim == 1 && drop) return(Z[[1]])
-    return(as.solist(Z))
+    result <- simulationresult(Z, nsim, drop)
+    return(result)
   }
   if(!inherits(f, "linim"))
     stop("f should be a linfun or linim object")
@@ -85,7 +85,7 @@ rlpp <- function(n, f, ..., nsim=1, drop=TRUE) {
   probs <- fvals * (tright - tleft) * seglen[df$mapXY]
   probs <- probs/sum(probs)
   #' 
-  result <- list()
+  result <- vector(mode="list", length=nsim)
   for(isim in 1:nsim) {
     #' sample intervals and place point uniformly in each interval
     ii <- sample.int(nr, size=n, replace=TRUE, prob=probs)
@@ -93,6 +93,6 @@ rlpp <- function(n, f, ..., nsim=1, drop=TRUE) {
     tp  <- runif(n, tleft[ii], tright[ii])
     result[[isim]] <- as.lpp(seg=seg, tp=tp, L=L)
   }
-  if(nsim == 1 && drop) return(result[[1]])
-  return(as.solist(result, .NameBase="Simulation"))
+  result <- simulationresult(result, nsim, drop)
+  return(result)
 }

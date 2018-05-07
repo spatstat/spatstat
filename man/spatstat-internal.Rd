@@ -608,6 +608,7 @@
 \alias{shiftxypolygon}              
 \alias{signalStatus}
 \alias{simulate.profilepl}
+\alias{simulationresult}
 \alias{simulrecipe}              
 \alias{slr.prepare}
 \alias{slrAssemblePixelData}
@@ -1456,7 +1457,7 @@ rmpoint.I.allim(n, f, types)
 \method{row.names}{hyperframe}(x) <- value
 rpoint.multi(n, f, fmax, marks, win, giveup, verbose, warn, nsim, drop)
 runifpoispp(lambda, win, \dots, nsim, drop)
-runifpoisppOnLines(lambda, L, nsim)
+runifpoisppOnLines(lambda, L, nsim, drop)
 runifrect(n, win, nsim, drop)
 safedeldir(X)
 safelookup(Z, x, factor, warn)
@@ -1483,6 +1484,7 @@ sewsmod(d, ff, wt, Ef, rvals, method="smrep", \dots, nwtsteps=500)
 shiftxy(X, vec = c(0, 0))
 shiftxypolygon(p, vec = c(0, 0))
 \method{simulate}{profilepl}(object, \dots)
+simulationresult(resultlist, nsim, drop, NameBase)
 simulrecipe(type, expr, envir, csr, pois, constraints)
 slr.prepare(CallInfo, envir, data, dataAtPoints, splitby, clip)
 slrAssemblePixelData(Y, Yname, W, covimages, dataAtPoints, pixelarea)

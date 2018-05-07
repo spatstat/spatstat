@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.55-1.032
+        CHANGES IN spatstat VERSION 1.55-1.033
 
 OVERVIEW
 
@@ -76,6 +76,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o solist
     New argument '.NameBase'
+
+    o runifpointOnLines, rpoisppOnLines
+    New argument 'drop'
     
     o plot.studpermutest
     This existing function now has a help file.

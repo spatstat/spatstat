@@ -6,7 +6,7 @@
 # Generate random points on specified lines
 #
 
-runifpointOnLines <- function(n, L, nsim=1) {
+runifpointOnLines <- function(n, L, nsim=1, drop=TRUE) {
   if(!is.numeric(n) || any(n < 0) || any(n %% 1 != 0))
     stop("n should be a nonnegative integer or integers")
   if(!is.psp(L))
@@ -18,8 +18,8 @@ runifpointOnLines <- function(n, L, nsim=1) {
     Y <- ppp(X$x, X$y, marks=X$marks, window=W, check=FALSE)
     result[[i]] <- Y
   }
-  if(nsim == 1) return(result[[1]])
-  return(as.solist(result, .NameBase="Simulation"))
+  result <- simulationresult(result, nsim, drop)
+  return(result)
 }
 
 datagen.runifpointOnLines <- function(n, L) {
@@ -77,7 +77,7 @@ datagen.runifpointOnLines <- function(n, L) {
   return(out)
 }
 
-runifpoisppOnLines <- function(lambda, L, nsim=1) {
+runifpoisppOnLines <- function(lambda, L, nsim=1, drop=TRUE) {
   if(!is.numeric(lambda) || !all(is.finite(lambda) && (lambda >= 0)))
     stop("lambda should be a finite, nonnegative number or numbers")
   if(!is.psp(L))
@@ -89,8 +89,8 @@ runifpoisppOnLines <- function(lambda, L, nsim=1) {
     Y <- ppp(X$x, X$y, marks=X$marks, window=W, check=FALSE)
     result[[i]] <- Y
   }
-  if(nsim == 1) return(result[[1]])
-  return(as.solist(result, .NameBase="Simulation"))
+  result <- simulationresult(result, nsim, drop)
+  return(result)
 }
 
 datagen.runifpoisppOnLines <- function(lambda, L) {
@@ -103,7 +103,7 @@ datagen.runifpoisppOnLines <- function(lambda, L) {
   return(df)
 }
 
-rpoisppOnLines <- function(lambda, L, lmax=NULL, ..., nsim=1) {
+rpoisppOnLines <- function(lambda, L, lmax=NULL, ..., nsim=1, drop=TRUE) {
   if(!is.psp(L))
     L <- as.psp(L)
   W <- as.owin(L)
@@ -113,8 +113,8 @@ rpoisppOnLines <- function(lambda, L, lmax=NULL, ..., nsim=1) {
     Y <- ppp(X$x, X$y, marks=X$marks, window=W, check=FALSE)
     result[[i]] <- Y
   }
-  if(nsim == 1) return(result[[1]])
-  return(as.solist(result, .NameBase="Simulation"))
+  result <- simulationresult(result, nsim, drop)
+  return(result)
 }
 
 datagen.rpoisppOnLines <- function(lambda, L, lmax=NULL, ..., check=TRUE)  {

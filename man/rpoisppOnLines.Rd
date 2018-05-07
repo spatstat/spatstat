@@ -6,7 +6,7 @@
   on the line segments.
 }
 \usage{
-rpoisppOnLines(lambda, L, lmax = NULL, ..., nsim=1)
+rpoisppOnLines(lambda, L, lmax = NULL, \dots, nsim=1, drop=TRUE)
 }
 \arguments{
   \item{lambda}{Intensity of the Poisson process.
@@ -28,6 +28,11 @@ rpoisppOnLines(lambda, L, lmax = NULL, ..., nsim=1)
     function.
   }
   \item{nsim}{Number of simulated realisations to be generated.}
+  \item{drop}{
+    Logical. If \code{nsim=1} and \code{drop=TRUE} (the default), the
+    result will be a point pattern, rather than a list 
+    containing a point pattern.
+  }
 }
 \details{
   This command generates a Poisson point process on the one-dimensional
