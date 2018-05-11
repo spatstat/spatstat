@@ -676,3 +676,26 @@ Change log from 1.55-1 to 1.55-2
 ------------- passed R-3.5.0 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
+
+11 may 2018
+
+   tests/ppmtricks.R
+   tests/density.R
+   tests/lppstuff.R
+   tests/rhohat.R
+   tests/rmhBasic.R
+	Tweaks and additions
+
+   tests/*.R
+	All scripts which invoke spatstat.options() at any point
+	are now ended with reset.spatstat.options() for safety.
+	
+   DESCRIPTION
+   NEWS
+	version 1.55-1.034
+
+------------- passed R-3.5.0 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+   
+

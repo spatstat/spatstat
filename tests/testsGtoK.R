@@ -43,6 +43,8 @@ local({
 #  $Revision: 1.3 $  $Date: 2014/08/25 04:43:07 $
 #
 
+require(spatstat)
+local({
   lambda <- runif(4, min=50, max=100)
   X <- lapply(as.list(lambda), function(x) { rpoispp(x) })
   h <- hyperframe(lambda=lambda, X=X)
@@ -54,6 +56,7 @@ local({
 
   names(h) <- LETTERS[1:5]
   print(h)
+})
 
 
 #
@@ -363,4 +366,5 @@ local({
   futFF3 <- kppm(redwood, method="clik2")
 })
 
+reset.spatstat.options()
   

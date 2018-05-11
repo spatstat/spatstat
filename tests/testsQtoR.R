@@ -22,6 +22,9 @@ local({
   spatstat.options(op)
 })
 
+reset.spatstat.options()
+
+
 #'  tests/resid.R
 #'
 #'  Stuff related to residuals and residual diagnostics
@@ -72,10 +75,18 @@ local({
 local({
   require(spatstat)
   X <-  rpoispp(function(x,y){exp(3+3*x)})
+  ## rhohat.ppp
   ## done in example(rhohat):
   ## rhoA <- rhohat(X, "x")
   ## rhoB <- rhohat(X, "x", method="reweight")
   ## rhoC <- rhohat(X, "x", method="transform")
+
+  ## alternative smoother (if package locfit available)
+  rhoA <- rhohat(X, "x", smoother="local")
+  rhoB <- rhohat(X, "x", smoother="local", method="reweight")
+  rhoC <- rhohat(X, "x", smoother="local", method="transform")
+
+  ## rhohat.ppm
   fit <- ppm(X, ~x)
   rhofitA <- rhohat(fit, "x")
   rhofitB <- rhohat(fit, "x", method="reweight")
@@ -94,6 +105,12 @@ local({
   rhofitAH <- rhohat(fit, "x", horvitz=TRUE)
   rhofitBH <- rhohat(fit, "x", method="reweight", horvitz=TRUE)
   rhofitCH <- rhohat(fit, "x", method="transform", horvitz=TRUE)
+
+  ## class support
+  plot(rhoA)
+  plot(rhoA, rho ~ x, shade=NULL)
+  plot(rhoA, log(rho) ~ x, shade=NULL)
+  plot(rhoA, log(.) ~ x)
 })
 #
 #  tests/rmhAux.R
@@ -304,7 +321,24 @@ spatstat.options(expand=1.1)
    X1.strauss.trend <- rmh(model=mod17,start=list(n.start=90),
                            control=list(nrep=nr))
 
+   #' Test other code blocks
+   #'  nsim > 1
+   Xlist <- rmh(model=mod01,start=list(n.start=80),
+             control=list(nrep=nr),
+             nsim=2)
+   #' Condition on contents of window
+   XX <- Xlist[[1]]
+   YY <- XX[square(2)]
+   XXwindow <- rmh(model=mod01, start=list(n.start=80),
+                   control=list(nrep=nr, x.cond=YY))
+   #' Palm conditioning
+   XXpalm <- rmh(model=mod01,start=list(n.start=80),
+             control=list(nrep=nr, x.cond=coords(YY)))
+
+
 })
+
+reset.spatstat.options()
 ##
 ##     tests/rmhErrors.R
 ##
@@ -338,7 +372,7 @@ if(!inherits(out, "try-error"))
 
 require(spatstat)
 local({
-fit <- ppm(cells, ~x)
+fit <- ppm(cells ~x)
 
 # check rmhmodel.ppm
 mod <- rmhmodel(fit)
@@ -536,6 +570,8 @@ checkp(ks.test(Fy2(X2$y), "punif")$p.value,
        "Kolmogorov-Smirnov test of uniformity of transformed y coordinates of type 2 points")
 
 })
+
+reset.spatstat.options()
 #
 # tests/rmhTrend.R
 #
@@ -882,3 +918,6 @@ local({
 
    spatstat.options(op)
  })
+
+
+reset.spatstat.options()

@@ -447,7 +447,7 @@ local({
   sl2fitup <- update(sl2fit, use.internal=TRUE)
 })
 
-#
+grep#
 #   tests/ppmtricks.R
 #
 #   Test backdoor exits and hidden options in ppm
@@ -455,7 +455,7 @@ local({
 #
 #   Plus assorted tricks
 #
-#   $Revision: 1.7 $  $Date: 2018/05/05 06:40:30 $
+#   $Revision: 1.9 $  $Date: 2018/05/11 02:19:32 $
 #
 require(spatstat)
 local({
@@ -483,9 +483,10 @@ local({
   mungp   <- profilepl(ss, StraussHard, trend=~dM, Q=cats)
 
   ## (4) splitting large quadschemes into blocks
-  op <- spatstat.options(maxmatrix=5000)
+  mop <- spatstat.options(maxmatrix=5000)
   pr <- predict(ppm(cells ~ x, AreaInter(0.05)))
-
+  spatstat.options(mop)
+  
   ## (5) shortcuts in summary.ppm
   ## and corresponding behaviour of print.summary.ppm
   print(summary(fit, quick=TRUE))
@@ -503,16 +504,27 @@ local({
   Z <- as.im(function(x,y){x}, Window(cells))
   fitZ <- ppm(cells ~ Z)
   U <- getppmOriginalCovariates(fitZ)
-  fitNot <- ppm(redwood ~1, Strauss(0.1))
-  fitFast <- emend(fitNot, fast=TRUE)
   logLik(fitZ, absolute=TRUE)
+  fitNot <- ppm(redwood ~1, Strauss(0.1))
+  fitFast <- emend(fitNot, trace=TRUE)
+  op <- spatstat.options(project.fast=TRUE)
+  fitFast <- emend(fitNot, trace=TRUE)
+  spatstat.options(op)
   
   fut <- kppm(redwood ~ x)
   A <- quad.ppm(fut)
-  
-  spatstat.options(op)
+
+  ## (8) support for class profilepl
+  rr <- data.frame(r=seq(0.05, 0.15, by=0.02))
+  ps <- profilepl(rr, Strauss, cells)
+  plot(ps)
+  simulate(ps, nrep=1e4)
+  parameters(ps)
+  fitin(ps)
+  predict(ps, type="cif")
 })
 
+reset.spatstat.options()
 #'
 #'   tests/ppp.R
 #'

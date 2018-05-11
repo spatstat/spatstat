@@ -206,6 +206,7 @@ local({
   aa <- ppmInfluence(foo)
 })
 
+reset.spatstat.options()
 ##
 ##    tests/linalgeb.R
 ##
@@ -300,6 +301,18 @@ local({
   if(any(nw != nwP))
     stop("nnwhich.lpp does not agree with pairdist")
 
+  #' code blocks in nndist.lpp/nnwhich.lpp
+  #' non-sparse network, interpreted code  
+  Ad <- nndist(spiders, method="interpreted") 
+  Aw <- nnwhich(spiders, method="interpreted")
+  #' sparse network, older C code
+  opa <- spatstat.options(Cnndistlpp=FALSE)
+  Bd <- nndist(dendrite) 
+  spatstat.options(opa)
+  #' undefined nearest neighbours
+  Ed <- nndist(spiders[1:3], k=1:3)
+  Ew <- nnwhich(spiders[1:3], k=1:3)
+    
   #' trivial cases in nncross.lpp
   a <- nncross(runiflpp(0, simplenet), runiflpp(1, simplenet),
                what="which", format="list")$which
@@ -345,6 +358,7 @@ local({
     stop("Different results for nncross.lpp(iX, iY, 'dist') using R and C")
 
   spatstat.options(op)
+  reset.spatstat.options()
 
   # test handling marginal cases
   xyd <- nncross(XX, YY[1])
@@ -419,6 +433,7 @@ local({
   df <- pointsAlongNetwork(simplenet, 0.05)
 })
 
+reset.spatstat.options()
 #'
 #'   lppmodels.R
 #'

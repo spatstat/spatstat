@@ -57,7 +57,7 @@ local({
 ##  tests/closeshave.R
 ## check 'closepairs/crosspairs' code
 ## validity and memory allocation
-## $Revision: 1.8 $ $Date: 2018/04/12 06:45:06 $
+## $Revision: 1.9 $ $Date: 2018/05/11 02:21:16 $
 
 local({
   r <- 0.12
@@ -96,8 +96,8 @@ local({
   
   ## ...............................................
   #' compare with older, slower code
-  spatstat.options(closepairs.newcode=FALSE)
-  spatstat.options(crosspairs.newcode=FALSE)
+  op <- spatstat.options(closepairs.newcode=FALSE,
+                         crosspairs.newcode=FALSE)
   ## ...............................................
   old.close.ij <- closepairs(redwood, r, what="indices")
   old.cross.ij <- crosspairs(on, off, r, what="indices")
@@ -107,8 +107,7 @@ local({
   old.close.every <- closepairs(redwood, r, what="all", distinct=FALSE)
   old.cross.every <- crosspairs(on, off, r, what="all", distinct=FALSE)
   ## ...............................................
-  spatstat.options(closepairs.newcode=TRUE)
-  spatstat.options(crosspairs.newcode=TRUE)
+  spatstat.options(op)
   ## ...............................................
   
   # Rasmus' example
@@ -146,6 +145,8 @@ local({
   #' other functions that don't have a help file
   niets <- crosspairquad(quadscheme(cells), 0.1)
 })
+
+reset.spatstat.options()
 ## tests/colour.R
 ##
 ##  Colour value manipulation and colour maps
@@ -237,6 +238,9 @@ local({
     stop("Algorithms for whist disagree")
   spatstat.options(op)
 })
+
+reset.spatstat.options()
+
 #'
 #'    tests/deltasuffstat.R
 #' 
@@ -363,6 +367,10 @@ local({
     return(TRUE)
   }
   pants()
+  pants(diggle=TRUE)
+  pants(edge=FALSE)
+  pants(diggle=TRUE, at="points")
+  pants(edge=FALSE, at="points")
   pants(casecontrol=FALSE)
   pants(relative=TRUE)
   pants(casecontrol=FALSE, relative=TRUE)
@@ -370,6 +378,8 @@ local({
   pants(casecontrol=FALSE,at="points")
   pants(relative=TRUE,at="points")
   pants(casecontrol=FALSE, relative=TRUE,at="points")
+  pants(relative=TRUE, control="Cataglyphis", case="Messor")
+  pants(relative=TRUE, control="Cataglyphis", case="Messor", at="points")
 
   ## more than 2 types
   pants(X=sporophores)
@@ -436,6 +446,8 @@ local({
   VV <- Smooth(X, 5, geometric=TRUE, at="points")
 })
 
+reset.spatstat.options()
+
 local({
   #' Kmeasure, second.moment.engine
   #' Expansion of window
@@ -448,6 +460,18 @@ local({
   DR <- second.moment.calc(list(PR, PR), 0.1, debug=TRUE,
                              npts=npoints(redwood), obswin=Window(redwood))
 })
+
+local({
+  #' bandwidth selection
+  op <- spatstat.options(n.bandwidth=8)
+#  bw.relrisk(urkiola, hmax=20) is tested in man/bw.relrisk.Rd
+  bw.relrisk(urkiola, hmax=20, method="leastsquares")
+  bw.relrisk(urkiola, hmax=20, method="weightedleastsquares")
+  spatstat.options(op)
+})
+
+reset.spatstat.options()
+
 #'
 #'  tests/discarea.R
 #'
