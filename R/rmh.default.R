@@ -1,5 +1,5 @@
 #
-# $Id: rmh.default.R,v 1.108 2017/06/05 10:31:58 adrian Exp adrian $
+# $Id: rmh.default.R,v 1.109 2018/05/12 16:13:05 adrian Exp adrian $
 #
 rmh.default <- function(model,start=NULL,
                         control=default.rmhcontrol(model),
@@ -513,8 +513,8 @@ rmh.default <- function(model,start=NULL,
                                             kitchensink=saveinfo),
                                        f.args))
     }
-    result <- as.solist(result)
     if(verbose) splat("Done.\n")
+    result <- simulationresult(result, nsim, drop)
   }
   return(result)
 }

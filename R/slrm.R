@@ -3,7 +3,7 @@
 #
 #  Spatial Logistic Regression
 #
-#  $Revision: 1.28 $   $Date: 2016/04/25 02:34:40 $
+#  $Revision: 1.29 $   $Date: 2018/05/12 16:19:22 $
 #
 
 slrm <- function(formula, ..., data=NULL, offset=TRUE, link="logit",
@@ -623,14 +623,8 @@ simulate.slrm <- function(object, nsim=1, seed=NULL, ...,
     out[[i]] <- rpoispp(lambda, lmax=lmax)
     if(verbose) pstate <- progressreport(i, nsim, state=pstate)
   }
-  # pack up
-  if(nsim == 1 && drop) {
-    out <- out[[1]]
-  } else {
-    out <- as.solist(out)
-    if(nsim > 0)
-      names(out) <- paste("Simulation", 1:nsim)
-  }
+  #' pack up
+  out <- simulationresult(out, nsim, drop)
   out <- timed(out, starttime=starttime)
   attr(out, "seed") <- RNGstate
   return(out)

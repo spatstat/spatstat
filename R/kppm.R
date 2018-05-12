@@ -3,7 +3,7 @@
 #
 # kluster/kox point process models
 #
-# $Revision: 1.138 $ $Date: 2018/05/01 12:19:14 $
+# $Revision: 1.139 $ $Date: 2018/05/12 16:20:53 $
 #
 
 kppm <- function(X, ...) {
@@ -1437,14 +1437,8 @@ simulate.kppm <- function(object, nsim=1, seed=NULL, ...,
   }
   if(verbose)
     cat("Done.\n")
-  # pack up
-  if(nsim == 1 && drop) {
-    out <- out[[1L]]
-  } else {
-    out <- as.solist(out)
-    if(nsim > 0)
-      names(out) <- paste("Simulation", 1:nsim)
-  }
+  #' pack up
+  out <- simulationresult(out, nsim, drop)
   out <- timed(out, starttime=starttime)
   attr(out, "seed") <- RNGstate
   return(out)

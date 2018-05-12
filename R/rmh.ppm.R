@@ -1,7 +1,7 @@
 #
 # simulation of FITTED model
 #
-#  $Revision: 1.34 $ $Date: 2016/07/31 07:39:32 $
+#  $Revision: 1.35 $ $Date: 2018/05/12 16:16:02 $
 #
 #
 rmh.ppm <- function(model, start = NULL,
@@ -155,13 +155,7 @@ simulate.ppm <- function(object, nsim=1, ...,
       }
     }
   }
-  if(nsim == 1 && drop) {
-    out <- out[[1]]
-  } else {
-    out <- as.solist(out)
-    if(nsim > 0)
-      names(out) <- paste("Simulation", 1:nsim)
-  }
+  out <- simulationresult(out, nsim, drop)
   out <- timed(out, starttime=starttime)
   return(out)
 }  

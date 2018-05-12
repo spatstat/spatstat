@@ -697,5 +697,25 @@ Change log from 1.55-1 to 1.55-2
 ------------- passed R-3.5.0 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
-   
+
+12 may 2018
+
+   tests/closeshave.R
+	More tests
+
+   rmh.default.R
+   rmh.ppm.R
+   simulatelppm.R
+   slrm.R
+   kppm.R
+	simulation methods use simulationresult()
+	
+   DESCRIPTION
+   NEWS
+	version 1.55-1.035
+
+------------- passed R-3.5.0 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
 

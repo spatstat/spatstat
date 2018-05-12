@@ -57,7 +57,7 @@ local({
 ##  tests/closeshave.R
 ## check 'closepairs/crosspairs' code
 ## validity and memory allocation
-## $Revision: 1.9 $ $Date: 2018/05/11 02:21:16 $
+## $Revision: 1.10 $ $Date: 2018/05/12 15:53:21 $
 
 local({
   r <- 0.12
@@ -144,6 +144,18 @@ local({
 
   #' other functions that don't have a help file
   niets <- crosspairquad(quadscheme(cells), 0.1)
+
+  #' other code blocks
+  u <- closepairs(cells, 0.09, periodic=TRUE, what="all")
+  v <- closepairs(cells, 0.07, twice=FALSE, neat=TRUE)
+  #' old code - tight cluster - guess count does not work
+  aop <- spatstat.options(closepairs.newcode=FALSE)
+  Xc <- runifpoint(100, square(0.01))
+  Window(Xc) <- square(1)
+  z <- closepairs(Xc, 0.02, what="indices", distinct=FALSE)
+  z <- closepairs(Xc, 0.02, what="ijd",     distinct=FALSE)
+  z <- closepairs(Xc, 0.02, what="all",     distinct=FALSE)
+  spatstat.options(aop)
 })
 
 reset.spatstat.options()

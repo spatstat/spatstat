@@ -3,7 +3,7 @@
 ##
 ##  Simulation of lppm objects
 ##
-##  $Revision: 1.6 $  $Date: 2015/07/11 08:19:26 $
+##  $Revision: 1.7 $  $Date: 2018/05/12 16:14:05 $
 ##
 
 simulate.lppm <- function(object, nsim=1, ...,
@@ -22,13 +22,7 @@ simulate.lppm <- function(object, nsim=1, ...,
     if(progress) pstate <- progressreport(i, nsim, state=pstate)
     result[[i]] <- rpoislpp(lambda, L, lmax=lmax)
   }
-  if(nsim == 1 && drop) {
-    result <- result[[1]]
-  } else {
-    result <- as.solist(result)
-    if(nsim > 0)
-      names(result) <- paste("Simulation", 1:nsim)
-  }
+  result <- simulationresult(result, nsim, drop)
   result <- timed(result, starttime=starttime)
   return(result)
 }
