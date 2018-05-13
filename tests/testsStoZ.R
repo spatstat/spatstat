@@ -1,3 +1,16 @@
+#'   tests/sdr.R
+#'
+#'   $Revision: 1.1 $ $Date: 2018/05/13 03:14:49 $
+
+require(spatstat)
+local({
+  AN <- sdr(bei, bei.extra, method="NNIR")
+  AV <- sdr(bei, bei.extra, method="SAVE")
+  AI <- sdr(bei, bei.extra, method="SIR")
+  AT <- sdr(bei, bei.extra, method="TSE")
+  subspaceDistance(AN$B, AV$B)
+  dimhat(AN$M)
+})
 #
 #  tests/segments.R
 #
@@ -882,7 +895,7 @@ local({
 ##
 ##    Test weird problems and boundary cases for line segment code
 ##
-##    $Version$ $Date: 2016/02/12 08:18:08 $ 
+##    $Version$ $Date: 2018/05/13 04:22:28 $ 
 ##
 require(spatstat)
 local({
@@ -898,4 +911,10 @@ local({
   Y <- selfcut.psp(X)
   marks(X) <- data.frame(A=1:10, B=factor(letters[1:10]))
   Z <- selfcut.psp(X)
+
+  #' psp class support
+  S <- as.psp(simplenet)
+  marks(S) <- sample(factor(c("A","B")), nobjects(S), replace=TRUE)
+  intensity(S)
+  intensity(S, weights=runif(nsegments(S)))
 })

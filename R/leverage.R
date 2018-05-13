@@ -3,7 +3,7 @@
 #
 #  leverage and influence
 #
-#  $Revision: 1.111 $ $Date: 2018/04/16 15:47:35 $
+#  $Revision: 1.112 $ $Date: 2018/05/13 03:22:16 $
 #
 
 leverage <- function(model, ...) {
@@ -84,7 +84,7 @@ avenndist <- function(X) mean(nndist(X))
 
 ppmInfluenceEngine <- function(fit,
                          what=c("leverage", "influence", "dfbetas",
-                           "score", "derivatives", "increments"),
+                           "score", "derivatives", "increments", "all"),
                          ...,
                          iScore=NULL, iHessian=NULL, iArgs=NULL,
                          drop=FALSE,
@@ -104,6 +104,9 @@ ppmInfluenceEngine <- function(fit,
   ## type of calculation to be performed
   method <- match.arg(method)
   what <- match.arg(what, several.ok=TRUE)
+  if("all" %in% what)
+    what <- c("leverage", "influence", "dfbetas",
+              "score", "derivatives", "increments")
   matrix.action <- match.arg(matrix.action)
 
   influencecalc <- any(what %in% c("leverage", "influence", "dfbetas"))

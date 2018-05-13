@@ -28,7 +28,9 @@
   and returns 0 for values outside the window.
 }
 \value{
-  A function in the \R language.
+  A function in the \R language with arguments \code{x,y}.
+  It also belongs to the class \code{"indicfun"} which has methods
+  for \code{plot} and \code{print}.
 }
 \author{
   \spatstatAuthors.
@@ -39,10 +41,12 @@
 \examples{
   W <- Window(humberside)
   f <- as.function(W)
+  f
   f(5000, 4500)
   f(123456, 78910)
   X <- runifpoint(5, Frame(humberside))
   f(X)
+  plot(f)
 }
 \keyword{spatial}
 \keyword{manip}

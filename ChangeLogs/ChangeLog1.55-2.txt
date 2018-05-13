@@ -718,4 +718,39 @@ Change log from 1.55-1 to 1.55-2
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+   plot.ppm.Rd
+   tests/sdr.R [New file]
+   tests/morpho.R [New file]
+	More examples and tests
+
+   indicator.R
+   spatstat-internal.Rd
+	New method plot.indicfun
+
+13 may 2018
+
+   leverage.R
+	Influence code has new option: what="all"
+
+   morphology.R
+	Bug fix in dilation.ppp
+
+   evalcovar.R
+	Bug fix and improvements in evalCovar.lpp
+	
+   tests/leverinf.R
+   tests/morpho.R
+   tests/lppstuff.R
+   tests/lppmodels.R
+   tests/xysegment.R
+	More tests
+
+   DESCRIPTION
+   NEWS
+	version 1.55-1.036
+
+------------- passed R-3.5.0 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
 

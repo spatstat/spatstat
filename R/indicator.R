@@ -18,3 +18,14 @@ print.indicfun <- function(x, ...) {
   print(W)
   return(invisible(NULL))
 }
+
+plot.indicfun <- function(x, W, ..., main) {
+  if(missing(main)) main <- short.deparse(substitute(x))
+  if(missing(W) || is.null(W)) {
+    w <- get("W", envir=environment(x))
+    R <- Frame(w)
+    W <- grow.rectangle(R, min(sidelengths(R))/5)
+  }
+  result <- do.as.im(x, plot, W=W, ..., main=main)
+  return(invisible(result))
+}

@@ -25,7 +25,7 @@ local({
 #'
 #'   leverage and influence for Gibbs models
 #' 
-#'   $Revision: 1.19 $ $Date: 2018/05/02 09:26:49 $
+#'   $Revision: 1.20 $ $Date: 2018/05/13 03:29:37 $
 #' 
 
 require(spatstat)
@@ -52,7 +52,7 @@ local({
   fitH <- ppm(cells ~ 1, Hardcore(0.07))
   levH <- Leverage(fitH)
   infH <- Influence(fitH)
-  # ppmInfluence; hard c
+  # ppmInfluence; hard core
   fitSH <- ppm(cells ~ 1, StraussHard(0.07, 0.01))
   levSH <- Leverage(fitSH)
   infSH <- Influence(fitSH)
@@ -72,10 +72,17 @@ local({
   w <- Window(infS)
   vv <- shift(levS, c(1.2, 1.3))
   vv <- shift(infS, c(1.2, 1.3))
+  ## plot options
+  plot(levS, what="exact")
+  plot(levS, what="nearest")
+  contour(levS, what="nearest")
+  persp(levS, what="nearest")
   ## plotting for multitype models
   plot(levAm)
   contour(levAm)
   persp(levAm)
+  plot(levAm, multiplot=FALSE)
+  contour(levAm, multiplot=FALSE)
 
   ## ..........  compare algorithms .........................
   ## divide and recombine algorithm
@@ -110,21 +117,24 @@ local({
   levHxB <- Leverage(fitHx)
   infHxB <- Influence(fitHx)
   dfbHxB <- Dfbetas(fitHx)
-  
+
+  ## run all code segments
+  Everything <- function(model, ...) { ppmInfluence(model, ..., what="all") }
+
   ## sparse algorithm, with blocks
   cat("Run sparse algorithm with blocks...", fill=TRUE)
-  pmiSSB <- ppmInfluence(fitS, sparseOK=TRUE)
+  pmiSSB <- Everything(fitS, sparseOK=TRUE)
   # also check case of zero cif
-  pmiHSB <- ppmInfluence(fitH, sparseOK=TRUE)
-  pmiSHSB <- ppmInfluence(fitSH, sparseOK=TRUE)
-  pmiHxSB <- ppmInfluence(fitHx, sparseOK=TRUE)
+  pmiHSB <- Everything(fitH, sparseOK=TRUE)
+  pmiSHSB <- Everything(fitSH, sparseOK=TRUE)
+  pmiHxSB <- Everything(fitHx, sparseOK=TRUE)
 
   cat("Reinstate maxmatrix...", fill=TRUE)
   spatstat.options(op)
 
   ## sparse algorithm, no blocks
   cat("Compare sparse and non-sparse results...", fill=TRUE)
-  pmi <- ppmInfluence(fitS, sparseOK=TRUE)
+  pmi <- Everything(fitS, sparseOK=TRUE)
   levSp <- pmi$leverage
   infSp <- pmi$influence
   dfbSp <- pmi$dfbetas
@@ -137,42 +147,46 @@ local({
 
   #' case of zero cif
   cat("zero cif...", fill=TRUE)
-  pmiH <- ppmInfluence(fitH, sparseOK=TRUE)
-  pmiSH <- ppmInfluence(fitSH, sparseOK=TRUE)
-  pmiHx <- ppmInfluence(fitHx, sparseOK=TRUE)
+  pmiH <- Everything(fitH, sparseOK=TRUE)
+  pmiSH <- Everything(fitSH, sparseOK=TRUE)
+  pmiHx <- Everything(fitHx, sparseOK=TRUE)
 
   #' other code blocks - check execution only
   cat("other code blocks...", fill=TRUE)
-  a <- ppmInfluence(fitS)  # i.e. full set of results
-  a <- ppmInfluence(fitS, method="interpreted") 
-  a <- ppmInfluence(fitS, method="interpreted", entrywise=FALSE)
-  a <- ppmInfluence(fitS,                       entrywise=FALSE) 
+  a <- Everything(fitS) 
+  a <- Everything(fitS, method="interpreted") 
+  a <- Everything(fitS, method="interpreted", entrywise=FALSE)
+  a <- Everything(fitS,                       entrywise=FALSE) 
   #' NOTE: code for irregular parameters is tested in 'make bookcheck'
 
   ## ...........  logistic fits .......................
   cat("Logistic fits...", fill=TRUE)
   #'  special algorithm for delta2
   fitSlogi <- ppm(cells ~ x, Strauss(0.12), rbord=0, method="logi")
-  pmiSlogi <- ppmInfluence(fitSlogi)
+  pmiSlogi <- Everything(fitSlogi)
   #'  special algorithm for delta2
   fitGlogi <- ppm(redwood ~ 1, Geyer(0.1, 2), rbord=0, method="logi")
-  pmiGlogi <- ppmInfluence(fitGlogi)
+  pmiGlogi <- Everything(fitGlogi)
   #'  generic algorithm for delta2
   fitDlogi <- ppm(cells ~ 1, DiggleGatesStibbard(0.12), rbord=0, method="logi")
-  pmiDlogi <- ppmInfluence(fitDlogi)
+  pmiDlogi <- Everything(fitDlogi)
   #'  generic algorithm for delta2 : offset; zero-dimensional 
   fitHlogi <- ppm(cells ~ 1, Hardcore(0.07), method="logi")
-  pmiHlogi <- ppmInfluence(fitHlogi)
+  pmiHlogi <- Everything(fitHlogi)
   #'  generic algorithm for delta2 : offset; 1-dimensional 
   fitHxlogi <- ppm(cells ~ x, Hardcore(0.07), rbord=0, method="logi")
-  pmiHxlogi <- ppmInfluence(fitHxlogi)
+  pmiHxlogi <- Everything(fitHxlogi)
+  #' plotting
+  plot(leverage(fitSlogi))
+  plot(influence(fitSlogi))
+  plot(dfbetas(fitSlogi))
   
   #' other code blocks - check execution only
   cat("Other code blocks...", fill=TRUE)
-  b <- ppmInfluence(fitSlogi)  # i.e. full set of results
-  b <- ppmInfluence(fitSlogi, method="interpreted") 
-  b <- ppmInfluence(fitSlogi, method="interpreted", entrywise=FALSE)
-  b <- ppmInfluence(fitSlogi,                       entrywise=FALSE) 
+  b <- Everything(fitSlogi)  # i.e. full set of results
+  b <- Everything(fitSlogi, method="interpreted") 
+  b <- Everything(fitSlogi, method="interpreted", entrywise=FALSE)
+  b <- Everything(fitSlogi,                       entrywise=FALSE) 
 
   #' irregular parameters
   cat("Irregular parameters...", fill=TRUE)
@@ -185,7 +199,7 @@ local({
   gogo <- function(tag, ..., iS=iScor, iH=iHess) {
     #' compute full set of results
     cat(tag, fill=TRUE)
-    ppmInfluence(..., iScore=iS, iHessian=iH)
+    ppmInfluence(..., what="all", iScore=iS, iHessian=iH)
   }
   cat("Offset model...", fill=TRUE)
   fut <- ippm(X ~ offset(ytoa), start=list(alpha=1))
@@ -203,7 +217,7 @@ local({
   #'
   set.seed(452)
   foo <- ppm(cells ~ 1, Strauss(0.15), method="ho", nsim=5)
-  aa <- ppmInfluence(foo)
+  aa <- Everything(foo)
 })
 
 reset.spatstat.options()
@@ -264,7 +278,7 @@ local({
 #
 # Tests for lpp code
 #
-#  $Revision: 1.11 $  $Date: 2018/02/24 10:48:20 $
+#  $Revision: 1.12 $  $Date: 2018/05/13 04:03:01 $
 
 
 require(spatstat)
@@ -429,7 +443,21 @@ local({
   plot(M, main="")
   summary(M)
 
-  ## lpp utilities
+  ## linequad
+  X <- runiflpp(6, simplenet)
+  Y <- X %mark% factor(rep(c("A", "B"), 3))
+  aX <- linequad(X)
+  aY <- linequad(Y)
+  aXR <- linequad(X, random=TRUE)
+  aYR <- linequad(Y, random=TRUE)
+  P <- as.ppp(X)
+  S <- as.psp(domain(X))
+  d <- linequad(P, S)
+  oop <- spatstat.options(Clinequad=FALSE)
+  bX <- linequad(X)
+  spatstat.options(oop)
+
+  ## other lpp utilities
   df <- pointsAlongNetwork(simplenet, 0.05)
 })
 
@@ -439,7 +467,7 @@ reset.spatstat.options()
 #'
 #'   Tests of lppm and class support
 #' 
-#'   $Revision$ $Date$
+#'   $Revision: 1.1 $ $Date: 2018/05/13 04:14:28 $
 #'
 
 require(spatstat)
@@ -483,6 +511,22 @@ local({
   fit1e <- emend(fit1)
   fit2e <- emend(fit2)
   fit3e <- emend(fit3)
+
+  #' fundamental utilities:
+  #' evalCovar
+  ycoord <- function(x,y) { y }
+  YS <- as.linim(ycoord, L=domain(spiders))
+  YC <- as.linim(ycoord, L=domain(chicago))
+
+  aT <- evalCovar(fit1, YS, interpolate=TRUE)
+  aF <- evalCovar(fit1, YS, interpolate=FALSE)
+  dT <- evalCovar(fit1, ycoord, interpolate=TRUE)
+  dF <- evalCovar(fit1, ycoord, interpolate=FALSE)
+
+  bT <- evalCovar(fit2, YC, interpolate=TRUE)
+  bF <- evalCovar(fit2, YC, interpolate=FALSE)
+  cT <- evalCovar(fit2, ycoord, interpolate=TRUE)
+  cF <- evalCovar(fit2, ycoord, interpolate=FALSE)
 })
 ##
 ##     tests/marcelino.R
@@ -552,6 +596,36 @@ local({
   envelopeTest(fitx, exponent=2, nsim=9, savefuns=TRUE)
 })
 
+#'  tests/morpho.R
+#' 
+#' morphology code blocks
+#'
+#' $Revision: 1.2 $ $Date: 2018/05/13 04:02:40 $
+
+require(spatstat)
+local({
+  #' owin
+  a <- erosion(letterR, 0.1, polygonal=FALSE)
+  b <- dilation(letterR, 0.1, polygonal=FALSE)
+  at <- erosion(letterR, 0.1, polygonal=FALSE, strict=TRUE)
+  bt <- dilation(letterR, 0.1, polygonal=FALSE, tight=FALSE)
+  #' psp
+  S <- edges(letterR)
+  dm <- dilation(S, 0.1, polygonal=FALSE)
+  dt <- dilation(S, 0.1, polygonal=FALSE, tight=FALSE)
+  op <- spatstat.options(old.morpho.psp=TRUE)
+  dn <- dilation(S, 0.1, polygonal=TRUE)
+  spatstat.options(op)
+  cS <- closing(S, 0.1, polygonal=FALSE)
+  eS <- erosion(S, 0)
+  oS <- opening(S, 0)
+  #' ppp
+  dc <- dilation(cells, 0.06, polygonal=FALSE)
+  ec <- erosion(cells, 0)
+  oc <- opening(cells, 0)
+})
+
+reset.spatstat.options()
 #
 # tests/mppm.R
 #

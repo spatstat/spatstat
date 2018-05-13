@@ -399,6 +399,7 @@
 \alias{plot.barplotdata}
 \alias{plot.bw.frac}
 \alias{plot.bw.optim}
+\alias{plot.indicfun}
 \alias{plot.localpcfmatrix}
 \alias{plot.lurk}
 \alias{plot.minconfit}
@@ -1242,6 +1243,7 @@ plotPolygonBdry(x, \dots)
 \method{plot}{barplotdata}(x, \dots)
 \method{plot}{bw.frac}(x, \dots)
 \method{plot}{bw.optim}(x, \dots, showopt, optargs)
+\method{plot}{indicfun}(x, W, \dots, main)
 \method{plot}{lurk}(x, \dots, shade)
 \method{plot}{minconfit}(x, \dots)
 \method{plot}{parres}(x, \dots)

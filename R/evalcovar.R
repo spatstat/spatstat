@@ -3,7 +3,7 @@
 #'
 #'   evaluate covariate values at data points and at pixels
 #'
-#' $Revision: 1.24 $ $Date: 2018/02/05 06:04:16 $
+#' $Revision: 1.26 $ $Date: 2018/05/13 05:38:09 $
 #'
 
 evalCovar <- function(model, covariate, ...) {
@@ -162,14 +162,14 @@ evalCovar.ppm <- local({
       } else if(is.function(covariate)) {
         type <- "function"
         #' evaluate exactly at data points
-        ZX <- covariate(X$x, X$y, marx)
+        ZX <- functioncaller(x=X$x, y=X$y, m=marx, f=covariate, ...)
+        #' functioncaller: function(x,y,m,f,...) { f(x,y,m,...) }
         #' same window
         W <- as.mask(W)
         #' covariate in window
         Z <- list()
         for(k in seq_along(possmarks))
-          Z[[k]] <- as.im(functioncaller, m=possmarks[k], f=covariate, W=W)
-        #' functioncaller: function(x,y,m,f) { f(x,y,m) }
+          Z[[k]] <- as.im(functioncaller, m=possmarks[k], f=covariate, W=W, ...)
         Zvalues <- unlist(lapply(Z, pixelvalues))
         #' corresponding fitted [conditional] intensity values
         lambda <- predict(model, locations=W, type=lambdatype)
@@ -223,9 +223,16 @@ evalCovar.ppm <- local({
 
   pixarea <- function(z) { z$xstep * z$ystep }
   npixdefined <- function(z) { sum(!is.na(z$v)) }
-  functioncaller <- function(x,y,m,f) { f(x,y,m) }
   pixelvalues <- function(z) { as.data.frame(z)[,3L] }
   getxy <- function(z) { z[,c("x","y")] }
+
+  functioncaller <- function(x,y,m,f,...) {
+    nf <- length(names(formals(f)))
+    if(nf < 2) stop("Covariate function must have at least 2 arguments")
+    value <- if(nf == 2) f(x,y) else if(nf == 3) f(x,y,m) else f(x,y,m,...)
+    return(value)
+  }
+            
   
   evalCovar.ppm
 })
@@ -376,7 +383,8 @@ evalCovar.lppm <- local({
       } else if(is.function(covariate)) {
         type <- "function"
         #' evaluate exactly at quadrature points
-        Zvalues <- covariate(U$x, U$y, marx)
+        Zvalues <- functioncaller(x=U$x, y=U$y, m=marx, f=covariate, ...)
+        #' functioncaller: function(x,y,m,f,...) { f(x,y,m,...) }
         #' extract data values
         ZX <- Zvalues[isdat]
         #' corresponding fitted [conditional] intensity values
@@ -434,7 +442,13 @@ evalCovar.lppm <- local({
 
   xcoordfun <- function(x,y,m){x}
   ycoordfun <- function(x,y,m){y}
-  functioncaller <- function(x,y,m,f) { f(x,y,m) }
 
+  functioncaller <- function(x,y,m,f,...) {
+    nf <- length(names(formals(f)))
+    if(nf < 2) stop("Covariate function must have at least 2 arguments")
+    value <- if(nf == 2) f(x,y) else if(nf == 3) f(x,y,m) else f(x,y,m,...)
+    return(value)
+  }
+            
   evalCovar.lppm
 })

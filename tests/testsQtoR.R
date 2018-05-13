@@ -70,7 +70,7 @@ local({
 ##
 ## Test all combinations of options for rhohatCalc
 ##
-## $Revision: 1.2 $ $Date: 2015/12/29 08:54:49 $
+## $Revision: 1.3 $ $Date: 2018/05/13 04:42:21 $
 
 local({
   require(spatstat)
@@ -111,6 +111,16 @@ local({
   plot(rhoA, rho ~ x, shade=NULL)
   plot(rhoA, log(rho) ~ x, shade=NULL)
   plot(rhoA, log(.) ~ x)
+
+  ## rho2hat
+  r2xy <- rho2hat(X, "x", "y")
+  r2xyw <- rho2hat(X, "x", "y", method="reweight")
+  plot(r2xy, do.points=TRUE)
+  xcoord <- function(x,y) x
+  ycoord <- function(x,y) y
+  xim <- as.im(xcoord, W=Window(X))
+  r2fi <- rho2hat(X, ycoord, xim)
+  r2if <- rho2hat(X, xim, ycoord)
 })
 #
 #  tests/rmhAux.R

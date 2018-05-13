@@ -6,7 +6,7 @@
 #  generic functions
 #  and methods for owin, psp, ppp
 #
-#  $Revision: 1.30 $   $Date: 2016/07/30 05:13:53 $
+#  $Revision: 1.31 $   $Date: 2018/05/13 03:58:54 $
 #
 
 # ............ generic  ............................
@@ -315,12 +315,13 @@ dilation.ppp <- function(w, r, ..., polygonal=TRUE, tight=TRUE) {
   
   # bounding frame
   bb <- if(tight) boundingbox(x) else as.rectangle(x)
-    newbox <- grow.rectangle(bb, r)
+  releps <- 1e-6
+  newbox <- grow.rectangle(bb, r * (1+releps))
 
   # compute dilation
   if(!polygonal) {
     # compute pixel approximation
-    x <- rebound.ppp(x, newbox)
+    Window(x) <- newbox
     distant <- distmap(x, ...)
     dil <- levelset(distant, r, "<=")
     return(dil)

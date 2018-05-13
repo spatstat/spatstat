@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.55-1.035
+        CHANGES IN spatstat VERSION 1.55-1.036
 
 OVERVIEW
 
@@ -46,6 +46,9 @@ NEW FUNCTIONS
 
     o rescale.distfun
     Change the unit of length in a 'distfun' object.
+
+    o plot.indicfun
+    Plot method for indicator functions created by as.function.owin.
     
 SIGNIFICANT USER-VISIBLE CHANGES
 
@@ -79,7 +82,7 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o runifpointOnLines, rpoisppOnLines
     New argument 'drop'
-    
+
     o plot.studpermutest
     This existing function now has a help file.
 
@@ -112,6 +115,9 @@ BUG FIXES
     Crashed sometimes when do.col=TRUE and values=NULL.
     Fixed.
 
+    o dilation.ppp
+    Crashed if polygonal=FALSE.
+    
     o plot.tess
     Ignored the marks of a tessellation defined by a pixel image.
     Fixed.

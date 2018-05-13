@@ -171,6 +171,7 @@
  m <- ppm(cells ~1, Strauss(0.05))
  pm <- plot(m) # The object ``pm'' will be plotted as well as saved
                # for future plotting.
+ pm
 }
 \author{
   \spatstatAuthors
