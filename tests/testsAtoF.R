@@ -1,3 +1,20 @@
+#'  tests/aucroc.R
+#'
+#'  AUC and ROC code
+#'
+#'  $Revision: 1.1 $ $Date: 2018/05/13 23:56:20 $
+
+require(spatstat)
+local({
+  fit <- kppm(redwood ~ I(y-x))
+  a <- roc(fit)
+  b <- auc(fit)
+  d <- roc(spiders, "x")
+  e <- auc(spiders, "y")
+  fut <- lppm(spiders ~ I(y-x))
+  f <- roc(fut)
+  g <- roc(fut)
+})
 ## badwindowcheck.R
 ## $Revision: 1.2 $  $Date: 2014/01/27 07:18:41 $
 ##

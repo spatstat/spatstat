@@ -241,7 +241,7 @@ local({
 #
 # tests/kppm.R
 #
-# $Revision: 1.21 $ $Date: 2018/05/01 08:57:17 $
+# $Revision: 1.22 $ $Date: 2018/05/14 09:26:51 $
 #
 # Test functionality of kppm that depends on RandomFields
 # Test update.kppm for old style kppm objects
@@ -293,6 +293,7 @@ local({
  
  if(require(RandomFields)) {
    fit0 <- kppm(redwood ~1, "LGCP")
+   is.poisson(fit0)
    Y0 <- simulate(fit0)[[1]]
    stopifnot(is.ppp(Y0))
 
@@ -331,6 +332,19 @@ local({
 
  }
 
+})
+
+local({
+  #' various code blocks
+  fut <- kppm(redwood, ~x)
+  fet <- update(fut, redwood3)
+  fot <- update(fut, trend=~y)
+  fit <- kppm(redwoodfull ~ x)
+  Y <- simulate(fit, window=redwoodfull.extra$regionII)
+  gut <- improve.kppm(fit, type="wclik1")
+  gut <- improve.kppm(fit, vcov=TRUE, fast.vcov=TRUE, save.internals=TRUE)
+  hut <- kppm(redwood ~ x, method="clik", weightfun=NULL)
+  hut <- kppm(redwood ~ x, method="palm", weightfun=NULL)
 })
 
 local({

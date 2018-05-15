@@ -2,7 +2,7 @@
 #   nncross.R
 #
 #
-#    $Revision: 1.28 $  $Date: 2017/06/05 10:31:58 $
+#    $Revision: 1.29 $  $Date: 2018/05/15 13:52:50 $
 #
 #  Copyright (C) Adrian Baddeley, Jens Oehlschlaegel and Rolf Turner 2000-2012
 #  Licence: GNU Public Licence >= 2
@@ -51,9 +51,9 @@ nncross.ppp <- function(X, Y, iX=NULL, iY=NULL,
   nX <- npoints(X)
   nY <- nobjects(Y)
   # deal with null cases
-  if(nX == 0)
+  if(nX == 0) 
     return(as.data.frame(list(dist=matrix(0, nrow=0, ncol=nk),
-                which=matrix(0L, nrow=0, ncol=nk))[what]))
+                              which=matrix(0L, nrow=0, ncol=nk)))[,what])
   if(nY == 0)
     return(as.data.frame(list(dist=matrix(Inf, nrow=nX, ncol=nk),
                              which=matrix(NA, nrow=nX, ncol=nk))[what]))

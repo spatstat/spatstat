@@ -1,7 +1,7 @@
 #
 #	distbdry.S		Distance to boundary
 #
-#	$Revision: 4.42 $	$Date: 2017/02/01 10:26:09 $
+#	$Revision: 4.43 $	$Date: 2018/05/15 13:34:45 $
 #
 # -------- functions ----------------------------------------
 #
@@ -38,20 +38,8 @@ function(X)
                },
                polygonal = {
                  xy <- cbind(x,y)
-                 result <- rep.int(Inf, X$n)
-                 bdry <- window$bdry
-                 for(i in seq_along(bdry)) {
-                   polly <- bdry[[i]]
-                   px <- polly$x
-                   py <- polly$y
-                   nsegs <- length(px)
-                   for(j in seq_len(nsegs)) {
-                     j1 <- if(j < nsegs) j + 1L else 1L
-                     seg <- c(px[j],  py[j],
-                              px[j1], py[j1])
-                     result <- pmin.int(result, distppl(xy, seg))
-                   }
-                 }
+                 ll <- edges(window)$ends
+                 result <- distppllmin(xy, ll)$min.d
                },
                mask = {
                  b <- bdist.pixels(window, style="matrix")

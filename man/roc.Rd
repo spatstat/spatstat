@@ -88,13 +88,7 @@
   \ifelse{latex}{\out{Birkh{\"a}user}}{Birkhauser}, Basel.
 }
 \author{
-\adrian
-
-
-\rolf
-
-and \ege
-
+\spatstatAuthors.
 }
 \seealso{
 \code{\link{auc}}

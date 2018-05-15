@@ -1,9 +1,9 @@
 
-        CHANGES IN spatstat VERSION 1.55-1.036
+        CHANGES IN spatstat VERSION 1.55-1.037
 
 OVERVIEW
 
-    o We thank Suman Rakshit for contributions.
+    o We thank Sebastian Meyer and Suman Rakshit for contributions.
     
     o Kernel estimate of intensity as a function(x,y)
 
@@ -86,6 +86,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o plot.studpermutest
     This existing function now has a help file.
 
+    o bdist.points
+    Accelerated, for polygonal windows (thanks to Sebastian Meyer).
+    
 BUG FIXES
 
     o "[.msr"
@@ -139,6 +142,11 @@ BUG FIXES
     Names or dimnames were missing in some cases.
     Fixed.
 
+    o nncross.ppp
+    Result had the wrong format if npoints(X) = 0 and length(what) = 1.
+    (Spotted by Sebastian Meyer).
+    Fixed.
+    
     o plot.colourmap
     Crashed if the colourmap was defined on an interval of dates or times.
     Fixed.

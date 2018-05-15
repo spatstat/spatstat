@@ -753,4 +753,28 @@ Change log from 1.55-1 to 1.55-2
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+14 may 2018
+
+   tests/aucroc.R [New file]
+   tests/kppm.R
+   	More tests
+
+15 may 2018
+
+   distbdry.R
+	Accelerated bdist.points in polygonal case
+	(thanks to Sebastian Meyer).
+
+   nncross.R
+	Bug fix 
+	(thanks to Sebastian Meyer).
+
+   DESCRIPTION
+   NEWS
+	version 1.55-1.037
+
+------------- passed R-3.5.0 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
 
