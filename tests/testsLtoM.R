@@ -25,7 +25,7 @@ local({
 #'
 #'   leverage and influence for Gibbs models
 #' 
-#'   $Revision: 1.20 $ $Date: 2018/05/13 03:29:37 $
+#'   $Revision: 1.21 $ $Date: 2018/05/17 07:22:25 $
 #' 
 
 require(spatstat)
@@ -72,6 +72,11 @@ local({
   w <- Window(infS)
   vv <- shift(levS, c(1.2, 1.3))
   vv <- shift(infS, c(1.2, 1.3))
+  A <- quadrats(Window(cells), 2)
+  a <- integral(levS,domain=A)
+  b <- integral(infS,domain=A)
+  u <- Smooth(levS, sigma=0.07)
+  v <- Smooth(infS, sigma=0.1)
   ## plot options
   plot(levS, what="exact")
   plot(levS, what="nearest")

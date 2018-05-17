@@ -777,4 +777,23 @@ Change log from 1.55-1 to 1.55-2
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+   tests/hyperframe.R
+	More tests
+	
+17 may 2018
 
+   leverage.R
+   spatstat-internal.Rd
+	New methods for 'Smooth' and 'integral'
+	for leverage.ppm and influence.ppm
+
+   tests/leverinf.R
+	Tests of new methods.
+	
+   DESCRIPTION
+   NEWS
+	version 1.55-1.038
+
+------------- passed R-3.5.0 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------

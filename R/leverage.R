@@ -3,7 +3,7 @@
 #
 #  leverage and influence
 #
-#  $Revision: 1.112 $ $Date: 2018/05/13 03:22:16 $
+#  $Revision: 1.113 $ $Date: 2018/05/17 07:08:51 $
 #
 
 leverage <- function(model, ...) {
@@ -1119,6 +1119,37 @@ print.influence.ppm <- function(x, ...) {
   x$infl <- y
   return(x)
 }
+
+## >>>>>>>>>>>>>>>>  SMOOTHING, INTEGRATION <<<<<<<<<<<<<<<<<<<<<
+
+integral.leverage.ppm <- function(f, domain=NULL, ...) {
+  y <- as.im(f, what="nearest")
+  z <- if(is.im(y)) {
+         integral(y, domain=domain, ...)
+       } else if(is.solist(y)) {
+         sapply(y, integral, domain=domain, ...)
+       } else stop("Internal format is not understood")
+  if(length(dim(z))) z <- t(z)
+  return(z)
+}
+
+integral.influence.ppm <- function(f, domain=NULL, ...) {
+  if(!is.null(domain)) {
+    if(is.tess(domain)) {
+      z <- sapply(tiles(domain), integral, f=f)
+      if(length(dim(z))) z <- t(z)
+      return(z)
+    }
+    f <- f[domain]
+  }
+  #' actual computation
+  y <- as.ppp(f)
+  return(colSums(as.matrix(marks(y))))
+}
+
+Smooth.leverage.ppm <- function(X, ...) Smooth(X$lev$val, ...)
+
+Smooth.influence.ppm <- function(X, ...) Smooth(as.ppp(X), ...)
 
 ## >>>>>>>>>>>>>>>>  GEOMETRICAL OPERATIONS <<<<<<<<<<<<<<<<<<<<<
 

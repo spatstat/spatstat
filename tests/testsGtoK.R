@@ -40,7 +40,7 @@ local({
 #
 # test "[.hyperframe" etc
 #
-#  $Revision: 1.3 $  $Date: 2014/08/25 04:43:07 $
+#  $Revision: 1.4 $  $Date: 2018/05/15 14:20:38 $
 #
 
 require(spatstat)
@@ -56,6 +56,11 @@ local({
 
   names(h) <- LETTERS[1:5]
   print(h)
+
+  summary(h)
+  str(h)
+  head(h)
+  tail(h)
 })
 
 

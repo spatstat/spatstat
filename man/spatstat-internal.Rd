@@ -227,6 +227,8 @@
 \alias{influence.ppmInfluence}
 \alias{inpoint}
 \alias{instantiate.interact}
+\alias{integral.leverage.ppm}
+\alias{integral.influence.ppm}
 \alias{interactionfamilyname}
 \alias{intermaker}
 \alias{intX.owin}     
@@ -614,6 +616,8 @@
 \alias{slr.prepare}
 \alias{slrAssemblePixelData}
 \alias{Smooth.solist}
+\alias{Smooth.leverage.ppm}
+\alias{Smooth.influence.ppm}
 \alias{smoothcrossEngine}              
 \alias{smoothpointsEngine}
 \alias{smudge}
@@ -1025,6 +1029,8 @@ impliedcoefficients(object, tag)
 \method{influence}{ppmInfluence}(model, \dots)
 inpoint(W)
 instantiate.interact(x, par)
+\method{integral}{leverage.ppm}(f, domain, \dots)
+\method{integral}{influence.ppm}(f, domain, \dots)
 interactionfamilyname(x)
 intermaker(f, blank)
 intX.owin(w)
@@ -1491,6 +1497,8 @@ simulrecipe(type, expr, envir, csr, pois, constraints)
 slr.prepare(CallInfo, envir, data, dataAtPoints, splitby, clip)
 slrAssemblePixelData(Y, Yname, W, covimages, dataAtPoints, pixelarea)
 \method{Smooth}{solist}(X, \dots)
+\method{Smooth}{leverage.ppm}(X, \dots)
+\method{Smooth}{influence.ppm}(X, \dots)
 smoothcrossEngine(Xdata, Xquery, values, sigma, \dots,
                     weights, varcov, sorted)
 smoothpointsEngine(x, values, sigma, \dots,
