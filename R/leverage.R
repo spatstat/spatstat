@@ -3,7 +3,7 @@
 #
 #  leverage and influence
 #
-#  $Revision: 1.113 $ $Date: 2018/05/17 07:08:51 $
+#  $Revision: 1.114 $ $Date: 2018/05/24 08:08:31 $
 #
 
 leverage <- function(model, ...) {
@@ -1145,6 +1145,11 @@ integral.influence.ppm <- function(f, domain=NULL, ...) {
   #' actual computation
   y <- as.ppp(f)
   return(colSums(as.matrix(marks(y))))
+}
+
+mean.leverage.ppm <- function(x, ...) {
+  y <- as.im(x, what="nearest")
+  mean(y, ...)
 }
 
 Smooth.leverage.ppm <- function(X, ...) Smooth(X$lev$val, ...)

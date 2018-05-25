@@ -76,10 +76,12 @@ leverage(model, \dots)
   image by \code{as.im} (see \code{\link{as.im.leverage.ppm}}).
 }
 \value{
-  An object of class \code{"leverage.ppm"} that can be plotted
-  (by \code{\link{plot.leverage.ppm}}). There are also methods
-  for \code{persp}, \code{print}, \code{[}, \code{as.im}, \code{as.function}
-  and \code{as.owin}.
+  An object of class \code{"leverage.ppm"} that can be
+  printed and plotted.
+  There are also methods for \code{contour}, \code{persp},
+  \code{[}, \code{\link{as.im}}, \code{as.function},
+  \code{\link{as.owin}}, \code{\link{domain}}, \code{\link{Smooth}},
+  \code{\link{integral}},  and \code{mean}.
 }
 \references{
   Baddeley, A., Chang, Y.M. and Song, Y. (2013)
@@ -99,7 +101,8 @@ leverage(model, \dots)
 \examples{
    X <- rpoispp(function(x,y) { exp(3+3*x) })
    fit <- ppm(X ~x+y)
-   plot(leverage(fit))
+   plot(le <- leverage(fit))
+   mean(le)
 }
 \keyword{spatial}
 \keyword{models}

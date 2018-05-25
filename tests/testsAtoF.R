@@ -502,6 +502,22 @@ local({
 reset.spatstat.options()
 
 #'
+#'      tests/diagnostique.R
+#'
+#'  Diagnostic tools such as diagnose.ppm, qqplot.ppm
+#'
+#'  $Revision: 1.1 $  $Date: 2018/05/22 11:57:12 $
+#'
+
+require(spatstat)
+local({
+  fit <- ppm(cells ~ x)
+  e <- envelope(cells, nsim=4, savepatterns=TRUE, savefuns=TRUE)
+  qf <- qqplot.ppm(fit, nsim=4, expr=e, plot.it=FALSE)
+  print(qf)
+  qg <- qqplot.ppm(fit, nsim=5, style="classical", plot.it=FALSE)
+})
+#'
 #'  tests/discarea.R
 #'
 #'   $Revision: 1.1 $ $Date: 2016/03/28 09:16:03 $

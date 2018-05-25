@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.55-1.038
+        CHANGES IN spatstat VERSION 1.55-1.039
 
 OVERVIEW
 
@@ -56,6 +56,9 @@ NEW FUNCTIONS
     o integral.leverage.ppm, integral.influence.ppm
     Compute the integral of a leverage function or an influence measure.
 
+    o mean.leverage.ppm
+    Compute the mean value of a leverage function.
+    
 SIGNIFICANT USER-VISIBLE CHANGES
 
     o plot.psp

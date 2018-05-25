@@ -351,6 +351,7 @@
 \alias{match.kernel}
 \alias{maxflow}
 \alias{mctestSigtraceEngine}
+\alias{mean.leverage.ppm}
 \alias{meanlistfv}
 \alias{meanX.owin}
 \alias{meanY.owin}
@@ -1171,6 +1172,7 @@ match.kernel(kernel)
 maxflow(costm)
 mctestSigtraceEngine(R, devdata, devsim, \dots,
      interpolate, confint, alpha, exponent, unitname)
+\method{mean}{leverage.ppm}(x, ...)
 meanlistfv(z, \dots)
 meanX.owin(w)            
 meanY.owin(w)

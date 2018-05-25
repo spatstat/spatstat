@@ -48,6 +48,8 @@
   or vector-valued measure. The function
   \code{\link{residuals.ppm}} returns an object of
   class \code{"msr"} representing the residual measure.
+  Various other diagnostic tools such as \code{\link{dfbetas.ppm}} and
+  \code{\link{dffit.ppm}} also return an object of class \code{"msr"}.
 
   The function \code{msr}  would not normally be called directly by the
   user. It is the low-level creator function that
@@ -89,8 +91,50 @@
   There is also a function \code{\link{Smooth.msr}} for smoothing a measure.
 }
 \value{
-  An object of class \code{"msr"} that can be plotted
-  by \code{\link{plot.msr}}.
+  An object of class \code{"msr"}.
+}
+\section{Guide to using measures}{
+  Objects of class \code{"msr"}, representing measures, are returned by the
+  functions \code{\link{residuals.ppm}}, \code{\link{dfbetas.ppm}},
+  \code{\link{dffit.ppm}} and possibly by other functions.
+
+  There are methods for printing and plotting a measure, along with
+  many other operations, which can be listed by
+  typing \code{methods(class="msr")}.
+
+  The \code{print} and \code{summary} methods report basic information
+  about a measure, such as the total value of the measure, and the
+  spatial domain on which it is defined.
+
+  The \code{plot} method displays the measure. It is documented separately in
+  \code{\link{plot.msr}}.
+
+  A measure can be smoothed using \code{\link{Smooth.msr}}, yielding a
+  pixel image which is sometimes easier to interpret than the plot
+  of the measure itself.
+
+  The subset operator \code{[} can be used to restrict the measure to
+  a subregion of space, or to extract one of the scalar components of a
+  vector-valued measure. It is documented separately in
+  \code{\link{[.msr}}.
+
+  The total value of a measure, or the value on a subregion,
+  can be obtained using \code{\link{integral.msr}}.
+  The value of a measure \code{m} on a subregion
+  \code{B} can be obtained by \code{integral(m, domain=B)} or
+  \code{integral(m[B])}. The values of a measure \code{m} on each tile
+  of a tessellation \code{A} can be obtained by
+  \code{integral(m, domain=A)}.
+
+  Some mathematical operations on measures are supported, such as
+  multiplying a measure by a single number, or adding two measures.
+
+  Measures can be separated into components in different ways using
+  \code{\link{as.layered.msr}}, \code{\link{unstack.msr}}
+  and \code{\link{split.msr}}.
+
+  Internal components of the data structure of an \code{"msr"} object
+  can be extracted using \code{\link{with.msr}}.
 }
 \references{
   Baddeley, A., Turner, R., \ifelse{latex}{\out{M\o ller}}{Moller}, J.

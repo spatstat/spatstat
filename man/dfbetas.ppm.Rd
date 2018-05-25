@@ -70,7 +70,7 @@
 }
 \value{
   An object of class \code{"msr"} representing a signed or vector-valued
-  measure. 
+  measure. This object can be printed and plotted. 
 }
 \references{
   Baddeley, A. and Chang, Y.M. and Song, Y. (2013)
@@ -83,7 +83,9 @@
 \seealso{
   \code{\link{leverage.ppm}},
   \code{\link{influence.ppm}},
-  \code{\link{ppmInfluence}}
+  \code{\link{ppmInfluence}}.
+
+  See \code{\link{msr}} for information on how to use a measure.
 }
 \examples{
    \testonly{op <- spatstat.options(npixel=32)}

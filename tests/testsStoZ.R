@@ -831,7 +831,7 @@ local({
 #
 # Tests of owin geometry code
 #
-#  $Revision: 1.4 $  $Date: 2018/05/02 13:33:27 $
+#  $Revision: 1.5 $  $Date: 2018/05/22 10:35:24 $
 
 require(spatstat)
 local({
@@ -861,7 +861,12 @@ local({
   V <- as.mask(letterR, eps=0.2)
   Vdf <- as.data.frame(V)
   Vnew <- as.owin(Vdf)
+  zz <- mask2df(V)
 
+  #' as.owin
+  U <- as.owin(quadscheme(cells))
+  U2 <- as.owin(list(xmin=0, xmax=1, ymin=0, ymax=1))
+  
   #' intersections involving masks
   B1 <- square(1)
   B2 <- as.mask(shift(B1, c(0.2, 0.3)))
@@ -888,6 +893,7 @@ local({
   periodify(B1, 2)
   periodify(union.owin(B1, B2), 2)
   periodify(letterR, 2)
+
 })
 
 ##

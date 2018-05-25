@@ -69,9 +69,10 @@
   point pattern by \code{as.ppp} (see \code{\link{as.ppp.influence.ppm}}).
 }
 \value{
-  An object of class \code{"influence.ppm"} that can be plotted
-  (by \code{\link{plot.influence.ppm}}). There are also methods
-  for \code{print}, \code{[}, \code{as.ppp} and \code{as.owin}.
+  An object of class \code{"influence.ppm"} that can be printed and plotted.
+  There are also methods for \code{[},
+  \code{\link{as.ppp}}, \code{\link{as.owin}}, \code{\link{domain}},
+  \code{\link{shift}}, \code{\link{integral}} and \code{\link{Smooth}}.
 }
 \references{
   Baddeley, A. and Chang, Y.M. and Song, Y. (2013)

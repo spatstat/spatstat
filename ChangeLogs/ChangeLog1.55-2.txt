@@ -797,3 +797,29 @@ Change log from 1.55-1 to 1.55-2
 ------------- passed R-3.5.0 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
+
+22 may 2018
+
+   tests/diagnostique.R [New file]
+   tests/windows.R
+	More tests
+
+24 may 2018
+
+   leverage.R
+   spatstat-internal.Rd
+	New method mean.leverage.ppm
+
+   influence.ppm.Rd
+   leverage.ppm.Rd
+   msr.Rd
+	Improved documentation.
+
+   DESCRIPTION
+   NEWS
+	version 1.55-1.039
+
+------------- passed R-3.5.0 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
