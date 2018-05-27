@@ -823,3 +823,30 @@ Change log from 1.55-1 to 1.55-2
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+25 may 2018
+
+   influence.ppm.Rd
+   leverage.ppm.Rd
+	Improved documentation.
+
+26 may 2018
+
+   slrm.Rd
+	Improved examples.
+
+27 may 2018
+
+   methods.lpp.Rd
+   tests/lppstuff.R
+   tests/imageops.R
+   tests/rmhBasic.R
+   tests/rmh.ppm.R
+	Tweaks and additions.
+	
+   DESCRIPTION
+   NEWS
+	version 1.55-1.040
+
+------------- passed R-3.5.0 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------

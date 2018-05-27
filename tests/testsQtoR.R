@@ -841,7 +841,7 @@ local({
 #
 #  tests/rmh.ppm.R
 #
-#  $Revision: 1.2 $ $Date: 2015/12/29 08:54:49 $
+#  $Revision: 1.3 $ $Date: 2018/05/27 05:27:34 $
 #
 #  Examples removed from rmh.ppm.Rd
 #  stripped down to minimal tests of validity
@@ -882,6 +882,10 @@ local({
      fit <- ppm(X ~1, AreaInter(r=7))
      Xsim <- rmh(fit, start=list(n.start=X$n))
   
+   # Penttinen process
+     fit <- ppm(X ~1, Penttinen(r=7))
+     Xsim <- rmh(fit, start=list(n.start=X$n))
+  
      # soft core interaction process
 #     X <- quadscheme(X, nd=50)
 #     fit <- ppm(X ~1, Softcore(kappa=0.1), correction="isotropic")
@@ -901,7 +905,7 @@ local({
    # marked point pattern
    Y <- amacrine
 
-   # marked Poisson models
+   #' marked Poisson models
    fit <- ppm(Y)
    Ysim <- rmh(fit)
 
@@ -910,22 +914,25 @@ local({
 
    fit <- ppm(Y~x)
    Ysim <- rmh(fit)
-#   fit <- ppm(Y~polynom(x,2))
-#   Ysim <- rmh(fit)
 
    fit <- ppm(Y~marks+x)
    Ysim <- rmh(fit)
-#   fit <- ppm(Y~marks+polynom(x,2))
-#   Ysim <- rmh(fit)
 
-   # multitype Strauss models
-   MS <- MultiStrauss(types = levels(Y$marks),
+   #' multitype Strauss
+   typ <- levels(Y$marks)
+   MS <- MultiStrauss(types = typ,
                       radii=matrix(0.07, ncol=2, nrow=2))
 
-#   fit <- ppm(Y~marks*polynom(x,2), MS)
-    fit <- ppm(Y~marks*x, MS)
+   fit <- ppm(Y~marks*x, MS)
    Ysim <- rmh(fit)
 
+   #' multitype Hardcore
+   h0 <- minnndist(unmark(Y)) * 0.95
+   MH <- MultiHard(types = typ,
+                   hradii=matrix(h0, ncol=2, nrow=2))
+   fit <- ppm(Y ~ marks+x, MH)
+   Ysim <- rmh(fit)
+   
    spatstat.options(op)
  })
 

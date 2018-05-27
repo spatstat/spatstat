@@ -67,7 +67,7 @@ local({
 #
 #  tests/imageops.R
 #
-#   $Revision: 1.13 $   $Date: 2018/05/02 09:47:46 $
+#   $Revision: 1.14 $   $Date: 2018/05/27 05:12:57 $
 #
 
 require(spatstat)
@@ -107,7 +107,16 @@ local({
   dx <- raster.x(d)
   dy <- raster.y(d)
   dxy <- raster.xy(d)
+  xyZ <- raster.xy(Z, drop=TRUE)
 
+  horosho <- conform.imagelist(cells, list(d, Z))
+
+  #' split.im
+  W <- square(1)
+  X <- as.im(function(x,y){x}, W)
+  Y <- dirichlet(runifpoint(7, W))
+  Z <- split(X, as.im(Y))
+  
   ## cases of "[.im"
   ee  <- d[simplenet, drop=FALSE]
   eev <- d[simplenet]
@@ -135,6 +144,9 @@ local({
   # convert after rescaling
   RGBscal <- rgbim(X, Y, Z, autoscale=TRUE, maxColorValue=1)
   HSVscal <- hsvim(X, Y, Z, autoscale=TRUE)
+
+  #' miscellaneous
+  ZZ <- zapsmall(Z, digits=6)
 })
 #' indices.R
 #' Tests of code for understanding index vectors etc

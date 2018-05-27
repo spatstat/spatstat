@@ -178,14 +178,14 @@ slrm(formula, ..., data = NULL, offset = TRUE, link = "logit",
      slrm(X ~ Z)
      slrm(X ~ Z, dataAtPoints=list(Z=nncross(X,Y,what="dist")))
 
-     dat <- list(A=X, V=Z)
-     slrm(A ~ V, data=dat)
+     mur <- murchison
+     mur$dfault <- distfun(mur$faults)
+     slrm(gold ~ dfault, data=mur)
+     slrm(gold ~ dfault + greenstone, data=mur)
+     slrm(gold ~ dfault, data=mur, splitby="greenstone")
 }
 \author{\adrian
-  \email{adrian@maths.uwa.edu.au}
-  
-  and \rolf
-  
+  and \rolf.
 }
 \keyword{spatial}
 \keyword{models}

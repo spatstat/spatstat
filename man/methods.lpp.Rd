@@ -97,10 +97,12 @@
 }
 \examples{
   X <- runiflpp(10, simplenet)
-  X
-  as.ppp(X)
-  summary(X)
   unitname(X) <- c("furlong", "furlongs")
+  X
+  summary(X)
+  summary(chicago)
+  nsegments(X)
+  Y <- as.ppp(X)
 }
 \keyword{spatial}
 \keyword{methods}

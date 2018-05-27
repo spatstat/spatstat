@@ -283,7 +283,7 @@ local({
 #
 # Tests for lpp code
 #
-#  $Revision: 1.12 $  $Date: 2018/05/13 04:03:01 $
+#  $Revision: 1.13 $  $Date: 2018/05/27 04:59:52 $
 
 
 require(spatstat)
@@ -462,8 +462,10 @@ local({
   bX <- linequad(X)
   spatstat.options(oop)
 
-  ## other lpp utilities
+  ## other internal utilities
   df <- pointsAlongNetwork(simplenet, 0.05)
+  X <- as.ppp(df[,c("x", "y")], W=Frame(simplenet))
+  A <- local2lpp(simplenet, seg=df$seg, tp=df$tp, X=X, df.only=FALSE)
 })
 
 reset.spatstat.options()

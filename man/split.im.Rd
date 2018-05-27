@@ -59,10 +59,7 @@
   plot(split(X,Y))
 }
 \author{\adrian
-  
-  
-  and \rolf
-  
+  and \rolf.
 }
 \keyword{spatial}
 \keyword{methods}

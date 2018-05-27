@@ -64,15 +64,15 @@
   log trend with respect to each pair of irregular parameters.
   
   The result of \code{influence.ppm} is 
-  an object of class \code{"influence.ppm"}. It can be plotted
-  (by \code{\link{plot.influence.ppm}}), or converted to a marked
+  an object of class \code{"influence.ppm"}. It can be printed and plotted.
+  It can be converted to a marked
   point pattern by \code{as.ppp} (see \code{\link{as.ppp.influence.ppm}}).
+  There are also methods for \code{[},
+  \code{\link{as.owin}}, \code{\link{domain}},
+  \code{\link{shift}}, \code{\link{integral}} and \code{\link{Smooth}}.
 }
 \value{
-  An object of class \code{"influence.ppm"} that can be printed and plotted.
-  There are also methods for \code{[},
-  \code{\link{as.ppp}}, \code{\link{as.owin}}, \code{\link{domain}},
-  \code{\link{shift}}, \code{\link{integral}} and \code{\link{Smooth}}.
+  An object of class \code{"influence.ppm"}.
 }
 \references{
   Baddeley, A. and Chang, Y.M. and Song, Y. (2013)
