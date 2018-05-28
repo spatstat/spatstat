@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.55-1.041
+        CHANGES IN spatstat VERSION 1.55-1.042
 
 OVERVIEW
 
@@ -17,6 +17,8 @@ OVERVIEW
 
     o Geometrical operations on 'distfun' objects.
 
+    o Distance map and contact distribution for rectangular structuring element.
+    
     o A very large number of minor bugs have been detected and fixed.
 
     o Version nickname: "antic-lockwise"
@@ -58,6 +60,12 @@ NEW FUNCTIONS
 
     o mean.leverage.ppm
     Compute the mean value of a leverage function.
+
+    o rectdistmap
+    Distance map using rectangular metric.
+    
+    o rectcontact
+    Contact distribution function using rectangular structuring element.
     
 SIGNIFICANT USER-VISIBLE CHANGES
 

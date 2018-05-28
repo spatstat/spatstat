@@ -871,4 +871,21 @@ Change log from 1.55-1 to 1.55-2
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+   src/metricPdt.h [New file]
+   src/metricPdt.c [New file]
+   metricPdt.R [New file]
+   rectdistmap.Rd [New file]
+   	Experimental distmap for rectangular metric.
+
+   metricPdt.R
+   rectcontact.Rd [New file]
+        Experimental contact distribution function for rectangular metric.
 	
+   DESCRIPTION
+   NEWS
+	version 1.55-1.042
+
+------------- passed R-3.5.0 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+

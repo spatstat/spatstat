@@ -126,6 +126,8 @@ void Clixellate(int *, int *, int *, int *, int *, int *, double *, double *, in
 void locpcfx(int *, double *, double *, int *, int *, double *, double *, int *, int *, double *, double *, double *); 
 void locWpcfx(int *, double *, double *, int *, int *, double *, double *, int *, double *, int *, double *, double *, double *);
 void cocoGraph(int *, int *, int *, int *, int *, int *);
+void mdtPOrect(double *, double *, double *, double *, int *, int *, int *, int *, int *, double *, int *, double *, int *, int *); 
+void mdtPOrect(double *, double *, double *, double *, int *, int *, int *, int *, int *, double *, int *, double *, int *, int *);
 void minPnnd2(int *, double *, double *, double *, double *); 
 void minnnd2(int *, double *, double *, double *, double *); 
 void maxPnnd2(int *, double *, double *, double *, double *); 
