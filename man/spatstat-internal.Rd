@@ -624,6 +624,7 @@
 \alias{smudge}
 \alias{sort.im}
 \alias{sortalongsegment}
+\alias{spatstat.deldir.setopt}
 \alias{spatstat.xy.coords}
 \alias{spatstatClusterModelInfo}
 \alias{spatstatDPPModelInfo}
@@ -1508,6 +1509,7 @@ smoothpointsEngine(x, values, sigma, \dots,
 smudge(X)
 \method{sort}{im}(x, \dots)
 sortalongsegment(df)
+spatstat.deldir.setopt(use.trigrafS, use.trigraf, debug.delaunay)
 spatstat.xy.coords(x, y)
 spatstatClusterModelInfo(name, onlyPCP)
 spatstatDPPModelInfo(model)

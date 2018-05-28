@@ -581,6 +581,21 @@ parres(model, "x", subregion=w, bw.input="quad")
 mod2 <- update(model, ~x)
 parres(mod2, "x")
 })
+#'    tests/trigraph.R
+#'
+#'   Tests for C code in trigraf.c
+#'   
+#'  $Revision: 1.1 $  $Date: 2018/05/28 06:28:40 $
+#'
+require(spatstat)
+local({
+  spatstat.deldir.setopt(FALSE, TRUE)
+  A <- delaunay(redwood)
+  spatstat.deldir.setopt(FALSE, FALSE)
+  B <- delaunay(redwood)
+  spatstat.deldir.setopt(TRUE, TRUE)
+})
+
 #
 # tests/triplets.R
 #

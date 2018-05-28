@@ -74,7 +74,7 @@ local({
 ##  tests/closeshave.R
 ## check 'closepairs/crosspairs' code
 ## validity and memory allocation
-## $Revision: 1.10 $ $Date: 2018/05/12 15:53:21 $
+## $Revision: 1.11 $ $Date: 2018/05/28 04:52:37 $
 
 local({
   r <- 0.12
@@ -165,10 +165,14 @@ local({
   #' other code blocks
   u <- closepairs(cells, 0.09, periodic=TRUE, what="all")
   v <- closepairs(cells, 0.07, twice=FALSE, neat=TRUE)
-  #' old code - tight cluster - guess count does not work
-  aop <- spatstat.options(closepairs.newcode=FALSE)
+  #' tight cluster - guess count does not work
   Xc <- runifpoint(100, square(0.01))
   Window(Xc) <- square(1)
+  z <- closepairs(Xc, 0.02, what="indices", distinct=FALSE)
+  z <- closepairs(Xc, 0.02, what="ijd",     distinct=FALSE)
+  z <- closepairs(Xc, 0.02, what="all",     distinct=FALSE)
+  #' same task, older code
+  aop <- spatstat.options(closepairs.newcode=FALSE)
   z <- closepairs(Xc, 0.02, what="indices", distinct=FALSE)
   z <- closepairs(Xc, 0.02, what="ijd",     distinct=FALSE)
   z <- closepairs(Xc, 0.02, what="all",     distinct=FALSE)

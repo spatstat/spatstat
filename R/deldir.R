@@ -1,16 +1,30 @@
-#
-# deldir.R
-#
-# Interface to deldir package
-#
-#  $Revision: 1.28 $ $Date: 2017/06/05 10:31:58 $
-#
+#'
+#' deldir.R
+#'
+#' Interface to deldir package
+#'
+#'  $Revision: 1.29 $ $Date: 2018/05/28 05:24:15 $
+#'
 
-.spst.triEnv <- new.env()
+#' ..............................................
+#' Internal options 
+#'      deldir suggests spatstat (!!!)
+#'      so we must save options here, not in spatstat.options
+  .spst.triEnv <- new.env()
+  assign("use.trigraf",  TRUE, envir=.spst.triEnv)
+  assign("use.trigrafS", TRUE, envir=.spst.triEnv)
+  assign("debug.delaunay", FALSE, envir=.spst.triEnv)
+#' for testing purposes only
+  spatstat.deldir.setopt <- function(use.trigrafS=TRUE,
+                                     use.trigraf=TRUE,
+                                     debug.delaunay=FALSE) {
+    assign("use.trigrafS", use.trigrafS, envir=.spst.triEnv)
+    assign("use.trigraf",  use.trigraf, envir=.spst.triEnv)
+    assign("debug.delaunay", debug.delaunay, envir=.spst.triEnv)
+    return(invisible(NULL))
+  }
+#'..............................................
 
-assign("use.trigraf",  TRUE, envir=.spst.triEnv)
-assign("use.trigrafS", TRUE, envir=.spst.triEnv)
-assign("debug.delaunay", FALSE, envir=.spst.triEnv)
 
 dirichlet <- local({
 

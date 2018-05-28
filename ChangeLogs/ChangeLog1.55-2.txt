@@ -850,3 +850,25 @@ Change log from 1.55-1 to 1.55-2
 ------------- passed R-3.5.0 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
+
+28 may 2018
+
+   deldir.R
+   spatstat-internal.Rd
+	Internal function to set internal options (for testing)
+
+   tests/closeshave.R
+   tests/trigraph.R [New file]
+	More tests, to cover all C code.
+
+   DESCRIPTION
+   NEWS
+   Nickname.txt
+	Nickname 'antic-lockwise'
+	version 1.55-1.041
+
+------------- passed R-3.5.0 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+	

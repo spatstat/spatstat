@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.55-1.040
+        CHANGES IN spatstat VERSION 1.55-1.041
 
 OVERVIEW
 
@@ -19,7 +19,7 @@ OVERVIEW
 
     o A very large number of minor bugs have been detected and fixed.
 
-    o Version nickname: "Glasgow Kiss"
+    o Version nickname: "antic-lockwise"
 
 NEW FUNCTIONS
 
