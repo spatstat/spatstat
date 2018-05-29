@@ -3,7 +3,7 @@
 #
 # support for tessellations
 #
-#   $Revision: 1.84 $ $Date: 2018/05/29 06:21:03 $
+#   $Revision: 1.85 $ $Date: 2018/05/29 09:15:07 $
 #
 tess <- function(..., xgrid=NULL, ygrid=NULL, tiles=NULL, image=NULL,
                  window=NULL, marks=NULL, keepempty=FALSE,
@@ -380,7 +380,11 @@ plot.tess <- local({
   multi.plot.tess <- function(x, ..., zlim=NULL, col=NULL, equal.ribbon=FALSE) {
     if(equal.ribbon && is.null(zlim) && !inherits(col, "colourmap"))
       zlim <- range(marks(x))
-    result <- plot(unstack(x), ..., zlim=zlim, col=col)
+    if(!is.null(zlim)) {
+      result <- plot(unstack(x), ..., zlim=zlim, col=col)
+    } else {
+      result <- plot(unstack(x), ..., col=col)
+    }
     return(invisible(result))
   }
   
