@@ -889,3 +889,18 @@ Change log from 1.55-1 to 1.55-2
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+29 may 2018
+
+   tess.R
+   plot.tess.Rd
+	Now generates a separate plot panel for each column of marks
+	if do.col=TRUE.
+	New argument 'multiplot'.
+	
+   DESCRIPTION
+   NEWS
+	version 1.55-1.043
+
+------------- passed R-3.5.0 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------

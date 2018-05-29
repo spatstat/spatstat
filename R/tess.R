@@ -3,7 +3,7 @@
 #
 # support for tessellations
 #
-#   $Revision: 1.83 $ $Date: 2018/04/19 09:01:07 $
+#   $Revision: 1.84 $ $Date: 2018/05/29 06:21:03 $
 #
 tess <- function(..., xgrid=NULL, ygrid=NULL, tiles=NULL, image=NULL,
                  window=NULL, marks=NULL, keepempty=FALSE,
@@ -192,25 +192,58 @@ plot.tess <- local({
                         labelargs=list(),
                         do.col=FALSE, 
                         values=marks(x),
+                        multiplot=TRUE,
                         col=NULL,
                         ribargs=list()) {
     if(missing(main) || is.null(main))
       main <- short.deparse(substitute(x))
-    if(do.col) {
+    ntiles <- x$n
+    if(!do.col) {
+      #' Plot tiles, with adornment
+      y <- NULL
+      result <- NULL
+      bbox <- NULL
+      need.legend <- FALSE
+    } else {
+      #' Fill tiles with colours determined by 'values'
+      if(markformat(values) == "hyperframe") 
+        values <- as.data.frame(values) #' automatic warning
       #' Determine values associated with each tile
-      if(is.null(values)) {
-        #' default is tile name
-        values <- factor(tilenames(x))
-      } else {
-        if(is.data.frame(values)) {
-          if(ncol(values) > 1)
-            warning("Using only the first column of values")
-          values <- values[,1]
-        }
-        if(length(values) != x$n)
-          stop(paste("Number of values =", length(values),
-                     "!=", x$n, "= number of tiles"))
-      }
+      switch(markformat(values),
+             none = {
+               #' no values assigned.
+               #' default is tile name
+               values <- factor(tilenames(x))
+             },
+             vector = {
+               #' vector of values.
+               #' validate length of vector
+               check.nvector(values, ntiles, things="tiles")
+             },
+             dataframe = {
+               #' data frame or matrix of values.
+               values <- as.data.frame(values)
+               if(nrow(values) != ntiles)
+                 stop(paste("Number of rows of values =", nrow(values),
+                            "!=", ntiles, "= number of tiles"),
+                      call.=FALSE)
+               if(multiplot && ncol(values) > 1 && !add) {
+                 #' Multiple Panel Plot
+                 result <- multi.plot.tess(x, ...,
+                                           main=main, show.all=show.all,
+                                           border=border, do.plot=do.plot,
+                                           do.labels=do.labels, labels=labels,
+                                           labelargs=labelargs, do.col=do.col, 
+                                           col=col, ribargs=ribargs)
+                 return(invisible(result))
+               }
+               if(ncol(values) > 1)
+                 warning("Using only the first column of values")
+               values <- values[,1]
+             },
+             stop("Format of values is not understood")
+             )
+      #' Single Panel Plot
       #' Determine colour map and plan layout (including colour ribbon)
       #' using rules for pixel images
       y <- as.im(as.function(x, values=values))
@@ -224,18 +257,14 @@ plot.tess <- local({
                           list(valuesAreColours=FALSE)
                           ))
       #' exit if not actually plotting
-      if(!do.plot) return(result)
+      if(!do.plot) return(invisible(result))
       #' extract info
       colmap <- result
       bbox <- attr(result, "bbox")
       bbox.legend <- attr(result, "bbox.legend")
       need.legend <- !is.null(bbox.legend)
-    } else {
-      y <- NULL
-      result <- NULL
-      bbox <- NULL
-      need.legend <- FALSE
     }
+    #'      Start Plot 
     #' initialise plot region if it is determined
     if(do.plot && !is.null(bbox) && !add) {
       plot(bbox, main=" ", type="n")
@@ -348,6 +377,13 @@ plot.tess <- local({
     return(invisible(result))
   }
 
+  multi.plot.tess <- function(x, ..., zlim=NULL, col=NULL, equal.ribbon=FALSE) {
+    if(equal.ribbon && is.null(zlim) && !inherits(col, "colourmap"))
+      zlim <- range(marks(x))
+    result <- plot(unstack(x), ..., zlim=zlim, col=col)
+    return(invisible(result))
+  }
+  
   plot.tess
 })
 

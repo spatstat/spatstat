@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.55-1.042
+        CHANGES IN spatstat VERSION 1.55-1.043
 
 OVERVIEW
 
@@ -91,6 +91,11 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o plot.im
     Improved behaviour when all pixel values are NA.
 
+    o plot.tess
+    Now generates a separate plot panel for each column of marks,
+    if do.col=TRUE.
+    New argument 'multiplot'.
+    
     o pcfinhom
     Now handles correction='good'
 
