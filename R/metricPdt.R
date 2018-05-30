@@ -3,7 +3,7 @@
 #'
 #'     Metric distance transform of pixel mask
 #'
-#'	$Revision: 1.1 $	$Date: 2018/05/28 09:30:05 $
+#'	$Revision: 1.2 $	$Date: 2018/05/30 01:22:38 $
 
 rectdistmap <- function(X, asp=1.0, npasses=1, verbose=FALSE) {
   w <- as.mask(X)
@@ -114,7 +114,8 @@ rectdistmap <- function(X, asp=1.0, npasses=1, verbose=FALSE) {
   return(result)
 }
 
-rectcontact <- function(X, ..., asp=1.0, eps=NULL, r=NULL, breaks=NULL,
+rectcontact <- function(X, ..., asp=1.0, npasses=4,
+                        eps=NULL, r=NULL, breaks=NULL,
                         correction=c("rs", "km")) {
   verifyclass(X, "im")
   rorbgiven <- !is.null(r) || !is.null(breaks)
@@ -158,11 +159,11 @@ rectcontact <- function(X, ..., asp=1.0, eps=NULL, r=NULL, breaks=NULL,
   
   ##  compute distances and censoring distances
   if(!emptyframe) {
-    dist <- rectdistmap(Y, asp, npasses=5)
+    dist <- rectdistmap(Y, asp, npasses=npasses)
     if(fullframe) {
       bdry <- attr(dist, "bdist")
     } else {
-      bdry <- rectdistmap(complement.owin(W), asp, npasses=5)
+      bdry <- rectdistmap(complement.owin(W), asp, npasses=npasses)
     }
     #' extract corresponding values
     dist <- dist[W, drop=TRUE, rescue=FALSE]

@@ -8,8 +8,8 @@
   of a set, using a rectangular structuring element.
 }
 \usage{
-rectcontact(X, \dots,
-       asp = 1, eps = NULL, r = NULL, breaks = NULL, correction = c("rs", "km"))
+rectcontact(X, \dots, asp = 1, npasses=4,
+            eps = NULL, r = NULL, breaks = NULL, correction = c("rs", "km"))
 }
 \arguments{
   \item{X}{
@@ -21,7 +21,12 @@ rectcontact(X, \dots,
     Ignored.
   }
   \item{asp}{
-    Aspect ratio for the rectangular metric.
+    Aspect ratio for the rectangular metric. A single positive number.
+    See \code{\link{rectdistmap}} for explanation.
+  }
+  \item{npasses}{
+    Number of passes to perform in the distance algorithm. A positive integer.
+    See \code{\link{rectdistmap}} for explanation.
   }
   \item{eps}{
     Pixel size, if the image should be converted to a finer grid.

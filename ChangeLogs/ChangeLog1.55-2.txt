@@ -915,3 +915,18 @@ Change log from 1.55-1 to 1.55-2
 ------------- passed R-3.5.0 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
+
+30 may 2018
+
+   metricPdt.R
+   rectcontact.Rd
+	Tweaked arguments
+
+   DESCRIPTION
+   NEWS
+	version 1.55-1.045
+
+------------- passed R-3.5.0 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
