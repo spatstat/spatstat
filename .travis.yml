@@ -21,7 +21,7 @@ before_install:
 install:
   - ./run.sh install_aptget r-cran-deldir r-cran-abind r-cran-tensor r-cran-polyclip r-cran-goftest
   - ./run.sh install_aptget r-cran-sm r-cran-maptools r-cran-gsl r-cran-locfit r-cran-spatial r-cran-tkrplot r-cran-randomfields r-cran-randomfieldsutils r-cran-fftwtools
-  - ./run.sh install_aptget r-cran-covr r-cran-devtools
+  - ./run.sh install_aptget r-cran-devtools
   - ./run.sh install_aptget texinfo
   - ./run.sh install_github spatstat/spatstat.utils spatstat/spatstat.data
 
@@ -30,6 +30,7 @@ script:
   - rm -rf spatstat/spatstat
   - git clone --depth=50 --branch=master https://github.com/spatstat/spatstat.git spatstat/spatstat
   - cd spatstat/spatstat
+  - R -e 'devtools::install_version("covr", "3.0.1")'
   - if [[ "${R_CODECOV_TEST}" ]]; then R -e 'covr::codecov(type = "test", quiet = FALSE, commit = covr:::current_commit(), branch = covr:::local_branch())'; fi
   - if [[ "${R_CODECOV_EXAMPLE}" ]]; then R -e 'covr::codecov(type = "example", quiet = FALSE, commit = covr:::current_commit(), branch = covr:::local_branch())'; fi
   - if [[ "${R_CODECOV_VIGNETTE}" ]]; then R -e 'covr::codecov(type = "vignette", quiet = FALSE, commit = covr:::current_commit(), branch = covr:::local_branch())'; fi
