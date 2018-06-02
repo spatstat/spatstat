@@ -930,3 +930,15 @@ Change log from 1.55-1 to 1.55-2
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+2 jun 2018
+
+  Kest.R
+	rmax.rule allows missing arguments
+
+   DESCRIPTION
+   NEWS
+	version 1.55-1.046
+
+------------- passed R-3.5.0 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------

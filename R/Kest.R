@@ -1,7 +1,7 @@
 #
 #	Kest.R		Estimation of K function
 #
-#	$Revision: 5.120 $	$Date: 2017/06/05 10:31:58 $
+#	$Revision: 5.121 $	$Date: 2018/06/02 08:33:53 $
 #
 #
 # -------- functions ----------------------------------------
@@ -727,28 +727,29 @@ Knone.engine <- function(X, rmax, nr=100,
      
 
 rmax.rule <- function(fun="K", W, lambda) {
-  verifyclass(W, "owin")
+  if(gotW <- !missing(W)) verifyclass(W, "owin")
+  if(gotL <- !missing(lambda)) lambda <- as.numeric(lambda) # can be vector
+  gotall <- gotW && gotL
   switch(fun,
          K = {
            # Ripley's Rule
-           ripley <- min(diff(W$xrange), diff(W$yrange))/4
+           ripley <- if(gotW) shortside(Frame(W))/4 else Inf
            # Count at most 1000 neighbours per point
-           rlarge <- if(!missing(lambda)) sqrt(1000 /(pi * lambda)) else Inf
+           rlarge <- if(gotL) sqrt(1000 /(pi * lambda)) else Inf
            rmax <- min(rlarge, ripley)
          },
          Kscaled = {
            ## rule of thumb for Kscaled
-           rdiam  <- diameter(as.rectangle(W))/2 * sqrt(lambda)
+           rdiam  <- if(gotall) diameter(Frame(W))/2 * sqrt(lambda) else Inf
            rmax <- min(10, rdiam)
          },
          F = ,
          G = ,
          J = {
            # rule of thumb
-           rdiam  <- diameter(as.rectangle(W))/2
+           rdiam  <- if(gotW) diameter(Frame(W))/2 else Inf
            # Poisson process has F(rlarge) = 1 - 10^(-5)
-           rlarge <-
-             if(!missing(lambda)) sqrt(log(1e5)/(pi * lambda)) else Inf
+           rlarge <- if(gotL) sqrt(log(1e5)/(pi * lambda)) else Inf
            rmax <- min(rlarge, rdiam)
          },
          stop(paste("Unrecognised function type", sQuote(fun)))
