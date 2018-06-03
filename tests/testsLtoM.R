@@ -283,7 +283,7 @@ local({
 #
 # Tests for lpp code
 #
-#  $Revision: 1.13 $  $Date: 2018/05/27 04:59:52 $
+#  $Revision: 1.14 $  $Date: 2018/06/03 09:32:17 $
 
 
 require(spatstat)
@@ -441,6 +441,14 @@ local({
 
   ## as.linim.linim
   xxcc <- as.linim(xcoord)
+
+  ## linim with df provided
+  Z <- as.im(function(x,y) {x-y}, Frame(simplenet))
+  X <- linim(simplenet, Z)
+  df <- attr(X, "df")
+  XX <- linim(simplenet, Z, df=df)
+  dfwithout <- df[, colnames(df) != "values"]
+  XXX <- linim(simplenet, Z, df=dfwithout)
   
   ## lpp with multiple columns of marks
   M <- chicago

@@ -528,7 +528,7 @@ reset.spatstat.options()
 #'
 #'   tests/ppp.R
 #'
-#'   $Revision: 1.1 $ $Date: 2018/04/26 12:53:29 $
+#'   $Revision: 1.2 $ $Date: 2018/06/03 09:06:56 $
 #'
 #'  Untested cases in ppp() or associated code
 
@@ -553,10 +553,17 @@ local({
   summary(B)
   summary(D)
   
-  #' subset operator with logical image
+  #' subset operator --- cases not covered elsewhere
+  #'   subset index is a logical image
   Z <- distmap(letterR, invert=TRUE)
   V <- (Z > 0.2)
   XV <- X[V]
+  #'   multiple columns of marks
+  fun3 <- finpines[1:3]
+  #'   multiple columns of marks, one of which is a factor
+  U <- finpines
+  marks(U)[,2] <- factor(c(rep("A", 60), rep("B", npoints(U)-60)))
+  UU <- U[1:3, drop=TRUE]
 
   #' test as.ppp for spatial package if it is not installed
   FR <- Frame(letterR)

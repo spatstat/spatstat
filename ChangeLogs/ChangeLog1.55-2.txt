@@ -942,3 +942,28 @@ Change log from 1.55-1 to 1.55-2
 ------------- passed R-3.5.0 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
+
+3 jun 2018
+
+   ppp.R
+	Bug fix in subset operator
+
+   tests/ppp.R
+	More tests of subset operator
+
+   tests/lppstuff.R
+	More tests of linim()
+	
+   scanpp.Rd
+	Added examples.
+
+   DESCRIPTION
+   NEWS
+   Nickname.txt
+	Nickname: "Wee Cooper of Fyfe"
+	version 1.55-1.047
+
+------------- passed R-3.5.0 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+

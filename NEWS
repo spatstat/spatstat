@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.55-1.046
+        CHANGES IN spatstat VERSION 1.55-1.047
 
 OVERVIEW
 
@@ -19,9 +19,9 @@ OVERVIEW
 
     o Distance map and contact distribution for rectangular structuring element.
     
-    o A very large number of minor bugs have been detected and fixed.
+    o An infinite number of infinitesimal bugs has been detected and fixed.
 
-    o Version nickname: "antic-lockwise"
+    o Version nickname: "Wee Cooper of Fyfe"
 
 NEW FUNCTIONS
 
@@ -176,6 +176,11 @@ BUG FIXES
     o StraussHard, leverage.ppm, influence.ppm, dfbetas.ppm
     Leverage and influence calculations generated an error 
     when applied to models fitted with the StraussHard interaction.
+    Fixed.
+
+    o "[.ppp"
+    Crashed if there were several columns of marks,
+    some of which were factors, and drop=TRUE.
     Fixed.
     
         CHANGES IN spatstat VERSION 1.55-1

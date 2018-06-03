@@ -4,7 +4,7 @@
 #	A class 'ppp' to define point patterns
 #	observed in arbitrary windows in two dimensions.
 #
-#	$Revision: 4.111 $	$Date: 2017/06/05 10:31:58 $
+#	$Revision: 4.112 $	$Date: 2018/06/03 09:17:56 $
 #
 #	A point pattern contains the following entries:	
 #
@@ -358,17 +358,22 @@ cobble.xy <- function(x, y, f=ripras, fatal=TRUE, ...) {
           x <- x[j]   # invokes code above
 
         if(drop) {
+          #' drop unused factor levels
           mx <- x$marks
           switch(markformat(mx),
                  none = { },
                  vector = {
                    if(is.factor(mx))
-                     marks(x) <- factor(mx)
+                     marks(x) <- factor(mx) # this preserves order of levels
                  },
                  dataframe = {
-                   isfac <- sapply(mx, is.factor)
-                   if(any(isfac))
-                     mx[, isfac] <- lapply(mx[, isfac], factor)
+                   #' must be an actual data frame, not a matrix
+                   if(is.data.frame(mx)) {
+                     ml <- as.list(mx)
+                     isfac <- sapply(ml, is.factor)
+                     if(any(isfac))
+                       mx[, isfac] <- as.data.frame(lapply(ml[isfac], factor))
+                   }
                  },
                  hyperframe = { })
         }
