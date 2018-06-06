@@ -967,3 +967,15 @@ Change log from 1.55-1 to 1.55-2
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+6 jun 2018
+
+  tests/threedee.R [New file]
+      Tests of C code for 3D
+
+   DESCRIPTION
+   NEWS
+	version 1.55-1.048
+
+------------- passed R-3.5.0 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------

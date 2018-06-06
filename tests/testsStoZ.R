@@ -581,6 +581,27 @@ parres(model, "x", subregion=w, bw.input="quad")
 mod2 <- update(model, ~x)
 parres(mod2, "x")
 })
+#'
+#'     tests/threedee.R
+#'
+#'     Tests of 3D code 
+#'
+#'      $Revision: 1.2 $ $Date: 2018/06/06 03:05:12 $
+#'
+
+require(spatstat)
+local({
+  X <- runifpoint3(30)
+  Y <- runifpoint3(20)
+  d <- pairdist(X, periodic=TRUE, squared=TRUE)
+  d <- crossdist(X, Y, squared=TRUE)
+  d <- crossdist(X, Y, squared=TRUE, periodic=TRUE)
+  #' older code
+  gg1 <- g3engine(X$x, X$y, X$z, correction="Hanisch G3")
+  gg2 <- g3engine(X$x, X$y, X$z, correction="minus sampling")
+  ff1 <- f3engine(X$x, X$y, X$z, correction="no")
+  ff2 <- f3engine(X$x, X$y, X$z, correction="minus sampling")
+})
 #'    tests/trigraph.R
 #'
 #'   Tests for C code in trigraf.c
