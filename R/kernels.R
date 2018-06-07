@@ -3,7 +3,7 @@
 #
 #  rXXX, dXXX, pXXX and qXXX for kernels
 #
-#  $Revision: 1.17 $  $Date: 2016/07/02 03:36:46 $
+#  $Revision: 1.19 $  $Date: 2018/06/07 05:42:54 $
 #
 
 match.kernel <- function(kernel) {
@@ -192,24 +192,27 @@ qkernel <- function(p, kernel="gaussian", mean=0, sd=1, lower.tail=TRUE) {
   return(mean + a * y)
 }
 
-# integral of t^m k(t) dt from -Inf to r
-# was:    nukernel(r, m, kernel)
+#' integral of t^m k(t) dt from -Inf to r
+#'   where k(t) is the standard kernel with support [-1,1]
+#' was:    nukernel(r, m, kernel)
 
 kernel.moment <- local({
 
   kernel.moment <- function(m, r, kernel="gaussian") {
     ker <- match.kernel(kernel)
+    check.1.integer(m)
+    #' restrict to support
     if(ker != "gaussian") {
       r <- pmin(r, 1)
       r <- pmax(r, -1)
     }
-    stopifnot(length(m) == 1)
     if(!(m %in% c(0,1,2)) || (ker %in% c("cosine", "optcosine"))) {
       ## use generic integration
       neginf <- if(ker == "gaussian") -10 else -1
       result <- numeric(length(r))
       for(i in seq_along(r))
-        result[i] <- integralvalue(kintegrand, lower=neginf, upper=r[i],
+        result[i] <- integralvalue(kintegrand,
+                                   lower=neginf, upper=r[i],
                                    m=m, ker=ker)
       return(result)
     }
@@ -255,7 +258,9 @@ kernel.moment <- local({
 
   integralvalue <- function(...) integrate(...)$value
   
-  kintegrand <- function(x, m, ker) { x^m * dkernel(x, ker) }
+  kintegrand <- function(x, m, ker) {
+    (x^m) * dkernel(x, ker, mean=0, sd=1/kernel.factor(ker))
+  }
 
   kernel.moment
 })

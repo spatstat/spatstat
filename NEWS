@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.55-1.048
+        CHANGES IN spatstat VERSION 1.55-1.049
 
 OVERVIEW
 
@@ -113,6 +113,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
     
 BUG FIXES
 
+    o kernel.moment
+    Result was incorrect for kernel="cosine" and kernel="optcosine".
+    Fixed.
+    
     o "[.msr"
     Format was mangled if the subset contained exactly one quadrature point.
     Fixed.

@@ -223,7 +223,11 @@
                    clicks=myclicks,
                    redraws = list(NULL, Rvalue, NULL, NULL),
                    exit=myexit, env=myenv)
+  # print it
   P
+  # show what it looks like
+  redraw.simplepanel(P)
+
   # ( type run.simplepanel(P) to run the panel interactively )
 
   # add another button to right

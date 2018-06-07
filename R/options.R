@@ -3,7 +3,7 @@
 #
 #     Spatstat options and other internal states
 #
-#    $Revision: 1.80 $   $Date: 2017/06/05 10:31:58 $
+#    $Revision: 1.81 $   $Date: 2018/06/07 04:33:01 $
 #
 #
 
@@ -106,6 +106,12 @@ warn.once <- function(key, ...) {
        closepairs.newcode=list(
          ## use new code for 'closepairs'
          default=TRUE,
+         check=function(x) { is.logical(x) && length(x) == 1 },
+         valid="a single logical value"
+       ),
+       closepairs.altcode=list(
+         ## use alternative code for 'closepairs'
+         default=FALSE,
          check=function(x) { is.logical(x) && length(x) == 1 },
          valid="a single logical value"
        ),

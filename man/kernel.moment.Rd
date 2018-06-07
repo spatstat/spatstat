@@ -44,6 +44,9 @@
   }
   where \eqn{k(t)} is the selected kernel, \eqn{r} is the upper limit of
   integration, and \eqn{m} is the exponent or order.
+  Here \eqn{k(t)} is the \bold{standard form} of the kernel,
+  which has support \eqn{[-1,1]} and
+  standard deviation \eqn{sigma = 1/c} where \code{c = kernel.factor(kernel)}.
 }
 \value{
   A single number, or a numeric vector of the same length as \code{r}.

@@ -1,7 +1,7 @@
 #
 # closepairs.R
 #
-#   $Revision: 1.41 $   $Date: 2018/02/03 08:56:29 $
+#   $Revision: 1.42 $   $Date: 2018/06/07 04:35:05 $
 #
 #  simply extract the r-close pairs from a dataset
 # 
@@ -145,6 +145,55 @@ closepairs.ppp <- function(X, rmax, twice=TRUE,
                         PACKAGE = "spatstat")
              if(length(z) != 3)
                stop("Internal error: incorrect format returned from VcloseIJDpairs")
+             i  <- z[[1L]]  # NB no increment required
+             j  <- z[[2L]]
+             d  <- z[[3L]]
+           })
+
+  } else if(spatstat.options("closepairs.altcode")) {
+    #' experimental alternative code
+    got.twice <- FALSE
+    ng <- nsize
+    #
+    x <- Xsort$x
+    y <- Xsort$y
+    r <- rmax
+    storage.mode(x) <- "double"
+    storage.mode(y) <- "double"
+    storage.mode(r) <- "double"
+    storage.mode(ng) <- "integer"
+    switch(what,
+           all = {
+             z <- .Call("altVclosepairs",
+                        xx=x, yy=y, rr=r, nguess=ng,
+                        PACKAGE = "spatstat")
+             if(length(z) != 9)
+               stop("Internal error: incorrect format returned from altVclosepairs")
+             i  <- z[[1L]]  # NB no increment required
+             j  <- z[[2L]]
+             xi <- z[[3L]]
+             yi <- z[[4L]]
+             xj <- z[[5L]]
+             yj <- z[[6L]]
+             dx <- z[[7L]]
+             dy <- z[[8L]]
+             d  <- z[[9L]]
+           },
+           indices = {
+             z <- .Call("altVcloseIJpairs",
+                        xx=x, yy=y, rr=r, nguess=ng,
+                        PACKAGE = "spatstat")
+             if(length(z) != 2)
+               stop("Internal error: incorrect format returned from altVcloseIJpairs")
+             i  <- z[[1L]]  # NB no increment required
+             j  <- z[[2L]]
+           },
+           ijd = {
+             z <- .Call("altVcloseIJDpairs",
+                        xx=x, yy=y, rr=r, nguess=ng,
+                        PACKAGE = "spatstat")
+             if(length(z) != 3)
+               stop("Internal error: incorrect format returned from altVcloseIJDpairs")
              i  <- z[[1L]]  # NB no increment required
              j  <- z[[2L]]
              d  <- z[[3L]]

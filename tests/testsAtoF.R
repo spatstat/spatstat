@@ -74,7 +74,7 @@ local({
 ##  tests/closeshave.R
 ## check 'closepairs/crosspairs' code
 ## validity and memory allocation
-## $Revision: 1.11 $ $Date: 2018/05/28 04:52:37 $
+## $Revision: 1.13 $ $Date: 2018/06/07 05:55:00 $
 
 local({
   r <- 0.12
@@ -124,6 +124,16 @@ local({
   old.close.every <- closepairs(redwood, r, what="all", distinct=FALSE)
   old.cross.every <- crosspairs(on, off, r, what="all", distinct=FALSE)
   ## ...............................................
+  spatstat.options(op)
+  ## ...............................................
+
+  ## ...............................................
+  #' alternative code - execution only
+  op <- spatstat.options(closepairs.newcode=FALSE,
+                         closepairs.altcode=TRUE)
+  alt.close.ij <- closepairs(redwood, r, what="indices")
+  alt.close.ijd <- closepairs(redwood, r, what="ijd")
+  alt.close.all <- closepairs(redwood, r, what="all")
   spatstat.options(op)
   ## ...............................................
   
@@ -501,6 +511,23 @@ local({
   bw.relrisk(urkiola, hmax=20, method="leastsquares")
   bw.relrisk(urkiola, hmax=20, method="weightedleastsquares")
   spatstat.options(op)
+})
+
+local({
+  #' code in kernels.R
+  kernames <- c("gaussian", "rectangular", "triangular",
+                "epanechnikov", "biweight", "cosine", "optcosine")
+  X <- rnorm(20)
+  U <- runif(20)
+  for(ker in kernames) {
+    dX <- dkernel(X, ker)
+    fX <- pkernel(X, ker)
+    qU <- qkernel(U, ker)
+    m0 <- kernel.moment(0, 0, ker)
+    m1 <- kernel.moment(1, 0, ker)
+    m2 <- kernel.moment(2, 0, ker)
+    m3 <- kernel.moment(3, 0, ker)
+  }
 })
 
 reset.spatstat.options()

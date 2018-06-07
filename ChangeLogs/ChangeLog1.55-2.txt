@@ -979,3 +979,27 @@ Change log from 1.55-1 to 1.55-2
 ------------- passed R-3.5.0 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
+
+7 jun 2018
+
+   options.R
+   closepairs.R
+   tests/closeshave.R
+	Test of alternative C code for closepairs
+
+   simplepanel.Rd
+	More examples.
+
+   kernels.R
+	Bug fix.
+	
+   tests/density.R
+	Added tests of code in kernels.R
+	
+   DESCRIPTION
+   NEWS
+	version 1.55-1.049
+
+------------- passed R-3.5.0 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
