@@ -1003,3 +1003,23 @@ Change log from 1.55-1 to 1.55-2
 ------------- passed R-3.5.0 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
+
+08 jun 2018
+
+   options.R
+   edges2triangles.R
+   tests/trigraph.R
+	More coverage of code in trigraf.c
+
+   tests/colour.R
+	tweak
+	
+   DESCRIPTION
+   NEWS
+   Nickname.txt
+	Nickname "Long Tube Full of Demons"
+	version 1.55-1.050
+
+------------- passed R-3.5.0 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------

@@ -194,7 +194,7 @@ reset.spatstat.options()
 ##
 ##  Colour value manipulation and colour maps
 ##
-## $Revision: 1.2 $ $Date: 2018/05/02 05:55:44 $
+## $Revision: 1.3 $ $Date: 2018/06/08 13:33:39 $
 ##
 
 require(spatstat)
@@ -204,8 +204,8 @@ local({
    z <- to.grey(f)
 
    a <- colourmap(rainbow(12), range=as.Date(c("2018-01-01", "2018-12-31")))
-   a
-   summary(a)
+   print(a)
+   print(summary(a))
 
    b <- colourmap(rainbow(12), inputs=month.name)
    plot(b, vertical=FALSE)

@@ -1,7 +1,7 @@
 #
 #   edges2triangles.R
 #
-#   $Revision: 1.14 $  $Date: 2017/06/05 10:31:58 $
+#   $Revision: 1.15 $  $Date: 2018/06/08 13:12:09 $
 #
 
 edges2triangles <- function(iedge, jedge, nvert=max(iedge, jedge),
@@ -29,15 +29,20 @@ edges2triangles <- function(iedge, jedge, nvert=max(iedge, jedge),
   jedge <- jedge[oi]
   # call C
   storage.mode(nvert) <- storage.mode(iedge) <- storage.mode(jedge) <- "integer"
-  if(!usefriends) {
-    zz <- .Call("triograph",
-                nv=nvert, iedge=iedge, jedge=jedge,
-                PACKAGE="spatstat")
-  } else {
+  if(usefriends) {
     fr <- as.logical(friendly)
     storage.mode(fr) <- "integer"
     zz <- .Call("trioxgraph",
                 nv=nvert, iedge=iedge, jedge=jedge, friendly=fr,
+                PACKAGE="spatstat")
+  } else if(spatstat.options("fast.trigraph")) {
+    zz <- .Call("triograph",
+                nv=nvert, iedge=iedge, jedge=jedge,
+                PACKAGE="spatstat")
+  } else {
+    #' testing purposes only
+    zz <- .Call("trigraph",
+                nv=nvert, iedge=iedge, jedge=jedge,
                 PACKAGE="spatstat")
   }
   mat <- as.matrix(as.data.frame(zz))

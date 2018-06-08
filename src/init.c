@@ -201,6 +201,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"thinjumpequal",        (DL_FUNC) &thinjumpequal,         3},
     {"triDgraph",            (DL_FUNC) &triDgraph,             4},
     {"triDRgraph",           (DL_FUNC) &triDRgraph,            5},
+    {"trigraph",             (DL_FUNC) &trigraph,              3},
     {"triograph",            (DL_FUNC) &triograph,             3},
     {"trioxgraph",           (DL_FUNC) &trioxgraph,            4},
     {"VcloseIJDpairs",       (DL_FUNC) &VcloseIJDpairs,        4},

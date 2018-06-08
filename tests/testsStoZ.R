@@ -606,16 +606,24 @@ local({
 #'
 #'   Tests for C code in trigraf.c
 #'   
-#'  $Revision: 1.1 $  $Date: 2018/05/28 06:28:40 $
+#'  $Revision: 1.2 $  $Date: 2018/06/08 13:14:16 $
 #'
 require(spatstat)
 local({
+  #' called from deldir.R
   spatstat.deldir.setopt(FALSE, TRUE)
   A <- delaunay(redwood)
   spatstat.deldir.setopt(FALSE, FALSE)
   B <- delaunay(redwood)
   spatstat.deldir.setopt(TRUE, TRUE)
+  #' called from edges2triangles.R
+  op <- spatstat.options(fast.trigraph=FALSE)
+  fut <- ppm(cells ~ 1, Triplets(0.15))
+  spatstat.options(op)
 })
+
+reset.spatstat.options()
+
 
 #
 # tests/triplets.R
