@@ -114,5 +114,13 @@ progressreport(i, n,
      # some code ...
      sta <- progressreport(i, 20, state=sta)
   }
+
+  #' use text progress bar
+  sta <- list()
+  for(i in 1:10) {
+     # some code ...
+     sta <- progressreport(i, 10, state=sta, style="txtbar")
+  }
+
 }
 \keyword{print}

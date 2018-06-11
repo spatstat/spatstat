@@ -594,6 +594,11 @@ local({
   MR <- Kmark(AR,function(m1,m2){m1==m2})
   if(isTRUE(all.equal(MA,MR)))
     stop("Kmark unexpectedly ignores marks")
+
+  ## cover code blocks in markcorr.R
+  if(require(sm)) {
+    a <- markcrosscorr(betacells, method="sm")
+  }
 })
 #' tests/mctests.R
 #' Monte Carlo tests

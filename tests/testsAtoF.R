@@ -328,7 +328,7 @@ local({
 #'                    relrisk(), Smooth()
 #'                    and inhomogeneous summary functions
 #'
-#'  $Revision: 1.20 $  $Date: 2018/04/23 06:17:17 $
+#'  $Revision: 1.21 $  $Date: 2018/06/11 06:56:44 $
 #'
 
 require(spatstat)
@@ -429,6 +429,33 @@ local({
   pants(X=sporophores, at="points")
   pants(X=sporophores, relative=TRUE, at="points")
 
+  ## likewise 'relrisk.ppm'
+  fit <- ppm(ants ~ x)
+  rants <- function(..., model=fit) {
+    a <- relrisk(model, sigma=100, se=TRUE, ...)
+    return(TRUE)
+  }
+  rants()
+  rants(diggle=TRUE)
+  rants(edge=FALSE)
+  rants(diggle=TRUE, at="points")
+  rants(edge=FALSE, at="points")
+  rants(casecontrol=FALSE)
+  rants(relative=TRUE)
+  rants(casecontrol=FALSE, relative=TRUE)
+  rants(at="points")
+  rants(casecontrol=FALSE,at="points")
+  rants(relative=TRUE,at="points")
+  rants(casecontrol=FALSE, relative=TRUE,at="points")
+  rants(relative=TRUE, control="Cataglyphis", case="Messor")
+  rants(relative=TRUE, control="Cataglyphis", case="Messor", at="points")
+
+  ## more than 2 types
+  fut <- ppm(sporophores ~ x)
+  rants(model=fut)
+  rants(model=fut, at="points")
+  rants(model=fut, relative=TRUE, at="points")
+  
   ## execute Smooth.ppp and Smoothfun.ppp in all cases
   stroke <- function(...) {
     Z <- Smooth(longleaf, ..., at="pixels")

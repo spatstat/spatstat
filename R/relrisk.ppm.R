@@ -1,7 +1,7 @@
 ##
 ##  relrisk.ppm.R
 ##
-##  $Revision: 1.7 $ $Date: 2016/07/15 10:21:26 $
+##  $Revision: 1.8 $ $Date: 2018/06/11 06:55:12 $
 ##
 
 relrisk.ppm <- local({
@@ -206,7 +206,9 @@ relrisk.ppm <- local({
     # model matrices for data locations for each possible mark
     QM <- quad.ppm(model)
     Y <- QM$data
-    QR <- quadscheme.replicated(Y, unmark(Y[FALSE]))
+    suppressWarnings({
+      QR <- quadscheme.replicated(Y, unmark(Y[FALSE]))
+    })
     sourceid <- QR$param$sourceid
     ## canonical covariates 
     mm <- model.matrix(model, Q=QR)

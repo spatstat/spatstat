@@ -25,12 +25,12 @@
 \value{
   Null.
 }
+\examples{
+  sessionLibs()
+}
 \author{
   \adrian
-  
-  
-  and \rolf
-  
+  and \rolf.
 }
 \seealso{
   \code{\link[utils]{sessionInfo}}

@@ -1023,3 +1023,30 @@ Change log from 1.55-1 to 1.55-2
 ------------- passed R-3.5.0 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
+
+11 jun 2018
+
+   tests/quadschemes.R [New file]
+   	Tests of code for class 'quad'
+	
+   relrisk.ppm.R
+	Buglet fix
+
+   progressreport.Rd
+   sessionLibs.Rd
+   tests/density.R
+   tests/markcor.R
+   tests/resid.R
+	More examples and tests
+
+   DESCRIPTION
+        requires spatstat.data >= 1.3-0
+	
+   DESCRIPTION
+   NEWS
+	version 1.55-1.051
+        
+------------- passed R-3.5.0 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+

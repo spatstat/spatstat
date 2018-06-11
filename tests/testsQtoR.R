@@ -1,3 +1,22 @@
+#'
+#'    tests/quadschemes.R
+#'
+#'   $Revision: 1.2 $ $Date: 2018/06/11 08:36:39 $
+#'
+
+require(spatstat)
+local({
+  qu <- quadscheme(cells)
+  qm <- quadscheme(amacrine)
+  plot(qu)
+  plot(qm)
+  a <- param.quad(qu)
+  a <- param.quad(qm)
+  a <- equals.quad(qu)
+  a <- equals.quad(qm)
+  a <- domain(qu)
+  unitname(qu) <- c("Furlong", "Furlongs")
+})
 #'  tests/randoms.R
 #'   Further tests of random generation code
 #'  $Revision: 1.2 $ $Date: 2018/04/16 13:56:34 $
@@ -29,7 +48,7 @@ reset.spatstat.options()
 #'
 #'  Stuff related to residuals and residual diagnostics
 #'
-#'   $Revision: 1.1 $  $Date: 2016/09/02 10:56:59 $
+#'   $Revision: 1.2 $  $Date: 2018/06/11 07:07:31 $
 #'
 
 require(spatstat)
@@ -44,11 +63,20 @@ local({
   print(a)
   print(b)
 
-  diagnose.ppm(fit, which="marks")
+  d <- diagnose.ppm(fit, which="marks")
+  plot(d, plot.neg="discrete")
+  plot(d, plot.neg="imagecontour")
 
-  diagnose.ppm(fit, type="pearson", which="smooth")
-  diagnose.ppm(fit, type="pearson", which="x")
-  diagnose.ppm(fit, type="pearson", which="y")
+  d <- diagnose.ppm(fit, type="pearson", which="smooth")
+  plot(d, plot.smooth="image")
+  plot(d, plot.smooth="contour")
+  plot(d, plot.smooth="imagecontour")
+  
+  d <- diagnose.ppm(fit, type="pearson", which="x")
+  plot(d)
+  d <- diagnose.ppm(fit, type="pearson", which="y")
+  plot(d)
+  
   diagnose.ppm(fit, type="pearson", which="x", cumulative=FALSE)
   diagnose.ppm(fit, type="pearson", which="x", cumulative=FALSE)
   diagnose.ppm(fit, type="raw", plot.neg="discrete", plot.smooth="image")
