@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.55-1.051
+        CHANGES IN spatstat VERSION 1.55-1.052
 
 OVERVIEW
 
@@ -17,6 +17,8 @@ OVERVIEW
 
     o Geometrical operations on 'distfun' objects.
 
+    o Join vertices in a linear network.
+    
     o Distance map and contact distribution for rectangular structuring element.
     
     o An infinite number of infinitesimal bugs has been detected and fixed.
@@ -66,6 +68,9 @@ NEW FUNCTIONS
     
     o rectcontact
     Contact distribution function using rectangular structuring element.
+
+    o joinVertices
+    Join specified vertices in a linear network.
     
 SIGNIFICANT USER-VISIBLE CHANGES
 
@@ -110,6 +115,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o bdist.points
     Accelerated, for polygonal windows (thanks to Sebastian Meyer).
+
+    o linnet
+    When argument 'edges' is specified, the code now checks whether
+    any edges are duplicated.
     
 BUG FIXES
 

@@ -143,7 +143,9 @@ vertexdegree(x)
   \code{\link{volume}}
   and \code{\link{Window}}.
 
-  Special tools: \code{\link{thinNetwork}}, \code{\link{insertVertices}},
+  Special tools: \code{\link{thinNetwork}},
+  \code{\link{insertVertices}},
+  \code{\link{joinVertices}},
   \code{\link{connected.linnet}}.
   
   \code{\link{lixellate}} for dividing segments into shorter segments.

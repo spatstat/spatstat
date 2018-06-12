@@ -3,7 +3,7 @@
 #'
 #' Surgery on linear networks and related objects
 #'
-#' $Revision: 1.12 $  $Date: 2017/08/29 00:39:31 $
+#' $Revision: 1.13 $  $Date: 2018/06/12 02:55:59 $
 #'
 
 insertVertices <- function(L, ...) {
@@ -108,6 +108,29 @@ insertVertices <- function(L, ...) {
   marks(Xnew) <- marks(X)
   attr(Xnew, "id") <- newid
   return(Xnew)
+}
+
+joinVertices <- function(L, from, to) {
+  if(!inherits(L, c("lpp", "linnet")))
+    stop("L should be a linear network (linnet) or point pattern (lpp)",
+         call.=FALSE)
+  if(haspoints <- is.lpp(L)) {
+    X <- L
+    L <- as.linnet(L)
+    Xdf <- as.data.frame(X) 
+  }
+  if((missing(to) || is.null(to)) && !is.null(dim(from)) && ncol(from) == 2) {
+    to   <- from[,2]
+    from <- from[,1]
+  } 
+  newfrom <- as.integer(from)
+  newto <- as.integer(to)
+  edges <- cbind(c(L$from, newfrom), c(L$to, newto))
+  Lnew <- linnet(vertices(L), edges=edges, sparse=L$sparse)
+  if(!is.null(L$toler)) Lnew$toler <- L$toler
+  if(!haspoints) return(Lnew)
+  X <- lpp(Xdf, Lnew)
+  return(X)
 }
 
 thinNetwork <- function(X, retainvertices, retainedges) {

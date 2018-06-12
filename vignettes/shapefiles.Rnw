@@ -68,15 +68,18 @@ extension \texttt{shp}, for example \texttt{mydata.shp}.
 \section{Helper packages}
 \label{S:helpers}
 
-We'll use two other packages%
-\footnote{In previous versions of \pkg{spatstat},
-  the package \pkg{gpclib} was also needed for some tasks.
-  This is no longer required.}
- to handle shapefile data.
+We'll use two other packages to handle shapefile data.
 
 The \pkg{maptools} package is designed specifically for handling
 file formats for spatial data. It contains 
-facilities for reading and writing files in shapefile format.
+facilities for reading and writing files in shapefile format.%
+\footnote{
+  Some code in \pkg{maptools} is no longer maintained, 
+  and may give you a message recommending that you use the packages 
+  \pkg{rgdal} and \pkg{sf}. However these packages are more difficult
+  to install than \pkg{maptools} because of their software requirements. 
+  So we recommend that you try \pkg{maptools} first. 
+}
 
 The \pkg{sp} package supports a standard set of spatial data types
 in \R. These standard data types can be handled by many other packages,
@@ -111,6 +114,11 @@ using \texttt{readShapeSpatial}, for example
 <<eval=FALSE>>=
 x <- readShapeSpatial("mydata.shp")
 @ 
+In recent versions of \pkg{maptools} you may get a warning, 
+saying that this code is no longer supported,
+and recommending the packages \pkg{rgdal} and \pkg{sf}. 
+As far as we know, this warning is premature, as the code still 
+works fine!
 \item 
 To find out what kind of spatial objects are represented by the dataset,
 inspect its class:

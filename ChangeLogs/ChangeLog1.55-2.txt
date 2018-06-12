@@ -1050,3 +1050,27 @@ Change log from 1.55-1 to 1.55-2
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+   shapefiles.Rnw
+	Added note about new warnings in maptools
+
+12 jun 2018
+
+   linnet.R
+	linnet() checks for duplicated segments in 'edges'
+
+   linnetsurgery.R
+   joinVertices.Rd [New file]
+   	Add new segments to a network
+
+   linnet.Rd
+   methods.linnet.Rd
+   thinNetwork.Rd
+	added cross-references.
+
+   DESCRIPTION
+   NEWS
+	version 1.55-1.052
+        
+------------- passed R-3.5.0 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------

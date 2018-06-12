@@ -3,7 +3,7 @@
 #    
 #    Linear networks
 #
-#    $Revision: 1.66 $    $Date: 2018/03/07 02:20:39 $
+#    $Revision: 1.67 $    $Date: 2018/06/12 02:53:09 $
 #
 # An object of class 'linnet' defines a linear network.
 # It includes the following components
@@ -59,7 +59,7 @@ linnet <- function(vertices, m, edges, sparse=FALSE, warn=TRUE) {
     from <- ij[,1L]
     to   <- ij[,2L]
   } else {
-    # check (from, to) pairs
+    ## check (from, to) pairs
     stopifnot(is.matrix(edges) && ncol(edges) == 2)
     if(any((edges %% 1) != 0))
       stop("Entries of edges list should be integers")
@@ -72,7 +72,16 @@ linnet <- function(vertices, m, edges, sparse=FALSE, warn=TRUE) {
       stop("index out-of-bounds in edges list")
     from <- edges[,1L]
     to   <- edges[,2L]
-    # convert to adjacency matrix
+    ## avoid duplication in either sense
+    up <- (from < to)
+    ee <- cbind(ifelse(up, from , to), ifelse(up, to, from))
+    if(anyDuplicated(ee)) {
+      warning("Duplicated segments were ignored", call.=FALSE)
+      ok <- !duplicated(ee)
+      from <- from[ok]
+      to   <- to[ok]
+    }
+    ## convert to adjacency matrix
     if(!sparse) {
       m <- matrix(FALSE, np, np)
       m[edges] <- TRUE

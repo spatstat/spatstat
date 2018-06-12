@@ -50,7 +50,11 @@ insertVertices(L, \dots)
   Adrian Baddeley
 }
 \seealso{
-  \code{\link{as.lpp}}
+  \code{\link{as.lpp}},
+  \code{\link{linnet}},
+  \code{\link{methods.linnet}},
+  \code{\link{joinVertices}},
+  \code{\link{thinNetwork}}.
 }
 \examples{
    opa <- par(mfrow=c(1,3), mar=rep(0,4))

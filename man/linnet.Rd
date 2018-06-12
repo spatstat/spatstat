@@ -72,7 +72,9 @@ linnet(vertices, m, edges, sparse=FALSE, warn=TRUE)
   \code{\link[spatstat:methods.linnet]{methods.linnet}} for
   methods applicable to \code{linnet} objects.
 
-  Special tools: \code{\link{thinNetwork}}, \code{\link{insertVertices}},
+  Special tools: \code{\link{thinNetwork}},
+  \code{\link{insertVertices}},
+  \code{\link{joinVertices}}, 
   \code{\link{connected.linnet}}, \code{\link{lixellate}}.
   
   \code{\link{delaunayNetwork}} for the Delaunay triangulation
