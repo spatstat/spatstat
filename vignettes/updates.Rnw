@@ -143,6 +143,23 @@ the News and Release Notes for each update.
 
   \item \spst\ now suggests the package \pkg{fftwtools}.
 
+   \item Kernel estimate of intensity as a \texttt{function(x,y)}.
+
+   \item Extract discrete and continuous components of a measure.
+
+   \item Improvements and extensions to leverage and influence code.
+
+   \item Plot a line segment pattern using line widths.
+
+   \item Find connected components of each tile in a tessellation.
+
+   \item Geometrical operations on \texttt{distfun} objects.
+
+   \item Join vertices in a linear network.
+    
+   \item Distance map and contact distribution for 
+     rectangular structuring element.
+    
   \item Lurking variable plot for models fitted to several point patterns.
     
   \item New dataset \code{cetaceans}.
@@ -381,6 +398,52 @@ The following datasets have been added to the package.
 Following is a list of all the functions that have been added.
 
 \begin{itemize}
+    \item \texttt{densityfun}, \texttt{densityfun.ppp}:
+    Compute a kernel estimate of intensity of a point pattern
+    and return it as a function of spatial location.
+
+    \item \texttt{as.im.densityfun}:
+    Convert \texttt{function(x,y)} to a pixel image.
+
+    \item \texttt{measureDiscrete}, \texttt{measureContinuous}:
+    Extract the discrete and continuous components of a measure.
+
+    \item \texttt{connected.tess}:
+    Find connected components of each tile in a tessellation
+    and make a new tessellation composed of these pieces.
+
+    \item \texttt{dffit.ppm}:
+    Effect change diagnostic \texttt{DFFIT} for spatial point process models.
+
+    \item \texttt{shift.distfun}, \texttt{rotate.distfun}, 
+      \texttt{reflect.distfun}, \texttt{flipxy.distfun},
+    \texttt{affine.distfun}, \texttt{scalardilate.distfun}:
+    Methods for geometrical operations on \texttt{distfun} objects.
+
+    \item \texttt{rescale.distfun}:
+    Change the unit of length in a \texttt{distfun} object.
+
+    \item \texttt{plot.indicfun}:
+    Plot method for indicator functions created by \texttt{as.function.owin}.
+
+    \item \texttt{Smooth.leverage.ppm}, \texttt{Smooth.influence.ppm}:
+    Smooth a leverage function or an influence measure.
+
+    \item \texttt{integral.leverage.ppm}, \texttt{integral.influence.ppm}:
+    Compute the integral of a leverage function or an influence measure.
+
+    \item \texttt{mean.leverage.ppm}:
+    Compute the mean value of a leverage function.
+
+    \item \texttt{rectdistmap}:
+    Distance map using rectangular metric.
+    
+    \item \texttt{rectcontact}:
+    Contact distribution function using rectangular structuring element.
+
+    \item \texttt{joinVertices}:
+    Join specified vertices in a linear network.
+    
     \item \code{summary.ssf}:
       Summary method for a spatially sampled function (class \code{ssf}).
       
@@ -934,6 +997,14 @@ listed alphabetically.
   \item \texttt{as.im.leverage.ppm}:
   New argument \texttt{what}.
 
+  \item \texttt{as.im.nnfun}:
+  New argument \texttt{approx} chooses between a fast, approximate algorithm
+  and a slow, exact algorithm.
+
+  \item \texttt{as.im.smoothfun}:
+  New argument \texttt{approx} chooses between a fast, approximate algorithm
+  and a slow, exact algorithm.
+
 \item \texttt{as.layered}:
     Default method now handles a (vanilla) list of spatial objects.
 
@@ -978,6 +1049,9 @@ also carries these marks in the \verb!$lines! component.
 %%B
  \item \texttt{bdist.pixels}:
    Accelerated for polygonal windows. New argument \texttt{method}.
+
+ \item \texttt{bdist.points}:
+   Accelerated for polygonal windows. 
    
  \item \texttt{bind.fv}:
    New argument \texttt{clip}.
@@ -998,6 +1072,8 @@ also carries these marks in the \verb!$lines! component.
    \item The methods for classes \texttt{ppp}, \texttt{ppm}, \texttt{lpp}, 
      \texttt{lppm}, \texttt{slrm} have a new argument \texttt{interpolate}.
    \item Monte Carlo test runs much faster.
+   \item  More jittering is applied when \texttt{jitter=TRUE}.
+    Warnings about tied values should not occur any more.
    \end{itemize}
 
    
@@ -1345,6 +1421,7 @@ also carries these marks in the \verb!$lines! component.
   \item Computation has been vastly accelerated for models 
     with Geyer interaction
     fitted using isotropic or translation edge corrections.
+  \item Faster computation in many cases.
   \item  Virtually all models and edge corrections are now supported,
     using a ``brute force'' algorithm. This can be slow in some cases.
    \end{itemize}
@@ -1391,6 +1468,8 @@ also carries these marks in the \verb!$lines! component.
     row of \texttt{edges} specifies the \texttt{i}-th line segment in 
     \texttt{as.psp(L)}.
   \item New argument \texttt{warn}.
+  \item When argument \texttt{edges} is specified, the code now checks 
+    whether any edges are duplicated.
    \end{itemize}
 
   \item \texttt{lintess}:
@@ -1458,6 +1537,10 @@ also carries these marks in the \verb!$lines! component.
      the fitting algorithm. 
    \end{itemize}
 
+ \item \texttt{msr}:
+    Infinite and \texttt{NA} values are now detected (if \texttt{check=TRUE})
+    and are reset to zero, with a warning.
+    
 %%N
    
    \item \texttt{nbfires}:
@@ -1508,6 +1591,7 @@ also carries these marks in the \verb!$lines! component.
     New arguments \texttt{update} and \texttt{leaveoneout} control this.
    \item 
      New argument \texttt{close} for advanced use.
+   \item Now handles \texttt{correction="good"}
    \end{itemize}
 
  \item \code{persp.funxy}:
@@ -1544,6 +1628,7 @@ also carries these marks in the \verb!$lines! component.
      in the wrong spatial orientation.
    \item The number of tick marks in the colour ribbon can now be controlled
     using the argument \texttt{nint} in \texttt{ribargs}.
+  \item Improved behaviour when all pixel values are \texttt{NA}.
    \end{itemize}
 
  \item \texttt{plot.imlist}:
@@ -1614,6 +1699,11 @@ also carries these marks in the \verb!$lines! component.
      \item New arguments \texttt{equal.markscale} and \texttt{equal.ribbon}.
      \end{itemize}
 
+  \item \texttt{plot.psp}:
+    \begin{itemize}
+    \item Segments can be plotted with widths proportional to their mark values.
+    \item New argument \texttt{style}.
+    \end{itemize}
 
   \item \texttt{plot.pp3}:
     New arguments \texttt{box.front}, \texttt{box.back} 
@@ -1638,10 +1728,16 @@ also carries these marks in the \verb!$lines! component.
      \end{itemize}
 
   \item \code{plot.tess}:
-    This plot method can now fill each tile with a different colour.
-    New arguments \code{do.col}, \code{values}, \code{col} and 
-    \code{ribargs}.
-    Old argument \code{col} has been renamed \code{border} for consistency.
+    \begin{itemize}
+    \item This plot method can now fill each tile with a different colour.
+    \item     New arguments \code{do.col}, \code{values}, \code{col} and 
+      \code{ribargs}.
+      Old argument \code{col} has been renamed \code{border} for consistency.
+    \item  Now generates a separate plot panel for each column of marks,
+    if \texttt{do.col=TRUE}.
+  \item New argument \texttt{multiplot}.
+    \end{itemize}
+
     
    \item \texttt{plot.profilepl} ,\texttt{plot.quadratcount}, 
      \texttt{plot.quadrattest}, \texttt{plot.tess}:
@@ -1657,6 +1753,9 @@ also carries these marks in the \verb!$lines! component.
         from executing the plot of each panel.
       \end{itemize}
 
+    \item \texttt{plot.studpermutest}: This existing function now has a
+      help file.
+      
     \item \texttt{plot.symbolmap}:
       New argument \texttt{nsymbols} controls the number of symbols plotted.
 
@@ -1864,6 +1963,9 @@ also carries these marks in the \verb!$lines! component.
        New argument \texttt{saveparents}.
      \end{itemize}
 
+   \item \texttt{runifpointOnLines}, \texttt{rpoisppOnLines}:
+   	New argument \code{drop}.
+     
    \item \texttt{runifpointx}:
    	New argument \code{drop}.
 	
@@ -1898,7 +2000,9 @@ also carries these marks in the \verb!$lines! component.
    \item New argument \texttt{geometric} supports geometric-mean smoothing.
    \end{itemize}
 
- 
+ \item \texttt{solist}:
+   New argument \verb!.NameBase!
+   
    \item \texttt{spatstat.options}
    New options \texttt{fastthin} and \texttt{fastpois} 
    enable fast simulation algorithms.
@@ -2391,6 +2495,21 @@ of potential impact.
    Did not correctly handle one-line functions. 
    The resulting objects evaluated the wrong function in some cases.
    \bugger{1.45-0}{march 2016}{1.46-0}{july 2016}   
+
+ \item \texttt{kernel.moment}:
+   Result was incorrect for \texttt{kernel="cosine"} 
+   and \texttt{kernel="cosine"}.
+   \bugger{1.45-2}{may 2016}{1.51-2}{june 2018}   
+   
+ \item \verb![.msr!:
+   Format was mangled if the subset contained exactly one quadrature point.
+   \bugger{1.21-3}{january 2011}{1.51-2}{june 2018}   
+   
+ \item \texttt{tess}:
+    If a list of tiles was given, and the tiles were pixel images or masks,
+    their pixel resolutions were ignored, and reset to the default 
+    $128 \times 128$.
+   {\small (Bug fixed in \texttt{spatstat 1.51-2}, june 2018)}   
  \end{itemize}   
 
  %% LEVEL 4: 
