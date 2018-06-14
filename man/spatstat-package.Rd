@@ -1118,7 +1118,8 @@
   For model selection, you can also use 
   the generic functions \code{\link{step}}, \code{\link{drop1}} 
   and \code{\link{AIC}} on fitted point process models.
-
+  For variable selection, see \code{\link{sdr}}.
+  
   The theoretical models can also be simulated,
   for any choice of parameter values,
   using \code{\link{rThomas}}, \code{\link{rMatClust}},
@@ -1219,6 +1220,7 @@
   For model selection, you can also use 
   the generic functions \code{\link{step}}, \code{\link{drop1}} 
   and \code{\link{AIC}} on fitted point process models.
+  For variable selection, see \code{\link{sdr}}.
   
   See \code{\link{spatstat.options}} to control plotting of fitted model.
   
@@ -1413,6 +1415,7 @@
   including methods for \code{print}, \code{update}, \code{formula}
   and \code{terms}. Stepwise model selection is
   possible using \code{step} or \code{stepAIC}.
+  For variable selection, see \code{\link{sdr}}.
 }
 
 

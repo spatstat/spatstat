@@ -441,6 +441,11 @@ local({
 
   ## as.linim.linim
   xxcc <- as.linim(xcoord)
+  xxcceps <- as.linim(xcoord, eps=15)
+  xxccdel <- as.linim(xcoord, delta=30)
+  df1 <- attr(xxcc, "df")
+  df2 <- attr(xxccdel, "df")
+  df3 <- resampleNetworkDataFrame(df1, df2)
 
   ## linim with df provided
   Z <- as.im(function(x,y) {x-y}, Frame(simplenet))
@@ -449,6 +454,9 @@ local({
   XX <- linim(simplenet, Z, df=df)
   dfwithout <- df[, colnames(df) != "values"]
   XXX <- linim(simplenet, Z, df=dfwithout)
+  plot(XXX, zlim=c(-1,1))
+  plot(XXX, legend=FALSE)
+  plot(XXX, leg.side="bottom")
   
   ## lpp with multiple columns of marks
   M <- chicago

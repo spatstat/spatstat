@@ -1086,3 +1086,28 @@ Change log from 1.55-1 to 1.55-2
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+14 june 2018
+
+   tests/funnymarks.R
+   tests/lppstuff.R
+	More tests
+
+   man/sdr.Rd
+	Bug fix in table layout
+
+   DESCRIPTION
+   spatstat-package.Rd
+	Added mention of sdr()
+	
+   DESCRIPTION
+   NEWS
+	version 1.55-1.054
+
++++++++++++ installed spatstat.utils 1.8-2 +++++++++++
++++++++++++++ installed polyclip 1.9-0 +++++++++++++++
++++++++++++++ installed tkrplot 0.0-23 +++++++++++++++
++++++++++++++  installed rpanel 1.1-4  +++++++++++++++
+
+------------- passed R-3.5.0 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------

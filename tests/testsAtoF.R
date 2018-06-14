@@ -991,7 +991,7 @@ local({
 ##     tests/funnymarks.R
 ##
 ## tests involving strange mark values
-## $Revision: 1.3 $ $Date: 2015/12/29 08:54:49 $
+## $Revision: 1.5 $ $Date: 2018/06/14 01:50:19 $
 
 require(spatstat)
 local({
@@ -1031,6 +1031,23 @@ local({
   print(X)
   Y <- X %mark% data.frame(id=1:42, date=endoftime, dd=eotDate)
   print(Y)
+  md <- markformat(endoftime)
+  
+  ## mark formats
+  Z <- Y
+  marks(Z) <- marks(Z)[1,,drop=FALSE]
+  ms <- markformat(solist(cells, redwood))
+  marks(Z) <- factor(1:npoints(Z))
+  marks(Z)[12] <- NA
+  mz <- is.multitype(Z)
+  cZ <- coerce.marks.numeric(Z)
+  stopifnot(is.multitype(cells %mark% data.frame(a=factor(1:npoints(cells)))))
+
+  a <- numeric.columns(finpines)
+  b1 <- numeric.columns(amacrine)
+  b2 <- coerce.marks.numeric(amacrine)
+  d <- numeric.columns(cells)
+  f <- numeric.columns(longleaf)
 })
 # 
 #    tests/fvproblems.R

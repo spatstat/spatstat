@@ -54,9 +54,9 @@ sdr(X, covariates, method = c("DR", "NNIR", "SAVE", "SIR", "TSE"),
   \tabular{ll}{
     \code{method="DR"} \tab directional regression \cr
     \code{method="NNIR"} \tab nearest neighbour inverse regression \cr
-    \code{method="SAVE"} & sliced average variance estimation \cr
-    \code{method="SIR"} & sliced inverse regression \cr
-    \code{method="TSE"} & two-step estimation \cr
+    \code{method="SAVE"} \tab sliced average variance estimation \cr
+    \code{method="SIR"} \tab sliced inverse regression \cr
+    \code{method="TSE"} \tab two-step estimation \cr
   }
 
   The result includes a matrix \code{B} whose columns are estimates
