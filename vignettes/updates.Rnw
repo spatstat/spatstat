@@ -2499,17 +2499,17 @@ of potential impact.
  \item \texttt{kernel.moment}:
    Result was incorrect for \texttt{kernel="cosine"} 
    and \texttt{kernel="cosine"}.
-   \bugger{1.45-2}{may 2016}{1.51-2}{june 2018}   
+   \bugger{1.45-2}{may 2016}{1.56-0}{june 2018}   
    
  \item \verb![.msr!:
    Format was mangled if the subset contained exactly one quadrature point.
-   \bugger{1.21-3}{january 2011}{1.51-2}{june 2018}   
+   \bugger{1.21-3}{january 2011}{1.56-0}{june 2018}   
    
  \item \texttt{tess}:
     If a list of tiles was given, and the tiles were pixel images or masks,
     their pixel resolutions were ignored, and reset to the default 
     $128 \times 128$.
-   {\small (Bug fixed in \texttt{spatstat 1.51-2}, june 2018)}   
+   {\small (Bug fixed in \texttt{spatstat 1.56-0}, june 2018)}   
  \end{itemize}   
 
  %% LEVEL 4: 

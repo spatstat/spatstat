@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.55-1.054
+        CHANGES IN spatstat VERSION 1.56-0
 
 OVERVIEW
 
@@ -23,7 +23,7 @@ OVERVIEW
     
     o An infinite number of infinitesimal bugs has been detected and fixed.
 
-    o Version nickname: "Long Tube Full of Demons"
+    o Version nickname: "Bondi Tram"
 
 NEW FUNCTIONS
 

@@ -1,4 +1,4 @@
-Change log from 1.55-1 to 1.55-2
+Change log from 1.55-1 to 1.56-0
 ================================
 
 05 april 2018
@@ -1111,3 +1111,23 @@ Change log from 1.55-1 to 1.55-2
 ------------- passed R-3.5.0 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
+
+............. passed 'make bookcheck'  ...............
+
+------------- passed R-devel CMD check (2018-06-13 r74894) ................
+
+
+15 jun 2018
+
+   Nickname.txt
+	Version nickname 'Bondi Tram'
+	
+   DESCRIPTION
+   NEWS
+   updates.Rnw
+	version 1.56-0
+
+------------- passed R-3.5.0 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
