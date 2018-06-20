@@ -1,0 +1,23 @@
+Change log from 1.56-0 to 1.56-1
+================================
+
+15 june 2018
+
+   DESCRIPTION
+   NEWS
+   Nickname.txt
+	Initialised as version 1.56-0.001
+	Nicknamed 'This Face Intentionally Left Blank'
+
+20 june 2018
+
+   bugtable.R
+	Bug fix!!
+	(crashed if there were no bug reports!)
+	
+   DESCRIPTION
+	date-stamped
+
+------------- passed R-3.5.0 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------

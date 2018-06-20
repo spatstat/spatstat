@@ -1,7 +1,7 @@
 #'
 #'        bugtable.R
 #' 
-#'    $Revision: 1.3 $ $Date: 2017/01/07 04:20:31 $
+#'    $Revision: 1.4 $ $Date: 2018/06/20 03:26:25 $
 
 bugfixes <- function(sinceversion=NULL, sincedate=NULL,
                      package="spatstat",
@@ -34,7 +34,10 @@ bugfixes <- function(sinceversion=NULL, sincedate=NULL,
                               package=package),
                          list(sv=sinceversion)))
   }
-  if(!is.data.frame(a)) return(NULL)
+  if(!is.data.frame(a) || nrow(a) == 0) {
+    if(show) message("No bugs reported")
+    return(invisible(NULL))
+  }
   #' split each entry into lines
   alines <- strsplit(a$Text, "\n")
   #' extract first line
