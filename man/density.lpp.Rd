@@ -104,8 +104,8 @@
 \references{
 McSwiggan, G., Baddeley, A. and Nair, G. (2016)
 Kernel density estimation on a linear network.
-\emph{Scandinavian Journal of Statistics},
-In press.
+\emph{Scandinavian Journal of Statistics} \bold{44}, 324--345.
+
 
 Okabe, A. and Sugihara, K. (2012)
   \emph{Spatial analysis along networks}.

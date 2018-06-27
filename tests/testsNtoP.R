@@ -623,7 +623,7 @@ local({
 #
 # Things that might go wrong with predict()
 #
-#  $Revision: 1.5 $ $Date: 2018/04/30 04:32:49 $
+#  $Revision: 1.6 $ $Date: 2018/06/27 04:13:42 $
 #
 
 require(spatstat)
@@ -679,6 +679,13 @@ local({
 
   ## supporting code
   u <- model.se.image(fit, square(0.5), what="cv")
+
+  ##
+  fut <- ppm(cells ~ x, Strauss(0.1))
+  df <- data.frame(x=runif(10), y=runif(10),
+                   Interaction=sample(0:1, 10, TRUE))
+  m10 <- PPMmodelmatrix(fut, data=df)
+  mmm <- PPMmodelmatrix(fut, Q=quad.ppm(fut))
 })
 
 #
@@ -706,7 +713,13 @@ local({
   fit3 <- ppm(amacrine ~1, MultiStraussHard(types=c("off", "on"),
                                             iradii=r, hradii=r/5))
   chk(emend(fit3))
-  
+
+  #' code coverage
+  op <- spatstat.options(project.fast=TRUE)
+  fut <- emend(fit, trace=TRUE)
+  chk(fut)
+  spatstat.options(op)
+
   # hierarchical
   ra <- r
   r[2,1] <- NA
@@ -737,3 +750,5 @@ local({
   chk(f7)
 
 })
+
+reset.spatstat.options()

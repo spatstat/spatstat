@@ -4,7 +4,7 @@
 #	Class 'ppm' representing fitted point process models.
 #
 #
-#	$Revision: 2.144 $	$Date: 2018/03/14 09:09:36 $
+#	$Revision: 2.145 $	$Date: 2018/06/27 04:12:06 $
 #
 #       An object of class 'ppm' contains the following:
 #
@@ -765,7 +765,7 @@ model.matrix.ippm <- function(object,
 }
 
 PPMmodelmatrix <- function(object,
-                           data, 
+                           data = NULL, 
                            ...,
                            subset, Q=NULL, keepNA=TRUE, irregular=FALSE,
                            splitInf=FALSE) {
