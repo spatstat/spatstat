@@ -1,11 +1,29 @@
 
-        CHANGES IN spatstat VERSION 1.56-0.002
+        CHANGES IN spatstat VERSION 1.56-0.003
 
 OVERVIEW
 
-    o Internal bug fixes.
+    o Bug fixes.
 
     o Version nickname: "This Face Intentionally Left Blank"
+
+NEW FUNCTIONS
+
+    o as.im.expression
+    New method for 'as.im' for expressions.
+    
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o summary.lpp
+    Improved output.
+    
+BUG FIXES
+
+    o cut.lpp
+    Crashed if the marks were a data frame or hyperframe.
+    
+    o summary.lpp, print.summary.lpp
+    Output was garbled if the marks were a data frame or hyperframe.
     
         CHANGES IN spatstat VERSION 1.56-0
 

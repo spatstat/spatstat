@@ -1,7 +1,7 @@
 #
 # lpp.R
 #
-#  $Revision: 1.58 $   $Date: 2017/11/15 01:56:47 $
+#  $Revision: 1.60 $   $Date: 2018/07/01 06:23:11 $
 #
 # Class "lpp" of point patterns on linear networks
 
@@ -169,36 +169,47 @@ summary.lpp <- function(object, ...) {
   result$npoints <- np <- npoints(object)
   result$intensity <- np/result$totlength
   result$is.marked <- is.marked(object)
-  result$is.multitype <- is.marked(object)
-  if(result$is.marked) {
-    mks <- marks(object)
-    if(result$multiple.marks <- is.data.frame(mks)) {
-      result$marknames <- names(mks)
-      result$is.numeric <- FALSE
-      result$marktype <- "dataframe"
-      result$is.multitype <- FALSE
-    } else {
-      result$is.numeric <- is.numeric(mks)
-      result$marknames <- "marks"
-      result$marktype <- typeof(mks)
-      result$is.multitype <- is.multitype(object)
-    }
-    if(result$is.multitype) {
-      tm <- as.vector(table(mks))
-      tfp <- data.frame(frequency=tm,
-                        proportion=tm/sum(tm),
-                        intensity=tm/result$totlength,
-                        row.names=levels(mks))
-      result$marks <- tfp
-    } else 
-      result$marks <- summary(mks)
-  }
+  result$is.multitype <- is.multitype(object)
+  mks <- marks(object)  
+  result$markformat <- mkf <- markformat(mks)
+  switch(mkf,
+         none = {
+           result$multiple.marks <- FALSE
+         },
+         vector = {
+           result$multiple.marks <- FALSE
+           if(result$is.multitype) {
+             tm <- as.vector(table(mks))
+             tfp <- data.frame(frequency=tm,
+                               proportion=tm/sum(tm),
+                               intensity=tm/result$totlength,
+                               row.names=levels(mks))
+             result$marks <- tfp
+             result$is.numeric <- FALSE
+           } else {
+             result$marks <- summary(mks)
+             result$is.numeric <- is.numeric(mks)
+           }
+           result$marknames <- "marks"
+           result$marktype <- typeof(mks)
+         },
+         dataframe = ,
+         hyperframe = {
+           result$multiple.marks <- TRUE
+           result$marknames <- names(mks)
+           result$is.numeric <- FALSE
+           result$marktype <- mkf
+           result$is.multitype <- FALSE
+           result$marks <- summary(mks)
+         })
   class(result) <- "summary.lpp"
   return(result)
 }
 
 print.summary.lpp <- function(x, ...) {
-  splat("Point pattern on linear network")
+  what <- if(x$is.multitype) "Multitype point pattern" else
+          if(x$is.marked) "Marked point pattern" else "Point pattern"
+  splat(what, "on linear network")
   splat(x$npoints, "points")
   splat("Linear network with",
         x$nvert, "vertices and",
@@ -211,10 +222,10 @@ print.summary.lpp <- function(x, ...) {
   if(x$is.marked) {
     if(x$multiple.marks) {
       splat("Mark variables:", commasep(x$marknames, ", "))
-      cat("Summary:\n")
+      cat("Summary of marks:\n")
       print(x$marks)
     } else if(x$is.multitype) {
-      cat("Multitype:\n")
+      cat("Types of points:\n")
       print(signif(x$marks,dig))
     } else {
       splat("marks are ",
@@ -224,7 +235,7 @@ print.summary.lpp <- function(x, ...) {
       cat("Summary:\n")
       print(x$marks)
     }
-  }
+  } else splat("Unmarked")
   print(x$win, prefix="Enclosing window: ")
   invisible(NULL)
 }
@@ -567,7 +578,7 @@ cut.lpp <- function(x, z=marks(x), ...) {
   if(missing(z) || is.null(z)) {
     z <- marks(x, dfok=TRUE)
     if(is.null(z))
-      stop("x has no marks to cut")
+      stop("no data for grouping: z is missing, and x has no marks")
   } else {
     #' special objects
     if(inherits(z, "linim")) {
@@ -578,7 +589,6 @@ cut.lpp <- function(x, z=marks(x), ...) {
       z <- (as.linfun(z))(x)
     }
   }
-  #' standard data types
   if(is.character(z)) {
     if(length(z) == npoints(x)) {
       # interpret as a factor
@@ -590,20 +600,28 @@ cut.lpp <- function(x, z=marks(x), ...) {
       if(zname == "seg") z <- factor(z)
     } else stop("format of argument z not understood") 
   }
-  if(is.factor(z) || is.vector(z)) {
-    stopifnot(length(z) == npoints(x))
-    g <- if(is.factor(z)) z else if(is.numeric(z)) cut(z, ...) else factor(z)
-    marks(x) <- g
-    return(x)
-  }
-  if(is.data.frame(z) || is.matrix(z)) {
-    stopifnot(nrow(z) == npoints(x))
-    # take first column 
-    z <- z[,1L]
-    g <- if(is.numeric(z)) cut(z, ...) else factor(z)
-    marks(x) <- g
-    return(x)
-  }
+  switch(markformat(z),
+         none = stop("No data for grouping"),
+         vector = {
+           stopifnot(length(z) == npoints(x))
+           g <- if(is.factor(z)) z else
+                if(is.numeric(z)) cut(z, ...) else factor(z)
+           marks(x) <- g
+           return(x)
+         },
+         dataframe = ,
+         hyperframe = {
+           stopifnot(nrow(z) == npoints(x))
+           #' extract atomic data
+           z <- as.data.frame(z)
+           if(ncol(z) < 1) stop("No suitable data for grouping")
+           #' take first column of atomic data
+           z <- z[,1L,drop=TRUE]
+           g <- if(is.numeric(z)) cut(z, ...) else factor(z)
+           marks(x) <- g
+           return(x)
+         },
+         list = stop("Don't know how to split according to a list"))
   stop("Format of z not understood")
 }
 

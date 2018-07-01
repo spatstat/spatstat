@@ -80,13 +80,7 @@ quantess(M, Z, n, \dots)
 \author{
   Original idea by Ute Hahn.
   Implemented in \code{spatstat} by
-\adrian
-
-
-\rolf
-
-and \ege
-.
+  \spatstatAuthors.
 }
 \seealso{
   \code{\link{tess}}, \code{\link{quadrats}}, \code{\link{quantile}},

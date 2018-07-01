@@ -3,7 +3,7 @@
 #
 #    conversion to class "im"
 #
-#    $Revision: 1.52 $   $Date: 2018/04/13 07:17:05 $
+#    $Revision: 1.53 $   $Date: 2018/07/01 08:08:39 $
 #
 #    as.im()
 #
@@ -160,6 +160,12 @@ as.im.function <- function(X, W=NULL, ...,
   }
   if(ns == 1 && drop) return(outlist[[1L]])
   return(as.imlist(outlist)) 
+}
+
+as.im.expression <- function(X, W=NULL, ...) {
+  e <- parent.frame()
+  f <- function(x,y, ...) eval(X, envir=list(x=x, y=y), enclos=e)
+  as.im(f, W=W, ...)
 }
 
 as.im.matrix <- function(X, W=NULL, ...) {

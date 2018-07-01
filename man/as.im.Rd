@@ -7,6 +7,7 @@
 \alias{as.im.tess}
 \alias{as.im.function}
 \alias{as.im.funxy}
+\alias{as.im.expression}
 \alias{as.im.distfun}
 \alias{as.im.nnfun}
 \alias{as.im.densityfun}
@@ -39,6 +40,8 @@
         na.replace=NULL, strict=FALSE, drop=TRUE)
 
   \method{as.im}{funxy}(X, W=Window(X), \dots)
+
+  \method{as.im}{expression}(X, W=NULL, \dots)
 
   \method{as.im}{distfun}(X, W=NULL, \dots,
         eps=NULL, dimyx=NULL, xy=NULL,
@@ -161,7 +164,8 @@
     an object of class \code{"funxy"} representing a
     \code{function(x,y,...)} defined in a spatial region.
     The function will be evaluated as described above.
-    The window \code{W} defaults to the domain of definition of the function.
+    The window \code{W} defaults to the domain of definition of the
+    function.
     \item
     an object of class \code{"funxy"} which also belongs to one of
     the following special classes. If \code{approx=TRUE} (the default),
@@ -191,6 +195,17 @@
       The fast approximation is the Fast Fourier Transform
       algorithm in \code{\link{Smooth.ppp}}.
     }
+    \item
+    An \code{expression} involving the variables \code{x} and \code{y}
+    representing the spatial coordinates, and possibly also involving other
+    variables.
+    The additional argument \code{W} must be present; it will be converted to
+    a binary image mask. The expression \code{X} will be evaluated
+    in an environment where \code{x} and \code{y} are
+    \bold{vectors} containing the spatial coordinates
+    of all the pixels in the image mask.
+    Evaluation of the expression \code{X} must yield a vector or factor,
+    of the same length as \code{x} and \code{y}, giving the pixel values.
     \item
     a list with entries \code{x, y, z} in the format expected by
     the standard \code{R} functions
@@ -275,17 +290,20 @@
   # function
   Z <- as.im(function(x,y) {x^2 + y^2}, unit.square())
   image(Z)
+  # or as an expression
+  Z <- as.im(expression(x^2+y^2), square(1))
+
   # function with extra arguments
   f <- function(x, y, x0, y0) {
       sqrt((x - x0)^2 + (y-y0)^2)
   }
   Z <- as.im(f, unit.square(), x0=0.5, y0=0.5)
   image(Z)
+
   # Revisit the Sixties
-  data(letterR)
   Z <- as.im(f, letterR, x0=2.5, y0=2)
   image(Z)
-  # usual convention in S
+  # usual convention in R
   stuff <- list(x=1:10, y=1:10, z=matrix(1:100, nrow=10))
   Z <- as.im(stuff)
   # convert to finer grid

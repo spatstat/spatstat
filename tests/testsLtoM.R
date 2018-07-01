@@ -283,7 +283,7 @@ local({
 #
 # Tests for lpp code
 #
-#  $Revision: 1.14 $  $Date: 2018/06/03 09:32:17 $
+#  $Revision: 1.19 $  $Date: 2018/07/01 07:49:36 $
 
 
 require(spatstat)
@@ -425,6 +425,7 @@ local({
 
   ## Test algorithms for boundingradius.linnet
   L <- as.linnet(chicago, sparse=TRUE)
+  L$boundingradius <- NULL # artificially remove
   opa <- spatstat.options(Clinearradius=FALSE)
   bR <- as.linnet(L, sparse=FALSE)$boundingradius
   spatstat.options(Clinearradius=TRUE)
@@ -433,7 +434,15 @@ local({
   if(abs(bR-bC) > 0.001 * (bR+bC)/2)
     stop("Disagreement between R and C algorithms for boundingradius.linnet",
          call.=FALSE)
-    
+
+  ## linnet things
+  is.connected(as.linnet(dendrite))
+  zik <- rescale(chicago, 39.37/12, "m")
+  Simon <- simplenet
+  unitname(Simon) <- list("metre", "metres", 0.5)
+  b <- rescale(Simon)
+  ds <- density(simplenet, 0.05)
+  
   ## integral.linim with missing entries
   xcoord <- linfun(function(x,y,seg,tp) { x }, domain(chicago))
   xcoord <- as.linim(xcoord, dimyx=32)
@@ -463,7 +472,14 @@ local({
   marks(M) <- cbind(type=marks(M), data.frame(distnearest=nndist(M)))
   plot(M, main="")
   summary(M)
+  MM <- cut(M)
 
+  #' other cases
+  CX <- cut(chicago)
+  nd <- nndist(spiders)
+  SX <- cut(spiders %mark% nd, breaks=3)
+  SX <- cut(spiders, nd, breaks=c(0,100,200,Inf), include.lowest=TRUE)
+  
   ## linequad
   X <- runiflpp(6, simplenet)
   Y <- X %mark% factor(rep(c("A", "B"), 3))

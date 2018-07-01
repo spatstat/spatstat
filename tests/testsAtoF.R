@@ -212,6 +212,30 @@ local({
    plot(b, vertical=TRUE)
    
 })
+#'
+#'   tests/contrib.R
+#'
+#'   Tests for user-contributed code in spatstat
+#'
+#'   $Revision: 1.1 $  $Date: 2018/07/01 04:48:25 $
+
+require(spatstat)
+local({
+  #' Jinhom
+  #' Marie-Colette van Lieshout and Ottmar Cronie
+  X <- redwood3
+  fit <- ppm(X ~ polynom(x,y,2))
+  lam <- predict(fit)
+  lamX <- fitted(fit, dataonly=TRUE)
+  lmin <- 0.9 * min(lam)
+  g1 <- Ginhom(X, lambda=fit, update=TRUE)
+  g2 <- Ginhom(X, lambda=fit, update=FALSE, lmin = lmin)
+  g3 <- Ginhom(X, lambda=lam,  lmin=lmin)
+  g4 <- Ginhom(X, lambda=lamX, lmin=lmin)
+  f1 <- Finhom(X, lambda=fit, update=TRUE)
+  f2 <- Finhom(X, lambda=fit, update=FALSE)
+  f3 <- Finhom(X, lambda=lam,  lmin=lmin)
+})
 # tests/correctC.R
 # check for agreement between C and interpreted code
 # for interpoint distances etc.

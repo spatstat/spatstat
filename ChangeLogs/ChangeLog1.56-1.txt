@@ -42,3 +42,27 @@ Change log from 1.56-0 to 1.56-1
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+01 july 2018
+
+   lpp.R
+	Bug fix and improvement in summary.lpp
+	Bug fix in cut.lpp
+	
+   tests/lppstuff.R
+	More tests
+	Bug fix in test
+	
+   tests/contrib.R [New file]
+   	Tests of user-contributed code
+
+   as.im.R
+   as.im.Rd
+	New method 'as.im.expression'
+	
+   DESCRIPTION
+   NEWS
+	Version 1.56-0.003
+
+------------- passed R-3.5.0 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
