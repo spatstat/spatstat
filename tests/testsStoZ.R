@@ -586,7 +586,7 @@ parres(mod2, "x")
 #'
 #'     Tests of 3D code 
 #'
-#'      $Revision: 1.2 $ $Date: 2018/06/06 03:05:12 $
+#'      $Revision: 1.3 $ $Date: 2018/07/02 15:40:29 $
 #'
 
 require(spatstat)
@@ -596,6 +596,11 @@ local({
   d <- pairdist(X, periodic=TRUE, squared=TRUE)
   d <- crossdist(X, Y, squared=TRUE)
   d <- crossdist(X, Y, squared=TRUE, periodic=TRUE)
+  #' 
+  h <- has.close(X, 0.2)
+  h <- has.close(X, 0.2, periodic=TRUE)
+  h <- has.close(X, 0.2, Y=Y)
+  h <- has.close(X, 0.2, Y=Y, periodic=TRUE)
   #' older code
   gg1 <- g3engine(X$x, X$y, X$z, correction="Hanisch G3")
   gg2 <- g3engine(X$x, X$y, X$z, correction="minus sampling")
@@ -628,23 +633,26 @@ reset.spatstat.options()
 #
 # tests/triplets.R
 #
-# test code for triplet interaction
+# test code for triplet interaction and associated summary function Tstat 
 #
-# $Revision: 1.5 $ $Date: 2015/12/29 08:54:49 $
+# $Revision: 1.6 $ $Date: 2018/07/02 15:51:26 $
 #
 require(spatstat)
 local({
   fit <- ppm(redwood ~1, Triplets(0.1))
   fit
   suffstat(fit)
-  # hard core (zero triangles, coefficient is NA)
+  #' hard core (zero triangles, coefficient is NA)
   fit0 <- ppm(cells ~1, Triplets(0.05))
   fit0
   suffstat(fit0)
-  # bug case (1 triangle in data)
+  #' bug case (1 triangle in data)
   fit1 <- ppm(cells ~1, Triplets(0.15))
   fit1
   suffstat(fit1)
+  #' Tstat function, all code blocks
+  a <- Tstat(redwood, ratio=TRUE,
+             correction=c("none", "border", "bord.modif", "translate"))
 })
 #
 #  tests/undoc.R

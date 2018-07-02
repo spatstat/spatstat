@@ -1,7 +1,7 @@
 #
 #	tstat.R		Estimation of T function
 #
-#	$Revision: 1.11 $	$Date: 2016/02/11 09:36:11 $
+#	$Revision: 1.12 $	$Date: 2018/07/02 15:45:48 $
 #
 
 Tstat <- local({
@@ -96,7 +96,7 @@ Tstat <- local({
         denom <- lambda2 * areaW
         numT <- eval.fv(denom * TT)
         denT <- eval.fv(denom + TT * 0)
-        attributes(numT) <- attributes(denT) <- attributes(T)
+        attributes(numT) <- attributes(denT) <- attributes(TT)
         attr(numT, "desc")[2] <- "numerator for theoretical Poisson %s"
         attr(denT, "desc")[2] <- "denominator for theoretical Poisson %s"
       }

@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.56-0.004
+        CHANGES IN spatstat VERSION 1.56-0.005
 
 OVERVIEW
 
@@ -29,6 +29,10 @@ BUG FIXES
 
     o integral.linim
     Crashed if the function had NA values.
+    Fixed.
+
+    o Tstat
+    Crashed if ratio=TRUE.
     Fixed.
     
         CHANGES IN spatstat VERSION 1.56-0
