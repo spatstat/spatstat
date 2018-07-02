@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.56-0.003
+        CHANGES IN spatstat VERSION 1.56-0.004
 
 OVERVIEW
 
@@ -21,9 +21,15 @@ BUG FIXES
 
     o cut.lpp
     Crashed if the marks were a data frame or hyperframe.
+    Fixed.
     
     o summary.lpp, print.summary.lpp
     Output was garbled if the marks were a data frame or hyperframe.
+    Fixed.
+
+    o integral.linim
+    Crashed if the function had NA values.
+    Fixed.
     
         CHANGES IN spatstat VERSION 1.56-0
 

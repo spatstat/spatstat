@@ -1,7 +1,7 @@
 #
 # linim.R
 #
-#  $Revision: 1.50 $   $Date: 2018/04/11 06:10:58 $
+#  $Revision: 1.51 $   $Date: 2018/07/02 08:45:54 $
 #
 #  Image/function on a linear network
 #
@@ -659,7 +659,8 @@ integral.linim <- function(f, domain=NULL, ...){
   if(anyNA(vals)) {
     ##    p <- as.numeric(by(!is.na(vals), seg, mean, ..., na.rm=TRUE))
     ##    p[is.na(p)] <- 0
-    pnum <- tapplysum(!is.na(vals), list(seg), na.rm=FALSE)
+    defined <- as.numeric(!is.na(vals))
+    pnum <- tapplysum(defined, list(seg), na.rm=FALSE)
     p <- pnum/nper
     len <- len * p
   }
