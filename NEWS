@@ -1,8 +1,10 @@
 
-        CHANGES IN spatstat VERSION 1.56-0.005
+        CHANGES IN spatstat VERSION 1.56-0.006
 
 OVERVIEW
 
+    o We thank Agustin Lobo for contributions.
+    
     o Bug fixes.
 
     o Version nickname: "This Face Intentionally Left Blank"
@@ -16,6 +18,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o summary.lpp
     Improved output.
+
+    o intersect.owin
+    Argument 'fatal' now defaults to FALSE.
     
 BUG FIXES
 
@@ -33,6 +38,11 @@ BUG FIXES
 
     o Tstat
     Crashed if ratio=TRUE.
+    Fixed.
+
+    o intersect.owin
+    Ignored argument 'fatal' in some cases.
+    [Spotted by Agustin Lobo.]
     Fixed.
     
         CHANGES IN spatstat VERSION 1.56-0

@@ -7,7 +7,7 @@
   Yields the intersection, union or set subtraction of windows.
 }
 \usage{
-   intersect.owin(\dots, fatal=TRUE, p)
+   intersect.owin(\dots, fatal=FALSE, p)
    union.owin(\dots, p)
    setminus.owin(A, B, \dots, p)
 }
@@ -52,21 +52,17 @@
   must be named arguments of \code{\link{as.mask}}.
 
   If the intersection is empty, then if \code{fatal=FALSE}
-  the result is NULL, while if \code{fatal=TRUE} an error occurs.
+  the result is an empty window or \code{NULL},
+  while if \code{fatal=TRUE} an error occurs.
 }
 
 \author{
-\adrian
-
-
-\rolf
-
-and \ege
-
+\spatstatAuthors.
 }
 \seealso{
   \code{\link{is.subset.owin}},
   \code{\link{overlap.owin}},
+  \code{\link{is.empty}},
   \code{\link{boundingbox}},
   \code{\link{owin.object}}
 }

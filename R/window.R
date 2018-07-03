@@ -3,7 +3,7 @@
 #
 #	A class 'owin' to define the "observation window"
 #
-#	$Revision: 4.180 $	$Date: 2018/02/14 08:25:09 $
+#	$Revision: 4.181 $	$Date: 2018/07/03 03:08:39 $
 #
 #
 #	A window may be either
@@ -1028,9 +1028,9 @@ print.owin <- function(x, ..., prefix="window: ") {
            rectname <- paste0(prefix, "rectangle =")
          },
          polygonal={
-           splat(paste0(prefix, "polygonal boundary"))
-           if(length(x$bdry) == 0)
-             splat("window is empty")
+           nonemp <- (length(x$bdry) != 0)
+           splat(paste0(prefix,
+                        if(nonemp) "polygonal boundary" else "empty"))
            rectname <- "enclosing rectangle:"
          },
          mask={

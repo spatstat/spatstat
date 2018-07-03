@@ -1,7 +1,7 @@
 #
 #	wingeom.R	Various geometrical computations in windows
 #
-#	$Revision: 4.125 $	$Date: 2017/11/15 01:30:34 $
+#	$Revision: 4.128 $	$Date: 2018/07/03 04:00:30 $
 #
 
 volume.owin <- function(x) { area.owin(x) }
@@ -262,7 +262,7 @@ function(x, i, ...) {
 #
 #
 
-intersect.owin <- function(..., fatal=TRUE, p) {
+intersect.owin <- function(..., fatal=FALSE, p) {
   argh <- list(...)
   ## p is a list of arguments to polyclip::polyclip
   if(missing(p) || is.null(p)) p <- list()
@@ -292,9 +292,18 @@ intersect.owin <- function(..., fatal=TRUE, p) {
 
   ## at least one window
   A <- argh[[1L]]
+  if(is.empty(A)) {
+    if(fatal) stop("Intersection is empty", call.=FALSE)
+    return(A)
+  }
   if(nwin == 1) return(A)
+
   ## at least two windows
   B <- argh[[2L]]
+  if(is.empty(B)) {
+    if(fatal) stop("Intersection is empty", call.=FALSE)
+    return(B)
+  }
   
   if(nwin > 2) {
     ## handle union of more than two windows
@@ -302,16 +311,15 @@ intersect.owin <- function(..., fatal=TRUE, p) {
     ## determine a common set of parameters for polyclip
     p <- commonPolyclipArgs(A, B, do.call(boundingbox, windows), p=p)
     ## absorb all windows into B
-    for(i in seq_along(windows))
+    for(i in seq_along(windows)) {
       B <- do.call(intersect.owin,
-                   append(list(B, windows[[i]], p=p),
-                            rasterinfo))
+                   append(list(B, windows[[i]], p=p, fatal=fatal),
+                          rasterinfo))
+      if(is.empty(B)) return(B)
+    }
   }
 
-  ## There are now only two windows
-  if(is.empty(A)) return(A)
-  if(is.empty(B)) return(B)
-
+  ## There are now only two windows, which are not empty.
   if(identical(A, B))
     return(A)
 
@@ -324,14 +332,11 @@ intersect.owin <- function(..., fatal=TRUE, p) {
   xr <- intersect.ranges(A$xrange, B$xrange, fatal=fatal)
   yr <- intersect.ranges(A$yrange, B$yrange, fatal=fatal)
   if(!fatal && (is.null(xr) || is.null(yr)))
-    return(NULL)
+    return(emptywindow(A))
+  #' non-empty intersection of Frames
   C <- owin(xr, yr, unitname=uname)
 
-  if(is.empty(A) || is.empty(B))
-    return(emptywindow(C))
-           
   # Determine type of intersection
-  
   Arect <- is.rectangle(A)
   Brect <- is.rectangle(B)
 #  Apoly <- is.polygonal(A)
@@ -351,8 +356,10 @@ intersect.owin <- function(..., fatal=TRUE, p) {
                   append(list(a, b, "intersection",
                               fillA="nonzero", fillB="nonzero"),
                          p))
-    if(length(ab)==0)
+    if(length(ab)==0) {
+      if(fatal) stop("Intersection is empty", call.=FALSE)
       return(emptywindow(C))
+    }
     # ensure correct polarity
     totarea <- sum(unlist(lapply(ab, Area.xypolygon)))
     if(totarea < 0)
@@ -374,15 +381,29 @@ intersect.owin <- function(..., fatal=TRUE, p) {
   if(Bmask)
     B <- trim.mask(B, C)
 
+  #' trap empty windows
+  if(is.empty(A)) {
+    if(fatal) stop("Intersection is empty", call.=FALSE)
+    return(A)
+  }
+  if(is.empty(B)) {
+    if(fatal) stop("Intersection is empty", call.=FALSE)
+    return(B)
+  }
+  
   # Did the user specify the pixel raster?
   if(length(rasterinfo) > 0) {
     # convert to masks with specified parameters, and intersect
     if(Amask) {
       A <- do.call(as.mask, append(list(A), rasterinfo))
-      return(restrict.mask(A, B))
+      AB <- restrict.mask(A, B)
+      if(fatal && is.empty(AB)) stop("Intersection is empty", call.=FALSE)
+      return(AB)
     } else {
       B <- do.call(as.mask, append(list(B), rasterinfo))
-      return(restrict.mask(B, A))
+      BA <- restrict.mask(B,A)
+      if(fatal && is.empty(BA)) stop("Intersection is empty", call.=FALSE)
+      return(BA)
     }
   } 
   
@@ -393,28 +414,37 @@ intersect.owin <- function(..., fatal=TRUE, p) {
       return(A)
 
   # One mask and one polygon?
-  if(Amask && !Bmask) 
-    return(restrict.mask(A, B))
-  if(!Amask && Bmask)
-    return(restrict.mask(B, A))
+  if(Amask && !Bmask) {
+    AB <- restrict.mask(A, B)
+    if(fatal && is.empty(AB)) stop("Intersection is empty", call.=FALSE)
+    return(AB)
+  }
+  if(!Amask && Bmask) {
+    BA <- restrict.mask(B, A)
+    if(fatal && is.empty(BA)) stop("Intersection is empty", call.=FALSE)
+    return(BA)
+  }
 
   # Two existing masks?
   if(Amask && Bmask) {
     # choose the finer one
-    if(A$xstep <= B$xstep)
-      return(restrict.mask(A, B))
-    else
-      return(restrict.mask(B, A))
+    AB <- if(A$xstep <= B$xstep) restrict.mask(A, B) else restrict.mask(B, A)
+    if(fatal && is.empty(AB)) stop("Intersection is empty", call.=FALSE)
+    return(AB)
   }
 
   # No existing masks. No clipping applied so far.
   # Convert one window to a mask with default pixel raster, and intersect.
   if(Arect) {
     A <- as.mask(A)
-    return(restrict.mask(A, B))
+    AB <- restrict.mask(A, B)
+    if(fatal && is.empty(AB)) stop("Intersection is empty", call.=FALSE)
+    return(AB)
   } else {
     B <- as.mask(B)
-    return(restrict.mask(B, A))
+    BA <- restrict.mask(B, A)
+    if(fatal && is.empty(BA)) stop("Intersection is empty", call.=FALSE)
+    return(BA)
   }
 }
 
