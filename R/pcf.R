@@ -1,7 +1,7 @@
 #
 #   pcf.R
 #
-#   $Revision: 1.64 $   $Date: 2017/06/05 10:31:58 $
+#   $Revision: 1.66 $   $Date: 2018/07/06 08:33:46 $
 #
 #
 #   calculate pair correlation function
@@ -32,6 +32,8 @@ pcf.ppp <- function(X, ..., r=NULL,
   lambda2area <- areaW * lambda^2
 
   kernel <- match.kernel(kernel)
+
+  rmaxdefault <- rmax.rule("K", win, lambda)        
   
   if(!is.null(domain)) {
     # estimate based on contributions from a subdomain
@@ -55,10 +57,11 @@ pcf.ppp <- function(X, ..., r=NULL,
       denom <- sum(indom == "TRUE") * lambda
       g <- ratfv(as.data.frame(g), NULL, denom,
                  "r", quote(g(r)),
-                 "theo", NULL, alim,
+                 "theo", NULL, c(0, rmaxdefault), 
                  attr(g, "labl"), attr(g, "desc"), fname="g",
                  ratio=TRUE)
     }
+    unitname(g) <- unitname(X)
     if(var.approx)
       warning("var.approx is not implemented when 'domain' is given")
     return(g)
@@ -97,7 +100,6 @@ pcf.ppp <- function(X, ..., r=NULL,
   ########## r values ############################
   # handle arguments r and breaks 
 
-  rmaxdefault <- rmax.rule("K", win, lambda)        
   breaks <- handle.r.b.args(r, NULL, win, rmaxdefault=rmaxdefault)
   if(!(breaks$even))
     stop("r values must be evenly spaced")
@@ -227,7 +229,7 @@ pcf.ppp <- function(X, ..., r=NULL,
       vnum <- vden * vest
       out <- bind.ratfv(out,
                         data.frame(v=vnum),
-                        data.frame(c=vden),
+                        data.frame(v=vden),
                         "v(r)", 
                         "approximate variance of %s",
                         "v")

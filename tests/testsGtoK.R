@@ -220,9 +220,9 @@ local({
 })#'
 #'   tests/Kfuns.R
 #'
-#'   Various K and L functions
+#'   Various K and L functions and pcf
 #'
-#'   $Revision: 1.2 $  $Date: 2018/05/06 05:45:38 $
+#'   $Revision: 1.3 $  $Date: 2018/07/06 06:37:44 $
 #'
 
 require(spatstat)
@@ -238,6 +238,10 @@ local({
              weights=Z, ratio=TRUE)
   Kn <- Kest(cells, correction="none",
              weights=Z, ratio=TRUE)
+  #' pcf.ppp special code blocks
+  pr  <- pcf(cells, ratio=TRUE, var.approx=TRUE)
+  pc  <- pcf(cells, domain=square(0.5))
+  pcr <- pcf(cells, domain=square(0.5), ratio=TRUE)
   #' inhomogeneous multitype
   fit <- ppm(amacrine ~ marks)
   K1 <- Kcross.inhom(amacrine, lambdaX=fit)

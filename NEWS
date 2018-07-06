@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.56-0.007
+        CHANGES IN spatstat VERSION 1.56-0.009
 
 OVERVIEW
 
@@ -53,6 +53,10 @@ BUG FIXES
 
     o plot.tess
     Crashed if do.col=TRUE and 'values' was a factor.
+    Fixed.
+
+    o pcf.ppp
+    Crashed if 'domain' was given and ratio=TRUE.
     Fixed.
     
     o "[<-.sparse3Darray"
