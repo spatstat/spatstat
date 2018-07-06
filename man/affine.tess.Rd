@@ -1,5 +1,6 @@
 \name{affine.tess} 
 \alias{reflect.tess} 
+\alias{flipxy.tess} 
 \alias{shift.tess} 
 \alias{rotate.tess} 
 \alias{scalardilate.tess} 
@@ -11,6 +12,8 @@
 }
 \usage{
   \method{reflect}{tess}(X)
+
+  \method{flipxy}{tess}(X)
 
   \method{shift}{tess}(X, \dots)
 
@@ -45,6 +48,7 @@
 \details{
   These are method for the generic functions 
 \code{\link{reflect}},
+\code{\link{flipxy}},
 \code{\link{shift}},
 \code{\link{rotate}}, 
 \code{\link{scalardilate}},

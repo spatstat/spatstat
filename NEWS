@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.56-0.006
+        CHANGES IN spatstat VERSION 1.56-0.007
 
 OVERVIEW
 
@@ -13,6 +13,9 @@ NEW FUNCTIONS
 
     o as.im.expression
     New method for 'as.im' for expressions.
+
+    o flipxy.tess
+    Method for 'flipxy' for tessellations.
     
 SIGNIFICANT USER-VISIBLE CHANGES
 
@@ -21,6 +24,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o intersect.owin
     Argument 'fatal' now defaults to FALSE.
+
+    o quadrature schemes (class "quad" and "logiquad")
+    Improved print and summary methods.
     
 BUG FIXES
 
@@ -43,6 +49,15 @@ BUG FIXES
     o intersect.owin
     Ignored argument 'fatal' in some cases.
     [Spotted by Agustin Lobo.]
+    Fixed.
+
+    o plot.tess
+    Crashed if do.col=TRUE and 'values' was a factor.
+    Fixed.
+    
+    o "[<-.sparse3Darray"
+    Crashed if 'value' was one-dimensional
+    and the indices i, j, k specified a two-dimensional subset of x.
     Fixed.
     
         CHANGES IN spatstat VERSION 1.56-0

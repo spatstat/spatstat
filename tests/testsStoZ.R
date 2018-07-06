@@ -173,7 +173,7 @@ local({
 
 #'    tests/sparse3Darrays.R
 #'  Basic tests of code in sparse3Darray.R and sparsecommon.R
-#'  $Revision: 1.15 $ $Date: 2018/05/04 03:56:37 $
+#'  $Revision: 1.16 $ $Date: 2018/07/06 01:54:17 $
 
 require(spatstat)
 local({
@@ -299,6 +299,9 @@ local({
     M[ 2, 5:3, 2] <- V3
     M[,,2] <- M2a
     M[,,2] <- (M2a + 1)
+    V5 <- sparseVector(x=1:2, i=2:3, length=5)
+    M[,2,2] <- V5
+    M[,,2] <- V5
     ## integer matrix index
     Mnew[cbind(3:5, 3:5, c(1,2,1))] <- 1:3
     Mnew[cbind(3:5, 3:5, 2)] <- 1:3
@@ -525,6 +528,7 @@ local({
     e <- do.call(op, list(Img, ...))
   }
   flay(reflect)
+  flay(flipxy)
   flay(shift, vec=c(1,2))
   flay(scalardilate, f=2) 
   flay(rotate, angle=pi/3)
@@ -543,6 +547,21 @@ local({
   b <- bdist.tiles(A[c(3,5,7)])
   #'
   Eim <- as.im(E, W=letterR)
+  #'
+  #' chop.tess
+  #'    horiz/vert lines
+  W <- square(1)
+  H <- infline(h=(2:4)/5)
+  V <- infline(v=(3:4)/5)
+  WH <- chop.tess(W, H)
+  WV <- chop.tess(W, V)
+  #'     image-based tessellation
+  f <- function(x,y){factor(round(4* (x^2 + y^2)))}
+  A <- tess(image=as.im(f, W=W))
+  L <- infline(p=(1:3)/3, theta=pi/4)
+  AL <- chop.tess(A, L)
+  AH <- chop.tess(A, H)
+  AV <- chop.tess(A, V)
 })
 #
 #   tests/testaddvar.R

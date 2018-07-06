@@ -1,7 +1,7 @@
 #
 #  logistic.R
 #
-#   $Revision: 1.24 $  $Date: 2017/10/03 09:15:23 $
+#   $Revision: 1.25 $  $Date: 2018/07/06 02:05:10 $
 #
 #  Logistic likelihood method - under development
 #
@@ -218,7 +218,7 @@ logi.engine <- function(Q,
   the.version <- list(major=spv$major,
                       minor=spv$minor,
                       release=spv$patchlevel,
-                      date="$Date: 2017/10/03 09:15:23 $")
+                      date="$Date: 2018/07/06 02:05:10 $")
 
   ## Compile results
   fit <- list(method      = "logi",
@@ -362,7 +362,7 @@ summary.logiquad <- function(object, ..., checkdup=FALSE) {
 }
 
 print.summary.logiquad <- function(x, ..., dp=3) {
-  cat("Quadrature scheme = data + dummy\n")
+  cat("Quadrature scheme (logistic) = data + dummy\n")
   Dinfo <- x$param
   if(is.null(Dinfo))
     cat("created by an unknown function.\n")

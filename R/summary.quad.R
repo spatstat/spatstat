@@ -3,7 +3,7 @@
 #
 #  summary() method for class "quad"
 #
-#  $Revision: 1.11 $ $Date: 2016/09/23 07:38:07 $
+#  $Revision: 1.12 $ $Date: 2018/07/06 02:05:31 $
 #
 
 summary.quad <- local({
@@ -20,6 +20,7 @@ summary.quad <- local({
     X <- object$data
     D <- object$dummy
     s <- list(
+      logi  = inherits(object, "logiquad"),
       data  = summary.ppp(X, checkdup=checkdup),
       dummy = summary.ppp(D, checkdup=checkdup),
       param = object$param)
@@ -91,7 +92,7 @@ print.summary.quad <- local({
   }
 
   print.summary.quad <- function(x, ..., dp=3) {
-    splat("Quadrature scheme = data + dummy + weights")
+    splat("Quadrature scheme (Berman-Turner) = data + dummy + weights")
     pa <- x$param
     if(is.null(pa))
       splat("created by an unknown function.")
@@ -149,7 +150,9 @@ print.summary.quad <- local({
 })
 
 print.quad <- function(x, ...) {
-  splat("Quadrature scheme")
+  logi <- inherits(x, "logiquad")
+  splat("Quadrature scheme",
+        paren(if(logi) "logistic" else "Berman-Turner"))
   splat(x$data$n, "data points,", x$dummy$n, "dummy points")
   if(waxlyrical('extras')) {
     sx <- summary(x)

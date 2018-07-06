@@ -3,7 +3,7 @@
 #
 # support for tessellations
 #
-#   $Revision: 1.85 $ $Date: 2018/05/29 09:15:07 $
+#   $Revision: 1.86 $ $Date: 2018/07/06 03:46:03 $
 #
 tess <- function(..., xgrid=NULL, ygrid=NULL, tiles=NULL, image=NULL,
                  window=NULL, marks=NULL, keepempty=FALSE,
@@ -218,7 +218,7 @@ plot.tess <- local({
              vector = {
                #' vector of values.
                #' validate length of vector
-               check.nvector(values, ntiles, things="tiles")
+               check.anyvector(values, ntiles, things="tiles")
              },
              dataframe = {
                #' data frame or matrix of values.
@@ -930,6 +930,23 @@ reflect.tess <- function(X) {
          },
          image = {
            Y$image <- reflect(Y$image)
+         })
+  return(Y)
+}
+
+flipxy.tess <- function(X) {
+  Y <- X
+  Y$window <- flipxy(Y$window)
+  switch(X$type,
+         rect = {
+           Y$xgrid <- X$ygrid
+           Y$ygrid <- X$xgrid
+         },
+         tiled = {
+           Y$tiles <- lapply(Y$tiles, flipxy)
+         },
+         image = {
+           Y$image <- flipxy(Y$image)
          })
   return(Y)
 }

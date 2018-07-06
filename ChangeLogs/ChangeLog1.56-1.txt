@@ -110,4 +110,35 @@ Change log from 1.56-0 to 1.56-1
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+07 july 2018
+
+   tests/sparse3Darrays.R
+   tests/quadschemes.R
+   tests/randoms.R
+	More tests
+
+   sparse3Darray.R
+	Bug fix in [<-.sparse3Darray
+
+   tess.R
+	Bug fix in plot.tess
+
+   tess.R
+   affine.tess.Rd
+	New method flipxy.tess
+	
+   quadclass.R
+   summary.quad.R
+   logistic.R
+	Tweaks to printing of quadschemes.
+	
+   DESCRIPTION
+   NEWS
+	Depends on spatstat.utils 1.9-0
+	Version 1.56-0.007
+
+------------- passed R-3.5.0 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
 
