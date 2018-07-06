@@ -115,6 +115,7 @@ Change log from 1.56-0 to 1.56-1
    tests/sparse3Darrays.R
    tests/quadschemes.R
    tests/randoms.R
+   tests/tessera.R
 	More tests
 
    sparse3Darray.R

@@ -503,7 +503,7 @@ local({
 })
 #'   tests/tessera.R
 #'   Tessellation code, not elsewhere tested
-#'   $Revision: 1.1 $ $Date: 2018/04/14 03:25:12 $
+#'   $Revision: 1.2 $ $Date: 2018/07/06 04:09:17 $
 #'
 require(spatstat)
 local({
@@ -555,6 +555,10 @@ local({
   V <- infline(v=(3:4)/5)
   WH <- chop.tess(W, H)
   WV <- chop.tess(W, V)
+  #'     polygonal tessellation
+  D <- dirichlet(runifpoint(4))
+  DH <- chop.tess(D, H)
+  DV <- chop.tess(D, V)
   #'     image-based tessellation
   f <- function(x,y){factor(round(4* (x^2 + y^2)))}
   A <- tess(image=as.im(f, W=W))
