@@ -3,7 +3,7 @@
 #
 # place points at regular intervals along line segments
 #
-#   $Revision: 1.7 $  $Date: 2014/11/10 11:21:02 $
+#   $Revision: 1.8 $  $Date: 2018/07/11 05:51:05 $
 #
 
 pointsOnLines <- function(X, eps=NULL, np=1000, shortok=TRUE) {
@@ -26,8 +26,9 @@ pointsOnLines <- function(X, eps=NULL, np=1000, shortok=TRUE) {
 #  allsegs <- 1:nseg
   if(any(short <- (len <= eps)) && shortok) {
     # very short segments: use midpoints
-    Z <- data.frame(x = xmid[short], y = ymid[short])
-  } else Z <- data.frame(x=numeric(0), y=numeric(0))
+    Z <- data.frame(x = xmid[short], y = ymid[short], seg=which(short), tp=0.5)
+  } else Z <- data.frame(x=numeric(0), y=numeric(0),
+                         seg=integer(0), tp=numeric(0))
   # handle other segments
   for(i in (1:nseg)[!short]) {
     # divide segment into pieces of length eps
@@ -41,10 +42,12 @@ pointsOnLines <- function(X, eps=NULL, np=1000, shortok=TRUE) {
     nbrks <- length(brks)
     # points at middle of each piece
     ss <- (brks[-1] + brks[-nbrks])/2
-    x <- with(Xdf, x0[i] + (ss/leni) * (x1[i]-x0[i]))
-    y <- with(Xdf, y0[i] + (ss/leni) * (y1[i]-y0[i]))
-    Z <- rbind(Z, data.frame(x=x, y=y))
+    tp <- ss/leni
+    x <- with(Xdf, x0[i] + tp * (x1[i]-x0[i]))
+    y <- with(Xdf, y0[i] + tp * (y1[i]-y0[i]))
+    Z <- rbind(Z, data.frame(x=x, y=y, seg=i, tp=tp))
   }
-  Z <- as.ppp(Z, W=X$window)
-  return(Z)
+  result <- as.ppp(Z[,c("x","y")], W=X$window)
+  attr(result, "map") <- Z[,c("seg", "tp")]
+  return(result)
 }

@@ -35,7 +35,8 @@ pointsOnLines(X, eps = NULL, np = 1000, shortok=TRUE)
 }
 \value{
   A point pattern (object of class \code{"ppp"}) in the same window
-  as \code{X}.
+  as \code{X}. The result also has an attribute called \code{"map"} which
+  maps the points to their parent line segments.
 }
 \seealso{
   \code{\link{psp}},
@@ -48,11 +49,8 @@ pointsOnLines(X, eps = NULL, np = 1000, shortok=TRUE)
   plot(X, main="")
   plot(Y, add=TRUE, pch="+")
 }
-\author{\adrian
-  
-  
-  and \rolf
-  
+\author{
+  \spatstatAuthors.
 }
 \keyword{spatial}
 \keyword{manip}

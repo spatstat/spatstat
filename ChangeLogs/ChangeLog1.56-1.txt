@@ -152,3 +152,29 @@ Change log from 1.56-0 to 1.56-1
 ------------- passed R-3.5.0 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
+
+   pcf.R
+	Bug fix in pcf.ppp
+ 
+   DESCRIPTION
+   NEWS
+	Version 1.56-0.009
+
+------------- passed R-3.5.0 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+11 july 2018
+
+   pointsonlines.R
+   pointsOnLines.Rd
+       The result now has an attribute named "map"
+       which maps each point to its parent line segment.
+
+   DESCRIPTION
+   NEWS
+	Version 1.56-0.010
+
+------------- passed R-3.5.0 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------

@@ -1,9 +1,11 @@
 
-        CHANGES IN spatstat VERSION 1.56-0.009
+        CHANGES IN spatstat VERSION 1.56-0.010
 
 OVERVIEW
 
     o We thank Agustin Lobo for contributions.
+
+    o Improvements to infrastructure.
     
     o Bug fixes.
 
@@ -19,6 +21,10 @@ NEW FUNCTIONS
     
 SIGNIFICANT USER-VISIBLE CHANGES
 
+    o pointsOnLines
+    The result now has an attribute named "map"
+    which maps each point to its parent line segment.
+    
     o summary.lpp
     Improved output.
 
