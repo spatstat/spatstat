@@ -352,7 +352,7 @@ local({
 #'                    relrisk(), Smooth()
 #'                    and inhomogeneous summary functions
 #'
-#'  $Revision: 1.21 $  $Date: 2018/06/11 06:56:44 $
+#'  $Revision: 1.22 $  $Date: 2018/07/12 02:14:08 $
 #'
 
 require(spatstat)
@@ -371,7 +371,6 @@ local({
     return(invisible(NULL))
   }
 
-
   tryit(0.05)
   tryit(0.05, diggle=TRUE)
   tryit(0.05, se=TRUE)
@@ -379,11 +378,26 @@ local({
 
   V <- diag(c(0.05^2, 0.07^2))
   tryit(varcov=V)
+  tryit(varcov=V, diggle=TRUE)
   tryit(varcov=V, weights=expression(x))
+  tryit(varcov=V, weights=expression(x), diggle=TRUE)
+  Z <- distmap(runifpoint(5, Window(cells)))
+  tryit(0.05, weights=Z)
+  tryit(0.05, weights=Z, diggle=TRUE)
 
   wdf <- data.frame(a=1:42,b=42:1)
   tryit(0.05, weights=wdf, do.fun=FALSE)
   tryit(varcov=V, weights=wdf, do.fun=FALSE)
+  tryit(varcov=V, weights=expression(cbind(x,y)), do.fun=FALSE)
+
+  crossit <- function(..., sigma=NULL) {
+    U <- runifpoint(20, Window(cells))
+    a <- densitycrossEngine(cells, U, sigma=sigma, ...)
+    a <- densitycrossEngine(cells, U, sigma=sigma, ..., diggle=TRUE)
+    invisible(NULL)
+  }
+  crossit(varcov=V, weights=cells$x)
+  crossit(varcov=V, weights=wdf)
 
   # apply different discretisation rules
   Z <- density(cells, 0.05, fractional=TRUE)
@@ -707,7 +721,7 @@ local({
 #
 #  Test validity of envelope data
 #
-#  $Revision: 1.10 $  $Date: 2018/05/02 09:02:43 $
+#  $Revision: 1.11 $  $Date: 2018/07/12 02:14:13 $
 #
 
 require(spatstat)
@@ -749,6 +763,10 @@ B <- envelope(cells, Kest, nsim=4, transform=expression(sqrt(./pi) - .x))
 fit <- ppm(cells~x)
 Ef <- envelope(fit, Kest, nsim=4, savefuns=TRUE, global=TRUE)
 Ep <- envelope(fit, Kest, nsim=4, savepatterns=TRUE, global=TRUE)
+
+#' check handling of 'dangerous' cases
+fut <- ppm(redwood ~ x)
+Ek <- envelope(fut, Kinhom, update=FALSE, nsim=4)
 
 # check conditional simulation
 e1 <- envelope(cells, Kest, nsim=4, fix.n=TRUE)

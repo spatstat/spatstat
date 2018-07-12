@@ -178,3 +178,18 @@ Change log from 1.56-0 to 1.56-1
 ------------- passed R-3.5.0 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
+
+12 july 2018
+
+   tests/density.R
+   tests/envelopes.R
+	More tests.
+
+   DESCRIPTION
+   NEWS
+	Version 1.56-0.011
+
+------------- passed R-3.5.0 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
