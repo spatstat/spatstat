@@ -80,13 +80,12 @@
   X <- density(rpoispp(30))
   Y <- density(rpoispp(40))
   Z <- density(rpoispp(30))
-  pairs(X,Y,Z)
+  p <- pairs(X,Y,Z)
+  p
+  plot(p)
 }
-\author{\adrian
-  
-  
-  and \rolf
-  
+\author{
+  \spatstatAuthors.
 }
 \keyword{spatial}
 \keyword{hplot}

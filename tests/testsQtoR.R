@@ -1,11 +1,14 @@
 #'
 #'    tests/quadschemes.R
 #'
-#'   $Revision: 1.2 $ $Date: 2018/06/11 08:36:39 $
+#'    Quadrature schemes, dummy points etc
+#' 
+#'   $Revision: 1.3 $ $Date: 2018/07/12 08:29:41 $
 #'
 
 require(spatstat)
 local({
+  ##  class 'quad' 
   qu <- quadscheme(cells)
   qm <- quadscheme(amacrine)
   plot(qu)
@@ -16,6 +19,17 @@ local({
   a <- equals.quad(qm)
   a <- domain(qu)
   unitname(qu) <- c("Furlong", "Furlongs")
+
+  ## utilities
+  b <- cellmiddles(square(1), 3, 4)
+  b <- cellmiddles(letterR, 3, 4, distances=FALSE)
+  b <- cellmiddles(letterR, 3, 4, distances=TRUE)
+  v <- tilecentroids(square(1), 3, 4)
+  v <- tilecentroids(letterR, 3, 4)
+  n <- default.n.tiling(cells)
+  n <- default.n.tiling(cells, nd=4)
+  n <- default.n.tiling(cells, ntile=4)
+  n <- default.n.tiling(cells, ntile=4, quasi=TRUE)
 })
 #'  tests/randoms.R
 #'   Further tests of random generation code

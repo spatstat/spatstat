@@ -193,3 +193,20 @@ Change log from 1.56-0 to 1.56-1
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+   tests/lppstuff.R
+   tests/quadschemes.R
+	More tests
+
+   panel.contour.Rd
+   pairs.im.Rd
+	Tweaked examples.
+
+   DESCRIPTION
+   NEWS
+	Version 1.56-0.012
+
+------------- passed R-3.5.0 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+

@@ -283,7 +283,7 @@ local({
 #
 # Tests for lpp code
 #
-#  $Revision: 1.19 $  $Date: 2018/07/01 07:49:36 $
+#  $Revision: 1.20 $  $Date: 2018/07/12 08:20:47 $
 
 
 require(spatstat)
@@ -442,12 +442,16 @@ local({
   unitname(Simon) <- list("metre", "metres", 0.5)
   b <- rescale(Simon)
   ds <- density(simplenet, 0.05)
-  
+
   ## integral.linim with missing entries
   xcoord <- linfun(function(x,y,seg,tp) { x }, domain(chicago))
   xcoord <- as.linim(xcoord, dimyx=32)
   integral(xcoord)
 
+  ## options to plot.linim
+  plot(xcoord, legend=FALSE)
+  plot(xcoord, leg.side="top")
+  
   ## as.linim.linim
   xxcc <- as.linim(xcoord)
   xxcceps <- as.linim(xcoord, eps=15)
@@ -456,6 +460,12 @@ local({
   df2 <- attr(xxccdel, "df")
   df3 <- resampleNetworkDataFrame(df1, df2)
 
+  ## linim with complex values
+  Zc <- as.im(function(x,y){(x-y) + x * 1i}, Frame(simplenet))
+  Fc <- linim(simplenet, Zc)
+  print(Fc)
+  print(summary(Fc))
+  
   ## linim with df provided
   Z <- as.im(function(x,y) {x-y}, Frame(simplenet))
   X <- linim(simplenet, Z)
