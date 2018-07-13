@@ -222,7 +222,7 @@ local({
 #'
 #'   Various K and L functions and pcf
 #'
-#'   $Revision: 1.3 $  $Date: 2018/07/06 06:37:44 $
+#'   $Revision: 1.4 $  $Date: 2018/07/13 05:15:00 $
 #'
 
 require(spatstat)
@@ -258,6 +258,16 @@ local({
   km <- Kmark(X, f="myfun")
   Y <- X %mark% data.frame(u=runif(100), v=runif(100))
   mk <- markcorr(Y)
+  #'
+  rr <- rep(0.1, npoints(cells))
+  eC <- edge.Ripley(cells, rr)
+  eI <- edge.Ripley(cells, rr, method="interpreted")
+  if(max(abs(eC-eI)) > 0.1)
+    stop("Ripley edge correction results do not match")
+
+  a <- rmax.Ripley(square(1))
+  a <- rmax.Ripley(as.polygonal(square(1)))
+  a <- rmax.Ripley(letterR)
 })
 #
 # tests/kppm.R

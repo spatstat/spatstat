@@ -586,7 +586,7 @@ addvar(model, "x", subregion=w, bw.input="points")
 #
 # additional test of parres
 #
-#  $Revision: 1.2 $  $Date: 2015/12/29 08:54:49 $
+#  $Revision: 1.3 $  $Date: 2018/07/13 05:07:57 $
 #
 require(spatstat)
 local({
@@ -603,6 +603,13 @@ parres(model, "x", subregion=w, bw.input="quad")
 # check whether 'update.ppm' has messed up internals
 mod2 <- update(model, ~x)
 parres(mod2, "x")
+
+#' other kinds of covariates
+mod3 <- ppm(X ~ x + offset(y))
+parres(mod3, "offset(y)")
+Z <- distmap(runifpoint(3))
+parres(mod3, Z)
+
 })
 #'
 #'     tests/threedee.R
