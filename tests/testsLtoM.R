@@ -1,3 +1,33 @@
+#'
+#'   tests/layered.R
+#'
+#'   Tests of 'layered' class
+#'
+#'   $Revision: 1.1 $  $Date: 2018/07/14 06:23:45 $
+#'
+require(spatstat)
+local({
+  D <- distmap(cells)
+  L <- layered(D, cells,
+               plotargs=list(list(ribbon=FALSE), list(pch=16)))
+  #'
+  plot(L, which=2, plotargs=list(list(pch=3)))
+  plot(L, plotargs=list(list(pch=3)))
+  #'
+  W <- as.owin(L)
+  V <- domain(L)
+  #' methods
+  L2 <- L[square(0.5)]
+  Lr <- reflect(L)
+  Lf <- flipxy(L)
+  Ls <- scalardilate(L, 2)
+  La <- shift(L, origin="midpoint")
+  Lo <- rotate(L, pi/3, origin="bottomleft")
+  Lu <- rescale(L, 0.1, "parsec")
+  #' as.layered 
+  M <- as.layered(finpines)
+  M2 <- as.layered(split(amacrine))
+})
 ## 
 ##    tests/legacy.R
 ##

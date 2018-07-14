@@ -623,7 +623,7 @@ local({
 #
 # Things that might go wrong with predict()
 #
-#  $Revision: 1.6 $ $Date: 2018/06/27 04:13:42 $
+#  $Revision: 1.7 $ $Date: 2018/07/14 06:07:25 $
 #
 
 require(spatstat)
@@ -678,7 +678,9 @@ local({
   b <- predict(fit, total=quadrats(cells, 3))
 
   ## supporting code
+  u <- model.se.image(fit, square(0.5))
   u <- model.se.image(fit, square(0.5), what="cv")
+  u <- model.se.image(fit, square(0.5), what="ce")
 
   ##
   fut <- ppm(cells ~ x, Strauss(0.1))
