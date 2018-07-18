@@ -3,7 +3,7 @@
 #
 #	A class 'owin' to define the "observation window"
 #
-#	$Revision: 4.181 $	$Date: 2018/07/03 03:08:39 $
+#	$Revision: 4.182 $	$Date: 2018/07/16 08:13:42 $
 #
 #
 #	A window may be either
@@ -179,7 +179,7 @@ owin <- local({
     if(missing(xrange))
       xrange <- actual.xrange
     else if(check) {
-      if(!is.vector(xrange) || length(xrange) != 2 || xrange[2L] <= xrange[1L])
+      if(!is.vector(xrange) || length(xrange) != 2 || xrange[2L] < xrange[1L])
         stop("xrange should be a vector of length 2 giving (xmin, xmax)")
       if(!all(xrange == range(c(xrange, actual.xrange))))
         stop("polygon's x coordinates outside xrange")
@@ -189,7 +189,7 @@ owin <- local({
     if(missing(yrange))
       yrange <- actual.yrange
     else if(check) {
-      if(!is.vector(yrange) || length(yrange) != 2 || yrange[2L] <= yrange[1L])
+      if(!is.vector(yrange) || length(yrange) != 2 || yrange[2L] < yrange[1L])
         stop("yrange should be a vector of length 2 giving (ymin, ymax)")
       if(!all(yrange == range(c(yrange, actual.yrange))))
       stop("polygon's y coordinates outside yrange")
@@ -292,9 +292,9 @@ owin <- local({
         xrange <- c(0,nc)
         yrange <- c(0,nr)
       } else if(check) {
-        if(!is.vector(xrange) || length(xrange) != 2 || xrange[2L] <= xrange[1L])
+        if(!is.vector(xrange) || length(xrange) != 2 || xrange[2L] < xrange[1L])
           stop("xrange should be a vector of length 2 giving (xmin, xmax)")
-        if(!is.vector(yrange) || length(yrange) != 2 || yrange[2L] <= yrange[1L])
+        if(!is.vector(yrange) || length(yrange) != 2 || yrange[2L] < yrange[1L])
           stop("yrange should be a vector of length 2 giving (ymin, ymax)")
       }
       xstep <- diff(xrange)/nc

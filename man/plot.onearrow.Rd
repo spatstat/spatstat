@@ -75,16 +75,12 @@
 }
 \examples{
   oa <- onearrow(cells[c(1, 42)])
+  oa
   plot(oa)
   plot(oa, zap=TRUE, do.points=TRUE, col.head="pink", col="red")
 }
-\author{\adrian
-  
-  
-  \rolf
-  
-  and \ege
-  
+\author{
+  \spatstatAuthors.
 }
 \seealso{
   \code{\link{onearrow}},

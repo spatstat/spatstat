@@ -503,7 +503,7 @@ local({
 })
 #'   tests/tessera.R
 #'   Tessellation code, not elsewhere tested
-#'   $Revision: 1.2 $ $Date: 2018/07/06 04:09:17 $
+#'   $Revision: 1.3 $ $Date: 2018/07/16 08:51:44 $
 #'
 require(spatstat)
 local({
@@ -566,6 +566,17 @@ local({
   AL <- chop.tess(A, L)
   AH <- chop.tess(A, H)
   AV <- chop.tess(A, V)
+  #'
+  #' quantess
+  a <- quantess(square(1), "x", 3)
+  a <- quantess(square(1), "y", 3)
+  b <- quantess(letterR, "y", 3)
+  d <- quantess(cells, "y", 4)
+  g <- quantess(demopat, "x", 5)
+  g <- quantess(demopat, "y", 5)
+  D <- distmap(demopat)
+  h <- quantess(D, "y", 4)
+  h <- quantess(D, function(x,y){x+y}, 5)
 })
 #
 #   tests/testaddvar.R

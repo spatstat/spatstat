@@ -62,13 +62,8 @@ yardstick(x0, y0, x1, y1, txt = NULL, \dots)
   or \code{"yardstick"}. There are methods for \code{plot},
   \code{print}, \code{"["} and \code{\link{shift}}.
 }
-\author{\adrian
-  
-  
-  \rolf
-  
-  and \ege
-  
+\author{
+  \spatstatAuthors.
 }
 \seealso{
   \code{\link{plot.textstring}},
@@ -78,10 +73,14 @@ yardstick(x0, y0, x1, y1, txt = NULL, \dots)
 \examples{
   X <- rescale(swedishpines)
   plot(X, pch=16, main="")
+  yd <- yardstick(0,0,1,1, "diagonal")
+  yy <- yardstick(X[1:2])
   ys <- yardstick(as.psp(list(xmid=4, ymid=0.5, length=1, angle=0),
                          window=Window(X)),
                   txt="1 m")
+  ys
   plot(ys, angle=90)
+  scalardilate(ys, 2)
 }
 \keyword{spatial}
 \keyword{hplot}

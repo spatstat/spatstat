@@ -3,7 +3,7 @@
 #'
 #'    Quadrature schemes, dummy points etc
 #' 
-#'   $Revision: 1.3 $ $Date: 2018/07/12 08:29:41 $
+#'   $Revision: 1.4 $ $Date: 2018/07/16 03:48:41 $
 #'
 
 require(spatstat)
@@ -30,6 +30,22 @@ local({
   n <- default.n.tiling(cells, nd=4)
   n <- default.n.tiling(cells, ntile=4)
   n <- default.n.tiling(cells, ntile=4, quasi=TRUE)
+
+  ## logistic
+  d <- quadscheme.logi(cells, logi.dummy(cells, "binomial"))
+  print(summary(d))
+  d <- quadscheme.logi(cells, logi.dummy(cells, "poisson"))
+  print(summary(d))
+  d <- quadscheme.logi(cells, logi.dummy(cells, "grid"))
+  print(summary(d))
+  d <- quadscheme.logi(cells, logi.dummy(cells, "transgrid"))
+  print(summary(d))
+  d <- quadscheme.logi(amacrine,
+                       logi.dummy(amacrine, "binomial", mark.repeat=TRUE))
+  print(summary(d))
+  d <- quadscheme.logi(amacrine,
+                       logi.dummy(amacrine, "poisson", mark.repeat=FALSE))
+  print(summary(d))
 })
 #'  tests/randoms.R
 #'   Further tests of random generation code

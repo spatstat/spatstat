@@ -228,3 +228,39 @@ Change log from 1.56-0 to 1.56-1
    tests/prediction.R
    tests/layered.R [New file]
 	More code blocks tested.
+
+   DESCRIPTION
+   NEWS
+	Version 1.56-0.014
+
+------------- passed R-3.5.0 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+16 jul 2018
+
+   tests/quadschemes.R
+	More tests for logistic quadschemes.
+
+   window.R
+	Allow diff(xrange) = 0 and diff(yrange) = 0.
+	
+   yardstick.Rd
+   plot.yardstick.Rd
+   plot.onearrow.Rd
+   plot.textstring.Rd
+	More examples.
+
+   tests/tessera.R
+	More tests for quantess()
+
+18 jul 2018
+
+   DESCRIPTION
+   NEWS
+	Version 1.56-0.015
+
+------------- passed R-3.5.0 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
