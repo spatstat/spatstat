@@ -91,16 +91,10 @@ hopskel.test(X, \dots,
 }
 \examples{
   hopskel(redwood)
-  hopskel(redwood)
   hopskel.test(redwood, alternative="clustered")
 }
-\author{\adrian
-  
-  
-  \rolf
-  
-  and \ege
-  
+\author{
+  \spatstatAuthors.
 }
 \keyword{spatial}
 \keyword{nonparametric}

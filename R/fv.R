@@ -4,7 +4,7 @@
 ##
 ##    class "fv" of function value objects
 ##
-##    $Revision: 1.152 $   $Date: 2018/04/13 04:15:41 $
+##    $Revision: 1.153 $   $Date: 2018/07/21 04:05:00 $
 ##
 ##
 ##    An "fv" object represents one or more related functions
@@ -1356,7 +1356,7 @@ distributecbind <- local({
 
 ratfv <- function(df, numer, denom, ..., ratio=TRUE) {
   ## Determine y
-  if(!missing(df)) {
+  if(!missing(df) && !is.null(df)) {
     y <- fv(df, ...)
     num <- NULL
   } else {

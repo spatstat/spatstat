@@ -3,7 +3,7 @@
 # Function to take a matrix of pairwise distances
 # and compile a 'K' function in the format required by spatstat.
 #
-#   $Revision: 1.9 $  $Date: 2017/06/05 10:31:58 $
+#   $Revision: 1.10 $  $Date: 2018/07/21 04:05:36 $
 # -------------------------------------------------------------------
 
 compileK <- function(D, r, weights=NULL, denom=1, check=TRUE, ratio=FALSE,
@@ -40,7 +40,7 @@ compileK <- function(D, r, weights=NULL, denom=1, check=TRUE, ratio=FALSE,
   } else {
     num <- data.frame(r=r, est=Kcount)
     den <- data.frame(r=r, est=denom)
-    K <- ratfv(num, den,
+    K <- ratfv(df=NULL, numer=num, denom=den,
                "r", quote(K(r)), "est", . ~ r , c(0,rmax),
                c("r", makefvlabel(NULL, "hat", fname)), 
                c("distance argument r", "estimated %s"),
@@ -106,7 +106,7 @@ compilepcf <- function(D, r, weights=NULL, denom=1, check=TRUE,
   } else {
       num <- data.frame(r=r, est=gval * denom)
       den <- data.frame(r=r, est=denom)
-      g <- ratfv(num, den,
+      g <- ratfv(df=NULL, numer=num, denom=den,
                  "r", quote(g(r)), "est", . ~ r , c(0,rmax),
                  c("r", makefvlabel(NULL, "hat", fname)), 
                  c("distance argument r", "estimated %s"),

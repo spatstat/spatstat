@@ -3,7 +3,7 @@
 #'
 #'    Quadrature schemes, dummy points etc
 #' 
-#'   $Revision: 1.4 $ $Date: 2018/07/16 03:48:41 $
+#'   $Revision: 1.5 $ $Date: 2018/07/21 03:36:04 $
 #'
 
 require(spatstat)
@@ -13,13 +13,15 @@ local({
   qm <- quadscheme(amacrine)
   plot(qu)
   plot(qm)
+  is.multitype(qu)
+  is.multitype(qm)
   a <- param.quad(qu)
   a <- param.quad(qm)
   a <- equals.quad(qu)
   a <- equals.quad(qm)
   a <- domain(qu)
   unitname(qu) <- c("Furlong", "Furlongs")
-
+  
   ## utilities
   b <- cellmiddles(square(1), 3, 4)
   b <- cellmiddles(letterR, 3, 4, distances=FALSE)
@@ -31,6 +33,10 @@ local({
   n <- default.n.tiling(cells, ntile=4)
   n <- default.n.tiling(cells, ntile=4, quasi=TRUE)
 
+  ## plot.quad 
+  plot(quadscheme(cells, method="dirichlet", nd=7),              tiles=TRUE)
+  plot(quadscheme(cells, method="dirichlet", nd=7, exact=FALSE), tiles=TRUE)
+  
   ## logistic
   d <- quadscheme.logi(cells, logi.dummy(cells, "binomial"))
   print(summary(d))
@@ -442,7 +448,7 @@ if(!inherits(out, "try-error"))
 #
 # test decisions about expansion of simulation window
 #
-#  $Revision: 1.3 $  $Date: 2017/10/24 01:53:11 $
+#  $Revision: 1.4 $  $Date: 2018/07/21 00:46:16 $
 #
 
 require(spatstat)
@@ -451,6 +457,7 @@ fit <- ppm(cells ~x)
 
 # check rmhmodel.ppm
 mod <- rmhmodel(fit)
+is.expandable(mod)
 wsim <- as.rectangle(mod$trend)
 # work around changes in 'unitname'
 wcel <- as.owin(cells)

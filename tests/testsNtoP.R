@@ -34,7 +34,7 @@ local({
 #
 # Also test whether minnndist(X) == min(nndist(X))
 #
-#   $Revision: 1.17 $  $Date: 2016/11/29 06:25:15 $
+#   $Revision: 1.18 $  $Date: 2018/07/21 00:37:26 $
 #
 
 require(spatstat)
@@ -209,6 +209,9 @@ local({
   if(any(a != b)) stop("Incorrect result for has.close(X, r, Y, periodic=TRUE)")
 })
 
+local({
+  b <- bdist.pixels(letterR, style="coords")
+})
 ## 
 ##    tests/percy.R
 ##
@@ -574,6 +577,10 @@ local({
   #' various utilities
   periodify(cells, 2)
   periodify(demopat, 2)
+
+  #'
+  a <- multiplicity(finpines)
+  a <- multiplicity(longleaf)
 })
 #
 # tests/ppx.R

@@ -64,6 +64,23 @@ local({
 })
 
 
+#'     tests/hypotests.R
+#'     Hypothesis tests
+#' 
+#'  $Revision: 1.2 $ $Date: 2018/07/21 03:02:20 $
+
+require(spatstat)
+local({
+  hopskel.test(redwood, method="MonteCarlo", nsim=5)
+  
+  berman.test(spiders, "x")
+  berman.test(lppm(spiders ~ x), "y")
+
+  #' quadrat test - spatial methods
+  a <- quadrat.test(redwood, 3)
+  domain(a)
+  shift(a, c(1,1))
+})
 #
 #  tests/imageops.R
 #
@@ -272,7 +289,7 @@ local({
 #
 # tests/kppm.R
 #
-# $Revision: 1.22 $ $Date: 2018/05/14 09:26:51 $
+# $Revision: 1.23 $ $Date: 2018/07/21 00:49:50 $
 #
 # Test functionality of kppm that depends on RandomFields
 # Test update.kppm for old style kppm objects
@@ -303,6 +320,11 @@ local({
  vc2 <- vcov(fitx, fast=TRUE)
  vc3 <- vcov(fitx, fast=TRUE, splitup=TRUE)
  vc4 <- vcov(fitx,            splitup=TRUE)
+
+ ## other code blocks
+ a <- varcount(fitx, function(x,y){x+1}) # always positive
+ a <- varcount(fitx, function(x,y){y-1}) # always negative
+ a <- varcount(fitx, function(x,y){x+y}) # positive or negative
  
  # improve.kppm
  fitI <- update(fit, improve.type="quasi")

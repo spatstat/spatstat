@@ -313,7 +313,7 @@ local({
 #
 # Tests for lpp code
 #
-#  $Revision: 1.20 $  $Date: 2018/07/12 08:20:47 $
+#  $Revision: 1.21 $  $Date: 2018/07/21 03:00:17 $
 
 
 require(spatstat)
@@ -330,6 +330,8 @@ local({
   plot(K)
   g <- linearpcfinhom(X, lambda=fit, normalise=TRUE)
   plot(g)
+  ## other code blocks
+  K <- linearKinhom(X, lambda=fit, correction="none", ratio=TRUE)
   # check empty patterns OK
   X <- runiflpp(0, simplenet)
   print(X)

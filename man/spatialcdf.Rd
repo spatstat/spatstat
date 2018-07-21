@@ -100,6 +100,7 @@ spatialcdf(Z, weights = NULL, normalise = FALSE, ..., W = NULL, Zname = NULL)
      plot(A <- spatialcdf(grad, fit))
      A(0.1)
   })
+  plot(spatialcdf("x", W=letterR))
 }
 \keyword{spatial}
 \keyword{nonparametric}

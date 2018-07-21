@@ -91,8 +91,6 @@ clarkevans.test(X, ...,
 }
 \author{
   \adrian
-  
-  
 }
 \seealso{
   \code{\link{clarkevans}},
@@ -102,6 +100,7 @@ clarkevans.test(X, ...,
   # Redwood data - clustered
   clarkevans.test(redwood)
   clarkevans.test(redwood, alternative="clustered")
+  clarkevans.test(redwood, correction="cdf", nsim=39)
 }
 \keyword{spatial}
 \keyword{nonparametric}

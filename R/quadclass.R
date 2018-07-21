@@ -4,7 +4,7 @@
 #	Class 'quad' to define quadrature schemes
 #	in (rectangular) windows in two dimensions.
 #
-#	$Revision: 4.26 $	$Date: 2016/02/16 01:39:12 $
+#	$Revision: 4.27 $	$Date: 2018/07/21 03:33:10 $
 #
 # An object of class 'quad' contains the following entries:
 #
@@ -235,8 +235,9 @@ plot.quad <- function(x, ..., main, add=FALSE, dum=list(), tiles=FALSE) {
                  tt <- dirichlet(U)
                } else {
                  win <- as.mask(as.owin(U))
-                 tileid <- image(exactdt(U)$i,
-                                 win$xcol, win$yrow, win$xrange, win$yrange)
+                 tileid <- im(exactdt(U)$i,
+                              win$xcol, win$yrow,
+                              win$xrange, win$yrange)
                  tt <- tess(image=tileid[win, drop=FALSE])
                }
              },

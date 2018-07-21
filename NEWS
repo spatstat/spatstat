@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.56-0.015
+        CHANGES IN spatstat VERSION 1.56-0.016
 
 OVERVIEW
 
@@ -70,6 +70,11 @@ BUG FIXES
     and the indices i, j, k specified a two-dimensional subset of x.
     Fixed.
     
+    o plot.quad
+    Crashed if tiles=TRUE for a quadrature scheme
+    created by quadscheme(method="dirichlet", exact=TRUE).
+    Fixed.
+
         CHANGES IN spatstat VERSION 1.56-0
 
 OVERVIEW

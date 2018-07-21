@@ -55,6 +55,8 @@ local({
   cdf.test(unmark(AC), DM)
   cdf.test(unmark(AC), DM, "cvm")
   cdf.test(unmark(AC), DM, "ad")
+  ## other code blocks
+  cdf.test(finpines, "x")
 
   ## (2) linear networks
   set.seed(42)
@@ -65,11 +67,20 @@ local({
   cdf.test(fit, "y")
   cdf.test(fit, "y", "cvm")
   cdf.test(fit, "y", "ad")
+  ## marked
+  cdf.test(chicago, "y")
 
   ## (3) Monte Carlo test for Gibbs model
   fit <- ppm(cells ~ 1, Strauss(0.07))
   cdf.test(fit, "x", nsim=9)
+
+  ## cdf.test.slrm
+  fut <- slrm(japanesepines ~ x + y)
+  Z <- distmap(japanesepines)
+  cdf.test(fut, Z)
 })
+
+
 
 ##  tests/closeshave.R
 ## check 'closepairs/crosspairs' code
@@ -634,7 +645,7 @@ local({
 #'
 #'   disconnected linear networks
 #'
-#'    $Revision: 1.2 $ $Date: 2017/06/05 14:58:36 $
+#'    $Revision: 1.3 $ $Date: 2018/07/21 03:00:09 $
 
 require(spatstat)
 
@@ -646,6 +657,7 @@ m[4,5] <- m[5,4] <- m[6,10] <- m[10,6] <- m[4,6] <- m[6,4] <- FALSE
 L <- linnet(vertices(simplenet), m)
 L
 summary(L)
+is.connected(L)
 Z <- connected(L, what="components")
 
 #' point pattern with no points in one connected component
@@ -679,6 +691,8 @@ KYI <- linearKcross.inhom(Y, lambdaI=rep(intensity(Y1), npoints(Y1)),
 PYI <- linearpcfcross.inhom(Y, lambdaI=rep(intensity(Y1), npoints(Y1)),
                     lambdaJ=rep(intensity(Y2), npoints(Y2)))
 
+#' internal utilities
+K <- ApplyConnected(X, linearK, rule=function(...) list())
 })
 #'
 #'   tests/dominic.R

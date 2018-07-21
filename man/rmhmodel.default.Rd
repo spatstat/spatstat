@@ -445,6 +445,7 @@ otherwise an error is given.
    # Strauss process:
    mod01 <- rmhmodel(cif="strauss",par=list(beta=2,gamma=0.2,r=0.7),
                  w=c(0,10,0,10))
+   mod01
    # The above could also be simulated using 'rStrauss'
 
    # Strauss with hardcore:
@@ -522,6 +523,7 @@ otherwise an error is given.
                     par=list(list(beta=100,gamma=0.5,r=0.05),
                              list(beta=1, gamma=0.7,r=0.1, sat=2)),
                     w=square(1))
+  modhy
 }
 \author{
   \adrian

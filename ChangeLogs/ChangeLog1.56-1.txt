@@ -264,3 +264,31 @@ Change log from 1.56-0 to 1.56-1
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+21 jul 2018
+
+   compileK.R
+   fv.R
+   quadclass.R
+	Bug fixes
+	
+   tests/cdf.test.R
+   tests/disconnected.R
+   tests/hypotests.R [New file]
+   tests/kppm.R
+   tests/lppstuff.R
+   tests/nndist.R
+   tests/rmhExpand.R
+	More tests
+	
+   rmhmodel.default.Rd
+   rmhstart.Rd
+   spatialcdf.Rd
+	More examples
+
+   DESCRIPTION
+   NEWS
+	Version 1.56-0.016
+
+------------- passed R-3.5.0 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
