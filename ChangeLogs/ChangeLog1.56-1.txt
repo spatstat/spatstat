@@ -292,3 +292,19 @@ Change log from 1.56-0 to 1.56-1
 ------------- passed R-3.5.0 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
+
+22 july 2018
+
+   tests/polygons.R
+   tests/segments.R
+   tests/leverinf.R
+	More tests invoking C code blocks.
+
+   DESCRIPTION
+   NEWS
+	Version 1.56-0.017
+
+------------- passed R-3.5.0 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+

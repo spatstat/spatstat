@@ -266,12 +266,16 @@ local({
 ## 
 ## tests/polygons.R
 ##
-##  $Revision: 1.2 $ $Date: 2015/12/29 08:54:49 $
+##  $Revision: 1.3 $ $Date: 2018/07/22 02:10:07 $
 ##
 require(spatstat)
 local({
   co <- as.ppp(corners(letterR), letterR, check=FALSE)
   co[letterR]
+
+  b <- letterR$bdry
+  a <- sapply(b, xypolyselfint, yesorno=TRUE)
+  a <- lapply(b, xypolyselfint, proper=TRUE)
 })
 
 # 

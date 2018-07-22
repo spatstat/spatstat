@@ -14,7 +14,7 @@ local({
 #
 #  tests/segments.R
 #
-#  $Revision: 1.12 $  $Date: 2018/05/02 05:55:25 $
+#  $Revision: 1.13 $  $Date: 2018/07/22 02:15:02 $
 
 require(spatstat)
 
@@ -126,7 +126,15 @@ if(xFI > 0.01) stop(paste("density.psp FFT algorithm relative error =", xFI))
 
 #' undocumented  
   as.ppp(B)
+
+  #' segment crossing code
+  X <- psp(runif(30),runif(30),runif(30),runif(30), window=owin())
+  spatstat.options(selfcrossing.psp.useCall=FALSE)
+  selfcrossing.psp(X)
+  spatstat.options(selfcrossing.psp.useCall=TRUE)
 })
+
+reset.spatstat.options()
 #
 ## tests/sigtraceprogress.R
 #

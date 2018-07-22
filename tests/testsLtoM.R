@@ -55,7 +55,7 @@ local({
 #'
 #'   leverage and influence for Gibbs models
 #' 
-#'   $Revision: 1.21 $ $Date: 2018/05/17 07:22:25 $
+#'   $Revision: 1.22 $ $Date: 2018/07/22 02:19:45 $
 #' 
 
 require(spatstat)
@@ -78,6 +78,10 @@ local({
   fitD <- ppm(cells ~ 1, DiggleGatesStibbard(0.12), rbord=0)
   levD <- Leverage(fitD)
   infD <- Influence(fitD)
+  # DiggleGratton() special code
+  fitDG <- ppm(cells ~ 1, DiggleGratton(0.05, 0.12), rbord=0)
+  levDG <- Leverage(fitDG)
+  infDG <- Influence(fitDG)
   # ppmInfluence; offset is present; coefficient vector has length 0
   fitH <- ppm(cells ~ 1, Hardcore(0.07))
   levH <- Leverage(fitH)
