@@ -308,3 +308,15 @@ Change log from 1.56-0 to 1.56-1
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+   sdr.R
+   sdr.Rd
+	sdr is now generic with a method for ppp
+	
+   DESCRIPTION
+   NEWS
+	Version 1.56-0.018
+
+------------- passed R-3.5.0 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+

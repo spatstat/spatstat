@@ -1,5 +1,6 @@
 \name{sdr}
 \alias{sdr}
+\alias{sdr.ppp}
 \title{
   Sufficient Dimension Reduction
 }
@@ -9,8 +10,11 @@
   a linear combination of the original predictors.
 }
 \usage{
-sdr(X, covariates, method = c("DR", "NNIR", "SAVE", "SIR", "TSE"),
-    Dim1 = 1, Dim2 = 1, predict=FALSE)
+sdr(X, covariates, \dots)
+
+\method{sdr}{ppp}(X, covariates,
+                  method = c("DR", "NNIR", "SAVE", "SIR", "TSE"),
+                  Dim1 = 1, Dim2 = 1, predict=FALSE, \dots)
 }
 \arguments{
   \item{X}{
@@ -35,6 +39,9 @@ sdr(X, covariates, method = c("DR", "NNIR", "SAVE", "SIR", "TSE"),
   \item{predict}{
     Logical value indicating whether to compute the new predictors
     as well.
+  }
+  \item{\dots}{
+    Additional arguments (ignored by \code{sdr.ppp}).
   }
 }
 \details{

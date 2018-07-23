@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.56-0.017
+        CHANGES IN spatstat VERSION 1.56-0.018
 
 OVERVIEW
 
@@ -21,6 +21,9 @@ NEW FUNCTIONS
     
 SIGNIFICANT USER-VISIBLE CHANGES
 
+    o sdr
+    This is now a generic function, with a method for class 'ppp'.
+    
     o pointsOnLines
     The result now has an attribute named "map"
     which maps each point to its parent line segment.

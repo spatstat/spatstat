@@ -9,15 +9,21 @@
 #'
 #'  GNU Public Licence 2.0 || 3.0
 #'
-#'    $Revision: 1.11 $  $Date: 2016/11/26 07:41:34 $
+#'    $Revision: 1.13 $  $Date: 2018/07/23 02:03:16 $
 #'
 
-sdr <- local({
+sdr <- function(X, covariates, ...) {
+  UseMethod("sdr")
+}
 
-  sdr <- function(X, covariates, method=c("DR", "NNIR", "SAVE", "SIR", "TSE"),
-                  Dim1=1, Dim2=1, predict=FALSE) {
+sdr.ppp <- local({
+
+  sdr.ppp <- function(X, covariates,
+                      method=c("DR", "NNIR", "SAVE", "SIR", "TSE"),
+                      Dim1=1, Dim2=1, predict=FALSE, ...) {
     stopifnot(is.ppp(X))
     method <- match.arg(method)
+    trap.extra.arguments(...)
     #' ensure 'covariates' is a list of compatible images
     if(!inherits(covariates, "imlist") && !all(sapply(covariates, is.im)))
       stop("Argument 'covariates' must be a list of images")
@@ -70,7 +76,7 @@ sdr <- local({
     return(M)
   }
   
-  sdr
+  sdr.ppp
 })
 
 sdrPredict <- function(covariates, B) {
