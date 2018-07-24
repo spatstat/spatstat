@@ -320,3 +320,18 @@ Change log from 1.56-0 to 1.56-1
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+24 july 2018
+
+   src/spasumsymout.h
+	Bug fix
+
+   DESCRIPTION
+   NEWS
+	Version 1.56-0.019
+
+------------- passed R-3.5.0 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+
+   

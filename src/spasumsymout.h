@@ -13,7 +13,7 @@
 
   WEIGHTS   (#ifdef) use weights 
 
-  $Revision: 1.4 $  $Date: 2016/02/24 09:57:16 $
+  $Revision: 1.5 $  $Date: 2018/07/24 11:33:19 $
 
  */
 
@@ -99,7 +99,7 @@ void FNAME(m, n,
     while(r < R && ((jw[r] < j) || 
 		    ((jw[r] == j) && (kw[r] < k))))
       ++r;
-    if(jw[r] == j && kw[r] == k) {
+    if(r < R && jw[r] == j && kw[r] == k) {
       /* weight w[j,k] is present */
       wjk = w[r];
 #endif
@@ -121,7 +121,7 @@ void FNAME(m, n,
       Rprintf("\t tstart=%d\n", tstart);
       Rprintf("\t kt[tstart]=%d, jt[tstart]=%d\n", kt[tstart], jt[tstart]);
 #endif
-      if(kt[tstart] == j && jt[tstart] == k) {
+      if(tstart < L && kt[tstart] == j && jt[tstart] == k) {
 	/* Both x[,j,k] and x[,k,j] are present so a contribution will occur */
 	/* seek end of run */
 	for(tend = tstart+1;
