@@ -319,6 +319,7 @@ Change log from 1.56-0 to 1.56-1
 ------------- passed R-3.5.0 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
++++++++++++++ installed R-3.5.1        +++++++++++++++
 
 24 july 2018
 
@@ -329,9 +330,20 @@ Change log from 1.56-0 to 1.56-1
    NEWS
 	Version 1.56-0.019
 
-------------- passed R-3.5.0 CMD check ---------------
+------------- passed R-3.5.1 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+>>>>>>> passed R-3.5.1 CMD check --use-valgrind <<<<<<<
 
-   
+25 July 2018
+
+   DESCRIPTION
+   NEWS
+   Nickname.txt
+	Nickname: "Apotropaic"
+	Version 1.56-0.020
+
+------------- passed R-3.5.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
