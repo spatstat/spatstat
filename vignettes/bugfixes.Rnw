@@ -1,0 +1,566 @@
+\documentclass[11pt]{article}
+\usepackage{graphicx}
+\usepackage{Sweave}
+\usepackage{bm}
+\usepackage{anysize}
+
+\marginsize{2cm}{2cm}{2cm}{2cm}
+
+% \VignetteIndexEntry{Bugs Fixed in Spatstat}
+
+\newcommand{\pkg}[1]{\texttt{#1}}
+\newcommand{\code}[1]{\texttt{#1}}
+\newcommand{\R}{{\sf R}}
+\newcommand{\spst}{\pkg{spatstat}}
+\newcommand{\Spst}{\pkg{Spatstat}}
+
+\begin{document}
+\bibliographystyle{plain}
+
+<<echo=FALSE,results=hide>>=
+library(spatstat)
+sversion <- read.dcf(file = system.file("DESCRIPTION", package = "spatstat"),
+         fields = "Version")
+options(useFancyQuotes=FALSE)
+@ 
+
+\title{Bugs fixed in \spst}
+\author{Adrian Baddeley, Rolf Turner and Ege Rubak}
+\date{For \spst\ version \texttt{\Sexpr{sversion}}}
+\maketitle
+
+\thispagestyle{empty}
+
+This vignette lists all \emph{important} bugs detected and fixed in the
+\spst\ package since 2010.
+
+<<echo=FALSE,results=hide>>=
+nbugs <- nrow(news(grepl("^BUG", Category), 
+                   package="spatstat"))
+nbugssince <- nrow(news(Version > "1.42-0" & grepl("^BUG", Category), 
+                   package="spatstat"))
+@ 
+
+\tableofcontents
+
+\section{Bug history}
+
+Thousands of bugs have been detected and fixed in \spst\ during its
+25-year history. We started recording the bug history in 2010.
+
+Bugs that may have affected the user are listed in the 
+package \texttt{NEWS} file, and can be searched
+using the \R\ command \texttt{news} or the \spst\ command \texttt{bugfixes}. 
+
+To see all bugs in the recorded history of \spst\ 
+that may have affected the user, type
+<<eval=FALSE>>=
+bugfixes
+@ 
+which currently produces a list of \Sexpr{nbugs} bugs,
+of which \Sexpr{nbugssince} were detected after publication of the
+book \cite{baddrubaturn15}.
+To see all bugs in \spst\ that were fixed after 30 June 2017, type
+<<eval=FALSE>>=
+bugfixes(sincedate="2017-06-30")
+@ 
+To see all bugs fixed after the book \cite{baddrubaturn15} was written, type
+<<eval=FALSE>>=
+bugfixes(sinceversion="1.42-0")
+@ 
+
+\section{Serious bugs}
+
+Following is a list of the {\bf most serious bugs} only, in order
+of potential impact.
+
+\newcommand\bugger[4]{%
+  \\  {} %
+  {\small (Bug introduced in \texttt{spatstat {#1}}, {#2}; %
+    fixed in \texttt{spatstat {#3}}, {#4})}%
+}
+
+  %%% LEVEL 1
+\subsubsection{Serious Bugs, Always Wrong, Broad Impact} 
+
+\begin{itemize}
+\item \texttt{nncross.ppp}:
+  Results were completely incorrect if $k > 1$.
+  \bugger{1.31-2}{april 2013}{1.35-0}{december 2013}
+
+\item \texttt{nncross.pp3}:
+  Results were completely incorrect in some cases.
+  \bugger{1.32-0}{august 2013}{1.34-0}{october 2013}
+
+ \item \texttt{cdf.test.ppm}:
+    Calculation of $p$-values was incorrect for Gibbs models: 
+    $1-p$ was computed instead of $p$.
+  \bugger{1.40-0}{december 2014}{1.45-2}{may 2016}
+
+\item \texttt{Smooth.ppp}:
+  Results of \verb!Smooth(X, at="points", leaveoneout=FALSE)!
+  were completely incorrect.
+  \bugger{1.20-5}{august 2010}{1.46-0}{july 2016}
+  
+\item \texttt{rmh}:
+  
+   \begin{itemize}
+   \item Simulation was completely incorrect in the case of 
+     a multitype point process with an interaction that does not depend
+     on the marks, such as \verb!ppm(betacells, ~marks, Strauss(60))!
+     due to a coding error in the \texttt{C} interface.
+     \bugger{1.22-3}{march 2010}{1.22-3}{june 2011}
+   \item 
+     Simulation of the Area-Interaction model was completely incorrect.
+     \bugger{1.23-6}{october 2011}{1.31-0}{january 2013}
+   \item 
+     Simulation of the Geyer saturation process was completely incorrect.
+     \bugger{1.31-0}{january 2013}{1.31-1}{march 2013}
+   \item 
+     Simulation of the Strauss-Hard Core process was partially incorrect,
+     giving point patterns with a slightly lower intensity.
+     \bugger{1.31-0}{january 2013}{1.37-0}{may 2014}
+   \item
+   The result of simulating a model with a hard core
+   did not necessarily respect the hard core constraint,
+   and simulation of a model with strong inhibition
+   did not necessarily converge. 
+   This only happened if the first order trend was large,
+   the starting state (\texttt{n.start} or \texttt{x.start}) was not given,
+   and the number of iterations \texttt{nrep} was not very large.
+   It occurred because of a poor choice for the default starting state.
+   {\small (Bug was present since about 2010.  
+     Fixed in \texttt{spatstat 1.40-0}, december 2014)}
+   \item 
+     Simulation was incorrect in the case of an inhomogeneous multitype model
+     with \texttt{fixall=TRUE} (i.e.\ with a fixed number of points 
+     of each type) if the model was segregated (i.e.\ if different types
+     of points had different first order trend). 
+     The effect of the error was that all types of points
+     had the same first order trend.
+     {\small (Bug was present since about 2010.
+       Fixed in \texttt{spatstat 1.43-0}, september 2015)}
+  \item 
+     Simulation of the Geyer saturation process was 
+     incorrectly initialised, so that the results of a short run 
+     (i.e. small value of \texttt{nrep}) were incorrect, 
+     while long runs were correct.
+     \bugger{1.17-0}{october 2009}{1.31-1}{march 2013}
+   \end{itemize}
+
+\item \texttt{nnmark, as.im.ssf}:
+  If \code{marks(X)} was a matrix rather than a data frame,
+  the results were completely incorrect.
+  \bugger{1.32-0}{august 2013}{1.55-1}{april 2018}
+
+ \item \texttt{rVarGamma}:
+   Simulations were incorrect; they were generated using the wrong value
+   of the parameter \texttt{nu.ker}.  
+   \bugger{1.25-0}{december 2011}{1.35-0}{december 2013}
+
+ \item \texttt{rCauchy}:
+   Simulations were incorrect; they were generated using the wrong value
+   of the parameter \texttt{omega}.
+   \bugger{1.25-0}{december 2011}{1.25-2}{january 2012}
+   
+ \item \texttt{lppm}:
+   For multitype patterns, the fitted model was completely incorrect
+   due to an error in constructing the quadrature scheme.
+   \bugger{1.23-0}{july 2011}{1.30-0}{december 2012}
+   
+ \item \verb![.lpp!:
+   The local coordinate \texttt{seg} was completely incorrect,
+   when \texttt{i} was a window.
+   \bugger{1.31-2}{april 2013}{1.45-0}{march 2016}
+   
+ \item \texttt{lohboot}:  Implementation was completely incorrect.
+   \bugger{1.26-1}{april 2012}{1.53-2}{october 2017}
+   
+ \item \texttt{leverage.ppm}, \texttt{influence.ppm}, \texttt{dfbetas.ppm}:
+   Results were incorrect for non-Poisson processes
+   due to a mathematical error.
+   \bugger{1.25-0}{december 2011}{1.51-0}{may 2017}
+
+ \end{itemize}
+ 
+  %%% LEVEL 2
+ \subsubsection{Serious Bugs, Often Completely Wrong, Moderate Impact}
+
+ \begin{itemize}
+ \item \texttt{bw.pcf}:
+   Results were totally incorrect due to a typo.
+   \bugger{1.51-0}{may 2017}{1.52-0}{august 2017}   
+
+ \item \texttt{predict.mppm}:
+   If the model included random effects, and if the library \pkg{MASS} was not loaded,
+   the predictions were on the log scale (i.e.\ they were logarithms of the correct values).
+   \bugger{1.43-0}{october 2015}{1.55-1}{april 2018}   
+   
+ \item \texttt{nnmap}, \texttt{nnmark}:
+   Values were incorrect if the resulting pixel image
+    had unequal numbers of rows and columns.
+   \bugger{1.35-0}{december 2013}{1.55-0}{january 2018}   
+
+ \item \texttt{vcov.mppm}:
+    Format was incorrect (rows/columns were omitted) in some cases.
+   \bugger{1.45-1}{may 2016}{1.55-0}{january 2018}   
+
+  \item \texttt{model.matrix.ppm}, \texttt{model.frame.ppm}:
+    Values were sometimes incorrect when applied to the result of
+    \texttt{subfits}.
+    To be precise, if \texttt{fit} was an \texttt{mppm}
+    object fitted to a hyperframe
+    that included ``design covariates'' (covariates that take a constant value
+    in each row of the hyperframe), and if \verb!futs <- subfits(fit)!, then
+    \verb!model.matrix(futs[[i]])! gave incorrect values in the columns
+    corresponding to the design covariates. 
+    \bugger{1.45-1}{may 2016}{1.55-0}{january 2018}   
+   
+ \item \texttt{predict.rho2hat}:
+   Results were incorrect for a \texttt{rho2hat} object computed
+   from a point pattern.
+   \bugger{1.42-0}{may 2015}{1.52-0}{august 2017}   
+   
+\item \texttt{envelope.ppm}:
+   If the model was an inhomogeneous Poisson process, 
+   the resulting envelope object was incorrect
+   (the simulations were correct, but the envelopes were calculated
+   assuming the model was CSR). 
+   \bugger{1.23-5}{september 2011}{1.23-6}{october 2011}
+
+ \item \texttt{linearK}, \texttt{linearpcf},
+   \texttt{linearKinhom}, \texttt{linearpcfinhom}
+   and multitype versions:
+    These functions were sometimes greatly underestimated
+    when the network had segments shorter than 10 coordinate units.
+   \bugger{1.44-0}{december 2015}{1.46-2}{july 2016}
+
+ \item \texttt{nncross}, \texttt{distfun}, \texttt{AreaInter}:
+  Results of \texttt{nncross} were possibly incorrect 
+  when \code{X} and \code{Y} did not have the same window. 
+  This bug affected values of \texttt{distfun} and may also 
+  have affected ppm objects with interaction \texttt{AreaInter}.
+  \bugger{1.9-4}{june 2006}{1.25-2}{january 2012}
+
+ \item \texttt{update.kppm}:
+   \begin{itemize}
+   \item Did not function correctly when several additional arguments
+     were given.
+     \bugger{1.42-2}{june 2015}{1.54-0}{november 2017}
+   \item 
+  If the call to \texttt{update} did not include a formula argument
+   or a point pattern argument, then all arguments were ignored. 
+   Example: \texttt{update(fit, improve.type="quasi")} was identical to 
+   \texttt{fit}.
+   \bugger{1.42-2}{june 2015}{1.45-0}{march 2016}
+   \end{itemize}
+
+  \item \texttt{markcorrint}:
+   Results were completely incorrect.
+   \bugger{1.39-0}{october 2014}{1.40-0}{december 2014}
+
+    \item \texttt{leverage.ppm}, \texttt{influence.ppm}, \texttt{dfbetas.ppm}:
+   Results were slightly incorrect for models with a hard core,
+   due to a mathematical error.
+   \bugger{1.51-0}{may 2017}{1.55-1}{april 2018}
+
+    \item \texttt{Ops.msr}:
+    If the input data contained a pixel image of the smoothed density,
+    this image was not updated; it was copied to the output unchanged.
+    Plots of the resulting measure were incorrect. 
+    \bugger{1.52-0}{august 2017}{1.55-1}{april 2018}
+
+  \item \verb![.linnet!: 
+    in calculating \verb!L[W]! where \texttt{W} is a window,
+    the code ignored segments of \code{L} that crossed \code{W}
+    without having a vertex in \code{W}.
+    \bugger{1.53-0}{september 2017}{1.55-1}{april 2015}
+  \end{itemize}
+  
+  %%% LEVEL 3
+  \subsubsection{Bugs, Substantially Incorrect, Moderate Impact}
+
+  \begin{itemize}
+   \item \texttt{simulate.dppm}, \texttt{simulate.detpointprocfamily}:
+    In dimensions higher than 2, the result was shifted so that
+    it was centred at the origin.
+    \bugger{1.54-0}{december 2017}{1.55-0}{january 2018}   
+
+    \item \texttt{integral.msr}: If the result was a matrix, 
+      it was the transpose of the correct answer.
+    \bugger{1.35-0}{december 2012}{1.55-1}{april 2018}   
+      
+\item \texttt{density.ppp}:
+  Values of \verb!density(X, at="points")!
+  and \verb!Smooth(X, at="points")!
+  were sometimes incorrect, due to omission of
+  the contribution from the data point with the smallest $x$ coordinate.
+  \bugger{1.26-0}{april 2012}{1.46-1}{july 2016}
+  
+ \item \texttt{update.ppm}:
+   If the argument \texttt{Q} was given,
+   the results were usually incorrect, or an error was generated.
+   \bugger{1.38-0}{august 2014}{1.38-1}{august 2014}
+
+\item \texttt{subfits}:
+    The interaction coefficients of the submodels were incorrect
+    for Gibbs models with a multitype interaction (\texttt{MultiStrauss}, etc).
+   \bugger{1.35-0}{december 2013}{1.45-2}{may 2016}
+   
+\item \texttt{F3est}:
+   Estimates of $F(r)$ for the largest value of $r$ 
+   were wildly incorrect. 
+     {\small (Bug was present since about 2010.
+       Fixed in \texttt{spatstat 1.48-0}, december 2016)}
+   
+ \item \texttt{kppm}, \texttt{matclust.estpcf}, \texttt{pcfmodel}:
+    The pair correlation function of the M\'atern Cluster Process
+    was evaluated incorrectly at distances close to 0.
+    This could have affected the fitted parameters 
+    in \texttt{matclust.estpcf()} or \texttt{kppm(clusters="MatClust")}.
+    \bugger{1.20-2}{august 2010}{1.33-0}{september 2013}
+    
+ \item \texttt{ppm}:
+   Results were incorrect for the Geyer saturation model
+   with a non-integer value of the saturation parameter \texttt{sat}.
+   \bugger{1.20-0}{july 2010}{1.31-2}{april 2013}
+   
+ \item \texttt{clip.infline}: 
+   Results were incorrect unless the midpoint of the window
+   was the coordinate origin.
+   \bugger{1.15-1}{april 2009}{1.48-0}{december 2016}
+   
+ \item \texttt{intensity.ppm}:
+   Result was incorrect for Gibbs models if the model was 
+    exactly equivalent to a Poisson process (i.e. if all interaction
+    coefficients were exactly zero).
+   \bugger{1.28-1}{june 2012}{1.47-0}{october 2016}
+   
+ \item \texttt{funxy}: 
+   Did not correctly handle one-line functions. 
+   The resulting objects evaluated the wrong function in some cases.
+   \bugger{1.45-0}{march 2016}{1.46-0}{july 2016}   
+
+ \item \texttt{kernel.moment}:
+   Result was incorrect for \texttt{kernel="cosine"} 
+   and \texttt{kernel="cosine"}.
+   \bugger{1.45-2}{may 2016}{1.56-0}{june 2018}   
+   
+ \item \verb![.msr!:
+   Format was mangled if the subset contained exactly one quadrature point.
+   \bugger{1.21-3}{january 2011}{1.56-0}{june 2018}   
+   
+ \item \texttt{tess}:
+    If a list of tiles was given, and the tiles were pixel images or masks,
+    their pixel resolutions were ignored, and reset to the default 
+    $128 \times 128$.
+   {\small (Bug fixed in \texttt{spatstat 1.56-0}, june 2018)}   
+ \end{itemize}   
+
+ %% LEVEL 4: 
+ \subsubsection{Partially Incorrect}
+ \begin{itemize}
+   
+ \item \texttt{model.matrix.ppm}:
+   The attribute \texttt{assign} was omitted in some cases.
+   \bugger{1.45-1}{may 2016}{1.55-0}{january 2018}   
+
+\item \texttt{density.ppp}:
+  If the smoothing bandwidth \texttt{sigma} was very small 
+  (e.g.\ less than the width of a pixel), 
+  results were inaccurate if the default resolution was used,
+  and completely incorrect if a user-specified resolution was given.
+  \bugger{1.26-0}{april 2012}{1.52-0}{august 2017}
+  
+ \item \texttt{selfcrossing.psp}:
+   $y$ coordinate values were incorrect.   
+   \bugger{1.23-2}{august 2011}{1.25-3}{february 2012}
+     
+ \item \texttt{Geyer}:
+   For point process models with the \texttt{Geyer} interaction, 
+   \texttt{vcov.ppm} and \texttt{suffstat} sometimes gave incorrect answers.
+   \bugger{1.27-0}{may 2012}{1.30-0}{december 2012}
+   
+ \item \texttt{leverage.ppm}, \texttt{influence.ppm}, \texttt{dfbetas.ppm}:
+    Calculations were incorrect for a Geyer model fitted using
+    an edge correction other than \texttt{"border"} or \texttt{"none"}.
+   \bugger{1.25-0}{december 2011}{1.51-0}{may 2017}
+
+ \item \texttt{leverage.ppm}, \texttt{influence.ppm}, \texttt{dfbetas.ppm}:
+   Results were slightly incorrect for models fitted using the border
+   correction.
+   \bugger{1.25-0}{december 2011}{1.54-0}{november 2017}
+
+ \item \texttt{leverage.ppm}:
+   The mean leverage value (shown as a contour level in \texttt{plot.leverage.ppm})
+   was slightly incorrect for Gibbs models.
+   \bugger{1.25-0}{december 2011}{1.54-0}{november 2017}
+
+ \item \texttt{vcov.ppm}, \texttt{suffstat}:
+   These functions sometimes gave incorrect values 
+   for marked point process models.   
+   \bugger{1.27-0}{may 2012}{1.29-0}{october 2012}
+   
+ \item \texttt{diagnose.ppm}:
+   When applied to a model obtained from \texttt{subfits()}, 
+   in the default case (\texttt{oldstyle=FALSE}) 
+   the variance calculations were incorrect.
+   Consequently the dotted lines representing significance bands were 
+   incorrect. An error or warning about negative variances occurred sometimes.
+   However, calculations with \texttt{oldstyle=TRUE} were correct.
+   The default has now been changed to \texttt{oldstyle=TRUE} for such models.
+   \bugger{1.35-0}{december 2013}{1.45-0}{march 2016}
+
+ \item \texttt{Smooth.ppp}:
+   Results for \verb!at="points"! were garbled, for some values of 
+   \texttt{sigma}, if \texttt{X} had more than one column of marks.
+   \bugger{1.38-0}{october 2014}{1.46-0}{july 2016}
+    
+ \item \texttt{linearK}, \texttt{linearKinhom}:
+   If any data points were located exactly at a vertex of the 
+   linear network, the weights for Ang's correction were incorrect, 
+   due to numerical error. This sometimes produced infinite 
+   or NA values of the linear $K$ function.  
+   \bugger{1.23-0}{july 2011}{1.27-0}{may 2012}
+
+ \item \texttt{Kinhom}, \texttt{Linhom}:
+   the results were not renormalised (even if \texttt{renormalise=TRUE})
+   in some cases.
+   \bugger{1.21-0}{december 2010}{1.37-0}{may 2014}
+     
+ \item \texttt{Kinhom}, \texttt{Linhom}:
+   Ignored argument \texttt{reciplambda2} in some cases.
+   \bugger{1.39-0}{october 2014}{1.40-0}{december 2014}
+
+ \item \texttt{Kinhom}, \texttt{Linhom}:
+   Calculations were incorrect if \texttt{lambda} was a fitted point
+   process model.
+   \bugger{1.38-0}{august 2014}{1.38-1}{august 2014}
+     
+ \item \texttt{integral.linim}, \texttt{integral.linfun}:
+   \begin{itemize}
+   \item 
+   results were inaccurate because of a bias in the distribution of
+   sample points.
+   \bugger{1.41-0}{february 2015}{1.47-0}{october 2016}
+   \item 
+   results were inaccurate if many of the segment lengths were
+   shorter than the width of a pixel.
+   \bugger{1.41-0}{february 2015}{1.48-0}{december 2016}
+    \item 
+   results were wildly inaccurate in some extreme cases where many segments
+   were very short.
+   \bugger{1.41-0}{february 2015}{1.54-0}{november 2017}
+   \end{itemize}
+   
+ \item \texttt{predict.ppm}:
+   Calculation of the conditional intensity omitted the edge correction
+   if \texttt{correction='translate'} or \texttt{correction='periodic'}. 
+   \bugger{1.17-0}{october 2009}{1.31-3}{may 2013}
+
+ \item \texttt{varblock}:
+   Calculations were incorrect if more than one column of 
+   edge corrections was computed. 
+   \bugger{1.21-1}{november 2010}{1.39-0}{october 2014}
+   
+ \item \texttt{scan.test}
+   Results were sometimes incorrect due to numerical instability
+   (a 'Gibbs phenomenon').    
+   \bugger{1.24-1}{october 2011}{1.26-1}{april 2012}
+
+ \item \texttt{relrisk}:
+   When \verb!at="pixels"!, a small fraction of pixel values were sometimes
+   wildly inaccurate, due to numerical errors. This affected the 
+   range of values in the result, and therefore the appearance of plots.
+   {\small (Bug fixed in \texttt{spatstat 1.40-0}, december 2014)}
+
+ \item \texttt{predict.slrm}:
+   Results of \texttt{predict(object, newdata)} were incorrect 
+   if the spatial domain of \texttt{newdata}
+   was larger than the original domain.
+   \bugger{1.21-0}{november 2010}{1.25-3}{february 2012}
+   
+ \item \texttt{Lest}:
+   The variance approximations (Lotwick-Silverman and Ripley)
+   obtained with \texttt{var.approx=TRUE} were incorrect for \texttt{Lest}
+   (although they were correct for \texttt{Kest}) due to a coding error.
+   \bugger{1.24-1}{october 2011}{1.24-2}{november 2011}
+ 
+ \item \texttt{bw.diggle}:
+   Bandwidth was too large by a factor of 2.
+   \bugger{1.23-4}{september 2011}{1.23-5}{september 2011}
+ 
+ \item pair correlation functions (\texttt{pcf.ppp}, \texttt{pcfdot}, 
+    \texttt{pcfcross} etc:)
+    The result had a negative bias at the maximum $r$ value,
+    because contributions to the pcf estimate from interpoint distances
+    greater than \texttt{max(r)} were mistakenly omitted. 
+    {\small (Bugs fixed in \texttt{spatstat 1.35-0}, december 2013)}
+    
+ \item \texttt{Kest}, \texttt{Lest}:
+   Gave incorrect values in very large datasets, due to numerical overflow.
+   `Very large' typically means about 1 million points in a random pattern, 
+   or 100,000 points in a tightly clustered pattern.
+   [Overflow cannot occur unless there are at least 46,341 points.]
+   
+ \item \texttt{bw.relrisk}:
+    Implementation of \texttt{method="weightedleastsquares"} was incorrect
+    and was equivalent to \texttt{method="leastsquares"}.
+    \bugger{1.21-0}{november 2010}{1.23-4}{september 2011}
+    
+\item \texttt{triangulate.owin}:
+   Results were incorrect in some special cases.
+   \bugger{1.42-2}{june 2015}{1.44-0}{december 2015}
+  
+\item \texttt{crosspairs}:
+   If \texttt{X} and \texttt{Y} were identical point patterns,
+   the result was not necessarily symmetric
+   (on some machines) due to numerical artifacts.
+   \bugger{1.35-0}{december 2013}{1.44-0}{december 2015}
+
+ \item \texttt{bdist.tiles}:
+   Values were incorrect in some cases due to numerical error.
+    {\small (Bug fixed in \texttt{spatstat 1.29-0}, october 2012)}
+   
+\item \texttt{Kest.fft}:
+  Result was incorrectly normalised.
+   \bugger{1.21-2}{january 2011}{1.44-0}{december 2015}
+  
+\item \texttt{crossdist.ppp}:
+  Ignored argument \texttt{squared} if \texttt{periodic=FALSE}.
+    {\small (Bug fixed in \texttt{spatstat 1.38-0}, july 2014)}
+
+\item polygon geometry:
+    The point-in-polygon test gave the wrong answer in some boundary cases.
+    {\small (Bug fixed in \texttt{spatstat 1.23-2}, august 2011)}
+
+\item \texttt{MultiStraussHard}:
+    If a fitted model with \texttt{MultiStraussHard} interaction was invalid,
+    \texttt{project.ppm} sometimes yielded a model that was still invalid.
+    {\small (Bug fixed in \texttt{spatstat 1.42-0}, may 2015)}
+    
+\item \texttt{pool.envelope}:  
+  Did not always respect the value of \texttt{use.theory}.
+    \bugger{1.23-5}{september 2011}{1.43-0}{september 2015}
+
+\item \texttt{nncross.lpp}, \texttt{nnwhich.lpp}, \texttt{distfun.lpp}:
+  Sometimes caused a segmentation fault.
+    \bugger{1.44-0}{december 2015}{1.44-1}{december 2015}
+
+\item \texttt{anova.ppm}:
+  If a single \texttt{object} was given, and it was a Gibbs model,
+  then \texttt{adjust} was effectively set to \texttt{FALSE}.
+  \bugger{1.39-0}{october 2014}{1.44-1}{december 2015}
+
+  \item \verb![.linim!: the result sometimes had the wrong class.
+  \bugger{1.53-0}{september 2017}{1.55-1}{april 2015}
+\end{itemize}
+
+\begin{thebibliography}{1}
+\bibitem{baddrubaturn15}
+A. Baddeley, E. Rubak, and R. Turner.
+\newblock {\em Spatial Point Patterns: Methodology and Applications with {{R}}}.
+\newblock Chapman \& Hall/CRC Press, 2015.
+\end{thebibliography}
+ 
+\end{document}

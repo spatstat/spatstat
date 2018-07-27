@@ -347,3 +347,23 @@ Change log from 1.56-0 to 1.56-1
 ------------- passed R-3.5.1 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
+
+27 July 2018
+
+   updates.Rnw
+   bugfixes.Rnw [New file]
+   	Bug reports are now in a separate vignette.
+	    
+   DESCRIPTION
+   NEWS
+   Nickname.txt
+	Nickname: "Invisible Friend"
+	Version 1.56-1
+	
+------------- passed R-3.5.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+............. passed 'make bookcheck'  ...............
+............. submitted to CRAN        ...............
+

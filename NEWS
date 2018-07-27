@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.56-0.020
+        CHANGES IN spatstat VERSION 1.56-1
 
 OVERVIEW
 
@@ -9,7 +9,7 @@ OVERVIEW
     
     o Bug fixes.
 
-    o Version nickname: "Apotropaic"
+    o Version nickname: "Invisible Friend"
 
 NEW FUNCTIONS
 
@@ -78,6 +78,10 @@ BUG FIXES
     created by quadscheme(method="dirichlet", exact=TRUE).
     Fixed.
 
+    o bugtable
+    Crashed if there were no bugs!
+    Fixed.
+    
     o sparse array code
     An array bounds violation (segmentation fault) could occur.
     Fixed.
