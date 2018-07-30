@@ -6,7 +6,7 @@
   desired location in the frame.
 }
 \usage{
-interp.im(Z, x, y=NULL)
+interp.im(Z, x, y=NULL, bilinear=FALSE)
 }
 \arguments{
   \item{Z}{
@@ -16,6 +16,13 @@ interp.im(Z, x, y=NULL)
   \item{x,y}{
     Vectors of Cartesian coordinates.
     Alternatively \code{x} can be a point pattern and \code{y} can be missing.
+  }
+  \item{bilinear}{
+    Logical value specifying the choice of interpolation rule.
+    If \code{bilinear=TRUE} then a bilinear interpolation rule is used.
+    If \code{bilinear=FALSE} (the default) then a slightly biased rule
+    is used; this rule is consistent with earlier versions of
+    \pkg{spatstat}.
   }
 }
 \details{
@@ -44,6 +51,7 @@ interp.im(Z, x, y=NULL)
    V[list(x=0.5,y=0.5)]
    # interpolated value at location (0.5,0.5)
    interp.im(V, 0.5, 0.5)
+   interp.im(V, 0.5, 0.5, bilinear=TRUE)
    # true value is 0.75
 
    # how to obtain an interpolated image at a desired resolution
@@ -52,11 +60,10 @@ interp.im(Z, x, y=NULL)
    par(opa)
 }
 
-\author{\adrian
-  
-  
-  and \rolf
-  
+\author{
+  \adrian
+  and \rolf,
+  with a contribution from an anonymous user.
 }
 \keyword{spatial}
 \keyword{manip}

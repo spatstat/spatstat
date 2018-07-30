@@ -1,0 +1,18 @@
+Change log from 1.56-1 to 1.56-2
+================================
+
+30 july 2018
+
+   interp.im.R
+   interp.im.Rd
+	New argument 'bilinear'.
+	
+   DESCRIPTION
+   NEWS
+   Nickname.txt
+	Initialised as version 1.56-1.001
+	Nicknamed 'Damn You Autocorrect'
+
+------------- passed R-3.5.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------

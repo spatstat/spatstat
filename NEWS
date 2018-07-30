@@ -1,4 +1,15 @@
 
+        CHANGES IN spatstat VERSION 1.56-1.001
+
+OVERVIEW
+
+    o We thank 'daitakahashi' for contributions.
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o interp.im
+    New argument 'bilinear'
+    
         CHANGES IN spatstat VERSION 1.56-1
 
 OVERVIEW
