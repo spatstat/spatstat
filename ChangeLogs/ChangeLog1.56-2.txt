@@ -16,3 +16,28 @@ Change log from 1.56-1 to 1.56-2
 ------------- passed R-3.5.1 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
+
+07 august 2018
+
+   bw.pcf.Rd
+	Added reference (thanks to Rasmus)
+
+   DESCRIPTION
+   NEWS
+	version 1.56-1.002
+
+------------- passed R-3.5.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+   setcov.R
+	Improved handling of unitnames
+	(thanks to Kass Hingee)
+
+   DESCRIPTION
+   NEWS
+	version 1.56-1.003
+
+------------- passed R-3.5.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------

@@ -1,14 +1,18 @@
 
-        CHANGES IN spatstat VERSION 1.56-1.001
+        CHANGES IN spatstat VERSION 1.56-1.003
 
 OVERVIEW
 
-    o We thank 'daitakahashi' for contributions.
+    o We thank Kassel Hingee, Rasmus Waagepetersen and 'daitakahashi'
+    for contributions.
 
 SIGNIFICANT USER-VISIBLE CHANGES
 
     o interp.im
     New argument 'bilinear'
+
+    o imcov, setcov, convolve.im
+    The name of the unit of length is preserved.
     
         CHANGES IN spatstat VERSION 1.56-1
 

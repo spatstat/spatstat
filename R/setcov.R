@@ -2,7 +2,7 @@
 #
 #     setcov.R
 #
-#     $Revision: 1.15 $ $Date: 2017/06/05 10:31:58 $
+#     $Revision: 1.16 $ $Date: 2018/08/07 11:44:46 $
 #
 #    Compute the set covariance function of a window
 #    or the (noncentred) spatial covariance function of an image
@@ -102,7 +102,6 @@ convolve.im <- function(X, Y=X, ..., reflectX=FALSE, reflectY=FALSE) {
   yran <- XB$yrange + YB$yrange
   # Declare spatial domain
   out <- im(G, xrange = xran, yrange=yran)
-  unitname(out) <- unitname(X)
   if(crosscov) {
     # restrict to actual spatial domain of function
     if(reflectX) Xbox <- reflect(Xbox)
@@ -113,6 +112,7 @@ convolve.im <- function(X, Y=X, ..., reflectX=FALSE, reflectY=FALSE) {
     XYbox <- owin(xran, yran)
     out <- out[XYbox, rescue=TRUE]
   }
+  unitname(out) <- unitname(X)
   return(out)
 }
 
