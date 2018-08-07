@@ -102,6 +102,7 @@ convolve.im <- function(X, Y=X, ..., reflectX=FALSE, reflectY=FALSE) {
   yran <- XB$yrange + YB$yrange
   # Declare spatial domain
   out <- im(G, xrange = xran, yrange=yran)
+  unitname(out) <- unitname(X)
   if(crosscov) {
     # restrict to actual spatial domain of function
     if(reflectX) Xbox <- reflect(Xbox)
