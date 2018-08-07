@@ -78,7 +78,9 @@
   \eqn{h} is chosen to minimise an unbiased 
   estimate of the integrated mean-square error criterion 
   \eqn{M(h)} defined in equation (4) in Guan (2007a).
-  
+  The code implements the fast algorithm of Jalilian and Waagepetersen
+  (2018).
+    
   With \code{cv.method="compLik"}, the bandwidth 
   \eqn{h} is chosen to maximise a likelihood 
   cross-validation criterion \eqn{CV(h)} defined in 
@@ -127,6 +129,12 @@
   in pair correlation function estimations. 
   \emph{Statistics & Probability Letters}, 
   \bold{77}(18), 1722--1729.
+
+  Jalilian, A. and Waagepetersen, R. (2018)
+  Fast bandwidth selection for estimation of the pair correlation
+  function.
+  \emph{Journal of Statistical Computation and Simulation}, to appear.
+  \url{https://www.tandfonline.com/doi/full/10.1080/00949655.2018.1428606}
 }
 \author{
   Rasmus Waagepetersen and Abdollah Jalilian. 
