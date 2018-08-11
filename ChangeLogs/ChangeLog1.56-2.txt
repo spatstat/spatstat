@@ -41,3 +41,21 @@ Change log from 1.56-1 to 1.56-2
 ------------- passed R-3.5.1 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
+
+11 aug 2018
+
+   kernel2d.R
+	Buglet fixes and improvements
+
+   Kmeasure.R
+	second.moment.engine has new argument 'scalekernel'
+	for consistency with usage of evaluate2Dkernel()
+	
+   density.ppp.R
+	Bug fix in evaluating non-gaussian kernel at distance zero
+	when leaveoneout=FALSE.
+
+   Kmeasure.R
+	second.moment.engine slightly accelerated.
+	
+

@@ -3,7 +3,7 @@
 #
 #  Method for 'density' for point patterns
 #
-#  $Revision: 1.87 $    $Date: 2017/12/30 05:00:22 $
+#  $Revision: 1.88 $    $Date: 2018/08/11 10:59:03 $
 #
 
 # ksmooth.ppp <- function(x, sigma, ..., edge=TRUE) {
@@ -228,17 +228,15 @@ densitypointsEngine <- function(x, sigma, ...,
   if(is.character(kernel)) kernel <- match2DkernelName(kernel)
   isgauss <- identical(kernel, "gaussian")
 
-  # constant factor in density computations
-  if(is.null(varcov)) {
-    const <- 1/sigma^2 
-  } else {
-    detSigma <- det(varcov)
-    Sinv <- solve(varcov)
-    const <- 1/sqrt(detSigma)
-  }
   if(isgauss) {
-    # absorb leading constant in Gaussian density
-    const <- const/(2 * pi)
+    ## constant factor in Gaussian density
+    if(is.null(varcov)) {
+      gaussconst <- 1/(2 * pi * sigma^2)
+    } else {
+      detSigma <- det(varcov)
+      Sinv <- solve(varcov)
+      gaussconst <- 1/(2 * pi * sqrt(detSigma))
+    }
   }
   
   if(length(weights) == 0 || (!is.null(dim(weights)) && nrow(weights) == 0))
@@ -289,7 +287,7 @@ densitypointsEngine <- function(x, sigma, ...,
       edg <- second.moment.calc(x, sigma=sigma,
                                 kernel=kernel,
                                 scalekernel=scalekernel,
-                                what="edge", varcov=varcov)
+                                what="edge", varcov=varcov, ...)
       edgeweight <- safelookup(edg, x, warn=FALSE)
     }
     if(diggle) {
@@ -340,7 +338,7 @@ densitypointsEngine <- function(x, sigma, ...,
                result  = as.double(double(npts)),
                PACKAGE = "spatstat")
       if(sorted) result <- zz$result else result[oo] <- zz$result
-      result <- result * const
+      result <- result * gaussconst
     } else if(k == 1L) {
       wtsort <- if(sorted) weights else weights[oo]
       zz <- .C("Gwtdenspt",
@@ -352,7 +350,7 @@ densitypointsEngine <- function(x, sigma, ...,
                result  = as.double(double(npts)),
                PACKAGE = "spatstat")
       if(sorted) result <- zz$result else result[oo] <- zz$result 
-      result <- result * const
+      result <- result * gaussconst
     } else {
       ## matrix of weights
       wtsort <- if(sorted) weights else weights[oo, ]
@@ -367,7 +365,7 @@ densitypointsEngine <- function(x, sigma, ...,
                  PACKAGE = "spatstat")
         if(sorted) result[,j] <- zz$result else result[oo,j] <- zz$result
       }
-      result <- result * const
+      result <- result * gaussconst
     }
   } else if(isgauss && spatstat.options("densityC")) {
     # .................. C code ...........................
@@ -481,17 +479,18 @@ densitypointsEngine <- function(x, sigma, ...,
     # evaluate contribution from each close pair (i,j)
     if(isgauss) { 
       if(is.null(varcov)) {
-        contrib <- const * exp(-d^2/(2 * sigma^2))
+        contrib <- gaussconst * exp(-d^2/(2 * sigma^2))
       } else {
         ## anisotropic kernel
         dx <- close$dx
         dy <- close$dy
-        contrib <- const * exp(-(dx * (dx * Sinv[1L,1L] + dy * Sinv[1L,2L])
-                                 + dy * (dx * Sinv[2L,1L] + dy * Sinv[2L,2L]))/2)
+        contrib <- gaussconst * exp(-(dx * (dx * Sinv[1L,1L] + dy * Sinv[1L,2L])
+                               + dy * (dx * Sinv[2L,1L] + dy * Sinv[2L,2L]))/2)
       }
     } else {
       contrib <- evaluate2Dkernel(kernel, close$dx, close$dy,
-                                  sigma=sigma, varcov=varcov, ...)
+                                  sigma=sigma, varcov=varcov,
+                                  scalekernel=scalekernel, ...)
     }
     ## sum (weighted) contributions
     ifac <- factor(i, levels=1:npts)
@@ -511,8 +510,13 @@ densitypointsEngine <- function(x, sigma, ...,
   }
   # ----- contribution from point itself ----------------
   if(!leaveoneout) {
-    # add contribution from point itself
-    self <- const
+    #' add contribution from point itself
+    if(isgauss) {
+      self <- gaussconst
+    } else {
+      self <- evaluate2Dkernel(kernel, 0, 0, sigma=sigma, varcov=varcov,
+                               scalekernel=scalekernel, ...)
+    }
     if(!is.null(weights))
       self <- self * weights
     result <- result + self

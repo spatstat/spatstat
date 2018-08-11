@@ -3,7 +3,7 @@
 #'
 #'  Two-dimensional smoothing kernels
 #'
-#'  $Revision: 1.12 $ $Date: 2017/02/07 07:50:52 $
+#'  $Revision: 1.13 $ $Date: 2018/08/11 10:39:13 $
 #'
 
 .Spatstat.2D.KernelTable <- list(
@@ -76,14 +76,14 @@ evaluate2Dkernel <- function(kernel, x, y, sigma=NULL, varcov=NULL, ...,
       rr <- sdK/sigma
       x <- x * rr
       y <- y * rr
-      const <- rr^2
+      scalefactor <- rr^2
     } else {
       SinvH <- matrixinvsqrt(varcov)
       rSinvH <- sdK * SinvH
       XY <- cbind(x, y) %*% rSinvH
       x <- XY[,1L]
       y <- XY[,2L]
-      const <- det(rSinvH)
+      scalefactor <- det(rSinvH)
     }
   } 
 
@@ -92,12 +92,7 @@ evaluate2Dkernel <- function(kernel, x, y, sigma=NULL, varcov=NULL, ...,
   if(is.character(kernel)) {
     kerfun <- info$d
     result <- kerfun(x, y)
-    if(scalekernel)
-      result <- const * result
-    return(result)
-  }
-
-  if(is.function(kernel)) {
+  } else if(is.function(kernel)) {
     argh <- list(...)
     if(length(argh) > 0)
       argh <- argh[names(argh) %in% names(formals(kernel))]
@@ -106,22 +101,16 @@ evaluate2Dkernel <- function(kernel, x, y, sigma=NULL, varcov=NULL, ...,
       stop("NA values returned from kernel function")
     if(length(result) != length(x))
       stop("Kernel function returned the wrong number of values")
-    if(scalekernel)
-      result <- const * result
-    return(result)
-  }
-
-  if(is.im(kernel)) {
+  } else if(is.im(kernel)) {
     result <- kernel[list(x=x, y=y)]
-    if(anyNA(result))
+    if(anyNA(result) || length(result) != length(x))
       stop("Domain of kernel image is not large enough")
-    return(result)
-    if(scalekernel)
-      result <- const * result
-  } 
+  } else stop("Unrecognised format for kernel")
+  
+  if(scalekernel)
+    result <- scalefactor * result
 
-  # never reached
-  stop("Unrecognised format for kernel")
+  return(result)
 }
 
   

@@ -1483,7 +1483,7 @@ scanBinomLRTS(nZ, nG, muZ, muG, alternative)
 second.moment.calc(x, sigma, edge, what, \dots,
                    varcov=NULL, expand=FALSE, debug=FALSE)
 second.moment.engine(x, sigma, edge, what, \dots,
-      kernel, obswin, varcov, npts, debug)
+      kernel, scalekernel, obswin, varcov, npts, debug)
 sewpcf(d, w, denargs, lambda2area, divisor)
 sewsmod(d, ff, wt, Ef, rvals, method="smrep", \dots, nwtsteps=500)
 \method{shift}{diagramobj}(X, \dots)

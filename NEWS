@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.56-1.003
+        CHANGES IN spatstat VERSION 1.56-1.004
 
 OVERVIEW
 
@@ -13,6 +13,21 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o imcov, setcov, convolve.im
     The name of the unit of length is preserved.
+
+    o density.ppp
+    Slightly accelerated for non-Gaussian kernels.
+    
+BUG FIXES
+
+    o density.ppp
+    Result was incorrect for non-Gaussian kernels when
+    at="points" and leaveoneout=FALSE.
+    Fixed.
+
+    o density.ppp
+    Did not pass additional arguments "..." to a user-supplied kernel function
+    in some cases.
+    Fixed.
     
         CHANGES IN spatstat VERSION 1.56-1
 
