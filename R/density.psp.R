@@ -2,7 +2,7 @@
 #
 #  density.psp.R
 #
-#  $Revision: 1.13 $    $Date: 2017/11/19 04:18:27 $
+#  $Revision: 1.15 $    $Date: 2018/08/11 14:27:16 $
 #
 #
 
@@ -21,10 +21,10 @@ density.psp <- function(x, sigma, ..., edge=TRUE,
   #' determine locations for evaluation of density
   if(is.null(at)) {
     atype <- "window"
-    w <- as.mask(w, ...)
+    w <- do.call.matched(as.mask, resolve.defaults(list(w=w, ...)))
   } else if(is.owin(at)) {
     atype <- "window"
-    w <- as.mask(at, ...)
+    w <- do.call.matched(as.mask, resolve.defaults(list(w=at, ...)))
   } else {  
     atype <- "points"
     atY <- try(as.ppp(at, W=w))
@@ -92,7 +92,7 @@ density.psp <- function(x, sigma, ..., edge=TRUE,
          },
          FFT = {
            Y <- pixellate(x, ..., DivideByPixelArea=TRUE)
-           dens <- blur(Y, sigma, normalise=edge, bleed=FALSE)
+           dens <- blur(Y, sigma, normalise=edge, bleed=FALSE, ...)
            if(atype == "points") dens <- dens[atY, drop=FALSE]
          })
   if(edge && method != "FFT") {

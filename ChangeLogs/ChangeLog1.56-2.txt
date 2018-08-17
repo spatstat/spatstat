@@ -57,5 +57,27 @@ Change log from 1.56-1 to 1.56-2
 
    Kmeasure.R
 	second.moment.engine slightly accelerated.
-	
+
+   DESCRIPTION
+   NEWS
+	version 1.56-1.004
+
+------------- passed R-3.5.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+17 aug 2018
+
+   tests/density.R
+	Added tests for previous bug in evaluating non-Gaussian kernel
+
+   DESCRIPTION
+   NEWS
+	version 1.56-1.005
+
+------------- passed R-3.5.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+
 

@@ -29,8 +29,7 @@ blur <- function(x, sigma=NULL, ..., normalise=FALSE, bleed=TRUE, varcov=NULL) {
     stopifnot(all(sigma > 0))
   }
   if (varcov.given)
-    stopifnot(is.matrix(varcov) && nrow(varcov) == 2 && ncol(varcov) ==
-              2)
+    stopifnot(is.matrix(varcov) && nrow(varcov) == 2 && ncol(varcov) == 2)
   ngiven <- varcov.given + sigma.given
   switch(ngiven + 1L,
          {

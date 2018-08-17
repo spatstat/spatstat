@@ -1,10 +1,14 @@
 
-        CHANGES IN spatstat VERSION 1.56-1.004
+        CHANGES IN spatstat VERSION 1.56-1.005
 
 OVERVIEW
 
     o We thank Kassel Hingee, Rasmus Waagepetersen and 'daitakahashi'
     for contributions.
+
+    o Bug fix in density.ppp for non-Gaussian kernels.
+    
+    o Bug fixes and improvements.
 
 SIGNIFICANT USER-VISIBLE CHANGES
 

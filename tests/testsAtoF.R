@@ -363,7 +363,7 @@ local({
 #'                    relrisk(), Smooth()
 #'                    and inhomogeneous summary functions
 #'
-#'  $Revision: 1.22 $  $Date: 2018/07/12 02:14:08 $
+#'  $Revision: 1.23 $  $Date: 2018/08/17 09:59:51 $
 #'
 
 require(spatstat)
@@ -387,6 +387,10 @@ local({
   tryit(0.05, se=TRUE)
   tryit(0.05, weights=expression(x))
 
+  tryit(0.07, kernel="epa")
+  tryit(0.07, kernel="quartic")
+  tryit(0.07, kernel="disc")
+
   V <- diag(c(0.05^2, 0.07^2))
   tryit(varcov=V)
   tryit(varcov=V, diggle=TRUE)
@@ -400,7 +404,7 @@ local({
   tryit(0.05, weights=wdf, do.fun=FALSE)
   tryit(varcov=V, weights=wdf, do.fun=FALSE)
   tryit(varcov=V, weights=expression(cbind(x,y)), do.fun=FALSE)
-
+  
   crossit <- function(..., sigma=NULL) {
     U <- runifpoint(20, Window(cells))
     a <- densitycrossEngine(cells, U, sigma=sigma, ...)
@@ -447,6 +451,24 @@ local({
   crosscheque(density(redwood, at="points", sigma=0.13, edge=FALSE,
                       weights=wdfr))
 
+  ## correctness of non-Gaussian kernel calculation
+  leavein <- function(ker, maxd=0.025) {
+    ZI <- density(redwood, 0.12, kernel=ker, edge=FALSE,
+                  dimyx=256)[redwood]
+    ZP <- density(redwood, 0.12, kernel=ker, edge=FALSE,
+                  at="points", leaveoneout=FALSE)
+    discrep <- max(abs(ZP - ZI))/npoints(redwood)
+    if(discrep > maxd) 
+      stop(paste("Discrepancy",
+                 signif(discrep, 3),
+                 "in calculation for", ker, "kernel"))
+    return(invisible(NULL))
+  }
+  leavein("epanechnikov", 0.015)
+  leavein("quartic",      0.010)
+  leavein("disc",         0.100) 
+
+  ## Kinhom 
   lam <- density(redwood)
   K <- Kinhom(redwood, lam)
   
