@@ -196,7 +196,7 @@ PDEdensityLPP <- function(x, sigma, ..., weights=NULL,
              } else if(!is.null(argh$dimyx)) {
                min(sidelengths(W)/argh$dimyx)
              } else if(!is.null(argh$xy)) {
-               with(as.mask(W, xy=xy), min(xstep, ystep))
+               with(as.mask(W, xy=argh$xy), min(xstep, ystep))
              } else min(sidelengths(W)/spatstat.options("npixel"))
       dx <- max(eps/1.4, lbar/30)
     }

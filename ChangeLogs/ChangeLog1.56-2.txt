@@ -79,5 +79,18 @@ Change log from 1.56-1 to 1.56-2
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+20 aug 2018
+
+   density.lpp.R
+	Buglet fix.
+
+   DESCRIPTION
+   NEWS
+	version 1.56-1.006
+
+------------- passed R-3.5.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
 
 

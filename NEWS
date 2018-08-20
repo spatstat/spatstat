@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.56-1.005
+        CHANGES IN spatstat VERSION 1.56-1.006
 
 OVERVIEW
 
@@ -31,6 +31,10 @@ BUG FIXES
     o density.ppp
     Did not pass additional arguments "..." to a user-supplied kernel function
     in some cases.
+    Fixed.
+
+    o density.lpp
+    Default value of 'dx' was sometimes incorrect.
     Fixed.
     
         CHANGES IN spatstat VERSION 1.56-1
