@@ -1,7 +1,7 @@
 #
 # linim.R
 #
-#  $Revision: 1.51 $   $Date: 2018/07/02 08:45:54 $
+#  $Revision: 1.52 $   $Date: 2018/08/27 11:24:16 $
 #
 #  Image/function on a linear network
 #
@@ -35,7 +35,7 @@ linim <- function(L, Z, ..., restrict=TRUE, df=NULL) {
       #' ensure all mapped pixels are untouched
       pos <- nearest.pixel(df$xc, df$yc, Z)
       pos <- cbind(pos$row, pos$col)
-      M[pos] <- TRUE
+      M$m[pos] <- TRUE
     }
     Z <- Z[M, drop=FALSE]
   }

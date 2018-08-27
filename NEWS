@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.56-1.006
+        CHANGES IN spatstat VERSION 1.56-1.007
 
 OVERVIEW
 
@@ -23,6 +23,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
     
 BUG FIXES
 
+    o linim
+    Crashed in some cases with a message about unitnames.
+    Fixed.
+    
     o density.ppp
     Result was incorrect for non-Gaussian kernels when
     at="points" and leaveoneout=FALSE.

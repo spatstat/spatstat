@@ -69,6 +69,7 @@ To see all bugs fixed after the book \cite{baddrubaturn15} was written, type
 bugfixes(sinceversion="1.42-0")
 @ 
 
+\pagebreak
 \section{Serious bugs}
 
 Following is a list of the {\bf most serious bugs} only, in order
@@ -81,7 +82,7 @@ of potential impact.
 }
 
   %%% LEVEL 1
-\subsubsection{Serious Bugs, Always Wrong, Broad Impact} 
+\subsection{Serious Bugs, Always Wrong, Broad Impact} 
 
 \begin{itemize}
 \item \texttt{nncross.ppp}:
@@ -184,7 +185,7 @@ of potential impact.
  \end{itemize}
  
   %%% LEVEL 2
- \subsubsection{Serious Bugs, Often Completely Wrong, Moderate Impact}
+ \subsection{Serious Bugs, Often Completely Wrong, Moderate Impact}
 
  \begin{itemize}
  \item \texttt{bw.pcf}:
@@ -278,7 +279,7 @@ of potential impact.
   \end{itemize}
   
   %%% LEVEL 3
-  \subsubsection{Bugs, Substantially Incorrect, Moderate Impact}
+  \subsection{Bugs, Substantially Incorrect, Moderate Impact}
 
   \begin{itemize}
    \item \texttt{simulate.dppm}, \texttt{simulate.detpointprocfamily}:
@@ -358,7 +359,7 @@ of potential impact.
  \end{itemize}   
 
  %% LEVEL 4: 
- \subsubsection{Partially Incorrect}
+ \subsection{Partially Incorrect}
  \begin{itemize}
    
  \item \texttt{model.matrix.ppm}:

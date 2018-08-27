@@ -92,5 +92,10 @@ Change log from 1.56-1 to 1.56-2
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+23 aug 2018
+
+   bugfixes.Rnw
+	Tweak
+
 
 

@@ -57,7 +57,8 @@ density.lpp <- function(x, sigma, ...,
   Llengths <- lengths.psp(Llines)
   # initialise stack
   stack <- data.frame(seg=integer(0), from=logical(0), 
-                  distance=numeric(0), weight=numeric(0))
+                      distance=numeric(0), weight=numeric(0),
+                      generation=integer(0))
   # process each data point
   for(i in seq_len(n)) {
     segi <- seg[i]
@@ -72,7 +73,8 @@ density.lpp <- function(x, sigma, ...,
     stack <- rbind(data.frame(seg = c(segi, segi),
                               from  = c(TRUE, FALSE), 
                               distance = len * c(tpi, 1-tpi),
-                              weight = rep(weights[i], 2L)),
+                              weight = rep(weights[i], 2L),
+                              generation = rep(1L, 2)),
                    stack)
   }
   Lfrom <- L$from
@@ -82,7 +84,12 @@ density.lpp <- function(x, sigma, ...,
   if(savehistory)
     history <- data.frame(iter=integer(0), qlen=integer(0),
                           totmass=numeric(0), maxmass=numeric(0))
-  # process the stack
+
+  lastgen <- resolve.1.default(list(lastgen=Inf), list(...))
+  sortgen <- resolve.1.default(list(sortgen=FALSE), list(...))
+  sortgen <- sortgen || is.finite(lastgen) 
+
+  ## process the stack
   while(nrow(stack) > 0) {
     if(debug) print(stack)
     masses <- with(stack, abs(weight) * pkernel(distance,
@@ -121,6 +128,10 @@ density.lpp <- function(x, sigma, ...,
     Hseg <- H$seg
     Hvert <- if(H$from) Lfrom[Hseg] else Lto[Hseg]
     Hdist <- H$distance
+    Hgen <- H$generation
+    ## finished processing?
+    if(Hgen > lastgen)
+      break;
     # find all segments incident to this vertex
     incident <- which((Lfrom == Hvert) | (Lto == Hvert))
     degree <- length(incident)
@@ -147,8 +158,12 @@ density.lpp <- function(x, sigma, ...,
       stack <- rbind(data.frame(seg = J,
                                 from  = !(H.is.from),
                                 distance = lenJ + Hdist,
-                                weight = Jweight),
+                                weight = Jweight,
+                                generation = Hgen + 1L),
                      stack)
+      if(sortgen)
+        stack <- stack[order(stack$generation), , drop=FALSE]
+      print(stack)
     }
   }
   # attach values to nearest pixels
