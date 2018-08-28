@@ -97,5 +97,19 @@ Change log from 1.56-1 to 1.56-2
    bugfixes.Rnw
 	Tweak
 
+28 aug 2018
 
+   density.ppp.R
+	Buglet fix (spurious warning)
+	
+   density.ppp.Rd
+	Improved explanation of 'kernel' and 'scalekernel'
+
+   DESCRIPTION
+   NEWS
+	version 1.56-1.007
+
+------------- passed R-3.5.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
 

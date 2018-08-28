@@ -117,7 +117,7 @@
   By default it computes the convolution of the
   isotropic Gaussian kernel of standard deviation \code{sigma}
   with point masses at each of the data points in \code{x}.
-  Anisotropic Gaussian kernels are also supported.
+  Anisotropic Gaussian kernels, and non-Gaussian kernels, are also supported.
   Each point has unit weight, unless the argument \code{weights} is
   given.
 
@@ -161,25 +161,26 @@
   }
   where \eqn{W} is the observation window.
 
-  The smoothing kernel is determined by the arguments
+  By default, smoothing is performed using a Gaussian kernel,
+  with smoothing bandwidth determined by the arguments
   \code{sigma}, \code{varcov} and \code{adjust}.
   \itemize{
     \item if \code{sigma} is a single numerical value,
     this is taken as the standard deviation of the isotropic Gaussian
     kernel.
     \item alternatively \code{sigma} may be a function that computes
-    an appropriate bandwidth for the isotropic Gaussian kernel
+    an appropriate bandwidth 
     from the data point pattern by calling \code{sigma(x)}.
     To perform automatic bandwidth selection using cross-validation,
     it is recommended to use the functions \code{\link{bw.diggle}}
     or \code{\link{bw.ppl}}.
     \item
-    The smoothing kernel may be chosen to be any Gaussian
-    kernel, by giving the variance-covariance matrix \code{varcov}.
+    The smoothing kernel may be made anisotropic
+    by giving the variance-covariance matrix \code{varcov}.
     The arguments \code{sigma} and \code{varcov} are incompatible.
     \item
     Alternatively \code{sigma} may be a vector of length 2 giving the
-    standard deviations of two independent Gaussian coordinates,
+    standard deviations of the \eqn{x} and \eqn{y} coordinates,
     thus equivalent to \code{varcov = diag(rep(sigma^2, 2))}.
     \item if neither \code{sigma} nor \code{varcov} is specified,
     an isotropic Gaussian kernel will be used, 
@@ -195,6 +196,25 @@
     \code{adjust=2}.
   }
 
+  The choice of smoothing kernel is determined by the argument \code{kernel}.
+  This should be a character string giving the name of a recognised
+  two-dimensional kernel
+  (current options are \code{"gaussian"}, \code{"epanechnikov"},
+  \code{"quartic"} or \code{"disc"}),
+  or a pixel image (object of class \code{"im"})
+  containing values of the kernel, or a \code{function(x,y)} which
+  yields values of the kernel. The default is a Gaussian kernel.
+  
+  If \code{scalekernel=TRUE} then the kernel values will be rescaled
+  according to the arguments \code{sigma}, \code{varcov} and
+  \code{adjust} as explained above, effectively treating
+  \code{kernel} as the template kernel with standard deviation equal to 1.
+  This is the default behaviour when \code{kernel} is a character string.
+  If \code{scalekernel=FALSE}, the kernel values will not be altered,
+  and the arguments \code{sigma}, \code{varcov} and \code{adjust}
+  are ignored. This is the default behaviour when \code{kernel} is a
+  pixel image or a function.
+  
   If \code{at="pixels"} (the default), intensity values are
   computed at every location \eqn{u} in a fine grid,
   and are returned as a pixel image. The point pattern is first discretised 
@@ -212,7 +232,7 @@
 
   If \code{at="points"}, the intensity values are computed 
   to high accuracy at the points of \code{x} only. Computation is
-  performed by directly evaluating and summing the Gaussian kernel
+  performed by directly evaluating and summing the kernel
   contributions without discretising the data. The result is a numeric
   vector giving the density values.
   The intensity value at a point \eqn{x_i}{x[i]} is (if \code{diggle=FALSE})

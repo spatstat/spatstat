@@ -31,7 +31,8 @@ density.ppp <- function(x, sigma=NULL, ...,
     ## kernel is only partly implemented!
     if(se)
       stop("Standard errors are not implemented for non-Gaussian kernel")
-    if(verbose && (is.function(sigma) || (is.null(sigma) && is.null(varcov))))
+    if(verbose && scalekernel &&
+       (is.function(sigma) || (is.null(sigma) && is.null(varcov))))
       warning("Bandwidth selection will be based on Gaussian kernel")
   }
   
