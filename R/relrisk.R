@@ -3,7 +3,7 @@
 #
 #   Estimation of relative risk
 #
-#  $Revision: 1.33 $  $Date: 2017/01/28 06:29:07 $
+#  $Revision: 1.34 $  $Date: 2018/08/31 07:44:37 $
 #
 
 relrisk <- function(X, ...) UseMethod("relrisk")
@@ -17,14 +17,6 @@ relrisk.ppp <- local({
     stopifnot(is.multitype(X))
     control.given <- !missing(control)
     case.given <- !missing(case)
-    if(!relative && (control.given || case.given)) {
-      aa <- c("control", "case")[c(control.given, case.given)]
-      nn <- length(aa)
-      warning(paste(ngettext(nn, "Argument", "Arguments"),
-                    paste(sQuote(aa), collapse=" and "),
-                    ngettext(nn, "was", "were"),
-                    "ignored, because relative=FALSE"))
-    }
     npts <- npoints(X)
     Y <- split(X)
     uX <- unmark(X)
@@ -32,6 +24,17 @@ relrisk.ppp <- local({
     ntypes <- length(Y)
     if(ntypes == 1)
       stop("Data contains only one type of points")
+    casecontrol <- casecontrol && (ntypes == 2)
+    if((control.given || case.given) && !(casecontrol || relative)) {
+      aa <- c("control", "case")[c(control.given, case.given)]
+      nn <- length(aa)
+      warning(paste(ngettext(nn, "Argument", "Arguments"),
+                    paste(sQuote(aa), collapse=" and "),
+                    ngettext(nn, "was", "were"),
+                    "ignored, because relative=FALSE and",
+                    if(ntypes==2) "casecontrol=FALSE" else
+                    "there are more than 2 types of points"))
+    }
     marx <- marks(X)
     imarks <- as.integer(marx)
     lev <- levels(marx)

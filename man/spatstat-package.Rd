@@ -1813,6 +1813,7 @@
   Juha Heikkinen,
   Mandy Hering,
   Markus Herrmann,
+  Maximilian Hesselbarth,
   Paul Hewson,
   Kassel Hingee,
   Kurt Hornik,

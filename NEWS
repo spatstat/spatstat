@@ -1,15 +1,19 @@
 
-        CHANGES IN spatstat VERSION 1.56-1.008
+        CHANGES IN spatstat VERSION 1.56-1.009
 
 OVERVIEW
 
-    o We thank Kassel Hingee, Rasmus Waagepetersen and 'daitakahashi'
-    for contributions.
+    o We thank Tilman Davies, Maximilian Hesselbarth, Kassel Hingee,
+    Rasmus Waagepetersen and 'daitakahashi' for contributions.
 
+    o Bug fix in rthin.
+    
     o Bug fix in density.ppp for non-Gaussian kernels.
     
-    o Bug fixes and improvements.
+    o Minor bug fixes and improvements.
 
+    o Version nickname: 'Somatogravic'
+    
 SIGNIFICANT USER-VISIBLE CHANGES
 
     o interp.im
@@ -23,8 +27,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
     
 BUG FIXES
 
-    o linim
-    Crashed in some cases with a message about unitnames.
+    o rthin
+    If P was close to 1, the result was sometimes an empty point pattern
+    when it should have been identical to X.
+    [Spotted by Maximilian Hesselbarth.]
     Fixed.
     
     o density.ppp
@@ -37,6 +43,10 @@ BUG FIXES
     in some cases.
     Fixed.
 
+    o linim
+    Crashed in some cases with a message about unitnames.
+    Fixed.
+    
     o density.lpp
     Default value of 'dx' was sometimes incorrect.
     Fixed.
@@ -55,6 +65,11 @@ BUG FIXES
     Issued a spurious warning about bandwidth selection.
     Fixed.
 
+   o relrisk.ppp
+   Issued a spurious warning if the argument 'case' or 'control' was given
+   for a bivariate point pattern.
+   Fixed.
+   
         CHANGES IN spatstat VERSION 1.56-1
 
 OVERVIEW

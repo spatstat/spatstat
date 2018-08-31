@@ -3,7 +3,7 @@
 ##
 ##    Functions for generating random point patterns
 ##
-##    $Revision: 4.94 $   $Date: 2018/05/07 04:26:03 $
+##    $Revision: 4.95 $   $Date: 2018/08/31 08:08:39 $
 ##
 ##
 ##    runifpoint()      n i.i.d. uniform random points ("binomial process")
@@ -911,7 +911,12 @@ thinjump <- function(n, p) {
   stopifnot(length(p) == 1)
   if(p <= 0) return(integer(0))
   if(p >= 1) return(seq_len(n))
-  if(p > 0.5) return(-thinjump(n, 1-p))
+  if(p > 0.5) {
+    #' for retention prob > 0.5 we find the ones to discard instead
+    discard <- thinjump(n, 1-p)
+    retain <- if(length(discard)) -discard else seq_len(n)
+    return(retain)
+  }
   guessmaxlength <- ceiling(n * p + 2 * sqrt(n * p * (1-p)))
   i <- .Call("thinjumpequal",
              n, p, guessmaxlength,
