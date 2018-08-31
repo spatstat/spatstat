@@ -3,7 +3,7 @@
 #
 #  Smooth the marks of a point pattern
 # 
-#  $Revision: 1.48 $  $Date: 2018/04/13 06:42:11 $
+#  $Revision: 1.49 $  $Date: 2018/08/31 09:02:52 $
 #
 
 # smooth.ppp <- function(X, ..., weights=rep(1, npoints(X)), at="pixels") {
@@ -32,6 +32,11 @@ Smooth.ppp <- function(X, sigma=NULL, ...,
   at <- pickoption("output location type", at,
                    c(pixels="pixels",
                      points="points"))
+  ## insist on Gaussian kernel
+  kernel <- resolve.1.default(list(kernel="gaussian"), list(...))
+  if(!identical(match2DkernelName(kernel), "gaussian"))
+    stop("Sorry, non-Gaussian kernel is not yet implemented in Smooth.ppp",
+         call.=FALSE)
   ## weights
   weightsgiven <- !missing(weights) && !is.null(weights) 
   if(weightsgiven) {

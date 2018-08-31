@@ -152,5 +152,22 @@ Change log from 1.56-1 to 1.56-2
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
-   
+   density.ppp
+	densitypointsEngine now uses 'cutoff2Dkernel'
+
+   smooth.ppp.R
+   densityfun.R
+   densityfun.Rd
+	Added note/warning that only the Gaussian kernel is supported.
+	
+   DESCRIPTION
+   NEWS
+	version 1.56-1.010
+
+------------- passed R-3.5.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+
+	
 

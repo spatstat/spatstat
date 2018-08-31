@@ -3,7 +3,7 @@
 ##
 ## Exact 'funxy' counterpart of density.ppp
 ##
-##  $Revision: 1.4 $ $Date: 2018/04/09 07:44:12 $
+##  $Revision: 1.6 $ $Date: 2018/08/31 09:00:40 $
 
 
 densityfun <- function(X, ...) {
@@ -29,7 +29,11 @@ densityfun.ppp <- function(X, sigma=NULL, ...,
   } else weights <- NULL
   ## 
   stuff <- list(X=X, weights=weights, edge=edge, diggle=diggle)
-  ## 
+  ##
+  kernel <- resolve.1.default(list(kernel="gaussian"), list(...))
+  if(!identical(match2DkernelName(kernel), "gaussian"))
+    stop("Sorry, non-Gaussian kernel is not yet implemented in densityfun.ppp",
+         call.=FALSE)
   ## determine smoothing parameters
   ker <- resolve.2D.kernel(sigma=sigma, ...,
                            x=X, bwfun=bw.diggle, allow.zero=TRUE)

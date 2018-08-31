@@ -3,7 +3,7 @@
 #
 #  Method for 'density' for point patterns
 #
-#  $Revision: 1.88 $    $Date: 2018/08/11 10:59:03 $
+#  $Revision: 1.91 $    $Date: 2018/08/31 09:25:51 $
 #
 
 # ksmooth.ppp <- function(x, sigma, ..., edge=TRUE) {
@@ -242,17 +242,19 @@ densitypointsEngine <- function(x, sigma, ...,
   
   if(length(weights) == 0 || (!is.null(dim(weights)) && nrow(weights) == 0))
     weights <- NULL
-  # Leave-one-out computation
-  # cutoff: contributions from pairs of distinct points
-  # closer than 8 standard deviations
-  sd <- if(is.null(varcov)) sigma else sqrt(sum(diag(varcov)))
-  if(is.null(cutoff)) 
-    cutoff <- 8 * sd
+  
+  ## cutoff distance (beyond which the kernel value is treated as zero)
+  ## NB: input argument 'cutoff' is either NULL or
+  ##     an absolute distance (if scalekernel=FALSE)
+  ##     a number of standard deviations (if scalekernel=TRUE)
+  cutoff <- cutoff2Dkernel(kernel, sigma=sigma, varcov=varcov,
+                           scalekernel=scalekernel, cutoff=cutoff)
+  ## cutoff is now an absolute distance
   if(debugging)
     cat(paste("cutoff=", cutoff, "\n"))
 
   if(leaveoneout && npoints(x) > 1) {
-    # ensure each point has its closest neighbours within the cutoff
+    ## ensure each point has its closest neighbours within the cutoff
     nndmax <- maxnndist(x)
     cutoff <- max(2 * nndmax, cutoff)
     if(debugging)
@@ -323,6 +325,7 @@ densitypointsEngine <- function(x, sigma, ...,
       sorted <- FALSE
     }
     ## cutoff in standard coordinates
+    sd <- sigma %orifnull% sqrt(max(eigen(varcov)$values))
     cutoff <- cutoff/(sqrt(2) * sd)
     ## sort into increasing order of x coordinate (required by C code)
     if(!sorted) {
@@ -391,7 +394,7 @@ densitypointsEngine <- function(x, sigma, ...,
                  x       = as.double(xx),
                  y       = as.double(yy),
                  rmaxi   = as.double(cutoff),
-                 sig     = as.double(sd),
+                 sig     = as.double(sigma),
                  result  = as.double(double(npts)),
                  PACKAGE = "spatstat")
         if(sorted) result <- zz$result else result[oo] <- zz$result 
@@ -402,7 +405,7 @@ densitypointsEngine <- function(x, sigma, ...,
                  x       = as.double(xx),
                  y       = as.double(yy),
                  rmaxi   = as.double(cutoff),
-                 sig     = as.double(sd),
+                 sig     = as.double(sigma),
                  weight  = as.double(wtsort),
                  result  = as.double(double(npts)),
                  PACKAGE = "spatstat")
@@ -416,7 +419,7 @@ densitypointsEngine <- function(x, sigma, ...,
                    x       = as.double(xx),
                    y       = as.double(yy),
                    rmaxi   = as.double(cutoff),
-                   sig     = as.double(sd),
+                   sig     = as.double(sigma),
                    weight  = as.double(wtsort[,j]),
                    result  = as.double(double(npts)),
                    PACKAGE = "spatstat")
@@ -636,6 +639,7 @@ densitycrossEngine <- function(Xdata, Xquery, sigma, ...,
                                weights=NULL, edge=TRUE, varcov=NULL,
                                diggle=FALSE,
                                sorted=FALSE) {
+  ## only Gaussian case is implemented
   if(!is.null(varcov)) {
     detSigma <- det(varcov)
     Sinv <- solve(varcov)
