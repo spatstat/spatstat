@@ -91,6 +91,7 @@
 \alias{CressieReadStatistic}
 \alias{CressieReadSymbol}
 \alias{CressieReadName}
+\alias{cutoff2Dkernel}
 \alias{CVforPCF}
 \alias{damaged.ppm}
 \alias{data.mppm}
@@ -856,6 +857,7 @@ countingweights(id, areas, check = TRUE)
 CressieReadStatistic(OBS,EXP,lambda)
 CressieReadSymbol(lambda)
 CressieReadName(lambda)
+cutoff2Dkernel(kernel, sigma, varcov, \dots, scalekernel, cutoff)
 CVforPCF(bw, stuff)
 damaged.ppm(object)
 data.mppm(x)

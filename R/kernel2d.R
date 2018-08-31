@@ -113,7 +113,37 @@ evaluate2Dkernel <- function(kernel, x, y, sigma=NULL, varcov=NULL, ...,
   return(result)
 }
 
+cutoff2Dkernel <- function(kernel, sigma=NULL, varcov=NULL, ...,
+                           scalekernel=is.character(kernel),
+                           cutoff=NULL) {
+  info <- lookup2DkernelInfo(kernel)
+
+  ## if scalekernel = FALSE, 'cutoff' is an absolute distance
+  ## if scalekernel = TRUE,  'cutoff' is expressed in number of s.d.
   
+  if(scalekernel) {
+    if(is.null(cutoff)) {
+      ## template kernel's standard deviation
+      sdK <- info$sd %orifnull% 1
+      ## template kernel's halfwidth
+      hwK <- info$hw %orifnull% 8
+      ## cutoff for kernel with sd=1
+      cutoff <- hwK/sdK
+    } 
+    ## required standard deviation 
+    if(!is.null(sigma)) {
+      sig <- sigma
+    } else if(!is.null(varcov)) {
+      lam <- eigen(varcov)$values
+      sig <- sqrt(max(lam))
+    } else stop("Cannot determine standard deviation")
+    ## 
+    cutoff <- cutoff * sig
+  }
+
+  return(cutoff)
+  
+}
 
   
 

@@ -113,3 +113,18 @@ Change log from 1.56-1 to 1.56-2
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+30 aug 2018
+
+   kernel2D.R
+   spatstat-internal.Rd
+	New internal function 'cutoff2Dkernel'
+
+31 aug 2018
+
+   DESCRIPTION
+   NEWS
+	version 1.56-1.008
+
+------------- passed R-3.5.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------

@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.56-1.007
+        CHANGES IN spatstat VERSION 1.56-1.008
 
 OVERVIEW
 
@@ -41,6 +41,20 @@ BUG FIXES
     Default value of 'dx' was sometimes incorrect.
     Fixed.
     
+    o rMatClust, rThomas, rCauchy, rVarGamma
+    Issued a spurious warning about bandwidth selection
+    when saveLambda=TRUE.
+    Fixed.
+
+    o density.ppp
+    Issued a spurious warning about bandwidth selection
+    when 'kernel' was a user-supplied function.
+    Fixed.
+
+    o clusterfield.function
+    Issued a spurious warning about bandwidth selection.
+    Fixed.
+
         CHANGES IN spatstat VERSION 1.56-1
 
 OVERVIEW
