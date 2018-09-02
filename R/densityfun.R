@@ -3,7 +3,7 @@
 ##
 ## Exact 'funxy' counterpart of density.ppp
 ##
-##  $Revision: 1.6 $ $Date: 2018/08/31 09:00:40 $
+##  $Revision: 1.8 $ $Date: 2018/09/02 07:47:31 $
 
 
 densityfun <- function(X, ...) {
@@ -28,26 +28,17 @@ densityfun.ppp <- function(X, sigma=NULL, ...,
     check.nvector(weights, npoints(X))
   } else weights <- NULL
   ## 
-  stuff <- list(X=X, weights=weights, edge=edge, diggle=diggle)
+  stuff <- list(Xdata=X, weights=weights, edge=edge, diggle=diggle, ...)
   ##
-  kernel <- resolve.1.default(list(kernel="gaussian"), list(...))
-  if(!identical(match2DkernelName(kernel), "gaussian"))
-    stop("Sorry, non-Gaussian kernel is not yet implemented in densityfun.ppp",
-         call.=FALSE)
   ## determine smoothing parameters
   ker <- resolve.2D.kernel(sigma=sigma, ...,
                            x=X, bwfun=bw.diggle, allow.zero=TRUE)
-  stuff <- append(stuff, ker[c("sigma", "varcov")])
+  stuff[c("sigma", "varcov")]  <- ker[c("sigma", "varcov")]
   ##
   g <- function(x, y=NULL) {
     Y <- xy.coords(x, y)[c("x", "y")]
-    with(stuff,
-         densitycrossEngine(Xdata=X,
-                            Xquery=as.ppp(Y, X$window),
-                            sigma=sigma,
-                            varcov=varcov, 
-                            weights=weights,
-                            edge=edge, diggle=diggle))
+    Xquery <- as.ppp(Y, Window(stuff$Xdata))
+    do.call(densitycrossEngine, append(list(Xquery=Xquery), stuff))
   }
   g <- funxy(g, as.rectangle(as.owin(X)))
   class(g) <- c("densityfun", class(g))

@@ -3,7 +3,7 @@
 #'
 #'  Two-dimensional smoothing kernels
 #'
-#'  $Revision: 1.13 $ $Date: 2018/08/11 10:39:13 $
+#'  $Revision: 1.14 $ $Date: 2018/09/01 09:09:34 $
 #'
 
 .Spatstat.2D.KernelTable <- list(
@@ -115,7 +115,7 @@ evaluate2Dkernel <- function(kernel, x, y, sigma=NULL, varcov=NULL, ...,
 
 cutoff2Dkernel <- function(kernel, sigma=NULL, varcov=NULL, ...,
                            scalekernel=is.character(kernel),
-                           cutoff=NULL) {
+                           cutoff=NULL, fatal=FALSE) {
   info <- lookup2DkernelInfo(kernel)
 
   ## if scalekernel = FALSE, 'cutoff' is an absolute distance
@@ -141,6 +141,12 @@ cutoff2Dkernel <- function(kernel, sigma=NULL, varcov=NULL, ...,
     cutoff <- cutoff * sig
   }
 
+  if(fatal && is.null(cutoff))
+    stop(paste("The argument", sQuote("cutoff"), "is required",
+               "when a non-Gaussian kernel is specified",
+               "and scalekernel=FALSE"),
+         call.=FALSE)
+  
   return(cutoff)
   
 }

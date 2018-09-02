@@ -164,7 +164,7 @@ To convert the dataset to an object in the
 \pkg{spatstat} package, the procedure depends on the 
 type of data, as explained below. 
 
-Both packages \pkg{maptools} and \pkg{spatstat} must be loaded
+Both packages \pkg{maptools} and \pkg{spatstat} must be \textbf{loaded}
 in order to convert the data.
 
 \subsubsection{Objects of class \texttt{SpatialPoints}}
@@ -206,7 +206,8 @@ y <- as(x, "ppp")
 @ 
 
 (The conversion is performed by \texttt{as.ppp.SpatialPointsDataFrame},
-a function in \pkg{maptools}.)
+a function in \pkg{maptools}. So the \pkg{maptools} and \pkg{spatstat}
+packages must be loaded in order for this to work.)
 
 Before the conversion you can extract the
 data frame of auxiliary data by 
@@ -270,6 +271,10 @@ there are several things that you might want to do:
 out <- lapply(x@lines, function(z) { lapply(z@Lines, as.psp) })
 @ 
 
+(The conversion is performed by \texttt{as.psp.SpatialLines},
+a function in \pkg{maptools}. So the \pkg{maptools} and \pkg{spatstat}
+packages must be loaded in order for this to work.)
+
 The result will be a \textbf{list of lists} of objects of class \texttt{psp}.
 Each one of these objects represents a connected curve,
 although the \pkg{spatstat} package does not know that.
@@ -330,6 +335,10 @@ The result is a list-of-lists-of-\texttt{psp}'s.
 See the previous subsection for explanation on how to 
 change this using \texttt{c()} or \texttt{superimposePSP}.
 \end{enumerate}
+
+(The conversion is performed by \texttt{as.psp.SpatialLines},
+a function in \pkg{maptools}. So the \pkg{maptools} and \pkg{spatstat}
+packages must be loaded in order for this to work.)
 
 In either case, 
 the mark variables attached to a particular \emph{group of connected lines}
@@ -410,6 +419,10 @@ windows <- lapply(regions, as.owin)
 te <- tess(tiles=windows)
 @ 
 \end{enumerate}
+
+(The conversion is performed by \texttt{as.owin.SpatialPolygons},
+a function in \pkg{maptools}. So the \pkg{maptools} and \pkg{spatstat}
+packages must be loaded in order for this to work.)
 
 {\bf The following is different from what happened in
   previous versions of \pkg{spatstat}} (prior to version \texttt{1.36-0}.)

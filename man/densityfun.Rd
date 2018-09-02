@@ -42,9 +42,6 @@ densityfun(X, \dots)
   to compute the intensity estimate at \emph{any} spatial location.
   For purposes such as model-fitting it is more accurate to
   use \code{densityfun}.
-
-  Currently, only the Gaussian kernel is implemented in
-  \code{densityfun.ppp}.
 }
 \value{
   A \code{function} with arguments \code{x,y}

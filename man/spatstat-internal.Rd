@@ -857,7 +857,7 @@ countingweights(id, areas, check = TRUE)
 CressieReadStatistic(OBS,EXP,lambda)
 CressieReadSymbol(lambda)
 CressieReadName(lambda)
-cutoff2Dkernel(kernel, sigma, varcov, \dots, scalekernel, cutoff)
+cutoff2Dkernel(kernel, sigma, varcov, \dots, scalekernel, cutoff, fatal)
 CVforPCF(bw, stuff)
 damaged.ppm(object)
 data.mppm(x)
@@ -875,8 +875,9 @@ Deviation(x, ref, leaveout, n, xi)
 \method{dfbetas}{ppmInfluence}(model, \dots)
 dflt.redraw(button, name, env)
 densitycrossEngine(Xdata, Xquery, sigma, \dots,
+                    kernel, scalekernel,
                     weights, edge, varcov,
-                    diggle, sorted)
+                    diggle, sorted, cutoff)
 densitypointsEngine(x, sigma, \dots,
                     kernel, scalekernel,
                     weights, edge, varcov,

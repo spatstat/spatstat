@@ -1777,6 +1777,7 @@
   Bjarke Christensen,
   Jean-Francois Coeurjolly,
   Kim Colyvas,
+  Hadrien Commenges,
   Rochelle Constantine,
   Robin Corria Ainslie,
   Richard Cotton,

@@ -168,6 +168,53 @@ Change log from 1.56-1 to 1.56-2
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+01 sep 2018
 
+   shapefiles.Rnw
+	Emphasised the need to load 'maptools'.
+
+   kernel2d.R
+	cutoff2Dkernel gets argument 'fatal'
+
+   density.ppp.R
+	Use 'fatal' argument in densitypointsEngine
 	
+02 sep 2018
+
+   as.owin.Rd
+	Added an explanation about shapefiles.
+
+   DESCRIPTION
+   NEWS
+   spatstat-package.Rd
+	Acknowledged Hadrien Commenges
+	
+   DESCRIPTION
+   NEWS
+	version 1.56-1.011
+
+------------- passed R-3.5.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+   density.ppp.R
+   spatstat-internal.Rd
+	densitycrossEngine handles any kernel.
+
+   densityfun.R
+   densityfun.Rd
+	densityfun handles any kernel.
+
+   tests/density.R
+	Test densityfun() for non-Gaussian kernel
+
+   DESCRIPTION
+   NEWS
+	version 1.56-1.012
+
+------------- passed R-3.5.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+
 

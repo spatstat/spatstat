@@ -363,7 +363,7 @@ local({
 #'                    relrisk(), Smooth()
 #'                    and inhomogeneous summary functions
 #'
-#'  $Revision: 1.24 $  $Date: 2018/08/31 09:46:14 $
+#'  $Revision: 1.25 $  $Date: 2018/09/02 07:32:55 $
 #'
 
 require(spatstat)
@@ -387,9 +387,9 @@ local({
   tryit(0.05, se=TRUE)
   tryit(0.05, weights=expression(x))
 
-  tryit(0.07, kernel="epa", do.fun=FALSE)
-  tryit(0.07, kernel="quartic", do.fun=FALSE)
-  tryit(0.07, kernel="disc", do.fun=FALSE)
+  tryit(0.07, kernel="epa")
+  tryit(0.07, kernel="quartic")
+  tryit(0.07, kernel="disc")
 
   V <- diag(c(0.05^2, 0.07^2))
   tryit(varcov=V)

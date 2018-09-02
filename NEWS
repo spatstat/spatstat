@@ -1,10 +1,10 @@
 
-        CHANGES IN spatstat VERSION 1.56-1.010
+        CHANGES IN spatstat VERSION 1.56-1.012
 
 OVERVIEW
 
-    o We thank Tilman Davies, Maximilian Hesselbarth, Kassel Hingee,
-    Rasmus Waagepetersen and 'daitakahashi' for contributions.
+    o We thank Hadrien Commenges, Tilman Davies, Maximilian Hesselbarth,
+    Kassel Hingee, Rasmus Waagepetersen and 'daitakahashi' for contributions.
 
     o Bug fix in rthin.
     
@@ -16,6 +16,9 @@ OVERVIEW
     
 SIGNIFICANT USER-VISIBLE CHANGES
 
+    o densityfun.ppp
+    Now handles non-Gaussian kernels.
+    
     o interp.im
     New argument 'bilinear'
 
@@ -24,7 +27,7 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o density.ppp
     Slightly accelerated for non-Gaussian kernels.
-    
+
 BUG FIXES
 
     o rthin
