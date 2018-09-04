@@ -1508,7 +1508,8 @@ slrAssemblePixelData(Y, Yname, W, covimages, dataAtPoints, pixelarea)
 smoothcrossEngine(Xdata, Xquery, values, sigma, \dots,
                     weights, varcov, sorted)
 smoothpointsEngine(x, values, sigma, \dots,
-                    weights, varcov, leaveoneout, sorted, cutoff)
+                   kernel, scalekernel,
+                   weights, varcov, leaveoneout, sorted, cutoff)
 smudge(X)
 \method{sort}{im}(x, \dots)
 sortalongsegment(df)

@@ -3,7 +3,7 @@
 #
 #  Smooth the marks of a point pattern
 # 
-#  $Revision: 1.49 $  $Date: 2018/08/31 09:02:52 $
+#  $Revision: 1.53 $  $Date: 2018/09/04 06:55:50 $
 #
 
 # smooth.ppp <- function(X, ..., weights=rep(1, npoints(X)), at="pixels") {
@@ -270,11 +270,14 @@ Smooth.ppp <- function(X, sigma=NULL, ...,
 
 
 smoothpointsEngine <- function(x, values, sigma, ...,
+                               kernel="gaussian", 
+                               scalekernel=is.character(kernel),
                                weights=NULL, varcov=NULL,
                                leaveoneout=TRUE,
                                sorted=FALSE, cutoff=NULL) {
   debugging <- spatstat.options("developer")
   stopifnot(is.logical(leaveoneout))
+
   #' detect constant values
   if(diff(range(values, na.rm=TRUE)) == 0) { 
     result <- values
@@ -282,18 +285,26 @@ smoothpointsEngine <- function(x, values, sigma, ...,
     attr(result, "varcov") <- varcov
     return(result)
   }
-  #' Contributions from pairs of distinct points
-  #' closer than 8 standard deviations
-  sd <- if(is.null(varcov)) sigma else sqrt(sum(diag(varcov)))
-  if(is.null(cutoff)) 
-    cutoff <- 8 * sd
-  if(debugging)
-    cat(paste("cutoff=", cutoff, "\n"))
-  
+
+  validate2Dkernel(kernel)
+  if(is.character(kernel)) kernel <- match2DkernelName(kernel)
+  isgauss <- identical(kernel, "gaussian")
+
   ## Handle weights that are meant to be null
   if(length(weights) == 0 || (!is.null(dim(weights)) && nrow(weights) == 0))
      weights <- NULL
      
+  ## cutoff distance (beyond which the kernel value is treated as zero)
+  ## NB: input argument 'cutoff' is either NULL or
+  ##     an absolute distance (if scalekernel=FALSE)
+  ##     a number of standard deviations (if scalekernel=TRUE)
+  cutoff <- cutoff2Dkernel(kernel, sigma=sigma, varcov=varcov,
+                           scalekernel=scalekernel, cutoff=cutoff,
+                           fatal=TRUE)
+  ## cutoff is now an absolute distance
+  if(debugging)
+    cat(paste("cutoff=", cutoff, "\n"))
+  
   # detect very small bandwidth
   nnd <- nndist(x)
   nnrange <- range(nnd)
@@ -310,11 +321,17 @@ smoothpointsEngine <- function(x, values, sigma, ...,
     attr(result, "warnings") <- "underflow"
     return(result)
   }
+
   if(leaveoneout) {
     # ensure cutoff includes at least one point
     cutoff <- max(1.1 * nnrange[2], cutoff)
   }
-  if(spatstat.options("densityTransform") && spatstat.options("densityC")) {
+
+  sd <- if(is.null(varcov)) sigma else sqrt(max(eigen(varcov)$values))
+  
+  if(isgauss &&
+     spatstat.options("densityTransform") &&
+     spatstat.options("densityC")) {
     ## .................. experimental C code .....................
     if(debugging)
       cat('Using experimental code!\n')
@@ -374,7 +391,7 @@ smoothpointsEngine <- function(x, values, sigma, ...,
       # Use mark of nearest neighbour (by l'Hopital's rule)
       result[nbg] <- values[nnwhich(x)[nbg]]
     }
-  } else if(spatstat.options("densityC")) {
+  } else if(isgauss && spatstat.options("densityC")) {
     # .................. C code ...........................
     if(debugging)
       cat('Using standard code.\n')
@@ -458,40 +475,52 @@ smoothpointsEngine <- function(x, values, sigma, ...,
       result[nbg] <- values[nnwhich(x)[nbg]]
     }
   } else {
-    # previous, partly interpreted code
-    # compute weighted densities
+    #' Either a non-Gaussian kernel or using older, partly interpreted code
+    #' compute weighted densities
     if(is.null(weights)) {
       # weights are implicitly equal to 1
       numerator <- do.call(density.ppp,
-                         resolve.defaults(list(x=x, at="points"),
-                                          list(weights = values),
-                                          list(sigma=sigma, varcov=varcov),
-                                          list(leaveoneout=leaveoneout),
-                                          list(sorted=sorted),
+                         resolve.defaults(list(x=x, at="points",
+                                               weights = values,
+                                               sigma=sigma,
+                                               varcov=varcov,
+                                               leaveoneout=leaveoneout,
+                                               sorted=sorted,
+                                               kernel=kernel,
+                                               scalekernel=scalekernel),
                                           list(...),
                                           list(edge=FALSE)))
       denominator <- do.call(density.ppp,
-                             resolve.defaults(list(x=x, at="points"),
-                                              list(sigma=sigma, varcov=varcov),
-                                              list(leaveoneout=leaveoneout),
-                                              list(sorted=sorted),
+                             resolve.defaults(list(x=x, at="points",
+                                                   sigma=sigma,
+                                                   varcov=varcov,
+                                                   leaveoneout=leaveoneout,
+                                                   sorted=sorted,
+                                                   kernel=kernel,
+                                                   scalekernel=scalekernel),
                                               list(...),
                                               list(edge=FALSE)))
     } else {
       numerator <- do.call(density.ppp,
-                           resolve.defaults(list(x=x, at="points"),
-                                            list(weights = values * weights),
-                                            list(sigma=sigma, varcov=varcov),
-                                            list(leaveoneout=leaveoneout),
-                                            list(sorted=sorted),
+                           resolve.defaults(list(x=x, at="points",
+                                                 weights = values * weights,
+                                                 sigma=sigma,
+                                                 varcov=varcov,
+                                                 leaveoneout=leaveoneout,
+                                                 sorted=sorted,
+                                                 kernel=kernel,
+                                                 scalekernel=scalekernel),
                                             list(...),
                                             list(edge=FALSE)))
       denominator <- do.call(density.ppp,
-                             resolve.defaults(list(x=x, at="points"),
-                                              list(weights = weights),
-                                              list(sigma=sigma, varcov=varcov),
-                                              list(leaveoneout=leaveoneout),
-                                              list(sorted=sorted),
+                             resolve.defaults(list(x=x, at="points",
+                                                   weights = weights,
+                                                   sigma=sigma,
+                                                   varcov=varcov,
+                                                   leaveoneout=leaveoneout,
+                                                   sorted=sorted,
+                                                   kernel=kernel,
+                                                   scalekernel=scalekernel),
                                               list(...),
                                               list(edge=FALSE)))
     }

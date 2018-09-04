@@ -216,5 +216,17 @@ Change log from 1.56-1 to 1.56-2
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+04 sep 2018
 
+   smooth.ppp.R
+   spatstat-internal.Rd
+	smoothpointsEngine handles any kernel.
 
+   DESCRIPTION
+   NEWS
+	version 1.56-1.013
+
+------------- passed R-3.5.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+   
