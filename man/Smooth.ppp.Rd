@@ -5,7 +5,7 @@
 \title{Spatial smoothing of observations at irregular points}
 \description{
   Performs spatial smoothing of numeric values observed
-  at a set of irregular locations. Uses Gaussian kernel smoothing
+  at a set of irregular locations. Uses kernel smoothing
   and least-squares cross-validated bandwidth selection.
 }
 \usage{
@@ -13,7 +13,10 @@
                      ...,
                      weights = rep(1, npoints(X)),
                      at="pixels",
-                     edge=TRUE, diggle=FALSE, geometric=FALSE)
+                     varcov=NULL,
+                     edge=TRUE, diggle=FALSE,
+                     kernel="gaussian", scalekernel=is.character(kernel),
+                     geometric=FALSE)
 
 markmean(X, ...)
 
@@ -52,6 +55,24 @@ markvar(X, sigma=NULL, ..., weights=NULL, varcov=NULL)
     Variance-covariance matrix. An alternative
     to \code{sigma}. See \code{\link{density.ppp}}.
   }
+  \item{kernel}{
+    The smoothing kernel.
+    A character string specifying the smoothing kernel
+    (current options are \code{"gaussian"}, \code{"epanechnikov"},
+    \code{"quartic"} or \code{"disc"}),
+    or a pixel image (object of class \code{"im"})
+    containing values of the kernel, or a \code{function(x,y)} which
+    yields values of the kernel.
+  }
+  \item{scalekernel}{
+    Logical value.
+    If \code{scalekernel=TRUE}, then the kernel will be rescaled
+    to the bandwidth determined by \code{sigma} and \code{varcov}:
+    this is the default behaviour when \code{kernel} is a character string.
+    If \code{scalekernel=FALSE}, then \code{sigma} and \code{varcov}
+    will be ignored: this is the default behaviour when \code{kernel} is a
+    function or a pixel image.
+  }
   \item{geometric}{
     Logical value indicating whether to perform geometric mean
     smoothing instead of arithmetic mean smoothing. See Details.
@@ -69,8 +90,8 @@ markvar(X, sigma=NULL, ..., weights=NULL, varcov=NULL)
   \code{\link{Smooth}} for the class \code{"ppp"} of point patterns.
   Thus you can type simply \code{Smooth(X)}.
   
-  Smoothing is performed by Gaussian kernel weighting. If the
-  observed values are \eqn{v_1,\ldots,v_n}{v[1],...,v[n]}
+  Smoothing is performed by kernel weighting, using the Gaussian kernel
+  by default. If the observed values are \eqn{v_1,\ldots,v_n}{v[1],...,v[n]}
   at locations \eqn{x_1,\ldots,x_n}{x[1],...,x[n]} respectively,
   then the smoothed value at a location \eqn{u} is
   (ignoring edge corrections)
@@ -79,7 +100,8 @@ markvar(X, sigma=NULL, ..., weights=NULL, varcov=NULL)
   }{
     g(u) = (sum of k(u-x[i]) v[i])/(sum of k(u-x[i]))
   }
-  where \eqn{k} is a Gaussian kernel. This is known as the 
+  where \eqn{k} is the kernel (a Gaussian kernel by default).
+  This is known as the
   Nadaraya-Watson smoother (Nadaraya, 1964, 1989; Watson, 1964).
   By default, the smoothing kernel bandwidth is chosen by
   least squares cross-validation (see below).

@@ -229,4 +229,17 @@ Change log from 1.56-1 to 1.56-2
 ------------- passed R-3.5.1 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
-   
+
+05 sep 2018
+
+   smooth.ppp.R
+   Smooth.ppp.Rd
+	new arguments 'kernel', 'scalekernel', 'varcov'
+
+   DESCRIPTION
+   NEWS
+	version 1.56-1.014
+
+------------- passed R-3.5.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------

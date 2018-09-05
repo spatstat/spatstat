@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.56-1.013
+        CHANGES IN spatstat VERSION 1.56-1.014
 
 OVERVIEW
 
@@ -17,6 +17,9 @@ OVERVIEW
 SIGNIFICANT USER-VISIBLE CHANGES
 
     o densityfun.ppp
+    Now handles non-Gaussian kernels.
+
+    o Smooth.ppp
     Now handles non-Gaussian kernels.
     
     o interp.im

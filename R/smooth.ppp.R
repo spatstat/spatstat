@@ -3,7 +3,7 @@
 #
 #  Smooth the marks of a point pattern
 # 
-#  $Revision: 1.53 $  $Date: 2018/09/04 06:55:50 $
+#  $Revision: 1.55 $  $Date: 2018/09/04 23:28:16 $
 #
 
 # smooth.ppp <- function(X, ..., weights=rep(1, npoints(X)), at="pixels") {
@@ -22,7 +22,10 @@ Smooth.solist <- function(X, ...) {
 
 Smooth.ppp <- function(X, sigma=NULL, ...,
                        weights=rep(1, npoints(X)), at="pixels",
-                       edge=TRUE, diggle=FALSE, geometric=FALSE) {
+                       varcov=NULL, edge=TRUE, diggle=FALSE, 
+                       kernel="gaussian",
+                       scalekernel=is.character(kernel),
+                       geometric=FALSE) {
   verifyclass(X, "ppp")
   if(!is.marked(X, dfok=TRUE, na.action="fatal"))
     stop("X should be a marked point pattern", call.=FALSE)
@@ -32,11 +35,6 @@ Smooth.ppp <- function(X, sigma=NULL, ...,
   at <- pickoption("output location type", at,
                    c(pixels="pixels",
                      points="points"))
-  ## insist on Gaussian kernel
-  kernel <- resolve.1.default(list(kernel="gaussian"), list(...))
-  if(!identical(match2DkernelName(kernel), "gaussian"))
-    stop("Sorry, non-Gaussian kernel is not yet implemented in Smooth.ppp",
-         call.=FALSE)
   ## weights
   weightsgiven <- !missing(weights) && !is.null(weights) 
   if(weightsgiven) {
@@ -54,17 +52,26 @@ Smooth.ppp <- function(X, sigma=NULL, ...,
   ## geometric mean smoothing
   if(geometric) 
     return(ExpSmoothLog(X, sigma=sigma, ..., at=at,
+                        varcov=varcov,
+                        kernel=kernel, scalekernel=scalekernel,
                         weights=weights, edge=edge, diggle=diggle))
   ## determine smoothing parameters
-  ker <- resolve.2D.kernel(sigma=sigma, ...,
-                           x=X, bwfun=bw.smoothppp, allow.zero=TRUE)
-  sigma <- ker$sigma
-  varcov <- ker$varcov
+  if(scalekernel) {
+    ker <- resolve.2D.kernel(sigma=sigma, ..., varcov=varcov,
+                             kernel=kernel, 
+                             x=X, bwfun=bw.smoothppp, allow.zero=TRUE)
+    sigma <- ker$sigma
+    varcov <- ker$varcov
+  }
   ## Diggle's edge correction?
   if(diggle && !edge) warning("Option diggle=TRUE overridden by edge=FALSE")
   diggle <- diggle && edge
+  ##
+  ## cutoff distance (beyond which the kernel value is treated as zero)
+  cutoff <- cutoff2Dkernel(kernel, sigma=sigma, varcov=varcov,
+                           scalekernel=scalekernel, ..., fatal=TRUE)
   ## 
-  if(ker$cutoff < minnndist(X)) {
+  if(cutoff < minnndist(X)) {
     # very small bandwidth
     leaveoneout <- resolve.1.default("leaveoneout",
                                      list(...), list(leaveoneout=TRUE))
@@ -82,7 +89,8 @@ Smooth.ppp <- function(X, sigma=NULL, ...,
 
   if(diggle) {
     ## absorb Diggle edge correction into weights vector
-    edg <- second.moment.calc(X, sigma, what="edge", ..., varcov=varcov)
+    edg <- second.moment.calc(X, sigma, what="edge", ...,                                                     varcov=varcov,
+                              kernel=kernel, scalekernel=scalekernel)
     ei <- safelookup(edg, X, warn=FALSE)
     weights <- if(weightsgiven) weights/ei else 1/ei
     weights[!is.finite(weights)] <- 0
@@ -120,6 +128,8 @@ Smooth.ppp <- function(X, sigma=NULL, ...,
                          resolve.defaults(list(x=X,
                                                values=values, weights=weights,
                                                sigma=sigma, varcov=varcov,
+                                               kernel=kernel,
+                                               scalekernel=scalekernel,
                                                edge=FALSE),
                                           list(...)))
              },
@@ -131,6 +141,8 @@ Smooth.ppp <- function(X, sigma=NULL, ...,
                                                at="pixels",
                                                weights = values.weights,
                                                sigma=sigma, varcov=varcov,
+                                               kernel=kernel,
+                                               scalekernel=scalekernel,
                                                edge=FALSE),
                                           list(...)))
                denominator <-
@@ -140,6 +152,8 @@ Smooth.ppp <- function(X, sigma=NULL, ...,
                                                weights = weights,
                                                sigma=sigma,
                                                varcov=varcov,
+                                               kernel=kernel,
+                                               scalekernel=scalekernel,
                                                edge=FALSE),
                                           list(...)))
                result <- eval.im(numerator/denominator)
@@ -180,6 +194,8 @@ Smooth.ppp <- function(X, sigma=NULL, ...,
                                       at=at,
                                       weights = weights,
                                       sigma=sigma, varcov=varcov,
+                                      kernel=kernel,
+                                      scalekernel=scalekernel,
                                       edge=FALSE),
                                  list(...)))
       ## compute numerator for each column of marks
@@ -190,6 +206,8 @@ Smooth.ppp <- function(X, sigma=NULL, ...,
                                       at=at,
                                       weights = marx.weights,
                                       sigma=sigma, varcov=varcov,
+                                      kernel=kernel,
+                                      scalekernel=scalekernel,
                                       edge=FALSE),
                                  list(...)))
       uhoh <- attr(numerators, "warnings")
@@ -561,7 +579,8 @@ markvar  <- function(X, sigma=NULL, ..., weights=NULL, varcov=NULL) {
 }
 
 bw.smoothppp <- function(X, nh=spatstat.options("n.bandwidth"),
-                       hmin=NULL, hmax=NULL, warn=TRUE) {
+                         hmin=NULL, hmax=NULL, warn=TRUE,
+                         kernel="gaussian") {
   stopifnot(is.ppp(X))
   stopifnot(is.marked(X))
   X <- coerce.marks.numeric(X)
@@ -599,6 +618,7 @@ bw.smoothppp <- function(X, nh=spatstat.options("n.bandwidth"),
   # compute cross-validation criterion
   for(i in seq_len(nh)) {
     yhat <- Smooth(X, sigma=h[i], at="points", leaveoneout=TRUE,
+                   kernel=kernel, 
                    sorted=TRUE)
     if(!is.null(dimmarx))
       yhat <- as.matrix(as.data.frame(yhat))
