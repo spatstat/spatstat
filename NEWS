@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.56-1.014
+        CHANGES IN spatstat VERSION 1.56-1.015
 
 OVERVIEW
 
@@ -7,6 +7,8 @@ OVERVIEW
     Kassel Hingee, Rasmus Waagepetersen and 'daitakahashi' for contributions.
 
     o Bug fix in rthin.
+
+    o Smoothing functions handle non-Gaussian kernels.
     
     o Bug fix in density.ppp for non-Gaussian kernels.
     
@@ -16,12 +18,9 @@ OVERVIEW
     
 SIGNIFICANT USER-VISIBLE CHANGES
 
-    o densityfun.ppp
-    Now handles non-Gaussian kernels.
+    o densityfun.ppp, Smoothfun.ppp, Smooth.ppp
+    These commands now handle non-Gaussian kernels.
 
-    o Smooth.ppp
-    Now handles non-Gaussian kernels.
-    
     o interp.im
     New argument 'bilinear'
 

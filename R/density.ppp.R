@@ -3,7 +3,7 @@
 #
 #  Method for 'density' for point patterns
 #
-#  $Revision: 1.93 $    $Date: 2018/09/02 07:30:27 $
+#  $Revision: 1.95 $    $Date: 2018/09/07 04:14:43 $
 #
 
 # ksmooth.ppp <- function(x, sigma, ..., edge=TRUE) {
@@ -498,19 +498,19 @@ densitypointsEngine <- function(x, sigma, ...,
                                   scalekernel=scalekernel, ...)
     }
     ## sum (weighted) contributions
+    ## query point i, data point j
     ifac <- factor(i, levels=1:npts)
     if(is.null(weights)) {
-      result <- tapply(contrib, ifac, sum)
+      result <- tapplysum(contrib, list(ifac))
     } else if(k == 1L) {
       wcontrib <- contrib * weights[j]
-      result <- tapply(wcontrib, ifac, sum)
+      result <- tapplysum(wcontrib, list(ifac))
     } else {
       for(kk in 1:k) {
         wcontribkk <- contrib * weights[j, kk]
-        result[,kk] <- tapply(wcontribkk, ifac, sum)
+        result[,kk] <- tapplysum(wcontribkk, list(ifac))
       }
     }
-    result[is.na(result)] <- 0
     #
   }
   # ----- contribution from point itself ----------------
@@ -722,20 +722,20 @@ densitycrossEngine <- function(Xdata, Xquery, sigma, ...,
                                 sigma=sigma, varcov=varcov,
                                 scalekernel=scalekernel, ...)
     ## sum the (weighted) contributions
+    i <- close$i
     j <- close$j
     jfac <- factor(j, levels=seq_len(nquery))
     if(is.null(weights)) {
-      result <- tapply(contrib, jfac, sum)
+      result <- tapplysum(contrib, list(jfac))
     } else if(k == 1L) {
-      wcontrib <- contrib * weights[j]
-      result <- tapply(wcontrib, jfac, sum)
+      wcontrib <- contrib * weights[i]
+      result <- tapplysum(wcontrib, list(jfac))
     } else {
       for(kk in 1:k) {
-        wcontribkk <- contrib * weights[j, kk]
-        result[,kk] <- tapply(wcontribkk, jfac, sum)
+        wcontribkk <- contrib * weights[i, kk]
+        result[,kk] <- tapplysum(wcontribkk, list(jfac))
       }
     }
-    result[is.na(result)] <- 0
   } else {
     ## ................. Gaussian kernel ...................
     result <- if(k == 1L) numeric(nquery) else matrix(, nquery, k)

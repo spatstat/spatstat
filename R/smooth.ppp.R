@@ -3,7 +3,7 @@
 #
 #  Smooth the marks of a point pattern
 # 
-#  $Revision: 1.55 $  $Date: 2018/09/04 23:28:16 $
+#  $Revision: 1.58 $  $Date: 2018/09/07 04:14:48 $
 #
 
 # smooth.ppp <- function(X, ..., weights=rep(1, npoints(X)), at="pixels") {
@@ -647,14 +647,15 @@ bw.smoothppp <- function(X, nh=spatstat.options("n.bandwidth"),
 
 smoothcrossEngine <- function(Xdata, Xquery, values, sigma, ...,
                               weights=NULL, varcov=NULL,
-                              sorted=FALSE) {
-#  if(is.null(varcov)) {
-#    const <- 1/(2 * pi * sigma^2)
-#  } else {
-#    detSigma <- det(varcov)
-#    Sinv <- solve(varcov)
-#    const <- 1/(2 * pi * sqrt(detSigma))
-#  }
+                              kernel="gaussian", 
+                              scalekernel=is.character(kernel),
+                              sorted=FALSE,
+                              cutoff=NULL) {
+
+  validate2Dkernel(kernel)
+  if(is.character(kernel)) kernel <- match2DkernelName(kernel)
+  isgauss <- identical(kernel, "gaussian") && scalekernel
+
   if(!is.null(dim(weights)))
     stop("weights must be a vector")
 
@@ -664,11 +665,29 @@ smoothcrossEngine <- function(Xdata, Xquery, values, sigma, ...,
     colnames(nuttin) <- colnames(values)
     return(nuttin)
   }
+
+  # validate weights
+  if(is.matrix(values) || is.data.frame(values)) {
+    k <- ncol(values)
+    stopifnot(nrow(values) == npoints(Xdata))
+    values <- as.data.frame(values)
+    valuenames <- colnames(values)
+  } else {
+    k <- 1L
+    stopifnot(length(values) == npoints(Xdata) || length(values) == 1)
+    if(length(values) == 1L)
+      values <- rep(values, npoints(Xdata))
+  }
   
-  ## Contributions from pairs of distinct points
-  ## closer than 8 standard deviations
-  sd <- if(is.null(varcov)) sigma else sqrt(sum(diag(varcov)))
-  cutoff <- 8 * sd
+  ## cutoff distance (beyond which the kernel value is treated as zero)
+  ## NB: input argument 'cutoff' is either NULL or
+  ##     an absolute distance (if scalekernel=FALSE)
+  ##     a number of standard deviations (if scalekernel=TRUE)
+  cutoff.orig <- cutoff
+  cutoff <- cutoff2Dkernel(kernel, sigma=sigma, varcov=varcov,
+                           scalekernel=scalekernel, cutoff=cutoff,
+                           fatal=TRUE)
+  ## cutoff is now an absolute distance
 
   ## detect very small bandwidth
   nnc <- nncross(Xquery, Xdata)
@@ -676,7 +695,7 @@ smoothcrossEngine <- function(Xdata, Xquery, values, sigma, ...,
     if(npoints(Xdata) > 1) {
       warning("Very small bandwidth; values of nearest neighbours returned")
       nw <- nnc$which
-      result <- if(is.null(dim(values))) values[nw] else values[nw,,drop=FALSE]
+      result <- if(k == 1) values[nw] else values[nw,,drop=FALSE]
     } else {
       warning("Very small bandwidth; original values returned")
       result <- values
@@ -690,7 +709,51 @@ smoothcrossEngine <- function(Xdata, Xquery, values, sigma, ...,
   ## Handle weights that are meant to be null
   if(length(weights) == 0)
      weights <- NULL
-     
+
+  if(!isgauss) {
+    ## .................. non-Gaussian kernel ........................
+    close <- crosspairs(Xdata, Xquery, cutoff)
+    kerij <- evaluate2Dkernel(kernel, close$dx, close$dy,
+                            sigma=sigma, varcov=varcov,
+                            scalekernel=scalekernel, ...)
+    ## sum the (weighted) contributions
+    i <- close$i # data point
+    j <- close$j # query point
+    jfac <- factor(j, levels=seq_len(nquery))
+    wkerij <- kerij * weights[i]
+    denominator <- tapplysum(wkerij, list(jfac))
+    if(k == 1L) {
+      contribij <- wkerij * values[i]
+      numerator <- tapplysum(contribij, list(jfac))
+      result <- numerator/denominator
+    } else {
+      for(kk in 1:k) {
+        contribij <- wkerij * values[i, kk]
+        numeratorkk <- tapplysum(contribij, list(jfac))
+        result[,kk] <- numeratorkk/denominator
+      }
+    }
+    ## trap bad values
+    if(any(nbg <- (is.infinite(result) | is.nan(result)))) {
+      ## NaN or +/-Inf can occur if bandwidth is small
+      ## Use value at nearest neighbour (by l'Hopital's rule)
+      nnw <- nnc$which
+      if(k == 1L) {
+        result[nbg] <- values[nnw[nbg]]
+      } else {
+        bad <- which(nbg, arr.ind=TRUE)
+        badrow <- bad[,"row"]
+        badcol <- bad[,"col"]
+        result[nbg] <- values[cbind(nnw[badrow], badcol)]
+      }
+    }
+    attr(result, "sigma") <- sigma
+    attr(result, "varcov") <- varcov
+    return(result)
+  } 
+
+  ## .................. Gaussian kernel henceforth ........................
+  
   ## handle multiple columns of values
   if(is.matrix(values) || is.data.frame(values)) {
     k <- ncol(values)
@@ -708,8 +771,10 @@ smoothcrossEngine <- function(Xdata, Xquery, values, sigma, ...,
     for(j in 1:k) 
       result[,j] <- smoothcrossEngine(Xdata, Xquery, values[,j],
                                       sigma=sigma, varcov=varcov,
-                                      weights=weights, sorted=TRUE,
-                                      ...)
+                                      weights=weights,
+                                      kernel=kernel, scalekernel=scalekernel,
+                                      cutoff=cutoff.orig,
+                                      sorted=TRUE, ...)
     if(!sorted) {
       sortresult <- result
       result[ooq,] <- sortresult
@@ -742,6 +807,7 @@ smoothcrossEngine <- function(Xdata, Xquery, values, sigma, ...,
     yd <- yd[ood]
     vd <- vd[ood] 
   }
+  sd <- if(is.null(varcov)) sigma else sqrt(min(eigen(varcov)$values))
   if(is.null(varcov)) {
     ## isotropic kernel
     if(is.null(weights)) {

@@ -1506,7 +1506,8 @@ slrAssemblePixelData(Y, Yname, W, covimages, dataAtPoints, pixelarea)
 \method{Smooth}{leverage.ppm}(X, \dots)
 \method{Smooth}{influence.ppm}(X, \dots)
 smoothcrossEngine(Xdata, Xquery, values, sigma, \dots,
-                    weights, varcov, sorted)
+                    weights, varcov,
+                    kernel, scalekernel, sorted, cutoff)
 smoothpointsEngine(x, values, sigma, \dots,
                    kernel, scalekernel,
                    weights, varcov, leaveoneout, sorted, cutoff)

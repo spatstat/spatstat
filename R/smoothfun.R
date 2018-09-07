@@ -3,7 +3,7 @@
 ##
 ## Exact 'funxy' counterpart of Smooth.ppp
 ##
-##  $Revision: 1.6 $ $Date: 2018/04/13 06:24:43 $
+##  $Revision: 1.9 $ $Date: 2018/09/07 05:29:50 $
 
 
 Smoothfun <- function(X, ...) {
@@ -32,23 +32,18 @@ Smoothfun.ppp <- function(X, sigma=NULL, ...,
   ## 
   X <- coerce.marks.numeric(X)
   ## 
-  stuff <- list(X=X, weights=weights, edge=edge, diggle=diggle)
+  stuff <- list(Xdata=X, values=marks(X),
+                weights=weights, edge=edge, diggle=diggle, ...)
   ## 
   ## determine smoothing parameters
   ker <- resolve.2D.kernel(sigma=sigma, ...,
                            x=X, bwfun=bw.smoothppp, allow.zero=TRUE)
-  stuff <- append(stuff, ker[c("sigma", "varcov")])
+  stuff[c("sigma", "varcov")]  <- ker[c("sigma", "varcov")]
   ##
   g <- function(x, y=NULL) {
     Y <- xy.coords(x, y)[c("x", "y")]
-    with(stuff,
-         smoothcrossEngine(Xdata=X,
-                           Xquery=as.ppp(Y, X$window),
-                           values=marks(X),
-                           sigma=sigma,
-                           varcov=varcov, 
-                           weights=weights,
-                           edge=edge, diggle=diggle))
+    Xquery <- as.ppp(Y, Window(stuff$Xdata))
+    do.call(smoothcrossEngine, append(list(Xquery=Xquery), stuff))
   }
   g <- funxy(g, as.rectangle(as.owin(X)))
   class(g) <- c("Smoothfun", class(g))

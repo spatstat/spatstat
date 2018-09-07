@@ -243,3 +243,23 @@ Change log from 1.56-1 to 1.56-2
 ------------- passed R-3.5.1 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
+
+07 sep 2018
+
+   density.ppp.R
+	Bug fix
+	
+   smooth.ppp.R
+   spatstat-internal.Rd
+	smoothcrossEngine handles any kernel
+
+   smoothfun.R
+	Handles any kernel.
+
+   DESCRIPTION
+   NEWS
+	version 1.56-1.015
+
+------------- passed R-3.5.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
