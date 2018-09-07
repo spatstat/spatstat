@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.56-1.015
+        CHANGES IN spatstat VERSION 1.56-1.016
 
 OVERVIEW
 
@@ -29,6 +29,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o density.ppp
     Slightly accelerated for non-Gaussian kernels.
+
+    o split.ppx
+    Argument 'f' can be a logical vector.
 
 BUG FIXES
 

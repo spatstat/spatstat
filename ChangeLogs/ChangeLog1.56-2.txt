@@ -263,3 +263,16 @@ Change log from 1.56-1 to 1.56-2
 ------------- passed R-3.5.1 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
+
+   split.ppx.R
+   split.ppx.Rd
+	'f' can be a logical vector.
+
+   DESCRIPTION
+   NEWS
+	version 1.56-1.016
+
+------------- passed R-3.5.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+

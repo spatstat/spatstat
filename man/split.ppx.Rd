@@ -14,7 +14,7 @@
     An object of class \code{"ppx"}.
   }
   \item{f}{
-    Data determining the grouping. Either a factor, 
+    Data determining the grouping. Either a factor, a logical vector,
     or the name of one of the columns of marks.
   }
   \item{drop}{

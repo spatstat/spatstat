@@ -1,7 +1,7 @@
 #
 # split.ppx.R
 #
-# $Revision: 1.5 $ $Date: 2016/03/05 01:33:38 $
+# $Revision: 1.6 $ $Date: 2018/09/07 05:49:15 $
 #
 # split.ppx etc
 #
@@ -36,6 +36,9 @@ split.ppx <- function(x, f = marks(x), drop=FALSE, un=NULL, ...) {
     fsplit <- f
     if(is.factor(f)) {
       splittype <- "factor"
+    } else if(is.logical(f)) {
+      splittype <- "factor"
+      f <- factor(f)
     } else if(is.character(f) && length(f) == 1) {
       # f is the name of a column of marks
       marx <- marks(x)
