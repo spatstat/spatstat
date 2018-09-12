@@ -227,11 +227,9 @@
   \emph{Statistical analysis of spatial point patterns},
   Second edition. Arnold.
 }
-\author{\adrian
-  
-  
-  and \rolf
-  
+\author{
+  \adrian
+  and \rolf.
 }
 \keyword{spatial}
 \keyword{methods}

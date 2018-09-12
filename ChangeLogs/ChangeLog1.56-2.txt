@@ -276,3 +276,25 @@ Change log from 1.56-1 to 1.56-2
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+08 sep 2018
+
+   relrisk.R
+   relrisk.ppp.Rd   
+	Tweaks
+
+12 sep 2018
+
+   bugfixes.Rnw
+   updates.Rnw
+	Updated to cover all the above.
+
+   DESCRIPTION
+   NEWS
+	version 1.56-1.017
+
+------------- passed R-3.5.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+
+

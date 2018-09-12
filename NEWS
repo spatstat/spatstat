@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.56-1.016
+        CHANGES IN spatstat VERSION 1.56-1.017
 
 OVERVIEW
 
@@ -33,6 +33,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o split.ppx
     Argument 'f' can be a logical vector.
 
+    o relrisk.ppp
+    If se=TRUE and at="pixels", the result belongs to class 'solist'.
+    
 BUG FIXES
 
     o rthin

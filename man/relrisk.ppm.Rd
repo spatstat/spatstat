@@ -177,13 +177,8 @@
   and 1. If \code{relative=TRUE}, the results are either non-negative
   numbers, or the values \code{Inf} or \code{NA}. 
 }
-\author{\adrian
-  
-  
-  \rolf
-  
-  and \ege
-  
+\author{
+  \spatstatAuthors.
 }
 \seealso{
   There is another method \code{\link{relrisk.ppp}} for point pattern datasets

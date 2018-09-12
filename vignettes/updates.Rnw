@@ -1338,6 +1338,9 @@ also carries these marks in the \verb!$lines! component.
    Intensity approximation is now implemented for
    area-interaction model, and Geyer saturation model.
 
+\item \texttt{interp.im}:
+  New argument \texttt{bilinear}.
+
  \item \texttt{ippm}:
    \begin{itemize}
    \item Accelerated.
@@ -1885,6 +1888,10 @@ also carries these marks in the \verb!$lines! component.
    \item \texttt{rgb2hex}:
    New argument \texttt{maxColorValue}
 
+   \item \texttt{relrisk.ppp}:
+     If \texttt{se=TRUE} and \texttt{at="pixels"}, the result belongs
+     to class \texttt{solist}.
+     
    \texttt{rhohat}:
    New argument \texttt{subset} allows computation for a subset of the data.
    
@@ -2008,7 +2015,7 @@ also carries these marks in the \verb!$lines! component.
    Set these options to \texttt{FALSE} to reproduce results obtained with
    previous versions of \spst.
 
-   \item \texttt{split.ppp}
+   \item \texttt{split.ppp}, \texttt{split.ppx}:
    The splitting variable \texttt{f} can now be a logical vector.
 
    \item \texttt{square}: 

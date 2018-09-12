@@ -3,7 +3,7 @@
 #
 #   Estimation of relative risk
 #
-#  $Revision: 1.34 $  $Date: 2018/08/31 07:44:37 $
+#  $Revision: 1.36 $  $Date: 2018/09/08 09:47:04 $
 #
 
 relrisk <- function(X, ...) UseMethod("relrisk")
@@ -191,7 +191,7 @@ relrisk.ppp <- local({
                    Vcase <- Veach[[icase]]
                    NUM <- eval.im(Vcase * (1-2*pcase) + Vall * pcase^2)
                    SE <- eval.im(sqrt(pmax(NUM, 0))/Dall)
-                   result <- list(estimate=pcase, SE=SE)
+                   result <- solist(estimate=pcase, SE=SE)
                  }
                } else {
                  rcase <- eval.im(ifelse(pcase < 1, pcase/(1-pcase), NA))
@@ -203,7 +203,7 @@ relrisk.ppp <- local({
                    Dctrl <- Deach[[icontrol]]
                    NUM <- eval.im(Vcase + Vctrl * rcase^2)
                    SE <- eval.im(sqrt(pmax(NUM, 0))/Dctrl)
-                   result <- list(estimate=rcase, SE=SE)
+                   result <- solist(estimate=rcase, SE=SE)
                  }
                }
              },
@@ -284,9 +284,7 @@ relrisk.ppp <- local({
                  }
                } else {
                  risks <- as.solist(lapply(probs,
-                                           function(z, d) {
-                                             eval.im(ifelse(d > 0, z/d, NA))
-                                           },
+                                           divideifpositive,
                                            d = probs[[icontrol]]))
                  if(!se) {
                    result <- risks
@@ -354,6 +352,8 @@ relrisk.ppp <- local({
   }
 
   reciprocal <- function(x) 1/x
+
+  divideifpositive <- function(z, d) { eval.im(ifelse(d > 0, z/d, NA)) }
   
   relrisk.ppp
 })
