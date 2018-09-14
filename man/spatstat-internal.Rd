@@ -1402,7 +1402,7 @@ rhohatCalc(ZX, Zvalues, lambda, denom, \dots,
            weights, lambdaX,
            method, horvitz, smoother,
            n, bw, adjust, from, to, 
-           bwref, covname, confidence,
+           bwref, covname, confidence, positiveCI, 
            covunits, modelcall, callstring, savestuff)
 rMaternInhibition(type, kappa, r, win, stationary, \dots, nsim, drop)
 RmhExpandRule(nama)
