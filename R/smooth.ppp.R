@@ -659,9 +659,12 @@ smoothcrossEngine <- function(Xdata, Xquery, values, sigma, ...,
   if(!is.null(dim(weights)))
     stop("weights must be a vector")
 
-  if(npoints(Xquery) == 0 || npoints(Xdata) == 0) {
-    if(is.null(dim(values))) return(rep(NA, npoints(Xquery)))
-    nuttin <- matrix(NA, nrow=npoints(Xquery), ncol=ncol(values))
+  ndata <- npoints(Xdata)
+  nquery <- npoints(Xquery)
+  
+  if(nquery == 0 || ndata == 0) {
+    if(is.null(dim(values))) return(rep(NA, nquery))
+    nuttin <- matrix(NA, nrow=nquery, ncol=ncol(values))
     colnames(nuttin) <- colnames(values)
     return(nuttin)
   }
@@ -676,7 +679,7 @@ smoothcrossEngine <- function(Xdata, Xquery, values, sigma, ...,
     k <- 1L
     stopifnot(length(values) == npoints(Xdata) || length(values) == 1)
     if(length(values) == 1L)
-      values <- rep(values, npoints(Xdata))
+      values <- rep(values, ndata)
   }
   
   ## cutoff distance (beyond which the kernel value is treated as zero)
@@ -692,7 +695,7 @@ smoothcrossEngine <- function(Xdata, Xquery, values, sigma, ...,
   ## detect very small bandwidth
   nnc <- nncross(Xquery, Xdata)
   if(cutoff < min(nnc$dist)) {
-    if(npoints(Xdata) > 1) {
+    if(ndata > 1) {
       warning("Very small bandwidth; values of nearest neighbours returned")
       nw <- nnc$which
       result <- if(k == 1) values[nw] else values[nw,,drop=FALSE]
@@ -759,7 +762,7 @@ smoothcrossEngine <- function(Xdata, Xquery, values, sigma, ...,
     k <- ncol(values)
     stopifnot(nrow(values) == npoints(Xdata))
     values <- as.data.frame(values)
-    result <- matrix(, npoints(Xquery), k)
+    result <- matrix(, nquery, k)
     colnames(result) <- colnames(values)
     if(!sorted) {
       ood <- fave.order(Xdata$x)
@@ -786,10 +789,8 @@ smoothcrossEngine <- function(Xdata, Xquery, values, sigma, ...,
 
   ## values must be a vector
   stopifnot(length(values) == npoints(Xdata) || length(values) == 1)
-  if(length(values) == 1) values <- rep(values, npoints(Xdata))
+  if(length(values) == 1) values <- rep(values, ndata)
 
-  ndata <- npoints(Xdata)
-  nquery <- npoints(Xquery)
   result <- numeric(nquery) 
   ## coordinates and values
   xq <- Xquery$x

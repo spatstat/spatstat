@@ -317,8 +317,21 @@ Change log from 1.56-1 to 1.56-2
 	
    DESCRIPTION
    NEWS
-	version 1.56-1.018
+	version 1.56-1.019
 
 ------------- passed R-3.5.1 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
+
+   smooth.ppp.R
+	Buglet fix
+
+   DESCRIPTION
+   NEWS
+	version 1.56-1.020
+
+------------- passed R-3.5.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+
