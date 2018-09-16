@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.56-1.018
+        CHANGES IN spatstat VERSION 1.56-1.019
 
 OVERVIEW
 
@@ -79,6 +79,11 @@ BUG FIXES
    o relrisk.ppp
    Issued a spurious warning if the argument 'case' or 'control' was given
    for a bivariate point pattern.
+   Fixed.
+
+   o superimpose.ppp
+   If 'W' was a character string or function, the behaviour was
+   not exactly as described in the help file. 
    Fixed.
    
         CHANGES IN spatstat VERSION 1.56-1

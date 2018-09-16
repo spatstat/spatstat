@@ -309,3 +309,16 @@ Change log from 1.56-1 to 1.56-2
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+   superimpose.R
+	Buglet fix
+
+   tests/ppp.R
+	Added tests of superimpose.ppp
+	
+   DESCRIPTION
+   NEWS
+	version 1.56-1.018
+
+------------- passed R-3.5.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------

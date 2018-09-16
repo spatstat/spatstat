@@ -45,24 +45,16 @@ superimpose.ppp <- function(..., W=NULL, check=TRUE) {
 
   # determine whether there is any window information
   if(!is.owin(W)) {
-    # we have to compute the final window
-    WXY <- NULL
-    Wppp <- NULL
-    if(any(isppp <- unlist(lapply(arglist, is.ppp)))) {
-      # extract windows from ppp objects
-      wins <- unname(lapply(arglist[isppp], as.owin))
-      # take union
-      Wppp <- if(length(wins) == 1) wins[[1]] else do.call(union.owin, wins)
-    } 
+    ## we have to compute the final window
     if(is.function(W)) {
-      # W is a function like bounding.box.xy or ripras
-      # Apply function to the x,y coordinates; it should return an owin
+      ## W is a function like bounding.box.xy or ripras
+      ## Apply function to the x,y coordinates; it should return an owin
       WXY <- W(XY)
       if(!is.owin(WXY))
         stop("Function W did not return an owin object", call.=FALSE)
-    }
-    if(is.character(W)) {
-      # character string identifies a function
+      W <- WXY
+    } else if(is.character(W)) {
+      ## character string identifies a function
       pW <- pmatch(W, c("convex", "rectangle", "bbox", "none"))
       if(is.na(pW))
         stop(paste("Unrecognised option W=", sQuote(W)), call.=FALSE)
@@ -73,12 +65,18 @@ superimpose.ppp <- function(..., W=NULL, check=TRUE) {
                     none=NULL)
       # in these cases we don't need to verify that the points are inside.
       needcheck <- !is.null(WXY)
-    }
-    if(is.null(WXY) && is.null(Wppp)) {
-      # no window information
-      return(XY)
-    }
-    W <- union.owin(WXY, Wppp)
+      if(!is.null(WXY)) W <- WXY
+    } else if(is.null(W)) {
+      if(any(isppp <- unlist(lapply(arglist, is.ppp)))) {
+        ## extract windows from ppp objects
+        wins <- unname(lapply(arglist[isppp], as.owin))
+        ## take union
+        W <- if(length(wins) == 1) wins[[1]] else do.call(union.owin, wins)
+      } else {
+        ## no window information
+        return(XY)
+      }
+    } else stop("Argument W is not understood")
   }
   # extract the marks if any
   nobj <- lengths(lapply(arglist, getElement, name="x"))

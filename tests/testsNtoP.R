@@ -535,7 +535,7 @@ reset.spatstat.options()
 #'
 #'   tests/ppp.R
 #'
-#'   $Revision: 1.2 $ $Date: 2018/06/03 09:06:56 $
+#'   $Revision: 1.3 $ $Date: 2018/09/16 04:40:00 $
 #'
 #'  Untested cases in ppp() or associated code
 
@@ -585,6 +585,13 @@ local({
   #'
   a <- multiplicity(finpines)
   a <- multiplicity(longleaf)
+
+  ## superimpose.ppp, extra cases
+  X <- runifpoint(20)
+  A <- superimpose(cells, X, W="convex")
+  A <- superimpose(cells, X, W=ripras)
+  ## superimpose.splitppp
+  Y <- superimpose(split(amacrine))
 })
 #
 # tests/ppx.R
