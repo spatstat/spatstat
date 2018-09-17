@@ -1,7 +1,7 @@
 #
 #  psp.R
 #
-#  $Revision: 1.92 $ $Date: 2018/04/17 02:03:10 $
+#  $Revision: 1.93 $ $Date: 2018/09/17 07:10:30 $
 #
 # Class "psp" of planar line segment patterns
 #
@@ -661,14 +661,18 @@ shift.psp <- function(X, vec=c(0,0), ..., origin=NULL) {
     stopifnot(is.character(origin))
     if(!missing(vec))
       warning("Argument vec ignored; argument origin has precedence.\n")
-    origin <- pickoption("origin", origin, c(centroid="centroid",
-                                             midpoint="midpoint",
-                                             bottomleft="bottomleft"))
-    W <- as.owin(X)
-    locn <- switch(origin,
-                   centroid={ unlist(centroid.owin(W)) },
-                   midpoint={ c(mean(W$xrange), mean(W$yrange)) },
-                   bottomleft={ c(W$xrange[1], W$yrange[1]) })
+    if(is.numeric(origin)) {
+      locn <- origin
+    } else {
+      origin <- pickoption("origin", origin, c(centroid="centroid",
+                                               midpoint="midpoint",
+                                               bottomleft="bottomleft"))
+      W <- as.owin(X)
+      locn <- switch(origin,
+                     centroid={ unlist(centroid.owin(W)) },
+                     midpoint={ c(mean(W$xrange), mean(W$yrange)) },
+                     bottomleft={ c(W$xrange[1], W$yrange[1]) })
+    }
     return(shift(X, -locn))
   }
   # perform shift

@@ -349,3 +349,14 @@ Change log from 1.56-1 to 1.56-2
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+   psp.R
+	In shift.psp, argument 'origin' can be numeric.
+
+   DESCRIPTION
+   NEWS
+	version 1.56-1.022
+
+------------- passed R-3.5.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
