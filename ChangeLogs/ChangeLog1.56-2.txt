@@ -334,4 +334,18 @@ Change log from 1.56-1 to 1.56-2
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+17 sep 2018
+
+   rhohat.R
+   spatstat-internal.Rd
+	rhohatCalc gets argument 'markovCI' designed to
+	deflate	huge confidence intervals.
+
+   DESCRIPTION
+   NEWS
+	version 1.56-1.021
+
+------------- passed R-3.5.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
 

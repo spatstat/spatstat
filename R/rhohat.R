@@ -1,7 +1,7 @@
 #
 #  rhohat.R
 #
-#  $Revision: 1.75 $  $Date: 2018/09/14 09:24:16 $
+#  $Revision: 1.78 $  $Date: 2018/09/17 06:37:27 $
 #
 #  Non-parametric estimation of a transformation rho(z) determining
 #  the intensity function lambda(u) of a point process in terms of a
@@ -300,6 +300,7 @@ rhohatCalc <- local({
                          n=512, bw="nrd0", adjust=1, from=NULL, to=NULL, 
                          bwref=bw, covname, confidence=0.95,
                          positiveCI=(smoother == "local"),
+                         markovCI=TRUE,
                          covunits = NULL, modelcall=NULL, callstring=NULL,
                          savestuff=list()) {
     method <- match.arg(method)
@@ -422,6 +423,11 @@ rhohatCalc <- local({
         sss <- exp(crit * sdlog)
         hi <- yyy * sss
         lo <- yyy / sss
+        if(markovCI) {
+          ## truncate extremely large confidence intervals
+          ## using Markov's Inequality
+          hi <- pmin(hi, yyy/(1-confidence))
+        }
       }
     } else {
       ## .................. local likelihood smoothing .......................
@@ -471,14 +477,19 @@ rhohatCalc <- local({
              })
       vvvname <- "Variance of log of estimator"
       vvvlabel <- paste("bold(Var)~log(hat(%s)", paren(covname), ")", sep="")
+      sdlog <- sqrt(vvv)
       if(positiveCI) {
-        sss <- exp(crit * sqrt(vvv))
+        sss <- exp(crit * sdlog)
         hi <- yyy * sss
         lo <- yyy / sss
+        if(markovCI) {
+          ## truncate extremely large confidence intervals
+          ## using Markov's Inequality
+          hi <- pmin(hi, yyy/(1-confidence))
+        }
       } else {
-        sd <- sqrt(vvv)
-        hi <- yyy * (1 + crit * sd)
-        lo <- yyy * (1 - crit * sd)
+        hi <- yyy * (1 + crit * sdlog)
+        lo <- yyy * (1 - crit * sdlog)
       }
     }
     ## pack into fv object
