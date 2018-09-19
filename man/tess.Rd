@@ -127,7 +127,8 @@
   \code{\link{cut.ppp}},
   \code{\link{by.ppp}},
   \code{\link{bdist.tiles}},
-  \code{\link{tile.areas}}.
+  \code{\link{tile.areas}},
+  \code{\link{as.function.tess}}.
 
   To construct particular tessellations, see
   \code{\link{quadrats}}, \code{\link{hextess}},
@@ -136,6 +137,10 @@
 
   To divide space into pieces containing equal
   amounts of stuff, use \code{\link{quantess}}.
+
+  To convert a tessellation to a function, for use as a spatial covariate
+  (associating a numerical value with each tile of the tessellation) use
+  \code{\link{as.function.tess}}.
 }
 \examples{
   A <- tess(xgrid=0:4,ygrid=0:4)

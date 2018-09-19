@@ -167,6 +167,9 @@
       For each spatial location, the factor value indicates
       which tile of the tessellation it belongs to.
       This should be an object of class \code{"tess"}.
+      (To make a covariate in which each tile of the tessellation
+      has a numerical value, convert the tessellation to a \code{function(x,y)}
+      using \code{\link{as.function.tess}}.)
     }
     \item{a single number,}{indicating a covariate that is
       constant in this dataset.

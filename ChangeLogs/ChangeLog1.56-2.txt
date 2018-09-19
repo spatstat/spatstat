@@ -360,3 +360,20 @@ Change log from 1.56-1 to 1.56-2
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+19 sep 2018
+
+   ppm.Rd
+   tess.Rd
+	Added cross-references to as.function.tess
+
+   NEWS
+	Acknowledged Corey Anderson.
+
+   DESCRIPTION
+   NEWS
+	version 1.56-1.023
+
+------------- passed R-3.5.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+

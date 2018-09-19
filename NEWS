@@ -1,10 +1,11 @@
 
-        CHANGES IN spatstat VERSION 1.56-1.022
+        CHANGES IN spatstat VERSION 1.56-1.023
 
 OVERVIEW
 
-    o We thank Hadrien Commenges, Tilman Davies, Maximilian Hesselbarth,
-    Kassel Hingee, Rasmus Waagepetersen and 'daitakahashi' for contributions.
+    o We thank Corey Anderson, Hadrien Commenges, Tilman Davies,
+    Maximilian Hesselbarth, Kassel Hingee, Rasmus Waagepetersen
+    and 'daitakahashi' for contributions.
 
     o Bug fix in rthin.
 
