@@ -3,7 +3,7 @@
 #
 #    conversion to class "im"
 #
-#    $Revision: 1.53 $   $Date: 2018/07/01 08:08:39 $
+#    $Revision: 1.54 $   $Date: 2018/09/20 03:22:31 $
 #
 #    as.im()
 #
@@ -136,10 +136,12 @@ as.im.function <- function(X, W=NULL, ...,
       slice.inside.i <- slices.inside[[i]]
       #' create space for full matrix
       slice.i <- vector(mode=typeof(slice.inside.i), length=msize)
-      levels(slice.i) <- levels(slice.inside.i)
+      if(is.factor(slice.inside.i))
+        slice.i <- factor(slice.i, levels=levels(slice.inside.i))
       #' copy values, assigning NA outside window
       slice.i[inside] <- slice.inside.i
       slice.i[!inside] <- NA
+      #'
       slices[[i]] <- slice.i
     }
   }

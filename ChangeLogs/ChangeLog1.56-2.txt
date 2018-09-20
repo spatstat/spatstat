@@ -377,3 +377,16 @@ Change log from 1.56-1 to 1.56-2
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+20 sep 2018
+
+   as.im.R
+	Bug fix in as.im.function
+
+   DESCRIPTION
+   NEWS
+	version 1.56-1.024
+
+------------- passed R-3.5.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+

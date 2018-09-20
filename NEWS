@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.56-1.023
+        CHANGES IN spatstat VERSION 1.56-1.024
 
 OVERVIEW
 
@@ -55,6 +55,18 @@ BUG FIXES
     in some cases.
     Fixed.
 
+    o as.im.function, as.im.funxy
+    If the function values were factor values and the window was
+    not a rectangle, the result was an image with all pixel values NA.
+    [Spotted by Corey Anderson.]
+    Fixed.
+    
+    o plot.funxy
+    If the function values were factor values and the window was
+    not a rectangle, the plot was empty.
+    [Spotted by Corey Anderson.]
+    Fixed.
+    
     o linim
     Crashed in some cases with a message about unitnames.
     Fixed.
