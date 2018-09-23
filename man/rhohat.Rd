@@ -26,7 +26,7 @@ rhohat(object, covariate, ...)
        dimyx=NULL, eps=NULL,
        n = 512, bw = "nrd0", adjust=1, from = NULL, to = NULL,
        bwref=bw,
-       covname, confidence=0.95)
+       covname, confidence=0.95, positiveCI)
 
 \method{rhohat}{quad}(object, covariate, ...,
        baseline=NULL, weights=NULL,
@@ -37,7 +37,7 @@ rhohat(object, covariate, ...)
        dimyx=NULL, eps=NULL,
        n = 512, bw = "nrd0", adjust=1, from = NULL, to = NULL,
        bwref=bw,
-       covname, confidence=0.95)
+       covname, confidence=0.95, positiveCI)
 
 \method{rhohat}{ppm}(object, covariate, ...,
        weights=NULL,
@@ -48,7 +48,7 @@ rhohat(object, covariate, ...)
        dimyx=NULL, eps=NULL,
        n = 512, bw = "nrd0", adjust=1, from = NULL, to = NULL,
        bwref=bw,
-       covname, confidence=0.95)
+       covname, confidence=0.95, positiveCI)
 
 \method{rhohat}{lpp}(object, covariate, ...,
        weights=NULL,
@@ -59,7 +59,7 @@ rhohat(object, covariate, ...)
        nd=1000, eps=NULL, random=TRUE, 
        n = 512, bw = "nrd0", adjust=1, from = NULL, to = NULL,
        bwref=bw,
-       covname, confidence=0.95)
+       covname, confidence=0.95, positiveCI)
 
 \method{rhohat}{lppm}(object, covariate, ...,
        weights=NULL,
@@ -70,7 +70,7 @@ rhohat(object, covariate, ...)
        nd=1000, eps=NULL, random=TRUE, 
        n = 512, bw = "nrd0", adjust=1, from = NULL, to = NULL,
        bwref=bw,
-       covname, confidence=0.95)
+       covname, confidence=0.95, positiveCI)
 }
 \arguments{
   \item{object}{
@@ -146,6 +146,15 @@ rhohat(object, covariate, ...)
   \item{confidence}{
     Confidence level for confidence intervals.
     A number between 0 and 1.
+  }
+  \item{positiveCI}{
+    Logical value.
+    If \code{TRUE}, confidence limits are always positive numbers;
+    if \code{FALSE}, the lower limit of the
+    confidence interval may sometimes be negative.
+    Default is \code{FALSE} if \code{smoother="kernel"}
+    and \code{TRUE} if \code{smoother="local"}.
+    See Details.
   }
 }
 \details{
@@ -258,6 +267,19 @@ rhohat(object, covariate, ...)
 
   If the argument \code{subset} is present, then the calculations are
   performed using only the data inside this spatial region.
+    
+  Pointwise confidence intervals for the true value of \eqn{\rho(z)}
+  are also calculated for each \eqn{z} using the central limit theorem,
+  and will be plotted as grey shading.
+  If \code{positiveCI=FALSE}, the lower limit of the confidence
+  interval may sometimes be negative, because the confidence intervals
+  are based on a normal approximation to the estimate of \eqn{\rho(z)}.
+  If \code{positiveCI=TRUE}, the confidence limits are always
+  positive, because the confidence interval is based on a normal
+  approximation to the estimate of \eqn{\log(\rho(z))}{log(\rho(z))}.
+  For consistency with earlier versions, the default is
+  \code{positiveCI=FALSE} for \code{smoother="kernel"}
+  and \code{positiveCI=TRUE} for \code{smoother="local"}.
 }
 \value{
   A function value table (object of class \code{"fv"})

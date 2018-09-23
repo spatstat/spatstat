@@ -413,5 +413,14 @@ Change log from 1.56-1 to 1.56-2
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+   rhohat.R
+   rhohat.Rd
+	Argument 'positiveCI' is visible.
 
-   
+   DESCRIPTION
+   NEWS
+	version 1.56-1.026
+
+------------- passed R-3.5.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
