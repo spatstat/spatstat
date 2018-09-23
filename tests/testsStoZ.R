@@ -660,7 +660,7 @@ local({
 #'
 #'   Tests for C code in trigraf.c
 #'   
-#'  $Revision: 1.2 $  $Date: 2018/06/08 13:14:16 $
+#'  $Revision: 1.3 $  $Date: 2018/09/23 09:37:29 $
 #'
 require(spatstat)
 local({
@@ -671,9 +671,19 @@ local({
   B <- delaunay(redwood)
   spatstat.deldir.setopt(TRUE, TRUE)
   #' called from edges2triangles.R
-  op <- spatstat.options(fast.trigraph=FALSE)
-  fut <- ppm(cells ~ 1, Triplets(0.15))
-  spatstat.options(op)
+  tryangles <- function(iedge, jedge, nt=0) {
+    spatstat.options(fast.trigraph=FALSE)
+    A <- edges2triangles(iedge, jedge)
+    spatstat.options(fast.trigraph=TRUE)
+    B <- edges2triangles(iedge, jedge)
+    if(!all(dim(A) == dim(B)) || !all(A == B))
+      stop(paste("Discrepancy in edges2triangles (with", nt, "triangles)"))
+  }
+  ii <- simplenet$from
+  jj <- simplenet$to
+  tryangles(ii,          jj,          0)
+  tryangles(c(ii, 1),    c(jj, 5),    1)
+  tryangles(c(ii, 1, 8), c(jj, 5, 9), 2)
 })
 
 reset.spatstat.options()

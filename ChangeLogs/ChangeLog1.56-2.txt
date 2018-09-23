@@ -390,3 +390,28 @@ Change log from 1.56-1 to 1.56-2
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+23 sep 2018
+
+   edges2triangles.R
+	Harmonised format of result of edges2triangles.
+
+   tests/trigraph.R
+   tests/correctC.R
+   tests/density.R
+	Added tests of more cases.
+
+   src/massdisthack.c [Deleted file]
+   	This file is no longer used.
+
+   DESCRIPTION
+   NEWS
+   Nickname.txt
+	Nickname 'Raw prawn'
+	version 1.56-1.025
+
+------------- passed R-3.5.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+
+   

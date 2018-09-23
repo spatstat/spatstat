@@ -1,7 +1,7 @@
 #
 #   edges2triangles.R
 #
-#   $Revision: 1.15 $  $Date: 2018/06/08 13:12:09 $
+#   $Revision: 1.16 $  $Date: 2018/09/23 09:21:22 $
 #
 
 edges2triangles <- function(iedge, jedge, nvert=max(iedge, jedge),
@@ -22,7 +22,9 @@ edges2triangles <- function(iedge, jedge, nvert=max(iedge, jedge),
     }
   }
   # zero length data, or not enough to make triangles
-  if(length(iedge) < 3) return(matrix(, nrow=0, ncol=3))
+  if(length(iedge) < 3)
+    return(matrix(integer(0), nrow=0, ncol=3,
+                  dimnames=list(NULL, c("i", "j", "k"))))
   # sort in increasing order of 'iedge'
   oi <- fave.order(iedge)
   iedge <- iedge[oi]
@@ -45,7 +47,7 @@ edges2triangles <- function(iedge, jedge, nvert=max(iedge, jedge),
                 nv=nvert, iedge=iedge, jedge=jedge,
                 PACKAGE="spatstat")
   }
-  mat <- as.matrix(as.data.frame(zz))
+  mat <- as.matrix(as.data.frame(zz, col.names=c("i", "j", "k")))
   return(mat)
 }
 

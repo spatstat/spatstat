@@ -250,7 +250,7 @@ local({
 # tests/correctC.R
 # check for agreement between C and interpreted code
 # for interpoint distances etc.
-# $Revision: 1.4 $ $Date: 2015/12/29 08:54:49 $
+# $Revision: 1.5 $ $Date: 2018/09/23 09:03:53 $
 
 require(spatstat)
 
@@ -269,6 +269,11 @@ local({
   if(any(abs(dC - dR) > eps))
     stop("Algorithms for pairdist(periodic=TRUE) do not agree")
 
+  dC2 <- pairdist(X, periodic=TRUE, squared=TRUE, method="C")
+  dR2 <- pairdist(X, periodic=TRUE, squared=TRUE, method="interpreted")
+  if(any(sqrt(abs(dC2 - dR2)) > eps))
+    stop("Algorithms for pairdist(periodic=TRUE, squared=TRUE) do not agree")
+
   # crossdist.ppp
   Y <- rpoispp(42)
   dC <- crossdist(X, Y, method="C")
@@ -280,6 +285,11 @@ local({
   dR <- crossdist(X, Y, periodic=TRUE, method="interpreted")
   if(any(abs(dC - dR) > eps))
     stop("Algorithms for crossdist(periodic=TRUE) do not agree")
+
+  dC2 <- crossdist(X, Y, periodic=TRUE, squared=TRUE, method="C")
+  dR2 <- crossdist(X, Y, periodic=TRUE, squared=TRUE, method="interpreted")
+  if(any(sqrt(abs(dC2 - dR2)) > eps))
+    stop("Algorithms for crossdist(periodic=TRUE, squared=TRUE) do not agree")
 
   # nndist.ppp
   nnC <- nndist(X, method="C")
@@ -363,7 +373,7 @@ local({
 #'                    relrisk(), Smooth()
 #'                    and inhomogeneous summary functions
 #'
-#'  $Revision: 1.25 $  $Date: 2018/09/02 07:32:55 $
+#'  $Revision: 1.26 $  $Date: 2018/09/23 09:05:45 $
 #'
 
 require(spatstat)
@@ -626,6 +636,12 @@ local({
     m2 <- kernel.moment(2, 0, ker)
     m3 <- kernel.moment(3, 0, ker)
   }
+})
+
+local({
+  ## idw
+  Z <- idw(longleaf, power=4)
+  ZX <- idw(longleaf, power=4, at="points")
 })
 
 reset.spatstat.options()
