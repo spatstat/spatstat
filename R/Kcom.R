@@ -3,7 +3,7 @@
 #
 #   model compensated K-function
 #
-# $Revision: 1.14 $ $Date: 2015/10/21 09:06:57 $
+# $Revision: 1.15 $ $Date: 2018/09/28 05:08:55 $
 #
 
 Kcom <- local({
@@ -244,7 +244,7 @@ Kcom <- local({
       iOK <- I[okI]
       denom <- lambda2U * area.used
       variso <- varsumiso <- 0 * Kiso
-      for(i in sort(unique(iOK))) {
+      for(i in sortunique(iOK)) {
         relevant <- (iOK == i)
         tincrem <- whist(dOK[relevant], breaks$val, eOK[relevant])
         localterm <- cumsum(tincrem)/denom

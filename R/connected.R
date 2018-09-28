@@ -130,7 +130,7 @@ connected.owin <- function(X, ..., method="C") {
     
   # Renumber labels sequentially
   mapped <- (Z != 0)
-  usedlabs <- sort(unique(as.vector(Z[mapped])))
+  usedlabs <- sortunique(as.vector(Z[mapped]))
   nlabs <- length(usedlabs)
   labtable <- cumsum(seq_len(max(usedlabs)) %in% usedlabs)
   Z[mapped] <- labtable[Z[mapped]]

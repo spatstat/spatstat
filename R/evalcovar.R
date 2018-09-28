@@ -3,7 +3,7 @@
 #'
 #'   evaluate covariate values at data points and at pixels
 #'
-#' $Revision: 1.26 $ $Date: 2018/05/13 05:38:09 $
+#' $Revision: 1.27 $ $Date: 2018/09/28 05:11:03 $
 #'
 
 evalCovar <- function(model, covariate, ...) {
@@ -194,7 +194,7 @@ evalCovar.ppm <- local({
     #' apply jittering to avoid ties
     if(jitter) {
       nX <- length(ZX)
-      dZ <- 0.3 * quantile(diff(sort(unique(c(ZX, Zvalues)))), 1/min(20, nX))
+      dZ <- 0.3 * quantile(diff(sortunique(c(ZX, Zvalues))), 1/min(20, nX))
       ZX <- ZX + rnorm(nX, sd=dZ)
       Zvalues <- Zvalues + rnorm(length(Zvalues), sd=dZ)
     }
@@ -412,7 +412,7 @@ evalCovar.lppm <- local({
     #' apply jittering to avoid ties
     if(jitter) {
       nX <- length(ZX)
-      dZ <- 0.3 * quantile(diff(sort(unique(c(ZX, Zvalues)))), 1/min(20, nX))
+      dZ <- 0.3 * quantile(diff(sortunique(c(ZX, Zvalues))), 1/min(20, nX))
       ZX <- ZX + rnorm(nX, sd=dZ)
       Zvalues <- Zvalues + rnorm(length(Zvalues), sd=dZ)
     }

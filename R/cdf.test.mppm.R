@@ -1,7 +1,7 @@
 #
 # cdf.test.mppm.R
 #
-# $Revision: 1.16 $  $Date: 2016/04/14 02:34:50 $
+# $Revision: 1.17 $  $Date: 2018/09/28 05:13:38 $
 #
 cdf.test.mppm <- local({
 
@@ -220,7 +220,7 @@ cdf.test.mppm <- local({
       U <- FZ(ZX)
     else {
       ## jitter observed values to avoid ties
-      grain <- min(diff(sort(unique(ZX))))/8
+      grain <- min(diff(sortunique(ZX)))/8
       jit <- runif(length(ZX), min=0, max=grain)
       sgn <- sample(c(-1L,1L), length(ZX), replace=TRUE)
       sgn[ZX==min(xxx)] <- 1L

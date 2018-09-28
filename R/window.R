@@ -3,7 +3,7 @@
 #
 #	A class 'owin' to define the "observation window"
 #
-#	$Revision: 4.182 $	$Date: 2018/07/16 08:13:42 $
+#	$Revision: 4.183 $	$Date: 2018/09/28 05:03:46 $
 #
 #
 #	A window may be either
@@ -415,8 +415,8 @@ as.owin.data.frame <- function(W, ..., step, fatal=TRUE) {
   iz <- mch[3L]
   df <- data.frame(x=W[,ix], y=W[,iy], z=as.logical(W[,iz]))
   with(df, {
-    xx <- sort(unique(x))
-    yy <- sort(unique(y))
+    xx <- sortunique(x)
+    yy <- sortunique(y)
     jj <- match(x, xx)
     ii <- match(y, yy)
     ## make logical matrix (for incomplete x, y sequence)
@@ -617,8 +617,8 @@ as.mask <- function(w, eps=NULL, dimyx=NULL, xy=NULL) {
       if(!checkfields(xy, c("x", "y")))
         stop(paste(sQuote("xy"),
                    "should be a list containing two vectors x and y"))
-      x <- sort(unique(xy$x))
-      y <- sort(unique(xy$y))
+      x <- sortunique(xy$x)
+      y <- sortunique(xy$y)
       # derive other parameters
       nr <- length(y)
       nc <- length(x)

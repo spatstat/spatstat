@@ -3,7 +3,7 @@
 #
 # differentiation for fv objects
 #
-#  $Revision: 1.6 $ $Date: 2014/10/24 00:22:30 $
+#  $Revision: 1.7 $ $Date: 2018/09/28 05:12:08 $
 #
 
 deriv.fv <- local({
@@ -72,7 +72,7 @@ deriv.fv <- local({
       rr <- range(rvals)
       if(periodic) 
         kinks <- c(kinks-DR, kinks, kinks+DR)
-      breaks <- sort(unique(kinks))
+      breaks <- sortunique(kinks)
       if(breaks[1L] > rr[1L]) breaks <- c(rr[1L], breaks)
       if(max(breaks) < rr[2L]) breaks <- c(breaks, rr[2L])
       cutx <- cut(rvals, breaks=breaks, include.lowest=TRUE)

@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.56-1.026
+        CHANGES IN spatstat VERSION 1.56-1.027
 
 OVERVIEW
 
@@ -57,8 +57,8 @@ BUG FIXES
     Fixed.
 
     o density.ppp
-    Did not pass additional arguments "..." to a user-supplied kernel function
-    in some cases.
+    Did not pass additional arguments "..." to a user-supplied
+    kernel function, in some cases.
     Fixed.
 
     o as.im.function, as.im.funxy
@@ -96,8 +96,8 @@ BUG FIXES
     Fixed.
 
    o relrisk.ppp
-   Issued a spurious warning if the argument 'case' or 'control' was given
-   for a bivariate point pattern.
+   Issued a spurious warning if the argument 'case' or 'control'
+   was given, for a bivariate point pattern.
    Fixed.
 
    o superimpose.ppp

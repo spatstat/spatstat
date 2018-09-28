@@ -424,3 +424,45 @@ Change log from 1.56-1 to 1.56-2
 ------------- passed R-3.5.1 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
+
+24 sep 2018
+
+   nncross.R
+	Buglet fix
+
+28 sep 2018
+
+   daogenton.R
+   nndist.R
+	Replaced sort(x)[k] with orderstats(x, k) for efficiency
+
+   as.im.R
+   cdf.test.mppm.R
+   connected.R
+   deldir.R
+   derivfv.R
+   dummy.R
+   evalcovar.R
+   ewcdf.R
+   images.R
+   indices.R
+   Kcom.R
+   linnetsurgery.R
+   lintess.R
+   plot.ppp.R
+   primefactors.R
+   rescue.rectangle.R
+   window.R
+	replaced sort(unique(x)) by sortunique(x)
+	
+   DESCRIPTION
+	Require spatstat.utils 1.9-4
+	
+   DESCRIPTION
+   NEWS
+	version 1.56-1.027
+
+------------- passed R-3.5.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+

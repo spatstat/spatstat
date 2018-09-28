@@ -3,7 +3,7 @@
 #
 #    conversion to class "im"
 #
-#    $Revision: 1.54 $   $Date: 2018/09/20 03:22:31 $
+#    $Revision: 1.55 $   $Date: 2018/09/28 05:14:12 $
 #
 #    as.im()
 #
@@ -256,8 +256,8 @@ as.im.data.frame <- function(X, ..., step, fatal=TRUE, drop=TRUE) {
   y <- X[, mch[2L]]
   z <- X[, -mch[1:2], drop=FALSE]
   ## unique x,y coordinates
-  xx <- sort(unique(x))
-  yy <- sort(unique(y))
+  xx <- sortunique(x)
+  yy <- sortunique(y)
   jj <- match(x, xx)
   ii <- match(y, yy)
   iijj <- cbind(ii, jj)

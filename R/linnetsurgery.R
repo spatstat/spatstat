@@ -36,7 +36,7 @@ insertVertices <- function(L, ...) {
   tp <- co$tp
   ## determine which segments will be split,
   ## and compute new serial numbers for the un-split segments
-  splitsegments <- sort(unique(seg))
+  splitsegments <- sortunique(seg)
   notsplit <- rep(TRUE, nsegments(L))
   notsplit[splitsegments] <- FALSE
   segmap <- cumsum(notsplit)

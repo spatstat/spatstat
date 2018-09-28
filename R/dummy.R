@@ -3,7 +3,7 @@
 #
 #	Utilities for generating patterns of dummy points
 #
-#       $Revision: 5.31 $     $Date: 2015/10/21 09:06:57 $
+#       $Revision: 5.32 $     $Date: 2018/09/28 05:11:55 $
 #
 #	corners()	corners of window
 #	gridcenters()	points of a rectangular grid
@@ -263,7 +263,7 @@ default.n.tiling <- local({
     if(any(ok)) return(min(d[ok]))
     m <- floor(Nbig/N)
     d <- unlist(lapply(as.list(seq_len(m) * N), divisors))
-    d <- sort(unique(d))
+    d <- sortunique(d)
     ok <- (d >= lo)
     if(any(ok)) return(min(d[ok]))
     return(Nbig)

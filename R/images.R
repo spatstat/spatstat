@@ -1,7 +1,7 @@
 #
 #       images.R
 #
-#      $Revision: 1.147 $     $Date: 2018/04/12 10:05:05 $
+#      $Revision: 1.148 $     $Date: 2018/09/28 05:09:24 $
 #
 #      The class "im" of raster images
 #
@@ -355,8 +355,8 @@ shift.im <- function(X, vec=c(0,0), ..., origin=NULL) {
         ccall[[2L]] <- quote(CC)
         rr <- eval(as.call(rcall))
         cc <- eval(as.call(ccall))
-        rseq <- sort(unique(as.vector(rr)))
-        cseq <- sort(unique(as.vector(cc)))
+        rseq <- sortunique(as.vector(rr))
+        cseq <- sortunique(as.vector(cc))
         if(all(diff(rseq) == 1) && all(diff(cseq) == 1) &&
            (length(rr) == length(rseq) * length(cseq)) &&
            all(rr == RR[rseq, cseq]) && all(cc == CC[rseq,cseq])) {

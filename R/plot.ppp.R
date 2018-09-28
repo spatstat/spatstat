@@ -136,7 +136,7 @@ plot.ppp <- local({
     }
     ##  ...........  non-numeric marks .........................
     um <- marklevels %orifnull%
-          if(is.factor(marx)) levels(marx) else sort(unique(marx))
+          if(is.factor(marx)) levels(marx) else sortunique(marx)
     ntypes <- length(um)
     if(!is.null(cols))
       cols <- rep.int(cols, ntypes)[1:ntypes]

@@ -3,7 +3,7 @@
 ##
 ##  Dao-Genton adjusted p-values
 ##
-##  $Revision: 1.14 $  $Date: 2017/06/05 10:31:58 $
+##  $Revision: 1.15 $  $Date: 2018/09/28 04:51:38 $
 ##
 
 bits.test <- function(X, ..., exponent=2, nsim=19,
@@ -183,19 +183,19 @@ dg.envelope <- function(X, ..., nsim=19,
   if(!interpolate) {
     ## find critical rank 'l'
     rankY <- pvalY * (nsimsub + 1)
-    dg.rank <- sort(rankY, na.last=TRUE)[nrank]
+    dg.rank <- orderstats(rankY, k=nrank)
     if(verbose) cat("dg.rank=", dg.rank, fill=TRUE)
     ## extract deviation values from top-level simulation
     simdev <- attr(tX, "statistics")[["sim"]]
     ## find critical deviation
-    dg.crit <- sort(simdev, decreasing=TRUE, na.last=TRUE)[dg.rank]
+    dg.crit <- orderstats(simdev, decreasing=TRUE, k=dg.rank)
     if(verbose) cat("dg.crit=", dg.crit, fill=TRUE)
   } else {
     ## compute estimated cdf of t
     fhat <- attr(tX, "density")[c("x", "y")]
     fhat$z <- with(fhat, cumsum(y)/sum(y))  # 'within' upsets package checker
     ## find critical (second stage) p-value
-    pcrit <- sort(pvalY, na.last=TRUE)[nrank]
+    pcrit <- orderstats(pvalY, k=nrank)
     ## compute corresponding upper quantile of estimated density of t
     dg.crit <- with(fhat, { min(x[z >= 1 - pcrit]) })
   }

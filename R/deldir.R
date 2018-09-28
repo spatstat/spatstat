@@ -3,7 +3,7 @@
 #'
 #' Interface to deldir package
 #'
-#'  $Revision: 1.29 $ $Date: 2018/05/28 05:24:15 $
+#'  $Revision: 1.30 $ $Date: 2018/09/28 05:12:32 $
 #'
 
 #' ..............................................
@@ -116,7 +116,7 @@ delaunay <- function(X) {
     for(i in seq_len(nX)) {
       # find all Delaunay neighbours of i 
       jj <- c(b[a==i], a[b==i])
-      jj <- sort(unique(jj))
+      jj <- sortunique(jj)
       # select those with a higher index than i
       jj <- jj[jj > i]
       # find pairs of neighbours which are Delaunay neighbours
@@ -178,7 +178,7 @@ delaunay <- function(X) {
       if(debug.delaunay)
         cat(paste("\tInvestigating triangles", commasep(sustri), "\n"))
       # list all vertices associated with the suspect triangles
-      susvert <- sort(unique(as.vector(tlist[sustri, ])))
+      susvert <- sortunique(as.vector(tlist[sustri, ]))
       if(debug.delaunay)
         cat(paste("\tInvestigating vertices", commasep(susvert), "\n"))
       xsusvert <- x[susvert]

@@ -2,7 +2,7 @@
 #   nncross.R
 #
 #
-#    $Revision: 1.29 $  $Date: 2018/05/15 13:52:50 $
+#    $Revision: 1.30 $  $Date: 2018/09/24 10:25:57 $
 #
 #  Copyright (C) Adrian Baddeley, Jens Oehlschlaegel and Rolf Turner 2000-2012
 #  Licence: GNU Public Licence >= 2
@@ -56,7 +56,7 @@ nncross.ppp <- function(X, Y, iX=NULL, iY=NULL,
                               which=matrix(0L, nrow=0, ncol=nk)))[,what])
   if(nY == 0)
     return(as.data.frame(list(dist=matrix(Inf, nrow=nX, ncol=nk),
-                             which=matrix(NA, nrow=nX, ncol=nk))[what]))
+                             which=matrix(NA_integer_, nrow=nX, ncol=nk))[what]))
   
   # Y is a line segment pattern 
   if(is.psp(Y)) {

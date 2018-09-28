@@ -3,7 +3,7 @@
 #
 #   nearest neighbour distances (nndist) and identifiers (nnwhich)
 #
-#   $Revision: 1.8 $ $Date: 2017/06/05 10:31:58 $
+#   $Revision: 1.9 $ $Date: 2018/09/28 04:51:45 $
 #
 
 nndist <- function(X, ...) {
@@ -131,7 +131,7 @@ nndist.default <-
                for(i in seq_len(n)) {
                  D2i <- (x - x[i])^2 + (y - y[i])^2
                  D2i[i] <- Inf
-                 NND2[i,] <- sort(D2i)[1:kmaxcalc]
+                 NND2[i,] <- orderstats(D2i, k=1:kmaxcalc)
                }
                nnd <- sqrt(NND2)
              }

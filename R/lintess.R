@@ -29,7 +29,7 @@ lintess <- function(L, df) {
   if(any(reversed <- with(df, t1 < t0)))
     df[reversed, c("t0", "t1")] <- df[reversed, c("t1", "t0")]
   with(df, {
-    segU <- sort(unique(seg))
+    segU <- sortunique(seg)
     segN <- seq_len(nsegments(L))
     if(length(omitted <- setdiff(segN, segU)) > 0)
       stop(paste(ngettext(length(omitted), "Segment", "Segments"),

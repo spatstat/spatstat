@@ -695,6 +695,7 @@
 \alias{versionstring.ppm}
 \alias{versionstring.spatstat}
 \alias{verifyclass}
+\alias{veryunique}
 \alias{vnnFind}
 \alias{Window.lintess}
 \alias{Window<-.linnet}
@@ -1587,6 +1588,7 @@ varcountEngine(g, B, lambdaB, f)
 versionstring.interact(object)
 versionstring.ppm(object)
 versionstring.spatstat()
+veryunique(z)
 verifyclass(X, C, N = deparse(substitute(X)), fatal = TRUE)
 vnnFind(seg, tp, ns, nv, from, to, seglen, huge, tol, kmax)
 \method{Window}{lintess}(X, \dots)

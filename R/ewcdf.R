@@ -1,7 +1,7 @@
 #
 #     ewcdf.R
 #
-#     $Revision: 1.12 $  $Date: 2017/08/30 02:04:46 $
+#     $Revision: 1.13 $  $Date: 2018/09/28 05:10:02 $
 #
 #  With contributions from Kevin Ummel
 #
@@ -28,7 +28,7 @@ ewcdf <- function(x, weights=rep(1/length(x), length(x)))
   x <- x[ox]
   w <- weights[ox]
   # find jump locations and match
-  vals <- sort(unique(x))
+  vals <- sortunique(x)
   xmatch <- factor(match(x, vals), levels=seq_along(vals))
   # sum weight in each interval
   wmatch <- tapply(w, xmatch, sum)

@@ -1,7 +1,7 @@
 #
 #    rescue.rectangle.R
 # 
-#    $Revision: 1.6 $   $Date: 2008/06/15 14:53:11 $
+#    $Revision: 1.7 $   $Date: 2018/09/28 05:05:49 $
 #
 rescue.rectangle <- function(W) {
   verifyclass(W, "owin")
@@ -14,20 +14,20 @@ rescue.rectangle <- function(W) {
     y <- W$bdry[[1]]$y
     if(length(x) == 4 && length(y) == 4) {
       # could be a rectangle
-      veryunique <- function(z) {
-        uz <- sort(unique(z))
-        epsilon <- 2 * .Machine$double.eps * diff(range(uz))
-        close <- (diff(uz) <= epsilon)
-        uz <- uz[c(TRUE, !close)]
-        return(uz)
-      }
       ux <- veryunique(x)
       uy <- veryunique(y)
       if(length(ux) == 2 && length(uy) == 2)
         return(owin(ux,uy, unitname=unitname(W)))
     }
   }
-  
   return(W)
+}
+
+veryunique <- function(z) {
+  uz <- sortunique(z)
+  epsilon <- 2 * .Machine$double.eps * diff(range(uz))
+  close <- (diff(uz) <= epsilon)
+  uz <- uz[c(TRUE, !close)]
+  return(uz)
 }
 

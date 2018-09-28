@@ -1,7 +1,7 @@
 #
 # areadiff.R
 #
-#  $Revision: 1.36 $  $Date: 2017/11/03 08:10:56 $
+#  $Revision: 1.37 $  $Date: 2018/09/28 05:14:39 $
 #
 # Computes sufficient statistic for area-interaction process
 #
@@ -133,7 +133,7 @@ areaLoss.diri <- function(X, r, ..., W=as.owin(X), subset=NULL) {
       i <- newserial[ind]
       #' find all Delaunay neighbours of i 
       jj <- c(b[a==i], a[b==i])
-      jj <- sort(unique(jj))
+      jj <- sortunique(jj)
       #' extract only these points
       Yminus <- uX[jj]
       Yplus  <- uX[c(jj, i)]
@@ -187,7 +187,7 @@ areaGain.diri <- function(u, X, r, ..., W=as.owin(X), verbose=FALSE) {
     bb <- dd$delsgs[,6L]
     # find all Delaunay neighbours of Y[1] in V
     jj <- c(bb[aa==1L], aa[bb==1L])
-    jj <- sort(unique(jj))
+    jj <- sortunique(jj)
     # extract only these points
     Zminus <- V[jj]
     Zplus  <- V[c(1, jj)]

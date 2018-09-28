@@ -3,7 +3,7 @@
 #'
 #'   Code for handling vector/array indices
 #'
-#'   $Revision: 1.9 $  $Date: 2018/04/11 07:15:31 $
+#'   $Revision: 1.10 $  $Date: 2018/09/28 05:08:13 $
 #'
 
 grokIndexVector <- function(ind, len, nama=NULL) {
@@ -86,7 +86,7 @@ grokIndexVector <- function(ind, len, nama=NULL) {
     #' order is important
     imap <- match(ind, nama)
     unknown <- is.na(imap)
-    i <- sort(unique(imap[!unknown]))
+    i <- sortunique(imap[!unknown])
     lo <- logical(len)
     lo[i] <- TRUE
     map <- match(imap, i)
@@ -100,7 +100,7 @@ grokIndexVector <- function(ind, len, nama=NULL) {
     newones <- unique(ind[unknown])
     fullset <- c(nama, newones)
     imapfull <- match(ind, fullset)
-    ifull <- sort(unique(imapfull))
+    ifull <- sortunique(imapfull)
     lofull <- logical(length(fullset))
     lofull[ifull] <- TRUE
     mapfull <- match(imapfull, ifull)
@@ -115,7 +115,7 @@ grokIndexVector <- function(ind, len, nama=NULL) {
     if(all(ind > 0)) {
       #' integer index into 1:len
       #' order is important
-      ifull <- sort(unique(ind))
+      ifull <- sortunique(ind)
       inside <- (ifull <= len)
       i <- ifull[inside]
       map <- match(ind, i)
