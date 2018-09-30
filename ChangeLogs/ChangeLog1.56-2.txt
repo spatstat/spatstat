@@ -466,3 +466,20 @@ Change log from 1.56-1 to 1.56-2
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+30 sept 2018
+
+   smooth.ppp.R
+	Bug fix in handling weights in non-Gaussian case.
+	Handle trivial case where X is empty.
+	Corrected format of results in some trivial cases.
+
+   tests/density.R
+	More test cases.
+
+   DESCRIPTION
+   NEWS
+	version 1.56-1.028
+
+------------- passed R-3.5.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------

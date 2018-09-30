@@ -373,7 +373,7 @@ local({
 #'                    relrisk(), Smooth()
 #'                    and inhomogeneous summary functions
 #'
-#'  $Revision: 1.26 $  $Date: 2018/09/23 09:05:45 $
+#'  $Revision: 1.27 $  $Date: 2018/09/30 07:43:53 $
 #'
 
 require(spatstat)
@@ -538,31 +538,46 @@ local({
   rants(model=fut, relative=TRUE, at="points")
   
   ## execute Smooth.ppp and Smoothfun.ppp in all cases
-  stroke <- function(...) {
-    Z <- Smooth(longleaf, ..., at="pixels")
-    Z <- Smooth(longleaf, ..., at="points")
-    f <- Smoothfun(longleaf, ...)
+  stroke <- function(..., Y = longleaf) {
+    Z <- Smooth(Y, ..., at="pixels")
+    Z <- Smooth(Y, ..., at="points")
+    f <- Smoothfun(Y, ...)
     f(120, 80)
+    f(Y[1:2])
+    f(Y[FALSE])
     return(invisible(NULL))
   }
   stroke()
   stroke(5, diggle=TRUE)
   stroke(1e-6) # generates warning about small bandwidth
-  stroke(varcov=diag(c(25, 36)))
   stroke(5, weights=runif(npoints(longleaf)))
   stroke(5, weights=expression(x))
-  strike <- function(...) {
-    Z <- Smooth(finpines, ..., at="pixels")
-    Z <- Smooth(finpines, ..., at="points")
-    f <- Smoothfun(finpines, ...)
+  stroke(5, kernel="epa")
+  stroke(varcov=diag(c(25, 36)))
+  stroke(varcov=diag(c(25, 36)), weights=runif(npoints(longleaf)))
+  stroke(5, Y=longleaf %mark% 1)
+  stroke(5, Y=cut(longleaf,breaks=3))
+  Z <- as.im(function(x,y){abs(x)+1}, Window(longleaf))
+  stroke(5, weights=Z)
+  stroke(5, weights=Z, geometric=TRUE)
+
+  markmean(longleaf, 9)
+  
+  strike <- function(..., Y=finpines) {
+    Z <- Smooth(Y, ..., at="pixels")
+    Z <- Smooth(Y, ..., at="points")
+    f <- Smoothfun(Y, ...)
     f(4, 1)
+    f(Y[1:2])
+    f(Y[FALSE])
     return(invisible(NULL))
   }
   strike()
   strike(varcov=diag(c(1.2, 2.1)))
   strike(1.5, weights=runif(npoints(finpines)))
   strike(1.5, weights=expression(y))
-
+  strike(1e-6)
+  
   ## validity of Smooth.ppp(at='points')
   Y <- longleaf %mark% runif(npoints(longleaf), min=41, max=43)
   Z <- Smooth(Y, 5, at="points", leaveoneout=TRUE)

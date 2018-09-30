@@ -3,7 +3,7 @@
 #
 #  Smooth the marks of a point pattern
 # 
-#  $Revision: 1.58 $  $Date: 2018/09/07 04:14:48 $
+#  $Revision: 1.61 $  $Date: 2018/09/30 07:33:31 $
 #
 
 # smooth.ppp <- function(X, ..., weights=rep(1, npoints(X)), at="pixels") {
@@ -35,6 +35,24 @@ Smooth.ppp <- function(X, sigma=NULL, ...,
   at <- pickoption("output location type", at,
                    c(pixels="pixels",
                      points="points"))
+  ## trivial case
+  if(npoints(X) == 0) {
+    cn <- colnames(marks(X))
+    nc <- length(cn)
+    switch(at,
+           points = {
+             result <- if(nc == 0) numeric(0) else
+             matrix(, 0, nc, dimnames=list(NULL, cn))
+           },
+           pixels = {
+             result <- as.im(NA_real_, Window(X))
+             if(nc) {
+               result <- as.solist(rep(list(result), nc))
+               names(result) <- cn
+             }
+           })
+    return(result)
+  }
   ## weights
   weightsgiven <- !missing(weights) && !is.null(weights) 
   if(weightsgiven) {
@@ -544,7 +562,7 @@ smoothpointsEngine <- function(x, values, sigma, ...,
     }
     if(is.null(uhoh <- attr(numerator, "warnings"))) {
       result <- numerator/denominator
-      result <- ifelseXB(is.finite(result), result, NA)
+      result <- ifelseXB(is.finite(result), result, NA_real_)
     } else {
       warning("returning original values")
       result <- values
@@ -663,8 +681,8 @@ smoothcrossEngine <- function(Xdata, Xquery, values, sigma, ...,
   nquery <- npoints(Xquery)
   
   if(nquery == 0 || ndata == 0) {
-    if(is.null(dim(values))) return(rep(NA, nquery))
-    nuttin <- matrix(NA, nrow=nquery, ncol=ncol(values))
+    if(is.null(dim(values))) return(rep(NA_real_, nquery))
+    nuttin <- matrix(NA_real_, nrow=nquery, ncol=ncol(values))
     colnames(nuttin) <- colnames(values)
     return(nuttin)
   }
@@ -723,7 +741,7 @@ smoothcrossEngine <- function(Xdata, Xquery, values, sigma, ...,
     i <- close$i # data point
     j <- close$j # query point
     jfac <- factor(j, levels=seq_len(nquery))
-    wkerij <- kerij * weights[i]
+    wkerij <- if(is.null(weights)) kerij else kerij * weights[i]
     denominator <- tapplysum(wkerij, list(jfac))
     if(k == 1L) {
       contribij <- wkerij * values[i]
