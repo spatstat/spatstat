@@ -3,7 +3,7 @@
 #
 # support for colour maps and other lookup tables
 #
-# $Revision: 1.41 $ $Date: 2018/05/02 05:45:12 $
+# $Revision: 1.42 $ $Date: 2018/10/01 10:56:30 $
 #
 
 colourmap <- function(col, ..., range=NULL, breaks=NULL, inputs=NULL, gamma=1) {
@@ -215,7 +215,8 @@ plot.colourmap <- local({
 
   plot.colourmap <- function(x, ..., main,
                              xlim=NULL, ylim=NULL, vertical=FALSE, axis=TRUE,
-                             labelmap=NULL, gap=0.25, add=FALSE) {
+                             labelmap=NULL, gap=0.25, add=FALSE,
+                             increasing=NULL) {
     if(missing(main))
       main <- short.deparse(substitute(x))
     stuff <- attr(x, "stuff")
@@ -237,6 +238,10 @@ plot.colourmap <- local({
       labscal <- labelmap
       labelmap <- function(x) { x * labscal }
     } else stopifnot(is.function(labelmap))
+
+    if(is.null(increasing))
+      increasing <- !(discrete && vertical)
+    reverse <- !increasing
 
     # determine pixel entries 'v' and colour map breakpoints 'bks'
     # to be passed to 'image.default'
@@ -290,6 +295,8 @@ plot.colourmap <- local({
 
     if(separate) {
       # ................ plot separate blocks of colour .................
+      if(reverse) 
+        col <- rev(col)
       if(!vertical) {
         # horizontal arrangement of blocks
         xleft <- linmap(vleft, rr, xlim)
@@ -351,7 +358,8 @@ plot.colourmap <- local({
         bks <- bks[ok]
         col <- col[ok]
       }
-
+      if(reverse)
+        col <- rev(col)
       do.call.matched(image.default,
                       resolve.defaults(list(x=x, y=y, z=z, add=TRUE),
                                        list(...),
@@ -371,6 +379,8 @@ plot.colourmap <- local({
           at <- linmap(la, rr, xlim)
           la <- labelmap(la)
         }
+        if(reverse)
+          at <- rev(at)
         # default axis position is below the ribbon (side=1)
         sidecode <- resolve.1.default("side", list(...), list(side=1L))
         if(!(sidecode %in% c(1L,3L)))
@@ -396,6 +406,8 @@ plot.colourmap <- local({
           at <- linmap(la, rr, ylim)
           la <- labelmap(la)
         }
+        if(reverse)
+          at <- rev(at)
         # default axis position is to the right of ribbon (side=4)
         sidecode <- resolve.1.default("side", list(...), list(side=4))
         if(!(sidecode %in% c(2L,4L)))

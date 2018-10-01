@@ -7,7 +7,7 @@
 \usage{
 \method{plot}{colourmap}(x, ...,
        main, xlim = NULL, ylim = NULL, vertical = FALSE, axis = TRUE,
-       labelmap=NULL, gap=0.25, add=FALSE)
+       labelmap=NULL, gap=0.25, add=FALSE, increasing=NULL)
 }
 \arguments{
   \item{x}{Colour map to be plotted. An object of class \code{"colourmap"}.}
@@ -46,6 +46,10 @@
     existing plot (\code{add=TRUE}), or to start a new plot
     (\code{add=FALSE}, the default).
   }
+  \item{increasing}{
+    Logical value indicating whether to display the colour map
+    in increasing order. See Details.
+  }
 }
 \details{
   This is the plot method for the class \code{"colourmap"}.
@@ -74,6 +78,16 @@
   Labels explaining the colour map are
   drawn by \code{\link[graphics]{axis}} and can be modified by
   specifying arguments that will be passed to this function.
+
+  The argument \code{increasing} indicates whether the
+  colourmap should be displayed so that the
+  input values are increasing with the spatial coordinate:
+  that is, increasing from left to right (if \code{vertical=FALSE})
+  or increasing from bottom to top (if \code{vertical=TRUE}).
+  If \code{increasing=FALSE}, this ordering will be reversed.
+  The default is \code{increasing=TRUE} in all cases
+  except when \code{vertical=TRUE} and
+  the domain of the colourmap is a finite set of discrete inputs.
 }
 \value{
   None.

@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.56-1.028
+        CHANGES IN spatstat VERSION 1.56-1.029
 
 OVERVIEW
 
@@ -30,7 +30,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o rhohat
     Methods for rhohat have a new argument 'positiveCI'
     specifying whether confidence limits should be positive.
-    
+
+    o plot.colourmap
+    New argument 'increasing'.
+
     o imcov, setcov, convolve.im
     The name of the unit of length is preserved.
 
@@ -103,6 +106,10 @@ BUG FIXES
    o superimpose.ppp
    If 'W' was a character string or function, the behaviour was
    not exactly as described in the help file. 
+   Fixed.
+
+   o plot.psp
+   If the marks were factor values, the colour map was displayed upside down.
    Fixed.
    
         CHANGES IN spatstat VERSION 1.56-1
