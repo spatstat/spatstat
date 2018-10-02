@@ -483,3 +483,43 @@ Change log from 1.56-1 to 1.56-2
 ------------- passed R-3.5.1 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
+
+01 oct 2018
+
+   colourtables.R
+   plot.colourmap.Rd
+	plot.colourmap has new argument 'increasing'
+	
+   DESCRIPTION
+   NEWS
+	version 1.56-1.029
+
+------------- passed R-3.5.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+02 oct 2018
+
+   nnorient.R
+	Bug fix in degenerate case.
+
+   tests/nndist.R
+	Added test for nnorient
+	(with the argument domain, and the degenerate case).
+
+   DESCRIPTION
+   NEWS
+   spatstat-package.Rd
+	Acknowledged Tomas Lazauskas
+
+   Nickname.txt
+   NEWS
+	Nickname 'Psycho chicken'
+	
+   DESCRIPTION
+   NEWS
+	version 1.56-1.030
+
+------------- passed R-3.5.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------

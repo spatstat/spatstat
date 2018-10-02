@@ -34,7 +34,9 @@ local({
 #
 # Also test whether minnndist(X) == min(nndist(X))
 #
-#   $Revision: 1.18 $  $Date: 2018/07/21 00:37:26 $
+# Also test nnorient()
+#
+#   $Revision: 1.20 $  $Date: 2018/10/02 01:37:12 $
 #
 
 require(spatstat)
@@ -211,6 +213,14 @@ local({
 
 local({
   b <- bdist.pixels(letterR, style="coords")
+})
+
+local({
+  #' test nnorient
+  nnorient(cells, domain=erosion(Window(cells), 0.1))
+  #' degenerate case
+  X <- cells[nndist(cells) > bdist.points(cells)]
+  f <- nnorient(X)
 })
 ## 
 ##    tests/percy.R

@@ -6,7 +6,7 @@
 ## Function \vartheta(phi) defined in
 ## Illian et al (2008) equ (4.5.3) page 253
 ##
-##  $Revision: 1.3 $ $Date: 2014/12/05 07:31:57 $
+##  $Revision: 1.4 $ $Date: 2018/10/02 01:21:40 $
 
 nnorient <- function(X, ..., cumulative=FALSE, correction, k = 1,
                      unit=c("degree", "radian"),
@@ -50,7 +50,7 @@ nnorient <- function(X, ..., cumulative=FALSE, correction, k = 1,
     inD <- inside.owin(Xcoord$x, Xcoord$y, domain)
     Xcoord <- Xcoord[inD,]
     Ycoord <- Ycoord[inD,]
-  } else 
+  } 
   
   dYX <- Ycoord-Xcoord
   ANGLE <- with(dYX, atan2(y, x) * Convert) %% FullCircle
@@ -109,18 +109,24 @@ nnorient <- function(X, ..., cumulative=FALSE, correction, k = 1,
     }
     ok <- (nndX < bX)
     nok <- sum(ok)
+
     rr <- seq(0, max(bX), length=256)
-    Ar <- eroded.areas(W, rr)
-    Arf <- approxfun(rr, Ar, rule=2)
-    AI <- Arf(bX)
-    edgewt <- ifelse(ok, pmin(area(W)/AI, 100), 0)
-    if(cumulative) {
-      wh <- whist(ANGLE, breaks$val, edgewt)
-      num.bm <- cumsum(wh)/mean(edgewt)
+
+    if(nok == 0) {
+      num.bm <- numeric(Nphi) # i.e. rep(0, Nphi)
     } else {
-      w <- edgewt/sum(edgewt)
-      kd <- circdensity(ANGLE, ..., weights=w, n=Nphi, unit=unit)
-      num.bm <- kd$y * nok
+      Ar <- eroded.areas(W, rr)
+      Arf <- approxfun(rr, Ar, rule=2)
+      AI <- Arf(bX)
+      edgewt <- ifelse(ok, pmin(area(W)/AI, 100), 0)
+      if(cumulative) {
+        wh <- whist(ANGLE, breaks$val, edgewt)
+        num.bm <- cumsum(wh)/mean(edgewt)
+      } else {
+        w <- edgewt/sum(edgewt)
+        kd <- circdensity(ANGLE, ..., weights=w, n=Nphi, unit=unit)
+        num.bm <- kd$y * nok
+      }
     }
     den.bm <- nok
     NNO <- bind.ratfv(NNO,

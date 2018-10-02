@@ -1,11 +1,11 @@
 
-        CHANGES IN spatstat VERSION 1.56-1.029
+        CHANGES IN spatstat VERSION 1.56-1.030
 
 OVERVIEW
 
     o We thank Corey Anderson, Hadrien Commenges, Tilman Davies,
-    Maximilian Hesselbarth, Kassel Hingee, Rasmus Waagepetersen
-    and 'daitakahashi' for contributions.
+    Maximilian Hesselbarth, Kassel Hingee, Tomas Lazauskas,
+    Rasmus Waagepetersen and 'daitakahashi' for contributions.
 
     o Bug fix in rthin.
 
@@ -17,7 +17,7 @@ OVERVIEW
     
     o Minor bug fixes and improvements.
 
-    o Version nickname: 'Raw prawn'
+    o Version nickname: 'Psycho chicken'
     
 SIGNIFICANT USER-VISIBLE CHANGES
 
@@ -74,6 +74,11 @@ BUG FIXES
     If the function values were factor values and the window was
     not a rectangle, the plot was empty.
     [Spotted by Corey Anderson.]
+    Fixed.
+
+    o nnorient
+    Crashed if the border correction did not retain any data points.
+    (Spotted by Tomas Lazauskas.)
     Fixed.
     
     o linim
