@@ -1,7 +1,7 @@
 #
 #  psp.R
 #
-#  $Revision: 1.93 $ $Date: 2018/09/17 07:10:30 $
+#  $Revision: 1.94 $ $Date: 2018/10/02 03:50:30 $
 #
 # Class "psp" of planar line segment patterns
 #
@@ -97,14 +97,15 @@ as.psp.psp <- function(x, ..., check=FALSE, fatal=TRUE) {
 }
 
 as.psp.data.frame <- function(x, ..., window=NULL, marks=NULL,
-                              check=spatstat.options("checksegments"), fatal=TRUE) {
+                              check=spatstat.options("checksegments"),
+                              fatal=TRUE) {
   window <- suppressWarnings(as.owin(window,fatal=FALSE))
   if(!is.owin(window)) {
     if(fatal) stop("Cannot interpret \"window\" as an object of class owin.\n")
     return(NULL)
   }
 
-  if(checkfields(x,"marks")) {
+  if(checkfields(x, "marks")) {
     if(is.null(marks)) marks <- x$marks
     else warning(paste("Column named \"marks\" ignored;\n",
                        "argument named \"marks\" has precedence.\n",sep=""))
@@ -115,8 +116,7 @@ as.psp.data.frame <- function(x, ..., window=NULL, marks=NULL,
     out <- psp(x$x0, x$y0, x$x1, x$y1, window=window,
                check=check)
     x <- x[-match(c("x0","y0","x1","y1"),names(x))]
-  }
-  else if(checkfields(x, c("xmid", "ymid", "length", "angle"))) {
+  } else if(checkfields(x, c("xmid", "ymid", "length", "angle"))) {
     rr <- x$length/2
     dx <- cos(x$angle) * rr
     dy <- sin(x$angle) * rr
@@ -127,26 +127,35 @@ as.psp.data.frame <- function(x, ..., window=NULL, marks=NULL,
                    window=bigbox,check=FALSE)
     out <- pattern[window]
     x <- x[-match(c("xmid","ymid","length","angle"),names(x))]
-  }
-  else if(ncol(x) >= 4) {
+  } else if(ncol(x) >= 4) {
     out <- psp(x[,1], x[,2], x[,3], x[,4], window=window,
                check=check)
     x <- x[-(1:4)]
+  } else {
+    ## data not understood
+    if(fatal) 
+      stop("Unable to interpret x as a line segment pattern.", call.=FALSE)
+    return(NULL)
   }
-  else if(fatal)
-    stop("Unable to interpret x as a line segment pattern.", call.=FALSE)
-  else out <- NULL
 
-  if(!is.null(out)) {
-    if(is.null(marks) & ncol(x) > 0) marks <- x
+  if(ncol(x) > 0) {
+    #' additional columns of mark data in 'x'
     if(is.null(marks)) {
-       out$markformat <- "none"
+      marks <- x
     } else {
-       out$marks <- marks
-       out$markformat <- if(is.data.frame(marks)) "dataframe" else "vector"
-       out <- as.psp(out,check=FALSE)
+      warning(paste("Additional columns in x were ignored",
+                    "because argument 'marks' takes precedence"),
+              call.=FALSE)
     }
   }
+
+  if(!is.null(marks)) {
+    if(identical(ncol(marks), 1L)) marks <- marks[,1L]
+    #' assign marks directly to avoid infinite recursion
+    out$marks <- marks
+    out$markformat <- markformat(marks)
+  }
+
   return(out)
 }
 

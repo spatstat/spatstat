@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.56-1.030
+        CHANGES IN spatstat VERSION 1.56-1.031
 
 OVERVIEW
 
@@ -14,10 +14,17 @@ OVERVIEW
     o Bug fix in density.ppp for non-Gaussian kernels.
 
     o Positive confidence limits for rhohat.
+
+    o subset() method for line segment patterns.
     
     o Minor bug fixes and improvements.
 
     o Version nickname: 'Psycho chicken'
+
+NEW FUNCTIONS
+
+    o subset.psp
+    Method for 'subset' for line segment patterns.
     
 SIGNIFICANT USER-VISIBLE CHANGES
 

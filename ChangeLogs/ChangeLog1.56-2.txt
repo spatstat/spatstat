@@ -523,3 +523,21 @@ Change log from 1.56-1 to 1.56-2
 ------------- passed R-3.5.1 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
+
+   subset.R
+   subset.psp.Rd [New file]
+       Method for 'subset' for class psp
+
+   psp.R
+	Improvements to as.psp.data.frame
+
+   DESCRIPTION
+   NEWS
+	version 1.56-1.031
+
+------------- passed R-3.5.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+
+   
