@@ -3,7 +3,7 @@
 #
 #  Method for 'density' for point patterns
 #
-#  $Revision: 1.95 $    $Date: 2018/09/07 04:14:43 $
+#  $Revision: 1.97 $    $Date: 2018/10/03 10:45:23 $
 #
 
 # ksmooth.ppp <- function(x, sigma, ..., edge=TRUE) {
@@ -56,7 +56,36 @@ density.ppp <- function(x, sigma=NULL, ...,
                         diggle=diggle)
     if(positive) SE <- posify(SE)
   }
-                         
+
+  if(length(sigma) >= 1 && all(is.infinite(sigma))) {
+    #' special case: sigma=Inf: uniform estimate
+    nx <- npoints(x)
+    single <- is.null(dim(weights))
+    totwt <- if(is.null(weights)) nx else
+             if(single) sum(weights^2) else colSums(weights^2)
+    if(!edge) totwt <- 0 * totwt
+    W <- Window(x)
+    A <- area.owin(W)
+    switch(output,
+           pixels = {
+             E <- solapply(totwt/A, as.im, W=W, ...)
+             names(E) <- colnames(weights)
+             if(single) E <- E[[1L]]
+           },
+           points = {
+             numerator <- totwt
+             if(leaveoneout && edge) {
+               self <- if(is.null(weights)) rep(1, nx) else weights
+               numerator <- totwt - self
+             }
+             E <- numerator/A
+             if(!single)
+               colnames(E) <- colnames(weights)
+           })
+    result <- if(se) list(estimate=E, SE=SE) else E
+    return(result)
+  }
+  
   if(output == "points") {
     # VALUES AT DATA POINTS ONLY
     result <- densitypointsEngine(x, sigma,
@@ -172,6 +201,38 @@ divide.by.pixelarea <- function(x) {
 denspppSEcalc <- function(x, sigma, varcov, ...,
                           weights, edge, diggle, at) {
   ## Calculate standard error, rather than estimate
+  nx <- npoints(x)
+
+  if(length(sigma) >= 1 && all(is.infinite(sigma))) {
+    #' special case - uniform
+    single <- is.null(dim(weights))
+    totwt2 <- if(is.null(weights)) nx else
+              if(single) sum(weights^2) else colSums(weights^2)
+    if(!edge)
+      totwt2 <- 0 * totwt2
+    W <- Window(x)
+    A <- area.owin(W)
+    switch(at,
+           pixels = {
+             V <- solapply(totwt2/A, as.im, W=W, ...)
+             names(V) <- colnames(weights)
+             if(single) V <- V[[1L]]
+           },
+           points = {
+             numerator <- totwt2
+             leaveoneout <- resolve.1.default(list(leaveoneout=TRUE), list(...))
+             if(edge && leaveoneout) {
+               self <- if(is.null(weights)) rep(1, nx) else weights^2
+               numerator <- numerator - self
+             }
+             V <- numerator/A
+             if(!single) 
+               colnames(V) <- colnames(weights)
+           })
+    return(sqrt(V))
+  }
+
+  ## Usual case
   tau <- taumat <- NULL
   if(is.null(varcov)) {
     varconst <- 1/(4 * pi * prod(sigma))

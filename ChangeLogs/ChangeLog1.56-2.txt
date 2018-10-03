@@ -578,4 +578,17 @@ Change log from 1.56-1 to 1.56-2
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
    
+   density.ppp.R
+   density.ppp.Rd
+   relrisk.ppp.Rd
+	Now supports infinite bandwidth, sigma=Inf or adjust=Inf.
+
+   DESCRIPTION
+   NEWS
+	version 1.56-1.034
+
+------------- passed R-3.5.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
    
+   	

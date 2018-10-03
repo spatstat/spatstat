@@ -198,6 +198,10 @@
     the factor \code{adjust}. The matrix \code{varcov} will be
     multiplied by \code{adjust^2}. To double the smoothing bandwidth, set
     \code{adjust=2}.
+    \item
+    An infinite bandwidth, \code{sigma=Inf} or \code{adjust=Inf},
+    is permitted, and yields an intensity estimate which is constant
+    over the spatial domain.
   }
 
   The choice of smoothing kernel is determined by the argument \code{kernel}.

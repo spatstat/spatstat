@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.56-1.033
+        CHANGES IN spatstat VERSION 1.56-1.034
 
 OVERVIEW
 
@@ -10,6 +10,8 @@ OVERVIEW
 
     o Bug fix in rthin.
 
+    o Cronie-van Lieshout bandwidth selection.
+    
     o Smoothing functions handle non-Gaussian kernels.
     
     o Bug fix in density.ppp for non-Gaussian kernels.
@@ -36,6 +38,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o densityfun.ppp, Smoothfun.ppp, Smooth.ppp
     These commands now handle non-Gaussian kernels.
 
+    o density.ppp, relrisk.ppp
+    Argument 'sigma' can be infinite.
+    
     o interp.im
     New argument 'bilinear'
 

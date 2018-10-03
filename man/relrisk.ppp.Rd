@@ -155,10 +155,14 @@
     are both missing or null. Then a \bold{common}
     smoothing bandwidth \code{sigma}
     will be selected by cross-validation using \code{\link{bw.relrisk}}.
+    \item
+    An infinite smoothing bandwidth, \code{sigma=Inf}, is permitted
+    and yields a constant estimate of relative risk.
   }
 
   If \code{se=TRUE} then standard errors will also be computed,
   based on asymptotic theory, \emph{assuming a Poisson process}.
+
 }
 \value{
   If \code{se=FALSE} (the default), the format is described below.
