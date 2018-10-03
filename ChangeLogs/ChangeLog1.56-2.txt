@@ -540,4 +540,32 @@ Change log from 1.56-1 to 1.56-2
 ------------- committed to GitHub      ---------------
 
 
+   bw.CvL.R [New file]
+   bw.CvL.Rd [New file]
+      Cronie - Van Lieshout bandwidth selector
+
+   bw.diggle.Rd
+   bw.frac.Rd
+   bw.ppl.Rd
+   bw.scott.Rd
+   density.ppp.Rd
+   spatstat-package.Rd
+	Added cross-references.
+
+   DESCRIPTION
+	depends on spatstat.data version 1.4-0.
+
+   NEWS
+   Nickname.txt
+	Nickname 'Serving suggestion'.
+	
+   DESCRIPTION
+   NEWS
+	version 1.56-1.032
+
+------------- passed R-3.5.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+   
    

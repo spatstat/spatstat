@@ -55,24 +55,25 @@
   and the selected quantile.
 }
 \seealso{
+  For estimating point process intensity, see
   \code{\link{density.ppp}},
   \code{\link{bw.diggle}},
   \code{\link{bw.ppl}},
-  \code{\link{bw.relrisk}},
   \code{\link{bw.scott}},
+  \code{\link{bw.CvL}}.
+
+  For other smoothing purposes, see
+  \code{\link{bw.stoyan}},
   \code{\link{bw.smoothppp}},
-  \code{\link{bw.stoyan}}
+  \code{\link{bw.relrisk}}.
 }
 \examples{
   h <- bw.frac(letterR)
   h
   plot(h, main="bw.frac(letterR)")
 }
-\author{\adrian
-  
-  
-  and \rolf
-  
+\author{
+  \spatstatAuthors.
 }
 \keyword{spatial}
 \keyword{methods}

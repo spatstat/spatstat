@@ -36,6 +36,7 @@
   \code{\link{density.ppp}},
   \code{\link{bw.diggle}},
   \code{\link{bw.ppl}},
+  \code{\link{bw.CvL}},
   \code{\link{bw.frac}}.
 }
 \examples{
@@ -53,11 +54,8 @@
     Visualization}. 
   New York: Wiley.
 }
-\author{\adrian
-  
-  
-  and \rolf
-  
+\author{
+  \spatstatAuthors.
 }
 \keyword{spatial}
 \keyword{methods}

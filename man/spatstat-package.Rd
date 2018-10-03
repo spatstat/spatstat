@@ -809,6 +809,8 @@
                                for \code{\link{density.ppp}}\cr
     \code{\link{bw.ppl}} \tab likelihood cross-validated bandwidth selection
                                for \code{\link{density.ppp}}\cr
+    \code{\link{bw.CvL}} \tab Cronie-Van Lieshout bandwidth selection
+                                for density estimation\cr
     \code{\link{bw.scott}} \tab Scott's rule of thumb 
                                 for density estimation\cr
     \code{\link{bw.relrisk}} \tab cross-validated bandwidth selection

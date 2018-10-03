@@ -1,14 +1,14 @@
-\name{bw.ppl}
-\alias{bw.ppl}
+\name{bw.Cvl}
+\alias{bw.CvL}
 \title{
-  Likelihood Cross Validation Bandwidth Selection for Kernel Density
+  Cronie and van Lieshout's Criterion for Bandwidth Selection for Kernel Density
 }
 \description{
-  Uses likelihood cross-validation to select a smoothing bandwidth
-  for the kernel estimation of point process intensity.
+  Uses Cronie and van Lieshout's criterion based on Cambell's formula to select
+  a smoothing bandwidth for the kernel estimation of point process intensity.
 }
 \usage{
-   bw.ppl(X, \dots, srange=NULL, ns=16, sigma=NULL, weights=NULL)
+   bw.CvL(X, \dots, srange = NULL, ns = 16, sigma = NULL)
 }
 \arguments{
   \item{X}{
@@ -27,10 +27,6 @@
     Optional. Vector of values of the bandwidth to be searched.
     Overrides the values of \code{ns} and \code{srange}.
   }
-  \item{weights}{
-    Optional. Numeric vector of weights for the points of \code{X}.
-    Argument passed to \code{\link{density.ppp}}.
-  }
 }
 \details{
   This function selects an appropriate bandwidth \code{sigma}
@@ -38,30 +34,27 @@
   computed by \code{\link{density.ppp}}.
 
   The bandwidth \eqn{\sigma}{\sigma} is chosen to 
-  maximise the point process likelihood cross-validation criterion
+  minimise the discrepancy between the area of the observation window and the
+  sum of reciprocal estimated intensity values at the points of the point process
   \deqn{
-    \mbox{LCV}(\sigma) =
-    \sum_i \log\hat\lambda_{-i}(x_i) - \int_W \hat\lambda(u) \, {\rm d}u
+    \mbox{CvL}(\sigma) =
+    (|W| - \sum_i 1/\hat\lambda(x_i))^2
   }{
-    LCV(\sigma) = sum[i] log(\lambda[-i](x[i])) - integral[W] \lambda(u) du
+    CvL(\sigma) = (|W| - sum[i] 1/\lambda(x[i]))^2
   }
   where the sum is taken over all the data points \eqn{x_i}{x[i]},
-  where \eqn{\hat\lambda_{-i}(x_i)}{\lambda[-i](x_i)} is the
-  leave-one-out kernel-smoothing estimate of the intensity at
-  \eqn{x_i}{x[i]} with smoothing bandwidth \eqn{\sigma}{\sigma},
-  and \eqn{\hat\lambda(u)}{\lambda(u)} is the kernel-smoothing estimate
-  of the intensity at a spatial location \eqn{u} with smoothing
-  bandwidth \eqn{\sigma}{\sigma}.
-  See Loader(1999, Section 5.3).
+  and where \eqn{\hat\lambda(x_i)}{\lambda(x[i])} is the
+  kernel-smoothing estimate of the intensity at
+  \eqn{x_i}{x[i]} with smoothing bandwidth \eqn{\sigma}{\sigma}.
 
-  The value of \eqn{\mbox{LCV}(\sigma)}{LCV(\sigma)} is computed
+  The value of \eqn{\mbox{CvL}(\sigma)}{CvL(\sigma)} is computed
   directly, using \code{\link{density.ppp}}, 
   for \code{ns} different values of \eqn{\sigma}{\sigma}
   between \code{srange[1]} and \code{srange[2]}.
 
   The result is a numerical value giving the selected bandwidth.
   The result also belongs to the class \code{"bw.optim"}
-  which can be plotted to show the (rescaled) mean-square error
+  which can be plotted to show the bandwidth selection criterion
   as a function of \code{sigma}.
 }
 \value{
@@ -73,25 +66,31 @@
   \code{\link{density.ppp}},
   \code{\link{bw.diggle}},
   \code{\link{bw.scott}},
-  \code{\link{bw.CvL}},
+  \code{\link{bw.ppl}},
   \code{\link{bw.frac}}.
 }
 \examples{
   if(interactive()) {
-    b <- bw.ppl(redwood)
-    plot(b, main="Likelihood cross validation for redwoods")
+    b <- bw.CvL(redwood)
+    b
+    plot(b, main="Cronie and van Lieshout bandwidth criterion for redwoods")
     plot(density(redwood, b))
+    plot(density(redwood, bw.CvL))
   }
   \testonly{
-    b <- bw.ppl(redwood, srange=c(0.03, 0.07), ns=2)
+    b <- bw.CvL(redwood, srange=c(0.03, 0.07), ns=2)
   }
 }
 \references{
-  Loader, C. (1999)
-  \emph{Local Regression and Likelihood}.
-  Springer, New York.
+ Cronie, O and Van Lieshout, M N M (2018) A non-model-based approach to
+ bandwidth selection for kernel estimators of spatial intensity functions,
+ \emph{Biometrika}, \bold{105}, 455-462.
 }
-\author{
+\author{Ottmar Cronie
+  \email{ottmar.cronie@umu.se}
+  and Marie-Colette van Lieshout
+  \email{Marie-Colette.van.Lieshout@cwi.nl}
+  adapted for \pkg{spatstat} by
   \spatstatAuthors.
 }
 \keyword{spatial}

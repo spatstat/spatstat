@@ -76,7 +76,9 @@
 \seealso{
   \code{\link{density.ppp}},
   \code{\link{bw.ppl}},
-  \code{\link{bw.scott}}
+  \code{\link{bw.scott}},
+  \code{\link{bw.CvL}},
+  \code{\link{bw.frac}}.
 }
 \examples{
   data(lansing)
@@ -103,11 +105,8 @@
   \emph{Statistical analysis of spatial point patterns},
   Second edition. Arnold.
 }
-\author{\adrian
-  
-  
-  and \rolf
-  
+\author{
+  \spatstatAuthors.
 }
 \keyword{spatial}
 \keyword{methods}

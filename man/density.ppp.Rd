@@ -172,8 +172,12 @@
     an appropriate bandwidth 
     from the data point pattern by calling \code{sigma(x)}.
     To perform automatic bandwidth selection using cross-validation,
-    it is recommended to use the functions \code{\link{bw.diggle}}
-    or \code{\link{bw.ppl}}.
+    it is recommended to use the functions
+    \code{\link{bw.diggle}},
+    \code{\link{bw.CvL}},
+    \code{\link{bw.scott}}
+    or
+    \code{\link{bw.ppl}}.
     \item
     The smoothing kernel may be made anisotropic
     by giving the variance-covariance matrix \code{varcov}.
@@ -275,7 +279,12 @@
   at the locations of the data points in \code{x}).
   
   To select the bandwidth \code{sigma} automatically by
-  cross-validation, use \code{\link{bw.diggle}} or \code{\link{bw.ppl}}.
+  cross-validation, use
+  \code{\link{bw.diggle}},
+  \code{\link{bw.CvL}},
+  \code{\link{bw.scott}}
+  or
+  \code{\link{bw.ppl}}.
   
   To perform spatial interpolation of values that were observed
   at the points of a point pattern, use \code{\link{Smooth.ppp}}.
@@ -289,13 +298,16 @@
 }
 \seealso{
   \code{\link{bw.diggle}},
-  \code{\link{bw.ppl}},
+  \code{\link{bw.CvL}},
+  \code{\link{bw.scott}}
+  \code{\link{bw.ppl}} for bandwidth selection.
+  
   \code{\link{Smooth.ppp}},
   \code{\link{sharpen.ppp}},
   \code{\link{adaptive.density}},
   \code{\link{relrisk}},
   \code{\link{ppp.object}},
-  \code{\link{im.object}}
+  \code{\link{im.object}}.
 }
 \note{
   This function is often misunderstood.

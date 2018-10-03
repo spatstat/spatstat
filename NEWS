@@ -1,11 +1,12 @@
 
-        CHANGES IN spatstat VERSION 1.56-1.031
+        CHANGES IN spatstat VERSION 1.56-1.032
 
 OVERVIEW
 
-    o We thank Corey Anderson, Hadrien Commenges, Tilman Davies,
-    Maximilian Hesselbarth, Kassel Hingee, Tomas Lazauskas,
-    Rasmus Waagepetersen and 'daitakahashi' for contributions.
+    o We thank Corey Anderson, Hadrien Commenges, Ottmar Cronie,
+    Tilman Davies, Maximilian Hesselbarth, Kassel Hingee, Tomas Lazauskas,
+    Marie-Colette van Lieshout, Rasmus Waagepetersen and 'daitakahashi'
+    for contributions.
 
     o Bug fix in rthin.
 
@@ -19,10 +20,14 @@ OVERVIEW
     
     o Minor bug fixes and improvements.
 
-    o Version nickname: 'Psycho chicken'
+    o Version nickname: 'Serving suggestion'
 
 NEW FUNCTIONS
 
+    o bw.CvL
+    Cronie-Van Lieshout bandwidth selection for density estimation.
+    [Contributed by Ottmar Cronie and Marie-Colette van Lieshout.]
+    
     o subset.psp
     Method for 'subset' for line segment patterns.
     
@@ -85,7 +90,7 @@ BUG FIXES
 
     o nnorient
     Crashed if the border correction did not retain any data points.
-    (Spotted by Tomas Lazauskas.)
+    [Spotted by Tomas Lazauskas.]
     Fixed.
     
     o linim
