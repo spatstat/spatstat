@@ -567,5 +567,15 @@ Change log from 1.56-1 to 1.56-2
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+   bw.CvL.Rd
+	wee typo
+	
+   DESCRIPTION
+   NEWS
+	version 1.56-1.033
+
+------------- passed R-3.5.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
    
    

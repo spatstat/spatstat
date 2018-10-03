@@ -1,4 +1,4 @@
-\name{bw.Cvl}
+\name{bw.CvL}
 \alias{bw.CvL}
 \title{
   Cronie and van Lieshout's Criterion for Bandwidth Selection for Kernel Density
