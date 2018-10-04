@@ -3,7 +3,7 @@
 #
 #  Method for 'density' for point patterns
 #
-#  $Revision: 1.97 $    $Date: 2018/10/03 10:45:23 $
+#  $Revision: 1.101 $    $Date: 2018/10/04 04:05:49 $
 #
 
 # ksmooth.ppp <- function(x, sigma, ..., edge=TRUE) {
@@ -57,12 +57,13 @@ density.ppp <- function(x, sigma=NULL, ...,
     if(positive) SE <- posify(SE)
   }
 
+  ## infinite bandwidth
   if(length(sigma) >= 1 && all(is.infinite(sigma))) {
     #' special case: sigma=Inf: uniform estimate
     nx <- npoints(x)
     single <- is.null(dim(weights))
     totwt <- if(is.null(weights)) nx else
-             if(single) sum(weights^2) else colSums(weights^2)
+             if(single) sum(weights) else colSums(weights)
     if(!edge) totwt <- 0 * totwt
     W <- Window(x)
     A <- area.owin(W)
@@ -73,11 +74,10 @@ density.ppp <- function(x, sigma=NULL, ...,
              if(single) E <- E[[1L]]
            },
            points = {
-             numerator <- totwt
-             if(leaveoneout && edge) {
-               self <- if(is.null(weights)) rep(1, nx) else weights
-               numerator <- totwt - self
-             }
+             numerator <- rep(totwt, each=nx)
+             if(!single) numerator <- matrix(numerator, nrow=nx)
+             if(leaveoneout && edge) 
+               numerator <- numerator - (weights %orifnull% 1)
              E <- numerator/A
              if(!single)
                colnames(E) <- colnames(weights)
@@ -219,12 +219,11 @@ denspppSEcalc <- function(x, sigma, varcov, ...,
              if(single) V <- V[[1L]]
            },
            points = {
-             numerator <- totwt2
+             numerator <- rep(totwt2, each=nx)
+             if(!single) numerator <- matrix(numerator, nrow=nx)
              leaveoneout <- resolve.1.default(list(leaveoneout=TRUE), list(...))
-             if(edge && leaveoneout) {
-               self <- if(is.null(weights)) rep(1, nx) else weights^2
-               numerator <- numerator - self
-             }
+             if(edge && leaveoneout) 
+               numerator <- numerator - (weights %orifnull% 1)^2
              V <- numerator/A
              if(!single) 
                colnames(V) <- colnames(weights)
@@ -303,6 +302,26 @@ densitypointsEngine <- function(x, sigma, ...,
   
   if(length(weights) == 0 || (!is.null(dim(weights)) && nrow(weights) == 0))
     weights <- NULL
+  
+  ## infinite bandwidth
+  if(length(sigma) >= 1 && all(is.infinite(sigma))) {
+    #' special case: sigma=Inf: uniform estimate
+    nx <- npoints(x)
+    single <- is.null(dim(weights))
+    totwt <- if(is.null(weights)) nx else
+             if(single) sum(weights) else colSums(weights)
+    if(!edge) totwt <- 0 * totwt
+    W <- Window(x)
+    A <- area.owin(W)
+    numerator <- rep(totwt, each=nx)
+    if(!single) numerator <- matrix(numerator, nrow=nx)
+    if(leaveoneout && edge) 
+      numerator <- numerator - (weights %orifnull% 1)
+    result <- numerator/A
+    if(!single)
+      colnames(result) <- colnames(weights)
+    return(result)
+  }
   
   ## cutoff distance (beyond which the kernel value is treated as zero)
   ## NB: input argument 'cutoff' is either NULL or
@@ -721,6 +740,19 @@ densitycrossEngine <- function(Xdata, Xquery, sigma, ...,
     stopifnot(length(weights) == npoints(Xdata) || length(weights) == 1L)
   }
 
+  if(length(sigma) >= 1 && all(is.infinite(sigma))) {
+    #' special case: sigma=Inf: uniform estimate
+    single <- is.null(dim(weights))
+    totwt <- if(is.null(weights)) npoints(Xdata) else
+             if(single) sum(weights) else colSums(weights)
+    if(!edge) totwt <- 0 * totwt
+    lam <- totwt/area.owin(Window(Xdata))
+    result <- if(single) rep(lam, npoints(Xquery)) else 
+              matrix(lam, npoints(Xquery), length(lam), byrow=TRUE,
+                     dimnames=list(NULL, colnames(weights)))
+    return(result)
+  }
+  
   # evaluate edge correction weights at points 
   if(edge) {
     win <- Xdata$window

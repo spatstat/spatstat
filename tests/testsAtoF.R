@@ -373,7 +373,7 @@ local({
 #'                    relrisk(), Smooth()
 #'                    and inhomogeneous summary functions
 #'
-#'  $Revision: 1.27 $  $Date: 2018/09/30 07:43:53 $
+#'  $Revision: 1.29 $  $Date: 2018/10/04 04:25:02 $
 #'
 
 require(spatstat)
@@ -401,6 +401,8 @@ local({
   tryit(0.07, kernel="quartic")
   tryit(0.07, kernel="disc")
 
+  tryit(sigma=Inf)
+  
   V <- diag(c(0.05^2, 0.07^2))
   tryit(varcov=V)
   tryit(varcov=V, diggle=TRUE)
@@ -424,6 +426,8 @@ local({
   crossit(varcov=V, weights=cells$x)
   crossit(varcov=V, weights=wdf)
 
+  crossit(sigma=Inf)
+  
   # apply different discretisation rules
   Z <- density(cells, 0.05, fractional=TRUE)
   Z <- density(cells, 0.05, preserve=TRUE)
@@ -486,8 +490,8 @@ local({
   KX <- Kinhom(redwood, lamX)
 
   ## test all code cases of new 'relrisk.ppp' algorithm
-  pants <- function(..., X=ants) {
-    a <- relrisk(X, sigma=100, se=TRUE, ...)
+  pants <- function(..., X=ants, sigma=100) {
+    a <- relrisk(X, sigma=sigma, se=TRUE, ...)
     return(TRUE)
   }
   pants()
@@ -505,6 +509,8 @@ local({
   pants(relative=TRUE, control="Cataglyphis", case="Messor")
   pants(relative=TRUE, control="Cataglyphis", case="Messor", at="points")
 
+  pants(sigma=Inf)
+  
   ## more than 2 types
   pants(X=sporophores)
   pants(X=sporophores, at="points")
@@ -561,6 +567,8 @@ local({
   stroke(5, weights=Z)
   stroke(5, weights=Z, geometric=TRUE)
 
+  stroke(sigma=Inf)
+  
   markmean(longleaf, 9)
   
   strike <- function(..., Y=finpines) {
@@ -577,6 +585,8 @@ local({
   strike(1.5, weights=runif(npoints(finpines)))
   strike(1.5, weights=expression(y))
   strike(1e-6)
+
+  strike(sigma=Inf)
   
   ## validity of Smooth.ppp(at='points')
   Y <- longleaf %mark% runif(npoints(longleaf), min=41, max=43)

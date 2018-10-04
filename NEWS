@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.56-1.034
+        CHANGES IN spatstat VERSION 1.56-1.035
 
 OVERVIEW
 
@@ -38,7 +38,7 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o densityfun.ppp, Smoothfun.ppp, Smooth.ppp
     These commands now handle non-Gaussian kernels.
 
-    o density.ppp, relrisk.ppp
+    o density.ppp, relrisk.ppp, Smooth.ppp, densityfun.ppp, Smoothfun.ppp
     Argument 'sigma' can be infinite.
     
     o interp.im

@@ -3,7 +3,7 @@
 #
 #  Smooth the marks of a point pattern
 # 
-#  $Revision: 1.61 $  $Date: 2018/09/30 07:33:31 $
+#  $Revision: 1.65 $  $Date: 2018/10/04 04:24:17 $
 #
 
 # smooth.ppp <- function(X, ..., weights=rep(1, npoints(X)), at="pixels") {
@@ -67,6 +67,40 @@ Smooth.ppp <- function(X, sigma=NULL, ...,
   if(weightsgiven) {
     check.nvector(weights, npoints(X))
   } else weights <- NULL
+
+  ## infinite bandwidth
+  if(length(sigma) >= 1 && all(is.infinite(sigma))) {
+    #' special case: sigma=Inf: uniform estimate
+    nX <- npoints(X)
+    if(is.null(weights)) weights <- rep(1, nX)
+    marx <- marks(X)
+    single <- is.null(dim(marx))
+    wtmark <- weights * marx 
+    totwt <- sum(weights)
+    totwtmark <- if(single) sum(wtmark) else colSums(wtmark)
+    W <- Window(X)
+    switch(at,
+           pixels = {
+             result <- solapply(totwtmark/totwt, as.im, W=W, ...)
+             names(result) <- colnames(marx)
+             if(single) result <- result[[1L]]
+           },
+           points = {
+             denominator <- rep(totwt, nX)
+             numerator <- rep(totwtmark, each=nX)
+             if(!single) numerator <- matrix(numerator, nrow=nX)
+             leaveoneout <- resolve.1.default(list(leaveoneout=TRUE), list(...))
+             if(leaveoneout) {
+               numerator <- numerator - wtmark
+               denominator <- denominator - weights
+             }
+             result <- numerator/denominator
+             if(!single)
+               colnames(result) <- colnames(marx)
+           })
+    return(result)
+  }
+
   ## geometric mean smoothing
   if(geometric) 
     return(ExpSmoothLog(X, sigma=sigma, ..., at=at,
@@ -314,6 +348,9 @@ smoothpointsEngine <- function(x, values, sigma, ...,
   debugging <- spatstat.options("developer")
   stopifnot(is.logical(leaveoneout))
 
+  if(!is.null(dim(values)))
+    stop("Internal error: smoothpointsEngine does not support multidimensional values")
+  
   #' detect constant values
   if(diff(range(values, na.rm=TRUE)) == 0) { 
     result <- values
@@ -327,9 +364,28 @@ smoothpointsEngine <- function(x, values, sigma, ...,
   isgauss <- identical(kernel, "gaussian")
 
   ## Handle weights that are meant to be null
-  if(length(weights) == 0 || (!is.null(dim(weights)) && nrow(weights) == 0))
+  if(length(weights) == 0)
      weights <- NULL
-     
+
+  ## infinite bandwidth
+  if(length(sigma) >= 1 && all(is.infinite(sigma))) {
+    #' special case: sigma=Inf: uniform estimate
+    nX <- npoints(x)
+    W <- Window(x)
+    if(is.null(weights)) weights <- rep(1, nX)
+    wtval <- weights * values
+    totwt <- sum(weights)
+    totwtval <- sum(wtval) 
+    denominator <- rep(totwt, nX)
+    numerator <- rep(totwtval, nX)
+    if(leaveoneout) {
+      numerator <- numerator - wtval
+      denominator <- denominator - weights
+    }
+    result <- numerator/denominator
+    return(result)
+  }
+  
   ## cutoff distance (beyond which the kernel value is treated as zero)
   ## NB: input argument 'cutoff' is either NULL or
   ##     an absolute distance (if scalekernel=FALSE)
@@ -698,6 +754,23 @@ smoothcrossEngine <- function(Xdata, Xquery, values, sigma, ...,
     stopifnot(length(values) == npoints(Xdata) || length(values) == 1)
     if(length(values) == 1L)
       values <- rep(values, ndata)
+  }
+
+  ## infinite bandwidth
+  if(length(sigma) >= 1 && all(is.infinite(sigma))) {
+    #' special case: sigma=Inf: uniform estimate
+    if(is.null(weights)) weights <- rep(1, ndata)
+    single <- is.null(dim(values))
+    wtval <- weights * values 
+    totwt <- sum(weights)
+    totwtval <- if(single) sum(wtval) else colSums(wtval)
+    denominator <- rep(totwt, nquery)
+    numerator <- rep(totwtval, each=nquery)
+    if(!single) numerator <- matrix(numerator, nrow=nquery)
+    result <- numerator/denominator
+    if(!single)
+      colnames(result) <- colnames(values)
+    return(result)
   }
   
   ## cutoff distance (beyond which the kernel value is treated as zero)
