@@ -3,7 +3,7 @@
 #
 #  Smooth the marks of a point pattern
 # 
-#  $Revision: 1.65 $  $Date: 2018/10/04 04:24:17 $
+#  $Revision: 1.66 $  $Date: 2018/10/04 09:17:30 $
 #
 
 # smooth.ppp <- function(X, ..., weights=rep(1, npoints(X)), at="pixels") {
@@ -371,7 +371,6 @@ smoothpointsEngine <- function(x, values, sigma, ...,
   if(length(sigma) >= 1 && all(is.infinite(sigma))) {
     #' special case: sigma=Inf: uniform estimate
     nX <- npoints(x)
-    W <- Window(x)
     if(is.null(weights)) weights <- rep(1, nX)
     wtval <- weights * values
     totwt <- sum(weights)
@@ -748,7 +747,6 @@ smoothcrossEngine <- function(Xdata, Xquery, values, sigma, ...,
     k <- ncol(values)
     stopifnot(nrow(values) == npoints(Xdata))
     values <- as.data.frame(values)
-    valuenames <- colnames(values)
   } else {
     k <- 1L
     stopifnot(length(values) == npoints(Xdata) || length(values) == 1)

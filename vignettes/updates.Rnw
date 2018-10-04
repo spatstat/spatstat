@@ -105,29 +105,50 @@ text(as.Date("2015-01-01"), 60, "R code")
 
 \section{\pkg{spatstat} is splitting into parts}
 
-    \pkg{spatstat} is being split into several sub-packages, to satisfy
+    \pkg{spatstat} is being split into sub-packages, to satisfy
     the requirements of CRAN. This should not affect the user:
     existing code will continue to work in the same way.
 
+    Typing \code{library(spatstat)} will load the familiar
+    \pkg{spatstat} package which can be used as before.
+
+    \subsection{The parts of \pkg{spatstat}}
+    
     Currently there are three sub-packages, called 
     \pkg{spatstat.utils},
     \pkg{spatstat.data} 
     and \pkg{spatstat}.
 
-    Typing \code{library(spatstat)} will load the familiar
-    \pkg{spatstat} package which can be used as before.
-    This will automatically load the \pkg{spatstat.data} package 
-    and will silently ``import'' the \pkg{spatstat.utils} package.
-
-    The \pkg{spatstat.data} package now contains all the datasets
-    for \pkg{spatstat}.
+    \begin{itemize}
+    \item 
+      The \code{spatstat} package contains the main code.
+    \item 
+      The \pkg{spatstat.data} package now contains all the datasets
+      for \pkg{spatstat}.
+    \item
+      The \pkg{spatstat.utils} package
+      contains utility functions for \pkg{spatstat}.
+    \end{itemize}
     
-    The \pkg{spatstat.utils} package
-    contains utility functions that were originally written for \pkg{spatstat}:
-    they were undocumented internal functions in \pkg{spatstat}, but are now
-    documented and accessible in a separate package because they may be
-    useful for other purposes. To access these functions, you need to
+    Typing \code{library(spatstat)} 
+    will automatically load \pkg{spatstat.data}
+    and silently ``import'' \pkg{spatstat.utils}.
+
+    To access the functions in \pkg{spatstat.utils} directly, you would need to
     type \code{library(spatstat.utils)}. 
+
+    \subsection{Extension packages}
+    
+    There are also extension packages which provide additional capabilities
+    and must be loaded explicitly when you need them. 
+    Currently there are two extension packages:
+    
+    \begin{itemize}
+    \item \pkg{spatstat.local} for local model-fitting, 
+    \item \pkg{spatstat.sphere} for analysing point patterns on a sphere.
+    \end{itemize}
+
+\pagebreak
 
 \section{Precis of all changes}
 
@@ -383,6 +404,7 @@ The following datasets have been added to the package.
 \item \texttt{austates}: The states and large mainland territories of Australia
    represented as polygonal regions forming a tessellation.
  \item \texttt{redwood3}: a more accurate version of the \texttt{redwood} data.
+ \item \texttt{cetaceans}: point patterns of whale and dolphin sightings.
 \end{itemize}
 
 \section{New classes}

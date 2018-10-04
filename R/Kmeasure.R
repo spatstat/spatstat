@@ -1,7 +1,7 @@
 #
 #           Kmeasure.R
 #
-#           $Revision: 1.67 $    $Date: 2018/08/11 11:16:58 $
+#           $Revision: 1.68 $    $Date: 2018/10/04 09:15:16 $
 #
 #     Kmeasure()         compute an estimate of the second order moment measure
 #
@@ -224,10 +224,11 @@ second.moment.engine <-
         Kern <- Kern/sum(Kern)
       } else if(!is.null(varcov)) {
         ## anisotropic kernel
-        detSigma <- det(varcov)
         Sinv <- solve(varcov)
         halfSinv <- Sinv/2
-        #' WAS: constker <- kerpixarea/(2 * pi * sqrt(detSigma))
+        #' WAS:
+        #'      detSigma <- det(varcov)
+        #'      constker <- kerpixarea/(2 * pi * sqrt(detSigma))
         xsq <- matrix((xcol.ker^2)[col(Ypad)], ncol=2*nc, nrow=2*nr)
         ysq <- matrix((yrow.ker^2)[row(Ypad)], ncol=2*nc, nrow=2*nr)
         xy <- outer(yrow.ker, xcol.ker, "*")
