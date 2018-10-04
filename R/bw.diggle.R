@@ -11,7 +11,7 @@ bw.scott <- function(X) {
   n <- npoints(X)
   sdx <- sqrt(var(X$x))
   sdy <- sqrt(var(X$y))
-  return(c(sdx, sdy) * n^(-1/6))
+  return(c(sigma.x=sdx, sigma.y=sdy) * n^(-1/6))
 }
 
 bw.diggle <- local({

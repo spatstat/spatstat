@@ -3,20 +3,22 @@
 #
 #   Estimation of relative risk
 #
-#  $Revision: 1.36 $  $Date: 2018/09/08 09:47:04 $
+#  $Revision: 1.38 $  $Date: 2018/10/04 05:32:00 $
 #
 
 relrisk <- function(X, ...) UseMethod("relrisk")
                                       
 relrisk.ppp <- local({
 
-  relrisk.ppp <- function(X, sigma=NULL, ..., varcov=NULL, at="pixels",
-                      relative=FALSE, se=FALSE,
-                      casecontrol=TRUE, control=1, case) {
+  relrisk.ppp <- function(X, sigma=NULL, ..., varcov=NULL,
+                          at=c("pixels", "points"),
+                          relative=FALSE, se=FALSE,
+                          casecontrol=TRUE, control=1, case) {
     stopifnot(is.ppp(X))
     stopifnot(is.multitype(X))
     control.given <- !missing(control)
     case.given <- !missing(case)
+    at <- match.arg(at)
     npts <- npoints(X)
     Y <- split(X)
     uX <- unmark(X)

@@ -11,7 +11,8 @@
   cross-validation.
 }
 \usage{
-\method{relrisk}{ppp}(X, sigma = NULL, ..., varcov = NULL, at = "pixels",
+\method{relrisk}{ppp}(X, sigma = NULL, ..., varcov = NULL,
+           at = c("pixels", "points"),
            relative=FALSE,
            se=FALSE,
            casecontrol=TRUE, control=1, case)
@@ -38,7 +39,7 @@
     smoothing kernel. Incompatible with \code{sigma}.
   }
   \item{at}{
-    String specifying whether to compute the probability values
+    Character string specifying whether to compute the probability values
     at a grid of pixel locations (\code{at="pixels"}) or
     only at the points of \code{X} (\code{at="points"}).
   }

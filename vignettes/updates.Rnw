@@ -397,6 +397,11 @@ The following datasets have been added to the package.
 Following is a list of all the functions that have been added.
 
 \begin{itemize}
+    \item \texttt{bw.CvL}: Cronie-van Lieshout bandwidth selection
+      for density estimation.
+      
+    \item \texttt{subset.psp}: subset method for line segment patterns.
+      
     \item \texttt{densityfun}, \texttt{densityfun.ppp}:
     Compute a kernel estimate of intensity of a point pattern
     and return it as a function of spatial location.
@@ -1055,15 +1060,18 @@ also carries these marks in the \verb!$lines! component.
  \item \texttt{bind.fv}:
    New argument \texttt{clip}.
    
- \item \texttt{bw.ppl}:
-   New arguments \texttt{weights} and \texttt{sigma}.
-   
  \item \texttt{bw.diggle}, \texttt{bw.ppl}, \texttt{bw.relrisk}, 
-   \texttt{bw.smoothppp}, 
+   \texttt{bw.smoothppp}:
     These functions now extract and store the name of the unit of length
     from the point pattern dataset. When the bandwidth selection criterion
     is plotted, the name of the unit of length is shown on the x-axis.
    
+ \item \texttt{bw.ppl}:
+   New arguments \texttt{weights} and \texttt{sigma}.
+   
+  \item \texttt{bw.scott}: the two bandwidth values in the result
+    now have names \texttt{sigma.x} and \texttt{sigma.y}.
+    
 %%C
  \item \texttt{cdf.test}:
    \begin{itemize}
@@ -1126,6 +1134,8 @@ also carries these marks in the \verb!$lines! component.
    If \texttt{col} is a colour map, then the contours are drawn 
    in different colours.
 
+  \item \texttt{convolve.im}: the name of the unit of length is preserved.
+   
  \item \texttt{crossing.psp}:
     New argument \texttt{details} gives more information about the intersections
     between the segments.
@@ -1187,6 +1197,7 @@ also carries these marks in the \verb!$lines! component.
    \item A non-Gaussian kernel can now be specified
    using the argument \texttt{kernel}.
  \item Argument \texttt{weights} can now be a pixel image.
+ \item Infinite bandwidth \texttt{sigma=Inf} is supported.
    \item
      Accelerated by about 30\% when \texttt{at="pixels"}.
    \item Accelerated by about 15\%
@@ -1316,7 +1327,9 @@ also carries these marks in the \verb!$lines! component.
  \item \texttt{identify.psp}: Improved placement of labels.
    Arguments can be passed to \texttt{text.default}
    to control the plotting of labels.
-   
+
+  \item \texttt{imcov}: the name of the unit of length is preserved.
+    
  \item \texttt{influence.ppm}:
     For Gibbs models, memory usage has been dramatically reduced, 
     so the code can handle larger datasets and finer quadrature schemes.
@@ -1621,6 +1634,11 @@ also carries these marks in the \verb!$lines! component.
     from executing the plot of each panel.
    \end{itemize}
 
+ \item \texttt{plot.colourmap}:
+   New argument \texttt{increasing} specifies whether the colours are
+    displayed in order left-to-right/bottom-to-top.
+    Changed default behaviour for discrete colour maps 
+    when \texttt{vertical=FALSE}.
 
  \item \texttt{plot.im}:
    \begin{itemize}
@@ -1893,7 +1911,13 @@ also carries these marks in the \verb!$lines! component.
      to class \texttt{solist}.
      
    \texttt{rhohat}:
+   \begin{itemize}
+   \item 
    New argument \texttt{subset} allows computation for a subset of the data.
+   \item
+   New argument \texttt{positiveCI} specifies whether confidence limits
+   should always be positive. 
+   \end{itemize}
    
    \texttt{rhohat.lpp}:
    New argument \texttt{random} controls placement of dummy points.
@@ -1976,7 +2000,9 @@ also carries these marks in the \verb!$lines! component.
    	New argument \code{drop}.
 	
 %%S   
-   \item Simulation:
+  \item \texttt{setcov}: the name of the unit of length is preserved.
+
+  \item Simulation:
    Several basic simulation algorithms have been accelerated.
    Consequently, simulation outcomes are not identical to 
    those obtained with previous versions of \spst, even when the
@@ -1998,6 +2024,7 @@ also carries these marks in the \verb!$lines! component.
    \item A non-Gaussian kernel can now be specified
    using the argument \texttt{kernel}.
    \item Argument \texttt{weights} can now be a pixel image.
+   \item Infinite bandwidth \texttt{sigma=Inf} is supported.
    \item Accelerated by about 30\% in the case where \texttt{at="pixels"}.
    \item Accelerated by about 15\% in the case where \texttt{at="points"}
      and \texttt{kernel="gaussian"}.

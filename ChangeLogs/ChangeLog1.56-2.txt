@@ -610,4 +610,22 @@ Change log from 1.56-1 to 1.56-2
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
-   	
+   bw.diggle.R
+	The result of bw.scott now has names.
+
+   relrisk.R
+   relrisk.ppp.Rd
+	Buglet fixes.
+   
+   updates.Rnw
+   bugfixes.Rnw
+	Updated to cover all the above.
+	
+   DESCRIPTION
+   NEWS
+	version 1.56-1.036
+
+------------- passed R-3.5.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
