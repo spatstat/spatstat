@@ -133,7 +133,8 @@
   Jalilian, A. and Waagepetersen, R. (2018)
   Fast bandwidth selection for estimation of the pair correlation
   function.
-  \emph{Journal of Statistical Computation and Simulation}, to appear.
+  \emph{Journal of Statistical Computation and Simulation},
+  \bold{88}(10), 2001--2011.
   \url{https://www.tandfonline.com/doi/full/10.1080/00949655.2018.1428606}
 }
 \author{
