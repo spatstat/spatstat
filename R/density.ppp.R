@@ -3,7 +3,7 @@
 #
 #  Method for 'density' for point patterns
 #
-#  $Revision: 1.101 $    $Date: 2018/10/04 04:05:49 $
+#  $Revision: 1.102 $    $Date: 2018/10/05 03:49:55 $
 #
 
 # ksmooth.ppp <- function(x, sigma, ..., edge=TRUE) {
@@ -39,7 +39,8 @@ density.ppp <- function(x, sigma=NULL, ...,
   ker <- resolve.2D.kernel(..., sigma=sigma, varcov=varcov, x=x, adjust=adjust)
   sigma <- ker$sigma
   varcov <- ker$varcov
-
+  sigma.is.infinite <- ker$infinite
+  
   if(is.im(weights)) {
     weights <- safelookup(weights, x) # includes warning if NA
   } else if(is.expression(weights)) 
@@ -58,8 +59,8 @@ density.ppp <- function(x, sigma=NULL, ...,
   }
 
   ## infinite bandwidth
-  if(length(sigma) >= 1 && all(is.infinite(sigma))) {
-    #' special case: sigma=Inf: uniform estimate
+  if(bandwidth.is.infinite(sigma)) {
+    #' uniform estimate
     nx <- npoints(x)
     single <- is.null(dim(weights))
     totwt <- if(is.null(weights)) nx else
@@ -304,8 +305,8 @@ densitypointsEngine <- function(x, sigma, ...,
     weights <- NULL
   
   ## infinite bandwidth
-  if(length(sigma) >= 1 && all(is.infinite(sigma))) {
-    #' special case: sigma=Inf: uniform estimate
+  if(bandwidth.is.infinite(sigma)) {
+    #' uniform estimate
     nx <- npoints(x)
     single <- is.null(dim(weights))
     totwt <- if(is.null(weights)) nx else
@@ -740,8 +741,9 @@ densitycrossEngine <- function(Xdata, Xquery, sigma, ...,
     stopifnot(length(weights) == npoints(Xdata) || length(weights) == 1L)
   }
 
-  if(length(sigma) >= 1 && all(is.infinite(sigma))) {
-    #' special case: sigma=Inf: uniform estimate
+  #' infinite bandwidth
+  if(bandwidth.is.infinite(sigma)) {
+    #' uniform estimate
     single <- is.null(dim(weights))
     totwt <- if(is.null(weights)) npoints(Xdata) else
              if(single) sum(weights) else colSums(weights)
@@ -966,4 +968,7 @@ densitycrossEngine <- function(Xdata, Xquery, sigma, ...,
   return(result)
 }
 
-
+bandwidth.is.infinite <- function(sigma) {
+  sigma <- as.numeric(sigma)
+  return((length(sigma) > 0) && all(sigma == Inf))
+}

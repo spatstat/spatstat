@@ -3,7 +3,7 @@
 #
 #   Estimation of relative risk
 #
-#  $Revision: 1.38 $  $Date: 2018/10/04 05:32:00 $
+#  $Revision: 1.40 $  $Date: 2018/10/05 04:04:29 $
 #
 
 relrisk <- function(X, ...) UseMethod("relrisk")
@@ -11,8 +11,9 @@ relrisk <- function(X, ...) UseMethod("relrisk")
 relrisk.ppp <- local({
 
   relrisk.ppp <- function(X, sigma=NULL, ..., varcov=NULL,
-                          at=c("pixels", "points"),
-                          relative=FALSE, se=FALSE,
+                          at=c("pixels", "points"), 
+                          relative=FALSE,
+                          adjust=1, edge=TRUE, diggle=FALSE, se=FALSE,
                           casecontrol=TRUE, control=1, case) {
     stopifnot(is.ppp(X))
     stopifnot(is.multitype(X))
@@ -40,31 +41,36 @@ relrisk.ppp <- local({
     marx <- marks(X)
     imarks <- as.integer(marx)
     lev <- levels(marx)
-    ## trap arguments
-    dotargs <- list(...)
-    isbwarg <- names(dotargs) %in% c("method", "nh", "hmin", "hmax", "warn")
-    bwargs <- dotargs[isbwarg]
-    dargs  <- dotargs[!isbwarg]
-    ## using edge corrections?
-    edge   <- resolve.1.default(list(edge=TRUE), list(...))
-    diggle <- resolve.1.default(list(diggle=FALSE), list(...))
-    ## bandwidth
-    if(is.null(sigma) && is.null(varcov)) 
-      sigma <- do.call(bw.relrisk, append(list(X), bwargs))
-    SmoothPars <- append(list(sigma=sigma, varcov=varcov, at=at), dargs)
+    ## compute bandwidth (default bandwidth selector is bw.relrisk)
+    ker <- resolve.2D.kernel(...,
+                             sigma=sigma, varcov=varcov, adjust=adjust,
+                             bwfun=bw.relrisk, x=X)
+    sigma <- ker$sigma
+    varcov <- ker$varcov
+
+    ## determine smoothing parameters   
+    if(bandwidth.is.infinite(sigma))
+      edge <- FALSE
+    SmoothPars <- resolve.defaults(list(sigma=sigma, varcov=varcov, at=at,
+                                        edge=edge, diggle=diggle),
+                                   list(...))
+    ## 
     if(se) {
       ## determine other bandwidth for variance estimation
-      if(is.null(varcov)) {
+      VarPars <- SmoothPars
+      if(bandwidth.is.infinite(sigma)) {
+        varconst <- 1
+      } else if(is.null(varcov)) {
         varconst <- 1/(4 * pi * prod(sigma))
-        VarPars <- append(list(sigma=sigma/sqrt(2), at=at), dargs)
+        VarPars$sigma <- sigma/sqrt(2)
       } else {
         varconst <- 1/(4 * pi * sqrt(det(varcov)))
-        VarPars <- append(list(varcov=varcov/2, at=at), dargs)
+        VarPars$varcov <- varcov/2
       }
       if(edge) {
         ## evaluate edge correction weights
-        edgeim <- second.moment.calc(uX, sigma, what="edge", ...,
-                                     varcov=varcov)
+        edgeim <- do.call(second.moment.calc,
+                          append(list(x=uX, what="edge"), SmoothPars))
         if(diggle || at == "points") {
           edgeX <- safelookup(edgeim, uX, warn=FALSE)
           diggleX <- 1/edgeX

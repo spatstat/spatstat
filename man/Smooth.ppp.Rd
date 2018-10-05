@@ -13,7 +13,7 @@
                      ...,
                      weights = rep(1, npoints(X)),
                      at="pixels",
-                     varcov=NULL,
+                     adjust=1, varcov=NULL, 
                      edge=TRUE, diggle=FALSE,
                      kernel="gaussian", scalekernel=is.character(kernel),
                      geometric=FALSE)
@@ -50,6 +50,9 @@ markvar(X, sigma=NULL, ..., weights=NULL, varcov=NULL)
   \item{edge,diggle}{
     Arguments passed to \code{\link{density.ppp}} to
     determine the edge correction.
+  }
+  \item{adjust}{
+    Optional. Adjustment factor for the bandwidth \code{sigma}.
   }
   \item{varcov}{
     Variance-covariance matrix. An alternative

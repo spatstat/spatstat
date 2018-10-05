@@ -644,5 +644,26 @@ Change log from 1.56-1 to 1.56-2
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+05 oct 2018
 
+   density.ppp.R
+   spatstat-internal.Rd
+	Internal tweaks
+	
+   smooth.ppp.R
+   relrisk.R
+   Smooth.ppp.Rd
+   relrisk.ppp.Rd
+	New explicit arguments 'adjust', 'edge', 'diggle'
+	Bug fixes in handling infinite bandwidth.
+	Bug fixes in handling standard error.
+
+   DESCRIPTION
+   NEWS
+	version 1.56-1.038
+
+------------- passed R-3.5.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+	
 	

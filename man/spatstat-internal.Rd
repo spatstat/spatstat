@@ -38,6 +38,7 @@
 \alias{as.unitname}
 \alias{augment.msr}
 \alias{avenndist}
+\alias{bandwidth.is.infinite}
 \alias{BartCalc}
 \alias{bbEngine}
 \alias{bermantestCalc}
@@ -801,6 +802,7 @@ as.listof(x)
 as.unitname(s)
 augment.msr(x, \dots, sigma, recompute)
 avenndist(X)
+bandwidth.is.infinite(sigma)
 BartCalc(fY, fK)
 bbEngine(\dots)
 bermantestCalc(fram, which, alternative, \dots)

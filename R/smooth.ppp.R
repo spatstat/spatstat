@@ -3,7 +3,7 @@
 #
 #  Smooth the marks of a point pattern
 # 
-#  $Revision: 1.66 $  $Date: 2018/10/04 09:17:30 $
+#  $Revision: 1.68 $  $Date: 2018/10/05 03:49:46 $
 #
 
 # smooth.ppp <- function(X, ..., weights=rep(1, npoints(X)), at="pixels") {
@@ -22,7 +22,8 @@ Smooth.solist <- function(X, ...) {
 
 Smooth.ppp <- function(X, sigma=NULL, ...,
                        weights=rep(1, npoints(X)), at="pixels",
-                       varcov=NULL, edge=TRUE, diggle=FALSE, 
+                       adjust=1, varcov=NULL, 
+                       edge=TRUE, diggle=FALSE, 
                        kernel="gaussian",
                        scalekernel=is.character(kernel),
                        geometric=FALSE) {
@@ -53,7 +54,8 @@ Smooth.ppp <- function(X, sigma=NULL, ...,
            })
     return(result)
   }
-  ## weights
+
+  ## ensure weights are numeric
   weightsgiven <- !missing(weights) && !is.null(weights) 
   if(weightsgiven) {
     # convert to numeric
@@ -68,9 +70,27 @@ Smooth.ppp <- function(X, sigma=NULL, ...,
     check.nvector(weights, npoints(X))
   } else weights <- NULL
 
+  ## geometric mean smoothing
+  if(geometric) 
+    return(ExpSmoothLog(X, sigma=sigma, ..., at=at,
+                        adjust=adjust, varcov=varcov,
+                        kernel=kernel, scalekernel=scalekernel,
+                        weights=weights, edge=edge, diggle=diggle))
+
+  ## determine smoothing parameters
+  if(scalekernel) {
+    ker <- resolve.2D.kernel(sigma=sigma, ...,
+                             adjust=adjust, varcov=varcov,
+                             kernel=kernel, 
+                             x=X, bwfun=bw.smoothppp, allow.zero=TRUE)
+    sigma <- ker$sigma
+    varcov <- ker$varcov
+    adjust <- 1
+  } 
+  
   ## infinite bandwidth
-  if(length(sigma) >= 1 && all(is.infinite(sigma))) {
-    #' special case: sigma=Inf: uniform estimate
+  if(bandwidth.is.infinite(sigma)) {
+    #' uniform estimate
     nX <- npoints(X)
     if(is.null(weights)) weights <- rep(1, nX)
     marx <- marks(X)
@@ -101,27 +121,14 @@ Smooth.ppp <- function(X, sigma=NULL, ...,
     return(result)
   }
 
-  ## geometric mean smoothing
-  if(geometric) 
-    return(ExpSmoothLog(X, sigma=sigma, ..., at=at,
-                        varcov=varcov,
-                        kernel=kernel, scalekernel=scalekernel,
-                        weights=weights, edge=edge, diggle=diggle))
-  ## determine smoothing parameters
-  if(scalekernel) {
-    ker <- resolve.2D.kernel(sigma=sigma, ..., varcov=varcov,
-                             kernel=kernel, 
-                             x=X, bwfun=bw.smoothppp, allow.zero=TRUE)
-    sigma <- ker$sigma
-    varcov <- ker$varcov
-  }
   ## Diggle's edge correction?
   if(diggle && !edge) warning("Option diggle=TRUE overridden by edge=FALSE")
   diggle <- diggle && edge
   ##
   ## cutoff distance (beyond which the kernel value is treated as zero)
   cutoff <- cutoff2Dkernel(kernel, sigma=sigma, varcov=varcov,
-                           scalekernel=scalekernel, ..., fatal=TRUE)
+                           scalekernel=scalekernel, adjust=adjust, ...,
+                           fatal=TRUE)
   ## 
   if(cutoff < minnndist(X)) {
     # very small bandwidth
@@ -141,7 +148,7 @@ Smooth.ppp <- function(X, sigma=NULL, ...,
 
   if(diggle) {
     ## absorb Diggle edge correction into weights vector
-    edg <- second.moment.calc(X, sigma, what="edge", ...,                                                     varcov=varcov,
+    edg <- second.moment.calc(X, sigma, what="edge", ...,                                                     varcov=varcov, adjust=adjust,
                               kernel=kernel, scalekernel=scalekernel)
     ei <- safelookup(edg, X, warn=FALSE)
     weights <- if(weightsgiven) weights/ei else 1/ei
@@ -368,8 +375,8 @@ smoothpointsEngine <- function(x, values, sigma, ...,
      weights <- NULL
 
   ## infinite bandwidth
-  if(length(sigma) >= 1 && all(is.infinite(sigma))) {
-    #' special case: sigma=Inf: uniform estimate
+  if(bandwidth.is.infinite(sigma)) {
+    #' uniform estimate
     nX <- npoints(x)
     if(is.null(weights)) weights <- rep(1, nX)
     wtval <- weights * values
@@ -755,8 +762,8 @@ smoothcrossEngine <- function(Xdata, Xquery, values, sigma, ...,
   }
 
   ## infinite bandwidth
-  if(length(sigma) >= 1 && all(is.infinite(sigma))) {
-    #' special case: sigma=Inf: uniform estimate
+  if(bandwidth.is.infinite(sigma)) {
+    #' uniform estimate
     if(is.null(weights)) weights <- rep(1, ndata)
     single <- is.null(dim(values))
     wtval <- weights * values 

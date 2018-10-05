@@ -14,7 +14,7 @@
 \method{relrisk}{ppp}(X, sigma = NULL, ..., varcov = NULL,
            at = c("pixels", "points"),
            relative=FALSE,
-           se=FALSE,
+           adjust=1, edge=TRUE, diggle=FALSE, se=FALSE,
            casecontrol=TRUE, control=1, case)
 }
 \arguments{
@@ -50,6 +50,17 @@
     If \code{TRUE}, it computes the    
     \emph{relative risk}, the ratio of probabilities
     of each type relative to the probability of a control.
+  }
+  \item{adjust}{
+    Optional. Adjustment factor for the bandwidth \code{sigma}.
+  }
+  \item{edge}{
+    Logical value indicating whether to apply edge correction.
+  }
+  \item{diggle}{
+    Logical. If \code{TRUE}, use the Jones-Diggle improved edge correction,
+    which is more accurate but slower to compute than the default
+    correction.
   }
   \item{se}{
     Logical value indicating whether to compute standard errors
