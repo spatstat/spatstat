@@ -1,7 +1,7 @@
 #
 #      distances.R
 #
-#      $Revision: 1.46 $     $Date: 2017/06/05 10:31:58 $
+#      $Revision: 1.47 $     $Date: 2018/10/07 11:07:54 $
 #
 #
 #      Interpoint distances between pairs 
@@ -31,7 +31,14 @@ pairdist.ppp <- function(X, ..., periodic=FALSE, method="C", squared=FALSE) {
 pairdist.default <-
   function(X, Y=NULL, ..., period=NULL, method="C", squared=FALSE)
 {
+  if(!is.null(dim(X)) && ncol(X) > 2)
+    stop("Data contain more than 2 coordinates")
+  
   xy <- xy.coords(X,Y)[c("x","y")]
+
+  if(identical(xy$xlab, "Index")) 
+    stop("Cannot interpret data as 2-dimensional coordinates")
+
   x <- xy$x
   y <- xy$y
 

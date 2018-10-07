@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.56-1.039
+        CHANGES IN spatstat VERSION 1.56-1.040
 
 OVERVIEW
 
@@ -68,6 +68,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o bw.scott
     The two bandwidth values in the result
     now have names ('sigma.x' and 'sigma.y').
+
+    o pairdist.default
+    Now checks whether the data are valid 2-dimensional coordinates.
     
 BUG FIXES
 

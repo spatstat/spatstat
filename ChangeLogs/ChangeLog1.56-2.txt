@@ -683,5 +683,21 @@ Change log from 1.56-1 to 1.56-2
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+   distances.R
+	Added checks for valid 2D data in pairdist.default
 
-	
+   DESCRIPTION
+   NEWS
+	version 1.56-1.040
+
+------------- passed R-3.5.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+
+
+
+
+
+
+
