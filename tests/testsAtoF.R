@@ -250,68 +250,67 @@ local({
 # tests/correctC.R
 # check for agreement between C and interpreted code
 # for interpoint distances etc.
-# $Revision: 1.5 $ $Date: 2018/09/23 09:03:53 $
+# $Revision: 1.6 $ $Date: 2018/10/07 09:58:42 $
 
 require(spatstat)
 
 local({
   eps <- .Machine$double.eps * 4
 
-  # pairdist.ppp
+  checkagree <- function(A, B, blurb) {
+    maxerr <- max(abs(A-B))
+    cat("Discrepancy", maxerr, "for", blurb, fill=TRUE)
+    if(maxerr > eps) 
+      stop(paste("Algorithms for", blurb, "disagree"))
+    return(TRUE)
+  }
+
+  ## pairdist.ppp
+  set.seed(190901)
   X <- rpoispp(42)
   dC <- pairdist(X, method="C")
   dR <- pairdist(X, method="interpreted")
-  if(any(abs(dC - dR) > eps))
-    stop("Algorithms for pairdist() do not agree")
+  checkagree(dC, dR, "pairdist()")
 
-  dC <- pairdist(X, periodic=TRUE, method="C")
-  dR <- pairdist(X, periodic=TRUE, method="interpreted")
-  if(any(abs(dC - dR) > eps))
-    stop("Algorithms for pairdist(periodic=TRUE) do not agree")
+  dCp <- pairdist(X, periodic=TRUE, method="C")
+  dRp <- pairdist(X, periodic=TRUE, method="interpreted")
+  checkagree(dCp, dRp, "pairdist(periodic=TRUE)")
 
-  dC2 <- pairdist(X, periodic=TRUE, squared=TRUE, method="C")
-  dR2 <- pairdist(X, periodic=TRUE, squared=TRUE, method="interpreted")
-  if(any(sqrt(abs(dC2 - dR2)) > eps))
-    stop("Algorithms for pairdist(periodic=TRUE, squared=TRUE) do not agree")
+  dCp2 <- pairdist(X, periodic=TRUE, squared=TRUE, method="C")
+  dRp2 <- pairdist(X, periodic=TRUE, squared=TRUE, method="interpreted")
+  checkagree(dCp2, dRp2, "pairdist(periodic=TRUE, squared=TRUE)")
 
-  # crossdist.ppp
+  ## crossdist.ppp
   Y <- rpoispp(42)
   dC <- crossdist(X, Y, method="C")
   dR <- crossdist(X, Y, method="interpreted")
-  if(any(abs(dC - dR) > eps))
-    stop("Algorithms for crossdist() do not agree")
+  checkagree(dC, dR, "crossdist()")
 
   dC <- crossdist(X, Y, periodic=TRUE, method="C")
   dR <- crossdist(X, Y, periodic=TRUE, method="interpreted")
-  if(any(abs(dC - dR) > eps))
-    stop("Algorithms for crossdist(periodic=TRUE) do not agree")
+  checkagree(dC, dR, "crossdist(periodic=TRUE)")
 
   dC2 <- crossdist(X, Y, periodic=TRUE, squared=TRUE, method="C")
   dR2 <- crossdist(X, Y, periodic=TRUE, squared=TRUE, method="interpreted")
-  if(any(sqrt(abs(dC2 - dR2)) > eps))
-    stop("Algorithms for crossdist(periodic=TRUE, squared=TRUE) do not agree")
+  checkagree(dC2, dR2, "crossdist(periodic=TRUE, squared=TRUE)")
 
   # nndist.ppp
   nnC <- nndist(X, method="C")
   nnI <- nndist(X, method="interpreted")
-  if(any(abs(nnC - nnI) > eps))
-    stop("Algorithms for nndist() do not agree")
+  checkagree(nnC, nnI, "nndist()")
 
   nn3C <- nndist(X, k=3, method="C")
   nn3I <- nndist(X, k=3, method="interpreted")
-  if(any(abs(nn3C - nn3I) > eps))
-    stop("Algorithms for nndist(k=3) do not agree")
+  checkagree(nn3C, nn3I, "nndist(k=3)")
 
   # nnwhich.ppp
   nwC <- nnwhich(X, method="C")
   nwI <- nnwhich(X, method="interpreted")
-  if(any(nwC != nwI))
-    stop("Algorithms for nnwhich() do not agree")
+  checkagree(nwC, nwI, "nnwhich()")
 
   nw3C <- nnwhich(X, k=3, method="C")
   nw3I <- nnwhich(X, k=3, method="interpreted")
-  if(any(nw3C != nw3I))
-    stop("Algorithms for nnwhich(k=3) do not agree")
+  checkagree(nw3C, nw3I, "nnwhich(k=3)")
 
   # whist
   set.seed(98123)

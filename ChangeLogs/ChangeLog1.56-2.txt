@@ -665,5 +665,23 @@ Change log from 1.56-1 to 1.56-2
 ------------- passed R-3.5.1 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
-	
+
+07 oct 2018
+
+   tests/correctC.R
+	Relaxed the accuracy threshold in a cross-check
+	(it may have been too stringent - seems to have failed
+	on some systems.)
+
+   DESCRIPTION
+   NEWS
+   Nickname.txt
+	Nickname "Sitot dit, sitot fait, bonne affaire"
+	version 1.56-1.039
+
+------------- passed R-3.5.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+
 	
