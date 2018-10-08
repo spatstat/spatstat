@@ -3,7 +3,7 @@
 \title{Pairwise distances}
 \description{
   Computes the matrix of distances between all pairs of points
-  in a set of points
+  in a set of points in two dimensional space
 }
 \usage{
   \method{pairdist}{default}(X, Y=NULL, \dots, period=NULL, method="C", squared=FALSE)
@@ -38,16 +38,26 @@
   between the points numbered \code{i} and \code{j}.
 }
 \details{
-  Given the coordinates of a set of points,
+  Given the coordinates of a set of points in two dimensional space,
   this function computes the Euclidean distances between all pairs of
   points, and returns the matrix of distances.
   It is a method for the generic function \code{pairdist}.
+  
+  Note: If only pairwise distances within some threshold value are
+  needed the low-level function \code{\link{closepairs}} may be much
+  faster to use.
 
   The arguments \code{X} and \code{Y} must determine
   the coordinates of a set of points. Typically \code{X} and
   \code{Y} would be numeric vectors of equal length. Alternatively
   \code{Y} may be omitted and \code{X} may be a list with two components
   named \code{x} and \code{y}, or a matrix or data frame with two columns.
+  
+  For typical input the result is numerically equivalent to
+  (but computationally faster than) \code{as.matrix(dist(x))} where
+  \code{x = cbind(X, Y)}, but that command is useful for calculating 
+  all pairwise distances between points in \eqn{k}-dimensional space
+  when \code{x} has \eqn{k} columns.
   
   Alternatively if \code{period} is given,
   then the distances will be computed in the `periodic'
@@ -70,7 +80,8 @@
 \seealso{
   \code{\link{crossdist}},
   \code{\link{nndist}},
-  \code{\link{Kest}}
+  \code{\link{Kest}},
+  \code{\link{closepairs}}
 }
 \examples{
    x <- runif(100)
