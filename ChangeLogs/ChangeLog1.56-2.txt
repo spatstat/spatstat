@@ -694,9 +694,23 @@ Change log from 1.56-1 to 1.56-2
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+08 oct 2018
 
+   pairdist.default.Rd
+	Updated by Ege to explain that only 2D coordinates are handled.
+	
+09 oct 2018
 
+   idw.Rd
+	Added reference.
 
+   DESCRIPTION
+   NEWS
+	version 1.56-1.041
+
+------------- passed R-3.5.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
 
 
 

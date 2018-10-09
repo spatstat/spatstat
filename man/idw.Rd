@@ -107,6 +107,12 @@ idw(X, power=2, at="pixels", ...)
    plot(idw(finpines))
    idw(finpines, at="points")[1:5,]
 }
+\references{
+  Shepard, D. (1968) A two-dimensional interpolation function for
+  irregularly-spaced data.
+  \emph{Proceedings of the 1968 ACM National Conference},
+  1968, pages 517--524. DOI: 10.1145/800186.810616
+}
 \author{
   \spatstatAuthors.
 }
