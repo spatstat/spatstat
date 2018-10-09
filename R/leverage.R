@@ -925,6 +925,7 @@ plot.leverage.ppm <- function(x, ...,
   ave <- y$ave
   if(!multiplot && inherits(smo, "imlist")) {
     ave <- ave * length(smo)
+    smo <- do.call(harmonise.im, unname(smo))
     smo <- Reduce("+", smo)
     defaultmain <- c(defaultmain, "(sum over all types of point)")
   }
@@ -972,6 +973,7 @@ contour.leverage.ppm <- function(x, ...,
   ave <- y$ave
   if(!multiplot && inherits(smo, "imlist")) {
     ave <- ave * length(smo)
+    smo <- do.call(harmonise.im, unname(smo))
     smo <- Reduce("+", smo)
     defaultmain <- c(defaultmain, "(sum over all types of point)")
   }

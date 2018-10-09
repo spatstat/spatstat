@@ -712,6 +712,25 @@ Change log from 1.56-1 to 1.56-2
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+   eval.im.R
+   eval.im.Rd
+      New argument 'warn'.
+      
+   linim.R
+   eval.linim.Rd
+      New argument 'warn'.
 
+   leverage.R
+      Tweaked plot and contour methods to avoid warnings about image resolution
 
+   measures.R
+      Tweaked augment.msr to avoid warnings about image resolution
+
+   DESCRIPTION
+   NEWS
+	version 1.56-1.042
+
+------------- passed R-3.5.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
 

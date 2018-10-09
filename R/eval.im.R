@@ -8,12 +8,12 @@
 #        harmonise.im()       Harmonise images
 #        commonGrid()
 #
-#     $Revision: 1.42 $     $Date: 2017/10/24 01:02:35 $
+#     $Revision: 1.43 $     $Date: 2018/10/09 02:57:14 $
 #
 
 eval.im <- local({
 
-  eval.im <- function(expr, envir, harmonize=TRUE) {
+  eval.im <- function(expr, envir, harmonize=TRUE, warn=TRUE) {
     e <- as.expression(substitute(expr))
     ## get names of all variables in the expression
     varnames <- all.vars(e)
@@ -47,10 +47,10 @@ eval.im <- local({
                       "not compatible")
       if(!harmonize) {
         stop(whinge, call.=FALSE)
-      } else {
+      } else if(warn) {
         warning(whinge, call.=FALSE)
-        images <- do.call(harmonise.im, images)
       }
+      images <- do.call(harmonise.im, images)
     }
     ## trap a common error: using fv object as variable
     isfun <- unlist(lapply(vars, is.fv))

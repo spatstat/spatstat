@@ -1,7 +1,7 @@
 #
 # linim.R
 #
-#  $Revision: 1.52 $   $Date: 2018/08/27 11:24:16 $
+#  $Revision: 1.53 $   $Date: 2018/10/09 02:57:06 $
 #
 #  Image/function on a linear network
 #
@@ -449,7 +449,7 @@ as.linim.linim <- function(X, ...) {
 
 # analogue of eval.im
 
-eval.linim <- function(expr, envir, harmonize=TRUE) {
+eval.linim <- function(expr, envir, harmonize=TRUE, warn=TRUE) {
   sc <- sys.call()
   # Get names of all variables in the expression
   e <- as.expression(substitute(expr))

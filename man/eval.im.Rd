@@ -6,7 +6,7 @@
   and returns a pixel image.
 }
 \usage{
-  eval.im(expr, envir, harmonize=TRUE)
+  eval.im(expr, envir, harmonize=TRUE, warn=TRUE)
 }
 \arguments{
   \item{expr}{An expression.}
@@ -16,6 +16,10 @@
   \item{harmonize}{
     Logical. Whether to resolve inconsistencies between
     the pixel grids.
+  }
+  \item{warn}{
+    Logical. Whether to issue a warning if the pixel grids were
+    inconsistent.
   }
 }
 \details{
@@ -53,9 +57,10 @@
   There must be at least one pixel image in the expression.
 
   All images must have compatible dimensions.
-  If \code{harmonize=TRUE}, images that have incompatible dimensions
-  will be resampled so that they are compatible.
   If \code{harmonize=FALSE}, images that are incompatible will cause an error.
+  If \code{harmonize=TRUE}, images that have incompatible dimensions
+  will be resampled so that they are compatible; if \code{warn=TRUE},
+  a warning will be issued.
 }
 \value{
   An image object of class \code{"im"}.

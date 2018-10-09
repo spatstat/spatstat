@@ -3,7 +3,7 @@
 #
 #  signed/vector valued measures with atomic and diffuse components
 #
-#  $Revision: 1.83 $  $Date: 2018/04/19 09:00:18 $
+#  $Revision: 1.84 $  $Date: 2018/10/09 03:22:43 $
 #
 msr <- function(qscheme, discrete, density, check=TRUE) {
   if(!is.quad(qscheme))
@@ -240,17 +240,21 @@ augment.msr <- function(x, ..., sigma, recompute=FALSE) {
     sigma <- if(!mt) avenndist(xloc) else max(sapply(split(xloc), avenndist))
   }
   if(mt) {
-    ## multitype case - split by type, smooth, sum
+    ## multitype case - split by type, extract smoothed part, then sum
     y <- lapply(split(x), augment.msr, sigma=sigma, ...)
     z <- lapply(y, attr, which="smoothdensity")
     if((nc <- ncol(x)) == 1) {
       ## scalar valued
+      z <- do.call(harmonise, unname(z))
       smo <- Reduce("+", z)
     } else {
       ## vector valued
       smo <- vector(mode="list", length=nc)
-      for(j in 1:nc) 
-        smo[[j]] <- Reduce("+", lapply(z, "[[", i=j))
+      for(j in 1:nc) {
+        zj <- lapply(z, "[[", i=j)
+        zj <- do.call(harmonise, unname(zj))
+        smo[[j]] <- Reduce("+", zj)
+      }
       smo <- as.solist(smo)
     }
     attr(smo, "sigma") <- sigma
