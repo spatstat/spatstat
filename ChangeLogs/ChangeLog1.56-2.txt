@@ -734,3 +734,19 @@ Change log from 1.56-1 to 1.56-2
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+10 oct 2018
+
+   pixellate.R
+   pixellate.ppp.Rd
+	New argument 'savemap'.
+
+   tests/pixelgripes.R
+	Test of validity.
+	
+   DESCRIPTION
+   NEWS
+	version 1.56-1.043
+
+------------- passed R-3.5.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------

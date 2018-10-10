@@ -254,7 +254,7 @@ local({
 ## tests/pixelgripes.R
 ##     Problems related to pixellation of windows
 ##
-## $Revision: 1.3 $ $Date: 2015/12/29 08:54:49 $
+## $Revision: 1.4 $ $Date: 2018/10/10 08:04:10 $
 
 require(spatstat)
 local({
@@ -273,6 +273,15 @@ local({
   fit1 <- kppm(X ~ distorigin, clusters="MatClust")
   Y1 <- simulate(fit1, retry=0)
 })
+
+local({
+  ## pixellate.ppp includes mapping from (x,y) to (row, col)
+  Z <- pixellate(cells, savemap=TRUE)
+  ind <- attr(Z, "map")
+  m <- (as.matrix(Z))[ind]
+  if(!all(m == 1)) stop("Coordinate mismatch in pixellate.ppp")
+})
+
 ## 
 ## tests/polygons.R
 ##

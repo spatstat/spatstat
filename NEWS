@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.56-1.042
+        CHANGES IN spatstat VERSION 1.56-1.043
 
 OVERVIEW
 
@@ -72,6 +72,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o pairdist.default
     Now checks whether the data are valid 2-dimensional coordinates.
 
+    o pixellate.ppp
+    New argument 'savemap'
+    
     o eval.im, eval.linim
     New argument 'warn'.
     

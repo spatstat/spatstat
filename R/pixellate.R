@@ -18,7 +18,7 @@ pixellate <- function(x, ...) {
 
 pixellate.ppp <- function(x, W=NULL, ..., weights=NULL, padzero=FALSE,
                           fractional=FALSE, preserve=FALSE,
-                          DivideByPixelArea=FALSE) {
+                          DivideByPixelArea=FALSE, savemap=FALSE) {
   verifyclass(x, "ppp")
 
   if(is.null(W))
@@ -169,6 +169,9 @@ pixellate.ppp <- function(x, W=NULL, ..., weights=NULL, padzero=FALSE,
     out <- as.solist(out)
     names(out) <- names(weights)
   }
+  if(savemap)
+    attr(out, "map") <- cbind(row=as.integer(rowfac),
+                              col=as.integer(colfac))
   return(out)
 }
 

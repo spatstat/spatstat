@@ -10,7 +10,7 @@
 \usage{
 \method{pixellate}{ppp}(x, W=NULL, \dots, weights = NULL,
                         padzero=FALSE, fractional=FALSE, preserve=FALSE,
-                        DivideByPixelArea=FALSE)
+                        DivideByPixelArea=FALSE, savemap=FALSE)
 
 \method{as.im}{ppp}(X, \dots)
 }
@@ -33,6 +33,10 @@
   \item{DivideByPixelArea}{
     Logical value, indicating whether the resulting pixel values
     should be divided by the pixel area.
+  }
+  \item{savemap}{
+    Logical value, indicating whether to save information
+    about the discretised coordinates of the points of \code{x}.
   }
 }
 \details{
@@ -98,6 +102,11 @@
     are shifted to the nearest pixel lying inside the window, so that
     the total mass is preserved.
   }
+
+  If \code{savemap=TRUE} then the result has an attribute
+  \code{"map"} which is a 2-column matrix containing the row and column
+  indices of the discretised positions of the points of \code{x}
+  in the pixel grid.
 }
 \value{
   A pixel image (object of class \code{"im"}).
@@ -108,7 +117,6 @@
   \code{\link{density.ppp}}, \code{\link{Smooth.ppp}}.
 }
 \examples{
-  data(humberside)
   plot(pixellate(humberside))
   plot(pixellate(humberside, fractional=TRUE))
 }
