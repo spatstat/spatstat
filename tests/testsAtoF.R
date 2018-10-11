@@ -770,6 +770,24 @@ local({
   d <- pppdist(X, Y, type="ace", show.rprimal=TRUE)
   m <- pppdist.mat(X, Y, q=Inf, cutoff=0.001)
 })
+#'
+#'   tests/duplicity.R
+#'
+#'  Tests of duplicated/multiplicity code
+#'
+#' $Revision: 1.1 $ $Date: 2018/10/11 13:18:28 $
+
+require(spatstat)
+local({
+   X <- ppp(c(1,1,0.5,1), c(2,2,1,2), window=square(3), check=FALSE)
+   m <- multiplicity(X)
+   Y <- X %mark% factor(letters[c(3,2,4,3)])
+   mf <- multiplicity(Y)
+   Z <- Y %mark% matrix(c(3,2,4,3), 4, 2)
+   mm <- multiplicity(Z)
+   marks(Z) <- as.data.frame(marks(Z))
+   mz <- multiplicity(Z)
+})
 #  tests/emptymarks.R
 #
 # test cases where there are no (rows or columns of) marks

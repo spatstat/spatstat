@@ -186,7 +186,9 @@
 }
 \examples{
   p <- lohboot(simdat, stoyan=0.5)
-  plot(p)
+  g <- lohboot(simdat, stoyan=0.5, block=TRUE)
+  g
+  plot(g)
 }
 \author{
   \spatstatAuthors
