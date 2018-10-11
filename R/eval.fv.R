@@ -52,6 +52,9 @@ eval.fv <- local({
     }
     # copy first object as template
     result <- funs[[1L]]
+    # remove potential ratio info
+    class(result) <- setdiff(class(result), "rat")
+    attr(result, "numerator") <- attr(result, "denominator") <- NULL
     labl <- attr(result, "labl")
     origdotnames   <- fvnames(result, ".")
     origshadenames <- fvnames(result, ".s")
