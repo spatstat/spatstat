@@ -4,7 +4,7 @@
 #	Compute estimates of cross-type K functions
 #	for multitype point patterns
 #
-#	$Revision: 5.48 $	$Date: 2015/10/21 09:06:57 $
+#	$Revision: 5.49 $	$Date: 2018/10/13 06:55:41 $
 #
 #
 # -------- functions ----------------------------------------
@@ -98,16 +98,20 @@ function(X, i, j, r=NULL, breaks=NULL,
     stop(paste("No points have mark i =", i))
 
   if(i == j) {
-    result <- Kest(X[I],
-                   r=r, breaks=breaks, correction=correction, ...,
-                   ratio=ratio)
+    ## use Kest
+    result <- do.call(Kest,
+                      resolve.defaults(list(X=X[I],
+                                            r=r, breaks=breaks,
+                                            correction=correction, ratio=ratio),
+                                       list(rmax=NULL), ## forbidden 
+                                       list(...)))
   } else {
     J <- (marx == j)
     if(!any(J))
       stop(paste("No points have mark j =", j))
     result <- Kmulti(X, I, J,
-                     r=r, breaks=breaks, correction=correction, ...,
-                     ratio=ratio)
+                     r=r, breaks=breaks,
+                     correction=correction, ratio=ratio, ...)
   }
   iname <- make.parseable(paste(i))
   jname <- make.parseable(paste(j))

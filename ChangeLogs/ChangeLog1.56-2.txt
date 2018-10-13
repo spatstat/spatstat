@@ -767,3 +767,32 @@ Change log from 1.56-1 to 1.56-2
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+13 oct 2018
+
+   eval.fv
+	[From Ege] remove ratio information
+
+   Kmulti.R
+	For Kcross(X, i, i) the argument 'rmax' is ignored.
+
+   psp.R
+   simplepanel.R
+   transect.R
+	Replaced 'locator' by 'spatstatLocator'.
+
+   density.ppp.R
+	Buglet fixes.
+	
+   tests/density.R
+	More tests of density code.
+
+   DESCRIPTION
+   NEWS
+   Nickname.txt
+	Nickname 'Ballistic descent'
+	version 1.56-1.045
+
+------------- passed R-3.5.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+

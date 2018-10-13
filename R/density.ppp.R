@@ -3,7 +3,7 @@
 #
 #  Method for 'density' for point patterns
 #
-#  $Revision: 1.102 $    $Date: 2018/10/05 03:49:55 $
+#  $Revision: 1.104 $    $Date: 2018/10/13 08:19:17 $
 #
 
 # ksmooth.ppp <- function(x, sigma, ..., edge=TRUE) {
@@ -277,7 +277,7 @@ density.ppp
 
 })
 
-densitypointsEngine <- function(x, sigma, ...,
+densitypointsEngine <- function(x, sigma=NULL, ...,
                                 kernel="gaussian", 
                                 scalekernel=is.character(kernel),
                                 weights=NULL, edge=TRUE, varcov=NULL,
@@ -716,7 +716,7 @@ resolve.2D.kernel <- function(..., sigma=NULL, varcov=NULL, x, mindist=NULL,
   return(result)
 }
 
-densitycrossEngine <- function(Xdata, Xquery, sigma, ...,
+densitycrossEngine <- function(Xdata, Xquery, sigma=NULL, ...,
                                kernel="gaussian", 
                                scalekernel=is.character(kernel),
                                weights=NULL, edge=TRUE, varcov=NULL,
@@ -826,6 +826,7 @@ densitycrossEngine <- function(Xdata, Xquery, sigma, ...,
       wcontrib <- contrib * weights[i]
       result <- tapplysum(wcontrib, list(jfac))
     } else {
+      result <- matrix(, nquery, k)
       for(kk in 1:k) {
         wcontribkk <- contrib * weights[i, kk]
         result[,kk] <- tapplysum(wcontribkk, list(jfac))

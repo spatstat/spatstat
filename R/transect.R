@@ -45,9 +45,9 @@ transect.im <- local({
       if(click) {
         # interactive
         if(!add) plot(X)
-        from <- locator(1)
+        from <- spatstatLocator(1)
         points(from)
-        to <- locator(1)
+        to <- spatstatLocator(1)
         points(to)
         segments(from$x, from$y, to$x, to$y)
       } else {

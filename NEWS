@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.56-1.044
+        CHANGES IN spatstat VERSION 1.56-1.045
 
 OVERVIEW
 
@@ -22,7 +22,7 @@ OVERVIEW
 
     o Minor bug fixes and improvements.
 
-    o Version nickname: 'Sitot dit, sitot fait, bonne affaire'
+    o Version nickname: 'Ballistic descent'
 
 NEW FUNCTIONS
 
@@ -147,6 +147,11 @@ BUG FIXES
 
    o plot.psp
    If the marks were factor values, the colour map was displayed upside down.
+   Fixed.
+
+   o eval.fv
+   If one of the 'fv' objects included ratio information (class 'rat')
+   then this was erroneously retained, in some cases.
    Fixed.
    
         CHANGES IN spatstat VERSION 1.56-1

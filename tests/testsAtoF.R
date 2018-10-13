@@ -372,7 +372,7 @@ local({
 #'                    relrisk(), Smooth()
 #'                    and inhomogeneous summary functions
 #'
-#'  $Revision: 1.29 $  $Date: 2018/10/04 04:25:02 $
+#'  $Revision: 1.32 $  $Date: 2018/10/13 07:56:30 $
 #'
 
 require(spatstat)
@@ -400,7 +400,10 @@ local({
   tryit(0.07, kernel="quartic")
   tryit(0.07, kernel="disc")
 
+  tryit(0.07, kernel="epa", weights=expression(x))
+
   tryit(sigma=Inf)
+  tryit(sigma=Inf, weights=expression(x))
   
   V <- diag(c(0.05^2, 0.07^2))
   tryit(varcov=V)
@@ -411,19 +414,31 @@ local({
   tryit(0.05, weights=Z)
   tryit(0.05, weights=Z, diggle=TRUE)
 
+  trymost <- function(...) tryit(..., do.fun=FALSE) 
   wdf <- data.frame(a=1:42,b=42:1)
-  tryit(0.05, weights=wdf, do.fun=FALSE)
-  tryit(varcov=V, weights=wdf, do.fun=FALSE)
-  tryit(varcov=V, weights=expression(cbind(x,y)), do.fun=FALSE)
+  trymost(0.05, weights=wdf)
+  trymost(0.05, weights=wdf, diggle=TRUE)
+  trymost(sigma=Inf, weights=wdf)
+  trymost(varcov=V, weights=wdf)
+  trymost(varcov=V, weights=expression(cbind(x,y)))
+  
+  ## run C algorithm 'denspt'
+  opa <- spatstat.options(densityC=TRUE, densityTransform=FALSE)
+  tryit(varcov=V)
+  tryit(varcov=V, weights=expression(x))
+  trymost(varcov=V, weights=wdf)
+  spatstat.options(opa)
   
   crossit <- function(..., sigma=NULL) {
     U <- runifpoint(20, Window(cells))
-    a <- densitycrossEngine(cells, U, sigma=sigma, ...)
-    a <- densitycrossEngine(cells, U, sigma=sigma, ..., diggle=TRUE)
+    a <- densitycrossEngine(cells, U, ..., sigma=sigma)
+    a <- densitycrossEngine(cells, U, ..., sigma=sigma, diggle=TRUE)
     invisible(NULL)
   }
   crossit(varcov=V, weights=cells$x)
   crossit(varcov=V, weights=wdf)
+  crossit(sigma=0.1, weights=wdf)
+  crossit(sigma=0.1, kernel="epa", weights=wdf)
 
   crossit(sigma=Inf)
   

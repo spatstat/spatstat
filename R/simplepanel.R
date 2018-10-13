@@ -132,7 +132,7 @@ run.simplepanel <- function(P, popup=TRUE, verbose=FALSE) {
     more <- TRUE
     while(more) {
       redraw.simplepanel(P, verbose=verbose)
-      xy <- locator(1)
+      xy <- spatstatLocator(1)
       if(is.null(xy)) {
         if(verbose) cat("No (x,y) coordinates\n")
         break

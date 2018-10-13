@@ -6,7 +6,7 @@
 #
 #        compatible.fv()       Check whether two fv objects are compatible
 #
-#     $Revision: 1.35 $     $Date: 2016/07/26 10:30:13 $
+#     $Revision: 1.36 $     $Date: 2018/10/13 06:59:50 $
 #
 
 eval.fv <- local({

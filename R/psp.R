@@ -727,7 +727,7 @@ identify.psp <- function(x, ..., labels=seq_len(nsegments(x)),
     stop("n should be a single integer")
   out <- integer(0)
   while(length(out) < n) {
-    xy <- locator(1)
+    xy <- spatstatLocator(1)
     # check for interrupt exit
     if(length(xy$x) == 0)
       return(out)
