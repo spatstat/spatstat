@@ -161,6 +161,74 @@ local({
   bb <- dg.progress(redwood, Lest, nsim=5, use.theory=FALSE, leaveout=2,
                     verbose=FALSE)
 })
+#'
+#'     tests/simplepan.R
+#'
+#'   Tests of user interaction in simplepanel
+#'   Handled by spatstatLocator()
+#'
+#'   $Revision: 1.2 $  $Date: 2018/10/16 00:46:41 $
+#'
+
+require(spatstat)
+
+local({
+  ## Adapted from example(simplepanel)
+  ## make boxes
+  outerbox <- owin(c(0,4), c(0,1))
+  buttonboxes <- layout.boxes(outerbox, 4, horizontal=TRUE, aspect=1)
+  ## make environment containing an integer count
+  myenv <- new.env()
+  assign("answer", 0, envir=myenv)
+  ## what to do when finished: return the count.
+  myexit <- function(e) { return(get("answer", envir=e)) }
+  ## button clicks
+  ## decrement the count
+  Cminus <- function(e, xy) {
+    ans <- get("answer", envir=e)
+    assign("answer", ans - 1, envir=e)
+    return(TRUE)
+  }
+  ## display the count (clicking does nothing)
+  Cvalue <- function(...) { TRUE }
+  ## increment the count
+  Cplus <- function(e, xy) {
+    ans <- get("answer", envir=e)
+    assign("answer", ans + 1, envir=e)
+    return(TRUE)
+  }
+  ## 'Clear' button
+  Cclear <- function(e, xy) {
+    assign("answer", 0, envir=e)
+    return(TRUE)
+  }
+  ## quit button
+  Cdone <- function(e, xy) { return(FALSE) }
+
+  myclicks <- list("-"=Cminus,
+                   value=Cvalue,
+                   "+"=Cplus,
+                   done=Cdone)
+  ## redraw the button that displays the current value of the count
+  Rvalue <- function(button, nam, e) {
+     plot(button, add=TRUE)
+     ans <- get("answer", envir=e)
+     text(centroid.owin(button), labels=ans)
+     return(TRUE)
+  }
+  ## make the panel
+  P <- simplepanel("Counter",
+                   B=outerbox, boxes=buttonboxes,
+                   clicks=myclicks,
+                   redraws = list(NULL, Rvalue, NULL, NULL),
+                   exit=myexit, env=myenv)
+  ## queue up a sequence of inputs
+  boxcentres <- do.call(concatxy, unname(lapply(buttonboxes[c(3,3,1,3,2,4)],
+                                                centroid.owin)))
+  spatstat.utils::queueSpatstatLocator(boxcentres$x, boxcentres$y)
+  ## go
+  run.simplepanel(P)
+})
 #
 # tests/slrm.R
 #

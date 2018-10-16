@@ -796,3 +796,17 @@ Change log from 1.56-1 to 1.56-2
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+16 oct 2018
+
+   tests/simplepan.R  [New file]
+        tests of user interaction in simplepanel
+	(using new feature of spatstatLocator)
+
+   DESCRIPTION
+   NEWS
+	version 1.56-1.046
+
+------------- passed R-3.5.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
