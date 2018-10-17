@@ -111,7 +111,7 @@ rmhsnoop <- local({
                        mlevels, mcodes,
                        irep, itype, 
                        proptype, proplocn, propmark, propindx,
-                       numerator, denominator) {
+                       numerator, denominator, panel.only=FALSE) {
     trap.extra.arguments(..., .Context="In rmhsnoop")
     X <- ppp(xcoords, ycoords, window=Wsim)
     if(!missing(mlevels) && length(mlevels) > 0)
@@ -228,7 +228,7 @@ rmhsnoop <- local({
                  accepted=accepted,
                  numerator=numerator,
                  denominator=denominator)
-    inspectProposal(L, info, title=header)
+    inspectProposal(L, info, title=header, panel.only=panel.only)
   }
 
   decode.proptype <- function(n) {
@@ -239,7 +239,7 @@ rmhsnoop <- local({
     switch(s, Reject=0, Birth=1, Death=2, Shift=3)
   }
   
-  inspectProposal <- function(X, info, ..., title) {
+  inspectProposal <- function(X, info, ..., title, panel.only=FALSE) {
     if(missing(title)) title <- short.deparse(substitute(X))
     if(!inherits(X, "layered"))
       X <- layered(X)
@@ -290,7 +290,9 @@ rmhsnoop <- local({
     # Jump controls at left
     maxchars <- max(4, nchar(names(jump.clicks)))
     P <- grow.simplepanel(P, "left", panelwidth * maxchars/6, jump.clicks)
-    # go
+    ## exit for debug/test code
+    if(panel.only) return(P)
+    ## go
     rslt <- run.simplepanel(P, popup=FALSE)
     clear.simplepanel(P)
     rm(en)

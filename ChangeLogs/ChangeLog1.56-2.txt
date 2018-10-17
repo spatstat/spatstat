@@ -824,3 +824,17 @@ Change log from 1.56-1 to 1.56-2
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+   rmhsnoop.R
+   spatstat-internal.Rd
+	rmhsnoop has new argument 'panel.only' for internal use
+
+   tests/rmhsnoopy.R
+	Now tests the full sequence of actions in rmh(snoop=TRUE)
+	
+   DESCRIPTION
+   NEWS
+	version 1.56-1.048
+
+------------- passed R-3.5.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------

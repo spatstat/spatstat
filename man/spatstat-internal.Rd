@@ -1412,7 +1412,8 @@ RmhExpandRule(nama)
 rocData(covariate, nullmodel, \dots, high)
 rocModel(lambda, nullmodel, \dots, high)
 rmhsnoop(\dots, Wsim, Wclip, R, xcoords, ycoords, mlevels, mcodes, irep, itype, 
-     proptype, proplocn, propmark, propindx, numerator, denominator)
+     proptype, proplocn, propmark, propindx, numerator, denominator,
+     panel.only)
 roseContinuous(ang, rad, unit, \dots,
                start, clockwise, main, labels, at, do.plot)
 ruletextline(ch, n, terse)

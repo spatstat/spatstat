@@ -1013,23 +1013,47 @@ reset.spatstat.options()
 #'
 #'   tests/rmhsnoopy.R
 #'
-#'   Test of rmhsnoop() setup and user interaction
-#'
-#'   $Revision: 1.4 $  $Date: 2018/10/17 04:26:42 $
+#'   Test the rmh interactive debugger
+#' 
+#'   $Revision: 1.8 $  $Date: 2018/10/17 08:57:32 $
 
 require(spatstat)
 local({
-  ## click all the navigation buttons, then click 'exit debugger'
-  xx <- c(1.433, 1.443, 0.495, 0.541, -0.137, 1.117, -0.662)
-  yy <- c(1.056, 0.685, 1.127, -0.129, 0.457, 0.486, -0.444)
+  ## fit a model and prepare to simulate
+  R <- 0.1
+  fit <- ppm(cells ~ 1, Strauss(R))
+  siminfo <- rmh(fit, preponly=TRUE)
+  Wsim <- siminfo$control$internal$w.sim
+  Wclip <- siminfo$control$internal$w.clip
+  if(is.null(Wclip)) Wclip <- Window(cells)
 
-  spatstat.utils::queueSpatstatLocator(xx,yy)
+  ## determine debugger interface panel geometry
+  P <- rmhsnoop(Wsim=Wsim, Wclip=Wclip, R=R,
+                xcoords=runif(40),
+                ycoords=runif(40),
+                mlevels=NULL, mcodes=NULL,
+                irep=3, itype=1,
+                proptype=1, proplocn=c(0.5, 0.5), propmark=0, propindx=0,
+                numerator=42, denominator=24,
+                panel.only=TRUE)
+  boxes <- P$boxes
+  clicknames <- names(P$clicks)
+  boxcentres <- do.call(concatxy, lapply(boxes, centroid.owin))
 
-  rmhsnoop(Wsim=owin(), Wclip=square(0.7), R=0.1,
-           xcoords=runif(40),
-           ycoords=runif(40),
-           mlevels=NULL, mcodes=NULL,
-           irep=3, itype=1,
-           proptype=1, proplocn=c(0.5, 0.5), propmark=0, propindx=0,
-           numerator=42, denominator=24)
+  ## design a sequence of clicks
+  actionsequence <- c("Up", "Down", "Left", "Right",
+                      "At Proposal", "Zoom Out", "Zoom In", "Reset",
+                      "Accept", "Reject", "Print Info",
+                      "Next Iteration", "Next Shift", "Next Death",
+                      "Skip 10", "Skip 100", "Skip 1000", "Skip 10,000",
+                      "Skip 100,000", "Exit Debugger")
+  actionsequence <- match(actionsequence, clicknames)
+  actionsequence <- actionsequence[!is.na(actionsequence)]
+  xy <- lapply(boxcentres, "[", actionsequence)
+
+  ## queue the click sequence
+  spatstat.utils::queueSpatstatLocator(xy$x,xy$y)
+
+  ## go
+  rmh(fit, snoop=TRUE)
 })
