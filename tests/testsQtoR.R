@@ -1010,3 +1010,26 @@ local({
 
 
 reset.spatstat.options()
+#'
+#'   tests/rmhsnoopy.R
+#'
+#'   Test of rmhsnoop() setup and user interaction
+#'
+#'   $Revision: 1.4 $  $Date: 2018/10/17 04:26:42 $
+
+require(spatstat)
+local({
+  ## click all the navigation buttons, then click 'exit debugger'
+  xx <- c(1.433, 1.443, 0.495, 0.541, -0.137, 1.117, -0.662)
+  yy <- c(1.056, 0.685, 1.127, -0.129, 0.457, 0.486, -0.444)
+
+  spatstat.utils::queueSpatstatLocator(xx,yy)
+
+  rmhsnoop(Wsim=owin(), Wclip=square(0.7), R=0.1,
+           xcoords=runif(40),
+           ycoords=runif(40),
+           mlevels=NULL, mcodes=NULL,
+           irep=3, itype=1,
+           proptype=1, proplocn=c(0.5, 0.5), propmark=0, propindx=0,
+           numerator=42, denominator=24)
+})

@@ -810,3 +810,17 @@ Change log from 1.56-1 to 1.56-2
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+17 oct 2018
+
+   tests/rmhsnoopy.R  [New file]
+        tests of rmhsnoop() setup and user interaction
+	(using new feature of spatstatLocator)
+
+   DESCRIPTION
+   NEWS
+	version 1.56-1.047
+
+------------- passed R-3.5.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
