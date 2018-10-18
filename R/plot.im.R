@@ -1,7 +1,7 @@
 #
 #   plot.im.R
 #
-#  $Revision: 1.123 $   $Date: 2018/04/12 08:44:04 $
+#  $Revision: 1.125 $   $Date: 2018/10/18 09:36:06 $
 #
 #  Plotting code for pixel images
 #
@@ -133,10 +133,17 @@ plot.im <- local({
     return(y)
   }
 
-  Ticks <- function(usr, log=FALSE, nint=NULL, ...) {
-    #' same as axisTicks but accepts nint=NULL as if it were missing
-    if(!is.null(nint)) return(axisTicks(usr=usr, log=log, nint=nint, ...))
-    return(axisTicks(usr=usr, log=log, ...))
+  Ticks <- function(usr, log=FALSE, nint=NULL, ..., clip=TRUE) {
+    #' modification of grDevices::axisTicks
+    #'      constrains ticks to be inside the specified range if clip=TRUE
+    #'      accepts nint=NULL as if it were missing
+    z <- if(is.null(nint)) axisTicks(usr=usr, log=log, ...) else
+         axisTicks(usr=usr, log=log, nint=nint, ...) 
+    if(clip) {
+      zlimits <- if(log) 10^usr else usr
+      z <- z[inside.range(z, zlimits)]
+    }
+    return(z)
   }
 
   numericalRange <- function(x, zlim=NULL) {

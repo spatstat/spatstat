@@ -1,7 +1,7 @@
 #'
 #'      rmhtemper.R
 #'
-#'   $Revision: 1.3 $  $Date: 2015/10/21 09:06:57 $
+#'   $Revision: 1.4 $  $Date: 2018/10/18 02:07:56 $
 #'
 
 reheat <- local({
@@ -56,21 +56,31 @@ reheat <- local({
 })
 
 
-rtemper <- function(model, invtemp, nrep, ..., start=NULL, verbose=FALSE){
+rtemper <- function(model, invtemp, nrep, ...,
+                    track=FALSE, start=NULL, verbose=FALSE){
   df <- data.frame(invtemp, nrep)
   ndf <- nrow(df)
   X <- NULL
+  h <- NULL
   for(i in 1:ndf) {
     if(verbose)
-      cat(paste("Running", nrep[i], "steps",
-                "at inverse temperature", invtemp[i], "... "))
+      cat(paste("Step", i, "of", paste0(ndf, ":"),
+                "Running", nrep[i], "iterations",
+                "at inverse temperature", signif(invtemp[i], 4), "... "))
     model.i <- reheat(model, invtemp[i])
     X <- rmh(model.i, nrep=nrep[i], ...,
              start=start,
              overrideXstart = X,
-             overrideclip   = (i != ndf),
-             verbose=FALSE)
-    if(verbose) cat(" Done.\n")
+             overrideclip = (i != ndf),
+             track=track,
+             saveinfo = FALSE, verbose=FALSE)
+    if(track) {
+      hnew <- attr(X, "history")
+      h <- rbind(h, hnew)
+    }
   }
+  if(verbose) cat("Done.\n")
+  if(track)
+    attr(X, "history") <- h
   return(X)
 }

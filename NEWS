@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.56-1.048
+        CHANGES IN spatstat VERSION 1.56-1.049
 
 OVERVIEW
 
@@ -74,6 +74,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o pixellate.ppp
     New argument 'savemap'
+
+    o rtemper
+    New argument 'track'.
+    Code runs slightly faster.
     
     o eval.im, eval.linim
     New argument 'warn'.

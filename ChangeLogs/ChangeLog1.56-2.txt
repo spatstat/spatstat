@@ -838,3 +838,24 @@ Change log from 1.56-1 to 1.56-2
 ------------- passed R-3.5.1 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
+
+>>>>>>>>>>>>> passed R-devel CMD check <<<<<<<<<<<<<<<
+>>>>>>>>>>>>>    (2018-10-16 r75448)   <<<<<<<<<<<<<<<
+
+18 oct 2018
+
+   rtemper.R
+   rtemper.Rd
+	New argument 'track'.
+	Slightly accelerated.
+
+   plot.im.R
+	Improved handling of tickmarks.
+	
+   DESCRIPTION
+   NEWS
+	version 1.56-1.049
+
+------------- passed R-3.5.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
