@@ -56,6 +56,7 @@ parameters(model, \dots)
   \code{\link{coef}}
 }
 \examples{
+  parameters(Strauss(0.1))
   fit1 <- ppm(cells ~ x, Strauss(0.1))
   parameters(fit1)
   fit2 <- kppm(redwood ~ x, "Thomas")

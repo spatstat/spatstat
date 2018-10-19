@@ -888,3 +888,21 @@ Change log from 1.56-1 to 1.56-2
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+   parameters.Rd
+	More examples.
+
+   tests/undoc.R
+	More tests.
+
+   tests/cluck.R [New file]
+        tests of 'click*' functions
+
+   DESCRIPTION
+   NEWS
+	version 1.56-1.051
+
+------------- passed R-3.5.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+   
+	

@@ -784,7 +784,7 @@ local({
 #
 #  tests/undoc.R
 #
-#   $Revision: 1.5 $   $Date: 2018/04/27 09:31:24 $
+#   $Revision: 1.6 $   $Date: 2018/10/19 09:45:52 $
 #
 #  Test undocumented hacks, etc
 
@@ -818,7 +818,9 @@ local({
             list(a=2, b=TRUE))
   stopifnot(!allElementsIdentical(M))
   stopifnot(allElementsIdentical(M, "a"))
-  
+  ##
+  A <- Strauss(0.1)
+  A <- reincarnate.interact(A)
 })
 
 
