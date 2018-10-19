@@ -1,6 +1,6 @@
 Package: spatstat
-Version: 1.56-1.049
-Date: 2018-10-18
+Version: 1.56-1.050
+Date: 2018-10-19
 Title: Spatial Point Pattern Analysis, Model-Fitting, Simulation, Tests
 Author: Adrian Baddeley <Adrian.Baddeley@curtin.edu.au>,
 	Rolf Turner <r.turner@auckland.ac.nz> 
@@ -22,6 +22,7 @@ Author: Adrian Baddeley <Adrian.Baddeley@curtin.edu.au>,
 	by M. Adepeju;
         C. Anderson; 
         Q.W. Ang;
+	R. Arellano;
 	J. Astrom;
         M. Austenfeld;
 	S. Azaele; 
@@ -204,7 +205,7 @@ Author: Adrian Baddeley <Adrian.Baddeley@curtin.edu.au>,
 	A. Zeileis.
 Maintainer: Adrian Baddeley <Adrian.Baddeley@curtin.edu.au>
 Depends: R (>= 3.3.0), spatstat.data (>= 1.4-0), stats, graphics, grDevices, utils, methods, nlme, rpart
-Imports: spatstat.utils (>= 1.11-0), mgcv, Matrix, deldir (>= 0.0-21), abind, tensor, polyclip (>= 1.5-0), goftest
+Imports: spatstat.utils (>= 1.12-0), mgcv, Matrix, deldir (>= 0.0-21), abind, tensor, polyclip (>= 1.5-0), goftest
 Suggests: sm, maptools, gsl, locfit, spatial, rpanel, tkrplot, RandomFields (>= 3.1.24.1), RandomFieldsUtils(>= 0.3.3.1), fftwtools (>= 0.9-8)
 Remotes: spatstat/spatstat.utils, spatstat/spatstat.data
 Description: Comprehensive open-source toolbox for analysing Spatial Point Patterns. Focused mainly on two-dimensional point patterns, including multitype/marked points, in any spatial region. Also supports three-dimensional point patterns, space-time point patterns in any number of dimensions, point patterns on a linear network, and patterns of other geometrical objects. Supports spatial covariate data such as pixel images. 

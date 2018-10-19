@@ -317,7 +317,7 @@ local({
 #
 # Tests for lpp code
 #
-#  $Revision: 1.21 $  $Date: 2018/07/21 03:00:17 $
+#  $Revision: 1.22 $  $Date: 2018/10/19 04:06:19 $
 
 
 require(spatstat)
@@ -336,6 +336,7 @@ local({
   plot(g)
   ## other code blocks
   K <- linearKinhom(X, lambda=fit, correction="none", ratio=TRUE)
+  K0 <- linearKcross(dendrite[1], "thin", "thin")
   # check empty patterns OK
   X <- runiflpp(0, simplenet)
   print(X)

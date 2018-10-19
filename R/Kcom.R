@@ -3,7 +3,7 @@
 #
 #   model compensated K-function
 #
-# $Revision: 1.15 $ $Date: 2018/09/28 05:08:55 $
+# $Revision: 1.16 $ $Date: 2018/10/19 03:20:51 $
 #
 
 Kcom <- local({
@@ -180,7 +180,8 @@ Kcom <- local({
                  "border")
     # reduced sample for adjustment integral
     RSD <- Kwtsum(dIJ[okI], bI[okI], wcIJ[okI],
-                  b[Z & USED], rep.int(1, npts.used), breaks)
+                  b[Z & USED], rep.int(1, npts.used), breaks,
+                  fatal=FALSE)
 #    lambdaU <- (npts.used + 1)/area.used
     lambdaU <- (npts + 1)/areaW
     Kb <- RSD$numerator/((RSD$denominator + 1) * lambdaU)

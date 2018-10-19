@@ -1,7 +1,7 @@
 #
 #	Kinhom.S	Estimation of K function for inhomogeneous patterns
 #
-#	$Revision: 1.93 $	$Date: 2017/07/18 10:14:42 $
+#	$Revision: 1.94 $	$Date: 2018/10/19 03:19:54 $
 #
 #	Kinhom()	compute estimate of K_inhom
 #
@@ -418,7 +418,7 @@
 }
 
 
-Kwtsum <- function(dIJ, bI, wIJ, b, w, breaks) {
+Kwtsum <- function(dIJ, bI, wIJ, b, w, breaks, fatal=TRUE) {
   #
   # "internal" routine to compute border-correction estimates of Kinhom
   #
@@ -436,11 +436,31 @@ Kwtsum <- function(dIJ, bI, wIJ, b, w, breaks) {
   stopifnot(length(bI) == length(wIJ))
   stopifnot(length(w) == length(b))
 
-  if(!is.finite(sum(w, wIJ)))
-    stop("Weights in K-function were infinite or NA")
-
-  bkval <- breaks$val
+  if(!is.finite(sum(w, wIJ))) {
+    if(fatal)
+      stop("Weights in K-function were infinite or NA", call.=FALSE)
+    #' set non-finite weights to zero
+    if(any(bad <- !is.finite(w))) {
+      warning(paste(sum(bad), "out of", length(bad),
+                    paren(percentage(bad)), 
+                    "of the boundary weights",
+                    "in the K-function were NA or NaN or Inf",
+                    "and were reset to zero"),
+              call.=FALSE)
+      w[bad] <- 0
+    }
+    if(any(bad <- !is.finite(wIJ))) {
+      warning(paste(sum(bad), "out of", length(bad),
+                    paren(percentage(bad)),
+                    "of the weights for pairwise distances",
+                    "in the K-function were NA or NaN or Inf",
+                    "and were reset to zero"),
+              call.=FALSE)
+      wIJ[bad] <- 0
+    }
+  }
   
+  bkval <- breaks$val
   # determine which distances d_{ij} were observed without censoring
   uncen <- (dIJ <= bI)
   #

@@ -1,12 +1,12 @@
 
-        CHANGES IN spatstat VERSION 1.56-1.049
+        CHANGES IN spatstat VERSION 1.56-1.050
 
 OVERVIEW
 
-    o We thank Corey Anderson, Hadrien Commenges, Ottmar Cronie,
-    Tilman Davies, Maximilian Hesselbarth, Kassel Hingee, Tomas Lazauskas,
-    Marie-Colette van Lieshout, Rasmus Waagepetersen and 'daitakahashi'
-    for contributions.
+    o We thank Corey Anderson, Ryan Arellano, Hadrien Commenges,
+    Ottmar Cronie, Tilman Davies, Maximilian Hesselbarth, Kassel Hingee,
+    Tomas Lazauskas, Marie-Colette van Lieshout, Rasmus Waagepetersen
+    and 'daitakahashi' for contributions.
 
     o Cronie-van Lieshout bandwidth selection.
     
@@ -81,6 +81,11 @@ SIGNIFICANT USER-VISIBLE CHANGES
     
     o eval.im, eval.linim
     New argument 'warn'.
+
+    o Kres, Kcom, Gcom, psstG
+    If any of the calculated weights for the summary function
+    are infinite or NA, they are reset to zero, with a warning,
+    instead of a fatal error.
     
 BUG FIXES
 
@@ -156,6 +161,11 @@ BUG FIXES
    o eval.fv
    If one of the 'fv' objects included ratio information (class 'rat')
    then this was erroneously retained, in some cases.
+   Fixed.
+
+   o linearKcross
+   Crashed (with a message about a missing value of 'correction')
+   if there were no pairs of points to count.
    Fixed.
    
         CHANGES IN spatstat VERSION 1.56-1

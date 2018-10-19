@@ -1,7 +1,7 @@
 #
 # linearK
 #
-# $Revision: 1.48 $ $Date: 2017/08/09 00:21:51 $
+# $Revision: 1.50 $ $Date: 2018/10/19 03:49:29 $
 #
 # K function for point pattern on linear network
 #
@@ -64,7 +64,7 @@ linearKinhom <- function(X, lambda=NULL, r=NULL,  ...,
                      reweight=invlam2, denom=denom, 
   	             r=r, correction=correction, 
 	 	     ratio=ratio, ...)
-		     
+  
   # set appropriate y axis label
   switch(correction,
          Ang  = {
@@ -173,6 +173,7 @@ linearKengine <- function(X, ..., r=NULL, reweight=NULL, denom=1,
             c("distance argument r", "estimated %s"),
             fname = fname,
 	    ratio=ratio)
+    unitname(K) <- unitname(X)
     if(correction == "Ang") {
       # tack on theoretical value
       K <- bind.ratfv(K,
@@ -182,6 +183,7 @@ linearKengine <- function(X, ..., r=NULL, reweight=NULL, denom=1,
                       desc = "theoretical Poisson %s",
 		      ratio = ratio)
     }
+    attr(K, "correction") <- correction
     return(K)
   }
   # compute pairwise distances  
@@ -192,6 +194,7 @@ linearKengine <- function(X, ..., r=NULL, reweight=NULL, denom=1,
     K <- compileK(D, r, denom=denom, fname=fname, ratio=ratio)
     K <- rebadge.fv(K, ylab, fname)
     unitname(K) <- unitname(X)
+    attr(K, "correction") <- correction
     return(K)
   }
   if(correction == "none")

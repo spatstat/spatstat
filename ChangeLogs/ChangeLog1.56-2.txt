@@ -859,3 +859,32 @@ Change log from 1.56-1 to 1.56-2
 ------------- passed R-3.5.1 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
+
+   Kinhom.R
+   spatstat-internal.Rd
+	Kwtsum has new argument 'fatal'
+
+   Kcom.R
+   Gcom.R
+   psstG.R
+	calls Kwtsum with fatal=FALSE
+
+   linearK.R
+	Buglet fix in handling patterns with fewer than 2 points.
+
+   tests/lppstuff.R
+	Test for this bug
+	
+   DESCRIPTION
+   NEWS
+   spatstat-package.Rd
+	Acknowledged Ryan Arellano.   
+
+   DESCRIPTION
+   NEWS
+	version 1.56-1.050
+
+------------- passed R-3.5.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+

@@ -3,7 +3,7 @@
 #
 #	Model compensator of G 
 #
-#	$Revision: 1.8 $	$Date: 2014/11/10 13:20:25 $
+#	$Revision: 1.9 $	$Date: 2018/10/19 03:29:05 $
 #
 ################################################################################
 #
@@ -147,7 +147,7 @@ Gcom <- function(object, r=NULL, breaks=NULL, ...,
                  "border")
     # reduced sample for adjustment integral
     RSD <- Kwtsum(dIJ[okI], bI[okI], wcIJ[okI], b[ZUSED],
-                  rep.int(1, sum(ZUSED)), breaks)
+                  rep.int(1, sum(ZUSED)), breaks, fatal=FALSE)
     Gbcom <- RSD$numerator/(1 + RSD$denominator)
     
     G <- bind.fv(G, data.frame(bcom=Gbcom), "bold(C)~hat(%s)[bord](r)",
