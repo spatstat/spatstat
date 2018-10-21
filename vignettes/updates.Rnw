@@ -64,20 +64,29 @@ z <- mergeSizeTables(z, zutils)
 z <- mergeSizeTables(z, zdata)
 z <- mergeSizeTables(z, zlocal)
 #
-changes <- z[nrow(z), ] - z[z$version == "1.42-0", ]
+currentcount <- z[nrow(z), counts]
+bookcount    <- z[z$version == "1.42-0", counts]
+changes <- currentcount - bookcount
 newobj <- changes[["nobjects"]]
 newdat <- changes[["ndatasets"]] + 1  # counting rule doesn't detect redwood3
+newcode  <- changes[["Rlines"]] + changes[["srclines"]]
+bookcode <- bookcount[["Rlines"]] + bookcount[["srclines"]]
+growth <- signif((100 * newcode)/bookcode, digits=2)
 @ %$
 
 The book \cite{baddrubaturn15}, published in December 2015,
 covers everything in \spst\ up to version \texttt{1.42-0}, 
 released in May 2015.
+
+The \spst\ package has grown by \Sexpr{growth}\% 
+since the book was published.
+This document summarises the most important changes.
+
 The current version of \spst\ is \texttt{\Sexpr{sversion}}.
 It contains \Sexpr{newobj} new functions
 and \Sexpr{newdat} new datasets
 introduced after May 2015. 
 
-This document summarises the most important changes.
 
 <<echo=FALSE,results=hide,fig=FALSE>>=
 options(SweaveHooks=list(fig=function() par(mar=0.2+c(2,4,2,0))))

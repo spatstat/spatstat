@@ -289,7 +289,7 @@ local({
 #
 # tests/kppm.R
 #
-# $Revision: 1.23 $ $Date: 2018/07/21 00:49:50 $
+# $Revision: 1.24 $ $Date: 2018/10/21 03:10:37 $
 #
 # Test functionality of kppm that depends on RandomFields
 # Test update.kppm for old style kppm objects
@@ -401,16 +401,32 @@ local({
 })
 
 local({
+  #' minimum contrast code
   K <- Kest(redwood)
   a <- matclust.estK(K)
   a <- thomas.estK(K)
   a <- cauchy.estK(K)
+  a <- vargamma.estK(K)
   a <- lgcp.estK(K)
+
+  print(a)
+  u <- unitname(a)
+  
   g <- pcf(redwood)
   a <- matclust.estpcf(g)
   a <- thomas.estpcf(g)
   a <- cauchy.estpcf(g)
+  a <- vargamma.estpcf(g)
   a <- lgcp.estpcf(g)
+
+  #' auxiliary functions
+  b <- resolve.vargamma.shape(nu.pcf=1.5)
+
+  aa <- NULL
+  aa <- accumulateStatus(simpleMessage("Woof"), aa)
+  aa <- accumulateStatus(simpleMessage("Sit"),  aa)
+  aa <- accumulateStatus(simpleMessage("Woof"), aa)
+  printStatusList(aa)
 })
 
 local({

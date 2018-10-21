@@ -53,7 +53,7 @@
     Domain of integration. An object of class\code{"owin"} or \code{"tess"}.
   }
   \item{weights}{
-    Optional. Numeric vector of weights associated with the
+    Optional. Numeric vector of \emph{quadrature weights} associated with the
     sample points.
   }
 }

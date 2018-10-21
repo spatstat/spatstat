@@ -298,6 +298,8 @@ optimStatus <- function(x, call=NULL) {
          )
 }
 
+#' general code for collecting status reports
+
 signalStatus <- function(x, errors.only=FALSE) {
   stopifnot(inherits(x, "condition"))
   if(inherits(x, "error")) stop(x)
@@ -316,21 +318,18 @@ printStatus <- function(x, errors.only=FALSE) {
 }
 
 accumulateStatus <- function(x, stats=NULL) {
-  if(is.null(stats))
-    stats <- list(values=list(), frequencies=integer(0))
-  if(!inherits(x, c("error", "warning", "message")))
-    return(stats)
-  with(stats,
-       {
-         same <- unlist(lapply(values, identical, y=x))
-         if(any(same)) {
-           i <- min(which(same))
-           frequencies[i] <- frequencies[i] + 1
-         } else {
-           values <- append(values, list(x))
-           frequencies <- c(frequencies, 1)
-         }
-       })
+  values      <- stats$values      %orifnull% list()
+  frequencies <- stats$frequencies %orifnull% integer(0)
+  if(inherits(x, c("error", "warning", "message"))) {
+    same <- unlist(lapply(values, identical, y=x))
+    if(any(same)) {
+      i <- min(which(same))
+      frequencies[i] <- frequencies[i] + 1L
+    } else {
+      values <- append(values, list(x))
+      frequencies <- c(frequencies, 1L)
+    }
+  }
   stats <- list(values=values, frequencies=frequencies)
   return(stats)
 }
@@ -339,8 +338,9 @@ printStatusList <- function(stats) {
   with(stats,
        {
          for(i in seq_along(values)) {
-           printStatus(values[i])
-           cat(paste("\t", paren(paste(frequencies[i], "times")), "\n"))
+           printStatus(values[[i]])
+           fi <- frequencies[i]
+           splat("\t", paren(paste(fi, ngettext(fi, "time", "times"))))
          }
        }
        )

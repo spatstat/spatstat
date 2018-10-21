@@ -6,6 +6,7 @@
 \alias{[.splitppx}
 \alias{[.diagramobj}
 \alias{[<-.splitppx}
+\alias{accumulateStatus}
 \alias{acedist.show}
 \alias{acedist.noshow}
 \alias{active.interactions}
@@ -426,6 +427,7 @@
 \alias{prefixfv}
 \alias{prepareTitle}
 \alias{printStatus}
+\alias{printStatusList}
 \alias{print.addvar}    
 \alias{print.anylist}    
 \alias{print.autoexec}    
@@ -767,6 +769,7 @@
 \method{[}{splitppx}(x, \dots) <- value
 \method{[}{diagramobj}(x, \dots)
 \method{[}{rat}(x, \dots)
+accumulateStatus(x, stats)
 acedist.show(X, Y, n, d, timelag)
 acedist.noshow(X, Y, n, d)
 active.interactions(object)
@@ -1225,6 +1228,7 @@ objsurfEngine(objfun, optpar, objargs,
 onecolumn(m)
 optimStatus(x, call)
 printStatus(x, errors.only)
+printStatusList(stats)
 signalStatus(x, errors.only)
 outdated.interact(object)
 oversize.quad(Q, \dots, nU, nX, p)

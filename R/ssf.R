@@ -213,6 +213,7 @@ with.ssf <- function(data, ...) {
   return(newval)
 }
 
+## the following is NOT a method for 'apply' !!
 apply.ssf <- function(X, ...) {
   loc <- as.ppp(X)
   val <- marks(X)

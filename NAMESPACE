@@ -32,6 +32,7 @@ useDynLib(spatstat, .registration=TRUE)
 # .................................................. 
 # Automatically-generated list of documented objects 
 # .................................................. 
+export("accumulateStatus")
 export("acedist.noshow")
 export("acedist.show")
 export("active.interactions")
@@ -1778,6 +1779,7 @@ export("print.splitppp")
 export("print.splitppx")
 export("print.ssf")
 export("printStatus")
+export("printStatusList")
 export("print.summary.distfun")
 export("print.summary.fii")
 export("print.summary.funxy")
