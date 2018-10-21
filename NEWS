@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.56-1.052
+        CHANGES IN spatstat VERSION 1.56-1.053
 
 OVERVIEW
 
@@ -22,7 +22,7 @@ OVERVIEW
 
     o Minor bug fixes and improvements.
 
-    o Version nickname: 'Ballistic descent'
+    o Version nickname: 'Daft as a brush'
 
 NEW FUNCTIONS
 
@@ -166,6 +166,10 @@ BUG FIXES
    o linearKcross
    Crashed (with a message about a missing value of 'correction')
    if there were no pairs of points to count.
+   Fixed.
+
+   o envelope.lpp
+   Crashed (randomly) when fix.n=TRUE and fix.marks=TRUE.
    Fixed.
    
         CHANGES IN spatstat VERSION 1.56-1

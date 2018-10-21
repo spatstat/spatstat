@@ -25,7 +25,7 @@ local({
 #
 #  Test validity of envelope data
 #
-#  $Revision: 1.11 $  $Date: 2018/07/12 02:14:13 $
+#  $Revision: 1.12 $  $Date: 2018/10/21 10:01:24 $
 #
 
 require(spatstat)
@@ -153,6 +153,28 @@ local({
   #' envelope.envelope
   B <- envelope(cells, nsim=5, savepatterns=TRUE, savefuns=FALSE)
   envelope(B)
+})
+
+local({
+  X <- runiflpp(10, simplenet)
+  Xr <- X %mark% runif(10)
+  Xc <- X %mark% factor(letters[c(1:4,3,2,4:1)])
+  X2 <- X %mark% data.frame(height=runif(10), width=runif(10))
+
+  E  <- envelope(X,  linearK, nsim=9)
+  Er <- envelope(Xr, linearK, nsim=9)
+  Ec <- envelope(Xc, linearK, nsim=9)
+  E2 <- envelope(X2, linearK, nsim=9)
+  
+  Erf <- envelope(Xr, linearK, nsim=9, fix.n=TRUE)
+  E2f <- envelope(X2, linearK, nsim=9, fix.n=TRUE)
+
+  Ecf <- envelope(Xc, linearK,      nsim=9, fix.n=TRUE)
+  Ecm <- envelope(Xc, linearKcross, nsim=9, fix.n=TRUE, fix.marks=TRUE)
+
+  fut <- lppm(Xc ~ marks)
+  EEf <- envelope(fut, linearK,      fix.n=TRUE)
+  EEm <- envelope(fut, linearKcross, fix.n=TRUE, fix.marks=TRUE)
 })
 #
 #    tests/factorbugs.R

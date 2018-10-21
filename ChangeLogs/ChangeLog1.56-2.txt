@@ -927,3 +927,23 @@ Change log from 1.56-1 to 1.56-2
 ------------- passed R-3.5.1 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
+
+   envelopelpp.R
+	Bug fix.
+	
+   tests/envelopes.R
+	Added tests for envelope.lpp, envelope.lppm
+
+   tests/density.R
+	More tests of Smooth.ppp
+
+   DESCRIPTION
+   NEWS
+   Nickname.txt
+	Nickname 'Daft as a brush'
+	version 1.56-1.053
+
+------------- passed R-3.5.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+

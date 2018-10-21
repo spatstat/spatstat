@@ -408,7 +408,7 @@ local({
 #'                    relrisk(), Smooth()
 #'                    and inhomogeneous summary functions
 #'
-#'  $Revision: 1.32 $  $Date: 2018/10/13 07:56:30 $
+#'  $Revision: 1.33 $  $Date: 2018/10/21 10:09:11 $
 #'
 
 require(spatstat)
@@ -637,6 +637,15 @@ local({
   strike(1e-6)
 
   strike(sigma=Inf)
+
+  ## detect special cases
+  Smooth(longleaf[FALSE])
+  Xconst <- cells %mark% 1
+  Smooth(Xconst, 0.1)
+  Smooth(Xconst, 0.1, at="points")
+  Smooth(cells %mark% runif(42), sigma=Inf)
+  Smooth(cells %mark% runif(42), sigma=Inf, at="points")
+  Smooth(cells %mark% runif(42), sigma=Inf, at="points", leaveoneout=FALSE)
   
   ## validity of Smooth.ppp(at='points')
   Y <- longleaf %mark% runif(npoints(longleaf), min=41, max=43)

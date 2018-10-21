@@ -1,7 +1,7 @@
 #
 #  envelopelpp.R
 #
-#  $Revision: 1.23 $   $Date: 2016/11/23 08:10:44 $
+#  $Revision: 1.24 $   $Date: 2018/10/21 09:58:37 $
 #
 #  Envelopes for 'lpp' objects
 #
@@ -113,7 +113,7 @@ envelope.lpp <-
     Ymarx <- marks(Y)
     NETWORK <- Y$domain
     # expression that will be evaluated
-    simexpr <- expression(rpoislpp(nY, NETWORK) %mark% Ymarx)
+    simexpr <- expression(runiflpp(nY, NETWORK) %mark% Ymarx)
     dont.complain.about(nY, Ymarx, NETWORK)
     # evaluate in THIS environment
     simrecipe <- simulrecipe(type = "csr",
