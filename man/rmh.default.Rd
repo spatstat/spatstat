@@ -401,11 +401,11 @@ trend corresponding to a particular type, there is still a component
      nv  <- 5000
      ns <- 200
    } else {
-     nr  <- 10
+     nr  <- 20
      nv <- 5
      ns <- 20
      oldopt <- spatstat.options()
-     spatstat.options(expand=1.1)
+     spatstat.options(expand=1.05)
    }
    set.seed(961018)
    

@@ -235,7 +235,7 @@ local({
 ##
 ##   tests/rmhBasic.R
 ##
-##   $Revision: 1.11 $  $Date: 2015/12/29 08:54:49 $
+##   $Revision: 1.12 $  $Date: 2018/10/22 09:31:43 $
 #
 # Test examples for rmh.default
 # run to reasonable length
@@ -416,6 +416,14 @@ spatstat.options(expand=1.1)
    XXpalm <- rmh(model=mod01,start=list(n.start=80),
              control=list(nrep=nr, x.cond=coords(YY)))
 
+
+   #' code blocks for various interactions, not otherwise tested
+   rr <- seq(0,0.2,length=8)[-1]
+   gmma <- c(0.5,0.6,0.7,0.8,0.7,0.6,0.5)
+   mod18 <- list(cif="badgey",par=list(beta=4000, gamma=gmma,r=rr,sat=5),
+                 w=square(1))
+   Xbg <- rmh(model=mod18,start=list(n.start=20),
+              control=list(nrep=1e4, periodic=TRUE))
 
 })
 

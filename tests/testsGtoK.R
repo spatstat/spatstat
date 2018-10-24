@@ -239,7 +239,7 @@ local({
 #'
 #'   Various K and L functions and pcf
 #'
-#'   $Revision: 1.4 $  $Date: 2018/07/13 05:15:00 $
+#'   $Revision: 1.5 $  $Date: 2018/10/24 10:35:12 $
 #'
 
 require(spatstat)
@@ -247,7 +247,10 @@ myfun <- function(x,y){(x+1) * y }
 local({
   #' supporting code
   implemented.for.K(c("border", "bord.modif", "translate", "good", "best"),
+                    "polygonal", TRUE)
+  implemented.for.K(c("border", "bord.modif", "translate", "good", "best"),
                     "mask", TRUE)
+  implemented.for.K(c("border", "isotropic"), "mask", FALSE)
   #' Kest special code blocks
   K <- Kest(cells, var.approx=TRUE, ratio=FALSE)
   Z <- distmap(cells) + 1
@@ -255,6 +258,18 @@ local({
              weights=Z, ratio=TRUE)
   Kn <- Kest(cells, correction="none",
              weights=Z, ratio=TRUE)
+  Knb <- Kest(cells, correction=c("border","bord.modif","none"),
+              weights=Z, ratio=TRUE)
+  bigint <- 50000 # This is only "big" on a 32-bit system where
+                  # sqrt(.Machine$integer.max) = 46340.9
+  X <- runifpoint(bigint)
+  Z <- as.im(1/bigint, owin())
+  Kb <- Kest(X, correction=c("border","bord.modif"),
+             rmax=0.02, weights=Z, ratio=TRUE)
+  Kn <- Kest(X, correction="none",
+             rmax=0.02, weights=Z, ratio=TRUE)
+  Knb <- Kest(X, correction=c("border","bord.modif","none"),
+             rmax=0.02, weights=Z, ratio=TRUE)
   #' pcf.ppp special code blocks
   pr  <- pcf(cells, ratio=TRUE, var.approx=TRUE)
   pc  <- pcf(cells, domain=square(0.5))
