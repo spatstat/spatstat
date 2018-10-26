@@ -3,7 +3,7 @@
 #
 #  Method for 'density' for point patterns
 #
-#  $Revision: 1.104 $    $Date: 2018/10/13 08:19:17 $
+#  $Revision: 1.105 $    $Date: 2018/10/26 01:31:56 $
 #
 
 # ksmooth.ppp <- function(x, sigma, ..., edge=TRUE) {
@@ -204,7 +204,7 @@ denspppSEcalc <- function(x, sigma, varcov, ...,
   ## Calculate standard error, rather than estimate
   nx <- npoints(x)
 
-  if(length(sigma) >= 1 && all(is.infinite(sigma))) {
+  if(bandwidth.is.infinite(sigma)) {
     #' special case - uniform
     single <- is.null(dim(weights))
     totwt2 <- if(is.null(weights)) nx else
@@ -235,7 +235,7 @@ denspppSEcalc <- function(x, sigma, varcov, ...,
   ## Usual case
   tau <- taumat <- NULL
   if(is.null(varcov)) {
-    varconst <- 1/(4 * pi * prod(sigma))
+    varconst <- 1/(4 * pi * prod(ensure2vector(sigma)))
     tau <- sigma/sqrt(2)
   } else {
     varconst <- 1/(4 * pi * sqrt(det(varcov)))

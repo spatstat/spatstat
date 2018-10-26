@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.56-1.054
+        CHANGES IN spatstat VERSION 1.56-1.055
 
 OVERVIEW
 
@@ -20,6 +20,8 @@ OVERVIEW
 
     o Bug fix in density.ppp for non-Gaussian kernels.
 
+    o Bug fix in standard error for density.ppp
+    
     o Minor bug fixes and improvements.
 
     o Version nickname: 'Daft as a brush'
@@ -93,6 +95,12 @@ BUG FIXES
     If P was close to 1, the result was sometimes an empty point pattern
     when it should have been identical to X.
     [Spotted by Maximilian Hesselbarth.]
+    Fixed.
+
+    o density.ppp
+    Standard error calculations were incorrect
+    when sigma was a single numeric value.
+    The output was equal to 'sqrt(sigma)' times the correct answer.
     Fixed.
     
     o density.ppp

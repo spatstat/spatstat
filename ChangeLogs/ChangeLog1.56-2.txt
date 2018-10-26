@@ -954,9 +954,25 @@ Change log from 1.56-1 to 1.56-2
 
    DESCRIPTION
    NEWS
-   Nickname.txt
 	version 1.56-1.054
 
 ------------- passed R-3.5.1 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
+
+26 oct 2018
+
+   density.ppp.R
+	Bug fix in standard error calculations.
+
+   bugfixes.Rnw
+	Noted the bug in density.ppp(se=TRUE)
+	
+   DESCRIPTION
+   NEWS
+	version 1.56-1.055
+
+------------- passed R-3.5.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
