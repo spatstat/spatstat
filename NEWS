@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.56-1.055
+        CHANGES IN spatstat VERSION 1.56-1.056
 
 OVERVIEW
 
@@ -11,17 +11,17 @@ OVERVIEW
     o Cronie-van Lieshout bandwidth selection.
     
     o Smoothing functions handle non-Gaussian kernels.
+
+    o Infinite smoothing bandwidths permitted.
     
     o Positive confidence limits for rhohat.
 
+    o Improved bivariate interpolation.
+    
     o subset() method for line segment patterns.
     
-    o Bug fix in rthin.
+    o Important bug fixes in rthin and density.ppp
 
-    o Bug fix in density.ppp for non-Gaussian kernels.
-
-    o Bug fix in standard error for density.ppp
-    
     o Minor bug fixes and improvements.
 
     o Version nickname: 'Daft as a brush'

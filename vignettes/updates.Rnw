@@ -1312,6 +1312,10 @@ also carries these marks in the \verb!$lines! component.
     allow envelopes to be computed
     using simulations conditional on the observed number of points.   
 
+ \item \texttt{eval.im}:  New argument \texttt{warn}.
+   
+ \item \texttt{eval.linim}:  New argument \texttt{warn}.
+   
  \item \texttt{ewcdf}: Argument \texttt{weights} can now be \texttt{NULL}.
    
 %%F
@@ -1650,6 +1654,7 @@ also carries these marks in the \verb!$lines! component.
     \item      Accelerated in the case where weights are given.
     \item New arguments \texttt{fractional} and \texttt{preserve}
       for more accurate discretisation.
+    \item New argument \texttt{savemap}.
     \end{itemize}
 
 
@@ -1680,6 +1685,7 @@ also carries these marks in the \verb!$lines! component.
    \item The number of tick marks in the colour ribbon can now be controlled
     using the argument \texttt{nint} in \texttt{ribargs}.
   \item Improved behaviour when all pixel values are \texttt{NA}.
+  \item Improved handling of tickmarks on colour ribbon.
    \end{itemize}
 
  \item \texttt{plot.imlist}:
@@ -1938,8 +1944,14 @@ also carries these marks in the \verb!$lines! component.
    New argument \texttt{maxColorValue}
 
    \item \texttt{relrisk.ppp}:
-     If \texttt{se=TRUE} and \texttt{at="pixels"}, the result belongs
-     to class \texttt{solist}.
+     \begin{itemize}
+     \item 
+       If \texttt{se=TRUE} and \texttt{at="pixels"}, the result belongs
+       to class \texttt{solist}.
+     \item
+       The arguments \texttt{adjust}, \texttt{edge}, \texttt{diggle}
+       are now explicit formal arguments.
+     \end{itemize}
      
    \texttt{rhohat}:
    \begin{itemize}
@@ -2005,6 +2017,8 @@ also carries these marks in the \verb!$lines! component.
  \item \texttt{rStrauss, rHardcore, rStraussHard, rDiggleGratton, rDGS, rPenttinen:}
    New argument \texttt{drop}.
 
+   \item \texttt{rtemper:} new argument \texttt{track}.
+     
    \item \texttt{rthin}
    \begin{itemize}
       \item	
@@ -2062,6 +2076,8 @@ also carries these marks in the \verb!$lines! component.
    \item Now exits gracefully if any mark values are \texttt{NA}, \texttt{NaN}
      or \texttt{Inf}.
    \item New argument \texttt{geometric} supports geometric-mean smoothing.
+   \item The arguments \texttt{adjust}, \texttt{edge}, \texttt{diggle}
+     are now explicit formal arguments.
    \end{itemize}
 
  \item \texttt{solist}:

@@ -963,7 +963,7 @@ Change log from 1.56-1 to 1.56-2
 26 oct 2018
 
    density.ppp.R
-	Bug fix in standard error calculations.
+	Important bug fix in standard error calculations.
 
    bugfixes.Rnw
 	Noted the bug in density.ppp(se=TRUE)
@@ -976,3 +976,20 @@ Change log from 1.56-1 to 1.56-2
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+   pppmatch.R
+	Tweaked layout
+
+   tests/dominic.R
+	More tests of pppmatch code
+
+   bugfixes.Rnw
+   updates.Rnw
+	up to date.
+	
+   DESCRIPTION
+   NEWS
+	version 1.56-1.056
+
+------------- passed R-3.5.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------

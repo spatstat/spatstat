@@ -821,15 +821,22 @@ K <- ApplyConnected(X, linearK, rule=function(...) list())
 #'
 #'   Additional tests for Dominic Schuhmacher's code
 #'
-#'   $Revision: 1.1 $  $Date: 2018/04/29 11:01:30 $
+#'   $Revision: 1.2 $  $Date: 2018/10/26 08:12:26 $
 
 require(spatstat)
 local({
   X <- runifpoint(10)
   Y <- runifpoint(10)
   d <- pppdist(X, Y, type="ace", show.rprimal=TRUE)
+  d2 <- pppdist(X, Y, type="spa", ccode=FALSE)
+  d3 <- pppdist(X, Y, type="mat", ccode=TRUE, auction=FALSE)
   m <- pppdist.mat(X, Y, q=Inf, cutoff=0.001)
+  a <- matchingdist(d, type="ace")
+  b <- matchingdist(d, type="mat")
 })
+
+
+
 #'
 #'   tests/duplicity.R
 #'
