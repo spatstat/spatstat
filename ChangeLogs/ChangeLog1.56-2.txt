@@ -993,3 +993,24 @@ Change log from 1.56-1 to 1.56-2
 ------------- passed R-3.5.1 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
+
+28 oct 2018
+
+   wingeom.R
+	Bug fix in even.breaks.owin
+	Removed unused code in intersect.owin
+
+   tests/windows.R
+	More tests of window geometry code.
+
+   tests/imageops.R
+	Test more cases of "[.im"
+
+   DESCRIPTION
+   NEWS
+	version 1.56-1.057
+
+------------- passed R-3.5.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+

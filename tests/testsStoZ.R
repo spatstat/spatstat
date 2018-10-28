@@ -1041,7 +1041,7 @@ local({
 #
 # Tests of owin geometry code
 #
-#  $Revision: 1.5 $  $Date: 2018/05/22 10:35:24 $
+#  $Revision: 1.6 $  $Date: 2018/10/28 10:31:56 $
 
 require(spatstat)
 local({
@@ -1073,6 +1073,8 @@ local({
   Vnew <- as.owin(Vdf)
   zz <- mask2df(V)
 
+  RM <- owinpoly2mask(letterR, as.mask(Frame(letterR)), check=TRUE)
+
   #' as.owin
   U <- as.owin(quadscheme(cells))
   U2 <- as.owin(list(xmin=0, xmax=1, ymin=0, ymax=1))
@@ -1084,7 +1086,10 @@ local({
   o21 <- overlap.owin(B2, B1)
   i12 <- intersect.owin(B1, B2, eps=0.01)
   i21 <- intersect.owin(B2, B1, eps=0.01)
-
+  E2 <- emptywindow(square(2))
+  e12 <- intersect.owin(B1, E2)
+  e21 <- intersect.owin(E2, B1)
+  
   #' geometry
   inradius(B1)
   inradius(B2)
@@ -1095,7 +1100,13 @@ local({
   is.convex(B1)
   is.convex(B2)
   is.convex(letterR)
-
+  volume(letterR)
+  perimeter(as.mask(letterR))
+  
+  spatstat.options(Cbdrymask=FALSE)
+  bb <- bdry.mask(letterR)
+  spatstat.options(Cbdrymask=TRUE)
+  
   X <- longleaf[square(50)]
   marks(X) <- marks(X)/8
   D <- discs(X, delta=5, separate=TRUE)
@@ -1106,6 +1117,7 @@ local({
 
 })
 
+reset.spatstat.options()
 ##
 ## tests/xysegment.R
 ##

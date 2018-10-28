@@ -84,7 +84,7 @@ local({
 #
 #  tests/imageops.R
 #
-#   $Revision: 1.14 $   $Date: 2018/05/27 05:12:57 $
+#   $Revision: 1.15 $   $Date: 2018/10/28 10:42:36 $
 #
 
 require(spatstat)
@@ -162,8 +162,35 @@ local({
   RGBscal <- rgbim(X, Y, Z, autoscale=TRUE, maxColorValue=1)
   HSVscal <- hsvim(X, Y, Z, autoscale=TRUE)
 
+  #' cases of [.im
+  Ma <- as.mask(M, dimyx=37)
+  ZM <- Z[raster=Ma, drop=FALSE]
+  ZM[solutionset(Y+Z > 0.4)] <- NA
+  ZF <- cut(ZM, breaks=5)
+  ZL <- (ZM > 0)
+  P <- list(x=c(0.511, 0.774, 0.633, 0.248, 0.798),
+            y=c(0.791, 0.608, 0.337, 0.613, 0.819))
+  zmp <- ZM[P, drop=TRUE]
+  zfp <- ZF[P, drop=TRUE]
+  zlp <- ZL[P, drop=TRUE]
+  P <- as.ppp(P, owin())
+  zmp <- ZM[P, drop=TRUE]
+  zfp <- ZF[P, drop=TRUE]
+  zlp <- ZL[P, drop=TRUE]
+
   #' miscellaneous
   ZZ <- zapsmall(Z, digits=6)
+  ZZ <- zapsmall(Z)
+
+  ZS <- shift(Z, origin="centroid")
+  ZS <- shift(Z, origin="bottomleft")
+
+  plot(Z, ribside="left")
+  plot(Z, ribside="top")
+  
+  h <- hist(Z)
+  plot(h)
+  
 })
 #' indices.R
 #' Tests of code for understanding index vectors etc

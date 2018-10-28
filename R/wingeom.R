@@ -1,7 +1,7 @@
 #
 #	wingeom.R	Various geometrical computations in windows
 #
-#	$Revision: 4.128 $	$Date: 2018/07/03 04:00:30 $
+#	$Revision: 4.130 $	$Date: 2018/10/28 10:27:04 $
 #
 
 volume.owin <- function(x) { area.owin(x) }
@@ -101,9 +101,9 @@ eroded.areas <- function(w, r, subset=NULL) {
 }	
 
 even.breaks.owin <- function(w) {
-	verifyclass(w, "owin")
-        Rmax <- diameter(w)
-        make.even.breaks(Rmax, Rmax/(100 * sqrt(2)))
+  verifyclass(w, "owin")
+  Rmax <- diameter(w)
+  make.even.breaks(bmax=Rmax, npos=128)
 }
 
 unit.square <- function() { owin(c(0,1),c(0,1)) }
@@ -433,19 +433,20 @@ intersect.owin <- function(..., fatal=FALSE, p) {
     return(AB)
   }
 
-  # No existing masks. No clipping applied so far.
-  # Convert one window to a mask with default pixel raster, and intersect.
-  if(Arect) {
-    A <- as.mask(A)
-    AB <- restrict.mask(A, B)
-    if(fatal && is.empty(AB)) stop("Intersection is empty", call.=FALSE)
-    return(AB)
-  } else {
-    B <- as.mask(B)
-    BA <- restrict.mask(B, A)
-    if(fatal && is.empty(BA)) stop("Intersection is empty", call.=FALSE)
-    return(BA)
-  }
+  stop("Internal error: never reached")
+#  # No existing masks. No clipping applied so far.
+#  # Convert one window to a mask with default pixel raster, and intersect.
+#  if(Arect) {
+#    A <- as.mask(A)
+#    AB <- restrict.mask(A, B)
+#    if(fatal && is.empty(AB)) stop("Intersection is empty", call.=FALSE)
+#    return(AB)
+#  } else {
+#    B <- as.mask(B)
+#    BA <- restrict.mask(B, A)
+#    if(fatal && is.empty(BA)) stop("Intersection is empty", call.=FALSE)
+#    return(BA)
+#  }
 }
 
 
