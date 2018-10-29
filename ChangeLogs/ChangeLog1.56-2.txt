@@ -1014,3 +1014,17 @@ Change log from 1.56-1 to 1.56-2
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+!!!!!!!!!!!!! passed 'make bookcheck'  !!!!!!!!!!!!!!!
+
+29 oct 2018
+
+   density.ppp.R
+	Removed unused variable detected by codetools.
+
+   DESCRIPTION
+   NEWS
+	version 1.56-1.058
+
+------------- passed R-3.5.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------

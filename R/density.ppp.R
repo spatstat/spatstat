@@ -3,7 +3,7 @@
 #
 #  Method for 'density' for point patterns
 #
-#  $Revision: 1.105 $    $Date: 2018/10/26 01:31:56 $
+#  $Revision: 1.106 $    $Date: 2018/10/29 01:25:21 $
 #
 
 # ksmooth.ppp <- function(x, sigma, ..., edge=TRUE) {
@@ -39,7 +39,7 @@ density.ppp <- function(x, sigma=NULL, ...,
   ker <- resolve.2D.kernel(..., sigma=sigma, varcov=varcov, x=x, adjust=adjust)
   sigma <- ker$sigma
   varcov <- ker$varcov
-  sigma.is.infinite <- ker$infinite
+  ## sigma.is.infinite <- ker$infinite
   
   if(is.im(weights)) {
     weights <- safelookup(weights, x) # includes warning if NA
