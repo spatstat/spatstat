@@ -25,7 +25,7 @@ local({
 #
 #  Test validity of envelope data
 #
-#  $Revision: 1.12 $  $Date: 2018/10/21 10:01:24 $
+#  $Revision: 1.13 $  $Date: 2018/10/31 03:52:34 $
 #
 
 require(spatstat)
@@ -175,6 +175,13 @@ local({
   fut <- lppm(Xc ~ marks)
   EEf <- envelope(fut, linearK,      fix.n=TRUE)
   EEm <- envelope(fut, linearKcross, fix.n=TRUE, fix.marks=TRUE)
+})
+
+local({
+  #' Test robustness of envelope() sorting procedure when NA's are present
+  #' Fails with spatstat.utils 1.12-0
+  set.seed(42)
+  EP <- envelope(longleaf, pcf, nsim=10, nrank=2)
 })
 #
 #    tests/factorbugs.R

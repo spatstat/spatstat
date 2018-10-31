@@ -196,12 +196,12 @@ of potential impact.
    The standard error (calculated when \texttt{se=TRUE})
    was incorrect when \texttt{sigma} was a single numeric value.
    The output was equal to \texttt{sqrt(sigma)} times the correct answer.
-   \bugger{1.41-1}{february 2015}{1.56-2}{september 2018}   
+   \bugger{1.41-1}{february 2015}{1.57-0}{october 2018}   
    
  \item \texttt{rthin}:
    If \texttt{P} was close to 1, the result was sometimes an empty point pattern
    when it should have been identical to \texttt{X}.
-   \bugger{1.43-0}{october 2015}{1.56-2}{september 2018}   
+   \bugger{1.43-0}{october 2015}{1.57-0}{october 2018}   
    
  \item \texttt{predict.mppm}:
    If the model included random effects, and if the library \pkg{MASS} was not loaded,
@@ -236,7 +236,7 @@ of potential impact.
 \item \texttt{density.ppp}:
   Result was incorrect for non-Gaussian kernels when
   \texttt{at="points"} and \texttt{leaveoneout=FALSE}.
-   \bugger{1.47-0}{october 2016}{1.56-2}{september 2018}   
+   \bugger{1.47-0}{october 2016}{1.57-0}{october 2018}   
   
 \item \texttt{envelope.ppm}:
    If the model was an inhomogeneous Poisson process, 
@@ -297,7 +297,7 @@ of potential impact.
     if the function domain was not a rectangle
     and the function values were categorical (factor) values,
     the result was an empty image.
-    \bugger{1.42-0}{may 2015}{1.56-2}{october 2018}
+    \bugger{1.42-0}{may 2015}{1.57-0}{october 2018}
     
   \end{itemize}
   
@@ -382,7 +382,7 @@ of potential impact.
    
  \item \texttt{nnorient}:
    crashed if the point pattern was empty.
-   \bugger{1.40-0}{december 2015}{1.56-2}{october 2018}   
+   \bugger{1.40-0}{december 2015}{1.57-0}{october 2018}   
  \end{itemize}   
 
  %% LEVEL 4: 

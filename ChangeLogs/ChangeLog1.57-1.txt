@@ -1,0 +1,21 @@
+Change log from 1.57-0 to 1.57-1
+================================
+
+31 oct 2018
+
+   DESCRIPTION
+   NEWS
+   Nickname.txt
+	Initialised as version 1.57-0.001
+	Nicknamed 'The Worm is the Spice'
+
+   DESCRIPTION
+	require spatstat.utils 1.13-0
+	
+   tests/envelopes.R
+	Added test for sorting bug in envelope.matrix
+	
+------------- passed R-3.5.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+

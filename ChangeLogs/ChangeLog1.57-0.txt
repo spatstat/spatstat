@@ -1,4 +1,4 @@
-Change log from 1.56-1 to 1.56-2
+Change log from 1.56-1 to 1.57-0
 ================================
 
 30 july 2018
@@ -1028,3 +1028,24 @@ Change log from 1.56-1 to 1.56-2
 ------------- passed R-3.5.1 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
+
+||||| passed R CMD check --as-cran --run-donttest ||||
+
+============  passed R-devel CMD check ===============
+============    (2018-10-27 r75507)    ===============
+
+30 oct 2018
+
+   Nickname.txt
+   NEWS
+	Nickname 'Zombie apocalypse'
+
+   DESCRIPTION
+   NEWS
+   bugfixes.Rnw
+	version renumbered 1.57-0 for release
+
+------------- passed R-3.5.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+   
