@@ -1,7 +1,7 @@
 #
 #   anova.ppm.R
 #
-#  $Revision: 1.25 $   $Date: 2016/10/23 10:36:58 $
+#  $Revision: 1.27 $   $Date: 2018/11/01 13:49:31 $
 #
 
 anova.ppm <- local({
@@ -205,93 +205,102 @@ anova.ppm <- local({
       ## Put back
       attr(result, "heading") <- h
     }
-  
+
     if(adjust && gibbs) {
-      ## issue warning, if not already given
-      if(warn) warn.once("anovaAdjust",
-                         "anova.ppm now computes the *adjusted* deviances",
-                         "when the models are not Poisson processes.")
-      ## Corrected pseudolikelihood ratio 
-      nmodels <- length(objex)
-      if(nmodels > 1) {
-        cfac <- rep(1, nmodels)
-        for(i in 2:nmodels) {
-          a <- objex[[i-1]]
-          b <- objex[[i]]
-          df <- length(coef(a)) - length(coef(b))
-          if(df > 0) {
-            ibig <- i-1
-            ismal <- i
-          } else {
-            ibig <- i
-            ismal <- i-1
-            df <- -df
-          }
-          bigger <- objex[[ibig]]
-          smaller <- objex[[ismal]]
-          if(df == 0) {
-            gripe("Models", i-1, "and", i, "have the same dimension")
-          } else {
-            bignames <- names(coef(bigger))
-            smallnames <- names(coef(smaller))
-            injection <- match(smallnames, bignames)
-            if(any(uhoh <- is.na(injection))) {
-              gripe("Unable to match",
-                    ngettext(sum(uhoh), "coefficient", "coefficients"),
-                    commasep(sQuote(smallnames[uhoh])),
-                    "of model", ismal, 
-                    "to coefficients in model", ibig)
+      fitz <- lapply(objex, getglmfit)
+      usegam <- any(sapply(fitz, inherits, what="gam"))
+      if(usegam) {
+        gripe("Deviance adjustment is not available for gam fits;",
+              "unadjusted composite deviance calculated.")
+      } else {
+        ## issue warning, if not already given
+        if(warn) warn.once("anovaAdjust",
+                           "anova.ppm now computes the *adjusted* deviances",
+                           "when the models are not Poisson processes.")
+        ## Corrected pseudolikelihood ratio 
+        nmodels <- length(objex)
+        if(nmodels > 1) {
+          cfac <- rep(1, nmodels)
+          for(i in 2:nmodels) {
+            a <- objex[[i-1]]
+            b <- objex[[i]]
+            df <- length(coef(a)) - length(coef(b))
+            if(df > 0) {
+              ibig <- i-1
+              ismal <- i
             } else {
-              thetaDot <- 0 * coef(bigger)
-              thetaDot[injection] <- coef(smaller)
-              JH <- vcov(bigger, what="internals", new.coef=thetaDot, fine=fine)
-              J   <- if(!logi) JH$Sigma else (JH$Sigma1log+JH$Sigma2log)
-              H   <- if(!logi) JH$A1 else JH$Slog
-              G   <- H%*%solve(J)%*%H
-              if(df == 1) {
-                cfac[i] <- H[-injection,-injection]/G[-injection,-injection]
+              ibig <- i
+              ismal <- i-1
+              df <- -df
+            }
+            bigger <- objex[[ibig]]
+            smaller <- objex[[ismal]]
+            if(df == 0) {
+              gripe("Models", i-1, "and", i, "have the same dimension")
+            } else {
+              bignames <- names(coef(bigger))
+              smallnames <- names(coef(smaller))
+              injection <- match(smallnames, bignames)
+              if(any(uhoh <- is.na(injection))) {
+                gripe("Unable to match",
+                      ngettext(sum(uhoh), "coefficient", "coefficients"),
+                      commasep(sQuote(smallnames[uhoh])),
+                      "of model", ismal, 
+                      "to coefficients in model", ibig)
               } else {
-                Res <- residuals(bigger, type="score",
-                                 new.coef=thetaDot, drop=TRUE)
-                U <- integral.msr(Res)
-                Uo <- U[-injection]
-                Uo <- matrix(Uo, ncol=1)
-                Hinv <- solve(H)
-                Ginv <- solve(G)
-                Hoo <- Hinv[-injection,-injection, drop=FALSE]
-                Goo <- Ginv[-injection,-injection, drop=FALSE]
-                ScoreStat <- t(Uo) %*% Hoo %*% solve(Goo) %*% Hoo %*% Uo
-                cfac[i] <- ScoreStat/(t(Uo) %*% Hoo %*% Uo)
+                thetaDot <- 0 * coef(bigger)
+                thetaDot[injection] <- coef(smaller)
+                JH <- vcov(bigger, what="internals",
+                           new.coef=thetaDot, fine=fine)
+                J   <- if(!logi) JH$Sigma else (JH$Sigma1log+JH$Sigma2log)
+                H   <- if(!logi) JH$A1 else JH$Slog
+                G   <- H%*%solve(J)%*%H
+                if(df == 1) {
+                  cfac[i] <- H[-injection,-injection]/G[-injection,-injection]
+                } else {
+                  Res <- residuals(bigger, type="score",
+                                   new.coef=thetaDot, drop=TRUE)
+                  U <- integral.msr(Res)
+                  Uo <- U[-injection]
+                  Uo <- matrix(Uo, ncol=1)
+                  Hinv <- solve(H)
+                  Ginv <- solve(G)
+                  Hoo <- Hinv[-injection,-injection, drop=FALSE]
+                  Goo <- Ginv[-injection,-injection, drop=FALSE]
+                  ScoreStat <- t(Uo) %*% Hoo %*% solve(Goo) %*% Hoo %*% Uo
+                  cfac[i] <- ScoreStat/(t(Uo) %*% Hoo %*% Uo)
+                }
               }
             }
           }
+          ## apply Pace et al (2011) adjustment to pseudo-deviances
+          ## (save attributes of 'result' for later reinstatement)
+          oldresult <- result
+          result$Deviance <- AdjDev <- result$Deviance * cfac
+          cn <- colnames(result)
+          colnames(result)[cn == "Deviance"] <- "AdjDeviance"
+          if("Pr(>Chi)" %in% colnames(result)) 
+            result[["Pr(>Chi)"]] <- c(NA, pchisq(abs(AdjDev[-1L]),
+                                                 df=abs(result$Df[-1L]),
+                                                 lower.tail=FALSE))
+          class(result) <- class(oldresult)
+          attr(result, "heading") <- attr(oldresult, "heading")
         }
-        ## apply Pace et al (2011) adjustment to pseudo-deviances
-        ## (save attributes of 'result' for later reinstatement)
-        oldresult <- result
-        result$Deviance <- AdjDev <- result$Deviance * cfac
-        cn <- colnames(result)
-        colnames(result)[cn == "Deviance"] <- "AdjDeviance"
-        if("Pr(>Chi)" %in% colnames(result)) 
-          result[["Pr(>Chi)"]] <- c(NA, pchisq(abs(AdjDev[-1L]),
-                                               df=abs(result$Df[-1L]),
-                                               lower.tail=FALSE))
-        class(result) <- class(oldresult)
-        attr(result, "heading") <- attr(oldresult, "heading")
+      }
+
+      if(newton) {
+        ## calculation does not include 'covfunargs'
+        cfa <- lapply(lapply(objex, getElement, name="covfunargs"), names)
+        cfa <- unique(unlist(cfa))
+        action <- if(adjust && gibbs) "Adjustment to composite likelihood" else
+                  if(test == "Rao") "Score test calculation" else NULL
+        if(!is.null(action)) 
+          gripe(action, "does not account for",
+                "irregular trend parameters (covfunargs)",
+                commasep(sQuote(cfa)))
       }
     }
-
-    if(newton) {
-      ## calculation does not include 'covfunargs'
-      cfa <- lapply(lapply(objex, getElement, name="covfunargs"), names)
-      cfa <- unique(unlist(cfa))
-      action <- if(adjust && gibbs) "Adjustment to composite likelihood" else
-                if(test == "Rao") "Score test calculation" else NULL
-      if(!is.null(action)) 
-        gripe(action, "does not account for",
-              "irregular trend parameters (covfunargs)",
-              commasep(sQuote(cfa)))
-    }
+    
     return(result)
   }
 

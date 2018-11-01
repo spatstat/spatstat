@@ -1,6 +1,6 @@
 #    mpl.R
 #
-#	$Revision: 5.230 $	$Date: 2018/03/15 08:47:36 $
+#	$Revision: 5.231 $	$Date: 2018/11/01 12:53:52 $
 #
 #    mpl.engine()
 #          Fit a point process model to a two-dimensional point pattern
@@ -115,7 +115,7 @@ mpl.engine <-
     the.version <- list(major=spv$major,
                         minor=spv$minor,
                         release=spv$patchlevel,
-                        date="$Date: 2018/03/15 08:47:36 $")
+                        date="$Date: 2018/11/01 12:53:52 $")
 
     if(want.inter) {
       ## ensure we're using the latest version of the interaction object
@@ -228,7 +228,7 @@ mpl.engine <-
     ## determine algorithm control parameters
     if(is.null(gcontrol)) gcontrol <- list() else stopifnot(is.list(gcontrol))
     gcontrol <- if(!is.null(GLMcontrol)) do.call(GLMcontrol, gcontrol) else
-                if(use.gam) do.call(mgcv::gam.control, gcontrol) else
+                if(want.trend && use.gam) do.call(mgcv::gam.control, gcontrol) else
                 do.call(stats::glm.control, gcontrol)
   
     ## Fit the generalized linear/additive model.

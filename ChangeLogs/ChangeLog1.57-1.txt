@@ -19,3 +19,28 @@ Change log from 1.57-0 to 1.57-1
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+01 nov 2018
+
+   tests/ppmscope.R
+	Test more cases of anova.ppm
+	
+   predict.ppm.R
+	Avoid prediction using 'new.coef' with GAM fits.
+	
+   anova.ppm.R
+	Do not attempt to calculated adjusted deviance for GAM fits.
+	
+   tests/prediction.R
+	Test 'effectfun'
+
+   tests/Kfuns.R
+	Test local K function
+	
+   DESCRIPTION
+   NEWS
+	Version 1.57-0.002
+
+------------- passed R-3.5.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+   

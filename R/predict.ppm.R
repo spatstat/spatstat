@@ -1,7 +1,7 @@
 #
 #    predict.ppm.S
 #
-#	$Revision: 1.108 $	$Date: 2018/04/17 02:41:29 $
+#	$Revision: 1.109 $	$Date: 2018/11/01 13:15:05 $
 #
 #    predict.ppm()
 #	   From fitted model obtained by ppm(),	
@@ -725,6 +725,8 @@ GLMpredict <- function(fit, data, coefs, changecoef=TRUE,
   if(!changecoef && all(ok)) {
     answer <- predict(fit, newdata=data, type=type)
   } else {
+    if(inherits(fit, "gam"))
+      stop("This calculation is not supported for GAM fits", call.=FALSE)
     # do it by hand
     fmla <- formula(fit)
     data$.mpl.Y <- 1

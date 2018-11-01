@@ -471,6 +471,22 @@ local({
   sl2fit <- update(slfit, ~grad + I(grad^2))
   slfitup <- update(slfit, use.internal=TRUE)
   sl2fitup <- update(sl2fit, use.internal=TRUE)
+
+  ## (4) anova.ppm
+  fut1  <- ppm(cells ~ 1, Strauss(0.1))
+  futx  <- ppm(cells ~ x, Strauss(0.1))
+  anova(fut1, test="Chi")
+  anova(futx, test="Chi")
+  fut1a <- ppm(cells ~ 1, Strauss(0.1), rbord=0)
+  anova(fut1a, futx, test="Chi")
+  fut1d <- ppm(cells ~ 1, Strauss(0.1), nd=23)
+  anova(fut1d, futx, test="Chi")
+  ## The following doesn't work yet
+  ## futxyg <- ppm(cells ~ x + s(y), Strauss(0.1), use.gam=TRUE)
+  ## anova(futx, futxyg)
+  fatP <- ppm(amacrine ~ marks)
+  fatM <- ppm(amacrine ~ marks, MultiStrauss(matrix(0.07, 2, 2)))
+  anova(fatP, fatM, test="Chi")
 })
 
 grep#
@@ -660,7 +676,7 @@ local({
 #
 # Things that might go wrong with predict()
 #
-#  $Revision: 1.7 $ $Date: 2018/07/14 06:07:25 $
+#  $Revision: 1.8 $ $Date: 2018/11/01 13:20:23 $
 #
 
 require(spatstat)
@@ -725,6 +741,9 @@ local({
                    Interaction=sample(0:1, 10, TRUE))
   m10 <- PPMmodelmatrix(fut, data=df)
   mmm <- PPMmodelmatrix(fut, Q=quad.ppm(fut))
+  fut1 <- ppm(cells ~ 1, Strauss(0.1))
+  effectfun(fut1, "x")
+  effectfun(fut1, "y")
 })
 
 #

@@ -266,7 +266,7 @@ local({
 #'
 #'   Various K and L functions and pcf
 #'
-#'   $Revision: 1.5 $  $Date: 2018/10/24 10:35:12 $
+#'   $Revision: 1.7 $  $Date: 2018/11/01 13:26:16 $
 #'
 
 require(spatstat)
@@ -327,6 +327,17 @@ local({
   a <- rmax.Ripley(square(1))
   a <- rmax.Ripley(as.polygonal(square(1)))
   a <- rmax.Ripley(letterR)
+  #'
+  #'   local K functions
+  #'
+  fut <- ppm(swedishpines ~ polynom(x,y,2))
+  Z <- predict(fut)
+  Lam <- fitted(fut, dataonly=TRUE)
+  a <- localLinhom(swedishpines, lambda=fut)
+  a <- localLinhom(swedishpines, lambda=Z)
+  a <- localLinhom(swedishpines, lambda=Lam)
+  a <- localLinhom(swedishpines, lambda=Z, correction="none")
+  a <- localLinhom(swedishpines, lambda=Z, correction="translate")
 })
 #
 # tests/kppm.R

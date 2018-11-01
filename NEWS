@@ -1,10 +1,15 @@
 
-        CHANGES IN spatstat VERSION 1.57-0.001
+        CHANGES IN spatstat VERSION 1.57-0.002
 
 OVERVIEW
 
-    o Nothing yet!
-    
+    o Bug fixes.
+
+BUG FIXES
+
+    o anova.ppm
+    Crashed if adjust=TRUE and the models were fitted with use.gam=TRUE.
+    Fixed.
 
         CHANGES IN spatstat VERSION 1.57-0
 
