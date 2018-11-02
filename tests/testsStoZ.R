@@ -140,7 +140,7 @@ reset.spatstat.options()
 #
 ## Tests of *.sigtrace and *.progress
 #
-## $Revision: 1.3 $ $Date: 2015/12/29 08:54:49 $
+## $Revision: 1.4 $ $Date: 2018/11/02 00:53:45 $
 
 require(spatstat)
 local({
@@ -160,6 +160,13 @@ local({
   b <- dg.sigtrace(redwood, Lest, nsim=5, use.theory=FALSE, leaveout=2)
   bb <- dg.progress(redwood, Lest, nsim=5, use.theory=FALSE, leaveout=2,
                     verbose=FALSE)
+  ## other code blocks
+  e <- mad.progress(redwood, nsim=5)
+  e <- mad.progress(redwood, nsim=19, alpha=0.05)
+  f <- dclf.progress(redwood, nsim=5, scale=function(x) x^2)
+  f <- dclf.progress(redwood, nsim=5, normalize=TRUE, deflate=TRUE)
+  g <- dg.progress(redwood, nsim=5, scale=function(x) x^2)
+  g <- dg.progress(redwood, nsim=5, normalize=TRUE, deflate=TRUE)
 })
 #'
 #'     tests/simplepan.R

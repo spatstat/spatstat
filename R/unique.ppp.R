@@ -1,7 +1,7 @@
 #
 #   unique.ppp.R
 #
-# $Revision: 1.32 $  $Date: 2016/04/25 02:34:40 $
+# $Revision: 1.33 $  $Date: 2018/11/02 01:19:08 $
 #
 # Methods for 'multiplicity' co-authored by Sebastian Meyer
 # Copyright 2013 Adrian Baddeley and Sebastian Meyer 
@@ -155,13 +155,16 @@ multiplicityNumeric <- function(x)
 {
   if (anyDuplicated(x)) {
     distmat <- as.matrix(dist(x, method="manhattan"))  # faster than euclid.
-    as.integer(rowSums(distmat == 0))                  # labels are kept
+    result <- as.integer(rowSums(distmat == 0))        # labels are kept
+    if(is.null(names(result)))
+      names(result) <- seq_along(result)
   } else {                                             # -> vector of 1's
     nx <- NROW(x)
     labels <- if (length(dim(x))) rownames(x) else names(x)
     if (is.null(labels)) labels <- seq_len(nx)
-    setNames(rep.int(1L, nx), labels)
+    result <- setNames(rep.int(1L, nx), labels)
   }
+  return(result)
 }
 
 ### multiplicity method for arrays, data frames, and vectors (including lists)
@@ -190,7 +193,8 @@ multiplicity.default <- function (x) {
   hit <- outer(seq_len(nu), seq_len(nd), IdenticalRows, a=ux, b=dx)
   counts <- as.integer(1L + .rowSums(hit, nu, nd))
   dumap <- apply(hit, 2, match, x=TRUE) # was: function(z) min(which(z)))
-  result[dup] <- counts[dumap]
+  result[!dup] <- counts
+  result[dup]  <- counts[dumap]
   return(result)
 }
 

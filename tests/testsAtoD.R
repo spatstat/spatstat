@@ -842,7 +842,7 @@ local({
 #'
 #'  Tests of duplicated/multiplicity code
 #'
-#' $Revision: 1.1 $ $Date: 2018/10/11 13:18:28 $
+#' $Revision: 1.2 $ $Date: 2018/11/02 01:23:09 $
 
 require(spatstat)
 local({
@@ -854,4 +854,17 @@ local({
    mm <- multiplicity(Z)
    marks(Z) <- as.data.frame(marks(Z))
    mz <- multiplicity(Z)
+   ## default method
+   kk <- c(1,2,3,1,1,2)
+   mk <- multiplicity(kk)
+   ml <- multiplicity(list(sin, cos, tan)[kk])
+   mc <- multiplicity(c("sin", "cos", "tan")[kk])
+   if(!identical(ml, mk))
+     stop("multiplicity.default(<list>) disagrees with multiplicityNumeric")
+   if(!identical(mc, mk))
+     stop("multiplicity(<character>) disagrees with multiplicity(<numeric>)")
+   ## data frame method
+   df <- data.frame(x=c(1:4, 1,3,2,4, 0,0, 3,4),
+                    y=factor(rep(letters[1:4], 3)))
+   md <- multiplicity(df)
 })

@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.57-0.002
+        CHANGES IN spatstat VERSION 1.57-0.003
 
 OVERVIEW
 
@@ -7,6 +7,10 @@ OVERVIEW
 
 BUG FIXES
 
+    o multiplicity.default
+    Some entries of the result were incorrectly set to 1.
+    Fixed.
+    
     o anova.ppm
     Crashed if adjust=TRUE and the models were fitted with use.gam=TRUE.
     Fixed.

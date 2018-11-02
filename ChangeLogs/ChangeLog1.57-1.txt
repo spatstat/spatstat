@@ -43,4 +43,24 @@ Change log from 1.57-0 to 1.57-1
 ------------- passed R-3.5.1 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
-   
+
+02 nov 2018
+
+   unique.ppp.R
+	Bug fixes in multiplicity.default
+	
+   tests/duplicity.R
+	Test validity of multiplicity() methods
+
+   tests/sigtraceprogress.R
+	Test more code blocks.
+
+   DESCRIPTION
+   NEWS
+	Version 1.57-0.003
+
+------------- passed R-3.5.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+
