@@ -1,10 +1,12 @@
 
-        CHANGES IN spatstat VERSION 1.57-0.003
+        CHANGES IN spatstat VERSION 1.57-1
 
 OVERVIEW
 
     o Bug fixes.
 
+    o Version nickname: 'Cartoon Physics'
+   
 BUG FIXES
 
     o multiplicity.default

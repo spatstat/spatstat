@@ -321,6 +321,11 @@ of potential impact.
   the contribution from the data point with the smallest $x$ coordinate.
   \bugger{1.26-0}{april 2012}{1.46-1}{july 2016}
   
+  \item \texttt{multiplicity.default}:
+    The first occurrence of any value in the input
+    was incorrectly assigned a multiplicity of 1.
+    \bugger{1.32-0}{december 2013}{1.57-1}{november 2018}   
+    
  \item \texttt{update.ppm}:
    If the argument \texttt{Q} was given,
    the results were usually incorrect, or an error was generated.

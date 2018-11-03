@@ -63,4 +63,23 @@ Change log from 1.57-0 to 1.57-1
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+03 nov 2018
 
+   NEWS
+   Nickname.txt
+	nickname 'Cartoon Physics'
+
+   bugfixes.Rnw
+	Updated to cover the above.
+	
+   DESCRIPTION
+   NEWS
+	version 1.57-1
+
+------------- passed R-3.5.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+||||| passed R CMD check --as-cran --run-donttest ||||
+|||||||||||| passed 'make bookcheck' |||||||||||||||||
+|||||||||  passed R-devel CMD check  |||||||||||||||||
+              (2018-10-27 r75507)
