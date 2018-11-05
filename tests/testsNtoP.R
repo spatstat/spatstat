@@ -570,7 +570,7 @@ reset.spatstat.options()
 #'
 #'   tests/ppp.R
 #'
-#'   $Revision: 1.3 $ $Date: 2018/09/16 04:40:00 $
+#'   $Revision: 1.4 $ $Date: 2018/11/05 00:50:01 $
 #'
 #'  Untested cases in ppp() or associated code
 
@@ -587,13 +587,16 @@ local({
   D <- ppp(X$x, c(X$y[1:7], c(Inf, NA, NaN)), window=letterR,
            marks=data.frame(id=1:10, u=runif(10)))
 
-  #' test print/summary methods on these bad objects
+  #' test print/summary/plot methods on these bad objects
   print(A)
   print(B)
   print(D)
   summary(A)
   summary(B)
   summary(D)
+  plot(A)
+  plot(B)
+  plot(D)
   
   #' subset operator --- cases not covered elsewhere
   #'   subset index is a logical image

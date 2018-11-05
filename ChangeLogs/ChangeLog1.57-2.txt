@@ -1,0 +1,18 @@
+Change log from 1.57-1 to 1.57-2
+================================
+
+05 nov 2018
+
+   DESCRIPTION
+   NEWS
+   Nickname.txt
+	Initialised as version 1.57-1.001
+	Nicknamed 'Chocolate Teapot'
+
+   tests/ppp.R
+	Test plot.ppp for point patterns with rejected points, NA values 
+	
+------------- passed R-3.5.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
