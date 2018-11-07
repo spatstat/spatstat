@@ -838,6 +838,24 @@ local({
 
 
 #'
+#'    tests/deepeepee.R
+#'
+#'    Tests for determinantal point process models
+#' 
+#'    $Revision: 1.2 $ $Date: 2018/11/05 10:32:31 $
+
+require(spatstat)
+local({
+  #' simulate.dppm
+  jpines <- residualspaper$Fig1
+  fit <- dppm(jpines ~ 1, dppGauss)
+  set.seed(10981)
+  simulate(fit, W=square(5))
+  #' simulate.detpointprocfamily - code blocks
+  model <- dppGauss(lambda=100, alpha=.05, d=2)
+  simulate(model, seed=1999, correction="border")
+})
+#'
 #'   tests/duplicity.R
 #'
 #'  Tests of duplicated/multiplicity code

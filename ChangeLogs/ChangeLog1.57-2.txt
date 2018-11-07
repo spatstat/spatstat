@@ -16,3 +16,14 @@ Change log from 1.57-1 to 1.57-2
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+   tests/deepeepee.R [New file]
+   	Tests of code for determinantal models.
+
+   DESCRIPTION
+   NEWS
+	version 1.57-1.002
+
+------------- passed R-3.5.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
