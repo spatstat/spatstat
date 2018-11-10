@@ -1,7 +1,7 @@
 #'
 #'       summary.kppm.R
 #'
-#'   $Revision: 1.5 $  $Date: 2015/05/08 04:25:23 $
+#'   $Revision: 1.6 $  $Date: 2018/11/10 09:43:05 $
 #' 
 
 summary.kppm <- function(object, ..., quick=FALSE) {
@@ -55,30 +55,35 @@ print.summary.kppm <- function(x, ...) {
   if(waxlyrical('extras', terselevel) && nchar(x$Xname) < 20)
     splat("Fitted to point pattern dataset", sQuote(x$Xname))
 
+  Fit <- x$Fit
+  
   if(waxlyrical('gory', terselevel)) {
-    switch(x$Fit$method,
+    switch(Fit$method,
            mincon = {
              splat("Fitted by minimum contrast")
-             splat("\tSummary statistic:", x$Fit$StatName)
+             splat("\tSummary statistic:", Fit$StatName)
+             print(Fit$mcfit)
            },
            clik  =,
            clik2 = {
              splat("Fitted by maximum second order composite likelihood")
-             splat("\trmax =", x$Fit$rmax)
-             if(!is.null(wtf <- x$Fit$weightfun)) {
-               cat("\tweight function: ")
-               print(wtf)
+             splat("\trmax =", Fit$rmax)
+             if(!is.null(wtf <- Fit$weightfun)) {
+               a <- attr(wtf, "selfprint") %orifnull% pasteFormula(wtf)
+               splat("\tweight function:", a)
              }
+             printStatus(optimStatus(Fit$clfit))
            },
            palm = {
              splat("Fitted by maximum Palm likelihood")
-             splat("\trmax =", x$Fit$rmax)
-             if(!is.null(wtf <- x$Fit$weightfun)) {
-               cat("\tweight function: ")
-               print(wtf)
+             splat("\trmax =", Fit$rmax)
+             if(!is.null(wtf <- Fit$weightfun)) {
+               a <- attr(wtf, "selfprint") %orifnull% pasteFormula(wtf)
+               splat("\tweight function:", a)
              }
+             printStatus(optimStatus(Fit$clfit))
            },
-           warning(paste("Unrecognised fitting method", sQuote(x$Fit$method)))
+           warning(paste("Unrecognised fitting method", sQuote(Fit$method)))
            )
   }
 

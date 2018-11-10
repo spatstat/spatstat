@@ -1,12 +1,20 @@
 
-        CHANGES IN spatstat VERSION 1.57-1.003
+        CHANGES IN spatstat VERSION 1.57-1.004
 
 OVERVIEW
 
-    o Nothing yet.
+    o Minor improvements.
 
     o Version nickname: 'Chocolate Teapot'
 
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o summary.kppm
+    Prints more information about algorithm convergence.
+    
+BUG FIXES
+
+    o None!
 
         CHANGES IN spatstat VERSION 1.57-1
 

@@ -41,3 +41,15 @@ Change log from 1.57-1 to 1.57-2
 ------------- passed R-3.5.1 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
+
+   summary.kppm.R
+	Prints more information about algorithm convergence.
+
+   DESCRIPTION
+   NEWS
+	version 1.57-1.004
+
+------------- passed R-3.5.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
