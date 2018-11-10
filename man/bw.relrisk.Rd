@@ -49,10 +49,11 @@
   let \eqn{\hat p_j(u)}{p*[j](u)} be the estimated
   probabilities that a point at location \eqn{u} will belong to
   type \eqn{j}. 
-  Then the bandwidth is chosen to minimise either the likelihood,
+  Then the bandwidth is chosen to minimise either the negative likelihood,
   the squared error, or the approximately standardised squared error, of the
   indicators \eqn{y_{ij}}{y[i,j]} relative to the fitted
-  values  \eqn{\hat p_j(x_i)}{p*[j](x[i])}. See Diggle (2003).
+  values  \eqn{\hat p_j(x_i)}{p*[j](x[i])}. See Diggle (2003)
+  or Baddeley et al (2015).
 
   The result is a numerical value giving the selected bandwidth \code{sigma}.
   The result also belongs to the class \code{"bw.optim"}
@@ -93,6 +94,10 @@
   \testonly{spatstat.options(op)}
 }
 \references{
+  Baddeley, A., Rubak, E. and Turner, R. (2015)
+  \emph{Spatial Point Patterns: Methodology and Applications with R}.
+  Chapman and Hall/CRC Press.
+  
   Diggle, P.J. (2003)
   \emph{Statistical analysis of spatial point patterns},
   Second edition. Arnold.
@@ -101,11 +106,8 @@
   Kernel estimation of relative risk.
   \emph{Bernoulli} \bold{1}, 3--16.
 }
-\author{\adrian
-  
-  
-  and \rolf
-  
+\author{
+  \adrian and \rolf.
 }
 \keyword{spatial}
 \keyword{methods}

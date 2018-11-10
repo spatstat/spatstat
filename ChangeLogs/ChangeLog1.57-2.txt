@@ -27,3 +27,17 @@ Change log from 1.57-1 to 1.57-2
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+07 nov 2018
+
+   bw.relrisk.Rd
+	Minor corrections.
+
+10 nov 2018
+
+   DESCRIPTION
+   NEWS
+	version 1.57-1.003
+
+------------- passed R-3.5.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
