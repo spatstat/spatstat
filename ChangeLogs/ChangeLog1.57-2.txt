@@ -53,3 +53,16 @@ Change log from 1.57-1 to 1.57-2
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+23 nov 2018
+
+   clusterinfo.R
+	Tweaked experimental code.
+	
+   DESCRIPTION
+   NEWS
+	version 1.57-1.005
+
+------------- passed R-3.5.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+   
