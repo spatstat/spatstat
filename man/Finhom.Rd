@@ -134,8 +134,7 @@
   vector with length equal to the number of points in \code{X}.
 
   If \code{lambda} is omitted, then it will be estimated using
-  a `leave-one-out' kernel smoother, as described in Baddeley, \ifelse{latex}{\out{M\o ller}}{Moller}
-  and Waagepetersen (2000).  The estimate \code{lambda[i]} for the
+  a `leave-one-out' kernel smoother.  The estimate \code{lambda[i]} for the
   point \code{X[i]} is computed by removing \code{X[i]} from the
   point pattern, applying kernel smoothing to the remaining points using
   \code{\link{density.ppp}}, and evaluating the smoothed intensity
@@ -169,10 +168,8 @@
 }
 \author{
   Original code by Marie-Colette van Lieshout.
-  C implementation and R adaptation by \adrian
-  
-  
-  and \ege.
+  C implementation and R adaptation
+  by \adrian and \ege.
 }
 \keyword{spatial}
 \keyword{nonparametric}

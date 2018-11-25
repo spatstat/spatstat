@@ -65,4 +65,22 @@ Change log from 1.57-1 to 1.57-2
 ------------- passed R-3.5.1 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
-   
+
+25 nov 2018
+
+   Finhom.Rd
+   Ginhom.Rd
+   Jinhom.Rd
+	Tweaked.
+
+   .travis.yml
+	Suppress testing under R-devel on Mac
+	as travis currently seems to be unable to install R-devel
+	
+   DESCRIPTION
+   NEWS
+	version 1.57-1.006
+
+------------- passed R-3.5.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
