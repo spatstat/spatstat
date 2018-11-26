@@ -1,7 +1,7 @@
 #
 # close3Dpairs.R
 #
-#   $Revision: 1.9 $   $Date: 2017/06/05 10:31:58 $
+#   $Revision: 1.12 $   $Date: 2018/11/26 11:36:07 $
 #
 #  extract the r-close pairs from a 3D dataset
 # 
@@ -9,7 +9,7 @@
 closepairs.pp3 <- local({
 
   closepairs.pp3 <- function(X, rmax, twice=TRUE,
-                             what=c("all", "indices"),
+                             what=c("all", "indices", "ijd"),
                              distinct=TRUE, neat=TRUE, ...) {
     verifyclass(X, "pp3")
     what <- match.arg(what)
@@ -28,7 +28,8 @@ closepairs.pp3 <- local({
                            "xj", "yj", "zj",
                            "dx", "dy", "dz",
                            "d"),
-                   indices = c("i", "j"))
+                   indices = c("i", "j"),
+                   ijd     = c("i", "j", "d"))
     names(nama) <- nama
     if(npts == 0) {
       null.answer <- lapply(nama, nuttink)
@@ -69,6 +70,11 @@ closepairs.pp3 <- local({
                   .Call("close3IJpairs",
                         xx=x, yy=y, zz=z, rr=r, nguess=ng,
                         PACKAGE = "spatstat")
+                },
+                ijd = {
+                  .Call("close3IJDpairs",
+                        xx=x, yy=y, zz=z, rr=r, nguess=ng,
+                        PACKAGE = "spatstat")
                 })
     names(a) <- nama
     ## convert i,j indices to original sequence
@@ -91,12 +97,20 @@ closepairs.pp3 <- local({
     ## add pairs of identical points?
     if(!distinct) {
       ii <- seq_len(npts)
-      xtra <- data.frame(i = ii, j=ii)
-      if(what == "all") {
-        coo <- coords(X)[, c("x","y","z")]
-        zeroes <- rep(0, npts)
-        xtra <- cbind(xtra, coo, coo, zeroes, zeroes, zeroes, zeroes)
-      }
+      xtra <- switch(what,
+                     indices = {
+                       data.frame(i = ii, j=ii)
+                     },
+                     ijd= {
+                       data.frame(i = ii, j=ii, d=0)
+                     },
+                     all = {
+                       coo <- coords(X)[, c("x","y","z")]
+                       zero <- numeric(npts)
+                       cbind(data.frame(i=ii, j=ii),
+                             coo, coo,
+                             data.frame(dx=zero, dy=zero, dz=zero, d=zero))
+                     })
       a <- as.list(rbind(as.data.frame(a), xtra))
     }
     ## done
@@ -122,6 +136,11 @@ closepairs.pp3 <- local({
            indices = {
              with(a, data.frame(i=j,
                                 j=i))
+           },
+           ijd = {
+             with(a, data.frame(i=j,
+                                j=i,
+                                d=d))
            })
   }
   
@@ -134,7 +153,7 @@ closepairs.pp3 <- local({
 
 crosspairs.pp3 <- local({
 
-  crosspairs.pp3 <- function(X, Y, rmax, what=c("all", "indices"), ...) {
+  crosspairs.pp3 <- function(X, Y, rmax, what=c("all", "indices", "ijd"), ...) {
     verifyclass(X, "pp3")
     verifyclass(Y, "pp3")
     what <- match.arg(what)
@@ -145,7 +164,8 @@ crosspairs.pp3 <- local({
                            "xj", "yj", "zj",
                            "dx", "dy", "dz",
                            "d"),
-                   indices = c("i", "j"))
+                   indices = c("i", "j"),
+                   ijd = c("i", "j", "d"))
     names(nama) <- nama
     nX <- npoints(X)
     nY <- npoints(Y)
@@ -193,6 +213,13 @@ crosspairs.pp3 <- local({
                 },
                 indices = {
                   .Call("cross3IJpairs",
+                        xx1=Xx, yy1=Xy, zz1=Xz,
+                        xx2=Yx, yy2=Yy, zz2=Yz,
+                        rr=r, nguess=ng,
+                        PACKAGE = "spatstat")
+                },
+                ijd = {
+                  .Call("cross3IJDpairs",
                         xx1=Xx, yy1=Xy, zz1=Xz,
                         xx2=Yx, yy2=Yy, zz2=Yz,
                         rr=r, nguess=ng,

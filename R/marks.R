@@ -1,7 +1,7 @@
 #
 # marks.R
 #
-#   $Revision: 1.44 $   $Date: 2016/04/25 02:34:40 $
+#   $Revision: 1.45 $   $Date: 2018/11/26 10:24:13 $
 #
 # stuff for handling marks
 #
@@ -332,12 +332,10 @@ markcbind <- function(...) {
   return(marx)
 }
 
-# extract only the columns of (passably) numeric data from a data frame
-numeric.columns <- function(M, logical=TRUE, others=c("discard", "na")) {
-  others <- match.arg(others)
-  M <- as.data.frame(M)
-  if(ncol(M) == 1)
-    colnames(M) <- NULL
+numeric.columns <- local({
+
+  ## extract only the columns of (passably) numeric data from a data frame
+
   process <- function(z, logi, other) {
     if(is.numeric(z)) return(z)
     if(logi && is.logical(z)) return(as.integer(z))
@@ -346,18 +344,28 @@ numeric.columns <- function(M, logical=TRUE, others=c("discard", "na")) {
            discard=NULL,
            NULL)
   }
-  Mprocessed <- lapply(M, process, logi=logical, other=others)
-  isnul <- unlist(lapply(Mprocessed, is.null))
-  if(all(isnul)) {
-    # all columns have been removed
-    # return a data frame with no columns
-    return(as.data.frame(matrix(, nrow=nrow(M), ncol=0)))
+
+  numeric.columns <- function(M, logical=TRUE, others=c("discard", "na")) {
+    others <- match.arg(others)
+    M <- as.data.frame(M)
+    if(ncol(M) == 1)
+      colnames(M) <- NULL
+    Mprocessed <- lapply(M, process, logi=logical, other=others)
+    isnul <- unlist(lapply(Mprocessed, is.null))
+    if(all(isnul)) {
+      #' all columns have been removed
+      #' return a data frame with no columns
+      return(as.data.frame(matrix(, nrow=nrow(M), ncol=0)))
+    }
+    Mout <- do.call(data.frame, Mprocessed[!isnul])
+    if(ncol(M) == 1 && ncol(Mout) == 1)
+      colnames(Mout) <- NULL
+    return(Mout)
   }
-  Mout <- do.call(data.frame, Mprocessed[!isnul])
-  if(ncol(M) == 1 && ncol(Mout) == 1)
-    colnames(Mout) <- NULL
-  return(Mout)
-}
+
+  numeric.columns
+})
+
 
 coerce.marks.numeric <- function(X, warn=TRUE) {
   marx <- marks(X)

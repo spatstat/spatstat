@@ -1,17 +1,25 @@
 
-        CHANGES IN spatstat VERSION 1.57-1.006
+        CHANGES IN spatstat VERSION 1.57-1.007
 
 OVERVIEW
 
     o Minor improvements.
 
-    o Version nickname: 'Chocolate Teapot'
+    o Version nickname: 'Reliability you can count on'
 
+NEW FUNCTIONS
+
+    o markmarkscatter
+    Mark-mark scatterplot
+    
 SIGNIFICANT USER-VISIBLE CHANGES
 
     o summary.kppm
     Prints more information about algorithm convergence.
-    
+
+    o closepairs.pp3, crosspairs.pp3
+    Argument 'what' can take the value "ijd"
+
 BUG FIXES
 
     o None!

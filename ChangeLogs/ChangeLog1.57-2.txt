@@ -84,3 +84,24 @@ Change log from 1.57-1 to 1.57-2
 ------------- passed R-3.5.1 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
+
+26 nov 2018
+
+   close3pair.c
+   close3Dpairs.R
+   closepairs.pp3.Rd
+	New option: what="ijd"
+	
+   markmark.R [New file]
+   markmarkscatter.Rd [New file]
+   	New "mark-mark scatter plot"
+
+   DESCRIPTION
+   NEWS
+   Nickname.txt
+	Nickname 'Reliability You Can Count On'
+	version 1.57-1.007
+
+------------- passed R-3.5.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------

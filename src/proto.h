@@ -199,8 +199,10 @@ void discs2grid(int *, double *, double *, int *, double *, double *, int *, dou
 */
 SEXP close3pairs(SEXP, SEXP, SEXP, SEXP, SEXP); 
 SEXP close3IJpairs(SEXP, SEXP, SEXP, SEXP, SEXP); 
+SEXP close3IJDpairs(SEXP, SEXP, SEXP, SEXP, SEXP); 
 SEXP cross3pairs(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP); 
-SEXP cross3IJpairs(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
+SEXP cross3IJpairs(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP); 
+SEXP cross3IJDpairs(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
 SEXP closePpair(SEXP, SEXP, SEXP, SEXP, SEXP); 
 SEXP Vclosepairs(SEXP, SEXP, SEXP, SEXP); 
 SEXP VcloseIJpairs(SEXP, SEXP, SEXP, SEXP); 

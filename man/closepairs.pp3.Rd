@@ -10,10 +10,10 @@
 }
 \usage{
 \method{closepairs}{pp3}(X, rmax, twice=TRUE,
-                         what=c("all", "indices"),
+                         what=c("all", "indices", "ijd"),
                          distinct=TRUE, neat=TRUE, \dots)
 
-\method{crosspairs}{pp3}(X, Y, rmax, what=c("all", "indices"), \dots) 
+\method{crosspairs}{pp3}(X, Y, rmax, what=c("all", "indices", "ijd"), \dots) 
 }
 \arguments{
   \item{X,Y}{
@@ -35,6 +35,8 @@
     returned information includes the indices \code{i,j} of each pair,
     their \code{x,y,z} coordinates, and the distance between them.
     If \code{what="indices"} then only the indices \code{i,j} are returned.
+    If \code{what="ijd"} then the indices \code{i,j} and the
+    distance \code{d} are returned.
   }
   \item{distinct}{
     Logical value indicating whether to return only the
