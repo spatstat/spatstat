@@ -3,12 +3,16 @@
 #'
 #'   Mark-mark scatterplot
 #'
-#'   $Revision: 1.4 $ $Date: 2018/11/26 12:14:48 $
+#'   $Revision: 1.6 $ $Date: 2018/11/27 02:02:06 $
 
 
 markmarkscatter <- function(X, rmax, ..., col=NULL, symap=NULL, transform=I) {
   if(!is.ppp(X) && !is.pp3(X) && !is.ppx(X))
     stop("X should be a point pattern", call.=FALSE)
+  if(npoints(X) == 0) {
+    warning("Empty point pattern; no plot generated.", call.=FALSE)
+    return(invisible(NULL))
+  }
   stopifnot(is.marked(X))
   marx <- numeric.columns(marks(X))
   nc <- ncol(marx)
@@ -32,12 +36,15 @@ markmarkscatter <- function(X, rmax, ..., col=NULL, symap=NULL, transform=I) {
   d  <- cl$d
   ra <- range(marx)
   Y <- ppp(mi, mj, ra, ra, marks=d, check=FALSE)
+  nY <- npoints(Y)
   Y <- Y[order(d, decreasing=TRUE)]
   if(is.null(symap)) {
     if(is.null(col)) 
       col <- grey(seq(0.9, 0, length.out=128))
-    rd <- c(0, max(d))
-    symap <- symbolmap(cols=col, range=rd, size=1, pch=16)
+    if(nY > 0) {
+      rd <- c(0, max(d))
+      symap <- symbolmap(cols=col, range=rd, size=1, pch=16)
+    }
   }
   plot(Y, ..., symap=symap, main="", leg.side="right")
   axis(1)
@@ -45,13 +52,15 @@ markmarkscatter <- function(X, rmax, ..., col=NULL, symap=NULL, transform=I) {
   mname <- if(transformed) "Transformed mark" else "Mark"
   title(xlab=paste(mname, "of first point"),
         ylab=paste(mname, "of second point"))
-  mbar2 <- mean(marx)^2
-  msd2 <- sqrt(2 * var(marx))
-  hyperbola <- function(x) { mbar2/x }
-  bandline1 <- function(x) { x + msd2 }
-  bandline2 <- function(x) { x - msd2 }
-  curve(hyperbola, from=mbar2/ra[2], to=ra[2], add=TRUE)
-  curve(bandline1,  from=ra[1], to=ra[2]-msd2, add=TRUE)
-  curve(bandline2,  from=ra[1]+msd2, to=ra[2], add=TRUE)
+  if(nY >= 2) {
+    mbar2 <- mean(marx)^2
+    msd2 <- sqrt(2 * var(marx))
+    hyperbola <- function(x) { mbar2/x }
+    bandline1 <- function(x) { x + msd2 }
+    bandline2 <- function(x) { x - msd2 }
+    curve(hyperbola, from=mbar2/ra[2], to=ra[2], add=TRUE)
+    curve(bandline1,  from=ra[1], to=ra[2]-msd2, add=TRUE)
+    curve(bandline2,  from=ra[1]+msd2, to=ra[2], add=TRUE)
+  }
   return(invisible(NULL))
 }

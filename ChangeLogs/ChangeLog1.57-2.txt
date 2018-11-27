@@ -105,3 +105,26 @@ Change log from 1.57-1 to 1.57-2
 ------------- passed R-3.5.1 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
+
+27 nov 2018
+
+   persp.im.Rd
+	Minor improvements.
+
+   markmark.R
+	Bug fixes in handling trivial cases.
+
+   tests/closeshave.R
+   tests/lppstuff.R
+	Tests of markmarkscatter and closepairs code for 3D patterns.
+	
+   DESCRIPTION
+   NEWS
+	version 1.57-1.008
+
+------------- passed R-3.5.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+
+	

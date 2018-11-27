@@ -1,9 +1,11 @@
 
-        CHANGES IN spatstat VERSION 1.57-1.007
+        CHANGES IN spatstat VERSION 1.57-1.008
 
 OVERVIEW
 
-    o Minor improvements.
+    o Mark-mark scatter plot.
+    
+    o Minor improvements and extensions.
 
     o Version nickname: 'Reliability you can count on'
 

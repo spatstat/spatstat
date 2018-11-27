@@ -317,7 +317,7 @@ local({
 #
 # Tests for lpp code
 #
-#  $Revision: 1.22 $  $Date: 2018/10/19 04:06:19 $
+#  $Revision: 1.23 $  $Date: 2018/11/27 01:58:47 $
 
 
 require(spatstat)
@@ -545,6 +545,11 @@ local({
   df <- pointsAlongNetwork(simplenet, 0.05)
   X <- as.ppp(df[,c("x", "y")], W=Frame(simplenet))
   A <- local2lpp(simplenet, seg=df$seg, tp=df$tp, X=X, df.only=FALSE)
+
+  ## mark-mark scatterplot uses pairdist
+  X <- runiflpp(20, simplenet) %mark% runif(20)
+  markmarkscatter(X, 0.2)
+  markmarkscatter(X[FALSE], 0.1)
 })
 
 reset.spatstat.options()

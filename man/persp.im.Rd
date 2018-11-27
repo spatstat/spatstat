@@ -121,8 +121,11 @@
 \seealso{
   \code{\link{perspPoints}},
   \code{\link{perspLines}}
-  for drawing additional points or lines on the surface.
+  for drawing additional points or lines \emph{on the surface}.
 
+  \code{\link[grDevices]{trans3d}} for mapping arbitrary
+  \eqn{(x,y,z)} coordinate locations to the plotting coordinates.
+  
   \code{\link{im.object}},
   \code{\link{plot.im}},
   \code{\link{contour.im}}
@@ -140,13 +143,8 @@
          zlab="Elevation", main="", ticktype="detailed",
          expand=6)
 }
-\author{\adrian
-  
-  
-  \rolf
-  
-  and \ege
-  
+\author{
+  \spatstatAuthors.
 }
 \keyword{spatial}
  

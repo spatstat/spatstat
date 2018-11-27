@@ -85,7 +85,7 @@ local({
 ##  tests/closeshave.R
 ## check 'closepairs/crosspairs' code
 ## validity and memory allocation
-## $Revision: 1.13 $ $Date: 2018/06/07 05:55:00 $
+## $Revision: 1.15 $ $Date: 2018/11/27 02:07:30 $
 
 local({
   r <- 0.12
@@ -198,6 +198,20 @@ local({
   z <- closepairs(Xc, 0.02, what="ijd",     distinct=FALSE)
   z <- closepairs(Xc, 0.02, what="all",     distinct=FALSE)
   spatstat.options(aop)
+})
+
+local({
+  #' Three-dimensional
+  X <- runifpoint3(100)
+  Y <- runifpoint3(100)
+  cl <- closepairs(X, 0.2, what="indices")
+  cl <- closepairs(X, 0.2, what="ijd")
+  cr <- crosspairs(X, Y, 0.2, what="indices")
+  cr <- crosspairs(X, Y, 0.2, what="ijd")
+  #' markmarkscatter uses closepairs.pp3
+  marks(X) <- runif(npoints(X))
+  markmarkscatter(X, 0.2)
+  markmarkscatter(X[FALSE], 0.2)
 })
 
 reset.spatstat.options()
