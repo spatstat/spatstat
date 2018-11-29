@@ -4,7 +4,7 @@
 ##   Simple objects for the elements of a diagram (text, arrows etc)
 ##    that are compatible with plot.layered and plot.solist
 ##
-##   $Revision: 1.12 $ $Date: 2016/04/25 02:34:40 $
+##   $Revision: 1.13 $ $Date: 2018/11/28 10:10:49 $
 
 # ......... internal class 'diagramobj' supports other classes  .........
 
@@ -269,54 +269,65 @@ plot.onearrow <- function(x, ...,
                      pch=pch, cex=cex,
                      do.plot=do.plot && do.points,
                      show.all=show.all)
-  if(do.plot) {
-    if(!do.points && !add)
-      plot(Frame(x), main="", type="n")
-    txt <- attr(x, "txt")
-    argh <- resolve.defaults(list(...), attr(x, "otherargs"))
-    A <- as.numeric(coords(x)[1L,])
-    B <- as.numeric(coords(x)[2L,])
-    V <- B - A
-    AR <- A + retract * V
-    BR <- B - retract * V
-    H <- B - headfraction * V
-    HN <- H + headnick * headfraction * V
-    headlength <- headfraction * sqrt(sum(V^2))
-    halfwidth <- headlength * tan((headangle/2) * pi/180)
-    alpha <- atan2(V[2L], V[1L]) + pi/2
-    U <- c(cos(alpha), sin(alpha))
-    HL <- H + halfwidth * U
-    HR <- H - halfwidth * U
-    Head <- rbind(HN, HL, BR, HR, HN)
-    if(!is.na(col.head))
-      do.call.matched(polygon,
-                      resolve.defaults(list(x=Head),
-                                       argh,
-                                       list(col=col.head, lwd=lwd.head)))
-    if(!zap) {
-      Tail <- AR
-    } else {
-      M <- (AR+HN)/2
-      dM <- (zapfraction/2) * (1-headfraction) * V
-      dM <- dM + c(-dM[2L], dM[1L])
-      ML <- M + dM
-      MR <- M - dM
-      Tail <- rbind(AR, ML, MR)
-    }
-    do.call.matched(lines,
-                    resolve.defaults(list(x=rbind(Tail, Head)),
-                                     argh,
-                                     list(col=col, lwd=lwd)),
-                    extrargs=c("col", "lwd", "lty", "xpd", "lend"))
-    if(!is.null(txt <- attr(x, "txt"))) {
-      H <- (A+B)/2
-      do.call.matched(text.default,
-                      resolve.defaults(
-                        list(x=H[1L], y=H[2L]),
-                        argh,
-                        list(labels=txt, pos=3 + (V[2L] != 0))),
-                      funargs=graphicsPars("text"))
-    }
+  if(do.plot && !do.points && !add)
+    plot(Frame(x), main="", type="n")
+  txt <- attr(x, "txt")
+  argh <- resolve.defaults(list(...), attr(x, "otherargs"))
+  A <- as.numeric(coords(x)[1L,])
+  B <- as.numeric(coords(x)[2L,])
+  V <- B - A
+  AR <- A + retract * V
+  BR <- B - retract * V
+  H <- B - headfraction * V
+  HN <- H + headnick * headfraction * V
+  headlength <- headfraction * sqrt(sum(V^2))
+  halfwidth <- headlength * tan((headangle/2) * pi/180)
+  alpha <- atan2(V[2L], V[1L]) + pi/2
+  U <- c(cos(alpha), sin(alpha))
+  HL <- H + halfwidth * U
+  HR <- H - halfwidth * U
+  Head <- rbind(HN, HR, BR, HL, HN)
+  objHead <- owin(poly=Head[1:4,])
+  parHead <- resolve.defaults(list(col=col.head, lwd=lwd.head),
+                              argh)
+  if(do.plot && !is.na(col.head))
+    do.call.matched(polygon, append(list(x=Head), parHead))
+
+  if(!zap) {
+    Tail <- AR
+  } else {
+    M <- (AR+HN)/2
+    dM <- (zapfraction/2) * (1-headfraction) * V
+    dM <- dM + c(-dM[2L], dM[1L])
+    ML <- M + dM
+    MR <- M - dM
+    Tail <- rbind(MR, ML, AR)
   }
+  parLines <- resolve.defaults(argh,
+                               list(col=col, lwd=lwd))
+  if(do.plot) 
+    do.call.matched(lines,
+                    append(list(x=rbind(Head, Tail)),
+                           parLines),
+                    extrargs=c("col", "lwd", "lty", "xpd", "lend"))
+
+  HT <- rbind(Head, Tail)
+  W <- owin(range(HT[,1]), range(HT[,2]))
+  nht <- nrow(HT)
+  HT <- cbind(HT[-nht, , drop=FALSE], HT[-1, , drop=FALSE])
+  objLines <- as.psp(HT, window=W)
+
+  if(do.plot && !is.null(txt <- attr(x, "txt"))) {
+    H <- (A+B)/2
+    do.call.matched(text.default,
+                    resolve.defaults(
+                      list(x=H[1L], y=H[2L]),
+                      argh,
+                      list(labels=txt, pos=3 + (V[2L] != 0))),
+                    funargs=graphicsPars("text"))
+  }
+
+  attr(result, "objects") <- layered(Head=objHead, Lines=objLines,
+                                     plotargs=list(parHead, parLines))
   return(invisible(result))
 }

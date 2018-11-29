@@ -78,9 +78,9 @@
   \code{NULL}.
 }
 \references{
-  Baddeley, A. (2016)
+  Baddeley, A. (2017)
   Local composite likelihood for spatial point processes.
-  \emph{Spatial Statistics}, in press.
+  \emph{Spatial Statistics} \bold{22}, 261--295.
 
   Baddeley, A., Rubak, E. and Turner, R. (2015)
   \emph{Spatial Point Patterns: Methodology and Applications with R}.

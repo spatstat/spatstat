@@ -126,5 +126,22 @@ Change log from 1.57-1 to 1.57-2
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+   psib.Rd
+   plot.ssf.Rd
+	Updated bibliography.
+
+28 nov 2018
+
+   diagram.R
+	Return value of plot.onearrow now includes the diagram components.
+
+   DESCRIPTION
+   NEWS
+	version 1.57-1.009
+
+------------- passed R-3.5.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
 
 	
