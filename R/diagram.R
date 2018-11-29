@@ -4,7 +4,7 @@
 ##   Simple objects for the elements of a diagram (text, arrows etc)
 ##    that are compatible with plot.layered and plot.solist
 ##
-##   $Revision: 1.13 $ $Date: 2018/11/28 10:10:49 $
+##   $Revision: 1.14 $ $Date: 2018/11/29 05:20:09 $
 
 # ......... internal class 'diagramobj' supports other classes  .........
 
@@ -242,10 +242,17 @@ onearrow <- function(x0, y0, x1, y1, txt=NULL, ...) {
 }
 
 print.onearrow <- function(x, ...) {
-  cat("Single arrow", fill=TRUE)
+  splat("Single arrow from",
+        paren(paste0(x$x[1], ", ", x$y[1])),
+        "to",
+        paren(paste0(x$x[2], ", ", x$y[2])))
   if(!is.null(txt <- attr(x, "txt")))
-    cat("Text:", txt, fill=TRUE)
-  NextMethod("print")
+    splat("Text:", sQuote(txt))
+  if(length(oa <- attr(x, "otherargs"))) {
+    cat("Graphical parameters:\n")
+    print(unlist(oa))
+  }
+  return(invisible(NULL))
 }
 
 plot.onearrow <- function(x, ...,
@@ -272,7 +279,34 @@ plot.onearrow <- function(x, ...,
   if(do.plot && !do.points && !add)
     plot(Frame(x), main="", type="n")
   txt <- attr(x, "txt")
-  argh <- resolve.defaults(list(...), attr(x, "otherargs"))
+  ## resolve formal arguments with those stored in the object
+  saved <- attr(x, "otherargs")
+  if(missing(col))
+    col <- saved[["col"]] %orifnull% col
+  if(missing(lwd))
+    lwd <- saved[["lwd"]] %orifnull% lwd
+  if(missing(pch))
+    pch <- saved[["pch"]] %orifnull% pch
+  if(missing(cex))
+    cex <- saved[["cex"]] %orifnull% cex
+  if(missing(col.head))
+    col.head <- saved[["col.head"]] %orifnull% col.head
+  if(missing(lwd.head))
+    lwd.head <- saved[["lwd.head"]] %orifnull% lwd.head
+  if(missing(retract))
+     retract <- saved[["retract"]] %orifnull% retract
+  if(missing(headfraction))
+    headfraction <- saved[["headfraction"]] %orifnull% headfraction
+  if(missing(headangle))
+    headangle <- saved[["headangle"]] %orifnull% headangle
+  if(missing(headnick))
+    headnick <- saved[["headnick"]] %orifnull% headnick
+  if(missing(zap))
+    zap <- saved[["zap"]] %orifnull% zap
+  if(missing(zapfraction))
+    zapfraction <- saved[["zapfraction"]] %orifnull% zapfraction
+  argh <- list(col=col, lwd=lwd, cex=cex, pch=pch, ...)
+  ## calculate 
   A <- as.numeric(coords(x)[1L,])
   B <- as.numeric(coords(x)[2L,])
   V <- B - A
@@ -303,8 +337,7 @@ plot.onearrow <- function(x, ...,
     MR <- M - dM
     Tail <- rbind(MR, ML, AR)
   }
-  parLines <- resolve.defaults(argh,
-                               list(col=col, lwd=lwd))
+  parLines <- argh
   if(do.plot) 
     do.call.matched(lines,
                     append(list(x=rbind(Head, Tail)),

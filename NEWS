@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.57-1.009
+        CHANGES IN spatstat VERSION 1.57-1.010
 
 OVERVIEW
 
@@ -21,6 +21,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o closepairs.pp3, crosspairs.pp3
     Argument 'what' can take the value "ijd"
+
+    o plot.onearrow
+    Graphical parameters, specified when the object was created,
+    are now taken as the defaults for graphical parameters to the plot.
 
 BUG FIXES
 

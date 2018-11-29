@@ -143,5 +143,16 @@ Change log from 1.57-1 to 1.57-2
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+   diagram.R
+	Improved handling of saved graphical parameters.
+
+   DESCRIPTION
+   NEWS
+	version 1.57-1.010
+
+------------- passed R-3.5.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
 
 	
