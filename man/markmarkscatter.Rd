@@ -7,7 +7,7 @@
   Generates the mark-mark scatter plot of a point pattern.
 }
 \usage{
-markmarkscatter(X, rmax, \dots, col = NULL, symap = NULL, transform=I)
+markmarkscatter(X, rmax, \dots, col = NULL, symap = NULL, transform=I, jit=FALSE)
 }
 \arguments{
   \item{X}{
@@ -24,6 +24,10 @@ markmarkscatter(X, rmax, \dots, col = NULL, symap = NULL, transform=I)
   }
   \item{transform}{
     Optional. A function which should be applied to the mark values.
+  }
+  \item{jit}{
+    Logical value indicating whether mark values should be randomly
+    perturbed using \code{\link[base]{jitter}}. 
   }
   \item{col}{
     Optional. A vector of colour values, or a \code{\link{colourmap}}
@@ -43,6 +47,10 @@ markmarkscatter(X, rmax, \dots, col = NULL, symap = NULL, transform=I)
   pairwise distance between the two spatial points.
   The plot is augmented by three curves explained by
   Ballani et al (2019).
+
+  If the marks only take a few different values, then
+  it is usually appropriate to apply random perturbation (jitter)
+  to the mark values, by setting \code{jit=TRUE}.
 }
 \value{
   Null.
@@ -58,6 +66,8 @@ markmarkscatter(X, rmax, \dots, col = NULL, symap = NULL, transform=I)
 }
 \examples{
   markmarkscatter(longleaf, 10)
+
+  markmarkscatter(spruces, 10, jit=TRUE)
 }
 \keyword{spatial}
 \keyword{hplot}

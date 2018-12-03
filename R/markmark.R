@@ -3,10 +3,11 @@
 #'
 #'   Mark-mark scatterplot
 #'
-#'   $Revision: 1.6 $ $Date: 2018/11/27 02:02:06 $
+#'   $Revision: 1.7 $ $Date: 2018/12/03 10:26:38 $
 
 
-markmarkscatter <- function(X, rmax, ..., col=NULL, symap=NULL, transform=I) {
+markmarkscatter <- function(X, rmax, ..., col=NULL, symap=NULL, transform=I,
+                            jit=FALSE) {
   if(!is.ppp(X) && !is.pp3(X) && !is.ppx(X))
     stop("X should be a point pattern", call.=FALSE)
   if(npoints(X) == 0) {
@@ -24,6 +25,7 @@ markmarkscatter <- function(X, rmax, ..., col=NULL, symap=NULL, transform=I) {
   marx <- marx[,1,drop=TRUE]
   transformed <- !missing(transform)
   marx <- transform(marx)
+  if(jit) marx <- jitter(marx, factor=2.5)
   if(is.ppp(X) || is.pp3(X)) {
     cl <- closepairs(X, rmax, what="ijd")
   } else {
@@ -49,7 +51,9 @@ markmarkscatter <- function(X, rmax, ..., col=NULL, symap=NULL, transform=I) {
   plot(Y, ..., symap=symap, main="", leg.side="right")
   axis(1)
   axis(2)
-  mname <- if(transformed) "Transformed mark" else "Mark"
+  mname <- if(jit && transformed) "Jittered, transformed mark" else
+           if(jit) "Jittered mark" else
+           if(transformed) "Transformed mark" else "Mark"
   title(xlab=paste(mname, "of first point"),
         ylab=paste(mname, "of second point"))
   if(nY >= 2) {
