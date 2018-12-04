@@ -81,7 +81,9 @@ spatstatDPPModelInfo <- function(model){
     resolvedots = function(...){
       ## returning the input arguments p, q, rmin, rmax in list with one element 'ctrl'
       dots <- list(...)
-      return(list(ctrl = dots[c("p", "q", "rmin", "rmax")]))
+      ctrl <- resolve.defaults(dots$ctrl, dots[c("p", "q", "rmin", "rmax")],
+                               .StripNull = TRUE)
+      return(list(ctrl = ctrl))
     },
     ## K-function
     K = function(par, rvals, ...){
