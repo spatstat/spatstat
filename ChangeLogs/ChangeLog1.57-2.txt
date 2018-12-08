@@ -168,4 +168,31 @@ Change log from 1.57-1 to 1.57-2
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+08 dec 2018
+
+   kppm.R
+   clusterfit.Rd
+	clusterfit has new argument 'ctrl'
+
+   clusterinfo.R
+	the 'resolvedots' functions no longer have to handle
+	the minimum contrast control arguments q,p,rmin,rmax
+
+   zclustermodel.R
+	Consequential changes.
 	
+   kppm.Rd
+   dppm.Rd
+	Explained and corrected the description about
+	mincontrast algorithm parameters.
+	
+   DESCRIPTION
+   NEWS
+	version 1.57-1.012
+
+------------- passed R-3.5.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+
+

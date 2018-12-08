@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.57-1.011
+        CHANGES IN spatstat VERSION 1.57-1.012
 
 OVERVIEW
 
@@ -15,6 +15,12 @@ NEW FUNCTIONS
     Mark-mark scatterplot
     
 SIGNIFICANT USER-VISIBLE CHANGES
+
+    o kppm, dppm, clusterfit
+    Changed precedence rule for handling the algorithm parameters
+    in the minimum contrast algorithm. Individually-named arguments
+    'q,p,rmax,rmin' now take precedence over entries
+    with the same names in the list 'ctrl'.
 
     o summary.kppm
     Prints more information about algorithm convergence.

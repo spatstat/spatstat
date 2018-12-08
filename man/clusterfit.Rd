@@ -6,8 +6,9 @@
   Cox point process model to a point pattern by the Method of Minimum Contrast.
 }
 \usage{
-clusterfit(X, clusters, lambda = NULL, startpar = NULL,
-           q = 1/4, p = 2, rmin = NULL, rmax = NULL, \dots,
+clusterfit(X, clusters, lambda = NULL, startpar = NULL, \dots,
+           q = 1/4, p = 2, rmin = NULL, rmax = NULL,
+           ctrl=list(q=q, p=p, rmin=rmin, rmax=rmax),
            statistic = NULL, statargs = NULL, algorithm="Nelder-Mead")
 }
 \arguments{
@@ -38,9 +39,15 @@ clusterfit(X, clusters, lambda = NULL, startpar = NULL,
   }
   \item{q,p}{
     Optional. Exponents for the contrast criterion.
+    See \code{\link{mincontrast}}.
   }
   \item{rmin, rmax}{
     Optional. The interval of \eqn{r} values for the contrast criterion.
+    See \code{\link{mincontrast}}.
+  }
+  \item{ctrl}{
+    Optional. Named list containing values of the parameters
+    \code{q,p,rmin,rmax}.
   }
   \item{\dots}{
     Additional arguments passed to \code{\link{mincontrast}.}
@@ -101,6 +108,12 @@ clusterfit(X, clusters, lambda = NULL, startpar = NULL,
   After the clustering parameters of the model have been estimated by
   minimum contrast \code{lambda} (if non-null) is used to compute the
   additional model parameter \eqn{\mu}{\mu}.
+
+  The algorithm parameters \code{q,p,rmax,rmin} are described in the
+  help for \code{\link{mincontrast}}. They may be provided either
+  as individually-named arguments, or as entries in the list
+  \code{ctrl}. The individually-named arguments \code{q,p,rmax,rmin}
+  override the entries in the list \code{ctrl}.
 }
 \value{
   An object of class \code{"minconfit"}. There are methods for printing

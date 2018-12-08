@@ -170,7 +170,7 @@
       as shown in the Examples.
 
       Additional arguments \code{\dots} will be passed to
-      \code{\link{mincontrast}} to control the minimum contrast fitting
+      \code{\link{clusterfit}} to control the minimum contrast fitting
       algorithm.
     }
     \item{Composite likelihood:}{
@@ -248,7 +248,8 @@
   \code{\link{pcfmodel.dppm}}.
 
   Minimum contrast fitting algorithm:
-  \code{\link{mincontrast}}.
+  higher level interface \code{\link{clusterfit}};
+  low-level algorithm \code{\link{mincontrast}}.
 
   Deterimantal point process models:
   \code{\link{dppGauss}},

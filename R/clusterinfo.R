@@ -32,18 +32,7 @@
          },
          checkclustargs = function(margs, old = TRUE) list(),
          resolvedots = function(...){
-             ## resolve dots for kppm and friends allowing for old/new par syntax
-             dots <- list(...)
-             nam <- names(dots)
-             out <- list()
-             if("ctrl" %in% nam){
-                 out$ctrl <- dots$ctrl
-             } else{
-                 out$ctrl <- dots[nam %in% c("p", "q", "rmin", "rmax")]
-             }
-             chk <- .Spatstat.ClusterModelInfoTable$Thomas$checkpar
-             if(!is.null(dots$startpar)) out$startpar <- chk(dots$startpar)
-             return(out)
+           return(list(...))
          },
          # density function for the distance to offspring
          ddist = function(r, scale, ...) {
@@ -159,18 +148,7 @@
          },
          checkclustargs = function(margs, old = TRUE) list(),
          resolvedots = function(...){
-             ## resolve dots for kppm and friends allowing for old/new par syntax
-             dots <- list(...)
-             nam <- names(dots)
-             out <- list()
-             if("ctrl" %in% nam){
-                 out$ctrl <- dots$ctrl
-             } else{
-                 out$ctrl <- dots[nam %in% c("p", "q", "rmin", "rmax")]
-             }
-             chk <- .Spatstat.ClusterModelInfoTable$MatClust$checkpar
-             if(!is.null(dots$startpar)) out$startpar <- chk(dots$startpar)
-             return(out)
+           return(list(...))
          },
          kernel = function(par, rvals, ...) {
              scale <- par[2L]
@@ -270,18 +248,7 @@
          },
          checkclustargs = function(margs, old = TRUE) list(),
          resolvedots = function(...){
-             ## resolve dots for kppm and friends allowing for old/new par syntax
-             dots <- list(...)
-             nam <- names(dots)
-             out <- list()
-             if("ctrl" %in% nam){
-                 out$ctrl <- dots$ctrl
-             } else{
-                 out$ctrl <- dots[nam %in% c("p", "q", "rmin", "rmax")]
-             }
-             chk <- .Spatstat.ClusterModelInfoTable$Cauchy$checkpar
-             if(!is.null(dots$startpar)) out$startpar <- chk(dots$startpar)
-             return(out)
+           return(list(...))
          },
          # density function for the distance to offspring
          ddist = function(r, scale, ...) {
@@ -366,30 +333,24 @@
              return(margs)
          },
          resolvedots = function(...){
-             ## resolve dots for kppm and friends allowing for old/new par syntax
-             dots <- list(...)
-             nam <- names(dots)
-             out <- list()
-             if("ctrl" %in% nam){
-                 out$ctrl <- dots$ctrl
-             } else{
-                 out$ctrl <- dots[nam %in% c("p", "q", "rmin", "rmax")]
-             }
-             chk <- .Spatstat.ClusterModelInfoTable$VarGamma$checkpar
-             if(!is.null(dots$startpar)) out$startpar <- chk(dots$startpar)
-             nu <- dots$nu
-             if(is.null(nu)){
-                 nu <- try(resolve.vargamma.shape(nu.ker=dots$nu.ker, nu.pcf=dots$nu.pcf)$nu.ker,
-                           silent = TRUE)
-                 if(inherits(nu, "try-error"))
-                     nu <- -1/4
-             } else{
-                 check.1.real(nu)
-                 stopifnot(nu > -1/2)
-             }
-             out$margs <- list(nu.ker=nu, nu.pcf=2*nu+1)
-             out$covmodel <- list(type="Kernel", model="VarGamma", margs=out$margs)
-             return(out)
+           ## resolve dots for kppm and friends allowing for old/new par syntax
+           dots <- list(...)
+           out <- list()
+           nu <- dots$nu
+           if(is.null(nu)){
+             nu <- try(resolve.vargamma.shape(nu.ker=dots$nu.ker,
+                                              nu.pcf=dots$nu.pcf)$nu.ker,
+                       silent = TRUE)
+             if(inherits(nu, "try-error"))
+               nu <- -1/4
+           } else {
+             check.1.real(nu)
+             stopifnot(nu > -1/2)
+           }
+           out$margs <- list(nu.ker=nu, nu.pcf=2*nu+1)
+           out$covmodel <- list(type="Kernel", model="VarGamma",
+                                margs=out$margs)
+           return(out)
          },
          # density function for the distance to offspring
          ddist = function(r, scale, nu, ...) {
@@ -542,44 +503,37 @@
          },
          checkclustargs = function(margs, old = TRUE) return(margs),
          resolvedots = function(...){
-             ## resolve dots for kppm and friends allowing for old/new par syntax
-             dots <- list(...)
-             nam <- names(dots)
-             out <- list()
-             if("ctrl" %in% nam){
-                 out$ctrl <- dots$ctrl
+           ## resolve dots for kppm and friends allowing for old/new par syntax
+           dots <- list(...)
+           nam <- names(dots)
+           out <- list()
+           cmod <- dots$covmodel
+           model <- cmod$model %orifnull% dots$model %orifnull% "exponential"
+           margs <- NULL
+           if(!identical(model, "exponential")) {
+             ## get the 'model generator' 
+             modgen <- getRandomFieldsModelGen(model)
+             attr(model, "modgen") <- modgen
+             if(is.null(cmod)){
+               margsnam <- names(formals(modgen))
+               margsnam <- margsnam[!(margsnam %in% c("var", "scale"))]
+               margs <- dots[nam %in% margsnam]
              } else{
-                 out$ctrl <- dots[nam %in% c("p", "q", "rmin", "rmax")]
+               margs <- cmod[names(cmod)!="model"]
              }
-             chk <- .Spatstat.ClusterModelInfoTable$LGCP$checkpar
-             if(!is.null(dots$startpar)) out$startpar <- chk(dots$startpar)
-             cmod <- dots$covmodel
-             model <- cmod$model %orifnull% dots$model %orifnull% "exponential"
+           }
+           if(length(margs)==0) {
              margs <- NULL
-             if(!identical(model, "exponential")) {
-               ## get the 'model generator' 
-               modgen <- getRandomFieldsModelGen(model)
-               attr(model, "modgen") <- modgen
-               if(is.null(cmod)){
-                 margsnam <- names(formals(modgen))
-                 margsnam <- margsnam[!(margsnam %in% c("var", "scale"))]
-                 margs <- dots[nam %in% margsnam]
-               } else{
-                 margs <- cmod[names(cmod)!="model"]
-               }
-             }
-             if(length(margs)==0) {
-                 margs <- NULL
-             } else {
-	         # detect anisotropic model
-		 if("Aniso" %in% names(margs))
-		   stop("Anisotropic covariance models cannot be used",
-		        call.=FALSE)
-	     }
-             out$margs <- margs
-             out$model <- model
-             out$covmodel <- list(type="Covariance", model=model, margs=margs)
-             return(out)
+           } else {
+             ## detect anisotropic model
+             if("Aniso" %in% names(margs))
+               stop("Anisotropic covariance models cannot be used",
+                    call.=FALSE)
+           }
+           out$margs <- margs
+           out$model <- model
+           out$covmodel <- list(type="Covariance", model=model, margs=margs)
+           return(out)
          },
          isPCP=FALSE,
          ## calls relevant covariance function from RandomFields package

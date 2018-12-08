@@ -3,7 +3,7 @@
 #
 # kluster/kox point process models
 #
-# $Revision: 1.139 $ $Date: 2018/05/12 16:20:53 $
+# $Revision: 1.140 $ $Date: 2018/12/08 10:49:03 $
 #
 
 kppm <- function(X, ...) {
@@ -219,16 +219,31 @@ kppmMinCon <- function(X, Xname, po, clusters, control, statistic, statargs,
 }
 
 clusterfit <- function(X, clusters, lambda = NULL, startpar = NULL,
-                       q=1/4, p=2, rmin=NULL, rmax=NULL, ...,
+                       ...,
+                       q=1/4, p=2, rmin=NULL, rmax=NULL, 
+                       ctrl=list(q=q, p=p, rmin=rmin, rmax=rmax),
                        statistic = NULL, statargs = NULL,
                        algorithm="Nelder-Mead"){
   ## If possible get dataname from dots
   dataname <- list(...)$dataname
   ## Cluster info:
   info <- spatstatClusterModelInfo(clusters)
-  ## Detect DPP usage
+  ## Determine model type
+  isPCP <- info$isPCP
   isDPP <- inherits(clusters, "detpointprocfamily")
-  
+
+  ## resolve algorithm parameters
+  default.ctrl <- list(q=if(isDPP) 1/2 else 1/4,
+                       p=2,
+                       rmin=NULL,
+                       rmax=NULL)
+  given.ctrl <- if(missing(ctrl)) list() else ctrl[names(default.ctrl)]
+  given.args <- c(if(missing(q)) NULL else list(q=q),
+                  if(missing(p)) NULL else list(p=p),
+                  if(missing(rmin)) NULL else list(rmin=rmin),
+                  if(missing(rmax)) NULL else list(rmax=rmax))
+  ctrl <- resolve.defaults(given.args, given.ctrl, default.ctrl)
+  ##
   if(inherits(X, "ppp")){
       if(is.null(dataname))
          dataname <- getdataname(short.deparse(substitute(X), 20), ...)
@@ -302,9 +317,7 @@ clusterfit <- function(X, clusters, lambda = NULL, startpar = NULL,
     algorithm <- alg$algorithm
   }
 
-  isPCP <- info$isPCP
-  if(isDPP && missing(q)) q <- 1/2
-  dots <- info$resolvedots(..., q = q, p = p, rmin = rmin, rmax = rmax)
+  dots <- info$resolvedots(...)
   # determine initial values of parameters
   startpar <- info$checkpar(startpar)
   # fit
@@ -352,7 +365,7 @@ clusterfit <- function(X, clusters, lambda = NULL, startpar = NULL,
   mcargs <- resolve.defaults(list(observed=Stat,
                                   theoretical=theoret,
                                   startpar=startpar,
-                                  ctrl=dots$ctrl,
+                                  ctrl=ctrl,
                                   method=algorithm,
                                   fvlab=list(label="%s[fit](r)",
                                       desc=desc),
@@ -364,9 +377,9 @@ clusterfit <- function(X, clusters, lambda = NULL, startpar = NULL,
                                   funaux=info$funaux,
 				  adjustment=adjustment),
                              list(...))
-  if(isDPP && algorithm=="Brent" && changealgorithm){
+
+  if(isDPP && algorithm=="Brent" && changealgorithm)
     mcargs <- resolve.defaults(mcargs, list(lower=alg$lower, upper=alg$upper))
-  }
   
   mcfit <- do.call(mincontrast, mcargs)
   # extract fitted parameters and reshape

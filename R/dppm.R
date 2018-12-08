@@ -1,7 +1,7 @@
 #'
 #'     dppm.R
 #'
-#'     $Revision: 1.8 $   $Date: 2017/06/05 10:31:58 $
+#'     $Revision: 1.9 $   $Date: 2018/12/08 11:14:52 $
 
 dppm <-
   function(formula, family, data=NULL,
@@ -79,9 +79,7 @@ spatstatDPPModelInfo <- function(model){
     },
     checkclustargs = function(margs, old = TRUE) list(),
     resolvedots = function(...){
-      ## returning the input arguments p, q, rmin, rmax in list with one element 'ctrl'
-      dots <- list(...)
-      return(list(ctrl = dots[c("p", "q", "rmin", "rmax")]))
+      return(list(...))
     },
     ## K-function
     K = function(par, rvals, ...){

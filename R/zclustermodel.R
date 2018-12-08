@@ -9,10 +9,8 @@ zclustermodel <- function(name="Thomas", ..., mu, kappa, scale) {
   if(missing(mu)) stop("The mean cluster size mu must be given")
   if(missing(scale)) stop("The cluster scale must be given")
   rules <- spatstatClusterModelInfo(name)
-  argh <- list(startpar=c(kappa=kappa, scale=scale), ...)
-  argh <- do.call(rules$resolvedots, argh)
-  par <- argh$startpar
-  other <- argh[names(argh) != "startpar"]
+  par <- c(kappa=kappa, scale=scale)
+  other <- rules$resolvedots(...)
   clustargs <- rules$checkclustargs(other$margs, old=FALSE)
   out <- list(name=name, rules=rules, par=par, mu=mu, clustargs=clustargs,
               other=other)
