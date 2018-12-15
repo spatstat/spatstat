@@ -342,7 +342,7 @@ local({
 #
 # tests/kppm.R
 #
-# $Revision: 1.24 $ $Date: 2018/10/21 03:10:37 $
+# $Revision: 1.25 $ $Date: 2018/12/15 10:22:17 $
 #
 # Test functionality of kppm that depends on RandomFields
 # Test update.kppm for old style kppm objects
@@ -480,6 +480,22 @@ local({
   aa <- accumulateStatus(simpleMessage("Sit"),  aa)
   aa <- accumulateStatus(simpleMessage("Woof"), aa)
   printStatusList(aa)
+
+  RMIN <- 0.01
+  fit <- kppm(redwood ~ 1, ctrl=list(rmin=RMIN,q=1/2))
+  if(fit$Fit$mcfit$ctrl$rmin != RMIN)
+    stop("kppm did not handle parameter 'rmin' in argument 'ctrl' ")
+  fit <- kppm(redwood ~ 1, ctrl=list(rmin=0,q=1/2), rmin=RMIN)
+  if(fit$Fit$mcfit$ctrl$rmin != RMIN)
+    stop("kppm did not handle parameter 'rmin' in argument 'ctrl'")
+
+  RMIN <- 2
+  fit <- dppm(swedishpines~1, dppGauss(), ctrl=list(rmin=RMIN,q=1))
+  if(fit$Fit$mcfit$ctrl$rmin != RMIN)
+    stop("dppm did not handle parameter 'rmin' in argument 'ctrl'")
+  fit <- dppm(swedishpines~1, dppGauss(), ctrl=list(rmin=0,q=1), rmin=RMIN)
+  if(fit$Fit$mcfit$ctrl$rmin != RMIN)
+    stop("dppm did not handle argument 'rmin'")
 })
 
 local({

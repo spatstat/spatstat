@@ -194,5 +194,17 @@ Change log from 1.57-1 to 1.57-2
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+15 dec 2018
 
+   tests/kppm.R
+	Added test of handling
+	the minimum contrast control arguments q,p,rmin,rmax
+
+   DESCRIPTION
+   NEWS
+	version 1.57-1.013
+
+------------- passed R-3.5.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
 
