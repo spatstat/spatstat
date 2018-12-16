@@ -94,7 +94,9 @@ void hasX3pclose(int *, double *, double *, double *, double *, double *, int *)
 void hasXY3close(int *, double *, double *, double *, int *, double *, double *, double *, double *, int *); 
 void hasXY3pclose(int *, double *, double *, double *, int *, double *, double *, double *, double *, double *, int *);
 void Cidw(double *, double *, double *, int *, double *, double *, int *, double *, double *, int *, double *, double *, double *, double *); 
-void idwloo(double *, double *, double *, int *, double *, double *, double *, double *);
+void Cidw2(double *, double *, double *, int *, double *, double *, int *, double *, double *, int *, double *, double *, double *, double *, double *, double *); 
+void idwloo(double *, double *, double *, int *, double *, double *, double *, double *); 
+void idwloo2(double *, double *, double *, int *, double *, double *, double *, double *, double *, double *);
 void locprod(int *, double *, double *, double *, int *, double *, double *); 
 void locxprod(int *, double *, double *, int *, double *, double *, double *, int *, double *, double *);
 void KborderI(int *, double *, double *, double *, int *, double *, int *, int *); 

@@ -208,3 +208,21 @@ Change log from 1.57-1 to 1.57-2
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+16 dec 2018
+
+   idw.c
+   idw.R
+	Added code for variance calculation
+
+   idw.R
+   idw.Rd
+	New argument 'se'.
+
+   DESCRIPTION
+   NEWS
+	version 1.57-1.014
+
+------------- passed R-3.5.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+

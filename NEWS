@@ -1,9 +1,13 @@
 
-        CHANGES IN spatstat VERSION 1.57-1.013
+        CHANGES IN spatstat VERSION 1.57-1.014
 
 OVERVIEW
 
+    o We thank Andrew P Webster for contributions.
+    
     o Mark-mark scatter plot.
+
+    o Standard error calculation for inverse-distance weighting
     
     o Minor improvements and extensions.
 
@@ -16,6 +20,9 @@ NEW FUNCTIONS
     
 SIGNIFICANT USER-VISIBLE CHANGES
 
+    o idw
+    Standard errors can now be calculated by setting 'se=TRUE'.
+    
     o kppm, dppm, clusterfit
     Changed precedence rule for handling the algorithm parameters
     in the minimum contrast algorithm. Individually-named arguments
