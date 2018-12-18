@@ -1,7 +1,10 @@
 /*
   Function declarations from mhsnoop.c
 
-  $Revision: 1.4 $ $Date: 2013/05/27 02:09:10 $
+  $Revision: 1.5 $ $Date: 2018/12/18 02:43:11 $
+
+  Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2018
+  Licence: GNU Public Licence >= 2
 
 */
 

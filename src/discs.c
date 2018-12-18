@@ -6,7 +6,10 @@
 
   Fill binary mask with discs with given centres and radii
 
-  $Revision: 1.4 $  $Date: 2014/10/05 03:04:08 $
+  $Revision: 1.5 $  $Date: 2018/12/18 02:43:11 $
+
+  Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2018
+  Licence: GNU Public Licence >= 2
 
 */
 

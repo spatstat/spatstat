@@ -5,7 +5,10 @@
 
    Yes, really
 
-   $Revision: 1.11 $ $Date: 2016/09/30 10:57:20 $ 
+   $Revision: 1.12 $ $Date: 2018/12/18 02:43:11 $ 
+
+  Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2018
+  Licence: GNU Public Licence >= 2
 
    Csumouter
    Cwsumouter

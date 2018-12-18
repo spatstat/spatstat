@@ -20,7 +20,10 @@
 
   SINGLE     if defined, capture only i < j
 
-  $Revision: 1.10 $ $Date: 2018/02/02 08:34:00 $
+  $Revision: 1.11 $ $Date: 2018/12/18 02:43:11 $
+
+  Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2018
+  Licence: GNU Public Licence >= 2
 
 */
 

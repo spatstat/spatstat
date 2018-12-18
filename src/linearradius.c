@@ -7,7 +7,10 @@
 
    Bounding radius in linear network
 
-   $Revision: 1.1 $  $Date: 2016/07/19 06:52:57 $
+   $Revision: 1.2 $  $Date: 2018/12/18 02:43:11 $
+
+  Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2018
+  Licence: GNU Public Licence >= 2
 
 */
 

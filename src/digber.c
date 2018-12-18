@@ -10,7 +10,10 @@
        phi(t, r) = 2 r^2 * (acos(y) - y sqrt(1 - y^2))
                         where y = t/(2r).
 
-  $Revision: 1.7 $     $Date: 2013/08/24 11:13:43 $
+  $Revision: 1.8 $     $Date: 2018/12/18 02:43:11 $
+
+  Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2018
+  Licence: GNU Public Licence >= 2
 
  */
 

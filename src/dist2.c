@@ -11,6 +11,10 @@
 
    dist2Mthresh: same as dist2thresh, but does not assume
                  the points are within one period of each other.
+
+  Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2018
+  Licence: GNU Public Licence >= 2
+
 */
 
 double dist2(u,v,x,y,period)

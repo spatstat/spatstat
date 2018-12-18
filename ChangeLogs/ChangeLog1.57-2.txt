@@ -226,3 +226,20 @@ Change log from 1.57-1 to 1.57-2
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+   idw.Rd
+	Added an explanation of the standard error calculation.
+
+18 dec 2018
+
+   src/*.c
+   src/*.h
+	Added copyright message if not already present.
+
+   DESCRIPTION
+   NEWS
+	version 1.57-1.015
+
+------------- passed R-3.5.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+

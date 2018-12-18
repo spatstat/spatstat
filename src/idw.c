@@ -3,13 +3,16 @@
 
   Inverse-distance weighted smoothing
 
-  $Revision: 1.10 $ $Date: 2018/12/16 03:08:30 $
+  $Revision: 1.11 $ $Date: 2018/12/18 02:43:11 $
 
   Cidw    inverse distance smoothing from data points onto pixel grid
   idwloo  leave-one-out estimate at data points
 
   Cidw2   Cidw with variance estimate
   idwloo2 idwloo with variance estimate
+
+  Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2018
+  Licence: GNU Public Licence >= 2
 
 */
 

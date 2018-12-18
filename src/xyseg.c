@@ -6,7 +6,10 @@
 
   xysegint     compute intersections between line segments
 
-  $Revision: 1.19 $     $Date: 2013/09/18 04:59:17 $
+  $Revision: 1.20 $     $Date: 2018/12/18 02:43:11 $
+
+  Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2018
+  Licence: GNU Public Licence >= 2
 
  */
 

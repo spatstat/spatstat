@@ -11,7 +11,10 @@
   HUH        #defined if debugging is on
   SWAP       swap macro
 
-  $Revision: 1.2 $ $Date: 2016/10/04 06:24:22 $
+  $Revision: 1.3 $ $Date: 2018/12/18 02:43:11 $
+
+  Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2018
+  Licence: GNU Public Licence >= 2
 
 */
 

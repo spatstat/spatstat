@@ -5,7 +5,10 @@
 
   data-to-data functions
 
-  $Revision: 1.5 $ $Date: 2013/09/18 04:28:45 $
+  $Revision: 1.6 $ $Date: 2018/12/18 02:43:11 $
+
+  Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2018
+  Licence: GNU Public Licence >= 2
 
   macros: 
 

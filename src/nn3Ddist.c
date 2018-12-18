@@ -4,7 +4,10 @@
 
   Nearest Neighbour Distances in 3D 
 
-  $Revision: 1.11 $     $Date: 2013/11/03 03:42:48 $
+  $Revision: 1.12 $     $Date: 2018/12/18 02:43:11 $
+
+  Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2018
+  Licence: GNU Public Licence >= 2
 
   THE FOLLOWING FUNCTIONS ASSUME THAT z IS SORTED IN ASCENDING ORDER 
 

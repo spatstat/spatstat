@@ -3,6 +3,9 @@
 
    tempered or not
 
+  Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2018
+  Licence: GNU Public Licence >= 2
+
 */
 
 #undef MH_TEMPER

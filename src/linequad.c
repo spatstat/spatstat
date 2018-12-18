@@ -10,7 +10,10 @@
    Clinequad    unmarked pattern
    ClineMquad   multitype pattern
 
-   $Revision: 1.5 $  $Date: 2016/10/03 08:43:57 $ 
+   $Revision: 1.6 $  $Date: 2018/12/18 02:43:11 $ 
+
+  Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2018
+  Licence: GNU Public Licence >= 2
 
  */
 

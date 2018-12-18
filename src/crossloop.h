@@ -17,7 +17,10 @@
        double x1i, y1i, xleft, dx, dy, d2, rmax, r2max;
        double *x1, *y1, *x2, *y2;
 
-  $Revision: 1.2 $  $Date: 2014/04/02 07:59:10 $
+  $Revision: 1.3 $  $Date: 2018/12/18 02:43:11 $
+
+  Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2018
+  Licence: GNU Public Licence >= 2
 
 */
 

@@ -23,6 +23,9 @@
   pixels numbered 0, ..., nx-1 and 0, ..., ny-1
   with boundaries at x=0, x=nx, y=0, y=ny.
 
+  Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2018
+  Licence: GNU Public Licence >= 2
+
 */
 
 #define V(I,J) out[(I) + (J) * (Ny)]

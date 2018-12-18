@@ -4,7 +4,10 @@
 
   Form list of all triangles in a planar graph, given list of edges
   
-  $Revision: 1.14 $     $Date: 2016/11/22 09:19:42 $
+  $Revision: 1.15 $     $Date: 2018/12/18 02:43:11 $
+
+  Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2018
+  Licence: GNU Public Licence >= 2
 
   Form list of all triangles in a planar graph, given list of edges
 

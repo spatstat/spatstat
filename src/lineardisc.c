@@ -7,7 +7,10 @@
 
    Disc of radius r in linear network
 
-   $Revision: 1.12 $  $Date: 2016/07/15 13:56:07 $
+   $Revision: 1.13 $  $Date: 2018/12/18 02:43:11 $
+
+  Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2018
+  Licence: GNU Public Licence >= 2
 
 */
 

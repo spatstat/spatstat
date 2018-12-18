@@ -4,7 +4,10 @@
 
   Area of intersection between disc and polygonal window
 
-  $Revision: 1.6 $     $Date: 2011/12/03 00:15:52 $
+  $Revision: 1.7 $     $Date: 2018/12/18 02:43:11 $
+
+  Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2018
+  Licence: GNU Public Licence >= 2
 
  */
 

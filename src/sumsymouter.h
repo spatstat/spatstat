@@ -3,7 +3,10 @@
 
   Code template for some functions in linalg.c
 
-  $Revision: 1.3 $ $Date: 2013/04/18 11:55:24 $
+  $Revision: 1.4 $ $Date: 2018/12/18 02:43:11 $
+
+  Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2018
+  Licence: GNU Public Licence >= 2
 
   Macros used: FNAME = function name,
                WEIGHTED = #defined for weighted version

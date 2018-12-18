@@ -24,7 +24,10 @@
    such that
    x1[i], y1[i] and x2[j], y2[j] are the same point iff id1[i] = id2[j].
 
-  $Revision: 1.5 $ $Date: 2013/09/20 10:01:25 $
+  $Revision: 1.6 $ $Date: 2018/12/18 02:43:11 $
+
+  Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2018
+  Licence: GNU Public Licence >= 2
 
 */
 

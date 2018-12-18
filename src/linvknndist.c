@@ -11,7 +11,10 @@
 
   Needs only the sparse representation of the network
 
-  $Revision: 1.5 $  $Date: 2017/09/12 17:47:37 $
+  $Revision: 1.6 $  $Date: 2018/12/18 02:43:11 $
+
+  Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2018
+  Licence: GNU Public Licence >= 2
 
   ! Data points must be ordered by segment index !
 

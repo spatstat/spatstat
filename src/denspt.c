@@ -10,12 +10,15 @@
 
   Calculation of density estimate at data points
 
-  $Revision: 1.18 $     $Date: 2017/06/05 10:53:59 $
+  $Revision: 1.19 $     $Date: 2018/12/18 02:43:11 $
 
   Assumes point pattern is sorted in increasing order of x coordinate
 
   *denspt*     Density estimate at points
   *smoopt*     Smoothed mark values at points
+
+  Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2018
+  Licence: GNU Public Licence >= 2
 
 */
 

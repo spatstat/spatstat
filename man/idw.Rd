@@ -66,6 +66,12 @@ idw(X, power=2, at=c("pixels", "points"), ..., se=FALSE)
   at a data point is excluded when calculating the smoothed value
   for that point). 
 
+  An estimate of standard error is also calculated, if \code{se=TRUE}.
+  The calculation assumes that the data point locations are fixed,
+  that is, the standard error only takes into account the variability
+  in the mark values, and not the variability due to randomness of the
+  data point locations.
+  
   An alternative to  inverse-distance weighting is kernel smoothing,
   which is performed by \code{\link{Smooth.ppp}}.
 }

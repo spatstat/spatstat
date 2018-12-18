@@ -7,7 +7,10 @@
 
   loccum.c
 
-  $Revision: 1.1 $     $Date: 2013/05/27 02:09:10 $
+  $Revision: 1.2 $     $Date: 2018/12/18 02:43:11 $
+
+  Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2018
+  Licence: GNU Public Licence >= 2
 
   Compute local cumulative sums or products of weights
 

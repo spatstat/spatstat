@@ -17,7 +17,10 @@
   Copyright (C) Adrian Baddeley, Julian Gilbey and Rolf Turner 2000-2013
   Licence: GPL >= 2
 
-  $Revision: 1.11 $     $Date: 2013/09/18 04:06:59 $
+  $Revision: 1.12 $     $Date: 2018/12/18 02:43:11 $
+
+  Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2018
+  Licence: GNU Public Licence >= 2
 
 */
 

@@ -2,7 +2,7 @@
 
   Krect.c
 
-  $Revision: 1.3 $     $Date: 2014/02/09 03:02:42 $
+  $Revision: 1.4 $     $Date: 2018/12/18 02:43:11 $
 
   +++  Copyright (C) Adrian Baddeley, Julian Gilbey and Rolf Turner 2014 ++++
 

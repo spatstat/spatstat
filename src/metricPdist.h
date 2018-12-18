@@ -6,7 +6,7 @@
        
        Code template which is #included several times in metricPdist.c
 
-       $Revision: 1.2 $ $Date: 2018/05/15 08:49:12 $
+       $Revision: 1.3 $ $Date: 2018/12/18 02:43:11 $
 
        Uses the following definitions
        FNAME          Function name (called from R)
@@ -16,6 +16,9 @@
        METRIC         Expression for calculating the metric (x1,y1,x2,y2)
 
        Also uses definitions from raster.h and metricPdist.c
+
+  Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2018
+  Licence: GNU Public Licence >= 2
 
 */
 

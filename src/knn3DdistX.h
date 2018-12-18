@@ -25,8 +25,11 @@
   Copyright (C) Adrian Baddeley, Jens Oehlschlagel and Rolf Turner 2000-2013
   Licence: GPL >= 2
 
-  $Revision: 1.1 $  $Date: 2013/06/29 03:04:47 $
+  $Revision: 1.2 $  $Date: 2018/12/18 02:43:11 $
 
+
+  Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2018
+  Licence: GNU Public Licence >= 2
 
 */
 #endif

@@ -9,6 +9,9 @@
 
   cif = eta^(1-B) where B = (uncovered area)/(pi r^2)
 
+  Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2018
+  Licence: GNU Public Licence >= 2
+
 */
 
 #define NGRID 16

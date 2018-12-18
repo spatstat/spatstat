@@ -6,7 +6,10 @@
 
   Estrauss.c
 
-  $Revision: 1.4 $     $Date: 2014/09/19 00:54:07 $
+  $Revision: 1.5 $     $Date: 2018/12/18 02:43:11 $
+
+  Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2018
+  Licence: GNU Public Licence >= 2
 
   C implementation of 'eval' for Strauss interaction
 

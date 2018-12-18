@@ -6,10 +6,13 @@
    Shortest-path distances between nearest neighbours in linear network
    One pattern to another pattern
 
-   $Revision: 1.1 $  $Date: 2013/10/21 02:01:29 $
+   $Revision: 1.2 $  $Date: 2018/12/18 02:43:11 $
 
    linndcross      
    linndxcross     
+
+  Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2018
+  Licence: GNU Public Licence >= 2
 
 */
 

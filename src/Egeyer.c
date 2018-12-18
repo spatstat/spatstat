@@ -7,7 +7,10 @@
 
   Egeyer.c
 
-  $Revision: 1.6 $     $Date: 2014/09/19 00:53:20 $
+  $Revision: 1.7 $     $Date: 2018/12/18 02:43:11 $
+
+  Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2018
+  Licence: GNU Public Licence >= 2
 
   Part of C implementation of 'eval' for Geyer interaction
 

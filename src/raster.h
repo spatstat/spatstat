@@ -5,7 +5,10 @@
 
       requires <math.h> (for floor())
 
-      $Revision: 1.3 $ $Date: 2004/11/15 19:25:11 $
+      $Revision: 1.4 $ $Date: 2018/12/18 02:43:11 $
+  Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2018
+  Licence: GNU Public Licence >= 2
+
 */
 
 typedef struct Raster{

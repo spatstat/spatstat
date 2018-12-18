@@ -4,9 +4,12 @@
        `Pseudoexact' distance transform of a discrete binary image
        (the closest counterpart to `exactdist.c')
        
-       $Revision: 1.12 $ $Date: 2011/05/17 12:27:20 $
+       $Revision: 1.13 $ $Date: 2018/12/18 02:43:11 $
 
        
+  Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2018
+  Licence: GNU Public Licence >= 2
+
 */
 
 #include <math.h>

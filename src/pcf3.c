@@ -8,7 +8,7 @@
 #include "constants.h"
 
 /*
-	$Revision: 1.7 $	$Date: 2012/03/27 05:01:41 $
+	$Revision: 1.8 $	$Date: 2018/12/18 02:43:11 $
 
 	pair correlation function of 3D point pattern
 	(Epanechnikov kernel) 
@@ -16,6 +16,9 @@
 	pcf3trans	  	translation correction
 
 	pcf3isot		isotropic correction
+
+  Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2018
+  Licence: GNU Public Licence >= 2
 
 */
 

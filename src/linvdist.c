@@ -10,7 +10,10 @@
 
   Sparse representation of network
 
-  $Revision: 1.1 $  $Date: 2015/12/05 06:07:16 $
+  $Revision: 1.1 $  $Date: 2018/12/18 02:43:11 $
+
+  Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2018
+  Licence: GNU Public Licence >= 2
 
   ! Data points must be ordered by segment index !
 

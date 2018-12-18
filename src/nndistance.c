@@ -7,7 +7,10 @@
   Copyright (C) Adrian Baddeley, Jens Oehlschlaegel and Rolf Turner 2000-2012
   Licence: GNU Public Licence >= 2
 
-  $Revision: 1.21 $     $Date: 2013/11/03 03:36:27 $
+  $Revision: 1.22 $     $Date: 2018/12/18 02:43:11 $
+
+  Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2018
+  Licence: GNU Public Licence >= 2
 
   THE FOLLOWING FUNCTIONS ASSUME THAT y IS SORTED IN ASCENDING ORDER 
 

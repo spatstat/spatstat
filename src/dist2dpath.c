@@ -6,6 +6,10 @@
   compute matrix of shortest-path distances
 
   Uses dist2dpath.h
+
+  Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2018
+  Licence: GNU Public Licence >= 2
+
 */
 
 #define FNAME Ddist2dpath

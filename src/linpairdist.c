@@ -7,9 +7,12 @@
 
    Shortest-path distances between each pair of points in linear network
 
-   $Revision: 1.5 $  $Date: 2012/10/12 10:21:46 $
+   $Revision: 1.6 $  $Date: 2018/12/18 02:43:11 $
 
    linpairdist
+
+  Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2018
+  Licence: GNU Public Licence >= 2
 
 */
 

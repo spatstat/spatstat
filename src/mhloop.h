@@ -22,7 +22,10 @@
    
    MH_SNOOP     whether to run visual debugger
 
-   $Revision: 1.22 $  $Date: 2015/09/06 05:21:55 $ 
+   $Revision: 1.23 $  $Date: 2018/12/18 02:43:11 $ 
+
+  Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2018
+  Licence: GNU Public Licence >= 2
 
 */
 

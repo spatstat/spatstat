@@ -4,7 +4,10 @@
        Exact distance transform of a point pattern
        (used to estimate the empty space function F)
        
-       $Revision: 1.12 $ $Date: 2011/09/20 07:36:17 $
+       $Revision: 1.13 $ $Date: 2018/12/18 02:43:11 $
+
+  Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2018
+  Licence: GNU Public Licence >= 2
 
        Author: Adrian Baddeley
 

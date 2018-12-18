@@ -2,7 +2,7 @@
 
   KrectFunDec.h
 
-  $Revision: 1.3 $     $Date: 2014/02/09 02:51:15 $
+  $Revision: 1.4 $     $Date: 2018/12/18 02:43:11 $
 
   Function declarations for Krect
 

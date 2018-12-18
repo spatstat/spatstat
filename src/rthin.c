@@ -8,7 +8,10 @@
    Select from the integers 1:n with probability p
    by simulating geometric(p) jumps between selected integers
 
-   $Revision: 1.1 $ $Date: 2015/07/25 03:19:22 $
+   $Revision: 1.2 $ $Date: 2018/12/18 02:43:11 $
+
+  Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2018
+  Licence: GNU Public Licence >= 2
 
 */
 

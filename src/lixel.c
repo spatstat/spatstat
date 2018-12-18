@@ -6,6 +6,9 @@
 
    divide a linear network into shorter segments
 
+  Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2018
+  Licence: GNU Public Licence >= 2
+
  */
 
 void Clixellate(ns, fromcoarse, tocoarse, 

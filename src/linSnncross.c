@@ -7,7 +7,7 @@
    Shortest-path distances between nearest neighbours in linear network
    One pattern to another pattern
 
-   $Revision: 1.3 $  $Date: 2015/11/28 10:08:55 $
+   $Revision: 1.4 $  $Date: 2018/12/18 02:43:11 $
 
    'Sparse version' 
 
@@ -17,6 +17,9 @@
 
    linSnndcross      
    linSnndwhich
+
+  Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2018
+  Licence: GNU Public Licence >= 2
 
 */
 

@@ -7,7 +7,10 @@
 
   poly2imA     pixel value = area of intersection between pixel and polygon
 
-  $Revision: 1.9 $ $Date: 2014/06/27 06:14:49 $
+  $Revision: 1.10 $ $Date: 2018/12/18 02:43:11 $
+
+  Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2018
+  Licence: GNU Public Licence >= 2
 
 */
 #undef DEBUG

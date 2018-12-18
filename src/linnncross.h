@@ -3,12 +3,15 @@
 
    Function body definitions with macros
 
-   $Revision: 1.2 $  $Date: 2015/11/28 02:02:50 $
+   $Revision: 1.3 $  $Date: 2018/12/18 02:43:11 $
 
    Macros used:
    FNAME   name of function
    EXCLU   whether serial numbers are provided
    WHICH   whether 'nnwhich' is required
+
+  Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2018
+  Licence: GNU Public Licence >= 2
 
 */
 

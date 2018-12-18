@@ -4,7 +4,10 @@
 
   Area difference function
 
-  $Revision: 1.14 $ $Date: 2013/09/18 04:09:24 $
+  Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2018
+  Licence: GNU Public Licence >= 2
+
+  $Revision: 1.15 $ $Date: 2018/12/18 02:43:11 $
 
   A(x,r) = area of disc b(0,r) not covered by discs b(x_i,r) for x_i in x
   

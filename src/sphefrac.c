@@ -3,7 +3,7 @@
 #include "geom3.h"
 /*
 
-	$Revision: 1.1 $ 	$Date: 2009/11/04 23:54:15 $
+	$Revision: 1.2 $ 	$Date: 2018/12/18 02:43:11 $
 
 	Routine for calculating surface area of sphere
 	intersected with box

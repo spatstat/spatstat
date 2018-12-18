@@ -9,7 +9,10 @@
   FNAME          Function name 
   IGNOREZERO     #defined if zero distances should be ignored
 
-  $Revision: 1.1 $     $Date: 2014/09/18 00:52:15 $
+  $Revision: 1.2 $     $Date: 2018/12/18 02:43:11 $
+
+  Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2018
+  Licence: GNU Public Licence >= 2
 
 */
 

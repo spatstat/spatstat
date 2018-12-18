@@ -7,11 +7,14 @@
 
   Ediggra.c
 
-  $Revision: 1.7 $     $Date: 2018/03/13 02:10:45 $
+  $Revision: 1.8 $     $Date: 2018/12/18 02:43:11 $
 
   C implementation of 'eval' for DiggleGratton interaction (exponentiated)
 
   Assumes point patterns are sorted in increasing order of x coordinate
+
+  Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2018
+  Licence: GNU Public Licence >= 2
 
 */
 

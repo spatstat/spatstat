@@ -9,11 +9,14 @@
 
   Ediggatsti.c
 
-  $Revision: 1.3 $     $Date: 2014/09/19 00:53:30 $
+  $Revision: 1.4 $     $Date: 2018/12/18 02:43:11 $
 
   C implementation of 'eval' for DiggleGatesStibbard interaction 
 
   Assumes point patterns are sorted in increasing order of x coordinate
+
+  Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2018
+  Licence: GNU Public Licence >= 2
 
 */
 

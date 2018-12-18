@@ -2,7 +2,10 @@
 
   closepair.c
 
-  $Revision: 1.33 $     $Date: 2016/03/28 03:46:26 $
+  $Revision: 1.34 $     $Date: 2018/12/18 02:43:11 $
+
+  Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2018
+  Licence: GNU Public Licence >= 2
 
   Assumes point pattern is sorted in increasing order of x coordinate
 
