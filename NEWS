@@ -1,9 +1,9 @@
 
-        CHANGES IN spatstat VERSION 1.57-1.015
+        CHANGES IN spatstat VERSION 1.57-1.016
 
 OVERVIEW
 
-    o We thank Andrew P Webster for contributions.
+    o We thank Hamidreza Heydarian and Andrew P Webster for contributions.
     
     o Mark-mark scatter plot.
 
@@ -29,6 +29,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
     'q,p,rmax,rmin' now take precedence over entries
     with the same names in the list 'ctrl'.
 
+    o rotmean
+    Improved algorithm stability
+    
     o summary.kppm
     Prints more information about algorithm convergence.
 
@@ -41,7 +44,15 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
 BUG FIXES
 
-    o None!
+    o rotmean
+    When result="im" the resulting image did not have the same dimensions
+    as the input. [Spotted by Hamidreza Heydarian.]
+    Fixed.
+
+    o rotmean
+    If argument 'origin' was given, and if result="im" was specified,
+    the resulting image was wrongly displaced.
+    Fixed.
 
         CHANGES IN spatstat VERSION 1.57-1
 

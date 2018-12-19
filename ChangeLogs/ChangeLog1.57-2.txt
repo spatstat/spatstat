@@ -243,3 +243,20 @@ Change log from 1.57-1 to 1.57-2
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+19 dec 2018
+
+   rotmean.R
+	Bug fixes and improvements.
+
+   DESCRIPTION
+   NEWS
+   spatstat-package.Rd
+	Acknowledged Hamidreza Heydarian
+	
+   DESCRIPTION
+   NEWS
+	version 1.57-1.016
+
+------------- passed R-3.5.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
