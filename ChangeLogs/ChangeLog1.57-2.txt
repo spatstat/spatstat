@@ -260,3 +260,22 @@ Change log from 1.57-1 to 1.57-2
 ------------- passed R-3.5.1 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
+
+02 Jan 2019
+
+   ppx.R
+	Bug fixes in runifpointx
+
+   tests/ppx.R
+   tests/testparres.R
+	More tests.
+
+   DESCRIPTION
+   NEWS
+	version 1.57-1.017
+
+------------- passed R-3.5.1 CMD check ---------------
++++++++++++++ installed R-3.5.2 ++++++++++++++++++++++
+------------- passed R-3.5.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------

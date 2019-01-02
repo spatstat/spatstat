@@ -709,7 +709,7 @@ addvar(model, "x", subregion=w, bw.input="points")
 #
 # additional test of parres
 #
-#  $Revision: 1.3 $  $Date: 2018/07/13 05:07:57 $
+#  $Revision: 1.4 $  $Date: 2019/01/02 08:27:51 $
 #
 require(spatstat)
 local({
@@ -732,6 +732,9 @@ mod3 <- ppm(X ~ x + offset(y))
 parres(mod3, "offset(y)")
 Z <- distmap(runifpoint(3))
 parres(mod3, Z)
+mod4 <- ppm(X ~ sin(x), data=solist(B=Z))
+parres(mod4, "sin(x)")
+parres(mod4, "B")
 
 })
 #'

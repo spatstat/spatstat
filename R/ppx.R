@@ -3,7 +3,7 @@
 #
 #  class of general point patterns in any dimension
 #
-#  $Revision: 1.61 $  $Date: 2017/10/24 01:02:35 $
+#  $Revision: 1.62 $  $Date: 2019/01/02 07:56:32 $
 #
 
 ppx <- local({
@@ -425,16 +425,17 @@ runifpointx <- function(n, domain, nsim=1, drop=TRUE) {
   result <- vector(mode="list", length=nsim)
   for(i in 1:nsim) {
     if(n == 0) {
-      coo <- matrix(, nrow=0, ncol=d)
+      coo <- matrix(numeric(0), nrow=0, ncol=d)
     } else {
       coo <- mapply(runif,
                     n=rep(n, d),
                     min=ra[1,],
                     max=ra[2,])
+      if(!is.matrix(coo)) coo <- matrix(coo, ncol=d)
     }
     colnames(coo) <- colnames(ra)
     df <- as.data.frame(coo)
-    result[[i]] <- ppx(df, domain)
+    result[[i]] <- ppx(df, domain, coord.type=rep("s", d))
   }
   if(nsim == 1 && drop)
     return(result[[1]])

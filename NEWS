@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.57-1.016
+        CHANGES IN spatstat VERSION 1.57-1.017
 
 OVERVIEW
 
@@ -52,6 +52,10 @@ BUG FIXES
     o rotmean
     If argument 'origin' was given, and if result="im" was specified,
     the resulting image was wrongly displaced.
+    Fixed.
+
+    o runifpointx
+    Result was mangled when n=0 or n=1.
     Fixed.
 
         CHANGES IN spatstat VERSION 1.57-1

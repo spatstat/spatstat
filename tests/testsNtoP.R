@@ -636,7 +636,7 @@ local({
 #
 # Test operations for ppx objects
 #
-#  $Revision: 1.4 $ $Date: 2018/04/30 09:28:15 $
+#  $Revision: 1.5 $ $Date: 2019/01/02 07:58:20 $
 #
 
 require(spatstat)
@@ -647,22 +647,33 @@ local({
   X <- ppx(data=df, coord.type=rep("s", 3), domain=box3())
   unique(X)
   duplicated(X)
+  anyDuplicated(X)
   multiplicity(X)
   print(X)
+  summary(X)
   plot(X)
   domain(X)
   unitname(X) <- c("metre", "metres")
   unitname(X)
-  
+
   #' subset operator
   X[integer(0)]
   Y <- X %mark% data.frame(a=df$x, b=1:4)
   Y[1:2]
   Y[FALSE]
+  marks(Y) <- as.data.frame(marks(Y))
+  Y[integer(0)]
+  Y[1:2]
+  Y[FALSE]
 
-  #' two dimensions
+  #' two dimensional
   A <- ppx(data=df[,1:2], coord.type=rep("s", 2), domain=square(1))
   plot(A)
+  B <- ppx(data=df[,1:2], coord.type=rep("s", 2), domain=NULL)
+  plot(B)
+  #' one dimensional
+  E <- ppx(data=data.frame(x=runif(10)))
+  plot(E)
   
   #' bug
   stopifnot(identical(unmark(chicago[1]),
@@ -673,6 +684,21 @@ local({
   V <- U %mark% 1
   V <- U %mark% factor("a")
 
+  #' simplify lower-dimensional patterns
+  X3 <- ppx(data=df, coord.type=rep("s", 3), domain=box3(), simplify=TRUE)
+  stopifnot(is.pp3(X3))
+  X2 <- ppx(data=df[,1:2], coord.type=rep("s", 2), domain=square(1), simplify=TRUE)
+  stopifnot(is.ppp(X2))
+
+  #' marks<-.ppx
+  M <- as.matrix(X)
+  marks(X) <- df[,1]
+  marks(X) <- df[,integer(0)]
+
+  #' trivial cases of random generators
+  B4 <- boxx(0:1, 0:1, 0:1, 0:1)
+  Z0 <- runifpointx(0, domain=B4, nsim=2)
+  Z1 <- runifpointx(1, domain=B4, nsim=2)
 })
 #
 # tests/prediction.R
