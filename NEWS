@@ -1,9 +1,10 @@
 
-        CHANGES IN spatstat VERSION 1.57-1.017
+        CHANGES IN spatstat VERSION 1.57-1.018
 
 OVERVIEW
 
-    o We thank Hamidreza Heydarian and Andrew P Webster for contributions.
+    o We thank Andrew Bevan, Hamidreza Heydarian and Andrew P Webster
+    for contributions.
     
     o Mark-mark scatter plot.
 
@@ -22,6 +23,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o idw
     Standard errors can now be calculated by setting 'se=TRUE'.
+
+    o im.apply
+    Computation accelerated when NA's are absent.
+    New arguments 'fun.handles.na' and 'check'.
     
     o kppm, dppm, clusterfit
     Changed precedence rule for handling the algorithm parameters

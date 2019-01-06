@@ -552,6 +552,7 @@
 	\code{\link{harmonise.im}} \tab make images compatible \cr
 	\code{\link{commonGrid}} \tab find a common pixel grid for images \cr
 	\code{\link{eval.im}} \tab evaluate any expression involving images\cr
+	\code{\link{im.apply}} \tab evaluate a function of several images \cr
 	\code{\link{scaletointerval}} \tab rescale pixel values \cr
 	\code{\link{zapsmall.im}} \tab set very small pixel values to zero \cr
 	\code{\link{levelset}} \tab level set of an image\cr 

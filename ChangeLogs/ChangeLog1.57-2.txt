@@ -279,3 +279,28 @@ Change log from 1.57-1 to 1.57-2
 ------------- passed R-3.5.2 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
+
+05 jan 2019
+
+   spatstat-package.Rd
+   im.apply.Rd
+   eval.im.Rd
+	More cross-references.
+
+06 jan 2019
+
+   eval.im.R
+	Accelerated 'im.apply'
+	and added new arguments 'fun.handles.na' and 'check'.
+
+   im.apply.Rd
+	New arguments 'fun.handles.na' and 'check'.
+	More examples
+
+   DESCRIPTION
+   NEWS
+	version 1.57-1.018
+
+------------- passed R-3.5.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------

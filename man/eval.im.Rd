@@ -66,6 +66,9 @@
   An image object of class \code{"im"}.
 }
 \seealso{
+  \code{\link{im.apply}} for operations similar to \code{\link{apply}},
+  such as taking the sum of a list of images.
+  
   \code{\link{as.im}},
   \code{\link{compatible.im}},
   \code{\link{harmonise.im}},
@@ -84,11 +87,9 @@
   ## Use of 'envir'
   W <- eval.im(sin(U), list(U=density(cells)))
 }
-\author{\adrian
-  
-  
+\author{
+  \adrian
   and \rolf
-  
 }
 \keyword{spatial}
 \keyword{manip}

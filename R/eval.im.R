@@ -8,7 +8,7 @@
 #        harmonise.im()       Harmonise images
 #        commonGrid()
 #
-#     $Revision: 1.43 $     $Date: 2018/10/09 02:57:14 $
+#     $Revision: 1.46 $     $Date: 2019/01/06 03:38:45 $
 #
 
 eval.im <- local({
@@ -210,35 +210,49 @@ commonGrid <- local({
 
 im.apply <- local({
 
-  im.apply <- function(X, FUN, ...) {
-    stopifnot(is.list(X))
-    if(!all(sapply(X, is.im)))
-      stop("All elements of X must be pixel images")
-    fun <- if(is.character(FUN)) get(FUN) else
+  im.apply <- function(X, FUN, ..., fun.handles.na=FALSE, check=TRUE) {
+    if(!inherits(X, "imlist")) {
+      stopifnot(is.list(X))
+      if(!all(sapply(X, is.im)))
+        stop("All elements of X must be pixel images")
+    }
+    fun <- if(is.character(FUN)) get(FUN, mode="function") else
            if(is.function(FUN)) FUN else stop("Unrecognised format for FUN")
     ## ensure images are compatible
-    X <- do.call(harmonise.im, X)
+    if(check) 
+      X <- do.call(harmonise.im, X)
+    ##
     template <- X[[1L]]
+    d <- dim(template)
     ## extract numerical values and convert to matrix with one column per image
     vlist <- lapply(X, flatten)
     vals <- matrix(unlist(vlist), ncol=length(X))
     colnames(vals) <- names(X)
-    ok <- complete.cases(vals)
-    if(!any(ok)) {
-      ## empty result
-      return(as.im(NA, W=template))
+    ##
+    if(fun.handles.na || !anyNA(vals)) {
+      y <- apply(vals, 1L, fun, ...)
+      if(length(y) != nrow(vals))
+        stop("FUN should yield one value per pixel")
+      ## pack up, with attention to type of data
+      resultmat <- matrix(y, d[1L], d[2L])
+    } else {
+      ## NA present
+      ok <- complete.cases(vals)
+      if(!any(ok)) {
+        ## empty result
+        return(as.im(NA, W=template))
+      }
+      ## apply function
+      y <- apply(vals[ok,, drop=FALSE], 1L, fun, ...)
+      if(length(y) != sum(ok))
+        stop("FUN should yield one value per pixel")
+      ## pack up, with attention to type of data
+      resultmat <- matrix(y[1L], d[1L], d[2L])
+      resultmat[ok] <- y
+      resultmat[!ok] <- NA
     }
-    ## apply function
-    resultok <- apply(vals[ok,, drop=FALSE], 1L, fun, ...)
-    if(length(resultok) != sum(ok))
-      stop("FUN should yield one value per pixel")
-    ## pack up, with attention to type of data
-    d <- dim(template)
-    resultmat <- matrix(resultok[1L], d[1L], d[2L])
-    resultmat[ok] <- resultok
-    resultmat[!ok] <- NA
     result <- as.im(resultmat, W=X[[1L]])
-    if(is.factor(resultok)) levels(result) <- levels(resultok)
+    if(is.factor(y)) levels(result) <- levels(y)
     return(result)
   }
 
