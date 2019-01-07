@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.57-1.018
+        CHANGES IN spatstat VERSION 1.57-1.019
 
 OVERVIEW
 
@@ -25,7 +25,7 @@ SIGNIFICANT USER-VISIBLE CHANGES
     Standard errors can now be calculated by setting 'se=TRUE'.
 
     o im.apply
-    Computation accelerated when NA's are absent.
+    Computation accelerated, especially when NA's are absent.
     New arguments 'fun.handles.na' and 'check'.
     
     o kppm, dppm, clusterfit

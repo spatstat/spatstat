@@ -8,7 +8,7 @@
 #        harmonise.im()       Harmonise images
 #        commonGrid()
 #
-#     $Revision: 1.46 $     $Date: 2019/01/06 03:38:45 $
+#     $Revision: 1.52 $     $Date: 2019/01/07 07:37:36 $
 #
 
 eval.im <- local({
@@ -208,55 +208,74 @@ commonGrid <- local({
   commonGrid
 })
 
-im.apply <- local({
-
-  im.apply <- function(X, FUN, ..., fun.handles.na=FALSE, check=TRUE) {
-    if(!inherits(X, "imlist")) {
-      stopifnot(is.list(X))
-      if(!all(sapply(X, is.im)))
-        stop("All elements of X must be pixel images")
-    }
-    fun <- if(is.character(FUN)) get(FUN, mode="function") else
-           if(is.function(FUN)) FUN else stop("Unrecognised format for FUN")
-    ## ensure images are compatible
-    if(check) 
-      X <- do.call(harmonise.im, X)
-    ##
-    template <- X[[1L]]
-    d <- dim(template)
-    ## extract numerical values and convert to matrix with one column per image
-    vlist <- lapply(X, flatten)
-    vals <- matrix(unlist(vlist), ncol=length(X))
-    colnames(vals) <- names(X)
-    ##
-    if(fun.handles.na || !anyNA(vals)) {
-      y <- apply(vals, 1L, fun, ...)
-      if(length(y) != nrow(vals))
-        stop("FUN should yield one value per pixel")
-      ## pack up, with attention to type of data
-      resultmat <- matrix(y, d[1L], d[2L])
-    } else {
-      ## NA present
-      ok <- complete.cases(vals)
-      if(!any(ok)) {
-        ## empty result
-        return(as.im(NA, W=template))
-      }
-      ## apply function
-      y <- apply(vals[ok,, drop=FALSE], 1L, fun, ...)
-      if(length(y) != sum(ok))
-        stop("FUN should yield one value per pixel")
-      ## pack up, with attention to type of data
-      resultmat <- matrix(y[1L], d[1L], d[2L])
-      resultmat[ok] <- y
-      resultmat[!ok] <- NA
-    }
-    result <- as.im(resultmat, W=X[[1L]])
-    if(is.factor(y)) levels(result) <- levels(y)
-    return(result)
+im.apply <- function(X, FUN, ..., fun.handles.na=FALSE, check=TRUE) {
+  if(!inherits(X, "imlist")) {
+    stopifnot(is.list(X))
+    if(!all(sapply(X, is.im)))
+      stop("All elements of X must be pixel images")
   }
-
-  flatten <- function(z) { as.vector(as.matrix(z)) }
-
-  im.apply
-})
+  ## determine function to be applied
+  fun <- if(is.character(FUN)) get(FUN, mode="function") else
+         if(is.function(FUN)) FUN else stop("Unrecognised format for FUN")
+  funcode <- match(list(fun),
+                   list(base::sum,
+                        base::mean,
+                        base::mean.default,
+                        stats::var,
+                        stats::sd),
+                   nomatch=0L)
+  funtype <- c("general", "sum", "mean", "mean", "var", "sd")[funcode+1L]
+  if(funcode != 0)
+    na.rm <- resolve.1.default(list(na.rm=FALSE), list(...))
+  ## ensure images are compatible
+  if(check && !do.call(compatible, unname(X)))
+    X <- do.call(harmonise.im, X)
+  template <- X[[1L]]
+  d <- dim(template)
+  ## extract numerical values and convert to matrix with one column per image
+  vals <- sapply(X, getElement, name="v")
+  ## apply to all pixels ?
+  full <- fun.handles.na || !anyNA(vals)
+  if(!full) {
+    ## NA present
+    ok <- complete.cases(vals)
+    if(!any(ok)) {
+      ## empty result
+      return(as.im(NA, W=template))
+    }
+    ## restrict to pixels where all data are non-NA
+    vals <- vals[ok, , drop=FALSE]
+  }
+  n <- nrow(vals)
+  ## calculate
+  y <- switch(funtype,
+              general = apply(vals, 1L, fun, ...),
+              sum     = rowSums(vals,  na.rm=na.rm),
+              mean    = rowMeans(vals, na.rm = na.rm),
+              sd = ,
+              var = {
+                sumx  <- rowSums(vals,   na.rm = na.rm)
+                sumx2 <- rowSums(vals^2, na.rm = na.rm)
+                if(!anyNA(vals)) {
+                  m <- ncol(vals)
+                  v <- (sumx2 - sumx^2/m)/(m-1)
+                } else {
+                  m <- rowSums(!is.na(vals)) 
+                  v <- ifelse(m < 2, NA, (sumx2 - sumx^2/m)/(m-1))
+                }
+                if(funtype == "var") v else sqrt(v)
+              })
+  if(funtype == "general" && length(y) != n)
+    stop("FUN should yield one value per pixel")
+  ## pack up, with attention to type of data
+  if(full) {
+    resultmat <- matrix(y, d[1L], d[2L])
+  } else {
+    resultmat <- matrix(y[1L], d[1L], d[2L])
+    resultmat[ok] <- y
+    resultmat[!ok] <- NA
+  }
+  result <- as.im(resultmat, W=X[[1L]])
+  if(is.factor(y)) levels(result) <- levels(y)
+  return(result)
+}

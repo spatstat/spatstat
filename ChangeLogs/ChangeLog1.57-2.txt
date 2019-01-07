@@ -304,3 +304,16 @@ Change log from 1.57-1 to 1.57-2
 ------------- passed R-3.5.2 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
+
+07 Jan 2019
+
+    eval.im.R
+	Accelerated 'im.apply' for sum, mean
+
+   DESCRIPTION
+   NEWS
+	version 1.57-1.019
+
+------------- passed R-3.5.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
