@@ -1,7 +1,7 @@
 ##
 ##  relrisk.ppm.R
 ##
-##  $Revision: 1.8 $ $Date: 2018/06/11 06:55:12 $
+##  $Revision: 1.9 $ $Date: 2019/01/08 07:44:07 $
 ##
 
 relrisk.ppm <- local({
@@ -63,7 +63,8 @@ relrisk.ppm <- local({
                if(!relative) {
                  ## compute probabilities..
                  ## total intensity (image)
-                 lambda.all <- Reduce("+", lambda.each)
+                 lambda.all <- im.apply(lambda.each, sum, check=FALSE)
+                 ## WAS: lambda.all <- Reduce("+", lambda.each)
                  if(!se) {
                    result <- lambda.each[[icase]]/lambda.all
                    result <- killglitches(result)
@@ -147,7 +148,8 @@ relrisk.ppm <- local({
                if(!relative) {
                  ## compute probabilities...
                  ## image of total intensity
-                 lambda.all <- Reduce("+", lambda.each)
+                 lambda.all <- im.apply(lambda.each, sum, check=FALSE)
+                 ## WAS:    lambda.all <- Reduce("+", lambda.each)
                  probs <- lapply(lambda.each, "/", e2=lambda.all)
                  probs <- as.solist(lapply(probs, killglitches))
                  if(!se) {
@@ -302,10 +304,10 @@ relrisk.ppm <- local({
     ## and one row for each canonical covariate
     ncoef <- length(coef(model))
     Sbar.u <- vector(mode="list", length=ncoef)
-    for(k in 1:ncoef)
-      Sbar.u[[k]] <- Reduce("+",
-                            mapply("*", e1=S.um[k,,drop=TRUE], e2=probvalues,
-                                   SIMPLIFY=FALSE))
+    for(k in 1:ncoef) {
+      A <- mapply("*", e1=S.um[k,,drop=TRUE], e2=probvalues, SIMPLIFY=FALSE)
+      Sbar.u[[k]] <- im.apply(A, sum)
+    }
     ## Sbar.u is a list of images, one for each canonical covariate
     Sdif.um <- lapply(as.list(S.um), 
                       msubtract,

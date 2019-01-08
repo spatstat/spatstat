@@ -3,7 +3,7 @@
 #
 #  signed/vector valued measures with atomic and diffuse components
 #
-#  $Revision: 1.84 $  $Date: 2018/10/09 03:22:43 $
+#  $Revision: 1.85 $  $Date: 2019/01/08 07:30:33 $
 #
 msr <- function(qscheme, discrete, density, check=TRUE) {
   if(!is.quad(qscheme))
@@ -245,15 +245,17 @@ augment.msr <- function(x, ..., sigma, recompute=FALSE) {
     z <- lapply(y, attr, which="smoothdensity")
     if((nc <- ncol(x)) == 1) {
       ## scalar valued
-      z <- do.call(harmonise, unname(z))
-      smo <- Reduce("+", z)
+      smo <- im.apply(z, sum)
+      ## WAS:     z <- do.call(harmonise, unname(z))
+      ##          smo <- Reduce("+", z)
     } else {
       ## vector valued
       smo <- vector(mode="list", length=nc)
       for(j in 1:nc) {
         zj <- lapply(z, "[[", i=j)
-        zj <- do.call(harmonise, unname(zj))
-        smo[[j]] <- Reduce("+", zj)
+        smo[[j]] <- im.apply(zj, sum)
+        ## WAS:    zj <- do.call(harmonise, unname(zj))
+        ##         smo[[j]] <- Reduce("+", zj)
       }
       smo <- as.solist(smo)
     }
@@ -323,7 +325,8 @@ plot.msr <- function(x, ..., add=FALSE,
     if(is.matrix(x$discrete)) x$discrete <- rowSums(x$discrete)
     if(is.matrix(x$density))  x$density <- rowSums(x$density)
     if(!is.null(smo <- attr(x, "smoothdensity")) && inherits(smo, "solist"))
-      attr(x, "smoothdensity") <- Reduce("+", smo)
+      attr(x, "smoothdensity") <- im.apply(smo, sum, check=FALSE)
+      ## WAS: attr(x, "smoothdensity") <-  Reduce("+", smo)
   }
 
   d <- dim(x)[2]

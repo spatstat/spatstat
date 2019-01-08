@@ -9,7 +9,7 @@
 #'
 #'  GNU Public Licence 2.0 || 3.0
 #'
-#'    $Revision: 1.13 $  $Date: 2018/07/23 02:03:16 $
+#'    $Revision: 1.14 $  $Date: 2019/01/08 07:46:46 $
 #'
 
 sdr <- function(X, covariates, ...) {
@@ -91,7 +91,8 @@ sdrPredict <- function(covariates, B) {
   result <- vector(mode="list", length=ncol(B))
   for(j in seq_along(result)) {
     cj <- as.list(B[,j])
-    result[[j]] <- Reduce("+", mapply("*", cj, covariates, SIMPLIFY=FALSE))
+    Zj <- mapply("*", cj, covariates, SIMPLIFY=FALSE)
+    result[[j]] <- im.apply(Zj, sum)
   }
   names(result) <- colnames(B)
   return(as.solist(result))

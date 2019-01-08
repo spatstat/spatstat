@@ -3,7 +3,7 @@
 #
 #   Estimation of relative risk
 #
-#  $Revision: 1.40 $  $Date: 2018/10/05 04:04:29 $
+#  $Revision: 1.41 $  $Date: 2019/01/08 07:32:46 $
 #
 
 relrisk <- function(X, ...) UseMethod("relrisk")
@@ -88,7 +88,8 @@ relrisk.ppp <- local({
              Deach <- do.call(density.splitppp,
                               append(list(x=Y), SmoothPars))
              ## compute intensity estimate for unmarked pattern
-             Dall <- Reduce("+", Deach)
+             Dall <- im.apply(Deach, sum, check=FALSE)
+             ## WAS: Dall <- Reduce("+", Deach)
              ## variance terms
              if(se) {
                if(!edge) {
@@ -109,7 +110,8 @@ relrisk.ppp <- local({
                                  SIMPLIFY=FALSE)
                }
                Veach <- lapply(Veach, "*", varconst)
-               Vall <- Reduce("+", Veach)
+               Vall <- im.apply(Veach, sum, check=FALSE)
+               ## WAS:   Vall <- Reduce("+", Veach)
              }
            },
            points = {

@@ -317,3 +317,20 @@ Change log from 1.57-1 to 1.57-2
 ------------- passed R-3.5.2 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
+
+08 Jan 2019
+
+   leverage.R
+   measures.R
+   relrisk.R
+   relrisk.ppm.R
+   sdr.R
+	accelerated by replacing 'Reduce("+", X)' by 'im.apply(X, sum)'
+
+   DESCRIPTION
+   NEWS
+	version 1.57-1.020
+
+------------- passed R-3.5.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------

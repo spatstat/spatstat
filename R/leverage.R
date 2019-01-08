@@ -3,7 +3,7 @@
 #
 #  leverage and influence
 #
-#  $Revision: 1.114 $ $Date: 2018/05/24 08:08:31 $
+#  $Revision: 1.115 $ $Date: 2019/01/08 07:25:14 $
 #
 
 leverage <- function(model, ...) {
@@ -926,7 +926,8 @@ plot.leverage.ppm <- function(x, ...,
   if(!multiplot && inherits(smo, "imlist")) {
     ave <- ave * length(smo)
     smo <- do.call(harmonise.im, unname(smo))
-    smo <- Reduce("+", smo)
+    ##    smo <- Reduce("+", smo)
+    smo <- im.apply(smo, sum, check=FALSE)
     defaultmain <- c(defaultmain, "(sum over all types of point)")
   }
   args.contour <- resolve.defaults(args.cut, list(levels=ave))
@@ -974,7 +975,8 @@ contour.leverage.ppm <- function(x, ...,
   if(!multiplot && inherits(smo, "imlist")) {
     ave <- ave * length(smo)
     smo <- do.call(harmonise.im, unname(smo))
-    smo <- Reduce("+", smo)
+    ##    smo <- Reduce("+", smo)
+    smo <- im.apply(smo, sum, check=FALSE)
     defaultmain <- c(defaultmain, "(sum over all types of point)")
   }
   
