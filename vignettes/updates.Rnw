@@ -172,6 +172,8 @@ the News and Release Notes for each update.
 
   \item \spst\ now suggests the package \pkg{fftwtools}.
 
+   \item Standard error calculation for inverse-distance weighting.
+     
    \item Kernel estimate of intensity as a \texttt{function(x,y)}.
 
    \item Extract discrete and continuous components of a measure.
@@ -428,6 +430,9 @@ The following datasets have been added to the package.
 Following is a list of all the functions that have been added.
 
 \begin{itemize}
+  
+    \item \texttt{markmarkscatter}: Mark--mark scatterplot.
+      
     \item \texttt{bw.CvL}: Cronie-van Lieshout bandwidth selection
       for density estimation.
       
@@ -1140,13 +1145,24 @@ also carries these marks in the \verb!$lines! component.
     Performance improved (computation time and memory requirements reduced.)
     This should improve the performance of many functions in \texttt{spatstat}.
    \end{itemize}
-
+   
+ \item \texttt{closepairs.pp3}:   
+   Argument \texttt{what} can take the value \texttt{"ijd"}
+   
  \item \texttt{clusterset}:
    Improved behaviour.
 
  \item \texttt{clusterfit}:
+   \begin{itemize}
+   \item 
    New argument \texttt{algorithm} specifies the choice 
    of optimisation algorithm.
+    \item 
+    Changed precedence rule for handling the algorithm parameters
+    in the minimum contrast algorithm. Individually-named arguments
+    \texttt{q,p,rmax,rmin} now take precedence over entries
+    with the same names in the list \texttt{ctrl}.
+  \end{itemize}
 
 \item \texttt{collapse.fv}:
    This is now treated as a method for the \texttt{nlme} 
@@ -1170,6 +1186,9 @@ also carries these marks in the \verb!$lines! component.
  \item \texttt{crossing.psp}:
     New argument \texttt{details} gives more information about the intersections
     between the segments.
+
+  \item \texttt{crosspairs.pp3}:   
+   Argument \texttt{what} can take the value \texttt{"ijd"}
 
  \item \texttt{cut.ppp}:
     Argument \texttt{z} can be \texttt{"x"} or \texttt{"y"}
@@ -1283,6 +1302,12 @@ also carries these marks in the \verb!$lines! component.
     object for the argument \texttt{x},
     instead of giving two coordinate vectors \texttt{x} and \texttt{y}.
 
+    \item \texttt{dppm}:
+    Changed precedence rule for handling the algorithm parameters
+    in the minimum contrast algorithm. Individually-named arguments
+    \texttt{q,p,rmax,rmin} now take precedence over entries
+    with the same names in the list \texttt{ctrl}.
+
 %%E
     
   \item \texttt{edge.Trans}:
@@ -1363,7 +1388,18 @@ also carries these marks in the \verb!$lines! component.
    Arguments can be passed to \texttt{text.default}
    to control the plotting of labels.
 
+   
+ \item \texttt{idw}: Standard errors can now be calculated by
+   setting \texttt{se=TRUE}.
+   
   \item \texttt{imcov}: the name of the unit of length is preserved.
+
+  \item \texttt{im.apply}: 
+    \begin{itemize}
+    \item Computation accelerated
+    \item New argument \texttt{fun.handles.na}
+    \item New argument \texttt{check}
+    \end{itemize}
     
  \item \texttt{influence.ppm}:
     For Gibbs models, memory usage has been dramatically reduced, 
@@ -1440,6 +1476,11 @@ also carries these marks in the \verb!$lines! component.
     Also affects \texttt{mincontrast}, 
     \texttt{cauchy.estpcf}, \texttt{lgcp.estpcf}, \texttt{matclust.estpcf},
     \texttt{thomas.estpcf}, \texttt{vargamma.estpcf}.
+  \item 
+    Changed precedence rule for handling the algorithm parameters
+    in the minimum contrast algorithm. Individually-named arguments
+    \texttt{q,p,rmax,rmin} now take precedence over entries
+    with the same names in the list \texttt{ctrl}.
     \item
     Improved printed output.
   \end{itemize}
@@ -1756,6 +1797,11 @@ also carries these marks in the \verb!$lines! component.
      \item New arguments \texttt{equal.markscale} and \texttt{equal.ribbon}.
      \end{itemize}
 
+     
+   \item \texttt{plot.onearrow:} 
+     Graphical parameters, specified when the object was created,
+     are now taken as the defaults for graphical parameters to the plot.
+
   \item \texttt{plot.psp}:
     \begin{itemize}
     \item Segments can be plotted with widths proportional to their mark values.
@@ -2002,8 +2048,11 @@ also carries these marks in the \verb!$lines! component.
    for measuring and plotting angles.
 
  \item \texttt{rotmean}:
-   New argument \texttt{padzero}. 
-   Default behaviour has changed.
+   \begin{itemize}
+   \item    New argument \texttt{padzero}. 
+   \item Default behaviour has changed.
+   \item Improved algorithm stability.
+   \end{itemize}
 
    \item \texttt{rpoispp}:
    Accelerated, when \texttt{lambda} is a pixel image.
@@ -2125,7 +2174,7 @@ also carries these marks in the \verb!$lines! component.
         \texttt{pcfcross.inhom}, \texttt{pcfcross}, \texttt{pcf}, 
         \texttt{Tstat}.
     \end{quote}
-    
+
   \item \texttt{Summary.linim} family supporting \texttt{range}, \texttt{max},
     \texttt{min} etc:
      Recognises the argument \texttt{finite} so that 
@@ -2137,6 +2186,9 @@ also carries these marks in the \verb!$lines! component.
      \item Pixel resolution can now be controlled.
      \end{itemize}
 
+   \item \texttt{summary.kppm}:
+     prints more information about algorithm convergence.
+     
    \item \texttt{summary.ppm}:
     New argument \texttt{fine} selects the algorithm for variance estimation.
 

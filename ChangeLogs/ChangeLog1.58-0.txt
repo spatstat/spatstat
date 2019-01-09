@@ -1,4 +1,4 @@
-Change log from 1.57-1 to 1.57-2
+Change log from 1.57-1 to 1.58-0
 ================================
 
 05 nov 2018
@@ -334,3 +334,20 @@ Change log from 1.57-1 to 1.57-2
 ------------- passed R-3.5.2 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
+
+   updates.Rnw
+   bugfixes.Rnw
+	updated to cover all the above.
+
+   DESCRIPTION
+   NEWS
+	version 1.58-0
+	
+------------- passed R-3.5.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- passed 'make bookcheck'  ---------------
+--- passed R-3.5.2 CMD check --as-cran --run-donttest ---
+------------- passed R-devel CMD check ---------------
+              (2019-01-07 r75958)
+--- passed R-3.5.2 CMD check --use-valgrind --run-donttest ---
+>>>>>>>>>>>>   submitted to CRAN  <<<<<<<<<<<<<<<<<<<<<<<

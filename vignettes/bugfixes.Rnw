@@ -393,6 +393,23 @@ of potential impact.
  %% LEVEL 4: 
  \subsection{Partially Incorrect}
  \begin{itemize}
+
+ \item \texttt{rotmean}:
+       When \texttt{result="im"}
+       the resulting image did not have the same dimensions
+       as the input.
+   \bugger{1.42-2}{june 2015}{1.58-0}{january 2019}   
+       
+ \item \texttt{rotmean}:
+    If argument \texttt{origin} was given, and if \texttt{result="im"}
+    was specified,
+    the resulting image was wrongly displaced.
+   \bugger{1.42-2}{june 2015}{1.58-0}{january 2019}   
+
+   
+ \item \texttt{runifpointx}:
+    Result was mangled when \texttt{n=0} or \texttt{n=1}.
+   \bugger{1.50-0}{march 2017}{1.58-0}{january 2019}   
    
  \item \texttt{model.matrix.ppm}:
    The attribute \texttt{assign} was omitted in some cases.
