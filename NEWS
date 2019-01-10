@@ -1,10 +1,25 @@
 
+        CHANGES IN spatstat VERSION 1.58-2
+
+OVERVIEW
+
+    o Venn diagram tessellation
+
+    o Internal bug fixes.
+    
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o venn.tess
+    Venn diagram tessellation.
+
         CHANGES IN spatstat VERSION 1.58-1
 
 OVERVIEW
 
     o Bug fixes.
 
+    o Version nickname: "Compliment Sandwich"
+    
 BUG FIXES
 
     o lpp

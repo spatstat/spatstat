@@ -3,7 +3,7 @@
 #
 # support for tessellations
 #
-#   $Revision: 1.86 $ $Date: 2018/07/06 03:46:03 $
+#   $Revision: 1.88 $ $Date: 2019/01/10 08:45:23 $
 #
 tess <- function(..., xgrid=NULL, ygrid=NULL, tiles=NULL, image=NULL,
                  window=NULL, marks=NULL, keepempty=FALSE,
@@ -824,6 +824,29 @@ intersect.tess <- function(X, Y, ..., keepmarks=FALSE) {
   return(out)
 }
 
+venn.tess <- function(..., window=NULL) {
+  argh <- list(...)
+  nargh <- length(argh)
+  if(nargh == 0) stop("No arguments given")
+  iswin <- sapply(argh, is.owin)
+  istes <- sapply(argh, is.tess)
+  if(!all(iswin | istes)) 
+    stop("All arguments must be windows or tessellations", call.=FALSE)
+  nama <- names(argh)
+  if(sum(nzchar(nama)) < nargh)
+    nama <- paste0("T", seq_len(nargh))
+  W <- window %orifnull% do.call(union.owin, unname(lapply(argh, as.owin)))
+  for(i in seq_len(nargh)) {
+    A <- argh[[i]]
+    if(is.owin(A)) {
+      Z <- list(A, Out=setminus.owin(W, A))
+      names(Z) <- paste0(c("", "not"), nama[i])
+      A <- tess(tiles=Z, window=W)
+    }
+    Y <- if(i == 1) A else intersect.tess(Y, A)
+  }
+  return(Y)
+}
 
 bdist.tiles <- local({
 

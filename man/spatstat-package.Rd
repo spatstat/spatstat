@@ -632,6 +632,7 @@
       \code{\link{quadrats}} \tab create a tessellation of rectangles\cr
       \code{\link{hextess}} \tab create a tessellation of hexagons \cr
       \code{\link{quantess}} \tab quantile tessellation \cr
+      \code{\link{venn.tess}} \tab Venn diagram tessellation \cr 
       \code{\link{as.tess}} \tab convert other data to a tessellation \cr
       \code{\link{plot.tess}} \tab plot a tessellation \cr
       \code{\link{tiles}} \tab extract all the tiles of a tessellation \cr

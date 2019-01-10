@@ -131,7 +131,7 @@
   \code{\link{as.function.tess}}.
 
   To construct particular tessellations, see
-  \code{\link{quadrats}}, \code{\link{hextess}},
+  \code{\link{quadrats}}, \code{\link{hextess}}, \code{\link{venn.tess}}
   \code{\link{dirichlet}}, \code{\link{delaunay}}
   and \code{\link{rpoislinetess}}.
 

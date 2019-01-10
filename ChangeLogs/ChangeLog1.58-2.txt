@@ -1,0 +1,25 @@
+Change log from 1.58-1 to 1.58-2
+================================
+
+10 jan 2019
+
+   DESCRIPTION
+   NEWS
+   Nickname.txt
+	Version 1.58-2
+	Nickname 'Not Even Wrong'
+
+   tess.R
+   venn.tess.Rd [New file]
+        New function venn.tess
+
+   tess.Rd
+   spatstat-package.Rd
+	Cross-references to venn.tess
+
+   options.R
+	More buglet fixes detected by CRAN
+	
+------------- passed R-3.5.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
