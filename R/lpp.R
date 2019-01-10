@@ -1,7 +1,7 @@
 #
 # lpp.R
 #
-#  $Revision: 1.60 $   $Date: 2018/07/01 06:23:11 $
+#  $Revision: 1.61 $   $Date: 2019/01/10 00:04:11 $
 #
 # Class "lpp" of point patterns on linear networks
 
