@@ -1,7 +1,7 @@
 # Lurking variable plot for arbitrary covariate.
 #
 #
-# $Revision: 1.63 $ $Date: 2017/12/08 03:46:08 $
+# $Revision: 1.64 $ $Date: 2019/01/10 00:21:28 $
 #
 
 lurking <- function(object, ...) {
@@ -161,7 +161,7 @@ lurking.ppp <- lurking.ppm <- local({
     ## Validate covariate values
 
     nbg <- is.na(covvalues)
-    if(any(offending <- nbg && subQset)) {
+    if(any(offending <- nbg & subQset)) {
       if(is.im(covariate))
         warning(paste(sum(offending), "out of", length(offending),
                       "quadrature points discarded because",

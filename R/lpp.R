@@ -22,9 +22,9 @@ lpp <- function(X, L, ...) {
       #' validate local coordinates
       if(nrow(X) > 0) {
         nedge <- nsegments(L)
-        if(with(X, any(seg < 1 || seg > nedge)))
+        if(with(X, any(seg < 1 | seg > nedge)))
           stop("Segment index coordinate 'seg' exceeds bounds")
-        if(with(X, any(tp < 0 || tp > 1)))
+        if(with(X, any(tp < 0 | tp > 1)))
           stop("Local coordinate 'tp' outside [0,1]")
       }
       if(!checkfields(X, spatialnames)) {

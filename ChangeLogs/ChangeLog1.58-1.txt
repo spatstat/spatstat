@@ -1,0 +1,19 @@
+Change log from 1.58-0 to 1.58-1
+================================
+
+10 jan 2019
+
+   lpp.R
+   lurking.R
+	Fixed bugs detected by CRAN.
+	("&&" typed instead of "&")
+	
+   DESCRIPTION
+   NEWS
+   Nickname.txt
+	Version 1.58-1
+	Nickname 'Compliment Sandwich'
+
+------------- passed R-3.5.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------

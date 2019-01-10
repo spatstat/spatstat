@@ -1,4 +1,20 @@
 
+        CHANGES IN spatstat VERSION 1.58-1
+
+OVERVIEW
+
+    o Bug fixes.
+
+BUG FIXES
+
+    o lpp
+    Did not correctly detect some situations where the input data are invalid.
+    Fixed.
+
+    o lurking.ppp, lurking.ppm
+    Did not correctly detect some situations where the input data are invalid.
+    Fixed.
+    
         CHANGES IN spatstat VERSION 1.58-0
 
 OVERVIEW
