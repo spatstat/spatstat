@@ -1,4 +1,16 @@
 
+        CHANGES IN spatstat VERSION 1.58-2.001
+
+OVERVIEW
+
+    o Bug fixes.
+
+BUG FIXES
+
+    o incircle, inpoint
+    Crashed if the window was extremely thin.
+    Fixed.
+
         CHANGES IN spatstat VERSION 1.58-2
 
 OVERVIEW

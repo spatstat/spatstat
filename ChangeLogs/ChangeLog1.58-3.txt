@@ -1,0 +1,17 @@
+Change log from 1.58-2 to 1.58-3
+================================
+
+13 jan 2019
+
+   wingeom.R
+	Bug fixes to incircle and inpoint (handing very thin windows) 
+	
+   DESCRIPTION
+   NEWS
+   Nickname.txt
+	Version 1.58-2.001
+	Nickname "Dog's Breakfast"
+
+------------- passed R-3.5.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------

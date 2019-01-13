@@ -1,7 +1,7 @@
 #
 #	wingeom.R	Various geometrical computations in windows
 #
-#	$Revision: 4.130 $	$Date: 2018/10/28 10:27:04 $
+#	$Revision: 4.132 $	$Date: 2019/01/13 02:50:52 $
 #
 
 volume.owin <- function(x) { area.owin(x) }
@@ -953,6 +953,7 @@ incircle <- function(W) {
   v <- D$v
   ok <- !is.na(v)
   Dvalues <- as.vector(v[ok])
+  if(length(Dvalues) == 0) return(NULL)
   Dmax <- max(Dvalues)
   # find location of maximum
   locn <- which.max(Dvalues)
@@ -982,6 +983,7 @@ inpoint <- function(W) {
   }
   W <- as.mask(W)
   Mm <- W$m
+  if(!any(Mm)) return(NULL)
   Mrow <- as.vector(row(Mm)[Mm])
   Mcol <- as.vector(col(Mm)[Mm])
   selectmiddle <- function(x) { x[ceiling(length(x)/2)] }
