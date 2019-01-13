@@ -82,6 +82,21 @@ local({
 
 
 
+#'    tests/circular.R
+#'
+#'    Circular data and periodic distributions
+#'
+#'    $Revision: 1.1 $  $Date: 2019/01/13 07:47:28 $
+
+require(spatstat)
+local({
+  a <- pairorient(redwood, 0.05, 0.15, correction="none")
+  b <- pairorient(redwood, 0.05, 0.15, correction="best")
+  rose(a)
+  rose(b, start="N", clockwise=TRUE)
+})
+
+  
 ##  tests/closeshave.R
 ## check 'closepairs/crosspairs' code
 ## validity and memory allocation

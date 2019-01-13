@@ -3,7 +3,12 @@
 
 OVERVIEW
 
-    o Bug fixes.
+    o Minor improvements and bug fixes.
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o pairorient
+    Default edge corrections now include 'bord.modif'.
 
 BUG FIXES
 
@@ -19,7 +24,7 @@ OVERVIEW
 
     o Internal bug fixes.
     
-SIGNIFICANT USER-VISIBLE CHANGES
+NEW FUNCTIONS
 
     o venn.tess
     Venn diagram tessellation.

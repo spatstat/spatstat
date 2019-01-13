@@ -8,7 +8,7 @@
 ##
 ##     and its derivative estimated by kernel smoothing
 ##
-##  $Revision: 1.9 $ $Date: 2014/12/05 06:59:53 $
+##  $Revision: 1.10 $ $Date: 2019/01/13 07:33:20 $
 
 pairorient <- function(X, r1, r2, ...,
                        cumulative=FALSE,
@@ -37,7 +37,7 @@ pairorient <- function(X, r1, r2, ...,
   ## choose correction(s)
   correction.given <- !missing(correction) && !is.null(correction)
   if(!correction.given)
-    correction <- c("border", "isotropic", "translate")
+    correction <- c("border", "bord.modif", "translate", "isotropic")
   correction <- pickoption("correction", correction,
                            c(none="none",
                              border="border",

@@ -15,3 +15,20 @@ Change log from 1.58-2 to 1.58-3
 ------------- passed R-3.5.2 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
+
+   pairorient.R
+   pairorient.Rd
+	Default edge correction now includes 'bord.modif'.
+
+   tests/circular.R [New file]
+        Code for circular/periodic distributions
+
+   DESCRIPTION
+   NEWS
+	Version 1.58-2.002
+
+------------- passed R-3.5.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+	

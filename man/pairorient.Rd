@@ -8,7 +8,7 @@
   pairs of points at a particular range of distances.
 }
 \usage{
-pairorient(X, r1, r2, ..., cumulative=FALSE,
+pairorient(X, r1, r2, \dots, cumulative=FALSE,
            correction, ratio = FALSE,
            unit=c("degree", "radian"), domain=NULL)
 }
@@ -32,8 +32,10 @@ pairorient(X, r1, r2, ..., cumulative=FALSE,
   \item{correction}{
     Character vector specifying edge correction or corrections.
     Options are \code{"none"}, \code{"isotropic"}, \code{"translate"},
+    \code{"border"}, \code{"bord.modif"},
     \code{"good"} and \code{"best"}.
     Alternatively \code{correction="all"} selects all options.
+    The default is to compute all edge corrections except \code{"none"}.
   }
   \item{ratio}{
     Logical. 
@@ -73,8 +75,12 @@ pairorient(X, r1, r2, ..., cumulative=FALSE,
   determined by an edge correction, to adjust for the fact that some
   interpoint distances are more likely to be observed than others.
   The choice of edge correction or corrections is determined by the argument
-  \code{correction}.
-
+  \code{correction}. See the help for \code{\link{Kest}} for details
+  of edge corrections, and explanation of the options available.
+  The choice \code{correction="none"} is not recommended;
+  it is included for demonstration purposes only. The default is to
+  compute all corrections except \code{"none"}.
+  
   It is also possible to calculate an estimate of the probability
   density from the cumulative distribution function,
   by numerical differentiation. 
@@ -89,8 +95,8 @@ pairorient(X, r1, r2, ..., cumulative=FALSE,
 }
 \references{
   Stoyan, D. and Stoyan, H. (1994)
-  Fractals, random shapes and point fields:
-  methods of geometrical statistics.
+  Fractals, Random Shapes and Point Fields:
+  Methods of Geometrical Statistics.
   John Wiley and Sons.
 }
 \seealso{
@@ -101,12 +107,8 @@ pairorient(X, r1, r2, ..., cumulative=FALSE,
   plot(CDF <- pairorient(redwood, 0.05, 0.15, cumulative=TRUE))
   plot(f <- deriv(CDF, spar=0.6, Dperiodic=TRUE))
 }
-\author{\adrian
-  
-  \rolf
-  
-  and \ege
-  
+\author{
+  \spatstatAuthors.
 }
 \keyword{spatial}
 \keyword{nonparametric}
