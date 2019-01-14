@@ -8,7 +8,7 @@
 
 spatstat.xy.coords <- function(x,y) {
   if(missing(y) || is.null(y)) {
-    xy <- if(is.ppp(x) || is.lpp(x)) coords(x) else
+    xy <- if(is.ppp(x) || is.lpp(x) || is.quad(x)) coords(x) else
           if(checkfields(x, c("x", "y"))) x else 
           stop("Argument y is missing", call.=FALSE)
     x <- xy$x

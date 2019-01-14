@@ -4,7 +4,7 @@
 #	Class 'quad' to define quadrature schemes
 #	in (rectangular) windows in two dimensions.
 #
-#	$Revision: 4.27 $	$Date: 2018/07/21 03:33:10 $
+#	$Revision: 4.28 $	$Date: 2019/01/14 06:44:41 $
 #
 # An object of class 'quad' contains the following entries:
 #
@@ -94,6 +94,11 @@ x.quad <- function(Q) {
 y.quad <- function(Q) {
   verifyclass(Q, "quad")
   c(Q$data$y, Q$dummy$y)
+}
+
+coords.quad <- function(x, ...) {
+  data.frame(x=x.quad(x),
+             y=y.quad(x))
 }
 
 w.quad <- function(Q) {

@@ -1,7 +1,7 @@
 #
 #  effectfun.R
 #
-#   $Revision: 1.20 $ $Date: 2017/06/05 10:31:58 $
+#   $Revision: 1.21 $ $Date: 2019/01/14 06:35:31 $
 #
 
 effectfun <- local({
@@ -67,8 +67,8 @@ effectfun <-  function(model, covname, ..., se.fit=FALSE) {
     Zvals <- levels(marks(data.ppm(model)))
   } else {
     # covariate is external
-    if(is.data.frame(covdf <- model$covariates)) {
-      Z <- covdf$covname
+    if(is.data.frame(covdf <- model$covariates) && (covname %in% names(covdf))) {
+      Z <- covdf[,covname]
       covtype <- typeof(Z)
       if(covtype == "double")
         covtype <- "real"

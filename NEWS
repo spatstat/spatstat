@@ -1,21 +1,33 @@
 
-        CHANGES IN spatstat VERSION 1.58-2.001
+        CHANGES IN spatstat VERSION 1.58-2.003
 
 OVERVIEW
 
     o Minor improvements and bug fixes.
 
+NEW FUNCTIONS
+
+    o coords.quad
+    New method for 'coords', to extract the coordinates of a quadrature scheme.
+    
 SIGNIFICANT USER-VISIBLE CHANGES
 
     o pairorient
     Default edge corrections now include 'bord.modif'.
 
+    o funxy
+    Functions of class 'funxy' can now be applied to quadrature schemes.
+    
 BUG FIXES
 
     o incircle, inpoint
     Crashed if the window was extremely thin.
     Fixed.
 
+    o effectfun
+    Crashed in some obscure cases.
+    Fixed.
+    
         CHANGES IN spatstat VERSION 1.58-2
 
 OVERVIEW

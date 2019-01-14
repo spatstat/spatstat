@@ -761,7 +761,7 @@ Contains the point patterns used as examples in
 along with {\sf R} code.
 
 <<fig=TRUE>>=
-plot(as.listof(residualspaper[c("Fig1", "Fig4a", "Fig4b", "Fig4c")]), 
+plot(as.solist(residualspaper[c("Fig1", "Fig4a", "Fig4b", "Fig4c")]), 
      main="")
 @ 
 

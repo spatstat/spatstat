@@ -330,12 +330,13 @@ local({
 #
 #  tests/func.R
 #
-#   $Revision: 1.3 $   $Date: 2016/06/10 15:04:08 $
+#   $Revision: 1.4 $   $Date: 2019/01/14 07:05:27 $
 #
 #  Tests of 'funxy' infrastructure etc
 
 require(spatstat)
 local({
+  ## Check the peculiar function-building code in funxy
   W <- square(1)
   f1a <- function(x, y) sqrt(x^2 + y^2)
   f1b <- function(x, y) { sqrt(x^2 + y^2) }
@@ -357,6 +358,13 @@ local({
   stopifnot(identical(F2a(cells), F2b(cells)))
   stopifnot(identical(F3a(cells), F3b(cells)))
   stopifnot(identical(F4a(cells), F4b(cells)))
+  ## check coordinate extraction from objects
+  X <- runifpoint(9)
+  Y <- runiflpp(5, simplenet)
+  Q <- quadscheme(X)
+  a <- F1a(X)
+  b <- F1a(Y)
+  d <- F1a(Q)
 })
 
 

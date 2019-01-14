@@ -39,10 +39,12 @@
   \code{n}.
 
   The resulting function \code{g <- funxy(f, W)} has the same formal
-  arguments as \code{f}. It accepts numeric vectors \code{x,y} as
-  described above, but if \code{y} is missing, then \code{x} may be
-  a point pattern (object of class \code{"ppp"} or \code{"lpp"}) from
-  which the coordinates should be extracted.
+  arguments as \code{f} and can be called in the same way,
+  \code{v <- g(x,y)} where \code{x} and \code{y} are numeric vectors.
+  However it can also be called as \code{v <- g(X)}, where \code{X} is a point pattern
+  (object of class \code{"ppp"} or \code{"lpp"})
+  or a quadrature scheme (class \code{"quad"});
+  the function will be evaluated at the points of \code{X}.
 }
 \value{
   A \code{function} with the same arguments as \code{f},
@@ -57,8 +59,10 @@
 \examples{
    f <- function(x,y) { x^2 + y^2 - 1} 
    g <- funxy(f, square(2))
-   g(0.2, 0.3)
    g
+   ## evaluate function at any x, y coordinates
+   g(0.2, 0.3)
+   ## evaluate function at the points of a point pattern
    g(cells[1:4])
 }
 \author{

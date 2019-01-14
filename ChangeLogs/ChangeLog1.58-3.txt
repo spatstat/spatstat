@@ -31,4 +31,33 @@ Change log from 1.58-2 to 1.58-3
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+   doc/datasets.Rnw
+	Minor correction
+
+14 jan 2019
+
+   effectfun.R
+	Bug fix in handling dataframes of covariates
 	
+   tests/prediction.R
+	Test handling of data frames of covariates
+
+   quadclass.R
+   coords.Rd
+	New method 'coords.quad'
+	
+   funxy.R
+	spatstat.xy.coords now handles quadrature schemes
+	so that 'funxy' objects can now be applied to quadrature schemes.
+
+   tests/func.R
+	Test funxy handling of ppp, lpp, quad
+	
+   DESCRIPTION
+   NEWS
+	Version 1.58-2.003
+
+------------- passed R-3.5.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+

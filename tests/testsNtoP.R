@@ -705,7 +705,7 @@ local({
 #
 # Things that might go wrong with predict()
 #
-#  $Revision: 1.8 $ $Date: 2018/11/01 13:20:23 $
+#  $Revision: 1.10 $ $Date: 2019/01/14 07:07:20 $
 #
 
 require(spatstat)
@@ -773,6 +773,15 @@ local({
   fut1 <- ppm(cells ~ 1, Strauss(0.1))
   effectfun(fut1, "x")
   effectfun(fut1, "y")
+
+  ## ppm with covariate values in data frame
+  X <- rpoispp(42)
+  Q <- quadscheme(X)
+  weirdfunction <- function(x,y){ 10 * x^2 + 5 * sin(10 * y) }
+  Zvalues <- weirdfunction(x.quad(Q), y.quad(Q))
+  fot <- ppm(Q ~ y + Z, data=data.frame(Z=Zvalues))
+  effectfun(fot, "y", Z=0)
+  effectfun(fot, "Z", y=0)
 })
 
 #
