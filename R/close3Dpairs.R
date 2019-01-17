@@ -105,10 +105,13 @@ closepairs.pp3 <- local({
                        data.frame(i = ii, j=ii, d=0)
                      },
                      all = {
-                       coo <- coords(X)[, c("x","y","z")]
+                       cooi <- cooj <- coords(X)[, c("x","y","z")]
+                       names(cooi) <- c("xi", "yi", "zi")
+                       names(cooj) <- c("xj", "yj", "zj")
                        zero <- numeric(npts)
                        cbind(data.frame(i=ii, j=ii),
-                             coo, coo,
+                             cooi,
+                             cooj,
                              data.frame(dx=zero, dy=zero, dz=zero, d=zero))
                      })
       a <- as.list(rbind(as.data.frame(a), xtra))

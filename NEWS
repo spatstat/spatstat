@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.58-2.003
+        CHANGES IN spatstat VERSION 1.58-2.004
 
 OVERVIEW
 
@@ -27,7 +27,12 @@ BUG FIXES
     o effectfun
     Crashed in some obscure cases.
     Fixed.
-    
+
+    o closepairs.pp3
+    Crashed if distinct=FALSE and what="all".
+    Fixed.
+
+
         CHANGES IN spatstat VERSION 1.58-2
 
 OVERVIEW

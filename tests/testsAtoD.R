@@ -100,7 +100,7 @@ local({
 ##  tests/closeshave.R
 ## check 'closepairs/crosspairs' code
 ## validity and memory allocation
-## $Revision: 1.15 $ $Date: 2018/11/27 02:07:30 $
+## $Revision: 1.16 $ $Date: 2019/01/17 01:42:03 $
 
 local({
   r <- 0.12
@@ -218,9 +218,16 @@ local({
 local({
   #' Three-dimensional
   X <- runifpoint3(100)
-  Y <- runifpoint3(100)
   cl <- closepairs(X, 0.2, what="indices")
   cl <- closepairs(X, 0.2, what="ijd")
+  cl <- closepairs(X, 0.2, distinct=FALSE)
+  cl <- closepairs(X, 0.2, distinct=FALSE, what="indices")
+  cl <- closepairs(X, 0.2, distinct=FALSE, what="ijd")
+  cl <- closepairs(X, 0.2, twice=FALSE, neat=TRUE)
+  #' trap obsolete usage
+  cl <- closepairs(X, 0.2, ordered=FALSE)
+  #' crosspairs
+  Y <- runifpoint3(100)
   cr <- crosspairs(X, Y, 0.2, what="indices")
   cr <- crosspairs(X, Y, 0.2, what="ijd")
   #' markmarkscatter uses closepairs.pp3

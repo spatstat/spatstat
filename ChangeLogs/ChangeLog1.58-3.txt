@@ -61,3 +61,21 @@ Change log from 1.58-2 to 1.58-3
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+17 jan 2019
+
+   close3Dpairs.R
+	Bug fix.
+
+   tests/closeshave.R
+	More tests of 3D closepairs/crosspairs code
+
+   tests/windows.R
+	More tests of window geometry code
+	
+   DESCRIPTION
+   NEWS
+	Version 1.58-2.003
+
+------------- passed R-3.5.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------

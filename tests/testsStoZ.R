@@ -1051,7 +1051,7 @@ local({
 #
 # Tests of owin geometry code
 #
-#  $Revision: 1.6 $  $Date: 2018/10/28 10:31:56 $
+#  $Revision: 1.7 $  $Date: 2019/01/17 01:47:29 $
 
 require(spatstat)
 local({
@@ -1125,6 +1125,16 @@ local({
   periodify(union.owin(B1, B2), 2)
   periodify(letterR, 2)
 
+  #' miscellaneous utilities
+  thrash <- function(f) {
+    f(letterR)
+    f(Frame(letterR))
+    f(as.mask(letterR))
+  }
+  thrash(meanX.owin)
+  thrash(meanY.owin)
+  thrash(intX.owin)
+  thrash(intY.owin)
 })
 
 reset.spatstat.options()
