@@ -1,7 +1,7 @@
 #
 #        edgeTrans.R
 #
-#    $Revision: 1.15 $    $Date: 2016/04/25 02:34:40 $
+#    $Revision: 1.16 $    $Date: 2019/01/18 02:26:41 $
 #
 #    Translation edge correction weights
 #
@@ -134,7 +134,7 @@ rmax.Trans <- function(W, g=setcov(W)) {
 ## maximum radius for rigid motion correction
 ## = radius of smallest circle centred at 0 containing W + ^W
 
-rmax.Rigid <- function(X, g=setcov(Window(X))) {
+rmax.Rigid <- function(X, g=setcov(as.owin(X))) {
   stopifnot(is.ppp(X) || is.owin(X))
   if(is.ppp(X))
     return(max(pairdist(X[chull(X)])))

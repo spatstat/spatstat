@@ -266,7 +266,7 @@ local({
 #'
 #'   Various K and L functions and pcf
 #'
-#'   $Revision: 1.7 $  $Date: 2018/11/01 13:26:16 $
+#'   $Revision: 1.8 $  $Date: 2019/01/18 02:11:11 $
 #'
 
 require(spatstat)
@@ -325,8 +325,22 @@ local({
     stop("Ripley edge correction results do not match")
 
   a <- rmax.Ripley(square(1))
+  a <- rmax.Rigid(square(1))
   a <- rmax.Ripley(as.polygonal(square(1)))
+  a <- rmax.Rigid(as.polygonal(square(1)))
   a <- rmax.Ripley(letterR)
+  a <- rmax.Rigid(letterR)
+
+  #' run slow code for edge correction and compare results
+  X <- redwood[c(TRUE, FALSE, FALSE)]
+  Window(X) <- as.polygonal(Window(X))
+  Eapprox <- edge.Trans(X)
+  Eexact <- edge.Trans(X, exact=TRUE)
+  maxrelerr <- max(abs(1 - range(Eapprox/Eexact)))
+  if(maxrelerr > 0.1)
+    stop(paste("Exact and approximate algorithms for edge.Trans disagree by",
+               paste0(round(100*maxrelerr), "%")),
+         call.=FALSE)
   #'
   #'   local K functions
   #'

@@ -481,7 +481,7 @@ local({
 #
 #  Thanks to Marcelino de la Cruz
 #
-#  $Revision: 1.11 $  $Date: 2016/03/05 01:33:47 $
+#  $Revision: 1.12 $  $Date: 2019/01/18 01:58:29 $
 #
 
 require(spatstat)
@@ -543,7 +543,12 @@ df <- data.frame(x=runif(4),y=runif(4),t=runif(4),
 X <- ppx(data=df, coord.type=c("s","s","t","m", "m","m"))
 Y <- split(X, "age")
 Y <- split(X, "mineral", drop=TRUE)
-
+Y <- split(X, "mineral")
+print(Y)
+print(summary(Y))
+Y[c(TRUE,FALSE,TRUE)]
+Y[1:2]
+Y[3] <- Y[1]
 })
 #'
 #'    tests/ssf.R
