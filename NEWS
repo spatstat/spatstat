@@ -1,10 +1,12 @@
 
-        CHANGES IN spatstat VERSION 1.58-2.005
+        CHANGES IN spatstat VERSION 1.58-2.006
 
 OVERVIEW
 
     o Minor improvements and bug fixes.
 
+    o Version nickname: "Dog's Breakfast"
+    
 NEW FUNCTIONS
 
     o coords.quad
@@ -32,7 +34,10 @@ BUG FIXES
     Crashed if distinct=FALSE and what="all".
     Fixed.
 
-
+    o extractbranch.lpp
+    Point pattern coordinates were sometimes erroneously set to NA.
+    Fixed.
+    
         CHANGES IN spatstat VERSION 1.58-2
 
 OVERVIEW

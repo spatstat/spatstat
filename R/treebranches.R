@@ -3,7 +3,7 @@
 #'
 #'  Label branches in a tree
 #'
-#'  $Revision: 1.4 $ $Date: 2016/07/16 03:14:51 $
+#'  $Revision: 1.5 $ $Date: 2019/01/20 05:26:51 $
 
 #' compute branch labels for each *vertex* in the tree L
 
@@ -129,7 +129,7 @@ extractbranch.lpp <- function(X, code, labels, ..., which=NULL) {
   if(missing(labels)) labels <- NULL
   Lnew <- extractbranch(L, code, labels, which=which)
   #' which vertices are included
-  vin <- attr(Lnew, "vin")
+  vin <- attr(Lnew, "which")
   #' which edges are included
   ein <- vin[L$from] & vin[L$to]
   #' which data points are included

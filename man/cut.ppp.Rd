@@ -126,7 +126,10 @@
  plot(cut(swedishpines, tes))
  plot(tes, lty=2, add=TRUE)
 
- # (4) multivariate marks
+ # (4) inside/outside a given region
+ with(murchison, cut(gold, greenstone))
+
+ # (5) multivariate marks
  finpines
  cut(finpines, "height", breaks=4)
 }

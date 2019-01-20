@@ -317,7 +317,7 @@ local({
 #
 # Tests for lpp code
 #
-#  $Revision: 1.23 $  $Date: 2018/11/27 01:58:47 $
+#  $Revision: 1.24 $  $Date: 2019/01/20 05:27:35 $
 
 
 require(spatstat)
@@ -550,6 +550,18 @@ local({
   X <- runiflpp(20, simplenet) %mark% runif(20)
   markmarkscatter(X, 0.2)
   markmarkscatter(X[FALSE], 0.1)
+
+  ## tree branches
+  # make a simple tree
+  m <- simplenet$m
+  m[8,10] <- m[10,8] <- FALSE
+  L <- linnet(vertices(simplenet), m)
+  tb <- treebranchlabels(L, 1)
+  X <- runiflpp(50, L)
+  # delete branch B
+  XminusB <- deletebranch(X, "b", tb)
+  # extract branch B
+  XB <- extractbranch(X, "b", tb)
 })
 
 reset.spatstat.options()

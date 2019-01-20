@@ -3,7 +3,7 @@
 #'
 #'    Quadrature schemes, dummy points etc
 #' 
-#'   $Revision: 1.5 $ $Date: 2018/07/21 03:36:04 $
+#'   $Revision: 1.6 $ $Date: 2019/01/20 05:49:40 $
 #'
 
 require(spatstat)
@@ -33,6 +33,10 @@ local({
   n <- default.n.tiling(cells, ntile=4)
   n <- default.n.tiling(cells, ntile=4, quasi=TRUE)
 
+  ## quadrature weights - special cases
+  X <- runifpoint(10, as.mask(letterR))
+  gr <- gridweights(X, ntile=12, npix=7) # causes warnings about zero digital area
+  
   ## plot.quad 
   plot(quadscheme(cells, method="dirichlet", nd=7),              tiles=TRUE)
   plot(quadscheme(cells, method="dirichlet", nd=7, exact=FALSE), tiles=TRUE)
