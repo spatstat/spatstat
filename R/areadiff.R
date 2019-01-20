@@ -1,7 +1,7 @@
 #
 # areadiff.R
 #
-#  $Revision: 1.37 $  $Date: 2018/09/28 05:14:39 $
+#  $Revision: 1.38 $  $Date: 2019/01/20 08:46:55 $
 #
 # Computes sufficient statistic for area-interaction process
 #
@@ -32,67 +32,58 @@ areaGain <- function(u, X, r, ..., W=as.owin(X), exact=FALSE,
 #    algorithms using polygon geometry
 #///////////////////////////////////////////////////////////
 
-areaLoss.poly <- local({
-
-  areaLoss.poly <- function(X, r, ..., W=as.owin(X), subset=NULL,
+areaLoss.poly <- function(X, r, ..., W=as.owin(X), subset=NULL,
                             splitem=TRUE) {
-    check.1.real(r)
-    nX <- npoints(X)
-    if(r <= 0 || nX == 0) return(numeric(nX))
-    cooX <- coords(X)
-    if(useW <- is.owin(W))
-      W <- as.polygonal(W)
-    #' initialise result
-    result <- rep(pi * r^2, nX)
-    wanted <- 1:nX
-    if(!is.null(subset))
-      wanted <- wanted[subset]
-    #' split into connected components
-    if(splitem) {
-      Y <- connected(X, 2 * r)
-      Z <- split(Y)
-      V <- lapply(Z, areaLoss.poly, r=r, W=W, splitem=FALSE)
-      return(unsplit(V, marks(Y))[wanted])
-    }
-    #' determine which pairs of points interact
-    cl <- closepairs(X, 2 * r, what="indices")
-    if(length(cl$i) == 0)
-      return(result[wanted])
-    #' determine scale parameters for polyclip
-    p <- commonPolyclipArgs(Frame(X))
-    #' template disc
-    ball0 <- disc(r, c(0,0), ...)
-    #' discs centred on data points
-    balls <- vector(mode="list", length=nX)
-    for(i in seq_len(nX))
-      balls[[i]] <- shift(ball0, vec=cooX[i,])
-    balls <- as.solist(balls, check=FALSE)
-    #' start computin'
-    for(i in wanted) {
-      jj <- cl$j[cl$i == i]
-      nn <- length(jj)
-      if(nn > 0) {
-        #' union of balls close to i
-        u <- if(nn == 1) balls[[ jj ]] else union.owin(balls[jj], p=p)
-        #' subtract from ball i
-        v <- setminus.owin(balls[[i]], u)
-        #' clip to window
-        if(useW) 
-          v <- intersect.owin(v, W)
-        #' compute
-        result[i] <- area(v)
-      }
-    }
+  check.1.real(r)
+  nX <- npoints(X)
+  if(r <= 0 || nX == 0) return(numeric(nX))
+  cooX <- coords(X)
+  if(useW <- is.owin(W))
+    W <- as.polygonal(W)
+  #' initialise result
+  result <- rep(pi * r^2, nX)
+  wanted <- 1:nX
+  if(!is.null(subset))
+    wanted <- wanted[subset]
+  #' split into connected components
+  if(splitem) {
+    Y <- connected(X, 2 * r)
+    Z <- split(Y)
+    V <- lapply(Z, areaLoss.poly, r=r, W=W, splitem=FALSE)
+    return(unsplit(V, marks(Y))[wanted])
+  }
+  #' determine which pairs of points interact
+  cl <- closepairs(X, 2 * r, what="indices")
+  if(length(cl$i) == 0)
     return(result[wanted])
+  #' determine scale parameters for polyclip
+  p <- commonPolyclipArgs(Frame(X))
+  #' template disc
+  ball0 <- disc(r, c(0,0), ...)
+  #' discs centred on data points
+  balls <- vector(mode="list", length=nX)
+  for(i in seq_len(nX))
+    balls[[i]] <- shift(ball0, vec=cooX[i,])
+  balls <- as.solist(balls, check=FALSE)
+  #' start computin'
+  for(i in wanted) {
+    jj <- cl$j[cl$i == i]
+    nn <- length(jj)
+    if(nn > 0) {
+      #' union of balls close to i
+      u <- if(nn == 1) balls[[ jj ]] else union.owin(balls[jj], p=p)
+      #' subtract from ball i
+      v <- setminus.owin(balls[[i]], u)
+      #' clip to window
+      if(useW) 
+        v <- intersect.owin(v, W)
+      #' compute
+      result[i] <- area(v)
+    }
   }
+  return(result[wanted])
+}
 
-  extract.reversed.polygons <- function(w) {
-    lapply(w$bdry, reverse.xypolygon)
-  }
-
-
-  areaLoss.poly
-})
 #////////////////////////////////////////////////////////////
 #    algorithms using Dirichlet tessellation
 #///////////////////////////////////////////////////////////

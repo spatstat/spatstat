@@ -785,7 +785,7 @@ local({
 #'
 #'  tests/discarea.R
 #'
-#'   $Revision: 1.1 $ $Date: 2016/03/28 09:16:03 $
+#'   $Revision: 1.2 $ $Date: 2019/01/20 08:44:50 $
 #'
 
 require(spatstat)
@@ -796,7 +796,13 @@ local({
   areaGain(u, cells, 0.1, W=NULL)
   areaGain(u, cells, 0.1, W=B)
 
-  areaLoss(cells[square(0.4)], 0.1, exact=TRUE)
+  X <- cells[square(0.4)]
+  areaLoss(X, 0.1, exact=TRUE)  # -> areaLoss.diri
+  areaLoss(X, 0.1, exact=FALSE) # -> areaLoss.grid
+  areaLoss.poly(X, 0.1)
+
+  areaLoss(X, 0.1, exact=FALSE, method="distmap")          # -> areaLoss.grid
+  areaLoss(X, c(0.1, 0.15), exact=FALSE, method="distmap") # -> areaLoss.grid
 })
 #'
 #'   tests/disconnected.R
