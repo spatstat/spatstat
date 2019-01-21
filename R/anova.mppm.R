@@ -1,7 +1,7 @@
 #
 # anova.mppm.R
 #
-# $Revision: 1.13 $ $Date: 2017/08/08 07:18:43 $
+# $Revision: 1.14 $ $Date: 2019/01/21 10:58:29 $
 #
 
 anova.mppm <- local({
@@ -52,7 +52,8 @@ anova.mppm <- local({
           ## model containing terms 1, ..., n-1
           fmla <- paste(". ~ . - ", paste(Terms[n:nT], collapse=" - "))
           fmla <- as.formula(fmla)
-          objex[[n]] <- update(object, fmla)
+          calln <- update(object, fmla, evaluate=FALSE)
+          objex[[n]] <- eval(calln, parent.frame())
         }
         ## full model
         objex[[nT+1L]] <- object

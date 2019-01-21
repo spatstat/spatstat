@@ -138,4 +138,27 @@ Change log from 1.58-2 to 1.58-3
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+   demo/sumfun.R
+	Neatened plot margins
+	Added examples of rose diagrams.
 
+   anova.mppm.R
+	Fixed scoping problem in the single-model case
+	
+   anova.mppm.Rd
+   tests/mppm.R
+	Run more code blocks in anova.mppm
+
+   lohboot.R
+	Streamlined and neatened the code.
+
+   tests/Kfuns.R
+	Added tests of code blocks in lohboot.
+
+   DESCRIPTION
+   NEWS
+	Version 1.58-2.008
+
+------------- passed R-3.5.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------

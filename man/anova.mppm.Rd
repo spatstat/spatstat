@@ -96,13 +96,23 @@
 }
 \examples{
  H <- hyperframe(X=waterstriders)
+ #' test for loglinear trend in x coordinate
  mod0 <- mppm(X~1, data=H, Poisson())
  modx <- mppm(X~x, data=H, Poisson())
  anova(mod0, modx, test="Chi")
+ # not significant
+ anova(modx, test="Chi")
+ # not significant
 
+ #' test for inhibition
  mod0S <- mppm(X~1, data=H, Strauss(2))
+ anova(mod0, mod0S, test="Chi")
+ # significant! 
+
+ #' test for trend after accounting for inhibition
  modxS <- mppm(X~x, data=H, Strauss(2))
  anova(mod0S, modxS, test="Chi")
+ # not significant
 }
 \references{
   Baddeley, A., Rubak, E. and Turner, R. (2015)

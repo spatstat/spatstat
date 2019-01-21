@@ -739,7 +739,7 @@ reset.spatstat.options()
 #
 # Basic tests of mppm
 #
-# $Revision: 1.9 $ $Date: 2017/12/07 15:11:20 $
+# $Revision: 1.11 $ $Date: 2019/01/21 10:59:07 $
 # 
 
 require(spatstat)
@@ -872,5 +872,18 @@ local({
   lurking(fit, expression(Z), type="P")
   lurking(fit, expression(V), type="raw") # design covariate
   lurking(fit, expression(U), type="raw") # image, constant in each row
+})
+
+local({
+  ## test anova.mppm code blocks and scoping problem
+  H <- hyperframe(X=waterstriders)
+  mod0 <- mppm(X~1, data=H, Poisson())
+  modxy <- mppm(X~x+y, data=H, Poisson())
+  mod0S <- mppm(X~1, data=H, Strauss(2))
+  modxyS <- mppm(X~x+y, data=H, Strauss(2))
+  anova(mod0, modxy, test="Chi")
+  anova(mod0S, modxyS, test="Chi")
+  anova(modxy, test="Chi")
+  anova(modxyS, test="Chi")
 })
 

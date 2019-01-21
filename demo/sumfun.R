@@ -1,9 +1,12 @@
 ## demonstration of all summary functions
 
-opa <- par(mfrow=c(1,1))
+opa <- par(mfrow=c(1,1),
+           mar=c(0,0,1,0)+0.2)
 
-## Ripley's K-function 
+## Ripley's K-function
 plot(swedishpines)
+
+par(mar=c(4,4,2,1)+0.2)
 plot(Kest(swedishpines))
 
 ## Besag's transformation
@@ -12,18 +15,23 @@ plot(Lest(swedishpines))
 ## pair correlation function
 plot(pcf(swedishpines))
 
-par(mfrow=c(2,3))
+par(mfrow=c(2,3),
+    mar=c(0,0,1,0)+0.2)
+    
 ## Showing the utility of the K-function
 plot(cells)
 plot(nztrees)
 plot(redwood)
+par(mar=c(4,4,2,1)+0.2)
 plot(Kest(cells))
 plot(Kest(nztrees))
 plot(Kest(redwood))
 ## Showing the utility of the pair correlation function
+par(mar=c(0,0,1,0)+0.2)
 plot(cells)
 plot(nztrees)
 plot(redwood)
+par(mar=c(4,4,2,1)+0.2)
 plot(pcf(cells))
 plot(pcf(nztrees))
 plot(pcf(redwood))
@@ -55,32 +63,41 @@ plot(localK(swedishpines))
 ## anisotropic
 plot(Ksector(redwood, 0, 90))
 plot(Rf <- pairorient(redwood, 0.05, 0.15))
-plot(Df <- deriv(Rf, spar=0.6, Dperiodic=TRUE))
+rose(Rf, main="Rose diagram of pair orientation distribution")
+plot(deriv(Rf, spar=0.6, Dperiodic=TRUE))
+rose(nnorient(redwood))
 
 ##
-par(mfrow=c(2,3))
+par(mfrow=c(2,3),
+    mar=rep(0.2, 4))
 ## Empty space function F
 plot(cells)
 plot(nztrees)
 plot(redwood)
+par(mar=c(4,4,2,1)+0.2)
 plot(Fest(cells))
 plot(Fest(nztrees))
 plot(Fest(redwood))
 ## Nearest neighbour distance function G
+par(mar=rep(0.2, 4))
 plot(cells)
 plot(nztrees)
 plot(redwood)
+par(mar=c(4,4,2,1)+0.2)
 plot(Gest(cells))
 plot(Gest(nztrees))
 plot(Gest(redwood))
 ## J-function
+par(mar=rep(0.2, 4))
 plot(cells)
 plot(nztrees)
 plot(redwood)
+par(mar=c(4,4,2,1)+0.2)
 plot(Jest(cells))
 plot(Jest(nztrees))
 plot(Jest(redwood))
-par(mfrow=c(1,1))
+par(mfrow=c(1,1),
+    mar=c(4,4,2,1)+0.2)
 
 ## versions for inhomogeneous patterns
 plot(Finhom(japanesepines))

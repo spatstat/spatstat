@@ -266,7 +266,7 @@ local({
 #'
 #'   Various K and L functions and pcf
 #'
-#'   $Revision: 1.8 $  $Date: 2019/01/18 02:11:11 $
+#'   $Revision: 1.9 $  $Date: 2019/01/21 10:21:29 $
 #'
 
 require(spatstat)
@@ -352,6 +352,13 @@ local({
   a <- localLinhom(swedishpines, lambda=Lam)
   a <- localLinhom(swedishpines, lambda=Z, correction="none")
   a <- localLinhom(swedishpines, lambda=Z, correction="translate")
+  #'
+  #'   lohboot code blocks
+  #'
+  Ared <- lohboot(redwood, block=TRUE, Vcorrection=TRUE, global=FALSE)
+  Bred <- lohboot(redwood, block=TRUE, basicboot=TRUE, global=FALSE)
+  X <- runifpoint(100, letterR)
+  AX <- lohboot(X, block=TRUE, nx=7, ny=10)
 })
 #
 # tests/kppm.R

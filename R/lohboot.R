@@ -1,7 +1,7 @@
 #
 #  lohboot.R
 #
-#  $Revision: 1.16 $   $Date: 2017/10/02 07:54:12 $
+#  $Revision: 1.19 $   $Date: 2019/01/21 10:34:36 $
 #
 #  Loh's bootstrap CI's for local pcf, local K etc
 #
@@ -67,84 +67,98 @@ lohboot <-
   y <- as.matrix(as.data.frame(f))[, 1:n]
   nr <- nrow(y)
     
-    ###### Modification by Christophe Biscio
-    
-  if(!block) {  # This is the loop in the former version of code
-  # average them
-  ymean <- .rowMeans(y, na.rm=TRUE, nr, n)
-  # resample
-  ystar <- matrix(, nrow=nr, ncol=nsim)
-  for(i in 1:nsim) {
-    # resample n points with replacement
-    ind <- sample(n, replace=TRUE)
-    # average their local pcfs
-    ystar[,i] <- .rowMeans(y[,ind], nr, n, na.rm=TRUE)
-  }
-  } else{ # Block bootstrap as described by Loh.
-      # Block creation for the bootstrap
-      W <- Window(X)
-      blocks <- tiles(quadrats(boundingbox(W), nx = nx, ny =ny))
-      if(!is.rectangle(W)){
-        fullblocks <- sapply(blocks, is.subset.owin, B = W)
-        if(sum(fullblocks)<2){
-          stop("Not enough blocks are fully contained in the window.")
-        }
-        warning("For non-rectangular windows only blocks fully contained in the window are used:",
-                paste(sum(fullblocks), "are used, and ", sum(!fullblocks), "are omitted."))
-        blocks <- blocks[fullblocks]
-        n <- sum(sapply(blocks, function(w) npoints(X[w])))
-      }
-      
-      # Average the marks in each blocks
-      nmarks <- length(blocks)  # same as the number of columns in ymarks
-      Xinblocks <-  lapply( 1:nmarks, FUN = function(i) {which(inside.owin(X, w=blocks[[i]]))}) # which point is in which block
-      ymarks <- lapply(1:nmarks, FUN = function(i) { if(length(Xinblocks[[i]])==0) { rep(0,nr) }
-        else {.rowSums(y[,Xinblocks[[i]]], nr , length(Xinblocks[[i]]), na.rm=TRUE)*nmarks/n  } } )
-      ymarks <- do.call(cbind,ymarks)
-      
-      # average all the marks
-      ymean <- .rowMeans(ymarks, na.rm=TRUE, nr, nmarks)
-      
-      # Average the marks in each blocks
-      ystar <- matrix(, nrow=nr, ncol=nsim)
-      for(i in 1:nsim) {
-        # resample nblocks blocks with replacement
-        ind <- sample( nmarks , replace=TRUE)
-        # average their local pcfs
-        ystar[,i] <-  .rowMeans(ymarks[,ind], nr, nmarks, na.rm=TRUE)
-      }
+  ## ---------- Modification by Christophe Biscio -----------------
+  ##                (some re-coding by Adrian)
+  
+  if(!block) {
+    ## Adrian's wrong code
+    ## average local statistics
+    ymean <- .rowMeans(y, na.rm=TRUE, nr, n)
+    ## resample
+    ystar <- matrix(, nrow=nr, ncol=nsim)
+    for(i in 1:nsim) {
+      ## resample n points with replacement
+      ind <- sample(n, replace=TRUE)
+      ## average their local statistics
+      ystar[,i] <- .rowMeans(y[,ind], nr, n, na.rm=TRUE)
     }
+  } else {
+    ## Correct block bootstrap as described by Loh.
+    W <- Window(X)
+    GridTess <- quadrats(boundingbox(W), nx = nx, ny =ny)
+    ## Classify points of X into grid tiles
+    BlockIndex <- tileindex(X$x, X$y, GridTess)
+    ## Use only 'full' blocks
+    if(!is.rectangle(W)) {
+      blocks <- tiles(GridTess)
+      fullblocks <- sapply(blocks, is.subset.owin, B = W)
+      if(sum(fullblocks)<2)
+        stop("Not enough blocks are fully contained in the window", call.=FALSE)
+      warning(paste("For non-rectangular windows,", 
+                    "only blocks fully contained in the window are used:",
+                    paste(sum(fullblocks), "were used and",
+                          sum(!fullblocks),
+                          "were ignored.")
+                    ),
+              call.=FALSE)
+      ## blocks <- blocks[fullblocks]
+      ## adjust classification of points of X
+      indexmap <- cumsum(fullblocks)
+      indexmap[!fullblocks] <- NA 
+      BlockIndex <- indexmap[BlockIndex]
+      ## adjust total number of points 
+      n <- sum(!is.na(BlockIndex))
+      BlockFactor <- factor(BlockIndex, levels=unique(indexmap[!is.na(indexmap)]))
+    } else BlockFactor <- factor(BlockIndex)
+    nmarks <- length(levels(BlockFactor))
+    ## Average the local function values in each block
+    ymarks <- by(t(y), BlockFactor, colSums, na.rm=TRUE, simplify=FALSE)
+    ## Ensure empty data yield zero
+    if(any(isempty <- sapply(ymarks, is.null))) 
+      ymarks[isempty] <- rep(list(numeric(nr)), sum(isempty))
+    ymarks <- as.matrix(do.call(cbind, ymarks)) * nmarks/n
+    ## average all the marks
+    ymean <- .rowMeans(ymarks, na.rm=TRUE, nr, nmarks)
+    ## Average the marks in each block
+    ystar <- matrix(, nrow=nr, ncol=nsim)
+    for(i in 1:nsim) {
+      ## resample nblocks blocks with replacement
+      ind <- sample( nmarks , replace=TRUE)
+      ## average their local function values
+      ystar[,i] <-  .rowMeans(ymarks[,ind], nr, nmarks, na.rm=TRUE)
+    }
+  }
     
-  # compute quantiles
+  ## compute quantiles
   if(!global) {
-    # pointwise quantiles
+    ## pointwise quantiles
     hilo <- apply(ystar, 1, quantile,
                   probs=probs, na.rm=TRUE, type=type)
     
-    # Ripley's K function correction proposed by Loh
-    if(Vcorrection & (fun=="Kest" | fun=="Kinhom")) { 
+    ## Ripley's K function correction proposed by Loh
+    if(Vcorrection && (fun=="Kest" || fun=="Kinhom")) { 
       Vcov=sqrt(1+2*pi*n*(f$r)^2/area.owin(W)) 
-      hilo[1L,] <-   ymean+(ymean-(hilo[1L,]) ) / Vcov
-      hilo[2L,] <-   ymean+(ymean-(hilo[2L,]) ) / Vcov
-      hilo <- hilo[2:1,] # switch of the index to have hilo[1,] as the lower bound and hilo[2,] as the upper bound
-      basicboot <- FALSE # The basic bootstrap interval is already used. Ensure that I do not modified hilo
+      hilo[1L,] <- ymean+(ymean-hilo[1L,]) / Vcov
+      hilo[2L,] <- ymean+(ymean-hilo[2L,]) / Vcov
+      hilo <- hilo[2:1,] # switch index so hilo[1,] is lower bound
+      basicboot <- FALSE # The basic bootstrap interval is already used. Ensure that I do not modify hilo
     }
-    # So called "basic bootstrap interval" proposed in Loh's paper, the intervals are asymptotically the same
-    if(basicboot)  { 
-      hilo[1L,] <-  2*ymean-(hilo[1L,])   
-      hilo[2L,] <-  2*ymean-(hilo[2L,])   
-      hilo <- hilo[c(2,1),] # switch of the index to have hilo[1,] as the lower bound and hilo[2,] as the upper bound
+    ## So-called "basic bootstrap interval" proposed in Loh's paper;
+    ## the intervals are asymptotically the same
+    if(basicboot) { 
+      hilo[1L,] <-  2*ymean-hilo[1L,]   
+      hilo[2L,] <-  2*ymean-hilo[2L,]
+      hilo <- hilo[c(2,1),] # switch index so hilo[1,] is lower bound
     } 
-    
   } else {
-    # quantiles of deviation
+    ## quantiles of deviation
     ydif <- sweep(ystar, 1, ymean)
     ydev <- apply(abs(ydif), 2, max, na.rm=TRUE)
     crit <- quantile(ydev, probs=probs, na.rm=TRUE, type=type)
     hilo <- rbind(ymean - crit, ymean + crit)
   }
     
-    ####### End Modification by Christophe Biscio        
+  ## =============  End Modification by Christophe Biscio ===================
     
   # create fv object
   df <- data.frame(r=f$r,

@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.58-2.007
+        CHANGES IN spatstat VERSION 1.58-2.008
 
 OVERVIEW
 
@@ -19,6 +19,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o funxy
     Functions of class 'funxy' can now be applied to quadrature schemes.
+
+    o lohboot
+    Computation accelerated when the window is a rectangle.
     
 BUG FIXES
 
@@ -36,6 +39,11 @@ BUG FIXES
 
     o extractbranch.lpp
     Point pattern coordinates were sometimes erroneously set to NA.
+    Fixed.
+
+    o anova.mppm
+    Crashed if applied to a single model, unless the current environment
+    was the global environment.
     Fixed.
     
         CHANGES IN spatstat VERSION 1.58-2

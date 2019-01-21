@@ -91,7 +91,8 @@
   from each resampled dataset the total contribution
   is computed, yielding \code{nsim} random pair correlation functions.
   
-  If \code{block=TRUE}, the (bounding box of the) window is divided
+  If \code{block=TRUE}, the calculation is performed as originally
+  proposed by Loh (2008, 2010). The (bounding box of the) window is divided
   into \eqn{nx * ny} rectangles (blocks).
   The average contribution of a block
   is obtained by averaging the contribution of each point included in the block.
