@@ -162,3 +162,20 @@ Change log from 1.58-2 to 1.58-3
 ------------- passed R-3.5.2 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
+
+   tests/Kfuns.R
+	More tests of 'Ksector'
+
+22 jan 2019
+
+   anova.mppm.R
+        Improved handling of scope
+
+   DESCRIPTION
+   NEWS
+	Version 1.58-2.009
+
+------------- passed R-3.5.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+

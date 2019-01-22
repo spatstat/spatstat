@@ -266,7 +266,7 @@ local({
 #'
 #'   Various K and L functions and pcf
 #'
-#'   $Revision: 1.9 $  $Date: 2019/01/21 10:21:29 $
+#'   $Revision: 1.10 $  $Date: 2019/01/21 13:44:48 $
 #'
 
 require(spatstat)
@@ -341,6 +341,15 @@ local({
     stop(paste("Exact and approximate algorithms for edge.Trans disagree by",
                paste0(round(100*maxrelerr), "%")),
          call.=FALSE)
+  #'
+  #'   directional K functions
+  #'
+    a <- Ksector(swedishpines,
+                 -pi/2, pi/2, units="radians",
+                 correction=c("none", "border", "bord.modif", "Ripley", "translate"),
+                 ratio=TRUE)
+    plot(a)
+                 
   #'
   #'   local K functions
   #'
