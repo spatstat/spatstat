@@ -84,7 +84,7 @@ local({
 #
 #  tests/imageops.R
 #
-#   $Revision: 1.15 $   $Date: 2018/10/28 10:42:36 $
+#   $Revision: 1.16 $   $Date: 2019/01/22 03:20:16 $
 #
 
 require(spatstat)
@@ -190,7 +190,14 @@ local({
   
   h <- hist(Z)
   plot(h)
-  
+
+  #' safelookup (including extrapolation case)
+  Z <- as.im(function(x,y) { x - y }, letterR)
+  B <- grow.rectangle(Frame(letterR), 1)
+  X <- superimpose(runifpoint(10,letterR),
+                   runifpoint(20, setminus.owin(B, letterR)),
+                   W=B)
+  a <- safelookup(Z, X)
 })
 #' indices.R
 #' Tests of code for understanding index vectors etc

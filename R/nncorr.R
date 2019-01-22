@@ -1,34 +1,54 @@
 #
 # nncorr.R
 #
-# $Revision: 1.11 $  $Date: 2015/10/21 09:06:57 $
+# $Revision: 1.12 $  $Date: 2019/01/22 03:08:57 $
 #
 
-nnmean <- function(X, k=1) {
-  stopifnot(is.ppp(X) && is.marked(X))
+nnmean <- function(X, k=1, na.action="warn") {
+  stopifnot(is.ppp(X))
+  if(!is.marked(X, na.action=na.action))
+    stop("X must be a marked point pattern", call.=FALSE)
   if(k %% 1 != 0 || length(k) != 1 || k <= 0)
     stop("k should be a single integer greater than 0", call.=FALSE)
-  if(k >= npoints(X))
-    stop("Not enough points to compute k-th nearest neighbours")
   m <- numeric.columns(marks(X), logical=TRUE, others="na")
-  nnid <- nnwhich(X, k=k)
-  ok <- (nndist(X, k=k) <= bdist.points(X))
-  if(!any(ok, na.rm=TRUE))
-    stop("Insufficient data")
-  numer <- unlist(lapply(as.data.frame(m[nnid[ok], ]), mean, na.rm=TRUE))
-  denom <- unlist(lapply(as.data.frame(m),             mean, na.rm=TRUE))
-  ans <- rbind(unnormalised=numer,
-               normalised  =numer/denom)
+  ## default result
+  nana <- rep(NA_real_, ncol(m))
+  ans <- rbind(unnormalised=nana,
+               normalised=nana)
+  ## 
+  if(all(is.na(m))) {
+    warning("non-numeric marks; results are NA", call.=FALSE)
+  } else if(k >= npoints(X)) {
+    warning(paste("Not enough points to compute k-th nearest neighbours",
+                  paste0(paren(paste0("n = ", npoints(X), ", k = ", k)), ";"),
+                  "results are NA"),
+            call.=FALSE)
+  } else {
+    nnid <- nnwhich(X, k=k)
+    ok <- (nndist(X, k=k) <= bdist.points(X))
+    if(!any(ok, na.rm=TRUE)) {
+      warning("insufficient data remaining after border correction; results are NA")
+    } else {
+      numer <- sapply(as.data.frame(m[nnid[ok], ]), mean, na.rm=TRUE)
+      denom <- sapply(as.data.frame(m),             mean, na.rm=TRUE)
+      ans <- rbind(unnormalised=numer,
+                   normalised  =numer/denom)
+    }
+  }
   if(ncol(ans) == 1) ans <- ans[,1,drop=TRUE]
   return(ans)
 }
 
 nnvario <- local({
 
-  nnvario <- function(X, k=1) {
-    stopifnot(is.ppp(X) && is.marked(X))
+  nnvario <- function(X, k=1, na.action="warn") {
+    stopifnot(is.ppp(X))
+    if(!is.marked(X, na.action=na.action))
+      stop("X must be a marked point pattern", call.=FALSE)
     m <- numeric.columns(marks(X), logical=TRUE, others="na")
-    ans <- nncorr(X %mark% m, sqdif, k=k, denominator=diag(var(m)))
+    if(all(is.na(m))) warning("non-numeric marks; results are NA", call.=FALSE)
+    ans <- nncorr(X %mark% m, sqdif, k=k, denominator=diag(var(m)),
+                  na.action="ignore")
     return(ans)
   }
   sqdif <- function(m1,m2) { ((m1-m2)^2)/2 }
@@ -42,8 +62,11 @@ nncorr <- function(X, f = function(m1,m2) { m1 * m2},
                    ...,
                    use = "all.obs",
                    method = c("pearson", "kendall", "spearman"),
-                   denominator=NULL) {
-  stopifnot(is.ppp(X) && is.marked(X))
+                   denominator=NULL,
+                   na.action="warn") {
+  stopifnot(is.ppp(X))
+  if(!is.marked(X, na.action=na.action))
+    stop("X must be a marked point pattern", call.=FALSE)
   if(k %% 1 != 0 || length(k) != 1 || k <= 0)
     stop("k should be a single integer greater than 0", call.=FALSE)
   if(k >= npoints(X))

@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.58-2.009
+        CHANGES IN spatstat VERSION 1.58-2.010
 
 OVERVIEW
 
@@ -22,6 +22,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o lohboot
     Computation accelerated when the window is a rectangle.
+
+    o nncorr, nnmean, nnvario
+    New argument 'na.action'.
     
 BUG FIXES
 

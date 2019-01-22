@@ -16,9 +16,11 @@
             k = 1,       
             \dots,
             use = "all.obs", method = c("pearson", "kendall", "spearman"),
-            denominator=NULL)
-     nnmean(X, k=1)
-     nnvario(X, k=1)
+            denominator=NULL, na.action="warn")
+
+     nnmean(X, k=1, na.action="warn")
+
+     nnvario(X, k=1, na.action="warn")
 }
 \arguments{
   \item{X}{
@@ -41,6 +43,10 @@
   }
   \item{denominator}{
     Internal use only.
+  }
+  \item{na.action}{
+    Character string (passed to \code{\link{is.marked.ppp}})
+    specifying what to do if the marks contain \code{NA} values.
   }
 }
 \details{
@@ -136,7 +142,8 @@
 
   The wrapper functions \code{nnmean} and \code{nnvario}
   compute the correlation indices for two special choices of the
-  function \eqn{f(m_1,m_2)}{f(m1,m2)}.
+  function \eqn{f(m_1,m_2)}{f(m1,m2)}. They are defined only when the
+  marks are numeric.
   \itemize{
     \item
     \code{nnmean} computes the correlation indices for 
@@ -188,11 +195,11 @@
   for each mark variable.
 }
 \examples{
-  data(finpines)
+  nnmean(finpines)
+  nnvario(finpines)
   nncorr(finpines)
   # heights of neighbouring trees are slightly negatively correlated
 
-  data(amacrine)
   nncorr(amacrine)
   # neighbouring cells are usually of different type
 }

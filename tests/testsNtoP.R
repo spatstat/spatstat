@@ -734,7 +734,11 @@ local({
     stop("new.coef mechanism is broken!")
   if(max(abs(pn-p0)) > 0.01)
     stop("new.coef mechanism gives wrong answer, for unnamed vectors")
-
+  #' adaptcoef     
+  a <- c(A=1,B=2,Z=42)
+  b <- c(B=41,A=0)
+  ab <- adaptcoef(a, b, drop=TRUE)
+  
   # tests of relrisk.ppm
   fut <- ppm(amacrine ~ x * marks)
   a <- relrisk(fut, control=2, relative=TRUE)

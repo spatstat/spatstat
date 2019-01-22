@@ -53,7 +53,8 @@ ewcdf(x, weights = rep(1/length(x), length(x)))
 \examples{
    x <- rnorm(100)
    w <- runif(100)
-   plot(ewcdf(x,w))
+   plot(e <- ewcdf(x,w))
+   e
 }
 \keyword{nonparametric}
 \keyword{univar}

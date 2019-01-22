@@ -179,3 +179,21 @@ Change log from 1.58-2 to 1.58-3
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+   nncorr.R
+   nncorr.Rd
+	New argument 'na.action' for nncorr, nnmean, nnvario
+
+   ewcdf.Rd
+	Tweaked example
+
+   tests/imageops.R
+	Added test of 'safelookup' code for fallback case.
+
+   DESCRIPTION
+   NEWS
+	Version 1.58-2.010
+
+------------- passed R-3.5.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
