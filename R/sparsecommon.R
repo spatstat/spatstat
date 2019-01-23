@@ -3,7 +3,7 @@
 #'
 #'  Utilities for sparse arrays
 #'
-#'  $Revision: 1.8 $  $Date: 2018/02/12 01:47:55 $
+#'  $Revision: 1.12 $  $Date: 2019/01/23 05:36:34 $
 #'
 
 #'  .............. completely generic ....................
@@ -115,9 +115,10 @@ mapSparseEntries <- function(x, margin, values, conform=TRUE, across) {
     }
     check.1.integer(margin)
     stopifnot(margin %in% 1:2)
-    check.nvector(values, dimx[margin], things=c("rows","columns")[margin],
-                  oneok=TRUE)
-    if(length(values) == 1) values <- rep(values, dimx[margin])
+    check.anySparseVector(values, dimx[margin], things=c("rows","columns")[margin],
+                          oneok=TRUE)
+    nv <- if(inherits(values, "sparseVector")) values@length else length(values)
+    if(nv == 1) values <- rep(values[1], dimx[margin])
     i <- x@i + 1L
     j <- x@j + 1L
     yindex <- switch(margin, i, j)
@@ -149,12 +150,13 @@ mapSparseEntries <- function(x, margin, values, conform=TRUE, across) {
       ijk <- apply(ijk, 2, rep, times=nslice)
       ijk[, across] <- rep(seq_len(nslice), each=npattern)
     }
-    if(is.vector(values)) {
+    if(is.vector(values) || inherits(values, "sparseVector")) {
       # vector of values matching margin extent
-      check.nvector(values, dimx[margin],
-                    things=c("rows","columns","planes")[margin],
-                    oneok=TRUE)
-      if(length(values) == 1) values <- rep(values, dimx[margin])
+      check.anySparseVector(values, dimx[margin],
+                            things=c("rows","columns","planes")[margin],
+                            oneok=TRUE)
+      nv <- if(inherits(values, "sparseVector")) values@length else length(values)
+      if(nv == 1) values <- rep(values[1], dimx[margin])
       yindex <- ijk[,margin]
       y <- sparse3Darray(i=ijk[,1],
                          j=ijk[,2],
@@ -162,7 +164,7 @@ mapSparseEntries <- function(x, margin, values, conform=TRUE, across) {
                          x=values[yindex],
                          dims=dimx, dimnames=dimnames(x))
       return(y)
-    } else if(is.matrix(values)) {
+    } else if(is.matrix(values) || inherits(values, "sparseMatrix")) {
       #' matrix of values.
       force(across)
       stopifnot(across != margin) 
@@ -230,4 +232,34 @@ applySparseEntries <- local({
   
   applySparseEntries
 })
+
+check.anySparseVector <- function(v, npoints=NULL, fatal=TRUE, things="data points",
+                                  naok=FALSE, warn=FALSE, vname, oneok=FALSE) {
+  # vector, factor or sparse vector of values for each point/thing
+  if(missing(vname))
+    vname <- sQuote(deparse(substitute(v)))
+  whinge <- NULL
+  isVector <- is.atomic(v) && is.null(dim(v))
+  isSparse <- inherits(v, "sparseVector")
+  nv <- if(isSparse) v@length else length(v)
+  if(!isVector && !isSparse) 
+    whinge <- paste(vname, "is not a vector, factor or sparse vector")
+  else if(!(is.null(npoints) || (nv == npoints)) &&
+          !(oneok && nv == 1)) 
+    whinge <- paste("The length of", vname,
+                    paren(paste0("=", nv)), 
+                    "should equal the number of", things,
+                    paren(paste0("=", npoints)))
+  else if(!naok && anyNA(v))
+    whinge <- paste("Some values of", vname, "are NA or NaN")
+  #
+  if(!is.null(whinge)) {
+    if(fatal) stop(whinge)
+    if(warn) warning(whinge)
+    ans <- FALSE
+    attr(ans, "whinge") <- whinge
+    return(ans)
+  }
+  return(TRUE)
+}
 

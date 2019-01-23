@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.58-2.010
+        CHANGES IN spatstat VERSION 1.58-2.011
 
 OVERVIEW
 
@@ -25,6 +25,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o nncorr, nnmean, nnvario
     New argument 'na.action'.
+
+    o pp3
+    New argument 'marks'.
     
 BUG FIXES
 

@@ -55,7 +55,7 @@ local({
 #'
 #'   leverage and influence for Gibbs models
 #' 
-#'   $Revision: 1.22 $ $Date: 2018/07/22 02:19:45 $
+#'   $Revision: 1.23 $ $Date: 2019/01/23 02:21:54 $
 #' 
 
 require(spatstat)
@@ -195,8 +195,13 @@ local({
   a <- Everything(fitS) 
   a <- Everything(fitS, method="interpreted") 
   a <- Everything(fitS, method="interpreted", entrywise=FALSE)
-  a <- Everything(fitS,                       entrywise=FALSE) 
-  #' NOTE: code for irregular parameters is tested in 'make bookcheck'
+  a <- Everything(fitS,                       entrywise=FALSE)
+  #' zero cif
+  b <- Everything(fitSH) 
+  b <- Everything(fitSH, method="interpreted") 
+  b <- Everything(fitSH, method="interpreted", entrywise=FALSE)
+  b <- Everything(fitSH,                       entrywise=FALSE) 
+  #' NOTE: code for irregular parameters is tested below, and in 'make bookcheck'
 
   ## ...........  logistic fits .......................
   cat("Logistic fits...", fill=TRUE)
@@ -252,6 +257,18 @@ local({
   d <- gogo("b", futx, method="interpreted") 
   d <- gogo("c", futx, method="interpreted", entrywise=FALSE)
   d <- gogo("d", futx,                       entrywise=FALSE)
+  cat("Offset model Strauss ...", fill=TRUE)
+  futS <- ippm(X ~ offset(ytoa), Strauss(0.07), start=list(alpha=1))
+  d <- gogo("a", futS)
+  d <- gogo("b", futS, method="interpreted") 
+  d <- gogo("c", futS, method="interpreted", entrywise=FALSE)
+  d <- gogo("d", futS,                       entrywise=FALSE) 
+  cat("Offset+x model Strauss ...", fill=TRUE)
+  futxS <- ippm(X ~ x + offset(ytoa), Strauss(0.07), start=list(alpha=1))
+  d <- gogo("a", futxS) 
+  d <- gogo("b", futxS, method="interpreted") 
+  d <- gogo("c", futxS, method="interpreted", entrywise=FALSE)
+  d <- gogo("d", futxS,                       entrywise=FALSE)
 
   #'
   set.seed(452)

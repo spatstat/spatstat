@@ -3,7 +3,7 @@
 #
 #  class of three-dimensional point patterns in rectangular boxes
 #
-#  $Revision: 1.28 $  $Date: 2017/11/06 02:03:15 $
+#  $Revision: 1.30 $  $Date: 2019/01/23 02:41:43 $
 #
 
 box3 <- function(xrange=c(0,1), yrange=xrange, zrange=yrange, unitname=NULL) {
@@ -97,13 +97,14 @@ bounding.box3 <- function(...) {
   box3(xr, yr, zr)
 }
 
-pp3 <- function(x, y, z, ...) {
+pp3 <- function(x, y, z, ..., marks=NULL) {
   stopifnot(is.numeric(x))
   stopifnot(is.numeric(y))
   stopifnot(is.numeric(z)) 
   b <- as.box3(...)
   out <- ppx(data=data.frame(x=x,y=y,z=z), domain=b)
   class(out) <- c("pp3", class(out))
+  if(!is.null(marks)) marks(out) <- marks
   return(out)
 }
 

@@ -197,3 +197,25 @@ Change log from 1.58-2 to 1.58-3
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+   sparsecommon.R
+	Bug fixes in mapSparseEntries
+
+   sparsecommon.R
+   spatstat-internal.Rd
+	mapSparseEntries now allows 'values' to be sparse.
+	New internal function 'check.anySparseVector'
+	
+   tests/leverinf.R
+	More tests of leverage code blocks.
+
+   pp3.R
+   pp3.Rd
+	pp3 has new argument 'marks'
+
+   DESCRIPTION
+   NEWS
+	Version 1.58-2.011
+
+------------- passed R-3.5.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------

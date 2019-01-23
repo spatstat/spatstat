@@ -8,7 +8,7 @@
   Create a three-dimensional point pattern
 }
 \usage{
-pp3(x, y, z, ...)
+pp3(x, y, z, ..., marks=NULL)
 }
 \arguments{
   \item{x,y,z}{
@@ -18,6 +18,10 @@ pp3(x, y, z, ...)
   \item{\dots}{
     Arguments passed to \code{\link{as.box3}} to determine
     the three-dimensional box in which the points have been observed.
+  }
+  \item{marks}{
+    Optional.
+    Vector, data frame, or hyperframe of mark values associated with the points.
   }
 }
 \details{
@@ -30,11 +34,8 @@ pp3(x, y, z, ...)
   Object of class \code{"pp3"} representing a three dimensional
   point pattern. Also belongs to class \code{"ppx"}. 
 }
-\author{\adrian
-  
-  
-  and \rolf
-  
+\author{
+  \spatstatAuthors.
 }
 \seealso{
   \code{\link{box3}}, 
@@ -42,7 +43,10 @@ pp3(x, y, z, ...)
   \code{\link{ppx}} 
 }
 \examples{
-   X <- pp3(runif(10), runif(10), runif(10), box3(c(0,1)))
+   X <- pp3(runif(10), runif(10), runif(10),
+            box3(c(0,1)),
+            marks=rnorm(10))
+   X
 }
 \keyword{spatial}
 \keyword{datagen}

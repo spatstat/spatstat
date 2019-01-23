@@ -65,7 +65,8 @@
 \alias{change.default.expand}          
 \alias{checkbigmatrix}          
 \alias{checkfields}          
-\alias{checksolve}          
+\alias{checksolve}
+\alias{check.anySparseVector}
 \alias{check.finespacing}
 \alias{check.hist.lengths}
 \alias{check.mat.mul}
@@ -836,6 +837,8 @@ change.default.expand(x, newdefault)
 checkbigmatrix(n, m, fatal, silent)
 checkfields(X,L)
 checksolve(M, action, descrip, target)
+check.anySparseVector(v, npoints, fatal, things,
+                      naok, warn, vname, oneok)
 check.finespacing(r, eps, win, rmaxdefault, context, action, rname)
 check.hist.lengths(hist,breaks)
 check.mat.mul(A, B, Acols, Brows, fatal)
