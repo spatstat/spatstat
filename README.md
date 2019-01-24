@@ -28,6 +28,8 @@ see the [CRAN page](https://cran.r-project.org/web/packages/spatstat).
 Recently we have started the process of splitting `spatstat` into several
 packages (as mandated by CRAN, because `spatstat` is very large).
 
+![Spatstat pieces](RepoStuff/spatstat.jpg)
+
 Your existing code will still work:
 typing `library(spatstat)` will still give you
 access to all the functions in `spatstat` that you know from previous versions.
