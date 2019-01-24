@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.58-2.011
+        CHANGES IN spatstat VERSION 1.58-2.012
 
 OVERVIEW
 
@@ -14,6 +14,10 @@ NEW FUNCTIONS
     
 SIGNIFICANT USER-VISIBLE CHANGES
 
+    o latest.news
+    Now prints news documentation for the current major version, by default.
+    New argument 'major'.
+    
     o pairorient
     Default edge corrections now include 'bord.modif'.
 
