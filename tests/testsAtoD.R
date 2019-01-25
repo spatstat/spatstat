@@ -100,7 +100,7 @@ local({
 ##  tests/closeshave.R
 ## check 'closepairs/crosspairs' code
 ## validity and memory allocation
-## $Revision: 1.16 $ $Date: 2019/01/17 01:42:03 $
+## $Revision: 1.17 $ $Date: 2019/01/25 03:57:38 $
 
 local({
   r <- 0.12
@@ -234,6 +234,13 @@ local({
   marks(X) <- runif(npoints(X))
   markmarkscatter(X, 0.2)
   markmarkscatter(X[FALSE], 0.2)
+})
+
+local({
+  #' weightedclosepairs is currently in strauss.R
+  wi <- weightedclosepairs(redwood, 0.05, "isotropic")
+  wt <- weightedclosepairs(redwood, 0.05, "translate")
+  wp <- weightedclosepairs(redwood, 0.05, "periodic")
 })
 
 reset.spatstat.options()

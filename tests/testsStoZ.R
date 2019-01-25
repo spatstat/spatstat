@@ -1056,7 +1056,7 @@ local({
 #
 # Tests of owin geometry code
 #
-#  $Revision: 1.7 $  $Date: 2019/01/17 01:47:29 $
+#  $Revision: 1.8 $  $Date: 2019/01/25 03:51:18 $
 
 require(spatstat)
 local({
@@ -1126,6 +1126,10 @@ local({
   marks(X) <- marks(X)/8
   D <- discs(X, delta=5, separate=TRUE)
 
+  AD <- dilated.areas(cells,
+                      r=0.01 * matrix(1:10, 10,1),
+                      constrained=FALSE, exact=FALSE)
+  
   periodify(B1, 2)
   periodify(union.owin(B1, B2), 2)
   periodify(letterR, 2)

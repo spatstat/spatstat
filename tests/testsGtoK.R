@@ -273,7 +273,7 @@ local({
 #'
 #'   Various K and L functions and pcf
 #'
-#'   $Revision: 1.10 $  $Date: 2019/01/21 13:44:48 $
+#'   $Revision: 1.11 $  $Date: 2019/01/25 03:43:49 $
 #'
 
 require(spatstat)
@@ -375,11 +375,18 @@ local({
   Bred <- lohboot(redwood, block=TRUE, basicboot=TRUE, global=FALSE)
   X <- runifpoint(100, letterR)
   AX <- lohboot(X, block=TRUE, nx=7, ny=10)
+  #'
+  #'  residual K functions etc
+  #'
+  rco <- compareFit(cells, Kcom,
+                    interaction=anylist(P=Poisson(), S=Strauss(0.08)),
+                    same="trans", different="tcom")
 })
+  
 #
 # tests/kppm.R
 #
-# $Revision: 1.25 $ $Date: 2018/12/15 10:22:17 $
+# $Revision: 1.26 $ $Date: 2019/01/25 03:33:40 $
 #
 # Test functionality of kppm that depends on RandomFields
 # Test update.kppm for old style kppm objects
@@ -511,7 +518,8 @@ local({
 
   #' auxiliary functions
   b <- resolve.vargamma.shape(nu.pcf=1.5)
-
+  Z <- clusterfield("Thomas", kappa=1, scale=0.2)
+  
   aa <- NULL
   aa <- accumulateStatus(simpleMessage("Woof"), aa)
   aa <- accumulateStatus(simpleMessage("Sit"),  aa)
