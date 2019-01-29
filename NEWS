@@ -1,16 +1,19 @@
 
-        CHANGES IN spatstat VERSION 1.58-2.013
+        CHANGES IN spatstat VERSION 1.58-2.014
 
 OVERVIEW
 
+    o We thank Tilman Davies for contributions.
+    
     o Minor improvements and bug fixes.
 
-    o Version nickname: "Dog's Breakfast"
+    o Version nickname: "Caution Wake Turbulence"
     
 NEW FUNCTIONS
 
     o coords.quad
-    New method for 'coords', to extract the coordinates of a quadrature scheme.
+    New method for 'coords', to extract the coordinates of the points
+    in a quadrature scheme.
     
 SIGNIFICANT USER-VISIBLE CHANGES
 
@@ -32,6 +35,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o pp3
     New argument 'marks'.
+
+    o beachcolours, beachcolourmap
+    Improved positioning of the yellow colour band.
     
 BUG FIXES
 
@@ -54,6 +60,11 @@ BUG FIXES
     o anova.mppm
     Crashed if applied to a single model, unless the current environment
     was the global environment.
+    Fixed.
+
+    o beachcolours, beachcolourmap
+    The number of colours was not always equal to 'ncolours'.
+    [Spotted by Tilman Davies.]
     Fixed.
     
         CHANGES IN spatstat VERSION 1.58-2

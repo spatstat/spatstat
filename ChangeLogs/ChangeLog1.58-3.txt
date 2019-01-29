@@ -255,3 +255,20 @@ Change log from 1.58-2 to 1.58-3
 ------------- passed R-3.5.2 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
+
+29 jan 2019
+
+    colourschemes.R
+	Bug fix in beachcolours (thanks to Tilman)
+	Improved position of 'sealevel' colour
+
+   DESCRIPTION
+   NEWS
+   Nickname.txt
+	Nickname 'Caution Wake Turbulence'
+	Version 1.58-2.014
+
+------------- passed R-3.5.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+    
