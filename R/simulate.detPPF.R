@@ -1,5 +1,5 @@
 ##   simulate.detPPF.R
-##            $Revision: 1.6 $  $Date: 2017/12/14 00:56:09 $
+##            $Revision: 1.7 $  $Date: 2019/01/29 05:21:22 $
 ##
 ## This file contains functions to simulate DPP models.
 ## Two simulation functions are visible:
@@ -348,9 +348,10 @@ simulate.detpointprocfamily <- function(object, nsim = 1, seed = NULL, ..., W = 
 
 dppeigen <- function(model, trunc, Wscale, stationary = FALSE){
     dim <- dim(model)
-    if(stationary&&dim!=2)
+    if(stationary && dim!=2)
         stop("Stationarity can only be exploited in dimension 2 at the moment.")
-    
+    Wscale <- as.numeric(Wscale)
+    check.nvector(Wscale, dim, things="dimensions")
     ## Calculate expected number of points if the intensity is a parameter
     expnum <- NULL
     lambdaname <- model$intensity
@@ -393,7 +394,7 @@ dppeigen <- function(model, trunc, Wscale, stationary = FALSE){
         trunc <- 1
         prec <- 0
         ## cat("truncation is being calculated adaptively. Current truncation:\n")
-        while(prec<=prec0 & (2*trunc)<=maxtrunc & trunc<=truncrange){
+        while(prec<=prec0 && (2*trunc)<=maxtrunc && trunc<=truncrange){
             trunc <- 2*trunc
             if(stationary){
                 ## Coordinates on axes:

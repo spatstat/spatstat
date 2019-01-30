@@ -271,4 +271,23 @@ Change log from 1.58-2 to 1.58-3
 ------------- passed R-3.5.2 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
-    
+
+   simulate.detPPF.R
+	Added checks for argument format in 'dppeigen'
+
+   tests/deepeepee.R
+	Added tests of code blocks in 'dppeigen'
+
+30 jan 2019
+
+   tests/density.R
+	Test more code blocks in Smooth.ppp
+
+   DESCRIPTION
+   NEWS
+	Version 1.58-2.015
+
+------------- passed R-3.5.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+

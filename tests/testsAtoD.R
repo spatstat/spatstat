@@ -451,7 +451,7 @@ local({
 #'                    relrisk(), Smooth()
 #'                    and inhomogeneous summary functions
 #'
-#'  $Revision: 1.33 $  $Date: 2018/10/21 10:09:11 $
+#'  $Revision: 1.34 $  $Date: 2019/01/30 09:32:41 $
 #'
 
 require(spatstat)
@@ -656,11 +656,15 @@ local({
   stroke(varcov=diag(c(25, 36)), weights=runif(npoints(longleaf)))
   stroke(5, Y=longleaf %mark% 1)
   stroke(5, Y=cut(longleaf,breaks=3))
+  heavY <- longleaf %mark% cbind(a=1:npoints(longleaf), b=1)
+  stroke(5, Y=heavY)
+  stroke(5, Y=heavY[FALSE])
   Z <- as.im(function(x,y){abs(x)+1}, Window(longleaf))
   stroke(5, weights=Z)
   stroke(5, weights=Z, geometric=TRUE)
 
   stroke(sigma=Inf)
+  stroke(sigma=Inf, Y=heavY)
   
   markmean(longleaf, 9)
   
@@ -891,7 +895,7 @@ local({
 #'
 #'    Tests for determinantal point process models
 #' 
-#'    $Revision: 1.2 $ $Date: 2018/11/05 10:32:31 $
+#'    $Revision: 1.4 $ $Date: 2019/01/29 05:33:09 $
 
 require(spatstat)
 local({
@@ -903,6 +907,12 @@ local({
   #' simulate.detpointprocfamily - code blocks
   model <- dppGauss(lambda=100, alpha=.05, d=2)
   simulate(model, seed=1999, correction="border")
+  #' dppeigen code blocks
+  mod <- dppMatern(lambda=2, alpha=0.01, nu=1, d=2)
+  uT <- dppeigen(mod, trunc=1.1,  Wscale=c(1,1), stationary=TRUE)
+  uF <- dppeigen(mod, trunc=1.1,  Wscale=c(1,1), stationary=FALSE)
+  vT <- dppeigen(mod, trunc=0.98, Wscale=c(1,1), stationary=TRUE)
+  vF <- dppeigen(mod, trunc=0.98, Wscale=c(1,1), stationary=FALSE)
 })
 #'
 #'   tests/duplicity.R
