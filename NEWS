@@ -1,9 +1,9 @@
 
-        CHANGES IN spatstat VERSION 1.58-2.015
+        CHANGES IN spatstat VERSION 1.58-2.016
 
 OVERVIEW
 
-    o We thank Tilman Davies for contributions.
+    o We thank Tilman Davies and Suman Rakshit for contributions.
     
     o Minor improvements and bug fixes.
 
@@ -38,6 +38,14 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o beachcolours, beachcolourmap
     Improved positioning of the yellow colour band.
+
+    o as.linnet.psp
+    Computation accelerated.
+
+    o selfcut.psp
+    Computation accelerated.
+    The result now has an attribute "camefrom"
+    indicating the provenance of each segment in the result.
     
 BUG FIXES
 

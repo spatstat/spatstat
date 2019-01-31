@@ -291,3 +291,19 @@ Change log from 1.58-2 to 1.58-3
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+31 jan 2019
+
+   pspcross.R
+	Accelerated 'selfcut.psp'
+	Result of selfcut.psp now includes tracing information
+
+   linnet.R
+	Accelerated as.linnet.psp
+	
+   DESCRIPTION
+   NEWS
+	Version 1.58-2.016
+
+------------- passed R-3.5.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------

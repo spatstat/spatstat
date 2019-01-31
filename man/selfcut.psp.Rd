@@ -30,7 +30,13 @@ selfcut.psp(A, \dots, eps)
 }
 \value{
   Another line segment pattern (object of class \code{"psp"})
-  in the same window as \code{A} with the same kind of marks as \code{A}.
+  in the same window as \code{A} with the same kind of marks as
+  \code{A}.
+
+  The result also has an attribute \code{"camefrom"} indicating
+  the provenance of each segment in the result.
+  For example \code{camefrom[3]=2} means that the third segment in the
+  result is a piece of the second segment of \code{A}.
 }
 \author{
 \spatstatAuthors.

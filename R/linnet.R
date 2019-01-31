@@ -3,7 +3,7 @@
 #    
 #    Linear networks
 #
-#    $Revision: 1.67 $    $Date: 2018/06/12 02:53:09 $
+#    $Revision: 1.68 $    $Date: 2019/01/31 08:40:24 $
 #
 # An object of class 'linnet' defines a linear network.
 # It includes the following components
@@ -286,39 +286,31 @@ as.linnet.linnet <- function(X, ..., sparse) {
   return(X)
 }
 
-as.linnet.psp <- local({
-  
-  as.linnet.psp <- function(X, ..., eps, sparse=FALSE) {
-    X <- selfcut.psp(X)
-    V <- unique(endpoints.psp(X))
-    if(missing(eps) || is.null(eps)) {
-      eps <- sqrt(.Machine$double.eps) * diameter(Frame(X))
-    } else {
-      check.1.real(eps)
-      stopifnot(eps >= 0)
-    }
-    if(eps > 0 && minnndist(V) <= eps) {
-      gV <- marks(connected(V, eps))
-      xy <- split(coords(V), gV)
-      mxy <- lapply(xy, centro)
-      V <- do.call(superimpose, append(unname(mxy), list(W=Window(X))))
-    }
-    first  <- endpoints.psp(X, "first")
-    second <- endpoints.psp(X, "second")
-    from <- nncross(first, V, what="which")
-    to   <- nncross(second, V, what="which")
-    nontrivial <- (from != to)
-    join <- cbind(from, to)[nontrivial, , drop=FALSE]
-    result <- linnet(V, edges=join, sparse=sparse)
-    if(is.marked(X)) marks(result$lines) <- marks(X[nontrivial])
-    return(result)
+as.linnet.psp <- function(X, ..., eps, sparse=FALSE) {
+  X <- selfcut.psp(X)
+  V <- unique(endpoints.psp(X))
+  if(missing(eps) || is.null(eps)) {
+    eps <- sqrt(.Machine$double.eps) * diameter(Frame(X))
+  } else {
+    check.1.real(eps)
+    stopifnot(eps >= 0)
   }
-
-  centro <- function(X) as.list(apply(X, 2, mean))
-  
-  as.linnet.psp
-})
-
+  if(eps > 0 && minnndist(V) <= eps) {
+    gV <- marks(connected(V, eps))
+    xx <- as.numeric(by(V$x, gV, mean))
+    yy <- as.numeric(by(V$y, gV, mean))
+    V <- ppp(xx, yy, window=Window(X))
+  }
+  first  <- endpoints.psp(X, "first")
+  second <- endpoints.psp(X, "second")
+  from <- nncross(first, V, what="which")
+  to   <- nncross(second, V, what="which")
+  nontrivial <- (from != to)
+  join <- cbind(from, to)[nontrivial, , drop=FALSE]
+  result <- linnet(V, edges=join, sparse=sparse)
+  if(is.marked(X)) marks(result$lines) <- marks(X[nontrivial])
+  return(result)
+}
 
 unitname.linnet <- function(x) {
   unitname(x$window)
