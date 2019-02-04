@@ -1,7 +1,7 @@
 #
 #       images.R
 #
-#      $Revision: 1.148 $     $Date: 2018/09/28 05:09:24 $
+#      $Revision: 1.149 $     $Date: 2019/02/04 06:35:13 $
 #
 #      The class "im" of raster images
 #
@@ -37,6 +37,11 @@ im <- function(mat, xcol=seq_len(ncol(mat)), yrow=seq_len(nrow(mat)),
   if(!is.null(dim(mat))) {
     nr <- nrow(mat)
     nc <- ncol(mat)
+    if(is.na(nc)) {
+      #' handle one-dimensional tables
+      nc <- 1
+      nr <- length(mat)
+    }
     if(length(xcol) != nc)
       stop("Length of xcol does not match ncol(mat)")
     if(length(yrow) != nr)

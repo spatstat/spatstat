@@ -1,11 +1,13 @@
 
-        CHANGES IN spatstat VERSION 1.58-2.016
+        CHANGES IN spatstat VERSION 1.58-2.017
 
 OVERVIEW
 
-    o We thank Tilman Davies and Suman Rakshit for contributions.
+    o We thank Tilman Davies, Mehdi Moradi and Suman Rakshit for contributions.
     
     o Minor improvements and bug fixes.
+
+    o Extensions to adaptive intensity estimators.
 
     o Version nickname: "Caution Wake Turbulence"
     
@@ -20,6 +22,12 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o latest.news
     Now prints news documentation for the current major version, by default.
     New argument 'major'.
+    
+    o adaptive.density
+    This is now a generic function with a method for class 'ppp'.
+    New argument 'fixed' specifies the subsampling.
+    New argument 'method' allows a choice between the original algorithm
+    and the recently described 'smoothed Voronoi' estimator.
     
     o pairorient
     Default edge corrections now include 'bord.modif'.
@@ -46,7 +54,12 @@ SIGNIFICANT USER-VISIBLE CHANGES
     Computation accelerated.
     The result now has an attribute "camefrom"
     indicating the provenance of each segment in the result.
-    
+
+    o bw.stoyan
+    The rule has been modified so that, if the pattern is empty,
+    it is now treated as if it contained 1 point,
+    so that a finite bandwidth value is returned.
+
 BUG FIXES
 
     o incircle, inpoint
@@ -73,6 +86,19 @@ BUG FIXES
     o beachcolours, beachcolourmap
     The number of colours was not always equal to 'ncolours'.
     [Spotted by Tilman Davies.]
+    Fixed.
+
+    o im
+    Crashed if 'mat' was a 1-dimensional table (class 'table').
+    Fixed.
+
+    o dirichlet
+    Crashed if the pattern was empty or contained only 1 point.
+    Fixed.
+
+    o rjitter
+    Crashed if the pattern contained 0 or 1 points and
+    the argument 'radius' was not specified.
     Fixed.
     
         CHANGES IN spatstat VERSION 1.58-2

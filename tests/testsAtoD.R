@@ -450,8 +450,9 @@ local({
 #'  Test behaviour of density() methods,
 #'                    relrisk(), Smooth()
 #'                    and inhomogeneous summary functions
+#'                    and idw, adaptive.density
 #'
-#'  $Revision: 1.34 $  $Date: 2019/01/30 09:32:41 $
+#'  $Revision: 1.35 $  $Date: 2019/02/04 07:46:52 $
 #'
 
 require(spatstat)
@@ -773,6 +774,11 @@ local({
   ## idw
   Z <- idw(longleaf, power=4)
   ZX <- idw(longleaf, power=4, at="points")
+  ## dodgy code blocks in adaptive.density.ppp
+  A <- adaptive.density(nztrees, nrep=2, method="count")
+  B <- adaptive.density(nztrees, nrep=2, method="count", fixed=TRUE)
+  D <- adaptive.density(nztrees, nrep=2, method="tile")
+  E <- adaptive.density(nztrees, nrep=2, method="tile", fixed=TRUE)
 })
 
 reset.spatstat.options()

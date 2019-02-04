@@ -3,7 +3,7 @@
 #'
 #' Interface to deldir package
 #'
-#'  $Revision: 1.30 $ $Date: 2018/09/28 05:12:32 $
+#'  $Revision: 1.31 $ $Date: 2019/02/04 07:13:02 $
 #'
 
 #' ..............................................
@@ -31,7 +31,10 @@ dirichlet <- local({
   dirichlet <- function(X) {
     stopifnot(is.ppp(X))
     X <- unique(X, rule="deldir", warn=TRUE)
+    nX <- npoints(X)
     w <- X$window
+    if(nX == 0) return(NULL)
+    if(nX == 1) return(as.tess(w))
     dd <- safedeldir(X)
     if(is.null(dd)) return(NULL)
     pp <- lapply(tile.list(dd), df2poly)

@@ -375,7 +375,7 @@ bw.stoyan <- function(X, co=0.15) {
   n <- npoints(X)
   W <- Window(X)
   a <- area(W)
-  stoyan <- co/sqrt(5 * n/a)
+  stoyan <- co/sqrt(5 * max(1,n)/a)
   return(stoyan)
 }
 

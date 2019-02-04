@@ -38,10 +38,13 @@ bw.stoyan(X, co=0.15)
   \eqn{\sigma = 0.15/\sqrt{5\lambda}}{\sigma = 0.15/sqrt(5 * \lambda)}.
   
   The coefficient \eqn{0.15} can be tweaked using the
-  argument \code{co}. 
+  argument \code{co}.
+
+  To ensure the bandwidth is finite, an empty point pattern is treated
+  as if it contained 1 point.
 }
 \value{
-  A numerical value giving the selected bandwidth (the standard
+  A finite positive numerical value giving the selected bandwidth (the standard
   deviation of the smoothing kernel).
 }
 \seealso{

@@ -226,7 +226,7 @@ local({
 })
 #'   tests/ippm.R
 #'   Tests of 'ippm' class
-#'   $Revision: 1.1 $ $Date: 2017/06/06 06:32:00 $
+#'   $Revision: 1.2 $ $Date: 2019/02/02 02:26:02 $
 
 require(spatstat)
 
@@ -263,12 +263,28 @@ local({
               start=list(gamma=1, delta=1),
               nd=nd)
 
-  # ............. test .............................
+  ## ............. test ippm class support ......................
   Ar <- model.matrix(fit)
   Ai <- model.matrix(fit, irregular=TRUE)
   Zr <- model.images(fit)
   Zi <- model.images(fit, irregular=TRUE)
-})#'
+  ## update.ippm
+  fit2 <- update(fit, . ~ . + I(Z^2))
+  fit0 <- update(fit,
+                 . ~ . - Z,
+                 start=list(gamma=2, delta=4))
+  oldfit <- ippm(X,
+              ~Z + offset(log(f)),
+              covariates=list(Z=Z, f=f),
+              iScore=Dlogf,
+              start=list(gamma=1, delta=1),
+              nd=nd)
+  oldfit2 <- update(oldfit, . ~ . + I(Z^2))
+  oldfit0 <- update(oldfit,
+                    . ~ . - Z,
+                    start=list(gamma=2, delta=4))
+})
+#'
 #'   tests/Kfuns.R
 #'
 #'   Various K and L functions and pcf

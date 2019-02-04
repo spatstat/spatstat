@@ -126,7 +126,8 @@ ippm(Q, \dots,
   not the intensity.
 }
 \value{
-  A fitted point process model (object of class \code{"ppm"}).
+  A fitted point process model (object of class \code{"ppm"})
+  which also belongs to the special class \code{"ippm"}. 
 }
 \author{\spatstatAuthors.}
 \seealso{

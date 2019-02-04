@@ -1,7 +1,7 @@
 #
 # ippm.R
 #
-#   $Revision: 2.24 $   $Date: 2017/07/18 00:38:31 $
+#   $Revision: 2.25 $   $Date: 2019/02/02 02:54:19 $
 #
 # Fisher scoring algorithm for irregular parameters in ppm trend
 #
@@ -142,14 +142,16 @@ ippm <- local({
       lpl <- logLik(fit, warn=FALSE)
       ## return negative logL because nlm performs *minimisation*
       value <- -as.numeric(lpl)
-      ## compute derivatives
-      stuff <- ppmInfluence(fit, what="score",
-                            iScore=iScore,
-                            iArgs=param)
-      score <- stuff$score
-      if(length(score) == length(coef(fit)) + length(param)) 
-        attr(value, "gradient") <- -score[-(1:nreg), drop=FALSE]
-      ## attr(value, "hessian") <- -hess[-(1:nreg), -(1:nreg), drop=FALSE]
+      if(!is.null(iScore)) {
+        ## compute analytic derivatives
+        stuff <- ppmInfluence(fit, what="score",
+                              iScore=iScore,
+                              iArgs=param)
+        score <- stuff$score
+        if(length(score) == length(coef(fit)) + length(param)) 
+          attr(value, "gradient") <- -score[-(1:nreg), drop=FALSE]
+        ## attr(value, "hessian") <- -hess[-(1:nreg), -(1:nreg), drop=FALSE]
+      }
       return(value)
     })
   }

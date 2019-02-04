@@ -307,3 +307,34 @@ Change log from 1.58-2 to 1.58-3
 ------------- passed R-3.5.2 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
+
+02 feb 2019
+
+   tests/ippm.R
+	Added tests of update.ippm
+	
+   ippm.R
+	Tweak to improve handling when iScore=NULL.
+
+   adaptive.density.R
+   adaptive.density.Rd
+	adaptive.density is now generic with a method for class 'ppp'.
+	New arguments 'method' and 'fixed'
+	New code for smoothed Voronoi estimator
+
+   tests/density.R
+	Tests for new code in adaptive.density.ppp
+
+   deldir.R
+   relrisk.R
+   random.R
+	Bug fixes in handling trivial patterns (0 or 1 point)
+	
+   DESCRIPTION
+   NEWS
+	Version 1.58-2.017
+
+------------- passed R-3.5.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+

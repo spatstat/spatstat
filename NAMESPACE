@@ -38,6 +38,7 @@ export("acedist.show")
 export("active.interactions")
 export("adaptcoef")
 export("adaptive.density")
+export("adaptive.density.ppp")
 export("add.texture")
 export("addvar")
 export("adjust.ratfv")
@@ -2606,6 +2607,7 @@ S3method("Summary", "sparse3Darray")
 # ......................................... 
 # Automatically generated list of S3 methods
 # ......................................... 
+S3method("adaptive.density", "ppp")
 S3method("affine", "distfun")
   S3method("affine", "im")
   S3method("affine", "layered")

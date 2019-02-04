@@ -3,7 +3,7 @@
 ##
 ##    Functions for generating random point patterns
 ##
-##    $Revision: 4.95 $   $Date: 2018/08/31 08:08:39 $
+##    $Revision: 4.96 $   $Date: 2019/02/04 07:16:40 $
 ##
 ##
 ##    runifpoint()      n i.i.d. uniform random points ("binomial process")
@@ -1004,20 +1004,18 @@ rthin <- function(X, P, ..., nsim=1, drop=TRUE) {
 rjitter <- function(X, radius, retry=TRUE, giveup=10000, ...,
                     nsim=1, drop=TRUE) {
   verifyclass(X, "ppp")
-  if(missing(radius) || is.null(radius))
-    radius <- bw.stoyan(X)
-  
-  if(!missing(nsim)) {
-    check.1.integer(nsim)
-    stopifnot(nsim >= 1)
-  }
+  check.1.integer(nsim)
+  stopifnot(nsim >= 1)
   nX <- npoints(X)
-  W <- X$window
   if(nX == 0) {
     result <- rep(list(X), nsim)
     result <- simulationresult(result, nsim, drop)
     return(result)
   }
+  W <- X$window
+  if(missing(radius) || is.null(radius))
+    radius <- min(bw.stoyan(X), shortside(Frame(W)))
+  
   result <- vector(mode="list", length=nsim)
   for(isim in 1:nsim) {
     if(!retry) {
