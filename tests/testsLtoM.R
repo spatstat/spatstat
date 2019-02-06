@@ -334,7 +334,7 @@ local({
 #
 # Tests for lpp code
 #
-#  $Revision: 1.24 $  $Date: 2019/01/20 05:27:35 $
+#  $Revision: 1.25 $  $Date: 2019/02/06 10:10:48 $
 
 
 require(spatstat)
@@ -579,6 +579,20 @@ local({
   XminusB <- deletebranch(X, "b", tb)
   # extract branch B
   XB <- extractbranch(X, "b", tb)
+
+  ## linear tessellations infrastructure
+  ns <- nsegments(simplenet)
+  df <- data.frame(seg=1:ns, t0=0, t1=1, tile=letters[1:ns])
+  tes <- lintess(simplenet, df)
+  X <- runiflpp(30, simplenet)
+  cX <- coords(X)
+  A <- lineartileindex(cX$seg, cX$tp, tes, method="interpreted")
+  B <- lineartileindex(cX$seg, cX$tp, tes, method="C")
+  if(!identical(A,B))
+    stop("conflicting results from lineartileindex")
+  D <- as.linfun(tes)(X)
+  if(!all(D==A))
+    stop("disagreement between as.linfun.lintess and lineartileindex")
 })
 
 reset.spatstat.options()
