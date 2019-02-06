@@ -354,3 +354,25 @@ Change log from 1.58-2 to 1.58-3
 ------------- passed R-3.5.2 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
+
+   adaptive.density.R -> densityVoronoi.R [renamed]
+   adaptive.density.Rd -> densityVoronoi.Rd [renamed]
+       Function renamed.
+
+   densityAdaptiveKernel.R [New file]
+   densityAdaptiveKernel.Rd [New file]
+       New function for variable-bandwidth kernel estimation
+       Currently a stub.
+       
+   adaptive.density.R 
+   adaptive.density.Rd
+       This is now a wrapper which calls either densityVoronoi
+       or densityAdaptiveKernel.
+
+   DESCRIPTION
+   NEWS
+	Version 1.58-2.019
+
+------------- passed R-3.5.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------

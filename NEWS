@@ -1,13 +1,13 @@
 
-        CHANGES IN spatstat VERSION 1.58-2.018
+        CHANGES IN spatstat VERSION 1.58-2.019
 
 OVERVIEW
 
     o We thank Tilman Davies, Mehdi Moradi and Suman Rakshit for contributions.
     
-    o Minor improvements and bug fixes.
-
     o Extensions to adaptive intensity estimators.
+
+    o Minor improvements and bug fixes.
 
     o Version nickname: "Caution Wake Turbulence"
     
@@ -17,6 +17,15 @@ NEW FUNCTIONS
     New method for 'coords', to extract the coordinates of the points
     in a quadrature scheme.
     
+    o densityAdaptiveKernel
+    Calculates adaptive estimate of point process intensity
+    using variable-bandwidth kernel estimation.
+    
+    o densityVoronoi
+    Calculates adaptive estimate of point process intensity
+    using tessellation methods. This is an extension of the
+    old function adaptive.density.
+    
 SIGNIFICANT USER-VISIBLE CHANGES
 
     o latest.news
@@ -24,10 +33,17 @@ SIGNIFICANT USER-VISIBLE CHANGES
     New argument 'major'.
     
     o adaptive.density
-    This is now a generic function with a method for class 'ppp'.
+    This function can now perform adaptive estimation by two methods: either
+    tessellation-based methods or variable-bandwidth kernel estimation.
+    The calculations are performed by either 'densityVoronoi' or
+    'densityAdaptiveKernel'.
+
+    o densityVoronoi
+    This performs the calculations of the old function 'adaptive.density'.
     New argument 'fixed' specifies the subsampling.
     New argument 'method' allows a choice between the original algorithm
     and the recently described 'smoothed Voronoi' estimator.
+    Default value of 'f' changed to 'f=1'.
     
     o pairorient
     Default edge corrections now include 'bord.modif'.
