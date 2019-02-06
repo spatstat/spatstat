@@ -123,6 +123,7 @@ void ClineMquad(int *, int *, int *, int *, double *, double *, double *, int *,
 void ClineRMquad(int *, int *, int *, int *, double *, double *, double *, int *, int *, double *, double *, int *, int *, double *, double *, int *, double *, double *, int *, int *, double *, double *, int *);
 void linearradius(int *, int *, int *, double *, int *, double *, double *, double *); 
 void cocoGraph(int *, int *, int *, int *, int *, int *);
+void lintileindex(int *, int *, double *, int *, int *, double *, double *, int *, int *); 
 void cocoGraph(int *, int *, int *, int *, int *, int *);
 void Clixellate(int *, int *, int *, int *, int *, int *, double *, double *, int *, double *, int *, int *, int *, double *, int *, double *);
 void locpcfx(int *, double *, double *, int *, int *, double *, double *, int *, int *, double *, double *, double *); 

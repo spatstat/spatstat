@@ -3,7 +3,7 @@
 #'
 #'   Tessellations on a Linear Network
 #'
-#'   $Revision: 1.16 $   $Date: 2017/12/18 00:57:05 $
+#'   $Revision: 1.18 $   $Date: 2019/02/06 08:41:54 $
 #'
 
 lintess <- function(L, df) {
@@ -168,6 +168,37 @@ as.owin.lintess <- function(W, ...) { as.owin(as.linnet(W), ...) }
 Window.lintess <- function(X, ...) { as.owin(as.linnet(X)) }
 
 domain.lintess <- as.linnet.lintess <- function(X, ...) { X$L }
+
+lineartileindex <- function(x, y, seg, tp, Z) {
+  #' sort query data
+  oo <- order(seg, tp)
+  n <- length(seg)
+  #' extract tessellation data and sort them
+  df <- Z$df
+  df <- df[order(df$seg, df$t0), , drop=FALSE]
+  m <- nrow(df)
+  dftile <- df$tile
+  tilecode <- as.integer(dftile)
+  tilenames <- levels(dftile)
+  #' launch
+  z <- .C("lintileindex",
+          n      = as.integer(n),
+          seg    = as.integer(seg),
+          tp     = as.double(tp),
+          dfn    = as.integer(m),
+          dfseg  = as.integer(df$seg),
+          dft0   = as.double(df$t0),
+          dft1   = as.double(df$t1),
+          dftile = as.integer(tilecode),
+          answer = as.integer(integer(n)),
+          PACKAGE="spatstat")
+  z <- z$answer
+  z[z == 0] <- NA
+  answer <- integer(n)
+  answer[oo] <- z
+  answer <- factor(answer, levels=seq_along(tilenames), labels=tilenames)
+  return(answer)
+}
 
 as.linfun.lintess <- function(X, ..., values, navalue=NA) {
   L <- X$L

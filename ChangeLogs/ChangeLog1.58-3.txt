@@ -376,3 +376,18 @@ Change log from 1.58-2 to 1.58-3
 ------------- passed R-3.5.2 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
+
+   lintileindex.c [New file]
+       Experimental C code to compute tile index in a linear tessellation.
+
+   lintess.R
+   spatstat-internal.Rd
+	Experimental function 'lineartileindex' using C code
+
+   DESCRIPTION
+   NEWS
+	Version 1.58-2.020
+
+------------- passed R-3.5.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
