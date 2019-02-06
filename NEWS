@@ -1,9 +1,10 @@
 
-        CHANGES IN spatstat VERSION 1.58-2.021
+        CHANGES IN spatstat VERSION 1.58-2.022
 
 OVERVIEW
 
-    o We thank Tilman Davies, Mehdi Moradi and Suman Rakshit for contributions.
+    o We thank Tilman Davies, Kassel Hingee, Mehdi Moradi
+    and Suman Rakshit for contributions.
     
     o Extensions to adaptive intensity estimators.
 
@@ -76,6 +77,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
     it is now treated as if it contained 1 point,
     so that a finite bandwidth value is returned.
 
+    o rebound.owin
+    Now preserves unitnames of the objects.
+    
 BUG FIXES
 
     o incircle, inpoint

@@ -1,7 +1,7 @@
 #
 #	distbdry.S		Distance to boundary
 #
-#	$Revision: 4.43 $	$Date: 2018/05/15 13:34:45 $
+#	$Revision: 4.45 $	$Date: 2019/02/06 10:53:48 $
 #
 # -------- functions ----------------------------------------
 #
@@ -160,51 +160,70 @@ erodemask <- function(w, r, strict=FALSE) {
   rebound.owin(X, value)
 }
 
-rebound.owin <- function(x, rect) {
-  w <- x
-  verifyclass(rect, "owin")
-  if(is.empty(w))
-    return(emptywindow(rect))
-  verifyclass(w, "owin")
-  if(!is.subset.owin(as.rectangle(w), rect)) {
-    bb <- boundingbox(w)
-    if(!is.subset.owin(bb, rect))
-      stop(paste("The new rectangle",
-                 sQuote("rect"),
-                 "does not contain the window",
-                 sQuote("win")))
-  }
-  xr <- rect$xrange
-  yr <- rect$yrange
-  switch(w$type,
-         rectangle={
-           return(owin(xr, yr,
-                       poly=list(x=w$xrange[c(1L,2L,2L,1L)],
-                                 y=w$yrange[c(1L,1L,2L,2L)]),
-                       check=FALSE))
-         },
-         polygonal={
-           return(owin(xr, yr, poly=w$bdry, check=FALSE))
-         },
-         mask={
-           newseq <- function(oldseq, newrange, dstep) {
-             oldends <- range(oldseq)
-             nleft <- max(0, floor((oldends[1L] - newrange[1L])/dstep))
-             nright <- max(0, floor((newrange[2L] - oldends[2L])/dstep))
-             newstart <- max(oldends[1L] - nleft * dstep, newrange[1L])
-             newend <- min(oldends[2L] + nright * dstep, newrange[2L])
-             seq(from=newstart, by=dstep, to=newend)
+rebound.owin <- local({
+
+  rebound.owin <- function(x, rect) {
+    w <- x
+    verifyclass(rect, "owin")
+    if(is.empty(w))
+      return(emptywindow(rect))
+    verifyclass(w, "owin")
+    if(!is.subset.owin(as.rectangle(w), rect)) {
+      bb <- boundingbox(w)
+      if(!is.subset.owin(bb, rect))
+        stop(paste("The new rectangle",
+                   sQuote("rect"),
+                   "does not contain the window",
+                   sQuote("win")))
+    }
+    xr <- rect$xrange
+    yr <- rect$yrange
+    ## determine unitname
+    uu <- list(unitname(x), unitname(rect))
+    uu <- unique(uu[sapply(uu, is.vanilla)])
+    if(length(uu) > 1) {
+      warning("Arguments of rebound.owin have incompatible unitnames",
+              call.=FALSE)
+      uu <- list()
+    }
+    un <- if(length(uu)) uu[[1]] else NULL
+    ## 
+    switch(w$type,
+           rectangle={
+             return(owin(xr, yr,
+                         poly=list(x=w$xrange[c(1L,2L,2L,1L)],
+                                   y=w$yrange[c(1L,1L,2L,2L)]),
+                         unitname = un,
+                         check=FALSE))
+           },
+           polygonal={
+             return(owin(xr, yr, poly=w$bdry, unitname=un, check=FALSE))
+           },
+           mask={
+             xcol <- newseq(w$xcol, xr)
+             yrow <- newseq(w$yrow, yr)
+             newmask <- as.mask(xy=list(x=xcol, y=yrow))
+             xx <- rasterx.mask(newmask)
+             yy <- rastery.mask(newmask)
+             newmask$m <- inside.owin(xx, yy, w)
+             unitname(newmask) <- un
+             return(newmask)
            }
-           xcol <- newseq(w$xcol, xr, mean(diff(w$xcol)))
-           yrow <- newseq(w$yrow, yr, mean(diff(w$yrow)))
-           newmask <- as.mask(xy=list(x=xcol, y=yrow))
-           xx <- rasterx.mask(newmask)
-           yy <- rastery.mask(newmask)
-           newmask$m <- inside.owin(xx, yy, w)
-           return(newmask)
-         }
-         )
-}
-  
+           )
+  }
+
+  newseq <- function(oldseq, newrange) {
+    oldrange <- range(oldseq)
+    dstep <- mean(diff(oldseq))
+    nleft <- max(0, floor((oldrange[1L] - newrange[1L])/dstep))
+    nright <- max(0, floor((newrange[2L] - oldrange[2L])/dstep))
+    newstart <- max(oldrange[1L] - nleft * dstep, newrange[1L])
+    newend <- min(oldrange[2L] + nright * dstep, newrange[2L])
+    seq(from=newstart, by=dstep, to=newend)
+  }
+
+  rebound.owin
+})
+
     
   
