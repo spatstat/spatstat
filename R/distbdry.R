@@ -166,7 +166,6 @@ rebound.owin <- function(x, rect) {
   if(is.empty(w))
     return(emptywindow(rect))
   verifyclass(w, "owin")
-  stopifnot(identical(unitname(x), unitname(rect)))
   if(!is.subset.owin(as.rectangle(w), rect)) {
     bb <- boundingbox(w)
     if(!is.subset.owin(bb, rect))
