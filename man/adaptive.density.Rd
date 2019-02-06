@@ -17,8 +17,7 @@ adaptive.density(X, \dots)
 \arguments{
   \item{X}{Point pattern dataset (object of class \code{"ppp"}).}
   \item{f}{Fraction (between 0 and 1 inclusive) of the data points that will be
-    removed from the data and used to determine a tessellation for the
-    intensity estimate.
+    used to determine a tessellation for the intensity estimate.
   }
   \item{\dots}{Arguments passed to \code{\link{as.im}} determining the
     pixel resolution of the result.

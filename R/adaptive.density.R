@@ -1,7 +1,7 @@
 #'
 #'  adaptive.density.R
 #'
-#'  $Revision: 1.13 $   $Date: 2019/02/04 06:55:53 $
+#'  $Revision: 1.14 $   $Date: 2019/02/06 02:05:15 $
 #'
 
 adaptive.density <- function(X, ...) {
@@ -56,19 +56,27 @@ adaptive.density.ppp <- function(X, f=0.1, ...,
   ## perform thinning
   if(!fixed) {
     itess <- thinjump(nX, f)
-    sampfrac <- f
+    tessfrac <- f
   } else {
     itess <- sample(seq_len(nX), ntess, replace=FALSE)
-    sampfrac <- as.numeric(nX - ntess)/nX
+    tessfrac <- as.numeric(ntess)/nX
   }
   Xtess <- X[itess]
   ## make tessellation
   tes <- dirichlet(Xtess)
   ## estimate intensity in each tile
-  tilemass <- switch(method,
-                     tile = 1,
-                     count = table(marks(cut(X[-itess], tes))))
-  lam <- as.numeric(tilemass)/(sampfrac * tile.areas(tes))
+  switch(method,
+         tile = {
+           tilemass <- 1
+           expansion <- 1/tessfrac
+         },
+         count = {
+           Xcount <- X[-itess]
+           tilemap <- tileindex(Xcount$x, Xcount$y, tes)
+           tilemass <- as.numeric(table(tilemap))
+           expansion <- 1/(1-tessfrac)
+         })
+  lam <- expansion * tilemass/tile.areas(tes)
   ## estimate of intensity at each location
   tesim <- nnmap(Xtess, what="which", ...)
   out <- eval.im(lam[tesim])

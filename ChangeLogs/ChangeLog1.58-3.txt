@@ -338,3 +338,19 @@ Change log from 1.58-2 to 1.58-3
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+08 feb 2019
+
+   adaptive.density.R
+	Bug fix
+	Accelerated computation when method='count'
+
+   adaptive.density.Rd
+	Tweak
+	
+   DESCRIPTION
+   NEWS
+	Version 1.58-2.018
+
+------------- passed R-3.5.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
