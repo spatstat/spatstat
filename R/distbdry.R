@@ -166,6 +166,9 @@ rebound.owin <- function(x, rect) {
   if(is.empty(w))
     return(emptywindow(rect))
   verifyclass(w, "owin")
+  if (identical(unitname(x), unitname(rect))) {
+	  saveunitname <- TRUE   #return object will have same units as input object
+  } else { saveunitname <- FALSE }
   if(!is.subset.owin(as.rectangle(w), rect)) {
     bb <- boundingbox(w)
     if(!is.subset.owin(bb, rect))
@@ -183,12 +186,10 @@ rebound.owin <- function(x, rect) {
                                  y=w$yrange[c(1L,1L,2L,2L)]),
                        check=FALSE)
 	 unitname(newx) <- unitname(x)
-	 return(newx)
          },
          polygonal={
            newx <- owin(xr, yr, poly=w$bdry, check=FALSE)
 	   unitname(newx) <- unitname(x)
-	   return(newx)
          },
          mask={
            newseq <- function(oldseq, newrange, dstep) {
@@ -201,14 +202,15 @@ rebound.owin <- function(x, rect) {
            }
            xcol <- newseq(w$xcol, xr, mean(diff(w$xcol)))
            yrow <- newseq(w$yrow, yr, mean(diff(w$yrow)))
-           newmask <- as.mask(xy=list(x=xcol, y=yrow))
-	   unitname(newmask) <- unitname(x)
-           xx <- rasterx.mask(newmask)
-           yy <- rastery.mask(newmask)
-           newmask$m <- inside.owin(xx, yy, w)
-           return(newmask)
+           newx <- as.mask(xy=list(x=xcol, y=yrow))
+	   unitname(newx) <- unitname(x)
+           xx <- rasterx.mask(newx)
+           yy <- rastery.mask(newx)
+           newx$m <- inside.owin(xx, yy, w)
          }
          )
+  if ( saveunitname ) {unitname(newx) <- unitname(x)}
+  return(newx)
 }
   
     
