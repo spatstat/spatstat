@@ -166,6 +166,7 @@ rebound.owin <- function(x, rect) {
   if(is.empty(w))
     return(emptywindow(rect))
   verifyclass(w, "owin")
+  stopifnot(identical(unitname(x), unitname(rect)))
   if(!is.subset.owin(as.rectangle(w), rect)) {
     bb <- boundingbox(w)
     if(!is.subset.owin(bb, rect))
@@ -178,13 +179,17 @@ rebound.owin <- function(x, rect) {
   yr <- rect$yrange
   switch(w$type,
          rectangle={
-           return(owin(xr, yr,
+           newx <- owin(xr, yr,
                        poly=list(x=w$xrange[c(1L,2L,2L,1L)],
                                  y=w$yrange[c(1L,1L,2L,2L)]),
-                       check=FALSE))
+                       check=FALSE)
+	 unitname(newx) <- unitname(x)
+	 return(newx)
          },
          polygonal={
-           return(owin(xr, yr, poly=w$bdry, check=FALSE))
+           newx <- owin(xr, yr, poly=w$bdry, check=FALSE)
+	   unitname(newx) <- unitname(x)
+	   return(newx)
          },
          mask={
            newseq <- function(oldseq, newrange, dstep) {
@@ -198,6 +203,7 @@ rebound.owin <- function(x, rect) {
            xcol <- newseq(w$xcol, xr, mean(diff(w$xcol)))
            yrow <- newseq(w$yrow, yr, mean(diff(w$yrow)))
            newmask <- as.mask(xy=list(x=xcol, y=yrow))
+	   unitname(newmask) <- unitname(x)
            xx <- rasterx.mask(newmask)
            yy <- rastery.mask(newmask)
            newmask$m <- inside.owin(xx, yy, w)
