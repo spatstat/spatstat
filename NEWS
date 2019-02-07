@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.58-2.023
+        CHANGES IN spatstat VERSION 1.58-2.024
 
 OVERVIEW
 
@@ -26,6 +26,10 @@ NEW FUNCTIONS
     Calculates adaptive estimate of point process intensity
     using tessellation methods. This is an extension of the
     old function adaptive.density.
+
+    o lineartileindex
+    Low-level function to classify points on a linear network
+    according to which tile of a tessellation they fall inside.
     
 SIGNIFICANT USER-VISIBLE CHANGES
 

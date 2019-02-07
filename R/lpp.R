@@ -1,7 +1,7 @@
 #
 # lpp.R
 #
-#  $Revision: 1.61 $   $Date: 2019/01/10 00:04:11 $
+#  $Revision: 1.62 $   $Date: 2019/02/07 05:13:00 $
 #
 # Class "lpp" of point patterns on linear networks
 
@@ -621,7 +621,7 @@ cut.lpp <- function(x, z=marks(x), ...) {
            marks(x) <- g
            return(x)
          },
-         list = stop("Don't know how to split according to a list"))
+         list = stop("Don't know how to cut according to a list"))
   stop("Format of z not understood")
 }
 

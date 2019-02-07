@@ -3,7 +3,7 @@
 #'
 #'   Tessellations on a Linear Network
 #'
-#'   $Revision: 1.29 $   $Date: 2019/02/07 03:00:52 $
+#'   $Revision: 1.30 $   $Date: 2019/02/07 04:45:47 $
 #'
 
 lintess <- function(L, df) {
@@ -199,7 +199,9 @@ lineartileindex <- function(seg, tp, Z,
            #' encode breakpoints as numeric
            bks <- with(df, c(seg - 1 + t0, seg[m]))
            #' which piece contains each query point
-           jj <- findInterval(loc, bks, rightmost.closed=TRUE)
+           jj <- findInterval(loc, bks,
+                              left.open=TRUE, all.inside=TRUE,
+                              rightmost.closed=TRUE)
            answer <- df$tile[jj]
          },
          C = {

@@ -299,7 +299,6 @@
 \alias{linearpcfmulti}
 \alias{linearpcfmulti.inhom}
 \alias{linearPCFmultiEngine}
-\alias{lineartileindex}
 \alias{listof}
 \alias{localKengine}
 \alias{localpcfengine}
@@ -1121,7 +1120,6 @@ linearKmultiEngine(X, I, J, \dots,
                    r, reweight, denom, correction, showworking)
 linearPCFmultiEngine(X, I, J, \dots,
                    r, reweight, denom, correction, showworking)
-lineartileindex(seg, tp, Z, method)
 listof(\dots)
 localKengine(X, \dots, wantL, lambda, correction, verbose, rvalue)
 localpcfengine(X, \dots, delta, rmax, nr, stoyan, lambda)
