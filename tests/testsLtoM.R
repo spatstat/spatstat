@@ -334,7 +334,7 @@ local({
 #
 # Tests for lpp code
 #
-#  $Revision: 1.25 $  $Date: 2019/02/06 10:10:48 $
+#  $Revision: 1.27 $  $Date: 2019/02/07 00:45:51 $
 
 
 require(spatstat)
@@ -581,17 +581,21 @@ local({
   XB <- extractbranch(X, "b", tb)
 
   ## linear tessellations infrastructure
-  ns <- nsegments(simplenet)
-  df <- data.frame(seg=1:ns, t0=0, t1=1, tile=letters[1:ns])
-  tes <- lintess(simplenet, df)
-  X <- runiflpp(30, simplenet)
+  nX <- 100
+  nY <- 20
+  X <- runiflpp(nX, simplenet)
+  Y <- runiflpp(nY, simplenet)
+  tes <- divide.linnet(Y)
   cX <- coords(X)
-  A <- lineartileindex(cX$seg, cX$tp, tes, method="interpreted")
-  B <- lineartileindex(cX$seg, cX$tp, tes, method="C")
-  if(!identical(A,B))
-    stop("conflicting results from lineartileindex")
-  D <- as.linfun(tes)(X)
-  if(!all(D==A))
+  iI <- lineartileindex(cX$seg, cX$tp, tes, method="interpreted")
+  iC <- lineartileindex(cX$seg, cX$tp, tes, method="C")
+  iE <- lineartileindex(cX$seg, cX$tp, tes, method="encode")
+  if(!identical(iI,iC))
+    stop("conflicting results from lineartileindex (interpreted vs C)")
+  if(!identical(iI,iE))
+    stop("conflicting results from lineartileindex (interpreted vs encoded)")
+  iA <- as.linfun(tes)(X)
+  if(!identical(iI, iA))
     stop("disagreement between as.linfun.lintess and lineartileindex")
 })
 

@@ -24,6 +24,11 @@
     omitted and \code{X} may be
     a list with two components \code{x} and \code{y},
     or a matrix with two columns.
+    Alternatively \code{X} can be
+    a three-dimensional point pattern (class \code{"pp3"}),
+    a higher-dimensional point pattern (class \code{"ppx"}),
+    a point pattern on a linear network (class \code{"lpp"}),
+    or a spatial pattern of line segments (class \code{"psp"}).
   }
   \item{\dots}{
     Ignored by \code{nndist.ppp}
@@ -74,9 +79,16 @@
   The function \code{nndist} is generic, with
   a method for point patterns (objects of class \code{"ppp"}),
   and a default method for coordinate vectors.
-  There is also a method for line segment patterns, \code{\link{nndist.psp}}.
 
-  The method for point patterns expects a single
+  There are also methods for line segment patterns,
+  \code{\link{nndist.psp}},
+  three-dimensional point patterns, \code{\link{nndist.pp3}},
+  higher-dimensional point patterns, \code{\link{nndist.ppx}}
+  and point patterns on a linear network, \code{\link{nndist.lpp}};
+  these are described in their own help files.
+  Type \code{methods(nndist)} to see all available methods.
+
+  The method for planar point patterns \code{nndist.ppp} expects a single
   point pattern argument \code{X} and returns the vector of its
   nearest neighbour distances.
 
@@ -138,6 +150,9 @@
 }
 \seealso{
   \code{\link{nndist.psp}},
+  \code{\link{nndist.pp3}},
+  \code{\link{nndist.ppx}},
+  \code{\link{nndist.lpp}},
   \code{\link{pairdist}},
   \code{\link{Gest}},
   \code{\link{nnwhich}},

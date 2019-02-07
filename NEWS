@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.58-2.022
+        CHANGES IN spatstat VERSION 1.58-2.023
 
 OVERVIEW
 
@@ -45,7 +45,7 @@ SIGNIFICANT USER-VISIBLE CHANGES
     New argument 'method' allows a choice between the original algorithm
     and the recently described 'smoothed Voronoi' estimator.
     Default value of 'f' changed to 'f=1'.
-    
+
     o pairorient
     Default edge corrections now include 'bord.modif'.
 
@@ -67,6 +67,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o as.linnet.psp
     Computation accelerated.
 
+    o as.linfun.lintess
+    Computation accelerated.
+    
     o selfcut.psp
     Computation accelerated.
     The result now has an attribute "camefrom"

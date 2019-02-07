@@ -338,7 +338,7 @@ Change log from 1.58-2 to 1.58-3
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
-08 feb 2019
+06 feb 2019
 
    adaptive.density.R
 	Bug fix
@@ -414,6 +414,26 @@ Change log from 1.58-2 to 1.58-3
    DESCRIPTION
    NEWS
 	Version 1.58-2.022
+
+------------- passed R-3.5.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+07 feb 2019
+
+   lintess.R
+	Accelerated 'lineartileindex'
+	Used 'lineartileindex' to accelerate 'as.linfun.lintess'
+
+   tests/lppstuff.R
+	Tests of validity of 'lineartileindex'
+
+   nndist.Rd
+	Added cross-references to other methods
+	
+   DESCRIPTION
+   NEWS
+	Version 1.58-2.023
 
 ------------- passed R-3.5.2 CMD check ---------------
 ------------- installed on laptop      ---------------

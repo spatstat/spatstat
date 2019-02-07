@@ -3,7 +3,7 @@
 #'
 #'   Tessellations on a Linear Network
 #'
-#'   $Revision: 1.21 $   $Date: 2019/02/06 10:05:04 $
+#'   $Revision: 1.29 $   $Date: 2019/02/07 03:00:52 $
 #'
 
 lintess <- function(L, df) {
@@ -170,13 +170,14 @@ Window.lintess <- function(X, ...) { as.owin(as.linnet(X)) }
 domain.lintess <- as.linnet.lintess <- function(X, ...) { X$L }
 
 lineartileindex <- function(seg, tp, Z,
-                            method=c("C", "interpreted")) {
+                            method=c("encode", "C", "interpreted")) {
   method <- match.arg(method)
+  df <- if(inherits(Z, "lintess")) Z$df else
+        if(is.data.frame(Z)) Z else stop("Format of Z is unrecognised")
   switch(method,
          interpreted = {
            n <- length(seg)
            #' extract tessellation data
-           df <- Z$df
            tilenames <- levels(df$tile)
            answer <- factor(rep(NA_integer_, n),
                             levels=seq_along(tilenames),
@@ -189,6 +190,18 @@ lineartileindex <- function(seg, tp, Z,
              answer[i] <- if(length(kk) == 0) NA else df[j[min(kk)], "tile"]
            }
          },
+         encode = {
+           #' encode locations as numeric
+           loc <- seg - 1 + tp
+           #' extract tessellation data and sort them
+           df <- df[order(df$seg, df$t0), , drop=FALSE]
+           m <- nrow(df)
+           #' encode breakpoints as numeric
+           bks <- with(df, c(seg - 1 + t0, seg[m]))
+           #' which piece contains each query point
+           jj <- findInterval(loc, bks, rightmost.closed=TRUE)
+           answer <- df$tile[jj]
+         },
          C = {
            #' sort query data
            oo <- order(seg, tp)
@@ -196,7 +209,6 @@ lineartileindex <- function(seg, tp, Z,
            tp  <- tp[oo]
            n <- length(seg)
            #' extract tessellation data and sort them
-           df <- Z$df
            df <- df[order(df$seg, df$t0), , drop=FALSE]
            m <- nrow(df)
            #' handle factor 
@@ -228,22 +240,23 @@ lineartileindex <- function(seg, tp, Z,
 
 as.linfun.lintess <- function(X, ..., values, navalue=NA) {
   L <- X$L
-  df <- X$df
+  Xdf <- X$df
+  tilenames <- levels(Xdf$tile)
   if(missing(values) || is.null(values)) {
-    rowvalues <- df$tile
+    tilevalues <- factor(tilenames, levels=tilenames)
   } else {
-    if(length(values) != length(levels(df$tile)))
+    if(length(values) != length(tilenames))
       stop("Length of 'values' should equal the number of tiles", call.=FALSE)
-    rowvalues <- values[as.integer(df$tile)]    
+    tilevalues <- values
   }
   f <- function(x, y, seg, tp) {
-    result <- rowvalues[integer(0)]
-    for(i in seq_along(seg)) {
-      tpi <- tp[i]
-      segi <- seg[i]
-      j <- which(df$seg == segi)
-      kk <- which(df[j, "t0"] <= tpi & df[j, "t1"] >= tpi)
-      result[i] <- if(length(kk) == 0) navalue else rowvalues[j[min(kk)]]
+    k <- as.integer(lineartileindex(seg, tp, Xdf))
+    if(!anyNA(k)) {
+      result <- tilevalues[k]
+    } else {
+      ok <- !is.na(k)
+      result <- rep(navalue, length(seg))
+      result[ok] <- tilevalues[k[ok]]
     }
     return(result)
   }

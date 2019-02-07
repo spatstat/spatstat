@@ -40,7 +40,7 @@
 \examples{
   X <- runiflpp(5, simplenet)
   plot(divide.linnet(X))
-  plot(X, add=TRUE, pch=16)
+  plot(X, add=TRUE, pch=16, show.network=FALSE)
 }
 \keyword{spatial}
 \keyword{manip}
