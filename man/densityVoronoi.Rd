@@ -113,8 +113,9 @@ densityVoronoi(X, \dots)
   estimates of the intensity of \code{X}.
 }
 \seealso{
-  \code{\link{density.ppp}},
+  \code{\link{densityVoronoi.lpp}},
   \code{\link{adaptive.density}},
+  \code{\link{density.ppp}},
   \code{\link{dirichlet}},
   \code{\link{im.object}}.
 }
@@ -144,7 +145,6 @@ densityVoronoi(X, \dots)
   Modelling heterogeneous space-time occurrences of earthquakes and its
   residual analysis.
   \emph{Applied Statistics} \bold{52} 499--509.
-
 }
 \examples{
   plot(densityVoronoi(nztrees, 1, f=1), main="Voronoi estimate")

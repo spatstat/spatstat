@@ -451,4 +451,20 @@ Change log from 1.58-2 to 1.58-3
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+08 feb 2019
+
+   densitylppVoronoi.R [New file]
+   densityVoronoi.lpp.Rd [New file]
+   bw.voronoi.Rd [New file]
+   	Smoothed Voronoi intensity estimator on linear network
+
+   DESCRIPTION
+   NEWS
+   Nickname.txt
+	Nickname "J'ai omis les oeufs de caille"
+	Version 1.58-2.025
+
+------------- passed R-3.5.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
 

@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.58-2.024
+        CHANGES IN spatstat VERSION 1.58-2.025
 
 OVERVIEW
 
@@ -10,7 +10,7 @@ OVERVIEW
 
     o Minor improvements and bug fixes.
 
-    o Version nickname: "Caution Wake Turbulence"
+    o Version nickname: "J'ai omis les oeufs de caille"
     
 NEW FUNCTIONS
 
@@ -22,10 +22,14 @@ NEW FUNCTIONS
     Calculates adaptive estimate of point process intensity
     using variable-bandwidth kernel estimation.
     
-    o densityVoronoi
+    o densityVoronoi, densityVoronoi.ppp
     Calculates adaptive estimate of point process intensity
     using tessellation methods. This is an extension of the
     old function adaptive.density.
+
+    o densityVoronoi.lpp
+    Voronoi or smoothed Voronoi estimator of intensity
+    for point pattern on a linear network.
 
     o lineartileindex
     Low-level function to classify points on a linear network

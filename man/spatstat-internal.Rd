@@ -308,6 +308,7 @@
 \alias{logi.dummy}
 \alias{logi.engine}
 \alias{logLik.vblogit}
+\alias{looVoronoiLPP}
 \alias{makeLinnetTolerance}
 \alias{maskLaslett}
 \alias{match2DkernelName}
@@ -1132,7 +1133,8 @@ logi.engine(Q, trend, interaction, \dots,
             correction, rbord, covfunargs, allcovar, 
             vnamebase, vnameprefix, justQ, savecomputed, precomputed,
             VB)
-\method{logLik}{vblogit}(object, \dots) 
+\method{logLik}{vblogit}(object, \dots)
+looVoronoiLPP(X)
 makeLinnetTolerance
 maskLaslett(X, \dots, eps, dimyx, xy, oldX, verbose, plotit)
 match2DkernelName(kernel)
