@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.58-2.025
+        CHANGES IN spatstat VERSION 1.58-2.026
 
 OVERVIEW
 
@@ -90,8 +90,33 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o rebound.owin
     Now preserves unitnames of the objects.
-    
+
+    o rescale.owin, rescale.ppp, rescale.psp
+    The geometrical type of the window is now preserved in all cases
+    (previously if the window was polygonal but was equivalent to a rectangle,
+    the rescaled window was a rectangle).
+
 BUG FIXES
+
+    o ppp
+    Points inside the window were erroneously rejected as lying outside the window,
+    if the window was a polygon equivalent to a rectangle
+    with sides longer than 10^6 units.
+    Fixed.
+    
+    o inside.owin
+    All results were FALSE if the window was a polygon equivalent to a rectangle
+    with sides longer than 10^6 units.
+    Fixed.
+    
+    o extractbranch.lpp
+    Point pattern coordinates were sometimes erroneously set to NA.
+    Fixed.
+
+    o beachcolours, beachcolourmap
+    The number of colours was not always equal to 'ncolours'.
+    [Spotted by Tilman Davies.]
+    Fixed.
 
     o incircle, inpoint
     Crashed if the window was extremely thin.
@@ -105,20 +130,16 @@ BUG FIXES
     Crashed if distinct=FALSE and what="all".
     Fixed.
 
-    o extractbranch.lpp
-    Point pattern coordinates were sometimes erroneously set to NA.
-    Fixed.
-
     o anova.mppm
     Crashed if applied to a single model, unless the current environment
     was the global environment.
     Fixed.
 
-    o beachcolours, beachcolourmap
-    The number of colours was not always equal to 'ncolours'.
-    [Spotted by Tilman Davies.]
+    o lurking.mppm
+    If 'covariate' was a list of images, the code crashed sometimes
+    with message 'Fisher information is singular'.
     Fixed.
-
+    
     o im
     Crashed if 'mat' was a 1-dimensional table (class 'table').
     Fixed.

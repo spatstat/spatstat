@@ -2,7 +2,7 @@
 #
 #   rescale.R
 #
-#   $Revision: 1.7 $ $Date: 2017/10/24 01:03:07 $
+#   $Revision: 1.8 $ $Date: 2019/02/10 06:42:26 $
 #
 #
 
@@ -13,7 +13,7 @@ rescale <- function(X, s, unitname) {
 rescale.ppp <- function(X, s, unitname) {
   if(missing(unitname)) unitname <- NULL
   if(missing(s) || is.null(s)) s <- 1/unitname(X)$multiplier
-  Y <- affine.ppp(X, mat=diag(c(1/s,1/s)))
+  Y <- affine.ppp(X, mat=diag(c(1/s,1/s)), rescue=FALSE)
   unitname(Y) <- rescale(unitname(X), s, unitname)
   return(Y)
 }
@@ -21,7 +21,7 @@ rescale.ppp <- function(X, s, unitname) {
 rescale.owin <- function(X, s, unitname) {
   if(missing(unitname)) unitname <- NULL
   if(missing(s) || is.null(s)) s <- 1/unitname(X)$multiplier
-  Y <- affine.owin(X, mat=diag(c(1/s,1/s)))
+  Y <- affine.owin(X, mat=diag(c(1/s,1/s)), rescue=FALSE)
   unitname(Y) <- rescale(unitname(X), s, unitname)
   return(Y)
 }
@@ -43,7 +43,7 @@ rescale.im <- function(X, s, unitname) {
 rescale.psp <- function(X, s, unitname) {
   if(missing(unitname)) unitname <- NULL
   if(missing(s) || is.null(s)) s <- 1/unitname(X)$multiplier
-  Y <- affine.psp(X, mat=diag(c(1/s,1/s)))
+  Y <- affine.psp(X, mat=diag(c(1/s,1/s)), rescue=FALSE)
   unitname(Y) <- rescale(unitname(X), s, unitname)
   return(Y)
 }

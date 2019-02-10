@@ -188,32 +188,37 @@ local({
 #
 # check for various bugs related to factor conversions
 #
-#    $Revision: 1.3 $  $Date: 2015/12/29 08:54:49 $
+#    $Revision: 1.4 $  $Date: 2019/02/10 07:21:02 $
 #
 require(spatstat)
 local({
-  # make a factor image
+  ## make a factor image
   m <- factor(rep(letters[1:4], 4))
   Z <- im(m, xcol=1:4, yrow=1:4)
-  # make a point pattern
+  ## make a point pattern
   set.seed(42)
   X <- runifpoint(20, win=as.owin(Z))
-  # look up the image at the points of X
-  # (a) internal
+  ## look up the image at the points of X
+  ## (a) internal
   ans1 <- lookup.im(Z, X$x, X$y)
   stopifnot(is.factor(ans1))
-  # (b) user level
+  ## (b) user level
   ans2 <- Z[X]
   stopifnot(is.factor(ans2))
-  # (c) turn the image into a tessellation
-  #  and apply quadratcount
+  ## (c) turn the image into a tessellation
+  ##  and apply quadratcount
   V <- tess(image = Z)
   quadratcount(X, tess=V)
-  # (d) pad image
+  ## (d) pad image
   Y <- padimage(Z, factor("b", levels=levels(Z)))
   stopifnot(Y$type == "factor")
   U <- padimage(Z, "b")
   stopifnot(U$type == "factor")
+  ## (e) manipulate levels
+  Zb <- relevel(Z, "b")
+  Zv <- mergeLevels(Z, vowel="a", consonant=c("b","c","d"))
+  P <- X %mark% Z[X]
+  Pv <- mergeLevels(P, vowel="a", consonant=c("b","c","d"))
 })
 
 

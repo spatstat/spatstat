@@ -973,7 +973,7 @@ local({
 #
 #  Thanks to Ege Rubak
 #
-#  $Revision: 1.9 $  $Date: 2018/03/28 08:41:20 $
+#  $Revision: 1.10 $  $Date: 2019/02/10 07:12:06 $
 #
 
 require(spatstat)
@@ -1050,13 +1050,27 @@ local({
   modelHyb <- ppm(japanesepines ~ 1, Hybrid(Strauss(0.05), Strauss(0.1)))
   vHyb <- vcov(modelHyb)
 
+  ## Code blocks for other choices of 'what'
+  model <- ppm(X ~ 1, Strauss(.05))
+  cG <- vcov(model, what="corr")
+  cP <- vcov(update(model, Poisson()), what="corr")
+
+  ## Model with zero-length coefficient vector
+  lam <- intensity(X)
+  f <- function(x,y) { rep(lam, length(x)) }
+  model0 <- ppm(X ~ offset(log(f)) - 1)
+  dd <- vcov(model0)
+  cc <- vcov(model0, what="corr")
+
+  ## Other weird stuff
+  su <- suffloc(ppm(X ~ x))
 })
 #
 # tests/windows.R
 #
 # Tests of owin geometry code
 #
-#  $Revision: 1.8 $  $Date: 2019/01/25 03:51:18 $
+#  $Revision: 1.9 $  $Date: 2019/02/10 06:52:45 $
 
 require(spatstat)
 local({
@@ -1134,6 +1148,14 @@ local({
   periodify(union.owin(B1, B2), 2)
   periodify(letterR, 2)
 
+  #' Ancient bug in inside.owin
+  W5 <- owin(poly=1e5*cbind(c(-1,1,1,-1),c(-1,-1,1,1)))
+  W6 <- owin(poly=1e6*cbind(c(-1,1,1,-1),c(-1,-1,1,1)))
+  i5 <- inside.owin(0,0,W5)
+  i6 <- inside.owin(0,0,W6)
+  if(!i5) stop("Wrong answer from inside.owin")
+  if(i5 != i6) stop("Results from inside.owin are scale-dependent")
+  
   #' miscellaneous utilities
   thrash <- function(f) {
     f(letterR)

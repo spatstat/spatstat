@@ -1,6 +1,6 @@
 #' lurkmppm.R
 #'    Lurking variable plot for mppm
-#'    $Revision: 1.6 $ $Date: 2017/12/09 04:33:27 $
+#'    $Revision: 1.8 $ $Date: 2019/02/10 08:33:42 $
 
 lurking.mppm <- local({
 
@@ -94,7 +94,8 @@ lurking.mppm <- local({
                       MoreArgs=list(type=type,
                                     plot.it=FALSE,
                                     ...,
-                                    internal=list(saveworking=TRUE),
+                                    internal=list(saveworking=TRUE,
+                                                  Fisher=Fisher),
                                     nx=nx,
                                     oldstyle=oldstyle,
                                     covname=covname),
@@ -158,19 +159,25 @@ lurking.mppm <- local({
       if(oldstyle) {
         theoretical$sd <- sqrt(varI)
       } else {
-        Bnames <- setdiff(colnames(w), c("varI", "varII")) 
+        Bnames <- setdiff(colnames(w), c("varI", "varII"))
         B <- as.matrix(w[, Bnames, drop=FALSE])
-        varII <- quadform(B, Vcov)
-        varR <- varI - varII
-        ra <- range(varR, finite=TRUE)
-        if(ra[1] < 0) {
-          warning(paste("Negative values of residual variance!",
-                        "Range =",
-                        prange(signif(ra, 4))),
-                  call.=FALSE)
-          varR <- pmax(0, varR)
+        if(ncol(B) != nrow(Vcov)) {
+          warning("Internal variance data are incomplete; reverting to oldstyle=TRUE")
+          oldstyle <- TRUE
+          theoretical$sd <- sqrt(varI)
+        } else {
+          varII <- quadform(B, Vcov)
+          varR <- varI - varII
+          ra <- range(varR, finite=TRUE)
+          if(ra[1] < 0) {
+            warning(paste("Negative values of residual variance!",
+                          "Range =",
+                          prange(signif(ra, 4))),
+                    call.=FALSE)
+            varR <- pmax(0, varR)
+          }
+          theoretical$sd <- sqrt(varR)
         }
-        theoretical$sd <- sqrt(varR)
       }
     }
     

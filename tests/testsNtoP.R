@@ -497,7 +497,7 @@ grep#
 #
 #   Plus assorted tricks
 #
-#   $Revision: 1.9 $  $Date: 2018/05/11 02:19:32 $
+#   $Revision: 1.10 $  $Date: 2019/02/10 07:00:38 $
 #
 require(spatstat)
 local({
@@ -564,6 +564,13 @@ local({
   parameters(ps)
   fitin(ps)
   predict(ps, type="cif")
+
+  ## (9) class 'plotppm'
+  fut <- ppm(amacrine ~ marks + polynom(x,y,2), Strauss(0.07))
+  p <- plot(fut, plot.it=FALSE)
+  print(p)
+  plot(p, how="contour")
+  plot(p, how="persp")
 })
 
 reset.spatstat.options()

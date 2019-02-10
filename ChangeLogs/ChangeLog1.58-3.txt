@@ -468,3 +468,43 @@ Change log from 1.58-2 to 1.58-3
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+10 feb 2019
+
+   rescale.R
+   window.R
+	The geometrical type of the window is now preserved
+	(previous behaviour 'rescued' rectangles and this caused
+	a bug in inside.owin)
+
+  tests/windows.R
+	Test of bug in inside.owin
+
+  lurkmppm.R
+	Bug fix in lurking.mppm
+	and hardened against internal errors
+	
+  tests/mppm.R
+	Test of bug in lurking.mppm
+
+  tests/vcovppm.R
+	More tests of code blocks
+
+  tests/ppmtricks.R
+	Tests of class 'plotppm'
+
+  tests/factorbugs.R
+	Test relevel and mergeLevels for images and point patterns
+
+  tests/density.R
+	More tests of evaluate2Dkernel
+
+   densityVoronoi.lpp.Rd
+	Corrected some text
+	
+   DESCRIPTION
+   NEWS
+	Version 1.58-2.026
+
+------------- passed R-3.5.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------

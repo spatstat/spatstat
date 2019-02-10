@@ -452,7 +452,7 @@ local({
 #'                    and inhomogeneous summary functions
 #'                    and idw, adaptive.density
 #'
-#'  $Revision: 1.37 $  $Date: 2019/02/06 04:40:01 $
+#'  $Revision: 1.38 $  $Date: 2019/02/10 07:34:47 $
 #'
 
 require(spatstat)
@@ -737,11 +737,20 @@ local({
   Zno  <- Kmeasure(redwood, sigma=0.2, expand=FALSE)
   Zyes <- Kmeasure(redwood, sigma=0.2, expand=TRUE)
   #' All code blocks
+  diagmat <- diag(c(1,1))
+  generalmat <- matrix(c(1, 0.5, 0.5, 1), 2, 2)
   A <- second.moment.calc(redwood, 0.1, what="all", debug=TRUE)
-  B <- second.moment.calc(redwood, varcov=diag(c(0.1,0.1)^2), what="all")
+  B <- second.moment.calc(redwood, varcov=diagmat/100,    what="all")
+  D <- second.moment.calc(redwood, varcov=generalmat/100, what="all")
   PR <- pixellate(redwood)
   DR <- second.moment.calc(list(PR, PR), 0.1, debug=TRUE,
-                             npts=npoints(redwood), obswin=Window(redwood))
+                           npts=npoints(redwood), obswin=Window(redwood))
+  isoGauss <- function(x,y) {dnorm(x) * dnorm(y)}
+  ee <- evaluate2Dkernel(isoGauss, runif(10), runif(10),
+                         varcov=generalmat, scalekernel=TRUE)
+  isoGaussIm <- as.im(isoGauss, square(c(-3,3)))
+  gg <- evaluate2Dkernel(isoGaussIm, runif(10), runif(10),
+                         varcov=generalmat, scalekernel=TRUE)
 })
 
 local({

@@ -41,15 +41,16 @@
   
   If \code{f=1} (the default), the Voronoi estimate (Barr and Schoenberg, 2010)
   is computed: the point pattern \code{X} is used to construct
-  a Voronoi/Dirichlet tessellation (see \code{\link{dirichlet}});
-  the areas of the Dirichlet tiles are computed; the estimated intensity
-  in each tile is the reciprocal of the tile area.
+  a Voronoi/Dirichlet tessellation on the network
+  (see \code{\link{lineardirichlet}});
+  the lengths of the Dirichlet tiles are computed; the estimated intensity
+  in each tile is the reciprocal of the tile length.
   The result is a pixel image
   of intensity estimates which are constant on each tile of the tessellation.
 
   If \code{f=0}, the intensity estimate at every location is
-  equal to the average intensity (number of points divided by window area).
-  The result is a pixel image
+  equal to the average intensity (number of points divided by
+  network length). The result is a pixel image
   of intensity estimates which are constant.
   
   If \code{f} is strictly between 0 and 1,

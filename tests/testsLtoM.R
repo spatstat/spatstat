@@ -907,6 +907,7 @@ local({
   lurking(fit, expression(Z), type="P")
   lurking(fit, expression(V), type="raw") # design covariate
   lurking(fit, expression(U), type="raw") # image, constant in each row
+  lurking(fit, H$Z,           type="P")   # list of images
 })
 
 local({
