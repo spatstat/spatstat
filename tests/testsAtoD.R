@@ -452,7 +452,7 @@ local({
 #'                    and inhomogeneous summary functions
 #'                    and idw, adaptive.density
 #'
-#'  $Revision: 1.38 $  $Date: 2019/02/10 07:34:47 $
+#'  $Revision: 1.39 $  $Date: 2019/02/11 09:49:23 $
 #'
 
 require(spatstat)
@@ -782,7 +782,9 @@ local({
 local({
   ## idw
   Z <- idw(longleaf, power=4)
+  Z <- idw(longleaf, power=4, se=TRUE)
   ZX <- idw(longleaf, power=4, at="points")
+  ZX <- idw(longleaf, power=4, at="points", se=TRUE)
   ## dodgy code blocks in densityVoronoi.R
   A <- adaptive.density(nztrees, nrep=2, f=0.5, counting=TRUE)
   B <- adaptive.density(nztrees, nrep=2, f=0.5, counting=TRUE, fixed=TRUE)

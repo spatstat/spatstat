@@ -239,7 +239,7 @@ local({
 ##
 ##   tests/rmhBasic.R
 ##
-##   $Revision: 1.12 $  $Date: 2018/10/22 09:31:43 $
+##   $Revision: 1.16 $  $Date: 2019/02/11 10:24:31 $
 #
 # Test examples for rmh.default
 # run to reasonable length
@@ -259,11 +259,13 @@ spatstat.options(expand=1.1)
                  w=c(0,10,0,10))
    X1.strauss <- rmh(model=mod01,start=list(n.start=80),
                      control=list(nrep=nr))
+   X1.strauss2 <- rmh(model=mod01,start=list(n.start=80),
+                     control=list(nrep=nr, periodic=FALSE))
 
    # Strauss process, conditioning on n = 80:
    X2.strauss <- rmh(model=mod01,start=list(n.start=80),
                      control=list(p=1,nrep=nr))
-   stopifnot(X2.strauss$n == 80)
+   stopifnot(npoints(X2.strauss) == 80)
 
    # test tracking mechanism
    X1.strauss <- rmh(model=mod01,start=list(n.start=80),
@@ -275,7 +277,9 @@ spatstat.options(expand=1.1)
    mod02 <- list(cif="hardcore",par=list(beta=2,hc=0.7),w=c(0,10,0,10))
    X3.hardcore <- rmh(model=mod02,start=list(n.start=60),
                      control=list(nrep=nr))
-   
+   X3.hardcore2 <- rmh(model=mod02,start=list(n.start=60),
+                       control=list(nrep=nr, periodic=FALSE))
+
    # Strauss process equal to pure hardcore:
    mod02 <- list(cif="strauss",par=list(beta=2,gamma=0,r=0.7),w=c(0,10,0,10))
    X3.strauss <- rmh(model=mod02,start=list(n.start=60),
@@ -292,7 +296,7 @@ spatstat.options(expand=1.1)
    # Strauss process in a polygonal window, conditioning on n = 42.
    X5.strauss <- rmh(model=mod03,start=list(n.start=42),
                      control=list(p=1,nrep=nr))
-   stopifnot(X5.strauss$n == 42)
+   stopifnot(npoints(X5.strauss) == 42)
 
    # Strauss process, starting off from X4.strauss, but with the
    # polygonal window replace by a rectangular one.  At the end,
@@ -307,6 +311,8 @@ spatstat.options(expand=1.1)
                 w=c(0,10,0,10))
    X1.straush <- rmh(model=mod04,start=list(n.start=70),
                      control=list(nrep=nr))
+   X1.straush2 <- rmh(model=mod04,start=list(n.start=70),
+                     control=list(nrep=nr, periodic=FALSE))
    
    # Another Strauss with hardcore (with a perhaps surprising result):
    mod05 <- list(cif="straush",par=list(beta=80,gamma=0.36,r=45,hc=2.5),
@@ -320,10 +326,29 @@ spatstat.options(expand=1.1)
    X3.straush <- rmh(model=mod06,start=list(n.start=60),
                      control=list(nrep=nr))
 
+   # Fiksel
+   modFik <- list(cif="fiksel",
+                  par=list(beta=180,r=0.15,hc=0.07,kappa=2,a= -1.0),
+                  w=square(1))
+   X.fiksel <- rmh(model=modFik,start=list(n.start=10),
+                   control=list(nrep=nr))
+   X.fiksel2 <- rmh(model=modFik,start=list(n.start=10),
+                   control=list(nrep=nr,periodic=FALSE))
+
+   # Penttinen process:
+   modpen <- rmhmodel(cif="penttinen",par=list(beta=2,gamma=0.6,r=1),
+                 w=c(0,10,0,10))
+   X.pen <- rmh(model=modpen,start=list(n.start=10),
+                control=list(nrep=nr))
+   X.pen2 <- rmh(model=modpen,start=list(n.start=10),
+                 control=list(nrep=nr, periodic=FALSE))
+
    # Area-interaction, inhibitory
    mod.area <- list(cif="areaint",par=list(beta=2,eta=0.5,r=0.5), w=square(10))
    X.area <- rmh(model=mod.area,start=list(n.start=60),
                  control=list(nrep=nr))
+   X.areaE <- rmh(model=mod.area,start=list(n.start=60),
+                 control=list(nrep=nr, periodic=FALSE))
 
    # Area-interaction, clustered
    mod.area2 <- list(cif="areaint",par=list(beta=2,eta=1.5,r=0.5), w=square(10))
@@ -344,11 +369,15 @@ spatstat.options(expand=1.1)
                 w=c(0,10,0,10))
    X.sftcr <- rmh(model=mod07,start=list(n.start=70),
                   control=list(nrep=nr))
+   X.sftcr2 <- rmh(model=mod07,start=list(n.start=70),
+                   control=list(nrep=nr, periodic=FALSE))
    
    # Diggle, Gates, and Stibbard:
    mod12 <- list(cif="dgs",par=list(beta=3600,rho=0.08),w=c(0,1,0,1))
    X.dgs <- rmh(model=mod12,start=list(n.start=300),
                 control=list(nrep=nr))
+   X.dgs2 <- rmh(model=mod12,start=list(n.start=300),
+                 control=list(nrep=nr, periodic=FALSE))
    
    # Diggle-Gratton:
    mod13 <- list(cif="diggra",
@@ -356,6 +385,8 @@ spatstat.options(expand=1.1)
                  w=square(1))
    X.diggra <- rmh(model=mod13,start=list(n.start=300),
                    control=list(nrep=nr))
+   X.diggra2 <- rmh(model=mod13,start=list(n.start=300),
+                    control=list(nrep=nr, periodic=FALSE))
    
    # Geyer:
    mod14 <- list(cif="geyer",par=list(beta=1.25,gamma=1.6,r=0.2,sat=4.5),
@@ -370,6 +401,8 @@ spatstat.options(expand=1.1)
                  w=c(0,10,0,10))
    X2.geyer <- rmh(model=mod15,start=list(n.start=200),
                    control=list(nrep=nr))
+   X2.geyer2 <- rmh(model=mod15,start=list(n.start=200),
+                   control=list(nrep=nr, periodic=FALSE))
    
    mod16 <- list(cif="geyer",par=list(beta=8.1,gamma=2.2,r=0.08,sat=3))
    data(redwood)
@@ -388,8 +421,10 @@ spatstat.options(expand=1.1)
       h[r>0.10] <- 1
       mod17 <- list(cif="lookup",par=list(beta=4000,h=h,r=r),w=c(0,1,0,1))
       X.lookup <- rmh(model=mod17,start=list(n.start=100),
-                      control=list(nrep=nr))
-                   
+                      control=list(nrep=nr, periodic=TRUE))
+      X.lookup2 <- rmh(model=mod17,start=list(n.start=100),
+                       control=list(nrep=nr, periodic=FALSE))
+
    # Strauss with trend
    tr <- function(x,y){x <- x/250; y <- y/250;
    			   exp((6*x + 5*y - 18*x^2 + 12*x*y - 9*y^2)/6)
@@ -428,6 +463,8 @@ spatstat.options(expand=1.1)
                  w=square(1))
    Xbg <- rmh(model=mod18,start=list(n.start=20),
               control=list(nrep=1e4, periodic=TRUE))
+   Xbg2 <- rmh(model=mod18,start=list(n.start=20),
+              control=list(nrep=1e4, periodic=FALSE))
 
 })
 

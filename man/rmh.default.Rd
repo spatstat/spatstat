@@ -358,6 +358,7 @@ trend corresponding to a particular type, there is still a component
   \code{\link{MultiStrauss}},
   \code{\link{MultiStraussHard}},
   \code{\link{PairPiece}},
+  \code{\link{Penttinen}},
   \code{\link{Poisson}},
   \code{\link{Softcore}},
   \code{\link{Strauss}},

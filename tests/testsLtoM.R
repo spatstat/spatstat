@@ -55,7 +55,7 @@ local({
 #'
 #'   leverage and influence for Gibbs models
 #' 
-#'   $Revision: 1.23 $ $Date: 2019/01/23 02:21:54 $
+#'   $Revision: 1.24 $ $Date: 2019/02/11 09:40:50 $
 #' 
 
 require(spatstat)
@@ -74,6 +74,10 @@ local({
   fitG <- ppm(redwood ~ 1, Geyer(0.1, 2), rbord=0)
   levG <- Leverage(fitG)
   infG <- Influence(fitG)
+  # AreaInter()$delta2
+  fitA <- ppm(cells ~ 1, AreaInter(0.07), rbord=0, nd=11)
+  levA <- Leverage(fitA)
+  infA <- Influence(fitA)
   # pairwise.family$delta2
   fitD <- ppm(cells ~ 1, DiggleGatesStibbard(0.12), rbord=0)
   levD <- Leverage(fitD)
@@ -160,6 +164,9 @@ local({
   ## run all code segments
   Everything <- function(model, ...) { ppmInfluence(model, ..., what="all") }
 
+  cat("Run full code on AreaInteraction model...", fill=TRUE)
+  pmiA <- Everything(fitA)
+  
   ## sparse algorithm, with blocks
   cat("Run sparse algorithm with blocks...", fill=TRUE)
   pmiSSB <- Everything(fitS, sparseOK=TRUE)

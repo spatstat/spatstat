@@ -508,3 +508,27 @@ Change log from 1.58-2 to 1.58-3
 ------------- passed R-3.5.2 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
+
+11 february 2019
+
+   tests/leverinf.R
+	Test of src/areapair.c
+
+   tests/density.R
+	Test standard error calculations in idw
+
+   tests/rmhBasic.R
+	Test more blocks of C code for interaction terms
+
+   rmhmodel.Rd
+   rmhmodel.default.Rd
+	Added cross-references
+
+   DESCRIPTION
+   NEWS
+	Version 1.58-2.027
+
+------------- passed R-3.5.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+

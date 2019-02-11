@@ -88,6 +88,7 @@
   \code{\link{MultiStraussHard}},
   \code{\link{DiggleGratton}},
   \code{\link{PairPiece}}
+  \code{\link{Penttinen}}
 }
 \author{\adrian
   

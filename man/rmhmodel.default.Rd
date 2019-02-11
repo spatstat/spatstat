@@ -462,6 +462,10 @@ otherwise an error is given.
                      par=list(beta=0.8,sigma=0.1,kappa=0.5),
                      w=w)
    
+   # Penttinen process:
+   modpen <- rmhmodel(cif="penttinen",par=list(beta=2,gamma=0.6,r=1),
+                 w=c(0,10,0,10))
+
    # Area-interaction process:
    mod42 <- rmhmodel(cif="areaint",par=list(beta=2,eta=1.6,r=0.7),
                  w=c(0,10,0,10))
