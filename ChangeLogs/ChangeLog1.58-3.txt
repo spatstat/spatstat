@@ -532,3 +532,20 @@ Change log from 1.58-2 to 1.58-3
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+13 feb 2019
+
+   pcf.R
+   pcf.ppp.Rd
+	pcf.ppp now accepts correction="none"
+
+   tests/Kfuns.R
+	Added tests of pcf.ppp(correction='none')
+
+   DESCRIPTION
+   NEWS
+	Acknowledged Max Hesselbarth
+	Version 1.58-2.028
+
+------------- passed R-3.5.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------

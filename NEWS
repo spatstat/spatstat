@@ -1,10 +1,10 @@
 
-        CHANGES IN spatstat VERSION 1.58-2.027
+        CHANGES IN spatstat VERSION 1.58-2.028
 
 OVERVIEW
 
-    o We thank Tilman Davies, Kassel Hingee, Mehdi Moradi
-    and Suman Rakshit for contributions.
+    o We thank Tilman Davies, Maximilian Hesselbarth, Kassel Hingee,
+    Mehdi Moradi and Suman Rakshit for contributions.
     
     o Extensions to adaptive intensity estimators.
 
@@ -54,6 +54,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
     and the recently described 'smoothed Voronoi' estimator.
     Default value of 'f' changed to 'f=1'.
 
+    o pcf.ppp
+    Now accepts correction="none".
+    
     o pairorient
     Default edge corrections now include 'bord.modif'.
 

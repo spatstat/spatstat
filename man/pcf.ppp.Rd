@@ -44,7 +44,8 @@
     Coefficient for Stoyan's bandwidth selection rule; see Details.
   }
   \item{correction}{
-    Choice of edge correction.
+    Edge correction. A character vector specifying the choice
+    (or choices) of edge correction. See Details.
   }
   \item{divisor}{
     Choice of divisor in the estimation formula:
@@ -159,14 +160,22 @@
     is used. For \code{divisor="r"} the translation-corrected estimate
     is given in equation (15.15), page 284 of Stoyan and Stoyan (1994).
     \item
-    If \code{correction="Ripley"} then Ripley's isotropic edge correction
+    If \code{correction="Ripley"} or \code{correction="isotropic"}
+    then Ripley's isotropic edge correction
     is used. For \code{divisor="r"} the isotropic-corrected estimate
     is given in equation (15.18), page 285 of Stoyan and Stoyan (1994). 
     \item
-    If \code{correction=c("translate", "Ripley")} then both estimates
-    will be computed.
+    If \code{correction="none"} then no edge correction is used,
+    that is, an uncorrected estimate is computed. 
   }
-  Alternatively \code{correction="all"} selects all options.
+  Multiple corrections can be selected. The default is
+  \code{correction=c("translate", "Ripley")}.
+  
+  Alternatively \code{correction="all"} selects all options;
+  \code{correction="best"} selects the option which has the best
+  statistical performance; \code{correction="good"} selects the option
+  which is the best compromise between statistical performance and speed
+  of computation.
   
   The choice of smoothing kernel is controlled by the 
   argument \code{kernel} which is passed to \code{\link{density.default}}.

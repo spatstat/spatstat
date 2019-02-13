@@ -1,7 +1,7 @@
 #
 #   pcf.R
 #
-#   $Revision: 1.66 $   $Date: 2018/07/06 08:33:46 $
+#   $Revision: 1.68 $   $Date: 2019/02/13 07:21:23 $
 #
 #
 #   calculate pair correlation function
@@ -74,7 +74,9 @@ pcf.ppp <- function(X, ..., r=NULL,
                              trans="translate",
                              translate="translate",
                              translation="translate",
-                             best="best"),
+                             good="translate",
+                             best="best",
+                             none="none"),
                            multi=TRUE)
 
   correction <- implemented.for.K(correction, win$type, correction.given)
@@ -155,6 +157,29 @@ pcf.ppp <- function(X, ..., r=NULL,
 
   bw.used <- NULL
   
+  if(any(correction=="none")) {
+    #' uncorrected
+    if(npts > 1) {
+      kdenN <- sewpcf(dIJ, 1, denargs, lambda2area, divisor)
+      gN <- kdenN$g
+      bw.used <- attr(kdenN, "bw")
+    } else gN <- undefined
+    if(!ratio) {
+      out <- bind.fv(out,
+                     data.frame(un=gN),
+                     "hat(%s)[un](r)",
+                     "uncorrected estimate of %s",
+                     "un")
+    } else {
+      out <- bind.ratfv(out,
+                        data.frame(un=gN * lambda2area),
+                        lambda2area,
+                        "hat(%s)[un](r)",
+                        "uncorrected estimate of %s",
+                        "un")
+    }
+  }
+  
   if(any(correction=="translate")) {
     # translation correction
     if(npts > 1) {
@@ -178,6 +203,7 @@ pcf.ppp <- function(X, ..., r=NULL,
                         "trans")
     }
   }
+
   if(any(correction=="isotropic")) {
     # Ripley isotropic correction
     if(npts > 1) {
@@ -258,6 +284,9 @@ pcf.ppp <- function(X, ..., r=NULL,
 
 sewpcf <- function(d, w, denargs, lambda2area, divisor=c("r","d")) {
   divisor <- match.arg(divisor)
+  nw <- length(w)
+  if(nw != length(d) && nw != 1)
+    stop("Internal error: incorrect length of weights vector in sewpcf")
   if(divisor == "d") {
     w <- w/d
     if(!all(good <- is.finite(w))) {
@@ -269,9 +298,17 @@ sewpcf <- function(d, w, denargs, lambda2area, divisor=c("r","d")) {
       w <- w[good]
     }
   }
-  wtot <- sum(w)
-  kden <- do.call.matched(density.default,
-                  append(list(x=d, weights=w/wtot), denargs))
+  if(nw == 1) {
+    #' weights are equal
+    kden <- do.call.matched(density.default,
+                            append(list(x=d), denargs))
+    wtot <- length(d)
+  } else {
+    #' weighted 
+    wtot <- sum(w)
+    kden <- do.call.matched(density.default,
+                            append(list(x=d, weights=w/wtot), denargs))
+  }
   r <- kden$x
   y <- kden$y * wtot
   if(divisor == "r")

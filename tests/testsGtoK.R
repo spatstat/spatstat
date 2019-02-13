@@ -289,7 +289,7 @@ local({
 #'
 #'   Various K and L functions and pcf
 #'
-#'   $Revision: 1.11 $  $Date: 2019/01/25 03:43:49 $
+#'   $Revision: 1.12 $  $Date: 2019/02/13 07:00:15 $
 #'
 
 require(spatstat)
@@ -324,6 +324,8 @@ local({
   pr  <- pcf(cells, ratio=TRUE, var.approx=TRUE)
   pc  <- pcf(cells, domain=square(0.5))
   pcr <- pcf(cells, domain=square(0.5), ratio=TRUE)
+  pw <- pcf(redwood, correction="none")
+  pwr <- pcf(redwood, correction="none", ratio=TRUE)
   #' inhomogeneous multitype
   fit <- ppm(amacrine ~ marks)
   K1 <- Kcross.inhom(amacrine, lambdaX=fit)
