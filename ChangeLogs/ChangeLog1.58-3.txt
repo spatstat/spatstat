@@ -549,3 +549,14 @@ Change log from 1.58-2 to 1.58-3
 ------------- passed R-3.5.2 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
+
+   kppm.Rd
+	Rearranged examples to track down an obscure bug/problem in Appveyor test
+	
+   DESCRIPTION
+   NEWS
+	Version 1.58-2.029
+
+------------- passed R-3.5.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
