@@ -3,7 +3,7 @@
 #'
 #'    densityVoronoi.lpp
 #'
-#'    $Revision: 1.6 $  $Date: 2019/02/07 08:48:59 $
+#'    $Revision: 1.7 $  $Date: 2019/02/14 00:47:12 $
 #' 
 
 densityVoronoi.lpp <- function(X, f = 1, ..., nrep = 1, verbose = TRUE){
@@ -143,10 +143,15 @@ bw.voronoi <- function(X, ..., probrange = c(0.2,0.8), nprob = 10,
 looVoronoiLPP <- function(X) {
   #' Compute leave-one-out Voronoi intensity estimate
   #' Hacked from 'lineardirichlet'
+  nX <- npoints(X)
+  if(nX == 0) return(numeric(0))
   #' Unique points, remembering original sequence
   ii <- which(!duplicated(X))
   uX <- X[ii]
   nuX <- npoints(uX)
+  #' trivial case
+  if(nuX <= 1) 
+    return(rep(1/volume(domain(X)), nX))
   #' local coordinates
   coUX <- coords(uX)[, c("seg", "tp")]
   #' add label from original sequence index

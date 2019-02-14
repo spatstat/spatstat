@@ -560,3 +560,26 @@ Change log from 1.58-2 to 1.58-3
 ------------- passed R-3.5.2 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
+
+14 february 2019
+
+   closepairs.R
+   spatstat-internal.Rd
+	New internal function 'tweak.closepairs'
+
+   densitylppVoronoi.R
+	Bug fix in looVoronoi
+
+   kppm.Rd
+   otherpackages.R
+	More tweaking to track down appveyor problem
+
+   DESCRIPTION
+   NEWS
+	Version 1.58-2.030
+
+------------- passed R-3.5.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+

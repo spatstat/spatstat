@@ -3,7 +3,7 @@
 #' 
 #'    Dealing with other packages
 #' 
-#'    $Revision: 1.17 $  $Date: 2017/06/05 10:31:58 $
+#'    $Revision: 1.18 $  $Date: 2019/02/14 02:02:11 $
 
 fft2D <- function(z, inverse=FALSE, west=fftwAvailable()) {
   if(west) return(fftwtools::fftw2d(data=z, inverse=inverse))
@@ -54,26 +54,29 @@ getRandomFieldsModelGen <- function(model) {
                "or one of the functions in the RandomFields package",
                "with a name beginning 'RM'"),
          call.=FALSE)
-  switch(model,
-         cauchy    = RandomFields::RMcauchy,
-         exponential = ,
-         exp       = RandomFields::RMexp,
-         gencauchy = RandomFields::RMgencauchy,
-         gauss     = RandomFields::RMgauss,
-         gneiting  = RandomFields::RMgneiting,
-         matern    = RandomFields::RMmatern,
-         nugget    = RandomFields::RMnugget,
-         spheric   = RandomFields::RMspheric,
-         stable    = RandomFields::RMstable,
-         whittle   = RandomFields::RMwhittle,
-         {
-           modgen <- try(getExportedValue("RandomFields", 
-                                          paste0("RM", model)),
-                         silent=TRUE)
-           if(inherits(modgen, "try-error") ||
-              !inherits(modgen, "RMmodelgenerator"))
-             stop(paste("Model", sQuote(model), "is not recognised"))
-           modgen
-         })
+  f <- switch(model,
+              cauchy    = RandomFields::RMcauchy,
+              exponential = ,
+              exp       = RandomFields::RMexp,
+              gencauchy = RandomFields::RMgencauchy,
+              gauss     = RandomFields::RMgauss,
+              gneiting  = RandomFields::RMgneiting,
+              matern    = RandomFields::RMmatern,
+              nugget    = RandomFields::RMnugget,
+              spheric   = RandomFields::RMspheric,
+              stable    = RandomFields::RMstable,
+              whittle   = RandomFields::RMwhittle,
+              {
+                modgen <- try(getExportedValue("RandomFields", 
+                                               paste0("RM", model)),
+                              silent=TRUE)
+                if(inherits(modgen, "try-error") ||
+                   !inherits(modgen, "RMmodelgenerator"))
+                  stop(paste("Model", sQuote(model), "is not recognised"))
+                modgen
+              })
+  if(!is.function(f))
+    stop(paste0("Unable to retrieve RandomFields::RM", model))
+  return(f)
 }
 

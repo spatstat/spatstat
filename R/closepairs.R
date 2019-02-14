@@ -1,7 +1,7 @@
 #
 # closepairs.R
 #
-#   $Revision: 1.42 $   $Date: 2018/06/07 04:35:05 $
+#   $Revision: 1.43 $   $Date: 2019/02/13 10:50:48 $
 #
 #  simply extract the r-close pairs from a dataset
 # 
@@ -700,3 +700,60 @@ crosspairquad <- function(Q, rmax, what=c("all", "indices")) {
   return(result)
 }
 
+tweak.closepairs <- function(cl, rmax, i, deltax, deltay, deltaz) {
+  stopifnot(is.list(cl))
+  stopifnot(all(c("i", "j") %in% names(cl)))
+  if(!any(c("xi", "dx") %in% names(cl)))
+    stop("Insufficient data to update closepairs list")
+  check.1.real(rmax)
+  check.1.integer(i)
+  check.1.real(deltax)
+  check.1.real(deltay)
+  if("dz" %in% names(cl)) check.1.real(deltaz) else { deltaz <- NULL }
+  hit.i <- (cl$i == i)
+  hit.j <- (cl$j == i)
+  if(any(hit.i | hit.j)) {
+    mm <- hit.i & !hit.j
+    if(any(mm)) {
+      cl$xi[mm] <- cl$xi[mm] + deltax
+      cl$yi[mm] <- cl$yi[mm] + deltay
+      cl$dx[mm] <- cl$dx[mm] - deltax
+      cl$dy[mm] <- cl$dy[mm] - deltay
+      if(is.null(deltaz)) {
+        cl$d[mm] <- sqrt(cl$dx[mm]^2 + cl$dy[mm]^2)
+      } else {
+        cl$zi[mm] <- cl$zi[mm] + deltaz
+        cl$dz[mm] <- cl$dz[mm] - deltaz
+        cl$d[mm] <- sqrt(cl$dx[mm]^2 + cl$dy[mm]^2 + cl$dz[mm]^2)
+      }
+    }
+    mm <- hit.j & !hit.i
+    if(any(mm)) {
+      cl$xj[mm] <- cl$xj[mm] + deltax
+      cl$yj[mm] <- cl$yj[mm] + deltay
+      cl$dx[mm] <- cl$dx[mm] + deltax
+      cl$dy[mm] <- cl$dy[mm] + deltay
+      if(is.null(deltaz)) {
+        cl$d[mm] <- sqrt(cl$dx[mm]^2 + cl$dy[mm]^2)
+      } else {
+        cl$zj[mm] <- cl$zj[mm] + deltaz
+        cl$dz[mm] <- cl$dz[mm] + deltaz
+        cl$d[mm] <- sqrt(cl$dx[mm]^2 + cl$dy[mm]^2 + cl$dz[mm]^2)
+      }
+    }
+    mm <- hit.i & hit.j
+    if(any(mm)) {
+      cl$xi[mm] <- cl$xi[mm] + deltax
+      cl$xj[mm] <- cl$xj[mm] + deltax
+      cl$yi[mm] <- cl$yi[mm] + deltay
+      cl$yj[mm] <- cl$yj[mm] + deltay
+      if(!is.null(deltaz)) {
+        cl$zi[mm] <- cl$zi[mm] + deltaz
+        cl$zj[mm] <- cl$zj[mm] + deltaz
+      }
+    }
+    if(any(lost <- (cl$d > rmax)))
+      cl <- as.list(as.data.frame(cl)[!lost, , drop=FALSE])
+  }
+  return(cl)
+}

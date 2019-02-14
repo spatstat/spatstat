@@ -671,7 +671,8 @@
 \alias{thinjump}
 \alias{tilecentroids}        
 \alias{trianglediameters}
-\alias{trim.mask}        
+\alias{trim.mask}
+\alias{tweak.closepairs}
 \alias{tweak.fv.entry}
 \alias{tweak.ratfv.entry}
 \alias{tweak.coefs}
@@ -1572,6 +1573,7 @@ tilecentroids(W, nx, ny)
 trianglediameters(iedge, jedge, edgelength, \dots,
                   nvert, dmax, check)
 trim.mask(M, R, tolerant)
+tweak.closepairs(cl, rmax, i, deltax, deltay, deltaz)
 tweak.fv.entry(x, current.tag, new.labl, new.desc, new.tag)
 tweak.ratfv.entry(x, \dots)
 tweak.coefs(model, new.coef)

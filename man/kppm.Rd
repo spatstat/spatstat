@@ -404,10 +404,13 @@
   # log-Gaussian Cox process (LGCP) models
   kppm(redwood ~ 1, "LGCP", statistic="pcf")
   if(require("RandomFields")) {
+    cat("Package loaded.", fill=TRUE)
     # Random Fields package is needed for non-default choice of covariance model
     kppm(redwood ~ x, "LGCP", statistic="pcf",
                               model="matern", nu=0.3,
+                              verbose=TRUE, # for debugging
                               control=list(maxit=10))
+    cat("Exit from kppm.", fill=TRUE)
   }
 
   # Different fitting techniques

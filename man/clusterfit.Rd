@@ -9,7 +9,7 @@
 clusterfit(X, clusters, lambda = NULL, startpar = NULL, \dots,
            q = 1/4, p = 2, rmin = NULL, rmax = NULL,
            ctrl=list(q=q, p=p, rmin=rmin, rmax=rmax),
-           statistic = NULL, statargs = NULL, algorithm="Nelder-Mead")
+           statistic = NULL, statargs = NULL, algorithm="Nelder-Mead", verbose=FALSE)
 }
 \arguments{
   \item{X}{
@@ -64,6 +64,10 @@ clusterfit(X, clusters, lambda = NULL, startpar = NULL, \dots,
     Character string determining the mathematical optimisation algorithm
     to be used by \code{\link[stats]{optim}}. See
     the argument \code{method} of \code{\link[stats]{optim}}.
+  }
+  \item{verbose}{
+    Logical value indicating whether to print detailed progress reports
+    for debugging purposes.
   }
 }
 \details{
