@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.58-2.030
+        CHANGES IN spatstat VERSION 1.58-2.031
 
 OVERVIEW
 
@@ -72,6 +72,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o pp3
     New argument 'marks'.
 
+    o clusterfit
+    New argument 'verbose'.
+    
     o beachcolours, beachcolourmap
     Improved positioning of the yellow colour band.
 

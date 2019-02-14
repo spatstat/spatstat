@@ -36,7 +36,7 @@ local({
 #
 # Also test nnorient()
 #
-#   $Revision: 1.20 $  $Date: 2018/10/02 01:37:12 $
+#   $Revision: 1.21 $  $Date: 2019/02/14 09:00:07 $
 #
 
 require(spatstat)
@@ -171,6 +171,16 @@ local({
   truewhich <- t(apply(crossdist(cells,flipcells), 1, order))[,1:4]
   if(any(calcwhich != truewhich))
     stop("nncross(k > 1) gives wrong answer")
+
+  #' cover some C code blocks
+  Z <- runifpoint(50)
+  X <- Z[1:30]
+  Y <- Z[20:50]
+  iX <- 1:30
+  iY <- 20:50
+  Ndw <- nncross(X,Y, iX, iY, k=3)
+  Nw  <- nncross(X,Y, iX, iY, k=3, what="which")
+  Nd  <- nncross(X,Y, iX, iY, k=3, what="dist")
   
   # test of agreement between nngrid.h and knngrid.h
   #    dimyx=23 (found by trial-and-error) ensures that there are no ties 

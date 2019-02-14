@@ -570,6 +570,10 @@ Change log from 1.58-2 to 1.58-3
    densitylppVoronoi.R
 	Bug fix in looVoronoi
 
+   kppm.R
+   clusterfit.R
+	clusterfit has new argument 'verbose'.
+	
    kppm.Rd
    otherpackages.R
 	More tweaking to track down appveyor problem
@@ -581,5 +585,20 @@ Change log from 1.58-2 to 1.58-3
 ------------- passed R-3.5.2 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
+
+   kppm.Rd
+	Removed debugging flag
+
+   tests/nndist.R
+	Covered some more C code blocks
+
+   DESCRIPTION
+   NEWS
+	Version 1.58-2.031
+
+------------- passed R-3.5.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
 
 
