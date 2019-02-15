@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.58-2.032
+        CHANGES IN spatstat VERSION 1.58-2.033
 
 OVERVIEW
 
@@ -105,8 +105,8 @@ SIGNIFICANT USER-VISIBLE CHANGES
 BUG FIXES
 
     o ppp
-    Points inside the window were erroneously rejected as lying outside the window,
-    if the window was a polygon equivalent to a rectangle
+    Points inside the window were erroneously rejected as lying outside
+    the window, if the window was a polygon equivalent to a rectangle
     with sides longer than 10^6 units.
     Fixed.
     
@@ -136,6 +136,10 @@ BUG FIXES
     Crashed if distinct=FALSE and what="all".
     Fixed.
 
+    o update.ippm
+    Crashed if the model was fitted using method="logi".
+    Fixed.
+    
     o plot.msr
     Crashed sometimes if x was multitype and multiplot=FALSE.
     Fixed.

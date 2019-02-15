@@ -623,5 +623,16 @@ Change log from 1.58-2 to 1.58-3
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+   logistic.R
+	The result of logi.engine now has the same format as mpl.engine
 
+   tests/ippm.R
+	Tests for ippm objects fitted with logistic likelihood.
+	
+   DESCRIPTION
+   NEWS
+	Version 1.58-2.033
 
+------------- passed R-3.5.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------

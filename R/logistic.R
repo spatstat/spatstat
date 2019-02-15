@@ -1,10 +1,10 @@
-#
-#  logistic.R
-#
-#   $Revision: 1.25 $  $Date: 2018/07/06 02:05:10 $
-#
-#  Logistic likelihood method - under development
-#
+##
+##  logistic.R
+##
+##   $Revision: 1.26 $  $Date: 2019/02/15 09:46:41 $
+##
+##  Logistic composite likelihood method
+##
 
 logi.engine <- function(Q,
                         trend = ~1,
@@ -218,7 +218,7 @@ logi.engine <- function(Q,
   the.version <- list(major=spv$major,
                       minor=spv$minor,
                       release=spv$patchlevel,
-                      date="$Date: 2018/07/06 02:05:10 $")
+                      date="$Date: 2019/02/15 09:46:41 $")
 
   ## Compile results
   fit <- list(method      = "logi",
@@ -227,16 +227,10 @@ logi.engine <- function(Q,
               coef        = co,
               trend       = trend,
               interaction = interaction,
-              Q           = Q,
-              correction  = correction,
-              rbord       = rbord,
-              terms       = terms(trend),
-              version     = the.version,
               fitin       = fitin,
+              Q           = Q,
               maxlogpl    = maxlogpl,
               satlogpl    = satlogpl,
-              covariates  = mpl.usable(covariates),
-#              varcov      = if(VB) fit$S else NULL,
               internal    = list(Vnames  = Vnames,
                                  IsOffset=IsOffset,
                                  glmdata = glmdata,
@@ -247,7 +241,17 @@ logi.engine <- function(Q,
                                  vnameprefix=vnameprefix,
                                  VB = if(VB) TRUE else NULL,
                                  priors = if(VB) fit$priors else NULL
-                                 )
+                                 ),
+              covariates  = mpl.usable(covariates),
+              covfunargs= covfunargs,
+              subsetexpr = subsetexpr,
+              correction  = correction,
+              rbord       = rbord,
+              fisher      = NULL,
+              varcov      = NULL, # if(VB) fit$S else NULL,
+              terms       = terms(trend),
+              version     = the.version,
+              problems    = list()
               )
   class(fit) <- "ppm"
   return(fit)

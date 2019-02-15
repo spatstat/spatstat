@@ -226,7 +226,7 @@ local({
 })
 #'   tests/ippm.R
 #'   Tests of 'ippm' class
-#'   $Revision: 1.2 $ $Date: 2019/02/02 02:26:02 $
+#'   $Revision: 1.3 $ $Date: 2019/02/15 10:08:26 $
 
 require(spatstat)
 
@@ -262,6 +262,12 @@ local({
               iScore=Dlogf,
               start=list(gamma=1, delta=1),
               nd=nd)
+  # fit model with logistic likelihood but without iScore
+  fitlo <- ippm(X ~Z + offset(log(f)),
+                method="logi",
+                covariates=list(Z=Z, f=f),
+                start=list(gamma=1, delta=1),
+                nd=nd)
 
   ## ............. test ippm class support ......................
   Ar <- model.matrix(fit)
@@ -283,6 +289,22 @@ local({
   oldfit0 <- update(oldfit,
                     . ~ . - Z,
                     start=list(gamma=2, delta=4))
+  ## again with logistic
+  fitlo2 <- update(fitlo, . ~ . + I(Z^2))
+  fitlo0 <- update(fitlo,
+                   . ~ . - Z,
+                   start=list(gamma=2, delta=4))
+  oldfitlo <- ippm(X,
+                   ~Z + offset(log(f)),
+                   method="logi",
+                   covariates=list(Z=Z, f=f),
+                   start=list(gamma=1, delta=1),
+                   nd=nd)
+  oldfitlo2 <- update(oldfitlo, . ~ . + I(Z^2))
+  oldfitlo0 <- update(oldfitlo,
+                      . ~ . - Z,
+                      start=list(gamma=2, delta=4))
+
 })
 #'
 #'   tests/Kfuns.R
