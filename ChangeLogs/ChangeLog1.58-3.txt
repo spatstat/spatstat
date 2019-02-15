@@ -600,5 +600,28 @@ Change log from 1.58-2 to 1.58-3
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+15 feb 2019
+
+   measures.R
+	Bug fix in augment.msr calculation of default 'sigma'.
+	Modified scalardilate.msr
+
+   leverage.R
+	Tweaked the definition of 'avenndist'
+	
+   integral.msr.Rd
+	More examples
+
+   tests/msr.R [New file]
+   	tests of code for measures
+
+   DESCRIPTION
+   NEWS
+	Version 1.58-2.032
+
+------------- passed R-3.5.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
 
 

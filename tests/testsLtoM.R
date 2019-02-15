@@ -930,3 +930,34 @@ local({
   anova(modxyS, test="Chi")
 })
 
+#'
+#'     tests/msr.R
+#'
+#'     $Revision: 1.1 $ $Date: 2019/02/15 01:37:55 $
+#'
+#'     Tests of code for measures
+#'
+
+require(spatstat)
+
+local({
+  rr <- residuals(ppm(cells ~ x))
+
+  a <- summary(rr)
+  b <- is.marked(rr)
+  w <- as.owin(rr)
+  z <- domain(rr)
+  ss <- scalardilate(rr, 2)
+
+  rrr <- augment.msr(rr, sigma=0.08)
+  uuu <- update(rrr)
+
+  mm <- residuals(ppm(amacrine ~ x))
+  ss <- residuals(ppm(amacrine ~ x), type="score")
+
+  plot(mm)
+  plot(mm, multiplot=FALSE)
+  plot(mm, equal.markscale=TRUE, equal.ribbon=TRUE)
+  plot(ss)
+  plot(ss, multiplot=FALSE)
+})

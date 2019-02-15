@@ -3,7 +3,7 @@
 #
 #  leverage and influence
 #
-#  $Revision: 1.115 $ $Date: 2019/01/08 07:25:14 $
+#  $Revision: 1.116 $ $Date: 2019/02/15 01:31:36 $
 #
 
 leverage <- function(model, ...) {
@@ -78,7 +78,7 @@ leverage.ppmInfluence <- function(model, ...) { model$leverage }
 influence.ppmInfluence <- function(model, ...) { model$influence }
 dfbetas.ppmInfluence <- function(model, ...) { model$dfbetas }
 
-avenndist <- function(X) mean(nndist(X))
+avenndist <- function(X) mean(nndist(unique(X)))
 
 ## ...............  main workhorse ....................................
 

@@ -67,6 +67,11 @@
    # multitype and vector-valued
    rsA <- residuals(fitA, type="score")
    sapply(split(rsA), integral)
+
+   ## integral over a subregion
+   integral(rr, domain=square(0.5))
+   ## integrals over the tiles of a tessellation
+   integral(rr, domain=quadrats(cells, 2))
 }
 \author{
   \spatstatAuthors.

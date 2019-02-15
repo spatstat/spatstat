@@ -3,7 +3,7 @@
 #
 #  signed/vector valued measures with atomic and diffuse components
 #
-#  $Revision: 1.85 $  $Date: 2019/01/08 07:30:33 $
+#  $Revision: 1.87 $  $Date: 2019/02/15 02:09:02 $
 #
 msr <- function(qscheme, discrete, density, check=TRUE) {
   if(!is.quad(qscheme))
@@ -236,8 +236,8 @@ augment.msr <- function(x, ..., sigma, recompute=FALSE) {
   W <- as.owin(xloc)
   mt <- is.multitype(xloc)
   if(missing(sigma)) {
-    ## WAS:  sigma <- maxnndist(xloc, positive=TRUE)
     sigma <- if(!mt) avenndist(xloc) else max(sapply(split(xloc), avenndist))
+    if(sigma == 0) sigma <- max(bw.scott(xloc))/5
   }
   if(mt) {
     ## multitype case - split by type, extract smoothed part, then sum
@@ -551,8 +551,10 @@ as.layered.msr <- local({
 
 
 scalardilate.msr <- function(X, f, ...) {
-  X$loc <- Xloc <- scalardilate(X$loc, f, ...)
-  putlastshift(X, getlastshift(Xloc))
+  X$loc <- scalardilate(X$loc, f, ...)
+  X$density <- X$density/f^2
+  X$val <- X$discrete + X$wt * X$density
+  return(X)
 }
 
 Ops.msr <- function(e1,e2=NULL){
