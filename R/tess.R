@@ -3,7 +3,7 @@
 #
 # support for tessellations
 #
-#   $Revision: 1.88 $ $Date: 2019/01/10 08:45:23 $
+#   $Revision: 1.89 $ $Date: 2019/02/18 07:39:14 $
 #
 tess <- function(..., xgrid=NULL, ygrid=NULL, tiles=NULL, image=NULL,
                  window=NULL, marks=NULL, keepempty=FALSE,
@@ -696,8 +696,14 @@ tileindex <- function(x, y, Z) {
            m <- factor(m, levels=lev, labels=lab)
          },
          image={
-           Zim <- Z$image
-           m <- factor(Zim[list(x=x, y=y), drop=FALSE], levels=levels(Zim))
+           Zim   <- Z$image
+           m <- lookup.im(Zim, x, y, naok=TRUE)
+           if(anyNA(m)) {
+             #' look up neighbouring pixels
+             isna <- is.na(m)
+             rc <- nearest.valid.pixel(x[isna], y[isna], Zim)
+             m[isna] <- Zim$v[cbind(rc$row, rc$col)]
+           }
          }
          )
   return(m)

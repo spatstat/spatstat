@@ -636,3 +636,31 @@ Change log from 1.58-2 to 1.58-3
 ------------- passed R-3.5.2 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
+
+18 feb 2018
+
+   quantess.R
+	Bug fix in quantess.owin
+
+   tess.R
+	Bug fix in tileindex when the tessellation is an image
+
+   blur.R
+	safelookup does not try to blur a factor-valued image.
+
+   quadrattest.R
+	Cressie-Read statistic now handles observed values of zero.
+	
+   DESCRIPTION
+   NEWS
+   spatstat-package.Rd
+	Acknowledged Lucia Cobo Sanchez
+
+   DESCRIPTION
+   NEWS
+        Version 1.58-2.034
+
+------------- passed R-3.5.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+

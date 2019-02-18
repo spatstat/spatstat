@@ -2,7 +2,7 @@
 #' 
 #'     Quantile Tessellation
 #'
-#'   $Revision: 1.12 $  $Date: 2016/02/18 07:26:34 $
+#'   $Revision: 1.13 $  $Date: 2019/02/18 07:10:43 $
 
 quantess <- function(M, Z, n, ...) {
   UseMethod("quantess")
@@ -48,7 +48,7 @@ quantess.owin <- function(M, Z, n, ..., type=2) {
     tilenames(out) <- paste0("[", qzz[1:n], ",",
                              qzz[-1], c(rep(")", n-1), "]"))
   } else {
-    ZC <- cut(Z, breaks=qZ, include.lowest=TRUE, right=FALSE)
+    ZC <- cut(Zim, breaks=qZ, include.lowest=TRUE, right=FALSE)
     out <- tess(image=ZC)
   }
   if(!is.null(tcross)) out <- intersect.tess(out, tcross)

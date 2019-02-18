@@ -1780,6 +1780,7 @@
   Igor Chernayavsky,
   Y.C. Chin,
   Bjarke Christensen,
+  \ifelse{latex}{\out{Luc\'{\i{}}a}}{Lucia} Cobo Sanchez,
   Jean-Francois Coeurjolly,
   Kim Colyvas,
   Hadrien Commenges,

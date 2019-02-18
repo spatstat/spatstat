@@ -3,7 +3,7 @@
 #
 # apply Gaussian blur to an image
 #
-#    $Revision: 1.17 $   $Date: 2017/11/19 04:17:39 $
+#    $Revision: 1.18 $   $Date: 2019/02/18 07:39:01 $
 #
 fillNA <- function(x, value=0) {
   stopifnot(is.im(x))
@@ -69,26 +69,26 @@ blur <- function(x, sigma=NULL, ..., normalise=FALSE, bleed=TRUE, varcov=NULL) {
 }
   
 safelookup <- function(Z, x, factor=2, warn=TRUE) {
-  # x is a ppp
-  # evaluates Z[x], replacing any NA's by blur(Z)[x]
+  #' x is a ppp
+  #' evaluates Z[x], replacing any NA's by blur(Z)[x]
   Zvals <- Z[x, drop=FALSE]
   if(any(isna <- is.na(Zvals))) {
-    # First pass - look up values at neighbouring pixels if valid
+    #' First pass - look up values at neighbouring pixels if valid
     XX <- x[isna]
     rc <- nearest.valid.pixel(XX$x, XX$y, Z)
     Zvals[isna] <- Z$v[cbind(rc$row, rc$col)]
   }
-  if(any(isna <- is.na(Zvals))) {
-    # Second pass - extrapolate
+  if(Z$type != "factor" && any(isna <- is.na(Zvals))) {
+    #' Second pass - extrapolate
     XX <- x[isna]
     pixdiam <- sqrt(Z$xstep^2 + Z$ystep^2)
-    # expand domain of Z 
+    #' expand domain of Z 
     RX <- as.rectangle(x)
     RZ <- as.rectangle(Z)
     bb <- boundingbox(RX, RZ)
     big <- grow.rectangle(bb, 2 * pixdiam)
     Z <- rebound.im(Z, big)
-    # now blur
+    #' now blur
     Zblur <- blur(Z, factor * pixdiam, bleed=TRUE, normalise=TRUE)
     Bvals <- Zblur[XX, drop=FALSE]
     if(anyNA(Bvals)) 

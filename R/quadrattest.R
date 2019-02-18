@@ -1,7 +1,7 @@
 #
 #   quadrattest.R
 #
-#   $Revision: 1.54 $  $Date: 2016/04/25 02:34:40 $
+#   $Revision: 1.55 $  $Date: 2019/02/18 07:43:31 $
 #
 
 quadrat.test <- function(X, ...) {
@@ -190,9 +190,11 @@ quadrat.testEngine <- function(X, nx, ny,
 
 CressieReadStatistic <- function(OBS, EXP, lambda=1) {
   y <- if(lambda == 1) sum((OBS - EXP)^2/EXP) else
-       if(lambda == 0) 2 * sum(OBS * log(OBS/EXP)) else
+       if(lambda == 0) 2 * sum(ifelse(OBS > 0, OBS * log(OBS/EXP), 0)) else
        if(lambda == -1) 2 * sum(EXP * log(EXP/OBS)) else
-       (2/(lambda * (lambda + 1))) * sum(OBS * ((OBS/EXP)^lambda - 1))
+       (2/(lambda * (lambda + 1))) * sum(ifelse(OBS > 0,
+                                                OBS * ((OBS/EXP)^lambda - 1),
+                                                0))
   names(y) <- CressieReadSymbol(lambda)
   return(y)
 }
