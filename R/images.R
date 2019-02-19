@@ -1,7 +1,7 @@
 #
 #       images.R
 #
-#      $Revision: 1.149 $     $Date: 2019/02/04 06:35:13 $
+#      $Revision: 1.152 $     $Date: 2019/02/19 04:38:05 $
 #
 #      The class "im" of raster images
 #
@@ -591,10 +591,10 @@ nearest.pixel <- function(x,y, Z) {
   if(length(x) > 0) {
     nr <- Z$dim[1L]
     nc <- Z$dim[2L]
-    cc <- round(1 + (x - Z$xcol[1L])/Z$xstep)
-    rr <- round(1 + (y - Z$yrow[1L])/Z$ystep)
-    cc <- pmax.int(1,pmin.int(cc, nc))
-    rr <- pmax.int(1,pmin.int(rr, nr))
+    cc <- as.integer(round(1 + (x - Z$xcol[1L])/Z$xstep))
+    rr <- as.integer(round(1 + (y - Z$yrow[1L])/Z$ystep))
+    cc <- pmax.int(1L,pmin.int(cc, nc))
+    rr <- pmax.int(1L,pmin.int(rr, nr))
   } else cc <- rr <- integer(0)
   return(list(row=rr, col=cc))
 }
@@ -602,37 +602,77 @@ nearest.pixel <- function(x,y, Z) {
 # Explores the 3 x 3 neighbourhood of nearest.pixel
 # and finds the nearest pixel that is not NA
 
-nearest.valid.pixel <- function(x, y, Z) {
-  rc <- nearest.pixel(x,y,Z) # checks that Z is an 'im' or 'mask'
-  rr <- rc$row
-  cc <- rc$col
-  # check whether any pixels are outside image domain
-  inside <- as.owin(Z)$m
-  miss <- !inside[cbind(rr, cc)]
-  if(!any(miss))
-    return(rc)
-  # for offending pixels, explore 3 x 3 neighbourhood
-  nr <- Z$dim[1L]
-  nc <- Z$dim[2L]
-  xcol <- Z$xcol
-  yrow <- Z$yrow
-  for(i in which(miss)) {
-    rows <- rr[i] + c(-1L,0L,1L)
-    cols <- cc[i] + c(-1L,0L,1L)
-    rows <- unique(pmax.int(1, pmin.int(rows, nr)))
-    cols <- unique(pmax.int(1, pmin.int(cols, nc)))
-    rcp <- expand.grid(row=rows, col=cols)
-    ok <- inside[as.matrix(rcp)]
-    if(any(ok)) {
-      # At least one of the neighbours is valid
-      # Find the closest one
-      rcp <- rcp[ok,]
-      dsq <- with(rcp, (x[i] - xcol[col])^2 + (y[i] - yrow[row])^2)
-      j <- which.min(dsq)
-      rc$row[i] <- rcp$row[j]
-      rc$col[i] <- rcp$col[j]
-    }
-  }
+nearest.valid.pixel <- function(x, y, Z,
+                                method=c("interpreted","C"),
+                                nsearch=1) {
+  method <- match.arg(method)
+  switch(method,
+         interpreted = {
+           rc <- nearest.pixel(x,y,Z) # checks that Z is an 'im' or 'mask'
+           rr <- rc$row
+           cc <- rc$col
+           #' check whether any pixels are outside image domain
+           inside <- as.owin(Z)$m
+           miss <- !inside[cbind(rr, cc)]
+           if(!any(miss))
+             return(rc)
+           #' for offending pixels, explore 3 x 3 neighbourhood
+           nr <- Z$dim[1L]
+           nc <- Z$dim[2L]
+           xcol <- Z$xcol
+           yrow <- Z$yrow
+           searching <- (-nsearch):(nsearch)
+           for(i in which(miss)) {
+             rows <- rr[i] + searching
+             cols <- cc[i] + searching
+             rows <- unique(pmax.int(1L, pmin.int(rows, nr)))
+             cols <- unique(pmax.int(1L, pmin.int(cols, nc)))
+             rcp <- expand.grid(row=rows, col=cols)
+             ok <- inside[as.matrix(rcp)]
+             if(any(ok)) {
+               #' At least one of the neighbours is valid
+               #' Find the closest one
+               rcp <- rcp[ok,]
+               dsq <- with(rcp, (x[i] - xcol[col])^2 + (y[i] - yrow[row])^2)
+               j <- which.min(dsq)
+               rc$row[i] <- rcp$row[j]
+               rc$col[i] <- rcp$col[j]
+             }
+           }
+         },
+         C = {
+           stopifnot(is.im(Z) || is.mask(Z))
+           n <- length(x)
+           if(n == 0) {
+             cc <- rr <- integer(0)
+           } else {
+             nr <- Z$dim[1L]
+             nc <- Z$dim[2L]
+             xscaled <- (x - Z$xcol[1])/Z$xstep
+             yscaled <- (y - Z$yrow[1])/Z$ystep
+             aspect  <- Z$ystep/Z$xstep
+             inside <- as.owin(Z)$m
+             zz <- .C("nearestvalidpixel",
+                      n = as.integer(n),
+                      x = as.double(xscaled),
+                      y = as.double(yscaled),
+                      nr = as.integer(nr),
+                      nc = as.integer(nc),
+                      aspect = as.double(aspect),
+                      z = as.integer(inside),
+                      nsearch = as.integer(nsearch),
+                      rr = as.integer(integer(n)),
+                      cc = as.integer(integer(n)),
+                      PACKAGE="spatstat")
+             rr <- zz$rr + 1L
+             cc <- zz$cc + 1L
+             if(any(bad <- (rr == 0 | cc == 0))) {
+               rr[bad] <- NA
+               cc[bad] <- NA
+             }
+           }
+           rc <- list(row=rr, col=cc)
+         })  
   return(rc)
 }
   

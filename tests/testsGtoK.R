@@ -84,7 +84,7 @@ local({
 #
 #  tests/imageops.R
 #
-#   $Revision: 1.16 $   $Date: 2019/01/22 03:20:16 $
+#   $Revision: 1.17 $   $Date: 2019/02/19 04:49:41 $
 #
 
 require(spatstat)
@@ -198,6 +198,19 @@ local({
                    runifpoint(20, setminus.owin(B, letterR)),
                    W=B)
   a <- safelookup(Z, X)
+
+  #' check nearest.valid.pixel
+  W <- Window(demopat)
+  X <- runifpoint(1000, W)
+  Z <- quantess(W, function(x,y) { x }, 9)$image
+  x <- X$x
+  y <- X$y
+  a <- nearest.valid.pixel(x, y, Z, method="interpreted")
+  b <- nearest.valid.pixel(x, y, Z, method="C")
+  if(!isTRUE(all.equal(a,b)))
+    stop("Unequal results in nearest.valid.pixel")
+  if(!identical(a,b)) 
+    stop("Equal, but not identical, results in nearest.valid.pixel")
 })
 #' indices.R
 #' Tests of code for understanding index vectors etc

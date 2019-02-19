@@ -664,3 +664,25 @@ Change log from 1.58-2 to 1.58-3
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+19 feb 2019
+
+   images.R
+	Ensure nearest.pixel, nearest.valid.pixel always return integer indices.
+
+   nearestpix.c [New file]
+   	C code for 'nearest.valid.pixel'
+	
+   images.R
+   spatstat-internal.Rd
+	Added option: method="C" in nearest.valid.pixel
+
+   tests/imageops.R
+	Added test of nearest.valid.pixel
+	
+   DESCRIPTION
+   NEWS
+        Version 1.58-2.035
+
+------------- passed R-3.5.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------

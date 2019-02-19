@@ -1218,7 +1218,7 @@ na.handle.im(X, na.replace)
 \method{names}{hyperframe}(x)
 \method{names}{hyperframe}(x) <- value
 nearest.pixel(x, y, Z)
-nearest.valid.pixel(x, y, Z)
+nearest.valid.pixel(x, y, Z, method, nsearch)
 newformula(old, change, eold, enew)
 newstyle.coeff.handling(object)
 nncleanEngine(kthNND, k, d, \dots, tol, maxit,
