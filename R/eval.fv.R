@@ -6,7 +6,7 @@
 #
 #        compatible.fv()       Check whether two fv objects are compatible
 #
-#     $Revision: 1.36 $     $Date: 2018/10/13 06:59:50 $
+#     $Revision: 1.37 $     $Date: 2019/02/20 03:34:50 $
 #
 
 eval.fv <- local({
@@ -185,7 +185,7 @@ compatible.fv <- local({
     verifyclass(B, "fv")
     ## are columns the same?
     namesmatch <-
-      identical(all.equal(names(A),names(B)), TRUE) &&
+      isTRUE(all.equal(names(A),names(B))) &&
         (fvnames(A, ".x") == fvnames(B, ".x")) &&
           (fvnames(A, ".y") == fvnames(B, ".y"))
     if(!namesmatch)

@@ -1,7 +1,7 @@
 #
 #   plot.im.R
 #
-#  $Revision: 1.125 $   $Date: 2018/10/18 09:36:06 $
+#  $Revision: 1.126 $   $Date: 2019/02/20 03:34:50 $
 #
 #  Plotting code for pixel images
 #
@@ -369,8 +369,8 @@ plot.im <- local({
                }
                ribbonticks <- Log(nominalmarks/ribscale)
                ribbonlabels <- paste(nominalmarks)
-               if(!do.log && identical(all.equal(ribbonticks,
-                                                 vrange[1]:vrange[2]), TRUE)) {
+               if(!do.log && isTRUE(all.equal(ribbonticks,
+                                              vrange[1]:vrange[2]))) {
                  # each possible pixel value will appear in ribbon
                  ribbonvalues <- vrange[1]:vrange[2]
                  imagebreaks <- c(ribbonvalues - 0.5, vrange[2] + 0.5)

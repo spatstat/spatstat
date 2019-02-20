@@ -1,5 +1,5 @@
 #
-# $Id: rmh.default.R,v 1.109 2018/05/12 16:13:05 adrian Exp adrian $
+# $Id: rmh.default.R,v 1.110 2019/02/20 03:34:50 adrian Exp adrian $
 #
 rmh.default <- function(model,start=NULL,
                         control=default.rmhcontrol(model),
@@ -236,7 +236,7 @@ rmh.default <- function(model,start=NULL,
     if(mtype) {
       if(!is.marked(x.condpp))
         stop("Model is multitype, but x.cond is unmarked")
-      if(!identical(all.equal(types, levels(marks(x.condpp))), TRUE))
+      if(!isTRUE(all.equal(types, levels(marks(x.condpp)))))
         stop("Types of points in x.cond do not match types in model")
     }
   }

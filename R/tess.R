@@ -3,7 +3,7 @@
 #
 # support for tessellations
 #
-#   $Revision: 1.89 $ $Date: 2019/02/18 07:39:14 $
+#   $Revision: 1.90 $ $Date: 2019/02/19 07:09:41 $
 #
 tess <- function(..., xgrid=NULL, ygrid=NULL, tiles=NULL, image=NULL,
                  window=NULL, marks=NULL, keepempty=FALSE,
@@ -701,7 +701,7 @@ tileindex <- function(x, y, Z) {
            if(anyNA(m)) {
              #' look up neighbouring pixels
              isna <- is.na(m)
-             rc <- nearest.valid.pixel(x[isna], y[isna], Zim)
+             rc <- nearest.valid.pixel(x[isna], y[isna], Zim, nsearch=2)
              m[isna] <- Zim$v[cbind(rc$row, rc$col)]
            }
          }

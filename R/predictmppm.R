@@ -1,7 +1,7 @@
 #
 #    predictmppm.R
 #
-#	$Revision: 1.10 $	$Date: 2018/03/28 07:41:06 $
+#	$Revision: 1.12 $	$Date: 2019/02/20 04:05:24 $
 #
 #
 # -------------------------------------------------------------------
@@ -23,6 +23,7 @@ predict.mppm <- local({
                                        cif="cif"), multi=TRUE)
     want.trend <- "trend" %in% type
     want.cif   <- "cif"   %in% type
+    ##
     selfcheck <- resolve.defaults(list(...), list(selfcheck=FALSE))$selfcheck
     ##
     ##
@@ -98,7 +99,7 @@ predict.mppm <- local({
           dup <- names(newdata) %in% names(locations)
           if(any(dup))
             for(nam in names(newdata)[dup])
-              if(!all.equal(newdata[,nam], locations[,nam]))
+              if(!isTRUE(all.equal(newdata[,nam], locations[,nam])))
                 stop(paste("The data frames newdata and locations",
                            "both have a column called", sQuote(nam),
                            "but the entries differ"))
@@ -147,10 +148,15 @@ predict.mppm <- local({
         answer$trend <- Predict(FIT, newdata=newdata, type="response")
       }
       if(want.cif) {
-        warning("Not yet implemented (computation of cif in data frame case)")
-        ## split data frame by 'id'
-        ## compute interaction components using existing point patterns
-        ## compute fitted values
+        if(is.poisson(object)) {
+          ## cif = trend
+          answer$cif <- if(want.trend) answer$trend else
+                        Predict(FIT, newdata=newdata, type="response")
+        } else {
+          warning("Not yet implemented (computation of cif in data frame case)")        ## split data frame by 'id'
+          ## compute interaction components using existing point patterns
+          ## compute fitted values
+        }
       }
       return(answer)
     }

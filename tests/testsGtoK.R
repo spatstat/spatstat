@@ -201,6 +201,7 @@ local({
 
   #' check nearest.valid.pixel
   W <- Window(demopat)
+  set.seed(911911)
   X <- runifpoint(1000, W)
   Z <- quantess(W, function(x,y) { x }, 9)$image
   x <- X$x

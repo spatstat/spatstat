@@ -2,7 +2,7 @@
 #
 #   rmhmodel.R
 #
-#   $Revision: 1.74 $  $Date: 2017/06/05 10:31:58 $
+#   $Revision: 1.75 $  $Date: 2019/02/20 03:34:50 $
 #
 #
 
@@ -864,7 +864,7 @@ spatstatRmhInfo <- function(cifname) {
 		h0    <- get("yleft",envir=environment(h.init))
 		h     <- h.init(r)
 		nlook <- length(r)
-		if(!identical(all.equal(h[nlook],1),TRUE))
+		if(!isTRUE(all.equal(h[nlook],1)))
                   stop(paste("The lookup interaction step function",
                              "must be equal to 1 for", dQuote("large"),
                              "distances."))
@@ -897,7 +897,7 @@ spatstatRmhInfo <- function(cifname) {
               r <- c(0,r)
               nlook <- nlook+1
               deltar <- mean(diff(r))
-              if(identical(all.equal(diff(r),rep.int(deltar,nlook-1)),TRUE)) {
+              if(isTRUE(all.equal(diff(r),rep.int(deltar,nlook-1)))) {
 		par <- list(beta=beta,nlook=nlook,
                             equisp=1,
                             deltar=deltar,rmax=rmax, h=h)

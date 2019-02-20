@@ -781,7 +781,7 @@ reset.spatstat.options()
 #
 # Basic tests of mppm
 #
-# $Revision: 1.11 $ $Date: 2019/01/21 10:59:07 $
+# $Revision: 1.12 $ $Date: 2019/02/20 04:05:43 $
 # 
 
 require(spatstat)
@@ -822,6 +822,23 @@ local({
   p2 <- solapply(s2, predict)
 #  p3 <- solapply(s3, predict)
 
+})
+
+local({
+  ## cases of predict.mppm
+  W <- solapply(waterstriders, Window)
+  Fakes <- solapply(W, runifpoint, n=30)
+  FakeDist <- solapply(Fakes, distfun)
+  H <- hyperframe(Bugs=waterstriders,
+                  D=FakeDist)
+  fit <- mppm(Bugs ~ D, data=H)
+  p1 <- predict(fit)
+  p2 <- predict(fit, locations=Fakes)
+  p3 <- predict(fit, locations=solapply(W, erosion, r=4))
+  locn <- as.data.frame(do.call(cbind, lapply(Fakes, coords)))
+  df <- data.frame(id=sample(1:3, nrow(locn), replace=TRUE),
+                   D=runif(nrow(locn)))
+  p4 <- predict(fit, locations=locn, newdata=df)
 })
 
 local({

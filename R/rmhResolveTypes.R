@@ -2,7 +2,7 @@
 #
 #   rmhResolveTypes.R
 #
-#   $Revision: 1.9 $   $Date: 2009/10/31 01:52:54 $
+#   $Revision: 1.10 $   $Date: 2019/02/20 03:34:50 $
 #
 #
 rmhResolveTypes <- function(model, start, control) {
@@ -22,7 +22,7 @@ rmhResolveTypes <- function(model, start, control) {
   
 # Check for inconsistencies  
   if(!is.null(types.model) && !is.null(types.start))
-    if(!identical(all.equal(types.model, types.start), TRUE))
+    if(!isTRUE(all.equal(types.model, types.start)))
       stop("marks in start$x.start do not match model$types")
   
   types.given <- if(!is.null(types.model)) types.model else types.start

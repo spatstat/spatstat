@@ -3,7 +3,7 @@
 #
 #   discretisation of coordinates
 #
-#   $Revision: 1.5 $  $Date: 2013/01/09 03:13:10 $
+#   $Revision: 1.6 $  $Date: 2019/02/20 03:34:50 $
 
 round.ppp <- round.pp3 <- round.ppx <- function(x, digits=0) {
   coords(x) <- round(as.matrix(coords(x)), digits=digits)
@@ -22,12 +22,12 @@ rounding.default <- function(x) {
   # works for numeric, complex, matrix etc
   if(all(x == 0))
     return(NULL)
-  if(identical(all.equal(x, round(x)), TRUE)) { 
+  if(isTRUE(all.equal(x, round(x)))) { 
     # integers: go up
     k <- 0
     smallk <- -log10(.Machine$double.xmax)
     repeat {
-      if(k < smallk || !identical(all.equal(x, round(x, k-1)), TRUE))
+      if(k < smallk || !isTRUE(all.equal(x, round(x, k-1))))
         return(k)
       k <- k-1
     }
@@ -36,7 +36,7 @@ rounding.default <- function(x) {
     k <- 1
     bigk <- -log10(.Machine$double.eps)
     repeat {
-      if(k > bigk || identical(all.equal(x, round(x, k)), TRUE))
+      if(k > bigk || isTRUE(all.equal(x, round(x, k))))
         return(k)
       k <- k+1
     }

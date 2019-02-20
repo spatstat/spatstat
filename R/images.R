@@ -1,7 +1,7 @@
 #
 #       images.R
 #
-#      $Revision: 1.152 $     $Date: 2019/02/19 04:38:05 $
+#      $Revision: 1.153 $     $Date: 2019/02/19 07:05:58 $
 #
 #      The class "im" of raster images
 #
@@ -603,7 +603,7 @@ nearest.pixel <- function(x,y, Z) {
 # and finds the nearest pixel that is not NA
 
 nearest.valid.pixel <- function(x, y, Z,
-                                method=c("interpreted","C"),
+                                method=c("C","interpreted"),
                                 nsearch=1) {
   method <- match.arg(method)
   switch(method,

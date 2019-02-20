@@ -686,3 +686,56 @@ Change log from 1.58-2 to 1.58-3
 ------------- passed R-3.5.2 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
+
+   images.R
+	Set default method="C" in nearest.valid.pixel
+
+   tests/imageops.R
+	tweak
+
+   tess.R
+	Tweak to 'tileindex' to eliminate NA's
+	when the tessellation is defined by an image.
+	
+   DESCRIPTION
+   NEWS
+        Version 1.58-2.036
+
+------------- passed R-3.5.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+20 feb 2019
+
+   discarea.R
+   eval.fv.R
+   formulae.R
+   hierpair.family.R
+   is.cadlag.R
+   mpl.R
+   pairwise.R
+   plot.im.R
+   predict.ppm.R
+   rmh.default.R
+   rmhmodel.R
+   rmhResolveTypes.R
+   round.R
+   saturated.R
+   units.R
+	Replaced identical(,TRUE) with isTRUE()
+
+   predictmppm.R
+	Extended to cover the case where 'locations' is a data frame
+	and the model is Poisson.
+
+   tests/mppm.R
+	More tests of predict.mppm
+
+   DESCRIPTION
+   NEWS
+        Version 1.58-2.037
+
+------------- passed R-3.5.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+

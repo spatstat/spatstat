@@ -1,7 +1,7 @@
 #
 #    predict.ppm.S
 #
-#	$Revision: 1.109 $	$Date: 2018/11/01 13:15:05 $
+#	$Revision: 1.110 $	$Date: 2019/02/20 03:34:50 $
 #
 #    predict.ppm()
 #	   From fitted model obtained by ppm(),	
@@ -298,7 +298,7 @@ predict.ppm <- local({
                      "is a marked point process)"))
         if(is.factor(mpredict)) {
           ## verify mark levels match those in model
-          if(!identical(all.equal(levels(mpredict), types), TRUE)) {
+          if(!isTRUE(all.equal(levels(mpredict), types))) {
             if(all(levels(mpredict) %in% types))
               mpredict <- factor(mpredict, levels=types)
             else 

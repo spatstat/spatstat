@@ -1,7 +1,7 @@
 #
 # Functions for extracting and setting the name of the unit of length
 #
-#   $Revision: 1.28 $   $Date: 2018/03/04 06:25:56 $
+#   $Revision: 1.29 $   $Date: 2019/02/20 03:34:50 $
 #
 #
 
@@ -165,7 +165,7 @@ compatible.unitname <- function(A, B, ..., coerce=TRUE) {
   # `coerce' determines whether `vanilla' units are compatible with other units
   coerce <- as.logical(coerce)
   # 
-  agree <- if(!Anull && !Bnull) identical(all.equal(A,B), TRUE) else
+  agree <- if(!Anull && !Bnull) isTRUE(all.equal(A,B)) else
            if(Anull && Bnull) TRUE else coerce 
   #
   if(!agree) return(FALSE)

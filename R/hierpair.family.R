@@ -2,7 +2,7 @@
 #
 #    hierpair.family.R
 #
-#    $Revision: 1.10 $	$Date: 2018/03/29 04:35:18 $
+#    $Revision: 1.11 $	$Date: 2019/02/20 03:34:50 $
 #
 #    The family of hierarchical pairwise interactions
 #
@@ -114,9 +114,9 @@ hierpair.family <-
          ## 
 
 fop <- names(formals(pairpot))
-if(identical(all.equal(fop, c("d", "par")), TRUE))
+if(isTRUE(all.equal(fop, c("d", "par"))))
   marx <- FALSE
-else if(identical(all.equal(fop, c("d", "tx", "tu", "par")), TRUE))
+else if(isTRUE(all.equal(fop, c("d", "tx", "tu", "par"))))
   marx <- TRUE
 else 
   stop("Formal arguments of pair potential function are not understood")
