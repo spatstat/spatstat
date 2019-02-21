@@ -289,29 +289,33 @@ reset.spatstat.options()
 ##
 ## checks validity of linear algebra code
 ##
-##  $Revision: 1.3 $ $Date: 2015/12/29 08:54:49 $
+##  $Revision: 1.4 $ $Date: 2019/02/21 02:21:43 $
 ##
 require(spatstat)
 local({
   p <- 3
   n <- 4
-
+  k <- 2
+  
   x <- matrix(1:(n*p), n, p)
-  w <- rep(2, n)
-  z <- matrix(0, p, p)
-  for(i in 1:n)
-    z <- z + w[i] * outer(x[i,],x[i,])
-  zC <- sumouter(x, w)
-  if(!identical(zC, z))
-    stop("sumouter gives incorrect result in symmetric case")
-
-  y <- matrix(1:(2*n), n, 2)
-  z <- matrix(0, p, 2)
-  for(i in 1:n)
-    z <- z + w[i] * outer(x[i,],y[i,])
-  zC <- sumouter(x, w, y)
-  if(!identical(zC, z))
-      stop("sumouter gives incorrect result in ASYMMETRIC case")
+  w <- runif(n)
+  y <- matrix(1:(2*n), n, k)
+  zUS <- zWS <- matrix(0, p, p)
+  zUA <- zWA <- matrix(0, p, k)
+  for(i in 1:n) {
+    zUS <- zUS +        outer(x[i,],x[i,])
+    zWS <- zWS + w[i] * outer(x[i,],x[i,])
+    zUA <- zUA +        outer(x[i,],y[i,])
+    zWA <- zWA + w[i] * outer(x[i,],y[i,])
+  }
+  if(!identical(zUS, sumouter(x)))
+    stop("sumouter gives incorrect result in Unweighted Symmetric case")
+  if(!identical(zWS, sumouter(x,w)))
+    stop("sumouter gives incorrect result in Weighted Symmetric case")
+  if(!identical(zUA, sumouter(x, y=y)))
+    stop("sumouter gives incorrect result in Unweighted Asymmetric case")
+  if(!identical(zWA, sumouter(x, w, y)))
+    stop("sumouter gives incorrect result in Weighted Asymmetric case")
   
   x <- array(as.numeric(1:(p * n * n)), dim=c(p, n, n))
   w <- matrix(1:(n*n), n, n)

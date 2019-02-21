@@ -920,9 +920,11 @@ local({
   m1
   reach(m1)
 
-  # Test of handling 'IsOffset' 
+  ## Test of handling 'IsOffset' 
   fit2 <- ppm(cells ~1, Hybrid(H=Hardcore(0.05), G=Geyer(0.15, 2)))
-  rmhmodel(fit2)
+  m2 <- rmhmodel(fit2)
+  ## also test C code for hybrid interaction with hard core
+  fakecells <- rmh(fit2, nrep=1e4)
 
   # Test of handling Poisson components
   fit3 <- ppm(cells ~1, Hybrid(P=Poisson(), S=Strauss(0.05)))
@@ -962,7 +964,7 @@ local({
 #
 #  tests/rmh.ppm.R
 #
-#  $Revision: 1.3 $ $Date: 2018/05/27 05:27:34 $
+#  $Revision: 1.4 $ $Date: 2019/02/21 01:59:48 $
 #
 #  Examples removed from rmh.ppm.Rd
 #  stripped down to minimal tests of validity
@@ -1053,6 +1055,17 @@ local({
                    hradii=matrix(h0, ncol=2, nrow=2))
    fit <- ppm(Y ~ marks+x, MH)
    Ysim <- rmh(fit)
+   #' other code blocks
+   Ysim <- rmh(fit, control=list(periodic=TRUE, expand=1))
+   Ysim <- rmh(fit, control=list(periodic=FALSE, expand=1))
+   #' multihard core with invalid initial state
+   Ydouble <- superimpose(Y, rjitter(Y, h0/10))
+   Ysim <- rmh(fit, start=list(x.start=Ydouble))
+
+   #' Lennard-Jones
+   fut <- ppm(unmark(longleaf) ~ 1, LennardJones(), rbord=1)
+   Ysim <- rmh(fut)
+   Ysim <- rmh(fut, control=list(periodic=TRUE, expand=1))
    
    spatstat.options(op)
  })

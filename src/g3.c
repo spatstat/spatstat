@@ -145,7 +145,7 @@ g3one(p, n, b, g)
   /* spacing of argument in result vector g */
   dt = (g->t1 - g->t0)/(g->n - 1);
 
-  for(i = 0; i < n; i++) { 
+  for(i = 0; i < n; i++) {
     lbord = floor( (bord[i] - g->t0) / dt );
     if(lbord >= g->n) 
       lbord = g->n - 1;

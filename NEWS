@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.58-2.037
+        CHANGES IN spatstat VERSION 1.58-2.038
 
 OVERVIEW
 
@@ -111,8 +111,14 @@ BUG FIXES
     Fixed.
     
     o inside.owin
-    All results were FALSE if the window was a polygon equivalent to a rectangle
+    All results were FALSE if the window was
+    a polygon equivalent to a rectangle
     with sides longer than 10^6 units.
+    Fixed.
+
+    o sumouter
+    Result was incorrect (all entries were zero)
+    if 'w' was missing and 'y' was given.
     Fixed.
     
     o extractbranch.lpp

@@ -739,3 +739,29 @@ Change log from 1.58-2 to 1.58-3
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+   src/linalg.c
+	Bug fix in Csum2outer (affecting sumouter(x, , y))
+	
+   fgk3.R
+	Ancient bug fix 
+
+   tests/linalgeb.R
+   tests/nndist.R
+   tests/rmhmodelHybrids.R
+   tests/rmh.ppm.R
+	More tests
+
+   tests/threedee.R
+	Bug fix in test code.
+
+   LennardJones.Rd
+	Added an example of a valid fitted model.
+
+   DESCRIPTION
+   NEWS
+        Version 1.58-2.038
+
+------------- passed R-3.5.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+

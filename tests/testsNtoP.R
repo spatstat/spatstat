@@ -36,7 +36,7 @@ local({
 #
 # Also test nnorient()
 #
-#   $Revision: 1.21 $  $Date: 2019/02/14 09:00:07 $
+#   $Revision: 1.22 $  $Date: 2019/02/21 03:01:30 $
 #
 
 require(spatstat)
@@ -93,6 +93,23 @@ local({
   if(any(nw5 != nw5P))
     stop("nnwhich.pp3(k=5) does not agree with pairdist")
 
+  Y <- runifpoint3(17)
+  a <- nncross(X,Y)
+  a <- nncross(X,Y, what="dist")
+  a <- nncross(X,Y, what="which")
+  a2 <- nncross(X,Y, k=2)
+  a2 <- nncross(X,Y, what="dist", k=2)
+  a2 <- nncross(X,Y, what="which", k=2)
+  iX <- 1:42
+  iZ <- 30:42
+  Z <- X[iZ]
+  b <- nncross(X, Z, iX=iX, iY=iZ)
+  b <- nncross(X, Z, iX=iX, iY=iZ, what="which")
+  b <- nncross(X, Z, iX=iX, iY=iZ, what="dist")
+  b2 <- nncross(X, Z, iX=iX, iY=iZ, k=2)
+  b2 <- nncross(X, Z, iX=iX, iY=iZ, what="which", k=2)
+  b2 <- nncross(X, Z, iX=iX, iY=iZ, what="dist", k=2)
+  
   # m dimensions
 
   X <- runifpointx(42, boxx(c(0,1),c(0,1),c(0,1),c(0,1)))

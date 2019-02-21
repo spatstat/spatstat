@@ -5,7 +5,7 @@
 
    Yes, really
 
-   $Revision: 1.12 $ $Date: 2018/12/18 02:43:11 $ 
+   $Revision: 1.13 $ $Date: 2019/02/21 02:21:17 $ 
 
   Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2018
   Licence: GNU Public Licence >= 2
@@ -121,7 +121,7 @@ void Csum2outer(x, y, n, px, py, z)
 	xij = xcolj[i];
 	for(k = 0; k < Py; k++) {
 	  ykj = ycolj[k];
-	  y[k * Px + i] += xij * ykj;
+	  z[k * Px + i] += xij * ykj;
 	}
       }
     }

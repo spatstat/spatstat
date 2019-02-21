@@ -747,7 +747,7 @@ parres(mod4, "B")
 #'
 #'     Tests of 3D code 
 #'
-#'      $Revision: 1.3 $ $Date: 2018/07/02 15:40:29 $
+#'      $Revision: 1.5 $ $Date: 2019/02/21 01:35:06 $
 #'
 
 require(spatstat)
@@ -762,11 +762,20 @@ local({
   h <- has.close(X, 0.2, periodic=TRUE)
   h <- has.close(X, 0.2, Y=Y)
   h <- has.close(X, 0.2, Y=Y, periodic=TRUE)
+  #' code blocks not otherwise reached
+  rmax <- 0.6 * max(nndist(X))
+  g <- G3est(X, rmax=rmax, correction="rs")
+  g <- G3est(X, rmax=rmax, correction="km")
+  g <- G3est(X, rmax=rmax, correction="Hanisch")
   #' older code
-  gg1 <- g3engine(X$x, X$y, X$z, correction="Hanisch G3")
-  gg2 <- g3engine(X$x, X$y, X$z, correction="minus sampling")
-  ff1 <- f3engine(X$x, X$y, X$z, correction="no")
-  ff2 <- f3engine(X$x, X$y, X$z, correction="minus sampling")
+  co <- coords(X)
+  xx <- co$x
+  yy <- co$y
+  zz <- co$z
+  gg1 <- g3engine(xx, yy, zz, correction="Hanisch G3")
+  gg2 <- g3engine(xx, yy, zz, correction="minus sampling")
+  ff1 <- f3engine(xx, yy, zz, correction="no")
+  ff2 <- f3engine(xx, yy, zz, correction="minus sampling")
 })
 #'    tests/trigraph.R
 #'

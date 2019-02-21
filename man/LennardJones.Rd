@@ -124,9 +124,14 @@
   \code{\link{ppm.object}}
 }
 \examples{
-   fit <- ppm(cells ~1, LennardJones(), rbord=0.1)
+   badfit <- ppm(cells ~1, LennardJones(), rbord=0.1)
+   badfit
+
+   fit <- ppm(unmark(longleaf) ~1, LennardJones(), rbord=1)
    fit
    plot(fitin(fit))
+   # Note the Longleaf Pines coordinates are rounded to the nearest decimetre
+   # (multiple of 0.1 metres) so the apparent inhibition may be an artefact
 }
 \references{
   Lennard-Jones, J.E. (1924) On the determination of molecular fields.

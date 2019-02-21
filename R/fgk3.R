@@ -1,5 +1,5 @@
 #
-#	$Revision: 1.26 $	$Date: 2017/06/05 10:31:58 $
+#	$Revision: 1.27 $	$Date: 2019/02/21 01:18:21 $
 #
 #	Estimates of F, G and K for three-dimensional point patterns
 #
@@ -324,8 +324,9 @@ g3engine <- function(x, y, z, box=c(0,1,0,1,0,1),
 		denom = as.double(numeric(nrval)),
 		as.integer(code),
 	  PACKAGE = "spatstat")
-	return(list(range = range, f = res$f, num=res$num, denom=res$denom, 
-		correction=correction))
+	return(list(range = c(0, rmax),
+                    f = res$f, num=res$num, denom=res$denom, 
+                    correction=correction))
 }
 #
 #
