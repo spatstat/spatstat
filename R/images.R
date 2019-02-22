@@ -1,7 +1,7 @@
 #
 #       images.R
 #
-#      $Revision: 1.153 $     $Date: 2019/02/19 07:05:58 $
+#      $Revision: 1.154 $     $Date: 2019/02/22 09:16:49 $
 #
 #      The class "im" of raster images
 #
@@ -130,19 +130,12 @@ levels.im <- function(x) {
 shift.im <- function(X, vec=c(0,0), ..., origin=NULL) {
   verifyclass(X, "im")
   if(!is.null(origin)) {
-    stopifnot(is.character(origin))
     if(!missing(vec))
-      warning("argument vec ignored; overruled by argument origin")
-    origin <- pickoption("origin", origin, c(centroid="centroid",
-                                             midpoint="midpoint",
-                                             bottomleft="bottomleft"))
-    W <- as.owin(X)
-    locn <- switch(origin,
-                   centroid={ unlist(centroid.owin(W)) },
-                   midpoint={ c(mean(W$xrange), mean(W$yrange)) },
-                   bottomleft={ c(W$xrange[1L], W$yrange[1L]) })
-    return(shift(X, -locn))
+      warning("argument vec ignored; argument origin has precedence")
+    locn <- interpretAsOrigin(origin, Window(X))
+    vec <- -locn
   }
+  vec <- as2vector(vec)
   X$xrange <- X$xrange + vec[1L]
   X$yrange <- X$yrange + vec[2L]
   X$xcol <- X$xcol + vec[1L]
@@ -1222,3 +1215,19 @@ anyNA.im <- function(x, recursive=FALSE) {
   anyNA(x$v)
 }
 
+ZeroValue <- function(x) {
+  UseMethod("ZeroValue")
+}
+
+ZeroValue.im <- function(x) {
+  lev <- levels(x)
+  z <- switch(x$type,
+              factor  = factor(lev[1L], levels=lev),
+              integer = integer(1L),
+              logical = logical(1L),
+              real    = numeric(1L),
+              complex = complex(1L),
+              character = character(1L),
+              x$v[!is.na(x$v),drop=TRUE][1])
+  return(z)
+}

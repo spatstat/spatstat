@@ -440,7 +440,7 @@ local({
 #
 # tests/kppm.R
 #
-# $Revision: 1.26 $ $Date: 2019/01/25 03:33:40 $
+# $Revision: 1.27 $ $Date: 2019/02/22 10:20:11 $
 #
 # Test functionality of kppm that depends on RandomFields
 # Test update.kppm for old style kppm objects
@@ -549,6 +549,8 @@ local({
   gut <- improve.kppm(fit, vcov=TRUE, fast.vcov=TRUE, save.internals=TRUE)
   hut <- kppm(redwood ~ x, method="clik", weightfun=NULL)
   hut <- kppm(redwood ~ x, method="palm", weightfun=NULL)
+  mut <- kppm(redwood)
+  nut <- update(mut, Y)
 })
 
 local({

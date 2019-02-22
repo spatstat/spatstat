@@ -3,7 +3,7 @@
 #
 # kluster/kox point process models
 #
-# $Revision: 1.141 $ $Date: 2019/02/14 01:52:54 $
+# $Revision: 1.142 $ $Date: 2019/02/22 10:20:19 $
 #
 
 kppm <- function(X, ...) {
@@ -1562,7 +1562,7 @@ update.kppm <- function(object, ..., evaluate=TRUE) {
          },
          {
 	   # original call has X = ppp and trend = [formula without lhs]
-           oldformula <- as.formula(getCall(object)$trend)
+           oldformula <- as.formula(getCall(object)$trend %orifnull% (~1))
 	   fom <-  newformula(oldformula, fmla, callframe, envir)
 	   if(!is.null(Xexpr))
 	      lhs.of.formula(fom) <- Xexpr

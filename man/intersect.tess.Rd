@@ -6,7 +6,7 @@
   or the intersection of a tessellation with a window.
 }
 \usage{
-   intersect.tess(X, Y, \dots, keepmarks=FALSE)
+   intersect.tess(X, Y, \dots, keepmarks=FALSE, sep="x")
 }
 \arguments{
   \item{X,Y}{Two tessellations (objects of class \code{"tess"}),
@@ -22,6 +22,11 @@
     Logical value. If \code{TRUE}, the marks attached to the
     tiles of \code{X} and \code{Y} will be retained as marks of
     the intersection tiles. 
+  }
+  \item{sep}{
+    Character string used to separate the names of tiles from \code{X}
+    and from \code{Y}, when forming the name of the tiles of the
+    intersection.
   }
 }
 \value{

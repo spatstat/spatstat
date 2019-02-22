@@ -235,6 +235,7 @@
 \alias{integral.influence.ppm}
 \alias{interactionfamilyname}
 \alias{intermaker}
+\alias{interpretAsOrigin}
 \alias{intX.owin}     
 \alias{intX.xypolygon}     
 \alias{intY.owin}     
@@ -718,6 +719,8 @@
 \alias{xtfrm.im}
 \alias{xypolygon2psp}
 \alias{xypolyselfint}
+\alias{ZeroValue}
+\alias{ZeroValue.im}
 %%%% sparse 3D arrays
 \alias{sparse3Darray}
 \alias{as.sparse3Darray}
@@ -1049,6 +1052,7 @@ instantiate.interact(x, par)
 \method{integral}{influence.ppm}(f, domain, \dots)
 interactionfamilyname(x)
 intermaker(f, blank)
+interpretAsOrigin(x, W)
 intX.owin(w)
 intX.xypolygon(polly)
 intY.owin(w)
@@ -1621,6 +1625,8 @@ X2testEngine(OBS, EXP, \dots, method, CR, df, nsim,
 \method{xtfrm}{im}(x)
 xypolyselfint(p, eps, proper, yesorno, checkinternal)
 xypolygon2psp(p, w, check)
+ZeroValue(x)
+\method{ZeroValue}{im}
 %%% sparse 3D arrays
 sparse3Darray(i,j,k,x,dims,dimnames,strict,nonzero)
 as.sparse3Darray(x, \dots)

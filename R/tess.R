@@ -3,7 +3,7 @@
 #
 # support for tessellations
 #
-#   $Revision: 1.90 $ $Date: 2019/02/19 07:09:41 $
+#   $Revision: 1.91 $ $Date: 2019/02/22 04:44:16 $
 #
 tess <- function(..., xgrid=NULL, ygrid=NULL, tiles=NULL, image=NULL,
                  window=NULL, marks=NULL, keepempty=FALSE,
@@ -741,8 +741,9 @@ as.tess.owin <- function(X) {
 
 domain.tess <- Window.tess <- function(X, ...) { as.owin(X) } 
 
-intersect.tess <- function(X, Y, ..., keepmarks=FALSE) {
+intersect.tess <- function(X, Y, ..., keepmarks=FALSE, sep="x") {
   X <- as.tess(X)
+  check.1.string(sep)
   if(is.owin(Y) && Y$type == "mask") {
     # special case
     # convert to pixel image 
@@ -797,6 +798,7 @@ intersect.tess <- function(X, Y, ..., keepmarks=FALSE) {
         }
       } else keepmarks <- FALSE
     }
+    Xtrivial <- (length(Xtiles) == 1)
     for(i in seq_along(Xtiles)) {
       Xi <- Xtiles[[i]]
       Ti <- lapply(Ytiles, intersect.owin, B=Xi, ..., fatal=FALSE)
@@ -804,7 +806,8 @@ intersect.tess <- function(X, Y, ..., keepmarks=FALSE) {
       nonempty <- !isempty
       if(any(nonempty)) {
         Ti <- Ti[nonempty]
-        names(Ti) <- paste(namesX[i], namesY[nonempty], sep="x")
+        names(Ti) <- if(Xtrivial) namesY[nonempty] else
+                     paste(namesX[i], namesY[nonempty], sep=sep)
         Ztiles <- append(Ztiles, Ti)
         if(keepmarks) {
           extra <- if(gotXmarks && gotYmarks) {

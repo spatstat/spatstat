@@ -42,7 +42,14 @@ venn.tess(\dots, window = NULL)
   \spatstatAuthors.
 }
 \seealso{
-  \code{\link{intersect.tess}}
+  \code{\link{intersect.tess}}.
+
+  To construct other kinds of tessellations, see
+  \code{\link{tess}},
+  \code{\link{quadrats}}, \code{\link{hextess}},
+  \code{\link{polartess}},
+  \code{\link{dirichlet}}, \code{\link{delaunay}}, \code{\link{quantess}}
+  and \code{\link{rpoislinetess}}.
 }
 \examples{
    V <- venn.tess(A=square(1),

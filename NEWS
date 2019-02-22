@@ -1,10 +1,10 @@
 
-        CHANGES IN spatstat VERSION 1.58-2.038
+        CHANGES IN spatstat VERSION 1.58-2.039
 
 OVERVIEW
 
     o We thank Lucia Cobo Sanchez, Tilman Davies, Maximilian Hesselbarth,
-    Kassel Hingee, Mehdi Moradi and Suman Rakshit for contributions.
+    Kassel Hingee, Mehdi Moradi, Suman Rakshit and Luke Yates for contributions.
     
     o Extensions to adaptive intensity estimators.
 
@@ -14,6 +14,9 @@ OVERVIEW
     
 NEW FUNCTIONS
 
+    o polartess
+    Tessellation using polar coordinates.
+    
     o coords.quad
     New method for 'coords', to extract the coordinates of the points
     in a quadrature scheme.
@@ -102,6 +105,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
     (previously if the window was polygonal but was equivalent to a rectangle,
     the rescaled window was a rectangle).
 
+    o shift.im, shift.owin, shift.ppp, shift.psp
+    More options for the argument 'origin'.
+    
 BUG FIXES
 
     o ppp
@@ -120,7 +126,7 @@ BUG FIXES
     Result was incorrect (all entries were zero)
     if 'w' was missing and 'y' was given.
     Fixed.
-    
+
     o extractbranch.lpp
     Point pattern coordinates were sometimes erroneously set to NA.
     Fixed.
@@ -130,6 +136,12 @@ BUG FIXES
     [Spotted by Tilman Davies.]
     Fixed.
 
+    o update.kppm
+    Crashed if the updating information was a point pattern
+    and the original model call did not include a formula.
+    Spotted by Luke Yates.
+    Fixed.
+    
     o incircle, inpoint
     Crashed if the window was extremely thin.
     Fixed.
@@ -188,6 +200,16 @@ BUG FIXES
     represented by a pixel image.
     Fixed.
 
+    o as.linim.linfun
+    Factor-valued functions were converted to integer-valued images.
+    Spotted by Suman Rakshit.
+    Fixed.
+
+    o plot.linfun
+    Did not display factor-valued functions correctly.
+    Spotted by Suman Rakshit.
+    Fixed.
+    
         CHANGES IN spatstat VERSION 1.58-2
 
 OVERVIEW

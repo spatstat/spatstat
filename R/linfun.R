@@ -3,7 +3,7 @@
 #
 #   Class of functions of location on a linear network
 #
-#   $Revision: 1.12 $   $Date: 2017/06/05 10:31:58 $
+#   $Revision: 1.13 $   $Date: 2019/02/22 09:28:28 $
 #
 
 linfun <- function(f, L) {
@@ -56,8 +56,9 @@ as.linim.linfun <- function(X, L=domain(X),
                                        delta=NULL) {
   if(is.null(L))
     L <- domain(X)
-  # create template
-  Y <- as.linim(1, L, eps=eps, dimyx=dimyx, xy=xy, delta=delta)
+  #' create template
+  typical <- X(runiflpp(1, L))
+  Y <- as.linim(typical, L, eps=eps, dimyx=dimyx, xy=xy, delta=delta)
   # extract coordinates of sample points along network
   df <- attr(Y, "df")
   coo <- df[, c("x", "y", "mapXY", "tp")]
@@ -66,14 +67,12 @@ as.linim.linfun <- function(X, L=domain(X),
   vals <- do.call(X, append(as.list(coo), list(...)))
   # write values in data frame
   df$values <- vals
-  # overwrite values in pixel array 
-  storage.mode(Y$v) <- typ <- typeof(vals)
-  Y$type <- if(typ == "double") "real" else typ
-  pix <- nearest.raster.point(df$xc, df$yc, Y)
-  Y$v[] <- NA
-  Y$v[cbind(pix$row, pix$col)] <- vals
-  #
   attr(Y, "df") <- df
+  #' overwrite values in pixel array
+  Y$v[] <- NA
+  pix <- nearest.raster.point(df$xc, df$yc, Y)
+  Y$v[cbind(pix$row, pix$col)] <- vals
+  #'
   return(Y)
 }
 

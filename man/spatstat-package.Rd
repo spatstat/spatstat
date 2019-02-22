@@ -1937,6 +1937,7 @@
   Carl G. Witthoft,
   Selene Wong,
   Maxime Woringer,
+  Luke Yates,
   Mike Zamboni
   and
   Achim Zeileis.

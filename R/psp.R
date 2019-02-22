@@ -1,7 +1,7 @@
 #
 #  psp.R
 #
-#  $Revision: 1.94 $ $Date: 2018/10/02 03:50:30 $
+#  $Revision: 1.96 $ $Date: 2019/02/22 11:13:34 $
 #
 # Class "psp" of planar line segment patterns
 #
@@ -666,26 +666,15 @@ affine.psp <- function(X,  mat=diag(c(1,1)), vec=c(0,0), ...) {
 
 shift.psp <- function(X, vec=c(0,0), ..., origin=NULL) {
   verifyclass(X, "psp")
+  W <- Window(X)
   if(!is.null(origin)) {
-    stopifnot(is.character(origin))
     if(!missing(vec))
-      warning("Argument vec ignored; argument origin has precedence.\n")
-    if(is.numeric(origin)) {
-      locn <- origin
-    } else {
-      origin <- pickoption("origin", origin, c(centroid="centroid",
-                                               midpoint="midpoint",
-                                               bottomleft="bottomleft"))
-      W <- as.owin(X)
-      locn <- switch(origin,
-                     centroid={ unlist(centroid.owin(W)) },
-                     midpoint={ c(mean(W$xrange), mean(W$yrange)) },
-                     bottomleft={ c(W$xrange[1], W$yrange[1]) })
-    }
-    return(shift(X, -locn))
+      warning("argument vec ignored; argument origin has precedence")
+    locn <- interpretAsOrigin(origin, W)
+    vec <- -locn
   }
   # perform shift
-  W <- shift.owin(X$window, vec=vec, ...)
+  W <- shift.owin(W, vec=vec, ...)
   E <- X$ends
   ends0 <- shiftxy(list(x=E$x0,y=E$y0), vec=vec, ...)
   ends1 <- shiftxy(list(x=E$x1,y=E$y1), vec=vec, ...)

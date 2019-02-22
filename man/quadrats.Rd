@@ -75,10 +75,19 @@ quadrats(X, nx = 5, ny = nx, xbreaks = NULL, ybreaks = NULL, keepempty=FALSE)
  plot(quadrats(letterR, 5, 7))
 }
 \seealso{
-  \code{\link{tess}},
+  For calculations using quadrats, see
   \code{\link{quadratcount}},
   \code{\link{quadrat.test}},
   \code{\link{quadratresample}}
+
+  For other kinds of tessellations, see 
+  \code{\link{tess}},
+  \code{\link{hextess}},
+  \code{\link{venn.tess}},
+  \code{\link{polartess}},
+  \code{\link{dirichlet}}, \code{\link{delaunay}},
+  \code{\link{rpoislinetess}} and \code{\link{quantess}}.
+
 }
 \author{\adrian
   

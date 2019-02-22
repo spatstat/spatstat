@@ -765,3 +765,56 @@ Change log from 1.58-2 to 1.58-3
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+22 feb 2019
+
+   tess.R
+	Improved tile names in intersect.tess in trivial cases.
+
+   images.R
+   spatstat-internal.Rd
+	New function 'ZeroValue'
+
+   linfun.R
+	Bug fix in as.linim.linfun for factor-valued functions.
+	Spotted by Suman.
+
+   polartess.R [New file]
+   polartess.Rd [New file]
+   	Tessellations in polar coordinates.
+
+   tess.Rd
+   quadrats.Rd
+   quantess.Rd
+   venn.tess.Rd
+	Added cross-references.
+
+   kppm.R
+	Bug fix in update.kppm
+
+   tests/kppm.R
+	Test of bug in update.kppm
+	
+   affine.R
+   spatstat-internal.Rd
+	New function 'interpretAsOrigin'.
+
+   affine.R
+   images.R
+   psp.R
+   shift.Rd
+   shift.im.Rd
+   shift.owin.Rd
+   shift.ppp.Rd
+   shift.psp.Rd
+	New options for the argument 'origin' in shift methods.
+
+   DESCRIPTION
+   NEWS
+   spatstat-package.Rd
+        Acknowledged Luke Yates.
+        Version 1.58-2.039
+
+------------- passed R-3.5.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+

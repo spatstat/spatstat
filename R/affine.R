@@ -1,7 +1,7 @@
 #
 #	affine.R
 #
-#	$Revision: 1.50 $	$Date: 2017/10/24 01:02:35 $
+#	$Revision: 1.53 $	$Date: 2019/02/22 10:36:51 $
 #
 
 affinexy <- function(X, mat=diag(c(1,1)), vec=c(0,0), invert=FALSE) {
@@ -215,23 +215,13 @@ shiftxypolygon <- function(p, vec=c(0,0)) {
   return(p)
 }
 
-"shift.owin" <- function(X,  vec=c(0,0), ..., origin=NULL) {
+shift.owin <- function(X,  vec=c(0,0), ..., origin=NULL) {
   verifyclass(X, "owin")
   if(!is.null(origin)) {
     if(!missing(vec))
-      warning("argument vec ignored; overruled by argument origin")
-    if(is.numeric(origin)) {
-      locn <- origin
-    } else if(is.character(origin)) {
-      origin <- pickoption("origin", origin, c(centroid="centroid",
-                                               midpoint="midpoint",
-                                               bottomleft="bottomleft"))
-      locn <- switch(origin,
-                     centroid={ unlist(centroid.owin(X)) },
-                     midpoint={ c(mean(X$xrange), mean(X$yrange)) },
-                     bottomleft={ c(X$xrange[1L], X$yrange[1L]) })
-    } else stop("origin must be a character string or a numeric vector")
-    return(shift(X, -locn))
+      warning("argument vec ignored; argument origin has precedence")
+    locn <- interpretAsOrigin(origin, X)
+    vec <- -locn
   }
   vec <- as2vector(vec)
   # Shift the bounding box
@@ -258,23 +248,12 @@ shiftxypolygon <- function(p, vec=c(0,0)) {
   return(X)
 }
 
-"shift.ppp" <- function(X, vec=c(0,0), ..., origin=NULL) {
+shift.ppp <- function(X, vec=c(0,0), ..., origin=NULL) {
   verifyclass(X, "ppp")
   if(!is.null(origin)) {
     if(!missing(vec))
-      warning("argument vec ignored; overruled by argument origin")
-    if(is.numeric(origin)) {
-      locn <- origin
-    } else if(is.character(origin)) {
-      origin <- pickoption("origin", origin, c(centroid="centroid",
-                                               midpoint="midpoint",
-                                               bottomleft="bottomleft"))
-      W <- X$window
-      locn <- switch(origin,
-                     centroid={ unlist(centroid.owin(W)) },
-                     midpoint={ c(mean(W$xrange), mean(W$yrange)) },
-                     bottomleft={ c(W$xrange[1L], W$yrange[1L]) })
-    } else stop("origin must be a character string or a numeric vector")
+      warning("argument vec ignored; argument origin has precedence")
+    locn <- interpretAsOrigin(origin, Window(X))
     vec <- -locn
   }
   vec <- as2vector(vec)
@@ -305,6 +284,33 @@ putlastshift <- function(X, vec) {
   return(X)
 }
 
+interpretAsOrigin <- function(x, W) {
+  if(is.character(x)) {
+    x <- paste(x, collapse="")
+    x <- match.arg(x,
+                   c("centroid", "midpoint",
+                     "left", "right", "top", "bottom",
+                     "bottomleft", "bottomright",
+                     "topleft", "topright"))
+    W <- as.owin(W)
+    xr <- W$xrange
+    yr <- W$yrange
+    x <- switch(x,
+                centroid    = { unlist(centroid.owin(W)) },
+                midpoint    = { c(mean(xr), mean(yr)) },
+                left        = { c(xr[1L],   mean(yr)) },
+                right       = { c(xr[2L],   mean(yr)) },
+                top         = { c(mean(xr), yr[2L]) },
+                bottom      = { c(mean(xr), yr[1L]) },
+                bottomleft  = { c(xr[1L],   yr[1L]) },
+                bottomright = { c(xr[2L],   yr[1L]) },
+                topleft     = { c(xr[1L],   yr[2L]) },
+                topright    = { c(xr[2L],   yr[2L]) },
+                stop(paste("Unrecognised option",sQuote(x)),
+                     call.=FALSE))
+  } 
+  return(as2vector(x))
+}
 
 ### ---------------------- scalar dilation ---------------------------------
 
