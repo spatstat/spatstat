@@ -8,7 +8,8 @@ Ginhom <- function(X, lambda=NULL, lmin=NULL,
                    ...,
                    sigma=NULL, varcov=NULL,
                    r=NULL, breaks=NULL,
-                   ratio=FALSE, update = TRUE) {
+                   ratio=FALSE, update = TRUE,
+                   warn.bias=TRUE, savelambda=FALSE) {
   
   stopifnot(is.ppp(X))
 
@@ -78,6 +79,8 @@ Ginhom <- function(X, lambda=NULL, lmin=NULL,
   if(!is.null(lmin)) {
     check.1.real(lmin)
     stopifnot(lmin >= 0)
+    if(lmin >= min(lambdaX))
+      stop("lmin must be smaller than all values of lambda")
   } else {
     # Compute minimum value over window
     if(is.null(lambda)) {
@@ -102,17 +105,19 @@ Ginhom <- function(X, lambda=NULL, lmin=NULL,
     if(lmin < 0)
       stop("Negative values of intensity encountered")
     # ensure lmin < lambdaX
-    lmin <- min(lmin, lambdaX)
+    lmin <- min(lmin, 0.95 * min(lambdaX))
   }
-  # Compute intensity factor
+  ## Compute intensity factor
   lratio <- lmin/lambdaX
   vv <- 1 - lratio
-  bad <- (lratio > 1)
-  if((nbad <- sum(bad)) > 0)
-    stop(paste("Value of", sQuote("lmin"), "exceeds",
-               nbad, gettext(nbad, "value", "values"),
-               "of", sQuote("lambda")))
-   # sort data points in order of increasing x coordinate
+  if(warn.bias) {
+    ra <- range(lratio)
+    if(ra[1] < 1e-6 || ra[2] > 1 - 1e-6)
+      warning(paste("Possible bias: range of values of lmin/lambdaX is",
+                    prange(signif(ra, 5))),
+              call.=FALSE)
+  }
+  ## sort data points in order of increasing x coordinate
   xx <- X$x
   yy <- X$y
   oX <- fave.order(xx)
@@ -164,6 +169,10 @@ Ginhom <- function(X, lambda=NULL, lmin=NULL,
     G <- conform.ratfv(G)
   if(danger)
     attr(G, "dangerous") <- dangerous
+  if(savelambda) {
+    attr(G, "lambda") <- lambdaX
+    attr(G, "lmin") <- lmin
+  }
   return(G)
 }
 
@@ -174,7 +183,8 @@ Finhom <- function(X, lambda=NULL, lmin=NULL,
                    ...,
                    sigma=NULL, varcov=NULL,
                    r=NULL, breaks=NULL,
-                   ratio=FALSE, update = TRUE) {
+                   ratio=FALSE, update = TRUE,
+                   warn.bias=TRUE, savelambda=FALSE) {
   
   stopifnot(is.ppp(X))
 
@@ -244,6 +254,8 @@ Finhom <- function(X, lambda=NULL, lmin=NULL,
   if(!is.null(lmin)) {
     check.1.real(lmin)
     stopifnot(lmin >= 0)
+    if(lmin >= min(lambdaX))
+      stop("lmin must be smaller than all values of lambda")
   } else {
     # Compute minimum value over window
     if(is.null(lambda)) {
@@ -268,17 +280,19 @@ Finhom <- function(X, lambda=NULL, lmin=NULL,
     if(lmin < 0)
       stop("Negative values of intensity encountered")
     # ensure lmin < lambdaX
-    lmin <- min(lmin, lambdaX)
+    lmin <- min(lmin, 0.95 * min(lambdaX))
   }
   # Compute intensity factor
   lratio <- lmin/lambdaX
   vv <- 1 - lratio
-  bad <- (lratio > 1)
-  if((nbad <- sum(bad)) > 0)
-    stop(paste("Value of", sQuote("lmin"), "exceeds",
-               nbad, gettext(nbad, "value", "values"),
-               "of", sQuote("lambda")))
-  # sort data points in order of increasing x coordinate
+  if(warn.bias) {
+    ra <- range(lratio)
+    if(ra[1] < 1e-6 || ra[2] > 1 - 1e-6)
+      warning(paste("Possible bias: range of values of lmin/lambdaX is",
+                    prange(signif(ra, 5))),
+              call.=FALSE)
+  }
+  ## sort data points in order of increasing x coordinate
   xx <- X$x
   yy <- X$y
   oX <- fave.order(xx)
@@ -338,24 +352,39 @@ Finhom <- function(X, lambda=NULL, lmin=NULL,
     FX <- conform.ratfv(FX)
   if(danger)
     attr(FX, "dangerous") <- dangerous
+  if(savelambda) {
+    attr(FX, "lambda") <- lambdaX
+    attr(FX, "lmin") <- lmin
+  }
   return(FX)
 }
 
 Jinhom <- function(X, lambda=NULL, lmin=NULL,
                    ...,
                    sigma=NULL, varcov=NULL,
-                   r=NULL, breaks=NULL, update = TRUE) {
+                   r=NULL, breaks=NULL, update = TRUE,
+                   warn.bias=TRUE, savelambda=FALSE) {
   if(missing(update) & (is.ppm(lambda) || is.kppm(lambda) || is.dppm(lambda)))
     warn.once(key="Jinhom.update",
               "The behaviour of Jinhom when lambda is a ppm object",
               "has changed (in spatstat 1.37-0 and later).",
               "See help(Jinhom)")
-        
+
+  ## compute inhomogeneous G (including determination of r and lmin)
   GX <- Ginhom(X, lambda=lambda, lmin=lmin, ...,
-               sigma=sigma, varcov=varcov, r=r, breaks=breaks, ratio=FALSE, update=update)
+               sigma=sigma, varcov=varcov, r=r, breaks=breaks,
+               ratio=FALSE, update=update,
+               warn.bias=warn.bias,
+               savelambda=TRUE)
+  ## extract auxiliary values to be used for Finhom
   r <- GX$r
-  FX <- Finhom(X, lambda=lambda, lmin=lmin, ...,
-               sigma=sigma, varcov=varcov, r=r, ratio=FALSE, update=update)
+  lmin <- attr(GX, "lmin")
+  lambdaX <- attr(GX, "lambda")
+  ## compute inhomogeneous J using previously-determined values
+  FX <- Finhom(X, lambda=lambdaX, lmin=lmin, ...,
+               sigma=sigma, varcov=varcov, r=r, ratio=FALSE, update=update,
+               warn.bias=FALSE, savelambda=FALSE)
+  ## evaluate inhomogeneous J function
   JX <- eval.fv((1-GX)/(1-FX))
   # relabel the fv object
   JX <- rebadge.fv(JX, quote(J[inhom](r)), c("J","inhom"),
@@ -364,5 +393,9 @@ Jinhom <- function(X, lambda=NULL, lmin=NULL,
   attr(JX, "G") <- GX
   attr(JX, "F") <- FX
   attr(JX, "dangerous") <- attr(GX, "dangerous")
+  if(savelambda) {
+    attr(JX, "lmin") <- lmin
+    attr(JX, "lambda") <- lambdaX
+  }
   return(JX)
 }

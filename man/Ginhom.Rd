@@ -10,7 +10,8 @@
 \usage{
   Ginhom(X, lambda = NULL, lmin = NULL, ...,
         sigma = NULL, varcov = NULL,
-        r = NULL, breaks = NULL, ratio = FALSE, update = TRUE)
+        r = NULL, breaks = NULL, ratio = FALSE,
+        update = TRUE, warn.bias=TRUE, savelambda=FALSE)
 }
 \arguments{
   \item{X}{
@@ -68,6 +69,16 @@
     before the fitted intensity is computed.
     If \code{update=FALSE}, the fitted intensity of the
     model will be computed without fitting it to \code{X}.
+  }
+  \item{warn.bias}{
+    Logical value specifying whether to issue a warning
+    when the inhomogeneity correction factor takes extreme values,
+    which can often lead to biased results. This usually occurs
+    when insufficient smoothing is used to estimate the intensity.
+  }
+  \item{savelambda}{
+    Logical value specifying whether to save the values of
+    \code{lmin} and \code{lambda} as attributes of the result.
   }
 }
 \details{

@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.58-2.039
+        CHANGES IN spatstat VERSION 1.58-2.040
 
 OVERVIEW
 
@@ -8,6 +8,8 @@ OVERVIEW
     
     o Extensions to adaptive intensity estimators.
 
+    o 'Dartboard' tessellation using polar coordinates.
+    
     o Minor improvements and bug fixes.
 
     o Version nickname: "J'ai omis les oeufs de caille"
@@ -107,6 +109,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o shift.im, shift.owin, shift.ppp, shift.psp
     More options for the argument 'origin'.
+
+    o Finhom, Ginhom, Jinhom
+    A warning is issued if bias is likely to occur because of undersmoothing.
+    New arguments 'warn.bias' and 'savelambda'.
     
 BUG FIXES
 

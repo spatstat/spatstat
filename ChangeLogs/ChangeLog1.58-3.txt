@@ -818,3 +818,19 @@ Change log from 1.58-2 to 1.58-3
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+23 feb 2019
+
+   Jinhom.R
+   Jinhom.Rd
+   Ginhom.Rd
+   Finhom.Rd
+	New arguments warn.bias and savelambda.
+	Issues a warning if bias is likely due to undersmoothing.
+
+   NEWS
+   spatstat-package.Rd
+        Version 1.58-2.040
+
+------------- passed R-3.5.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
