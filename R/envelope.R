@@ -3,7 +3,7 @@
 #
 #   computes simulation envelopes 
 #
-#   $Revision: 2.86 $  $Date: 2017/06/05 10:31:58 $
+#   $Revision: 2.87 $  $Date: 2019/02/26 09:10:36 $
 #
 
 envelope <- function(Y, fun, ...) {
@@ -1130,20 +1130,18 @@ envelope.matrix <- function(Y, ...,
     # assume funX is summary function for observed data
     rvals <- with(funX, .x)
     observed <- with(funX, .y)
-    theory <-
-      if(use.theory && "theo" %in% names(funX)) with(funX, theo) else NULL
+    theory <- if(use.theory) funX[["theo"]] else NULL
+    if(check) stopifnot(nrow(funX) == nrow(Y)) 
   } else if(check) {
     # validate vectors of data
     if(is.null(rvals)) stop("rvals must be supplied")
     if(is.null(observed)) stop("observed must be supplied")
-    if(!is.null(Y)) stopifnot(length(rvals) == nrow(Y))
+    stopifnot(length(rvals) == nrow(Y))
     stopifnot(length(observed) == length(rvals))
   }
 
-  if(use.theory) {
-    use.theory <- !is.null(theory)
-    if(use.theory && check) stopifnot(length(theory) == length(rvals))
-  }
+  use.theory <- use.theory && !is.null(theory)
+  if(use.theory && check) stopifnot(length(theory) == length(rvals))
 
   simvals <- Y
   fX <- observed
@@ -1605,8 +1603,9 @@ envelope.matrix <- function(Y, ...,
 
   # tack on saved functions
   if(savefuns) {
-    alldata <- cbind(rvals, simvals)
-    simnames <- paste("sim", 1:nsim, sep="")
+    nSim <- ncol(Y)
+    alldata <- cbind(rvals, Y)
+    simnames <- paste("sim", 1:nSim, sep="")
     colnames(alldata) <- c("r", simnames)
     alldata <- as.data.frame(alldata)
     SimFuns <- fv(alldata,
@@ -1617,7 +1616,7 @@ envelope.matrix <- function(Y, ...,
                   alim=atr$alim,
                   labl=names(alldata),
                   desc=c("distance argument r",
-                          paste("Simulation ", 1:nsim, sep="")),
+                          paste("Simulation ", 1:nSim, sep="")),
                   unitname=unitname(funX))
     fvnames(SimFuns, ".") <- simnames
     attr(result, "simfuns") <- SimFuns

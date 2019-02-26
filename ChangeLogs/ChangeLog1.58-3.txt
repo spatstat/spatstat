@@ -827,10 +827,26 @@ Change log from 1.58-2 to 1.58-3
 	New arguments warn.bias and savelambda.
 	Issues a warning if bias is likely due to undersmoothing.
 
+   DESCRIPTION
    NEWS
-   spatstat-package.Rd
         Version 1.58-2.040
 
 ------------- passed R-3.5.2 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
+
+26 feb 2019
+
+   envelope.R
+	envelope.matrix now saves all simulated function values
+	rather than just the values used to compute the envelope.
+
+   DESCRIPTION
+   NEWS
+        Version 1.58-2.041
+
+------------- passed R-3.5.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+	
