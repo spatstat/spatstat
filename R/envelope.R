@@ -3,7 +3,7 @@
 #
 #   computes simulation envelopes 
 #
-#   $Revision: 2.87 $  $Date: 2019/02/26 09:10:36 $
+#   $Revision: 2.89 $  $Date: 2019/02/27 09:20:20 $
 #
 
 envelope <- function(Y, fun, ...) {
@@ -407,7 +407,7 @@ envelopeEngine <-
     # simulation is specified by argument `simulate' to envelope()
     simulate <- simul
     # which should be an expression, or a list of point patterns,
-    # or an envelope object.
+    # or an envelope object, or a function to be applied to the data
     csr <- FALSE
     # override
     if(!is.null(icsr <- internal$csr)) csr <- icsr
@@ -425,10 +425,15 @@ envelopeEngine <-
                    "any saved point patterns."))
     }
     if(is.expression(simulate)) {
-      # The user-supplied expression 'simulate' will be evaluated repeatedly
+      ## The user-supplied expression 'simulate' will be evaluated repeatedly
       simtype <- "expr"
       simexpr <- simulate
       envir <- envir.user
+    } else if(is.function(simulate)) {
+      ## User-supplied function 'simulate' will be repeatedly evaluated on X
+      simtype <- "func"
+      simexpr <- expression(simulate(X))
+      envir <- envir.here
     } else if(is.list(simulate) &&
               all(sapply(simulate, inherits, what=Xclass))) {
       # The user-supplied list of point patterns will be used
@@ -463,6 +468,8 @@ envelopeEngine <-
              kppm=stop(paste("Internal error: simulate.kppm did not return an",
                Xobjectname)),
              expr=stop(paste("Evaluating the expression", sQuote("simulate"),
+               "did not yield an", Xobjectname)),
+             func=stop(paste("Evaluating the function", sQuote("simulate"),
                "did not yield an", Xobjectname)),
              list=stop(paste("Internal error: list entry was not an",
                Xobjectname)),
@@ -609,6 +616,7 @@ envelopeEngine <-
                           "model"),
                         kppm = "simulated realisations of fitted cluster model",
                         expr = "simulations by evaluating expression",
+                        func = "simulations by evaluating function",
                         list = "point patterns from list",
                         "simulated realisations")
       if(!is.null(constraints) && nzchar(constraints))
@@ -638,6 +646,10 @@ envelopeEngine <-
                },
                expr={
                  stop(paste("Evaluating the expression", sQuote("simulate"),
+                            "did not yield an", Xobjectname))
+               },
+               func={
+                 stop(paste("Evaluating the function", sQuote("simulate"),
                             "did not yield an", Xobjectname))
                },
                list={
@@ -694,6 +706,7 @@ envelopeEngine <-
                         "model"),
                       kppm = "simulated realisations of fitted cluster model",
                       expr = "simulations by evaluating expression",
+                      func = "simulations by evaluating function",
                       list = "point patterns from list",
                       "simulated patterns")
     if(!is.null(constraints) && nzchar(constraints))
@@ -747,6 +760,8 @@ envelopeEngine <-
                  "simulate.kppm did not return an",
                  Xobjectname)),
                expr=stop(paste("Evaluating the expression", sQuote("simulate"),
+                 "did not yield an", Xobjectname)),
+               func=stop(paste("Evaluating the function", sQuote("simulate"),
                  "did not yield an", Xobjectname)),
                list=stop(paste("Internal error: list entry was not an",
                  Xobjectname)),
@@ -949,6 +964,7 @@ print.envelope <- function(x, ...) {
                "model"),
              kppm="simulations of fitted cluster model",
              expr="evaluations of user-supplied expression",
+             func="evaluations of user-supplied function",
              list="point pattern datasets in user-supplied list",
              funs="columns of user-supplied data")
     } else "simulations of fitted model"
@@ -1017,6 +1033,7 @@ summary.envelope <- function(object, ...) {
                "model"),
              kppm="simulations of fitted cluster model",
              expr="evaluations of user-supplied expression",
+             func="evaluations of user-supplied function",
              list="point pattern datasets in user-supplied list",
              funs="columns of user-supplied data",
              "simulated point patterns")

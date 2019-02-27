@@ -49,6 +49,9 @@
     expression will be evaluated \code{nsim} times,
     to obtain \code{nsim} point patterns which are taken as the
     simulated patterns from which the envelopes are computed.
+    If \code{simulate} is a function, then this function will be
+    repeatedly applied to the data pattern \code{Y} to obtain
+    \code{nsim} simulated patterns.
     If \code{simulate} is a list of point patterns, then the entries
     in this list will be treated as the simulated patterns from which
     the envelopes are computed.

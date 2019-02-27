@@ -1,7 +1,7 @@
 #
 #  dclftest.R
 #
-#  $Revision: 1.36 $  $Date: 2017/12/30 05:10:25 $
+#  $Revision: 1.38 $  $Date: 2019/02/27 08:51:51 $
 #
 #  Monte Carlo tests for CSR (etc)
 #
@@ -306,6 +306,7 @@ envelopeTest <-
                "model"),
              kppm = "fitted cluster model",
              expr = "model simulated by evaluating expression",
+             func = "model simulated by evaluating function",
              list = "model simulated by drawing patterns from a list",
              "unrecognised model")
     } else "unrecognised model"

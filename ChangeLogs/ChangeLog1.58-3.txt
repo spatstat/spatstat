@@ -849,4 +849,19 @@ Change log from 1.58-2 to 1.58-3
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
-	
+27 feb 2019
+
+   envelope.R
+   dclftest.R
+   envelope.Rd
+   envelope.lpp.Rd
+   envelope.pp3.Rd
+	Argument 'simulate' can now be a function such as 'rlabel'.
+
+   DESCRIPTION
+   NEWS
+        Version 1.58-2.042
+
+------------- passed R-3.5.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------

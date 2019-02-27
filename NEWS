@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.58-2.041
+        CHANGES IN spatstat VERSION 1.58-2.042
 
 OVERVIEW
 
@@ -45,6 +45,11 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o latest.news
     Now prints news documentation for the current major version, by default.
     New argument 'major'.
+
+    o envelope
+    The argument 'simulate' can now be a function (such as 'rlabel').
+    The function will be applied repeatedly to the original data Y,
+    and should yield point patterns of the same kind.
     
     o adaptive.density
     This function can now perform adaptive estimation by two methods: either
