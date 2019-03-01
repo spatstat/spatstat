@@ -305,6 +305,26 @@ of potential impact.
   \subsection{Bugs, Substantially Incorrect, Moderate Impact}
 
   \begin{itemize}
+    
+  \item \texttt{ppp}:
+    Points inside the window were erroneously rejected as lying outside
+    the window, if the window was a polygon equivalent to a rectangle
+    with sides longer than $10^6$ units.
+     {\small (Bug was present since the beginning.
+       Fixed in \texttt{spatstat 1.59-0}, march 2019)}
+    
+  \item \texttt{inside.owin}:
+    All results were \texttt{FALSE}
+    if the window was a polygon equivalent to a rectangle
+    with sides longer than $10^6$ units.
+     {\small (Bug was present since the beginning.
+       Fixed in \texttt{spatstat 1.59-0}, march 2019)}
+     
+   \item \texttt{sumouter}:
+     result was incorrect (all entries were zero)
+     if \texttt{w} was missing and \texttt{y} was given.
+     \bugger{1.47-0}{october 2016}{1.59-0}{march 2019}
+     
    \item \texttt{simulate.dppm}, \texttt{simulate.detpointprocfamily}:
     In dimensions higher than 2, the result was shifted so that
     it was centred at the origin.
@@ -393,13 +413,33 @@ of potential impact.
  %% LEVEL 4: 
  \subsection{Partially Incorrect}
  \begin{itemize}
+   
+ 
+ \item \texttt{beachcolours}, \texttt{beachcolourmap}:
+   The number of colours was not always equal to \texttt{ncolours}.
+   \bugger{1.32-0}{august 2013}{1.59-0}{march 2019}
 
+ \item \texttt{extractbranch.lpp}:
+   Point pattern coordinates were sometimes erroneously set to \texttt{NA}.
+   \bugger{1.42-0}{may 2015}{1.59-0}{march 2019}
+   
  \item \texttt{rotmean}:
        When \texttt{result="im"}
        the resulting image did not have the same dimensions
        as the input.
    \bugger{1.42-2}{june 2015}{1.58-0}{january 2019}   
-       
+
+ \item \texttt{quadratcount.ppp}:
+   Sometimes issued an incorrect warning that data points were 
+   outside the tessellation, when \texttt{tess} was a tessellation
+   represented by a pixel image.
+   {\small (Bug fixed in \texttt{spatstat 1.59-0}, march 2019)}   
+   
+ \item \texttt{quadrat.test}:
+   the $p$-value was \texttt{NA} if one of the observed counts was zero,
+   for the Cressie-Read tests with \texttt{CR} not equal to $1$ or $-1$.
+   \bugger{1.38-0}{august 2014}{1.59-0}{march 2019}
+   
  \item \texttt{rotmean}:
     If argument \texttt{origin} was given, and if \texttt{result="im"}
     was specified,

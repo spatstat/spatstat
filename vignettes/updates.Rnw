@@ -172,6 +172,10 @@ the News and Release Notes for each update.
 
   \item \spst\ now suggests the package \pkg{fftwtools}.
 
+  \item Extensions to adaptive intensity estimators
+
+  \item `Dartboard' tessellation using polar coordinates.
+    
    \item Standard error calculation for inverse-distance weighting.
      
    \item Kernel estimate of intensity as a \texttt{function(x,y)}.
@@ -431,6 +435,18 @@ Following is a list of all the functions that have been added.
 
 \begin{itemize}
   
+  \item \texttt{polartess}: tessellation using polar coordinates.
+
+  \item \texttt{coords.quad}: method for \texttt{coords}, to extract the 
+    coordinates of the points in a quadrature scheme.
+    
+  \item \texttt{densityVoronoi}: adaptive estimate of point process intensity
+    using tessellation methods. 
+  
+  \item \texttt{lineartileindex}: low-level function to classify points
+    on a linear network according to which tile of a tessellation they
+    fall inside.
+    
     \item \texttt{markmarkscatter}: Mark--mark scatterplot.
       
     \item \texttt{bw.CvL}: Cronie-van Lieshout bandwidth selection
@@ -1018,6 +1034,13 @@ listed alphabetically.
 
 \begin{itemize}
 %%A
+  
+\item \texttt{adaptive.density}:
+  This function can now perform adaptive estimation by two methods: either
+  tessellation-based methods or variable-bandwidth kernel estimation.
+  The calculations are performed by either \texttt{densityVoronoi} or
+  \texttt{densityAdaptiveKernel}.
+  
 \item \texttt{affine.owin}:
   Allows transformation matrix to be singular, if the window is polygonal.
 
@@ -1052,6 +1075,7 @@ listed alphabetically.
 \begin{itemize}
 \item New argument \texttt{values} specifies the function value for each tile.
 \item New argument \texttt{navalue}.
+    \item Computation accelerated.
 \end{itemize}
 
 \item \texttt{as.linim.default}:
@@ -1059,8 +1083,13 @@ listed alphabetically.
    in internal data.
 
   \item \texttt{as.linnet.psp}:
-If the line segment pattern has marks, then the resulting linear network
-also carries these marks in the \verb!$lines! component.
+    \begin{itemize}
+    \item 
+      If the line segment pattern has marks, then the resulting linear network
+      also carries these marks in the \verb!$lines! component.
+    \item Computation accelerated.
+    \end{itemize}
+
 
 \item \texttt{as.owin.default}:
   \begin{itemize}
@@ -1092,6 +1121,9 @@ also carries these marks in the \verb!$lines! component.
 
  \item \texttt{bdist.points}:
    Accelerated for polygonal windows. 
+
+ \item \texttt{beachcolours}, \texttt{beachcolourmap}:
+   Improved positioning of the yellow colour band.
    
  \item \texttt{bind.fv}:
    New argument \texttt{clip}.
@@ -1107,6 +1139,11 @@ also carries these marks in the \verb!$lines! component.
    
   \item \texttt{bw.scott}: the two bandwidth values in the result
     now have names \texttt{sigma.x} and \texttt{sigma.y}.
+
+  \item \texttt{bw.stoyan}: The rule has been modified so that, 
+    if the pattern is empty,
+    it is now treated as if it contained 1 point,
+    so that a finite bandwidth value is returned.
     
 %%C
  \item \texttt{cdf.test}:
@@ -1162,6 +1199,7 @@ also carries these marks in the \verb!$lines! component.
     in the minimum contrast algorithm. Individually-named arguments
     \texttt{q,p,rmax,rmin} now take precedence over entries
     with the same names in the list \texttt{ctrl}.
+  \item New argument \texttt{verbose}.
   \end{itemize}
 
 \item \texttt{collapse.fv}:
@@ -1330,6 +1368,10 @@ also carries these marks in the \verb!$lines! component.
    \item 
      New argument \texttt{funYargs} contains arguments to the summary function
      when applied to the data pattern only.
+   \item 
+     The argument \texttt{simulate} can now be a function
+     (such as \texttt{rlabel}). The function will be applied repeatedly
+     to the original data pattern.
    \end{itemize}
 
  \item \texttt{envelope.lpp}, \texttt{envelope.lppm}:
@@ -1348,6 +1390,15 @@ also carries these marks in the \verb!$lines! component.
  \item \texttt{Fest}:
    Additional checks for errors in input data.
 
+ \item \texttt{Finhom}:
+   \begin{itemize}
+   \item 
+     A warning is issued if bias is likely to occur because of
+     undersmoothing.
+   \item 
+     New arguments \texttt{warn.bias} and \texttt{savelambda}.
+   \end{itemize}
+   
  \item \texttt{fitted.lppm}:
   New argument \texttt{leaveoneout}
   allows leave-one-out computation of fitted value.
@@ -1360,15 +1411,32 @@ also carries these marks in the \verb!$lines! component.
 
   
   \item \texttt{funxy}:
+    \begin{itemize}
+    \item 
     When the user calls a function that was created by \texttt{funxy},
     the user may now give a \texttt{ppp} or \texttt{lpp}
     object for the argument \texttt{x},
     instead of giving two coordinate vectors \texttt{x} and \texttt{y}.
+  \item 
+    Functions of class \texttt{"funxy"} can now be applied to
+    quadrature schemes.
+    \end{itemize}
+
 
 %%G
     
   \item \texttt{Geyer}:
    The saturation parameter \texttt{sat} can now be less than 1.
+   
+ \item \texttt{Ginhom}:
+   \begin{itemize}
+   \item 
+     A warning is issued if bias is likely to occur because of
+     undersmoothing.
+   \item 
+     New arguments \texttt{warn.bias} and \texttt{savelambda}.
+   \end{itemize}
+   
    
    \item \texttt{grow.rectangle}:
      New argument \texttt{fraction}.
@@ -1435,6 +1503,17 @@ also carries these marks in the \verb!$lines! component.
 
    
 %%J
+   
+ \item \texttt{Jinhom}:
+   \begin{itemize}
+   \item 
+     A warning is issued if bias is likely to occur because of
+     undersmoothing.
+   \item 
+     New arguments \texttt{warn.bias} and \texttt{savelambda}.
+   \end{itemize}
+   
+   
 %%K
 
  \item \texttt{Kcross.inhom}, \texttt{Kdot.inhom}, \texttt{Kmulti.inhom}:
@@ -1487,6 +1566,11 @@ also carries these marks in the \verb!$lines! component.
   
 %%L
    
+  
+\item \texttt{latest.news}: 
+  Now prints news documentation for the current major version, by default.
+  New argument \texttt{major}.
+  
  \item \texttt{Lcross.inhom}, \texttt{Ldot.inhom}:
     These functions now allow intensity values to be given by
     a fitted point process model.
@@ -1578,9 +1662,15 @@ also carries these marks in the \verb!$lines! component.
  \item \texttt{logLik.mppm}: new argument \texttt{warn}.
    
  \item \texttt{lohboot}:
-    Algorithm has been corrected and extended
+   \begin{itemize}
+   \item 
+     Algorithm has been corrected and extended
     thanks to Christophe Biscio and Rasmus Waagepetersen.
+  \item
     New arguments \texttt{block}, \texttt{basicboot}, \texttt{Vcorrection}.
+  \item 
+    Accelerated when the window is a rectangle.
+   \end{itemize}
 
  \item \texttt{lpp}:
    \begin{itemize}
@@ -1643,6 +1733,9 @@ also carries these marks in the \verb!$lines! component.
    \end{itemize}
 
    
+ \item \texttt{nncorr,nnmean,nnvario}:
+   New argument \texttt{na.action}.
+   
  \item \texttt{nndist.lpp, nnwhich.lpp, nncross.lpp, distfun.lpp}:
    New argument \texttt{k} allows computation of $k$-th nearest point.
    Computation accelerated.
@@ -1654,6 +1747,10 @@ also carries these marks in the \verb!$lines! component.
  \item \texttt{padimage}:
    New argument \texttt{W} allows an image to be padded out to fill any window.
 
+   
+ \item \texttt{pairorient}: Default edge corrections now include 
+   \texttt{"bord.modif"}.
+   
  \item \texttt{pcf.ppp}:
    \begin{itemize}
    \item
@@ -1668,6 +1765,7 @@ also carries these marks in the \verb!$lines! component.
      Now returns the smoothing bandwidth used, as an attribute of the result.
    \item 
      New argument \texttt{close} for advanced use.
+   \item Now accepts \texttt{correction="none"}.
    \end{itemize}
 
 
@@ -1913,6 +2011,9 @@ also carries these marks in the \verb!$lines! component.
        instead of causing a fatal error.
        \end{itemize}
 
+  \item \texttt{pp3}:
+    New argument \texttt{marks}.
+    
   \item \texttt{predict.kppm, residuals.kppm}
    Now issues a warning when the calculation ignores the 
    cluster/Cox component and treats the model as if it were Poisson.
@@ -1979,6 +2080,14 @@ also carries these marks in the \verb!$lines! component.
    \item \texttt{rcellnumber}:
      New argument \texttt{mu}.
 
+   \item \texttt{rebound.owin}: Now preserves unitnames of the objects.
+
+     
+   \item \texttt{rescale.owin}, \texttt{rescale.ppp}, \texttt{rescale.psp}:
+     The geometrical type of the window is now preserved in all cases.
+     (Previously if the window was polygonal but was equivalent to a 
+     rectangle, the rescaled window was a rectangle.)
+     
    \item \texttt{rgbim, hsvim}:
    New argument \texttt{A} controls the alpha (transparency) channel.
 
@@ -2094,7 +2203,24 @@ also carries these marks in the \verb!$lines! component.
    	New argument \code{drop}.
 	
 %%S   
+        
+      \item \texttt{selfcut.psp}:
+        \begin{itemize}
+        \item Computation accelerated.
+        \item The result now has an attribute \texttt{"camefrom"}
+          indicating the provenance of each segment in the result.
+        \end{itemize}
+        
   \item \texttt{setcov}: the name of the unit of length is preserved.
+
+   \item \code{shapley}:
+    In this installed dataset, the function \code{shapley.extra\$plotit}
+    has changed slightly (to accommodate the
+    dependence on the package \pkg{spatstat.utils}).
+
+  \item \texttt{shift.im}, \texttt{shift.owin},
+    \texttt{shift.ppp}, \texttt{shift.psp}:
+    More options for the argument \texttt{origin}.
 
   \item Simulation:
    Several basic simulation algorithms have been accelerated.
@@ -2104,11 +2230,6 @@ also carries these marks in the \verb!$lines! component.
    versions of spatstat, revert to the slower code by setting
    \texttt{spatstat.options(fastthin=FALSE, fastpois=FALSE)}.
 
-   \item \code{shapley}:
-    In this installed dataset, the function \code{shapley.extra\$plotit}
-    has changed slightly (to accommodate the
-    dependence on the package \pkg{spatstat.utils}).
-   
    \item \texttt{simulate.ppm}
    New argument \texttt{w} controls the window of the simulated patterns.
    New argument \texttt{verbose}.

@@ -1,7 +1,7 @@
 #
 #  is.subset.owin.R
 #
-#  $Revision: 1.14 $   $Date: 2017/02/07 07:47:20 $
+#  $Revision: 1.16 $   $Date: 2019/03/01 06:02:27 $
 #
 #  Determine whether a window is a subset of another window
 #
@@ -47,23 +47,23 @@ is.subset.owin <- local({
     }
 
     if(!is.mask(A) && !is.mask(B)) {
-      # rectangles or polygonal domains
+      ## rectangles or polygonal domains
       if(!all(inside.owin(vertices(A), , B)))
         return(FALSE)
-      # all vertices of A are inside B.
-      if(is.convex(B))
+      ## all vertices of A are inside B.
+      if(is.convex(B)) return(TRUE)
+      ## check for boundary crossings
+      bx <- crossing.psp(edges(A), edges(B))
+      if(npoints(bx) > 0) return(FALSE)
+      ## Absence of boundary crossings is sufficient if B has no holes
+      if(length(B$bdry) == 1 || !any(sapply(B$bdry, is.hole.xypolygon)))
         return(TRUE)
-      A <- as.polygonal(A)
-      B <- as.polygonal(B)
-      if(length(B$bdry) == 1 && length(A$bdry) == 1) {
-        # two simply-connected sets 
-        # check for boundary crossings
-        bx <- crossing.psp(edges(A), edges(B))
-        return(npoints(bx) == 0)
-      } else {
-        # compare area of intersection with area of A
-        return(overlap.owin(A,B) >= area(A))
-      }
+      ## Compare area of intersection with area of putative subset
+      ## (these are subject to numerical rounding error)
+      areaA <- area(A)
+      if(overlap.owin(A,B) >= areaA ||
+         overlap.owin(B,A) >= areaA) return(TRUE)
+      ## continue...
     }
   
    # Discretise

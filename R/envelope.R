@@ -3,7 +3,7 @@
 #
 #   computes simulation envelopes 
 #
-#   $Revision: 2.89 $  $Date: 2019/02/27 09:20:20 $
+#   $Revision: 2.90 $  $Date: 2019/03/01 03:49:35 $
 #
 
 envelope <- function(Y, fun, ...) {
@@ -1705,11 +1705,11 @@ envelope.envelope <- function(Y, fun=NULL, ...,
                                             weights=wt),
                                        .StripNull=TRUE))
   } else {
-    # compute new envelope with existing simulated functions
+    #' compute new envelope with existing simulated functions
     if(is.null(sf)) 
       stop(paste("Y does not contain a", dQuote("simfuns"), "attribute",
                  "(it was not generated with savefuns=TRUE)"))
-
+    
     if(!is.null(transform)) {
       # Apply transformation to Y and sf
       stopifnot(is.expression(transform))
@@ -1721,6 +1721,24 @@ envelope.envelope <- function(Y, fun=NULL, ...,
       sf <- eval(cc)
     }
 
+    #' catch discrepancy between domains of observed and simulated functions
+    if(nrow(sf) != nrow(Y)) {
+      rrsim <- sf[[fvnames(sf, ".x")]]
+      rrobs <- Y[[fvnames(Y, ".x")]]
+      ra <- intersect.ranges(range(rrsim), range(rrobs))
+      delta <- min(mean(diff(rrsim)), mean(diff(rrobs)))/2
+      oksim <- (rrsim >= ra[1] - delta) & (rrsim <= ra[2] + delta)
+      okobs <- (rrobs >= ra[1] - delta) & (rrobs <= ra[2] + delta)
+      if(sum(oksim) != sum(okobs))
+        stop("Internal error: Unable to reconcile the domains",
+             "of the observed and simulated functions", call.=FALSE)
+      if(mean(abs(rrsim[oksim] - rrobs[okobs])) > delta)
+        stop("Internal error: Unable to reconcile the r values",
+             "of the observed and simulated functions", call.=FALSE)
+      sf <- sf[oksim, ,drop=FALSE]
+      Y  <- Y[okobs,  ,drop=FALSE]
+    }
+    
     # extract simulated function values
     df <- as.data.frame(sf)
     rname <- fvnames(sf, ".x")

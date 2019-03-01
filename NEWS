@@ -1,10 +1,11 @@
 
-        CHANGES IN spatstat VERSION 1.58-2.042
+        CHANGES IN spatstat VERSION 1.58-2.043
 
 OVERVIEW
 
     o We thank Lucia Cobo Sanchez, Tilman Davies, Maximilian Hesselbarth,
-    Kassel Hingee, Mehdi Moradi, Suman Rakshit and Luke Yates for contributions.
+    Kassel Hingee, Mehdi Moradi, Suman Rakshit, Jan Sulavik
+    and Luke Yates for contributions.
     
     o Extensions to adaptive intensity estimators.
 
@@ -115,6 +116,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o shift.im, shift.owin, shift.ppp, shift.psp
     More options for the argument 'origin'.
 
+    o is.subset.owin
+    Improved robustness against numerical error.
+    
     o Finhom, Ginhom, Jinhom
     A warning is issued if bias is likely to occur because of undersmoothing.
     New arguments 'warn.bias' and 'savelambda'.
@@ -147,6 +151,11 @@ BUG FIXES
     [Spotted by Tilman Davies.]
     Fixed.
 
+    o is.subset.owin
+    Sometimes gave the wrong answer for polygonal windows
+    due to numerical rounding error.
+    Fixed.
+    
     o update.kppm
     Crashed if the updating information was a point pattern
     and the original model call did not include a formula.
@@ -219,6 +228,11 @@ BUG FIXES
     o plot.linfun
     Did not display factor-valued functions correctly.
     Spotted by Suman Rakshit.
+    Fixed.
+
+    o dclf.test, mad.test
+    Crashed, in rare cases, when applied to an 'envelope' object.
+    Spotted by Jan Sulavik.
     Fixed.
     
         CHANGES IN spatstat VERSION 1.58-2

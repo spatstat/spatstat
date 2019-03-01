@@ -26,11 +26,10 @@
   and manipulate.
 
   \code{f} should be a \code{function} in the \R language,
-  with formal arguments \code{f(x,y,seg,tp)} or 
-  \code{f(x,y,seg,tp, \dots)} where \code{x,y} are
+  with formal arguments \code{x,y,seg,tp} (and optional additional
+  arguments) where \code{x,y} are
   Cartesian coordinates of locations on the linear network,
-  \code{seg, tp} are the local coordinates, and
-  \code{\dots} are optional additional arguments.
+  \code{seg, tp} are the local coordinates. 
   
   The function \code{f} should be vectorised: that is,
   if \code{x,y,seg,tp} are numeric vectors of the same length
@@ -38,15 +37,19 @@
   should be a vector of length \code{n}.
 
   \code{L} should be a linear network (object of class \code{"linnet"})
-  inside which the function \code{f} is well-defined.
+  on which the function \code{f} is well-defined.
 
   The result is a function \code{g} in the \R language which belongs to
-  the special class \code{"linfun"}. This function
-  can be called as \code{g(X)} where \code{X} is an \code{"lpp"} object,
-  or called as \code{g(x,y)} or \code{g(x,y,seg,tp)} where
-  \code{x,y,seg,tp} are coordinates. There are several methods
+  the special class \code{"linfun"}. There are several methods
   for this class including \code{print}, \code{plot}
   and \code{\link{as.linim}}.
+
+  This function can be called as \code{g(X)}
+  where \code{X} is an \code{"lpp"} object,
+  or called as \code{g(x,y)} or \code{g(x,y,seg,tp)} where
+  \code{x,y,seg,tp} are coordinates. If the original function \code{f}
+  had additional arguments, then these may be included in the call
+  to \code{g}, and will be passed to \code{f}.
 }
 \value{
   A function in the \R\ language.
@@ -61,13 +64,22 @@
   \code{\link{nnfun.lpp}}.
 }
 \examples{
-  f <- linfun(function(x,y,seg,tp) { x+y }, simplenet)
-  plot(f)
+  f <- function(x,y,seg,tp) { x+y }
+  g <- linfun(f, simplenet)
+  plot(g)
   X <- runiflpp(3, simplenet)
-  plot(X, add=TRUE, cex=2)
-  f(X)
+  g(X)
+  Z <- as.linim(g)
+
+  f <- function(x,y,seg,tp, mul=1) { mul*(x+y) }
+  g <- linfun(f, simplenet)
+  plot(g)
+  plot(g, mul=10)
+  g(X, mul=10)
+  Z <- as.linim(g, mul=10)
 }
-\author{\adrian
+\author{
+  \adrian
   and \rolf
 }
 \keyword{spatial}

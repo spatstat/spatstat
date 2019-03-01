@@ -825,7 +825,7 @@ Change log from 1.58-2 to 1.58-3
    Ginhom.Rd
    Finhom.Rd
 	New arguments warn.bias and savelambda.
-	Issues a warning if bias is likely due to undersmoothing.
+	Issues a warning if bias is likely, due to undersmoothing.
 
    DESCRIPTION
    NEWS
@@ -865,3 +865,32 @@ Change log from 1.58-2 to 1.58-3
 ------------- passed R-3.5.2 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
+
+28 feb 2019
+
+   linfun.Rd
+	Improved explanation of additional arguments.
+
+   updates.Rnw
+   bugfixes.Rnw
+	Documented all of the above.
+
+01 march 2019
+
+   envelope.R
+	Bug fix
+
+   is.subset.owin.R
+	Bug fix
+	
+   DESCRIPTION
+   NEWS
+   spatstat-package.Rd
+	Acknowledged Jan Sulavik
+        Version 1.58-2.043
+
+------------- passed R-3.5.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+
