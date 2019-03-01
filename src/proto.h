@@ -151,7 +151,7 @@ void linndxcross(int *, double *, double *, int *, double *, double *, int *, do
 void nndistsort(int *, double *, double *, double *, double *); 
 void knndsort(int *, int *, double *, double *, double *, double *); 
 void nnwhichsort(int *, double *, double *, int *, double *); 
-void knnsort(int *, int *, double *, double *, double *, int *, double *);
+void knnwhich(int *, int *, double *, double *, int *, double *);
 void Clinvwhichdist(int *, int *, double *, int *, int *, int *, int *, double *, double *, double *, double *, int *); 
 void linvknndist(int *, int *, int *, double *, int *, int *, int *, int *, double *, double *, double *, double *, int *);
 void nnGinterface(int *, double *, double *, int *, double *, double *, int *, double *, double *, int *, int *, double *, int *, double *); 

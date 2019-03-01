@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.58-2.043
+        CHANGES IN spatstat VERSION 1.58-2.044
 
 OVERVIEW
 
@@ -116,6 +116,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o shift.im, shift.owin, shift.ppp, shift.psp
     More options for the argument 'origin'.
 
+    o nnwhich.ppp, nnwhich.default
+    Accelerated, in the case k > 1.
+    
     o is.subset.owin
     Improved robustness against numerical error.
     

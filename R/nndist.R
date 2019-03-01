@@ -3,7 +3,7 @@
 #
 #   nearest neighbour distances (nndist) and identifiers (nnwhich)
 #
-#   $Revision: 1.9 $ $Date: 2018/09/28 04:51:45 $
+#   $Revision: 1.10 $ $Date: 2019/03/01 10:15:04 $
 #
 
 nndist <- function(X, ...) {
@@ -325,12 +325,11 @@ nnwhich.default <-
              nnw <- matrix(integer(n * kmaxcalc), nrow=n, ncol=kmaxcalc)
              o <- fave.order(y)
              big <- sqrt(.Machine$double.xmax)
-             z<- .C("knnsort",
+             z<- .C("knnwhich",
                     n = as.integer(n),
                     kmax = as.integer(kmaxcalc),
                     x = as.double(x[o]),
                     y = as.double(y[o]),
-                    nnd = as.double(numeric(n * kmaxcalc)),
                     nnwhich = as.integer(nnw),
                     huge = as.double(big),
                     PACKAGE = "spatstat")
