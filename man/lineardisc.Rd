@@ -12,7 +12,7 @@
   lineardisc(L, x = locator(1), r, plotit = TRUE,
              cols=c("blue", "red","green"))
 
-  countends(L, x = locator(1), r, toler=NULL)
+  countends(L, x = locator(1), r, toler=NULL, internal=list())
 }
 \arguments{
   \item{L}{
@@ -38,6 +38,7 @@
     Optional. Distance threshold for \code{countends}. See Details.
     There is a sensible default.
   }
+  \item{internal}{Argument for internal use by the package.}
 }
 \details{
   The \sQuote{disc} \eqn{B(u,r)} of centre \eqn{x} and radius \eqn{r}

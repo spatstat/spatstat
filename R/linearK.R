@@ -1,7 +1,7 @@
 #
 # linearK
 #
-# $Revision: 1.50 $ $Date: 2018/10/19 03:49:29 $
+# $Revision: 1.55 $ $Date: 2019/03/04 07:55:50 $
 #
 # K function for point pattern on linear network
 #
@@ -197,21 +197,15 @@ linearKengine <- function(X, ..., r=NULL, reweight=NULL, denom=1,
     attr(K, "correction") <- correction
     return(K)
   }
-  if(correction == "none")
-     edgewt <- 1
-  else {
-     # inverse m weights (Wei's correction)
-     # determine tolerance
-     toler <- default.linnet.tolerance(L)
-     # compute m[i,j]
-     m <- matrix(1, np, np)
-     for(j in 1:np) 
-       m[ -j, j] <- countends(L, X[-j], D[-j,j], toler=toler)
-     if(any(uhoh <- (m == 0) & is.finite(D))) {
-       warning("Internal error: disc boundary count equal to zero")
-       m[uhoh] <- 1
-     }
-     edgewt <- 1/m
+  if(correction == "none") {
+    edgewt <- 1
+  } else {
+    ## inverse m weights (Wei's correction)
+    ## determine tolerance
+    toler <- default.linnet.tolerance(L)
+    ## compute m[i,j]
+    m <- DoCountEnds(X, D, toler)
+    edgewt <- 1/m
   }
   # compute K
   wt <- if(!is.null(reweight)) edgewt * reweight else edgewt
@@ -280,5 +274,49 @@ ApplyConnected <- function(X, Engine, r=NULL,
                                  list(weights=denoms,
 				      relabel=FALSE, variance=FALSE)))
   return(result)
+}
+
+DoCountEnds <- function(X, D, toler) {
+  stopifnot(is.lpp(X))
+  stopifnot(is.matrix(D))
+  nX <- npoints(X)
+  if(nrow(D) != nX) stopifnot(nrow(D) == npoints(X))
+  if(ncol(D) != nX) stopifnot(ncol(D) == npoints(X))
+  m <- matrix(1, nX, nX)
+  easy <- list(is.connected=TRUE)
+  L <- domain(X)
+  if(is.connected(L)) {
+    ## network is connected
+    for(j in 1:nX) {
+      m[ -j, j] <- countends(L, X[-j], D[-j,j], toler=toler, internal=easy)
+    }
+  } else {
+    ## network is disconnected - split into components
+    vlab <- connected(L, what="labels")
+    subsets <- split(seq_len(nvertices(L)), factor(vlab))
+    for(subi in subsets) {
+      ## extract one component and the points falling in it
+      Xsubi <- thinNetwork(X, retainvertices=subi)
+      ni <- npoints(Xsubi)
+      if(ni >= 2) {
+        Lsubi <- domain(Xsubi)
+        ## identify which points of X are involved
+        imap <- which(attr(Xsubi, "retainpoints"))
+        ## handle
+        for(j in seq_len(ni)) {
+          ij <- imap[j]
+          i.j <- imap[-j]
+          m[ i.j, ij ] <- countends(Lsubi, Xsubi[-j], D[i.j, ij],
+                                    toler=toler,
+                                    internal=easy)
+        }
+      }
+    }
+  }
+  if(any(uhoh <- (m == 0) & is.finite(D))) {
+    warning("Internal error: disc boundary count equal to zero")
+    m[uhoh] <- 1
+  }
+  return(m)
 }
 

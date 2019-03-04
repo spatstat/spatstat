@@ -2,7 +2,7 @@
 #
 #   disc.R
 #
-#   $Revision: 1.28 $ $Date: 2018/03/23 01:26:43 $
+#   $Revision: 1.29 $ $Date: 2019/03/04 04:32:29 $
 #
 #   Compute the disc of radius r in a linear network
 #
@@ -143,7 +143,7 @@ lineardisc <- function(L, x=locator(1), r, plotit=TRUE,
   return(list(lines=disclines, endpoints=discends))
 }
 
-countends <- function(L, x=locator(1), r, toler=NULL) {
+countends <- function(L, x=locator(1), r, toler=NULL, internal=list()) {
   # L is the linear network (object of class "linnet")
   # x is the centre point of the disc
   # r is the radius of the disc
@@ -164,11 +164,13 @@ countends <- function(L, x=locator(1), r, toler=NULL) {
   
   if(length(r) != np)
     stop("Length of vector r does not match number of points in x")
-  #
-  if(!is.connected(L)) {
+  
+  ## determine whether network is connected
+  iscon <- internal$is.connected %orifnull% is.connected(L)
+  if(!iscon) {
     #' disconnected network - split into components
     result <- numeric(np)
-    lab <- connected(L, what="labels")
+    lab <- internal$connected.labels %orifnull% connected(L, what="labels")
     subsets <- split(seq_len(nvertices(L)), factor(lab))
     for(subi in subsets) {
       xi <- thinNetwork(x, retainvertices=subi)
@@ -176,7 +178,8 @@ countends <- function(L, x=locator(1), r, toler=NULL) {
       ok <- is.finite(r[witch])
       witchok <- witch[ok]
       result[witchok] <-
-        countends(domain(xi), xi[ok], r[witchok], toler=toler)      
+        countends(domain(xi), xi[ok], r[witchok], toler=toler,
+                  internal=list(is.connected=TRUE))      
     }
     return(result)
   }

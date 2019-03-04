@@ -1,7 +1,7 @@
 #
 # linearKmulti
 #
-# $Revision: 1.13 $ $Date: 2017/02/07 08:12:05 $
+# $Revision: 1.16 $ $Date: 2019/03/04 07:49:33 $
 #
 # K functions for multitype point pattern on linear network
 #
@@ -247,29 +247,15 @@ linearKmultiEngine <- function(X, I, J, ..., r=NULL, reweight=NULL, denom=1,
     attr(K, "correction") <- correction
     return(K)
   }
-  if(correction == "none")
+  if(correction == "none") {
      edgewt <- 1
-  else {
-     # inverse m weights (Ang's correction)
-     # determine tolerance
-     toler <- default.linnet.tolerance(L)
-     # compute m[i,j]
-     m <- matrix(1, nI, nJ)
-     XI <- X[I]
-     if(!has.clash) {
-       for(k in seq_len(nJ)) {
-         j <- whichJ[k]
-         m[,k] <- countends(L, XI, DIJ[, k], toler=toler)
-       }
-     } else {
-       # don't count identical pairs
-       for(k in seq_len(nJ)) {
-         j <- whichJ[k]
-         inotj <- (whichI != j)
-         m[inotj, k] <- countends(L, XI[inotj], DIJ[inotj, k], toler=toler)
-       }
-     }
-     edgewt <- 1/m
+  } else {
+    ## inverse m weights (Ang's correction)
+    ## determine tolerance
+    toler <- default.linnet.tolerance(L)
+    ## compute m[i,j]
+    m <- DoCountCrossEnds(X, I, J, DIJ, toler)
+    edgewt <- 1/m
   }
   # compute K
   wt <- if(!is.null(reweight)) edgewt * reweight else edgewt
@@ -289,5 +275,66 @@ linearKmultiEngine <- function(X, I, J, ..., r=NULL, reweight=NULL, denom=1,
     attr(K, "working") <- list(DIJ=DIJ, wt=wt)
   attr(K, "correction") <- correction
   return(K)
+}
+
+DoCountCrossEnds <- function(X, I, J, DIJ, toler) {
+  stopifnot(is.lpp(X))
+  stopifnot(is.logical(I) && is.logical(J))
+  stopifnot(is.matrix(DIJ))
+  nI <- sum(I)
+  nJ <- sum(J)
+  whichI <- which(I)
+  whichJ <- which(J)
+  m <- matrix(1, nI, nJ)
+  easy <- list(is.connected=TRUE)
+  L <- domain(X)
+  if(is.connected(L)) {
+    ## network is connected
+    for(k in seq_len(nJ)) {
+      j <- whichJ[k]
+      I.j <- (whichI != j)
+      i.j <- setdiff(whichI, j)
+      m[I.j, k] <- countends(L, X[i.j], DIJ[I.j,k],
+                              toler=toler, internal=easy)
+    }
+  } else {
+    ## network is disconnected - split into components
+    vlab <- connected(L, what="labels")
+    subsets <- split(seq_len(nvertices(L)), factor(vlab))
+    for(s in subsets) {
+      ## extract one component and the points falling in it
+      Xs <- thinNetwork(X, retainvertices=s)
+      ns <- npoints(Xs)
+      if(ns >= 2) {
+        Ls <- domain(Xs)
+        ## identify which points of X are involved
+        relevant <- attr(Xs, "retainpoints")
+        Xindex <- which(relevant)
+        ## classify them
+        Isub <- I[relevant]
+        Jsub <- J[relevant]
+        ## identify relevant submatrix of DIJ
+        rowsub <- relevant[I]
+        colsub <- relevant[J]
+        ## corresponding indices in X
+        rowXindex <- whichI[rowsub]
+        colXindex <- whichJ[colsub]
+        ## handle
+        for(k in which(colsub)) {
+          j <- whichJ[k]
+          I.j <- rowsub & (whichI != j)
+          i.j <- Isub & (Xindex != j)
+          m[ I.j, k ] <- countends(Ls, Xs[i.j], DIJ[I.j, k],
+                                   toler=toler,
+                                   internal=easy)
+        }
+      }
+    }
+  }
+  if(any(uhoh <- (m == 0) & is.finite(DIJ))) {
+    warning("Internal error: disc boundary count equal to zero")
+    m[uhoh] <- 1
+  }
+  return(m)
 }
 

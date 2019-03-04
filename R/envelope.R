@@ -3,7 +3,7 @@
 #
 #   computes simulation envelopes 
 #
-#   $Revision: 2.90 $  $Date: 2019/03/01 03:49:35 $
+#   $Revision: 2.91 $  $Date: 2019/03/04 04:33:12 $
 #
 
 envelope <- function(Y, fun, ...) {
@@ -779,8 +779,8 @@ envelopeEngine <-
           stop("weightfun should return a single numeric value")
         weights[i] <- wti
       }
-      # apply function safely
-      funXsim <- try(do.call(fun, append(list(Xsim), funargs)))
+      ## apply function safely
+      funXsim <- try(do.call(fun, c(list(Xsim), funargs)))
 
       ok <- !inherits(funXsim, "try-error")
       

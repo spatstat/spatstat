@@ -106,6 +106,8 @@
 \alias{default.n.tiling}
 \alias{default.ntile}
 \alias{deltasuffstat}
+\alias{DoCountCrossEnds}
+\alias{DoCountEnds}
 \alias{Deviation}
 \alias{dfbetas.ppmInfluence}
 \alias{dflt.redraw}
@@ -885,6 +887,8 @@ default.ntile(X)
 deltasuffstat(model, \dots,
               restrict, dataonly, sparseOK, quadsub,
               force, warn.forced, verbose, use.special)
+DoCountEnds(X, D, toler)
+DoCountCrossEnds(X, I, J, DIJ, toler)
 Deviation(x, ref, leaveout, n, xi)
 \method{dfbetas}{ppmInfluence}(model, \dots)
 dflt.redraw(button, name, env)
