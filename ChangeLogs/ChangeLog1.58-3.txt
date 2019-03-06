@@ -904,13 +904,14 @@ Change log from 1.58-2 to 1.58-3
    linearKmulti.R
    spatstat-internal.Rd
 	New internal functions 'DoCountEnds', 'DoCountCrossEnds'
-	use the shortcut.
+	use the shortcut when the network is disconnected.
 	
    linearK.R
    linearpcf.R
 	Use DoCountEnds.
 
    linearKmulti.R
+   linearpcfmulti.R
 	Use DoCountCrossEnds.
 
    DESCRIPTION
@@ -921,4 +922,22 @@ Change log from 1.58-2 to 1.58-3
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+   bugfixes.Rnw
+	Typo.
+
+   bw.abram.R [New file]
+   bw.abram.Rd [New file]
+   	Abramson bandwidths.
+
+   densityAdaptiveKernel.R
+   densityAdaptiveKernel.Rd
+	These are now the adaptive density estimates
+
+   DESCRIPTION
+   NEWS
+        Version 1.58-2.046
+
+------------- passed R-3.5.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
 

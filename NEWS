@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.58-2.045
+        CHANGES IN spatstat VERSION 1.58-2.046
 
 OVERVIEW
 
@@ -10,6 +10,8 @@ OVERVIEW
     o Extensions to adaptive intensity estimators.
 
     o 'Dartboard' tessellation using polar coordinates.
+
+    o Performance improvements for linear networks code.
     
     o Minor improvements and bug fixes.
 
@@ -17,6 +19,9 @@ OVERVIEW
     
 NEW FUNCTIONS
 
+    o bw.abram
+    Variable bandwidths for adaptive smoothing, using Abramson's Rule.
+    
     o polartess
     Tessellation using polar coordinates.
     
@@ -89,6 +94,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o beachcolours, beachcolourmap
     Improved positioning of the yellow colour band.
 
+    o linearK, linearpcf, linearKdot, linearKcross, linearpcfcross, linearpcfdot
+    Computation accelerated for networks which are not connected.
+    
     o as.linnet.psp
     Computation accelerated.
 

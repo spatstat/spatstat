@@ -392,7 +392,7 @@ of potential impact.
 
  \item \texttt{kernel.moment}:
    Result was incorrect for \texttt{kernel="cosine"} 
-   and \texttt{kernel="cosine"}.
+   and \texttt{kernel="optcosine"}.
    \bugger{1.45-2}{may 2016}{1.56-0}{june 2018}   
    
  \item \verb![.msr!:

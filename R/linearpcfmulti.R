@@ -1,7 +1,7 @@
 #
 # linearpcfmulti.R
 #
-# $Revision: 1.12 $ $Date: 2017/02/07 08:12:05 $
+# $Revision: 1.13 $ $Date: 2019/03/04 08:39:25 $
 #
 # pair correlation functions for multitype point pattern on linear network
 #
@@ -248,29 +248,15 @@ linearPCFmultiEngine <- function(X, I, J, ..., r=NULL, reweight=NULL, denom=1,
     attr(g, "correction") <- correction
     return(g)
   }
-  if(correction == "none")
+  if(correction == "none") {
      edgewt <- 1
-  else {
-     # inverse m weights (Ang's correction)
-     # determine tolerance
-     toler <- default.linnet.tolerance(L)
-     # compute m[i,j]
-     m <- matrix(1, nI, nJ)
-     XI <- X[I]
-     if(!has.clash) {
-       for(k in seq_len(nJ)) {
-         j <- whichJ[k]
-         m[,k] <- countends(L, XI, DIJ[, k], toler=toler)
-       }
-     } else {
-       # don't count identical pairs
-       for(k in seq_len(nJ)) {
-         j <- whichJ[k]
-         inotj <- (whichI != j)
-         m[inotj, k] <- countends(L, XI[inotj], DIJ[inotj, k], toler=toler)
-       }
-     }
-     edgewt <- 1/m
+  } else {
+    ## inverse m weights (Ang's correction)
+    ## determine tolerance
+    toler <- default.linnet.tolerance(L)
+    ## compute m[i,j]
+    m <- DoCountCrossEnds(X, I, J, DIJ, toler)
+    edgewt <- 1/m
   }
   # compute pcf
   wt <- if(!is.null(reweight)) edgewt * reweight else edgewt
