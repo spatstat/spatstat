@@ -10,10 +10,9 @@
 densityAdaptiveKernel(X, \dots)
 
 \method{densityAdaptiveKernel}{ppp}(X, bw, \dots,
-       bwrange = range(bw), 
-       edge=TRUE, diggle=TRUE, weights=NULL, ngroups=NULL,
-       nbw = 64, what = c("smooth", "all"),
-       ncoarse=NULL, taperfac=c(5,10), verbose=TRUE)
+       weights=NULL,       
+       at=c("pixels", "points"),
+       edge=TRUE, ngroups) 
 }
 \arguments{
   \item{X}{
@@ -22,74 +21,58 @@ densityAdaptiveKernel(X, \dots)
   \item{bw}{
     Numeric vector of smoothing bandwidths for each point in \code{X},
     or a pixel image giving the smoothing bandwidth at each spatial
-    location.
-    If missing, a bandwidth image is computed using
-    \code{\link{bw.abram}}.
-  }
-  \item{bwrange}{
-    Range of possible bandwidths. A numeric vector of length 2
-    giving the minimum and maximum possible bandwidths.
+    location, or a spatial function of class \code{"funxy"} giving the
+    smoothing bandwidth at each location.
+    The default is to compute bandwidths using \code{\link{bw.abram}}.
   }
   \item{\dots}{
-    Arguments passed to \code{\link[spatstat]{as.mask}}
-    controlling the spatial resolution, or passed to
-    \code{\link{bw.abram}} to compute the smoothing bandwidths.
+    Arguments passed to
+    \code{\link{bw.abram}} to compute the smoothing bandwidths,
+    or passed to \code{\link[spatstat]{as.mask}}
+    to control the spatial resolution.
   }
   \item{weights}{
     Optional vector of numeric weights for the points of \code{X}.
   }
-  \item{ngroups}{
-    Optional.
-    Number of groups into which the bandwidth values should be partitioned.
-    If \code{ngroups = NULL} (the default) the bandwidths are not partitioned,
-    and the entire calculation is performed in one step.
-    If \code{ngroups} is given, the bandwidths are partitioned into
-    quantiles and the calculation is performed separately for each
-    quantile group.
-  }
-  \item{nbw}{
-    Integer. Total number of different bandwidth values 
-    in the discretised grid.
-  }
-  \item{what}{
-    Character string specifying whether to return only the final result,
-    the variable-bandwidth kernel estimate of intensity
-    (\code{what="smooth"}, the default)
-    or a list containing many interim results of the calculation
-    as well as this final result (\code{what="all"}).
+  \item{at}{
+    String specifying whether to compute the intensity values
+    at a grid of pixel locations (\code{at="pixels"}) or
+    only at the points of \code{x} (\code{at="points"}).
   }
   \item{edge}{
     Logical value indicating whether to perform edge correction.
   }
-  \item{diggle}{
-    Logical value indicating whether to use the analogue of
-    Diggle's edge correction (\code{diggle=TRUE}, the default) or the
-    uniform edge correction (\code{diggle=FALSE}).
-  }
-  \item{ncoarse}{
-    Numeric vector of length 3 providing the dimensions of
-    a coarser 3D grid upon which the edge-correction factors
-    should be computed, in the order of \code{c(nx,ny,nh)}.
-  }
-  \item{taperfac}{
-    Positive numeric vector of length 2 providing control factors for
-    the bandwidth tapering function; \code{[1]} for the lower taper,
-    \code{[2]} for the upper taper.
-  }
-  \item{verbose}{
-    Logical value indicating whether to print progress reports.
+  \item{ngroups}{
+    Number of groups into which the bandwidth values should be
+    partitioned and discretised.
   }
 }
 \details{
   To be written.
+
+  Uses the splitting technique of Davies and Baddeley (2018).
 }
 \value{
-  If \code{what="smooth"} (the default), the result is a pixel image.
-  If \code{what="all"}, the result is a named list containing interim
-  results of the calculation.
+  If \code{at="pixels"} (the default), the result is a pixel image.
+  If \code{at="points"}, the result is a numeric vector with one entry
+  for each data point in \code{X}.
 }
 \author{
-  Tilman Davies and \adrian.
+  \adrian and Tilman Davies.
+}
+\references{
+  Davies, T.M. and Baddeley, A. (2018)
+  Fast computation of spatially adaptive kernel estimates.
+  \emph{Statistics and Computing}, \bold{28}(4), 937-956.\cr
+
+  Hall, P. and Marron, J.S. (1988)
+  Variable window width kernel density estimates of probability
+  densities.
+  \emph{Probability Theory and Related Fields}, \bold{80}, 37-49.\cr
+
+  Silverman, B.W. (1986)
+  \emph{Density Estimation for Statistics and Data Analysis}.
+  Chapman and Hall, New York.
 }
 \seealso{
   \code{\link{density.ppp}},
@@ -98,9 +81,7 @@ densityAdaptiveKernel(X, \dots)
   \code{\link{im.object}}.
 }
 \examples{
-  h0 <- bw.abram(redwood,h0=0.1,hp=0.07, at="pixels")
-  nbw <- if(interactive()) 64 else 16
-  Z <- densityAdaptiveKernel(redwood, h0, nbw=nbw)
+  Z <- densityAdaptiveKernel(redwood, h0=0.1)
   plot(Z, main="Adaptive kernel estimate")
   points(redwood, col="white")
 }

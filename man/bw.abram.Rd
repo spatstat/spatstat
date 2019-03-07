@@ -9,7 +9,7 @@
 }
 \usage{
 bw.abram(X, h0, at=c("points", "pixels"),
-         \dots, hp = NULL, pilot = NULL, trim=5)
+         \dots, hp = h0, pilot = NULL, trim=5)
 }
 \arguments{
   \item{X}{
@@ -19,6 +19,7 @@ bw.abram(X, h0, at=c("points", "pixels"),
   \item{h0}{
     A scalar value giving the global smoothing bandwidth
     in the same units as the coordinates of \code{X}.
+    The default is \code{h0=\link{bw.ppl}(X)}.
   }
   \item{at}{
     Character string (partially matched) specifying whether
@@ -38,7 +39,8 @@ bw.abram(X, h0, at=c("points", "pixels"),
     (object of class \code{"im"}); see below.
   }
   \item{pilot}{
-    Optional. Specification of a pilot density.
+    Optional. Specification of a pilot density
+    (possibly unnormalised).
     If \code{pilot=NULL} (the default) the pilot density
     is computed using a fixed-bandwidth estimate based
     on \code{X} and \code{hp}.
@@ -46,10 +48,8 @@ bw.abram(X, h0, at=c("points", "pixels"),
     is computed using a fixed-bandwidth estimate based
     on \code{pilot} and \code{hp}.
     If \code{pilot} is a pixel image (object of class \code{"im"}),
-    the function assumes this to be the (possibly unnormalised)
-    pilot density and \code{hp} is ignored.
-    In both the latter two cases the function performs a basic check
-    to ensure the spatial domains are the same as that of \code{X}.
+    this is taken to be the (possibly unnormalised)
+    pilot density, and \code{hp} is ignored.
   }
   \item{trim}{
     A trimming value required to curb excessively large bandwidths.
@@ -75,20 +75,32 @@ bw.abram(X, h0, at=c("points", "pixels"),
   1988), to necessarily prevent occassionally massive bandwidths (which
   can occur at very isolated observations).
 
-  The pilot density may be directly supplied to the \code{pilot} argument
-  as a pixel image; otherwise it is computed as a fixed-bandwidth kernel
-  density estimate using the pilot bandwidth \code{hp}. This calculation
-  may either use the same observations as in \code{X}, or a different
-  pattern on the same spatial domain (performed when \code{pilot} is
-  passed a spatial point pattern object).
+  The pilot density or intensity is determined as follows:
+  \itemize{
+    \item If \code{pilot} is a pixel image, this is taken as the
+    pilot density or intensity.
+    \item If \code{pilot} is \code{NULL}, then the pilot intensity is
+    computed as a fixed-bandwidth kernel
+    intensity estimate using \code{\link{density.ppp}} applied to
+    the data pattern \code{X} using
+    the pilot bandwidth \code{hp}. 
+    \item
+    If \code{pilot} is a different point pattern on the same spatial
+    domain as \code{X}, then the pilot intensity is
+    computed as a fixed-bandwidth kernel
+    intensity estimate using \code{\link{density.ppp}} applied to
+    \code{pilot}.
+  }
+  In each case the pilot density or intensity is renormalised to
+  become a probability density, and then the Abramson rule is applied.
 }
 \value{
   Either a numeric vector of length \code{npoints(X)}
   giving the Abramson bandwidth for each point
-  (when \code{returnim = FALSE}, the default),
+  (when \code{at = "points"}, the default),
   or the entire pixel \code{\link[spatstat]{im}}age
   of the Abramson bandwidths over the relevant spatial domain
-  (when \code{returnim = TRUE}).
+  (when \code{at = "pixels"}).
 }
 \references{
   Abramson, I. (1982)

@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.58-2.046
+        CHANGES IN spatstat VERSION 1.58-2.047
 
 OVERVIEW
 
@@ -19,15 +19,11 @@ OVERVIEW
     
 NEW FUNCTIONS
 
-    o bw.abram
-    Variable bandwidths for adaptive smoothing, using Abramson's Rule.
-    
     o polartess
     Tessellation using polar coordinates.
     
-    o coords.quad
-    New method for 'coords', to extract the coordinates of the points
-    in a quadrature scheme.
+    o bw.abram
+    Variable bandwidths for adaptive smoothing, using Abramson's Rule.
     
     o densityAdaptiveKernel
     Calculates adaptive estimate of point process intensity
@@ -42,6 +38,10 @@ NEW FUNCTIONS
     Voronoi or smoothed Voronoi estimator of intensity
     for point pattern on a linear network.
 
+    o coords.quad
+    New method for 'coords', to extract the coordinates of the points
+    in a quadrature scheme.
+    
     o lineartileindex
     Low-level function to classify points on a linear network
     according to which tile of a tessellation they fall inside.

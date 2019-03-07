@@ -3,47 +3,43 @@
 #'
 #'   Abramson bandwidths
 #'
-#'   $Revision: 1.3 $ $Date: 2019/03/05 06:41:39 $
+#'   $Revision: 1.6 $ $Date: 2019/03/07 02:46:08 $
 #'
 
 bw.abram <- function(X, h0, 
                      at=c("points", "pixels"), ...,
-                     hp=NULL, pilot=NULL, trim=5){
+                     hp=h0, pilot=NULL, trim=5){
   stopifnot(is.ppp(X))
-  check.1.real(h0)
-  check.1.real(trim)
   at <- match.arg(at)
-  
-  stopifnot(h0 > 0)
+
+  if(missing(h0) || is.null(h0)) {
+    h0 <- bw.ppl(X)
+  } else {
+    check.1.real(h0)
+    stopifnot(h0 > 0)
+  }
+
+  check.1.real(trim)
   stopifnot(trim > 0)
   
-  pd <- pilot
-  imwin <- as.im(Window(X), ...)
   pilot.data <- X
+  imwin <- as.im(Window(X), ...)
   
-  if(!is.null(pd)){
-    if(is.im(pd)){
-      if(!compatible.im(imwin,pd))
-        stop("'X' and 'pilot' have incompatible spatial domains", call.=FALSE)
-      pilot[pd<=0] <- min(pd[pd>0]) # clip the worst small values away
-      hp <- NULL
-    } else if(is.ppp(pd)){
-      if(!compatible.im(imwin,as.im(Window(pd), ...)))
-        stop("'X' and 'pilot' have incompatible spatial domains", call.=FALSE)
-      pilot.data <- pd
-    } else {
-      stop("if supplied, 'pilot' must be a pixel image or a point pattern",
-           call.=FALSE)
-    }
-  }
+  if(is.im(pilot)){
+    if(!compatible.im(imwin,pilot))
+      stop("'X' and 'pilot' have incompatible spatial domains", call.=FALSE)
+    #' clip the worst small values away
+    pilot[pilot<=0] <- min(pilot[pilot>0]) 
+  } else if(is.ppp(pilot)){
+    if(!compatible.im(imwin,as.im(Window(pilot), ...)))
+      stop("'X' and 'pilot' have incompatible spatial domains", call.=FALSE)
+    pilot.data <- pilot
+  } else if(!is.null(pilot))
+    stop("if supplied, 'pilot' must be a pixel image or a point pattern",
+         call.=FALSE)
   
-  if(!is.im(pilot)){
-    if(is.null(hp))
-      stop(paste("pilot bandwidth 'hp' is required when 'pilot' is",
-                 "unsupplied or given as point pattern"),
-           call.=FALSE)
+  if(!is.im(pilot))
     pilot <- density(pilot.data,sigma=hp,positive=TRUE,...)
-  }
   
   pilot <- pilot/integral(pilot) # scale to probability density
   pilotvalues <- safelookup(pilot, pilot.data, warn=FALSE)

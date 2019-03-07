@@ -941,3 +941,22 @@ Change log from 1.58-2 to 1.58-3
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+07 mar 2018
+
+   bw.abram.R
+   bw.abram.Rd
+	Changed defaults.
+
+   densityAdaptiveKernel.R
+   densityAdaptiveKernel.Rd
+	Rewritten to use only the simple 'observation-specific bandwidths'
+
+   DESCRIPTION
+   NEWS
+        Version 1.58-2.047
+
+------------- passed R-3.5.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+
