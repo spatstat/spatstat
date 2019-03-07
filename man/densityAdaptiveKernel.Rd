@@ -48,9 +48,46 @@ densityAdaptiveKernel(X, \dots)
   }
 }
 \details{
-  To be written.
+  This function computes a spatially-adaptive kernel estimate of the
+  spatially-varying intensity from the point pattern \code{X}
+  using the partitioning technique of Davies and Baddeley (2018).
 
-  Uses the splitting technique of Davies and Baddeley (2018).
+  The argument \code{bw} specifies the smoothing bandwidths to be
+  applied to each of the points in \code{X}. It may be a numeric vector
+  of bandwidth values, or a pixel image or function yielding the
+  bandwidth values.
+
+  If the points of \code{X} are \eqn{x_1,\ldots,x_n}{x[1], ..., x[n]}
+  and the corresponding bandwidths are
+  \eqn{\sigma_1,\ldots,\sigma_n}{\sigma[1], ..., \sigma[n]}
+  then the adaptive kernel estimate of intensity at a location \eqn{u} is
+  \deqn{
+    \hat\lambda(u) = \sum_{i=1}^n k(u, x_i, \sigma_i)
+  }{
+    \lambda(u) = sum[i] e(x[i], k(u, x[i], \sigma[i])
+  }
+  where \eqn{k(u, v, \sigma)} is the value at \eqn{u}
+  of the (possibly edge-corrected) smoothing kernel with bandwidth \eqn{\sigma}
+  induced by a data point at \eqn{v}.
+
+  Exact computation of the estimate above can be time-consuming:
+  it takes \eqn{n} times longer than fixed-bandwidth smoothing.
+  
+  The partitioning method of Davies and Baddeley (2018)
+  accelerates this computation by partitioning the range of
+  bandwidths into \code{ngroups} intervals,
+  correspondingly subdividing the points of the pattern \code{X} into
+  \code{ngroups} sub-patterns according to bandwidth,
+  and applying fixed-bandwidth smoothing to each sub-pattern.
+
+  The default value of \code{ngroups} is the integer part of the square root of
+  the number of points in \code{X}, so that the computation time is
+  only about \eqn{\sqrt{n}}{sqrt(n)} times slower than fixed-bandwidth
+  smoothing. Any positive value of \code{ngroups}
+  can be specified by the user. Specifying \code{ngroups=Inf} enforces exact
+  computation of the estimate without partitioning. Specifying
+  \code{ngroups=1} is the same as fixed-bandwidth smoothing with
+  bandwidth \code{sigma=median(bw)}.
 }
 \value{
   If \code{at="pixels"} (the default), the result is a pixel image.

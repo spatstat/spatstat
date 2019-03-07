@@ -644,6 +644,11 @@ of potential impact.
 
   \item \verb![.linim!: the result sometimes had the wrong class.
   \bugger{1.53-0}{september 2017}{1.55-1}{april 2015}
+
+\item \verb!is.subset.owin!: sometimes gave the wrong result for polygonal
+  windows due to numerical rounding error.
+   {\small (Bug was always present.
+     Fixed in \texttt{spatstat 1.59-0}, march 2019)}
 \end{itemize}
 
 \begin{thebibliography}{1}

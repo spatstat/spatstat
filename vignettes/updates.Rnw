@@ -437,12 +437,18 @@ Following is a list of all the functions that have been added.
   
   \item \texttt{polartess}: tessellation using polar coordinates.
 
-  \item \texttt{coords.quad}: method for \texttt{coords}, to extract the 
-    coordinates of the points in a quadrature scheme.
-    
   \item \texttt{densityVoronoi}: adaptive estimate of point process intensity
     using tessellation methods. 
   
+  \item \texttt{densityAdaptiveKernel}: adaptive estimate of point process
+    intensity using variable kernel methods.
+    
+  \item \texttt{bw.abram}: compute adaptive smoothing bandwidths using
+    Abramson's rule.
+  
+  \item \texttt{coords.quad}: method for \texttt{coords}, to extract the 
+    coordinates of the points in a quadrature scheme.
+    
   \item \texttt{lineartileindex}: low-level function to classify points
     on a linear network according to which tile of a tessellation they
     fall inside.

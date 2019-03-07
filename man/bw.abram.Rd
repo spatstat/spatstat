@@ -57,22 +57,29 @@ bw.abram(X, h0, at=c("points", "pixels"),
   }
 }
 \details{
-  This function is based on the results of Abramson (1982)
-  and Hall and Marron (1988) for computation of adaptive bandwidths
-  attached to each observation in \code{X}.
+  This function computes adaptive smoothing bandwidths
+  using the methods of Abramson (1982) and Hall and Marron (1988).
 
-  Under this framework, we have \cr
+  If \code{at="points"} (the default) a smoothing bandwidth is
+  computed for each point in the pattern \code{X}. Alternatively if
+  \code{at="pixels"} a smoothing bandwidth is computed for
+  each spatial location in a pixel grid.
 
-  \eqn{h(u) =} \code{h0} * min[ \eqn{\tilde{f}(u)^{-1/2} / \gamma}, \code{trim} ],
-
+  Under the Abramson-Hall-Marron rule, the bandwidth at location \eqn{u} is
+  \deqn{
+    h(u) = \mbox{\texttt{h0}}
+    * \mbox{min}[ \frac{\tilde{f}(u)^{-1/2}}{\gamma}, \mbox{\texttt{trim}} ]
+  }{
+    h(u) = h0 * min(\tilde{f}(u)^{-1/2}/\gamma, trim)
+  }
   where \eqn{\tilde{f}(u)} is a pilot estimate of the spatially varying
-  density. The variable bandwidths are rescaled by \eqn{\gamma}, the
+  probability density. The variable bandwidths are rescaled by \eqn{\gamma}, the
   geometric mean of the \eqn{\tilde{f}(u)^{-1/2}} terms evaluated at the
   data; this allows the global bandwidth \code{h0} to be considered on
   the same scale as a corresponding fixed bandwidth. The trimming value
   \code{trim} has the same interpretation as the required `clipping' of
-  the pilot density at some small nominal value (see Hall & Marron,
-  1988), to necessarily prevent occassionally massive bandwidths (which
+  the pilot density at some small nominal value (see Hall and Marron,
+  1988), to necessarily prevent extreme bandwidths (which
   can occur at very isolated observations).
 
   The pilot density or intensity is determined as follows:

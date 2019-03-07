@@ -959,4 +959,19 @@ Change log from 1.58-2 to 1.58-3
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+   bw.abram.Rd
+   densityAdaptiveKernel.Rd
+	Polished.
+
+   bugfixes.Rnw
+   updates.Rnw
+	updated to cover all the above.
+	
+   DESCRIPTION
+   NEWS
+        Version 1.58-2.048
+
+------------- passed R-3.5.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
 
