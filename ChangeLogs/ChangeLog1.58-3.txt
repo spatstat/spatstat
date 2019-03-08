@@ -975,3 +975,15 @@ Change log from 1.58-2 to 1.58-3
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+08 mar 2019
+
+   densityAdaptiveKernel.Rd
+	Polished.
+
+   DESCRIPTION
+   NEWS
+        Version 1.58-2.049
+
+------------- passed R-3.5.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------

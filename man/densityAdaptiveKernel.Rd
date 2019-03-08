@@ -16,7 +16,7 @@ densityAdaptiveKernel(X, \dots)
 }
 \arguments{
   \item{X}{
-    Point pattern in two dimensions.
+    Point pattern (object of class \code{"ppp"}).
   }
   \item{bw}{
     Numeric vector of smoothing bandwidths for each point in \code{X},
@@ -27,9 +27,10 @@ densityAdaptiveKernel(X, \dots)
   }
   \item{\dots}{
     Arguments passed to
-    \code{\link{bw.abram}} to compute the smoothing bandwidths,
+    \code{\link{bw.abram}} to compute the smoothing bandwidths
+    if \code{bw} is missing,
     or passed to \code{\link[spatstat]{as.mask}}
-    to control the spatial resolution.
+    to control the spatial resolution of the result.
   }
   \item{weights}{
     Optional vector of numeric weights for the points of \code{X}.
@@ -89,6 +90,24 @@ densityAdaptiveKernel(X, \dots)
   \code{ngroups=1} is the same as fixed-bandwidth smoothing with
   bandwidth \code{sigma=median(bw)}.
 }
+\section{Bandwidths and Bandwidth Selection}{
+  The function \code{densityAdaptiveKernel}
+  computes one adaptive estimate of the intensity,
+  determined by the smoothing bandwidth values \code{bw}.
+
+  Typically the bandwidth values are computed by first computing
+  a pilot estimate of the intensity, then using \code{\link{bw.abram}}
+  to compute the vector of bandwidths according to Abramson's rule.
+  This involves specifying a global bandwidth \code{h0}.
+  
+  The default bandwidths may work well in many contexts, but for optimal
+  bandwidth selection, this calculation should be performed repeatedly with
+  different values of \code{h0} to optimise the value of \code{h0}.
+  This can be computationally demanding; we recommend
+  the function \code{bivariate.density} in the \pkg{sparr} package
+  which supports much faster bandwidth selection, using the FFT
+  method of Davies and Baddeley (2018).
+}
 \value{
   If \code{at="pixels"} (the default), the result is a pixel image.
   If \code{at="points"}, the result is a numeric vector with one entry
@@ -116,6 +135,9 @@ densityAdaptiveKernel(X, \dots)
   \code{\link{adaptive.density}},
   \code{\link{densityVoronoi}},
   \code{\link{im.object}}.
+
+  See the function \code{bivariate.density} in the \pkg{sparr} package
+  for a more flexible implementation.
 }
 \examples{
   Z <- densityAdaptiveKernel(redwood, h0=0.1)
