@@ -987,3 +987,18 @@ Change log from 1.58-2 to 1.58-3
 ------------- passed R-3.5.2 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
+
+   colourtables.R
+	plot.colourmap now handles a colour map for the range [a,a]
+
+   plot.im.R
+	Improved behaviour when the image values are almost constant.
+
+   DESCRIPTION
+   NEWS
+        Version 1.58-2.050
+
+------------- passed R-3.5.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+

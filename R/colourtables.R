@@ -3,7 +3,7 @@
 #
 # support for colour maps and other lookup tables
 #
-# $Revision: 1.42 $ $Date: 2018/10/01 10:56:30 $
+# $Revision: 1.43 $ $Date: 2019/03/08 09:59:28 $
 #
 
 colourmap <- function(col, ..., range=NULL, breaks=NULL, inputs=NULL, gamma=1) {
@@ -199,7 +199,11 @@ plot.colourmap <- local({
                   "tck", "tcl", "xpd")
 
   linmap <- function(x, from, to) {
-    b <- as.numeric(diff(to))/as.numeric(diff(from)) 
+    dFrom <- as.numeric(diff(from))
+    dTo <- as.numeric(diff(to))
+    b <- dTo/dFrom
+    if(is.nan(b)) b <- 0
+    if(!is.finite(b)) stop("Internal error: Cannot map zero width interval")
     to[1L] + b * (x - from[1L])
   }
 
@@ -207,10 +211,12 @@ plot.colourmap <- local({
 
   # rules to determine the ribbon dimensions when one dimension is given
   widthrule <- function(heightrange, separate, n, gap) {
-    if(separate) 1 else diff(heightrange)/10
+    dh <- diff(heightrange)
+    if(separate || dh == 0) 1 else dh/10
   }
   heightrule <- function(widthrange, separate, n, gap) {
-    (if(separate) (n + (n-1)*gap) else 10) * diff(widthrange) 
+    dw <- diff(widthrange)
+    if(dw == 0) 1 else (dw * (if(separate) (n + (n-1)*gap) else 10))
   }
 
   plot.colourmap <- function(x, ..., main,
@@ -243,13 +249,16 @@ plot.colourmap <- local({
       increasing <- !(discrete && vertical)
     reverse <- !increasing
 
-    # determine pixel entries 'v' and colour map breakpoints 'bks'
-    # to be passed to 'image.default'
+    #' determine pixel entries 'v' and colour map breakpoints 'bks'
+    #' to be passed to 'image.default'
+    trivial <- FALSE
     if(!discrete) {
       # real numbers: continuous ribbon
       bks <- stuff$breaks
       rr <- range(bks)
-      v <- seq(from=rr[1L], to=rr[2L], length.out=max(n+1L, 1024))
+      trivial <- (diff(rr) == 0)
+      v <- if(trivial) rr[1] else
+           seq(from=rr[1L], to=rr[2L], length.out=max(n+1L, 1024))
     } else if(!separate) {
       # discrete values: blocks of colour, run together
       v <- (1:n) - 0.5
@@ -347,16 +356,18 @@ plot.colourmap <- local({
       }
       #' deal with Date or integer values
       x <- ensurenumeric(x)
-      if(any(diff(x) == 0)) 
-        x <- seq(from=x[1L], to=x[length(x)], length.out=length(x))
-      y <- ensurenumeric(y)
-      if(any(diff(y) == 0)) 
-        y <- seq(from=y[1L], to=y[length(y)], length.out=length(y))
-      bks <- ensurenumeric(bks)
-      if(any(diff(bks) <= 0)) {
-        ok <- (diff(bks) > 0)
-        bks <- bks[ok]
-        col <- col[ok]
+      if(!trivial) {
+        if(any(diff(x) == 0)) 
+          x <- seq(from=x[1L], to=x[length(x)], length.out=length(x))
+        y <- ensurenumeric(y)
+        if(any(diff(y) == 0)) 
+          y <- seq(from=y[1L], to=y[length(y)], length.out=length(y))
+        bks <- ensurenumeric(bks)
+        if(any(diff(bks) <= 0)) {
+          ok <- (diff(bks) > 0)
+          bks <- bks[ok]
+          col <- col[ok]
+        }
       }
       if(reverse)
         col <- rev(col)

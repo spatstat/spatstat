@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.58-2.049
+        CHANGES IN spatstat VERSION 1.58-2.050
 
 OVERVIEW
 
@@ -129,11 +129,17 @@ SIGNIFICANT USER-VISIBLE CHANGES
     
     o is.subset.owin
     Improved robustness against numerical error.
-    
+
+    o plot.im
+    Improved behaviour when the pixel values are almost constant.
+
     o Finhom, Ginhom, Jinhom
     A warning is issued if bias is likely to occur because of undersmoothing.
     New arguments 'warn.bias' and 'savelambda'.
     
+    o plot.colourmap
+    Now handles a colourmap defined on an interval of length zero.
+
 BUG FIXES
 
     o ppp
@@ -245,7 +251,7 @@ BUG FIXES
     Crashed, in rare cases, when applied to an 'envelope' object.
     Spotted by Jan Sulavik.
     Fixed.
-    
+
         CHANGES IN spatstat VERSION 1.58-2
 
 OVERVIEW
