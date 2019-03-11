@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.58-2.050
+        CHANGES IN spatstat VERSION 1.58-2.051
 
 OVERVIEW
 
@@ -142,6 +142,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
 BUG FIXES
 
+    o spatialcdf
+    The argument 'weights' was ignored in some cases.
+    Fixed.
+    
     o ppp
     Points inside the window were erroneously rejected as lying outside
     the window, if the window was a polygon equivalent to a rectangle

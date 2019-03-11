@@ -1,7 +1,7 @@
 ##
 ## spatialcdf.R
 ##
-##  $Revision: 1.2 $ $Date: 2014/10/24 00:22:30 $
+##  $Revision: 1.3 $ $Date: 2019/03/11 08:26:11 $
 ##
 
 spatialcdf <- function(Z, weights=NULL, normalise=FALSE, ...,
@@ -31,13 +31,20 @@ spatialcdf <- function(Z, weights=NULL, normalise=FALSE, ...,
     if(is.null(W)) W <- as.owin(weights, fatal=FALSE)
     if(is.null(W)) W <- as.owin(Z, fatal=FALSE)
     if(is.null(W)) stop("No information specifying the spatial window")
-    if(is.null(weights)) weights <- 1
     M <- as.mask(W, ...)
     loc <- rasterxy.mask(M, drop=TRUE)
-    df <- mpl.get.covariates(list(Z=Z, weights=weights), loc,
-                             covfunargs=list(...))
     pixelarea <- with(unclass(M), xstep * ystep)
-    df$wt <- rep(pixelarea, nrow(df))
+    if(is.null(weights)) {
+      df <- mpl.get.covariates(list(Z=Z),
+                               loc,
+                               covfunargs=list(...))
+      df$wt <- rep(pixelarea, nrow(df))
+    } else {
+      df <- mpl.get.covariates(list(Z=Z, weights=weights),
+                               loc,
+                               covfunargs=list(...))
+      df$wt <- pixelarea * df$weights
+    }
     wtname <- if(normalise) "fraction of weight" else "weight"
   }
   if(normalise) 

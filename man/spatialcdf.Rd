@@ -80,13 +80,7 @@ spatialcdf(Z, weights = NULL, normalise = FALSE, ..., W = NULL, Zname = NULL)
   \code{"ewcdf"}, \code{"ecdf"} and \code{"stepfun"}.
 }
 \author{
-  \adrian
-  
-  ,
-  \rolf
-  
-  and \ege
-  
+  \spatstatAuthors.
 }
 \seealso{
   \code{\link{ewcdf}},
