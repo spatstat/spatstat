@@ -43,14 +43,15 @@ ewcdf(x, weights = NULL, normalise=TRUE, adjust=1)
   \code{ecdf(x)} except for the class membership.
 
   The result of \code{ewcdf} is a function, of class \code{"ewcdf"},
-  inheriting from the classes \code{"ecdf"} and \code{"stepfun"}.
+  inheriting from the classes \code{"ecdf"} (if \code{normalise=TRUE})
+  and \code{"stepfun"}.
   The class \code{ewcdf} has methods for \code{print} and \code{quantile}.
-  The inherited class \code{ecdf}
-  has methods for \code{plot} and \code{summary}.
+  The inherited classes \code{ecdf} and \code{stepfun}
+  have methods for \code{plot} and \code{summary}.
 }
 \value{
   A function, of class \code{"ewcdf"}, inheriting from 
-  \code{"ecdf"} and \code{"stepfun"}. 
+  \code{"ecdf"} (if \code{normalise=TRUE}) and \code{"stepfun"}. 
 }
 \author{
   \spatstatAuthors.

@@ -104,7 +104,7 @@ densityAdaptiveKernel(X, \dots)
   bandwidth selection, this calculation should be performed repeatedly with
   different values of \code{h0} to optimise the value of \code{h0}.
   This can be computationally demanding; we recommend
-  the function \code{bivariate.density} in the \pkg{sparr} package
+  the function \code{multiscale.density} in the \pkg{sparr} package
   which supports much faster bandwidth selection, using the FFT
   method of Davies and Baddeley (2018).
 }
@@ -137,7 +137,9 @@ densityAdaptiveKernel(X, \dots)
   \code{\link{im.object}}.
 
   See the function \code{bivariate.density} in the \pkg{sparr} package
-  for a more flexible implementation.
+  for a more flexible implementation, and
+  \code{multiscale.density} for an implementation that is more
+  efficient for bandwidth selection.
 }
 \examples{
   Z <- densityAdaptiveKernel(redwood, h0=0.1)

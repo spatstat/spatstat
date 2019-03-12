@@ -1,7 +1,7 @@
 ##
 ## spatialcdf.R
 ##
-##  $Revision: 1.4 $ $Date: 2019/03/12 09:38:01 $
+##  $Revision: 1.5 $ $Date: 2019/03/12 11:45:26 $
 ##
 
 spatialcdf <- function(Z, weights=NULL, normalise=FALSE, ...,
@@ -61,6 +61,10 @@ plot.spatialcdf <- function(x, ..., xlab, ylab) {
     xlab <- attr(x, "Zname")
   if(missing(ylab) || is.null(ylab))
     ylab <- attr(x, "ylab")
-  plot.ecdf(x, ..., xlab=xlab, ylab=ylab)
+  if(inherits(x, "ecdf")) {
+    plot.ecdf(x, ..., xlab=xlab, ylab=ylab)
+  } else {
+    plot.stepfun(x, ..., xlab=xlab, ylab=ylab)
+  }
 }
 

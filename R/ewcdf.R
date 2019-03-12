@@ -1,7 +1,7 @@
 #
 #     ewcdf.R
 #
-#     $Revision: 1.16 $  $Date: 2019/03/12 09:47:58 $
+#     $Revision: 1.18 $  $Date: 2019/03/12 11:14:36 $
 #
 #  With contributions from Kevin Ummel
 #
@@ -54,17 +54,22 @@ ewcdf <- function(x, weights=NULL, normalise=TRUE, adjust=1)
   }
   ## cumulative weight in each interval
   cumwt <- cumsum(wmatch)
+  totwt <- sum(wmatch)
   ## rescale ?
   if(normalise) {
-    cumwt <- cumwt/cumwt[length(cumwt)]
+    cumwt <- cumwt/totwt
+    totwt <- 1
   } else if(adjust != 1) {
     cumwt <- adjust * cumwt
+    totwt <- adjust * totwt
   }
   ## make function
   rval <- approxfun(vals, cumwt,
-                    method = "constant", yleft = 0, yright = sum(wmatch),
+                    method = "constant", yleft = 0, yright = totwt,
                     f = 0, ties = "ordered")
-  class(rval) <- c("ewcdf", "ecdf", "stepfun", class(rval))
+  class(rval) <- c("ewcdf",
+                   if(normalise) "ecdf" else NULL,
+                   "stepfun", class(rval))
   assign("w", w, envir=environment(rval))
   attr(rval, "call") <- sys.call()
   return(rval)

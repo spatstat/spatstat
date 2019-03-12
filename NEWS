@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.58-2.052
+        CHANGES IN spatstat VERSION 1.58-2.054
 
 OVERVIEW
 
@@ -143,9 +143,11 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o ewcdf
     Computation accelerated.
     New arguments 'normalise' and 'adjust'.
+    The result does not inherit class 'ecdf' if normalise=FALSE.
     
     o spatialcdf
     Computation accelerated.
+    The result does not inherit class 'ecdf' if normalise=FALSE.
     
 BUG FIXES
 

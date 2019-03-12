@@ -77,7 +77,8 @@ spatialcdf(Z, weights = NULL, normalise = FALSE, ..., W = NULL, Zname = NULL)
 \value{
   A cumulative distribution function object
   belonging to the classes \code{"spatialcdf"},
-  \code{"ewcdf"}, \code{"ecdf"} and \code{"stepfun"}.
+  \code{"ewcdf"}, \code{"ecdf"} (only if \code{normalise=TRUE})
+  and \code{"stepfun"}.
 }
 \author{
   \spatstatAuthors.
