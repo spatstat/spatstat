@@ -6,12 +6,22 @@
   empirical cumulative distribution function.
 }
 \usage{
-ewcdf(x, weights = rep(1/length(x), length(x)))
+ewcdf(x, weights = NULL, normalise=TRUE, adjust=1)
 }
 \arguments{
   \item{x}{Numeric vector of observations.}
-  \item{weights}{Numeric vector of non-negative weights
-    for \code{x}.}
+  \item{weights}{
+    Optional. Numeric vector of non-negative weights for \code{x}.
+    Defaults to equal weight 1 for each entry of \code{x}.
+  }
+  \item{normalise}{
+    Logical value indicating whether the weights should be rescaled
+    so that they sum to 1.
+  }
+  \item{adjust}{
+    Numeric value. Adjustment factor.
+    The weights will be multiplied by \code{adjust}.
+  }
 }
 \details{
   This is a modification of the standard function \code{\link{ecdf}}

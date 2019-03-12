@@ -1,7 +1,7 @@
 ##
 ## spatialcdf.R
 ##
-##  $Revision: 1.3 $ $Date: 2019/03/11 08:26:11 $
+##  $Revision: 1.4 $ $Date: 2019/03/12 09:38:01 $
 ##
 
 spatialcdf <- function(Z, weights=NULL, normalise=FALSE, ...,
@@ -26,6 +26,7 @@ spatialcdf <- function(Z, weights=NULL, normalise=FALSE, ...,
     loc <- as.ppp(Q)
     df <- mpl.get.covariates(list(Z=Z), loc, covfunargs=list(...))
     df$wt <- fitted(weights) * w.quad(Q)
+    G <- with(df, ewcdf(Z, wt, normalise=normalise))
     wtname <- if(normalise) "fraction of points" else "number of points"
   } else {
     if(is.null(W)) W <- as.owin(weights, fatal=FALSE)
@@ -38,18 +39,16 @@ spatialcdf <- function(Z, weights=NULL, normalise=FALSE, ...,
       df <- mpl.get.covariates(list(Z=Z),
                                loc,
                                covfunargs=list(...))
-      df$wt <- rep(pixelarea, nrow(df))
+      G <- with(df, ewcdf(Z, normalise=normalise, adjust=pixelarea))
+      wtname <- if(normalise) "fraction of area" else "area"
     } else {
-      df <- mpl.get.covariates(list(Z=Z, weights=weights),
+      df <- mpl.get.covariates(list(Z=Z, wt=weights),
                                loc,
                                covfunargs=list(...))
-      df$wt <- pixelarea * df$weights
+      G <- with(df, ewcdf(Z, wt, normalise=normalise, adjust=pixelarea))
+      wtname <- if(normalise) "fraction of weight" else "weight"
     }
-    wtname <- if(normalise) "fraction of weight" else "weight"
   }
-  if(normalise) 
-    df$wt <- with(df, wt/sum(wt))
-  G <- with(df, ewcdf(Z, wt))
   class(G) <- c("spatialcdf", class(G))
   attr(G, "call") <- sys.call()
   attr(G, "Zname") <- Zname

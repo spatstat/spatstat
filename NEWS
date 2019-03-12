@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.58-2.051
+        CHANGES IN spatstat VERSION 1.58-2.052
 
 OVERVIEW
 
@@ -11,7 +11,7 @@ OVERVIEW
 
     o 'Dartboard' tessellation using polar coordinates.
 
-    o Performance improvements for linear networks code.
+    o Performance improvements.
     
     o Minor improvements and bug fixes.
 
@@ -140,6 +140,13 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o plot.colourmap
     Now handles a colourmap defined on an interval of length zero.
 
+    o ewcdf
+    Computation accelerated.
+    New arguments 'normalise' and 'adjust'.
+    
+    o spatialcdf
+    Computation accelerated.
+    
 BUG FIXES
 
     o spatialcdf

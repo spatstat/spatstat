@@ -71,6 +71,7 @@ void knnwMD(int *, int *, int *, double *, double *, int *, double *);
 void distmapbin(double *, double *, double *, double *, int *, int *, int *, double *, double *);
 void ripleybox(int *, double *, double *, double *, int *, double *, double *, double *, double *, double *, double *); 
 void ripleypoly(int *, double *, double *, int *, double *, int *, double *, double *, double *, double *, double *);
+void tabsumweight(int *, double *, double *, int *, double *, double *);
 void exact_dt_R(double *, double *, int *, double *, double *, double *, double *, int *, int *, int *, int *, double *, int *, double *);
 void ps_exact_dt_R(double *, double *, double *, double *, int *, int *, int *, int *, int *, double *, int *, int *, double *);
 void fardist2grid(int *, double *, double *, int *, double *, double *, int *, double *, double *, double *); 

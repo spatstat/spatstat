@@ -168,6 +168,7 @@ static const R_CMethodDef CEntries[] = {
     {"seg2pixN",          (DL_FUNC) &seg2pixN,           9},
     {"segdens",           (DL_FUNC) &segdens,           10},
     {"smoopt",            (DL_FUNC) &smoopt,             8},
+    {"tabsumweight",      (DL_FUNC) &tabsumweight,       6},
     {"trigraf",           (DL_FUNC) &trigraf,           10},
     {"trigrafS",          (DL_FUNC) &trigrafS,          10},
     {"wtcrdenspt",        (DL_FUNC) &wtcrdenspt,        10},

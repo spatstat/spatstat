@@ -1012,3 +1012,24 @@ Change log from 1.58-2 to 1.58-3
 ------------- passed R-3.5.2 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
+
+12 mar 2019
+
+   ewcdf.R
+	Encoded the case weights=NULL separately, for speed.
+
+   ewcdf.R
+   ewcdf.Rd
+	New arguments 'normalise' and 'adjust'
+	
+   tabnum.c [New file]
+   ewcdf.R
+	Now uses C routines
+
+   DESCRIPTION
+   NEWS
+        Version 1.58-2.052
+
+------------- passed R-3.5.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
