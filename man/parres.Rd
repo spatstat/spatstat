@@ -26,6 +26,8 @@ parres(model, covariate, ...,
     or a pixel image (object of class \code{"im"})
     or \code{function(x,y)} supplying the
     values of a covariate at any location.
+    If the \code{model} depends on only one covariate,
+    then this covariate is the default; otherwise a covariate must be specified.
   }
   \item{smooth.effect}{
     Logical. Determines the choice of algorithm. See Details.
@@ -197,6 +199,10 @@ parres(model, covariate, ...,
   plot(parres(model2, "x"))
   Z <- setcov(owin())
   plot(parres(model2, Z))
+
+  #' when the model involves only one covariate
+  modelb <- ppm(bei ~ elev + I(elev^2), data=bei.extra)
+  plot(parres(modelb))
 }
 \keyword{spatial}
 \keyword{models}

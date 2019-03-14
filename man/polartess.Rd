@@ -97,7 +97,9 @@ polartess(W, \dots, nradial = NULL, nangular = NULL,
   
 }
 \examples{
-  plot(polartess(letterR, nangular=6, nradial=4), do.col=TRUE)
+  Y <- c(2.8, 1.5)
+  plot(polartess(letterR, nangular=6, radii=(0:4)/2, origin=Y),
+       do.col=TRUE)
 }
 \keyword{spatial}
 \keyword{manip}

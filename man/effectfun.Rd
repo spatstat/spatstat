@@ -6,7 +6,7 @@
   as a function of one of its covariates.
 }
 \usage{
-  effectfun(model, covname, \dots, se.fit=FALSE)
+  effectfun(model, covname, \dots, se.fit=FALSE, nvalues=256)
 }
 \arguments{
   \item{model}{
@@ -25,6 +25,11 @@
   \item{se.fit}{
     Logical. If \code{TRUE}, asymptotic standard errors of the estimates
     will be computed, together with a 95\% confidence interval.
+  }
+  \item{nvalues}{
+    Integer. The number of values of the covariate (if it is numeric)
+    for which the effect function should be evaluated.
+    We recommend at least 256.
   }
 }
 \details{

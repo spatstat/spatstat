@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.58-2.055
+        CHANGES IN spatstat VERSION 1.58-2.056
 
 OVERVIEW
 
@@ -151,6 +151,13 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o spatialcdf
     Computation accelerated.
     The result does not inherit class 'ecdf' if normalise=FALSE.
+
+    o effectfun
+    New argument 'nvalues'.
+
+    o parres
+    The argument 'covariate' may be omitted if the model involves
+    only one covariate.
     
 BUG FIXES
 
@@ -268,6 +275,10 @@ BUG FIXES
     Spotted by Jan Sulavik.
     Fixed.
 
+    o plot.spatialcdf, plot.ewcdf
+    A horizontal line was plotted at height 1, even if the CDF was unnormalised.
+    Fixed.
+    
         CHANGES IN spatstat VERSION 1.58-2
 
 OVERVIEW

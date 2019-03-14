@@ -1,14 +1,14 @@
 #
 #  effectfun.R
 #
-#   $Revision: 1.21 $ $Date: 2019/01/14 06:35:31 $
+#   $Revision: 1.22 $ $Date: 2019/03/14 07:52:51 $
 #
 
 effectfun <- local({
 
   okclasses <- c("ppm", "kppm", "lppm", "dppm", "rppm", "profilepl")
 
-effectfun <-  function(model, covname, ..., se.fit=FALSE) {
+effectfun <-  function(model, covname, ..., se.fit=FALSE, nvalues=256) {
   if(!inherits(model, okclasses))
     stop(paste("First argument 'model' should be a fitted model of class",
                commasep(sQuote(okclasses), " or ")),
@@ -16,11 +16,11 @@ effectfun <-  function(model, covname, ..., se.fit=FALSE) {
   orig.model <- model	 
   model <- as.ppm(model)
   dotargs <- list(...)
-  # determine names of covariates involved
+  #' determine names of covariates involved
   intern.names <-
     if(is.marked.ppm(model)) c("x", "y", "marks") else c("x", "y")
   needed.names <- variablesinformula(rhs.of.formula(formula(model)))
-  # check for clashes/quirks
+  #' check for clashes/quirks
   if("lambda" %in% needed.names) {
     if(is.dppm(orig.model) && (
        identical.formulae(formula(model), ~offset(log(lambda))-1) ||
@@ -50,8 +50,10 @@ effectfun <-  function(model, covname, ..., se.fit=FALSE) {
                ngettext(nuh, "an argument", "arguments"),
                "to effectfun)"))
   }
-  # establish type and range of covariate values
-  N0 <- 256
+  #' establish type and range of covariate values
+  check.1.integer(nvalues)
+  stopifnot(nvalues >= 128)
+  N0 <- nvalues
   if(covname == "x") {
     covtype <- "real"
     W <- as.owin(data.ppm(model))

@@ -52,14 +52,7 @@
 }
 \author{
   Original idea by Ute Hahn.
-  Code by 
-\adrian
-
-
-\rolf
-
-and \ege
-
+  Code by \spatstatAuthors.
 }
 \seealso{
   \code{\link{split.ppp}},

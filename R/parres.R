@@ -3,7 +3,7 @@
 #
 # code to plot transformation diagnostic
 #
-#   $Revision: 1.10 $  $Date: 2018/04/29 10:26:01 $
+#   $Revision: 1.11 $  $Date: 2019/03/14 08:04:11 $
 #
 
 parres <- function(model, covariate, ...,
@@ -13,10 +13,17 @@ parres <- function(model, covariate, ...,
                    bw.restrict = FALSE,
                    covname) {  
 
+  callstring <- paste(deparse(sys.call()), collapse = "")
   modelname <- deparse(substitute(model))
+
+  stopifnot(is.ppm(model))
+
+  if(missing(covariate)) {
+    mc <- model.covariates(model)
+    if(length(mc) == 1) covariate <- mc else stop("covariate must be provided")
+  }
   if(missing(covname)) 
     covname <- sensiblevarname(deparse(substitute(covariate)), "X")
-  callstring <- paste(deparse(sys.call()), collapse = "")
 
   if(is.marked(model))
     stop("Sorry, this is not yet implemented for marked models")
@@ -29,7 +36,6 @@ parres <- function(model, covariate, ...,
   bw.input <- match.arg(bw.input)
   
   # validate model
-  stopifnot(is.ppm(model))
   modelcall <- model$callstring
   if(is.null(modelcall))
     modelcall <- model$call

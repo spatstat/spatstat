@@ -4,7 +4,7 @@ Change log from 1.58-2 to 1.58-3
 13 jan 2019
 
    wingeom.R
-	Bug fixes to incircle and inpoint (handing very thin windows) 
+	Bug fixes to incircle and inpoint (handling very thin windows) 
 	
    DESCRIPTION
    NEWS
@@ -1088,3 +1088,30 @@ Change log from 1.58-2 to 1.58-3
 ------------- passed R-3.5.3 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
+
+    polartess.Rd
+	Improved example.
+
+    effectfun.R
+    effectfun.Rd
+	New argument 'nvalues'.
+
+    parres.R
+    parres.Rd
+        'covariate' is allowed to be missing
+	if the model only depends on one covariate.
+
+    tess.Rd
+	More cross-references
+
+    demo/spatstat.R
+	Added a section on Tessellations including quantess, polartess etc
+	
+    DESCRIPTION
+    NEWS
+        Version 1.58-2.056
+	
+------------- passed R-3.5.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+

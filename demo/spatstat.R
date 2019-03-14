@@ -175,7 +175,20 @@ X <- as.im(function(x,y){sqrt(x^2+y^2)}, W)
 Y <- dirichlet(runifpoint(12, W))
 plot(split(X,Y), main="image split by tessellation")
 
-fanfare("V. Exploratory data analysis")
+fanfare("V. Tessellations")
+
+plot(quadrats(square(1), nx=5, ny=3))
+plot(hextess(square(1), 0.07))
+plot(quantess(letterR, "x", 7))
+plot(polartess(letterR, nangular=6, radii=(0:4)/2, origin=c(2.8, 1.5)),
+     do.col=TRUE)
+plot(delaunay(cells))
+plot(cells, add=TRUE)
+plot(dirichlet(cells))
+plot(cells, add=TRUE)
+plot(rpoislinetess(2.5), do.col=TRUE)
+
+fanfare("VI. Exploratory data analysis")
 
 par(mar=c(3,3,3,2)+0.1)
 
@@ -420,7 +433,7 @@ plot(linearK(X, correction="Ang"), main="Corrected K-function", cex.main=0.75)
 
 par(mfrow=c(1,1))
 
-fanfare("VI. Model-fitting")
+fanfare("VII. Model-fitting")
 
 parsave <- par(mar=0.2+c(1,1,3,2))
 plot(japanesepines)
@@ -521,7 +534,7 @@ lam <- predict(fit)
 plot(lam, main="Point process model on linear network", ribscale=1000)
 plot(spiders, add=TRUE, pch=16, show.network=FALSE)
 
-fanfare("VII. Simulation")
+fanfare("VIII. Simulation")
 
 plot(letterR, main="Poisson random points")
 lambda <- 10/area.owin(letterR)
@@ -597,7 +610,7 @@ spatstat.options(npixel=100)
 plot(Halton(512, c(2,3)), main="quasirandom pattern")
 plot(Halton(16384, c(2,3)), main="quasirandom pattern", pch=".")
 
-fanfare("VIII. Geometry")
+fanfare("IX. Geometry")
 
 A <- letterR
 
@@ -686,7 +699,7 @@ par(nopa)
 
 laslett(heather$fine, main="Laslett's Transform")
 
-fanfare("IX. Operations on pixel images")
+fanfare("X. Operations on pixel images")
 
 Z <- distmap(swedishpines, dimyx=512)
 plot(Z, main="An image Z")
@@ -720,7 +733,7 @@ plot(letterR, add=TRUE)
 plot(blur(Z, 0.3, bleed=FALSE))
 plot(letterR, add=TRUE)
           
-fanfare("X. Programming tools")
+fanfare("XI. Programming tools")
 
 showoffK <- function(Y, current, ..., fullpicture,rad) { 
 	plot(fullpicture,
