@@ -1064,5 +1064,27 @@ Change log from 1.58-2 to 1.58-3
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+14 mar 2019
 
-   
++++++++++++++   installed R 3.5.3      +++++++++++++++
+++++++++++++ installed polyclip 1.10-0 +++++++++++++++
+
+    polartess.R
+	Bug fix in handling 'origin'
+
+    quantess.R
+    quantess.Rd
+	The covariate Z can now be "rad" or "ang" for polar coordinates.
+	New argument 'origin'.
+
+    tests/tessera.R
+	More tests of quantess, polartess.
+	
+    DESCRIPTION
+        Version 1.58-2.055
+	Depends on polyclip >= 1.10-0
+	Added baddstats/polyclip to Remotes
+	
+------------- passed R-3.5.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------

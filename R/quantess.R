@@ -2,23 +2,23 @@
 #' 
 #'     Quantile Tessellation
 #'
-#'   $Revision: 1.13 $  $Date: 2019/02/18 07:10:43 $
+#'   $Revision: 1.16 $  $Date: 2019/03/14 03:49:05 $
 
 quantess <- function(M, Z, n, ...) {
   UseMethod("quantess")
 }
 
-quantess.owin <- function(M, Z, n, ..., type=2) {
+quantess.owin <- function(M, Z, n, ..., type=2, origin=c(0,0)) {
   W <- as.owin(M)
+  B <- boundingbox(W)
   tcross <- MinimalTess(W, ...)
   force(n)
   if(!is.character(Z)) {
     Zim <- as.im(Z, W)
     Zrange <- range(Zim)
   } else {
-    if(!(Z %in% c("x", "y")))
-      stop(paste("Unrecognised covariate", dQuote(Z)))
-    if(is.rectangle(W)) {
+    Z <- match.arg(Z, c("x", "y", "rad", "ang"))
+    if(Z %in% c("x", "y") && is.rectangle(W)) {
       out <- switch(Z,
                     x={ quadrats(W, nx=n, ny=1) },
                     y={ quadrats(W, nx=1, ny=n) })
@@ -28,21 +28,45 @@ quantess.owin <- function(M, Z, n, ..., type=2) {
     switch(Z,
            x={
              Zfun <- function(x,y){x}
-             Zrange <- boundingbox(W)$xrange
+             Zrange <- B$xrange
            },
            y={
              Zfun <- function(x,y){y}
-             Zrange <- boundingbox(W)$yrange
+             Zrange <- B$yrange
+           },
+           rad={
+             origin <- interpretAsOrigin(origin, W)
+             Zfun <- function(x,y) { sqrt((x-origin[1])^2+(y-origin[2])^2) }
+             V <- vertices(W)
+             Zrange <- range(Zfun(V$x, V$y))
+           },
+           ang={
+             origin <- interpretAsOrigin(origin, W)
+             Zfun <- function(x,y) {
+               a <- atan2(y-origin[2], x-origin[1])
+               return(ifelse(a >= 0, a, a+2*pi))
+             }
+             V <- vertices(W)
+             Zrange <- range(Zfun(V$x, V$y))
+             if(!is.mask(W) && inside.owin(origin[1], origin[2], B)) {
+               ## check for crossing of positive x-axis
+               Xaxis <- psp(origin[1], origin[2], B$xrange[2], origin[2], B)
+               if(any(test.crossing.psp(Xaxis, edges(W))))
+                 Zrange <- c(0, 2*pi)
+             }
            })
     Zim <- as.im(Zfun, W)
   }
-  qZ <- quantile(Zim, probs=(1:(n-1))/n, type=type)
-  qZ <- c(Zrange[1], qZ, Zrange[2])
+  qZ <- quantile(Zim, probs=(0:n)/n, type=type)
+  qZ[1] <- min(qZ[1], Zrange[1])
+  qZ[n+1] <- max(qZ[n+1], Zrange[2])
   if(is.polygonal(W) && is.character(Z)) {
     R <- Frame(W)
     strips <- switch(Z,
                      x = tess(xgrid=qZ, ygrid=R$yrange),
-                     y = tess(xgrid=R$xrange, ygrid=qZ))
+                     y = tess(xgrid=R$xrange, ygrid=qZ),
+                     rad = polartess(B, radii=qZ, origin=origin),
+                     ang = polartess(B, angles=qZ, origin=origin))
     out <- intersect.tess(strips, tess(tiles=list(W)))
     qzz <- signif(qZ, 3)
     tilenames(out) <- paste0("[", qzz[1:n], ",",
@@ -55,8 +79,9 @@ quantess.owin <- function(M, Z, n, ..., type=2) {
   return(out)
 }
 
-quantess.ppp <- function(M, Z, n, ..., type=2) {
+quantess.ppp <- function(M, Z, n, ..., type=2, origin=c(0,0)) {
   W <- as.owin(M)
+  B <- boundingbox(W)
   tcross <- MinimalTess(W, ...)
   force(n)
   if(!is.character(Z)) {
@@ -64,9 +89,8 @@ quantess.ppp <- function(M, Z, n, ..., type=2) {
     ZM <- if(is.function(Z)) Z(M$x, M$y) else Zim[M]
     Zrange <- range(range(Zim), ZM)
   } else {
-    if(!(Z %in% c("x", "y")))
-      stop(paste("Unrecognised covariate", dQuote(Z)))
-    if(is.rectangle(W)) {
+    Z <- match.arg(Z, c("x", "y", "rad", "ang"))
+    if(Z %in% c("x", "y") && is.rectangle(W)) {
       switch(Z,
              x={
                qx <- quantile(M$x, probs=(1:(n-1))/n, type=type)
@@ -85,22 +109,48 @@ quantess.ppp <- function(M, Z, n, ..., type=2) {
            x={
              Zfun <- function(x,y){x}
              ZM <- M$x
-             Zrange <- boundingbox(W)$xrange
+             Zrange <- B$xrange
            },
            y={
              Zfun <- function(x,y){y}
              ZM <- M$y
-             Zrange <- boundingbox(W)$yrange
+             Zrange <- B$yrange
+           },
+           rad={
+             origin <- interpretAsOrigin(origin, W)
+             Zfun <- function(x,y) { sqrt((x-origin[1])^2+(y-origin[2])^2) }
+             ZM <- Zfun(M$x, M$y)
+             V <- vertices(W)
+             Zrange <- range(Zfun(V$x, V$y), ZM)
+           },
+           ang={
+             origin <- interpretAsOrigin(origin, W)
+             Zfun <- function(x,y) {
+               a <- atan2(y-origin[2], x-origin[1])
+               return(ifelse(a >= 0, a, a+2*pi))
+             }
+             ZM <- Zfun(M$x, M$y)
+             V <- vertices(W)
+             Zrange <- range(Zfun(V$x, V$y), ZM)
+             if(!is.mask(W) && inside.owin(origin[1], origin[2], B)) {
+               ## check for crossing of positive x-axis
+               Xaxis <- psp(origin[1], origin[2], B$xrange[2], origin[2], B)
+               if(any(test.crossing.psp(Xaxis, edges(W))))
+                 Zrange <- c(0, 2*pi)
+             }
            })
     Zim <- as.im(Zfun, W)
   } 
-  qZ <- quantile(ZM, probs=(1:(n-1))/n, type=type)
-  qZ <- c(Zrange[1], qZ, Zrange[2])
+  qZ <- quantile(Zim, probs=(0:n)/n, type=type)
+  qZ[1] <- min(qZ[1], Zrange[1])
+  qZ[n+1] <- max(qZ[n+1], Zrange[2])
   if(is.polygonal(W) && is.character(Z)) {
     R <- Frame(W)
     strips <- switch(Z,
                      x = tess(xgrid=qZ, ygrid=R$yrange),
-                     y = tess(xgrid=R$xrange, ygrid=qZ))
+                     y = tess(xgrid=R$xrange, ygrid=qZ),
+                     rad = polartess(B, radii=qZ, origin=origin),
+                     ang = polartess(B, angles=qZ, origin=origin))
     out <- intersect.tess(strips, tess(tiles=list(W)))
     qzz <- signif(qZ, 3)
     tilenames(out) <- paste0("[", qzz[1:n], ",",
@@ -113,17 +163,26 @@ quantess.ppp <- function(M, Z, n, ..., type=2) {
   return(out)
 }
 
-quantess.im <- function(M, Z, n, ..., type=2) {
+quantess.im <- function(M, Z, n, ..., type=2, origin=c(0,0)) {
   W <- Window(M)
+  B <- boundingbox(W)
   tcross <- MinimalTess(W, ...)
   force(n)
   if(!(type %in% c(1,2)))
     stop("Only quantiles of type 1 and 2 are implemented for quantess.im")
-  if(is.character(Z)) 
+  if(is.character(Z)) {
+    Z <- match.arg(Z, c("x", "y", "rad", "ang"))
+    origin <- interpretAsOrigin(origin, W)
     Z <- switch(Z,
                 x=function(x,y){x},
                 y=function(x,y){y},
+                rad=function(x,y) { sqrt((x-origin[1])^2+(y-origin[2])^2) },
+                ang=function(x,y) {
+                  a <- atan2(y-origin[2], x-origin[1])
+                  ifelse(a >= 0, a, a+2*pi)
+                },
                 stop(paste("Unrecognised covariate", dQuote(Z))))
+  }
   MZ <- harmonise(M=M, Z=Z)
   M <- MZ$M[W, drop=FALSE]
   Z <- MZ$Z[W, drop=FALSE]

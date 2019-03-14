@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.58-2.054
+        CHANGES IN spatstat VERSION 1.58-2.055
 
 OVERVIEW
 
@@ -51,6 +51,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o latest.news
     Now prints news documentation for the current major version, by default.
     New argument 'major'.
+
+    o quantess
+    The covariate Z can now be "rad" or "ang" representing polar coordinates.
 
     o envelope
     The argument 'simulate' can now be a function (such as 'rlabel').

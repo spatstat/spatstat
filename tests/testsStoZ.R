@@ -620,7 +620,7 @@ local({
 })
 #'   tests/tessera.R
 #'   Tessellation code, not elsewhere tested
-#'   $Revision: 1.3 $ $Date: 2018/07/16 08:51:44 $
+#'   $Revision: 1.4 $ $Date: 2019/03/14 03:45:58 $
 #'
 require(spatstat)
 local({
@@ -685,15 +685,27 @@ local({
   AV <- chop.tess(A, V)
   #'
   #' quantess
+  #' quantess.owin
   a <- quantess(square(1), "x", 3)
   a <- quantess(square(1), "y", 3)
+  a <- quantess(square(1), "rad", 5, origin=c(1/2, 1/3))
+  a <- quantess(square(1), "ang", 7, origin=c(1/2, 1/3))
+  ZFUN <- function(x,y){y-x}
+  a <- quantess(square(1), ZFUN, 3)
   b <- quantess(letterR, "y", 3)
+  #' quantess.ppp
   d <- quantess(cells, "y", 4)
   g <- quantess(demopat, "x", 5)
   g <- quantess(demopat, "y", 5)
+  g <- quantess(demopat, "rad", 5, origin=c(4442, 4214))
+  g <- quantess(demopat, "ang", 5, origin=c(4442, 4214))
+  g <- quantess(demopat, ZFUN, 7)
+  #' quantess.im
   D <- distmap(demopat)
   h <- quantess(D, "y", 4)
-  h <- quantess(D, function(x,y){x+y}, 5)
+  h <- quantess(D, ZFUN, 5)
+  g <- quantess(D, "rad", 5, origin=c(4442, 4214))
+  g <- quantess(D, "ang", 5, origin=c(4442, 4214))
 })
 #
 #   tests/testaddvar.R

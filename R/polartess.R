@@ -3,7 +3,7 @@
 #'
 #'   Tessellation using polar coordinates
 #' 
-#'   $Revision: 1.2 $  $Date: 2019/02/22 07:07:12 $
+#'   $Revision: 1.3 $  $Date: 2019/03/14 03:07:14 $
 
 polartess <- function(W, ..., nradial=NULL, nangular=NULL,
                       radii=NULL, angles=NULL, origin=NULL,
@@ -94,5 +94,7 @@ polartess <- function(W, ..., nradial=NULL, nangular=NULL,
     Atess <- tess(tiles=Tlist, window=DDD)
     result <- intersect.tess(result, Atess, sep=sep)
   }
+  if(!is.null(origin))
+    result <- shift(result, vec=origin)
   return(result)
 }

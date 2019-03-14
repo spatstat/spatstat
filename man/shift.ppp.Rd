@@ -14,6 +14,8 @@
   \item{origin}{
     Location that will be shifted to the origin.
     Either a numeric vector of length 2 giving the location,
+    or a point pattern containing only one point,
+    or a list with two entries named \code{x} and \code{y},
     or one of the character strings
     \code{"centroid"}, \code{"midpoint"},
     \code{"left"}, \code{"right"}, \code{"top"}, \code{"bottom"},
