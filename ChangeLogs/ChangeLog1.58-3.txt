@@ -1115,3 +1115,40 @@ Change log from 1.58-2 to 1.58-3
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+15 mar 2019
+
+   updates.Rnw
+	Updated to cover all the above.
+
+16 mar 2019
+
+   circarcs.R [New file]
+   spatstat-internal.Rd
+	Internal support for arcs on a circle.
+
+   tests/circular.R
+	Added tests for code in circarcs.R
+
+   quantess.R
+   quantess.Rd
+   spatstat-internal.Rd
+	Improved behaviour in angular case.
+	New argument 'eps'.
+	
+   tess.R
+	Bug fix in plot.tess (arrangement of tile names)
+	
+   updates.Rnw
+   bugfixes.Rnw
+	Updated to cover all the above.
+
+    DESCRIPTION
+    NEWS
+        Version 1.58-2.057
+	
+------------- passed R-3.5.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+
+	

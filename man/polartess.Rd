@@ -39,8 +39,7 @@ polartess(W, \dots, nradial = NULL, nangular = NULL,
   \item{angles}{
     The numeric values of the angles defining the tiles in the
     angular coordinate. A numeric vector, of length at least 2,
-    containing angles in radians between 0 and \code{2*pi},
-    in increasing order.
+    in increasing order, containing angles in radians.
   }
   \item{origin}{
     Location to be used as the origin of the polar coordinates.
@@ -73,6 +72,9 @@ polartess(W, \dots, nradial = NULL, nangular = NULL,
 
   If the argument \code{angles} is given, tiles will be demarcated
   by lines emanating from the origin at the specified angles.
+  The angular values can be any real numbers; they will be interpreted
+  as angles in radians modulo \code{2*pi},
+  but they must be an increasing sequence of numbers.
   If \code{angles} is absent but \code{nangular} is given,
   then \code{angles} will default to a sequence
   of \code{nangular+1} angles equally spaced from 0 to \code{2*pi}.

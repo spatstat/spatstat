@@ -3,7 +3,7 @@
 #'
 #'   Tessellation using polar coordinates
 #' 
-#'   $Revision: 1.3 $  $Date: 2019/03/14 03:07:14 $
+#'   $Revision: 1.4 $  $Date: 2019/03/16 05:36:40 $
 
 polartess <- function(W, ..., nradial=NULL, nangular=NULL,
                       radii=NULL, angles=NULL, origin=NULL,
@@ -42,11 +42,10 @@ polartess <- function(W, ..., nradial=NULL, nangular=NULL,
       warning("nangular ignored because angles were specified")
     angles <- as.numeric(angles)
     stopifnot(length(angles) >= 2)
-    stopifnot(all(angles >= 0))
     if(!all(diff(angles) > 0))
       stop("angles should be increasing")
-    if(any(radii < 0 | radii > 2 * pi))
-      stop("angles should be given in radians (0 < angles < 2 * pi)")
+    if(diff(range(angles)) > 2 * pi + .Machine$double.eps)
+      stop("The range of angles must not exceed 2 * pi")
     nangular <- length(angles) - 1L
   } else if(!is.null(nangular)) {
     check.1.integer(nangular)

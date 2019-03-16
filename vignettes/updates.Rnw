@@ -1358,8 +1358,12 @@ listed alphabetically.
     New argument \texttt{gW} for efficiency.
 
   \item \texttt{effectfun}:
+    \begin{itemize}
+    \item 
     Now works for \texttt{ppm}, \texttt{kppm}, 
     \texttt{lppm}, \texttt{dppm}, \texttt{rppm} and \texttt{profilepl} objects.
+    \item New argument \texttt{nvalues}.
+    \end{itemize}
     
  \item \texttt{envelope}:
    \begin{itemize}
@@ -1768,6 +1772,11 @@ listed alphabetically.
  \item \texttt{pairorient}: Default edge corrections now include 
    \texttt{"bord.modif"}.
    
+   
+ \item \texttt{parres}: 
+   the argument \texttt{covariate} is allowed to be missing
+   if the model only depends on one covariate.
+   
  \item \texttt{pcf.ppp}:
    \begin{itemize}
    \item
@@ -2090,6 +2099,14 @@ listed alphabetically.
  \item \texttt{quadrat.test.ppm}:
    Computation accelerated in some cases.
 
+ \item \texttt{quantess}: 
+   \begin{itemize}
+   \item The covariate \texttt{Z}
+     can now be \texttt{"rad"} or \texttt{"ang"} representing polar coordinates.
+   \item New argument \texttt{origin} specifies the origin of polar coordinates.
+   \item New argument \texttt{eps} controls the accuracy of the calculation.
+   \end{itemize}
+   
  \item \texttt{quantile.ewcdf}:
     The function is now normalised to the range \verb![0,1]!
     before the quantiles are computed. 

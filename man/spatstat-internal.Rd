@@ -66,12 +66,14 @@
 \alias{checkbigmatrix}          
 \alias{checkfields}          
 \alias{checksolve}
+\alias{check.arc}
 \alias{check.anySparseVector}
 \alias{check.finespacing}
 \alias{check.hist.lengths}
 \alias{check.mat.mul}
 \alias{check.testfun}
 \alias{circticks}
+\alias{circunion}
 \alias{clarkevansCalc}
 \alias{clip.psp}
 \alias{cliprect.psp}
@@ -232,6 +234,7 @@
 \alias{impliedcoefficients}
 \alias{influence.ppmInfluence}
 \alias{inpoint}
+\alias{inside.arc}
 \alias{instantiate.interact}
 \alias{integral.leverage.ppm}
 \alias{integral.influence.ppm}
@@ -369,6 +372,7 @@
 \alias{mpl.get.covariates}
 \alias{mpl.prepare}
 \alias{mpl.usable}
+\alias{MinimalTess}
 \alias{MultiPair.checkmatrix}
 \alias{multiply.only.finite.entries}
 \alias{multiplicityNumeric}
@@ -520,6 +524,7 @@
 \alias{print.yardstick}
 \alias{project3Dhom}
 \alias{putlastshift}
+\alias{qtPrepareCoordinate}
 \alias{quad}
 \alias{quad.mppm}
 \alias{quadBlockSizes}
@@ -844,6 +849,7 @@ change.default.expand(x, newdefault)
 checkbigmatrix(n, m, fatal, silent)
 checkfields(X,L)
 checksolve(M, action, descrip, target)
+check.arc(arc, fatal)
 check.anySparseVector(v, npoints, fatal, things,
                       naok, warn, vname, oneok)
 check.finespacing(r, eps, win, rmaxdefault, context, action, rname)
@@ -851,6 +857,7 @@ check.hist.lengths(hist,breaks)
 check.mat.mul(A, B, Acols, Brows, fatal)
 check.testfun(f, f1, X)
 circticks(R, at, unit, start, clockwise, labels)
+circunion(arcs)
 clarkevansCalc(X, correction, clipregion, working)
 clip.psp(x, window, check, fragments)
 cliprect.psp(x, window, fragments)
@@ -1051,6 +1058,7 @@ impliedpresence(tags, formula, df, extranames=character(0))
 impliedcoefficients(object, tag)
 \method{influence}{ppmInfluence}(model, \dots)
 inpoint(W)
+inside.arc(theta, arc)
 instantiate.interact(x, par)
 \method{integral}{leverage.ppm}(f, domain, \dots)
 \method{integral}{influence.ppm}(f, domain, \dots)
@@ -1218,6 +1226,7 @@ mpl.prepare(Q, X, P, trend, interaction, covariates,
             vnamebase, vnameprefix, warn.illegal, warn.unidentifiable,
             weightfactor, skip.border, clip.interaction, splitInf)
 mpl.usable(x)
+MinimalTess(W, \dots)
 MultiPair.checkmatrix(mat, n, matname, naok, zerook, asymmok)
 multiplicityNumeric(x)
 multiply.only.finite.entries(x, a)
@@ -1397,6 +1406,7 @@ prepareTitle(main)
 \method{print}{yardstick}(x, \dots)
 project3Dhom(xyz, eye, org, vert)
 putlastshift(X, vec)
+qtPrepareCoordinate(covname, W, origin)
 quad(data, dummy, w, param)
 quad.mppm(x)
 quadBlockSizes(nX, nD, p, nMAX, announce)

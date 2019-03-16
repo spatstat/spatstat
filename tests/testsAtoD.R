@@ -86,7 +86,7 @@ local({
 #'
 #'    Circular data and periodic distributions
 #'
-#'    $Revision: 1.1 $  $Date: 2019/01/13 07:47:28 $
+#'    $Revision: 1.2 $  $Date: 2019/03/16 04:18:34 $
 
 require(spatstat)
 local({
@@ -94,6 +94,11 @@ local({
   b <- pairorient(redwood, 0.05, 0.15, correction="best")
   rose(a)
   rose(b, start="N", clockwise=TRUE)
+
+  #' arcs on the circle 
+  set.seed(19171025)
+  aa <- replicate(7, runif(1, 0, 2*pi) + c(0, runif(1, 0, pi)), simplify=FALSE)
+  bb <- circunion(aa)
 })
 
   

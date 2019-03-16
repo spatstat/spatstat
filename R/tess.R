@@ -3,7 +3,7 @@
 #
 # support for tessellations
 #
-#   $Revision: 1.91 $ $Date: 2019/02/22 04:44:16 $
+#   $Revision: 1.92 $ $Date: 2019/03/16 11:15:58 $
 #
 tess <- function(..., xgrid=NULL, ygrid=NULL, tiles=NULL, image=NULL,
                  window=NULL, marks=NULL, keepempty=FALSE,
@@ -213,7 +213,8 @@ plot.tess <- local({
              none = {
                #' no values assigned.
                #' default is tile name
-               values <- factor(tilenames(x))
+               tn <- tilenames(x)
+               values <- factor(tn, levels=tn)
              },
              vector = {
                #' vector of values.

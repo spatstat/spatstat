@@ -10,9 +10,9 @@
 \usage{
 quantess(M, Z, n, \dots)
 
-\method{quantess}{owin}(M, Z, n, \dots, type=2, origin=c(0,0))
+\method{quantess}{owin}(M, Z, n, \dots, type=2, origin=c(0,0), eps=NULL)
 
-\method{quantess}{ppp}(M, Z, n, \dots, type=2, origin=c(0,0))
+\method{quantess}{ppp}(M, Z, n, \dots, type=2, origin=c(0,0), eps=NULL)
 
 \method{quantess}{im}(M, Z, n, \dots, type=2, origin=c(0,0))
 }
@@ -54,6 +54,11 @@ quantess(M, Z, n, \dots)
     \code{"topleft"}, \code{"bottomleft"}, \code{"topright"} or
     \code{"bottomright"} (partially matched).
   }
+  \item{eps}{
+    Optional. The size of pixels in the approximation which is used
+    to compute the quantiles. A positive numeric value, or vector of two
+    positive numeric values.
+  }
 }
 \details{
   A \emph{quantile tessellation} is a division of space into
@@ -82,7 +87,10 @@ quantess(M, Z, n, \dots)
   with weights given by \code{M}.
 
   For convenience, additional arguments \code{\dots} can be given,
-  to further subdivide the tiles of the tessellation.
+  to further subdivide the tiles of the tessellation. These arguments
+  should be recognised by one of the functions
+  \code{\link{quadrats}} or \code{\link{tess}}. The tessellation
+  determined by these arguments is intersected with the quantile tessellation.
 
   The result of \code{quantess} is a tessellation of \code{as.owin(M)}
   determined by the quantiles of \code{Z}.

@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.58-2.056
+        CHANGES IN spatstat VERSION 1.58-2.057
 
 OVERVIEW
 
@@ -54,7 +54,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o quantess
     The covariate Z can now be "rad" or "ang" representing polar coordinates.
-
+    New argument 'origin' specifies the origin of polar coordinates.
+    New argument 'eps' controls accuracy of calculation.
+    
     o envelope
     The argument 'simulate' can now be a function (such as 'rlabel').
     The function will be applied repeatedly to the original data Y,
@@ -277,6 +279,10 @@ BUG FIXES
 
     o plot.spatialcdf, plot.ewcdf
     A horizontal line was plotted at height 1, even if the CDF was unnormalised.
+    Fixed.
+
+    o plot.tess
+    The names of the tiles were sometimes re-ordered in the legend.
     Fixed.
     
         CHANGES IN spatstat VERSION 1.58-2

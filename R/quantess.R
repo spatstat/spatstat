@@ -2,19 +2,19 @@
 #' 
 #'     Quantile Tessellation
 #'
-#'   $Revision: 1.16 $  $Date: 2019/03/14 03:49:05 $
+#'   $Revision: 1.17 $  $Date: 2019/03/16 11:34:51 $
 
 quantess <- function(M, Z, n, ...) {
   UseMethod("quantess")
 }
 
-quantess.owin <- function(M, Z, n, ..., type=2, origin=c(0,0)) {
+quantess.owin <- function(M, Z, n, ..., type=2, origin=c(0,0), eps=NULL) {
   W <- as.owin(M)
   B <- boundingbox(W)
   tcross <- MinimalTess(W, ...)
   force(n)
   if(!is.character(Z)) {
-    Zim <- as.im(Z, W)
+    Zim <- as.im(Z, W, eps=eps)
     Zrange <- range(Zim)
   } else {
     Z <- match.arg(Z, c("x", "y", "rad", "ang"))
@@ -25,37 +25,10 @@ quantess.owin <- function(M, Z, n, ..., type=2, origin=c(0,0)) {
       if(!is.null(tcross)) out <- intersect.tess(out, tcross)
       return(out)
     }
-    switch(Z,
-           x={
-             Zfun <- function(x,y){x}
-             Zrange <- B$xrange
-           },
-           y={
-             Zfun <- function(x,y){y}
-             Zrange <- B$yrange
-           },
-           rad={
-             origin <- interpretAsOrigin(origin, W)
-             Zfun <- function(x,y) { sqrt((x-origin[1])^2+(y-origin[2])^2) }
-             V <- vertices(W)
-             Zrange <- range(Zfun(V$x, V$y))
-           },
-           ang={
-             origin <- interpretAsOrigin(origin, W)
-             Zfun <- function(x,y) {
-               a <- atan2(y-origin[2], x-origin[1])
-               return(ifelse(a >= 0, a, a+2*pi))
-             }
-             V <- vertices(W)
-             Zrange <- range(Zfun(V$x, V$y))
-             if(!is.mask(W) && inside.owin(origin[1], origin[2], B)) {
-               ## check for crossing of positive x-axis
-               Xaxis <- psp(origin[1], origin[2], B$xrange[2], origin[2], B)
-               if(any(test.crossing.psp(Xaxis, edges(W))))
-                 Zrange <- c(0, 2*pi)
-             }
-           })
-    Zim <- as.im(Zfun, W)
+    a <- qtPrepareCoordinate(Z, W, origin)
+    Zfun <- a$Zfun
+    Zrange <- a$Zrange
+    Zim <- as.im(Zfun, W, eps=eps)
   }
   qZ <- quantile(Zim, probs=(0:n)/n, type=type)
   qZ[1] <- min(qZ[1], Zrange[1])
@@ -79,13 +52,57 @@ quantess.owin <- function(M, Z, n, ..., type=2, origin=c(0,0)) {
   return(out)
 }
 
-quantess.ppp <- function(M, Z, n, ..., type=2, origin=c(0,0)) {
+qtPrepareCoordinate <- function(covname, W, origin=c(0,0)) {
+  switch(covname,
+         x={
+           Zfun <- function(x,y){x}
+           Zrange <- boundingbox(W)$xrange
+         },
+         y={
+           Zfun <- function(x,y){y}
+           Zrange <- boundingbox(W)$yrange
+         },
+         rad={
+           origin <- interpretAsOrigin(origin, W)
+           Zfun <- function(x,y) { sqrt((x-origin[1])^2+(y-origin[2])^2) }
+           V <- vertices(W)
+           Zrange <- range(Zfun(V$x, V$y))
+         },
+         ang={
+           origin <- interpretAsOrigin(origin, W)
+           Zstart <- 0
+           Zfun <- function(x,y) {
+             angle <- atan2(y-origin[2], x-origin[1]) %% (2*pi)
+             if(Zstart < 0) {
+               negangle <- angle - 2*pi
+               angle <- ifelse(negangle >= Zstart, negangle, angle)
+             }
+             return(angle)
+           }
+           S <- as.data.frame(edges(W))
+           a <- Zfun(S[,"x0"], S[,"y0"])
+           b <- Zfun(S[,"x1"], S[,"y1"])
+           bmina <- b - a
+           swap <- (bmina > pi) | (bmina < 0 & bmina > -pi)
+           arcs <- cbind(ifelse(swap, b, a), ifelse(swap, a, b))
+           arcs <- lapply(apply(arcs, 1, list), unlist)
+           Zunion <- circunion(arcs)
+           Zrange <- c(Zunion[[1]][1], Zunion[[length(Zunion)]][2])
+           if(diff(Zrange) < 0) {
+             #' first interval straddles the positive x-axis
+             Zstart <- Zrange[1] <- Zrange[1] - 2*pi
+           } 
+         })
+  return(list(Zrange=Zrange, Zfun=Zfun))
+}
+
+quantess.ppp <- function(M, Z, n, ..., type=2, origin=c(0,0), eps=NULL) {
   W <- as.owin(M)
   B <- boundingbox(W)
   tcross <- MinimalTess(W, ...)
   force(n)
   if(!is.character(Z)) {
-    Zim <- as.im(Z, W)
+    Zim <- as.im(Z, W, eps=eps)
     ZM <- if(is.function(Z)) Z(M$x, M$y) else Zim[M]
     Zrange <- range(range(Zim), ZM)
   } else {
@@ -105,41 +122,12 @@ quantess.ppp <- function(M, Z, n, ..., type=2, origin=c(0,0)) {
       if(!is.null(tcross)) out <- intersect.tess(out, tcross)
       return(out)
     }
-    switch(Z,
-           x={
-             Zfun <- function(x,y){x}
-             ZM <- M$x
-             Zrange <- B$xrange
-           },
-           y={
-             Zfun <- function(x,y){y}
-             ZM <- M$y
-             Zrange <- B$yrange
-           },
-           rad={
-             origin <- interpretAsOrigin(origin, W)
-             Zfun <- function(x,y) { sqrt((x-origin[1])^2+(y-origin[2])^2) }
-             ZM <- Zfun(M$x, M$y)
-             V <- vertices(W)
-             Zrange <- range(Zfun(V$x, V$y), ZM)
-           },
-           ang={
-             origin <- interpretAsOrigin(origin, W)
-             Zfun <- function(x,y) {
-               a <- atan2(y-origin[2], x-origin[1])
-               return(ifelse(a >= 0, a, a+2*pi))
-             }
-             ZM <- Zfun(M$x, M$y)
-             V <- vertices(W)
-             Zrange <- range(Zfun(V$x, V$y), ZM)
-             if(!is.mask(W) && inside.owin(origin[1], origin[2], B)) {
-               ## check for crossing of positive x-axis
-               Xaxis <- psp(origin[1], origin[2], B$xrange[2], origin[2], B)
-               if(any(test.crossing.psp(Xaxis, edges(W))))
-                 Zrange <- c(0, 2*pi)
-             }
-           })
-    Zim <- as.im(Zfun, W)
+    a <- qtPrepareCoordinate(Z, W, origin)
+    Zrange <- a$Zrange
+    Zfun <- a$Zfun
+    ZM <- Zfun(M$x, M$y)
+    Zrange <- range(Zrange, range(ZM))
+    Zim <- as.im(Zfun, W, eps=eps)
   } 
   qZ <- quantile(Zim, probs=(0:n)/n, type=type)
   qZ[1] <- min(qZ[1], Zrange[1])
@@ -172,21 +160,14 @@ quantess.im <- function(M, Z, n, ..., type=2, origin=c(0,0)) {
     stop("Only quantiles of type 1 and 2 are implemented for quantess.im")
   if(is.character(Z)) {
     Z <- match.arg(Z, c("x", "y", "rad", "ang"))
-    origin <- interpretAsOrigin(origin, W)
-    Z <- switch(Z,
-                x=function(x,y){x},
-                y=function(x,y){y},
-                rad=function(x,y) { sqrt((x-origin[1])^2+(y-origin[2])^2) },
-                ang=function(x,y) {
-                  a <- atan2(y-origin[2], x-origin[1])
-                  ifelse(a >= 0, a, a+2*pi)
-                },
-                stop(paste("Unrecognised covariate", dQuote(Z))))
-  }
+    a <- qtPrepareCoordinate(Z, W, origin)
+    Z <- a$Zfun
+    Zrange <- a$Zrange
+  } else Zrange <- NULL
   MZ <- harmonise(M=M, Z=Z)
   M <- MZ$M[W, drop=FALSE]
   Z <- MZ$Z[W, drop=FALSE]
-  Zrange <- range(Z)
+  Zrange <- range(c(range(Z), Zrange))
   Fun <- ewcdf(Z[], weights=M[]/sum(M[]))
   qZ <- quantile(Fun, probs=(1:(n-1))/n, type=type)
   qZ <- c(Zrange[1], qZ, Zrange[2])
@@ -200,21 +181,34 @@ quantess.im <- function(M, Z, n, ..., type=2, origin=c(0,0)) {
 }
 
 MinimalTess <- function(W, ...) {
-  # find the minimal tessellation of W consistent with the arguments 
+  ## find the minimal tessellation of W consistent with the arguments
   argh <- list(...)
-  if(length(argh) == 0) return(NULL)
-  nama <- names(argh)
-  if(any(c("nx", "ny") %in% nama)) {
-    fun <- quadrats
-    dflt <- list(nx=1, ny=1)
-  } else if(any(c("xbreaks", "ybreaks") %in% nama)) {
-    fun <- quadrats
-    dflt <- list(xbreaks=W$xrange, ybreaks=W$yrange)
-  } else {
-    fun <- tess
-    dflt <- list(window=W, keepempty=TRUE)
-  }
-  v <- do.call(fun, resolve.defaults(list(W), argh, dflt))
+  v <- NULL
+  if(length(argh)) {
+    nama <- names(argh)
+    known <- union(names(formals(quadrats)),
+                   names(formals(tess)))
+    recognised <- !is.na(match(nama, known))
+    if(any(recognised)) {
+      if(any(c("nx", "ny") %in% nama)) {
+        v <- do.call(quadrats,
+                     resolve.defaults(list(X=W),
+                                      argh[recognised],
+                                      list(nx=1, ny=1)))
+      } else if(any(c("xbreaks", "ybreaks") %in% nama)) {
+        v <- do.call(quadrats,
+                     resolve.defaults(list(X=W),
+                                      argh[recognised],
+                                      list(xbreaks=W$xrange,
+                                           ybreaks=W$yrange)))
+      } else {
+        v <- do.call(tess,
+                     resolve.defaults(argh[recognised],
+                                      list(window=W,
+                                           keepempty=TRUE)))
+      }
+    }
+  } 
   return(v)
 }
 
