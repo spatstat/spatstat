@@ -3,7 +3,7 @@
 #
 #   computes simulation envelopes 
 #
-#   $Revision: 2.91 $  $Date: 2019/03/04 04:33:12 $
+#   $Revision: 2.93 $  $Date: 2019/03/18 09:22:33 $
 #
 
 envelope <- function(Y, fun, ...) {
@@ -339,16 +339,22 @@ envelopeEngine <-
            weights=NULL,
            nsim2=nsim,
            VARIANCE=FALSE, nSD=2,
-           Yname=NULL, maxnerr=nsim, internal=NULL, cl=NULL,
+           Yname=NULL,
+           silent=FALSE,
+           maxnerr=nsim,
+           maxerr.action=c("fatal", "warn", "null"),
+           internal=NULL, cl=NULL,
            envir.user=envir.user,
            expected.arg="r",
            do.pwrong=FALSE,
            foreignclass=NULL,
-           collectrubbish=FALSE) {
+           collectrubbish=FALSE)
+{
   #
   envir.here <- sys.frame(sys.nframe())
 
   alternative <- match.arg(alternative)
+  maxerr.action <- match.arg(maxerr.action)  
 
   foreignclass <- as.character(foreignclass)
   if(length(foreignclass) != 0 && clipdata) {
@@ -744,11 +750,12 @@ envelopeEngine <-
   
   # start simulation loop
   nerr <- 0
+  gaveup <- FALSE
   if(verbose) pstate <- list()
   for(i in 1:Nsim) {
     ok <- FALSE
     # safely generate a random pattern and apply function
-    while(!ok) {
+    while(!ok && !gaveup) {
       Xsim <- eval(simexpr, envir=envir)
       # check valid point pattern
       if(!inherits(Xsim, Xclass))
@@ -780,19 +787,29 @@ envelopeEngine <-
         weights[i] <- wti
       }
       ## apply function safely
-      funXsim <- try(do.call(fun, c(list(Xsim), funargs)))
+      funXsim <- try(do.call(fun, c(list(Xsim), funargs)), silent=silent)
 
       ok <- !inherits(funXsim, "try-error")
-      
+
       if(!ok) {
         nerr <- nerr + 1L
-        if(nerr > maxnerr)
-          stop("Exceeded maximum number of errors")
-        cat("[retrying]\n")
+        if(nerr > maxnerr) {
+          whinge <- paste("Exceeded maximum number of errors",
+                          paren(maxnerr),
+                          "when evaluating summary function",
+                          "for simulated patterns")
+          switch(maxerr.action,
+                 fatal = stop(whinge),
+                 warn  = warning(whinge),
+                 null  = {})
+          gaveup <- TRUE
+        } else if(!silent) cat("[retrying]\n")
       } 
     }
-
-    # sanity checks
+    
+    if(gaveup) break; # exit loop now
+    
+    ## sanity checks
     if(i == 1L) {
       if(!inherits(funXsim, "fv"))
         stop(paste("When applied to a simulated pattern, the function",
@@ -857,28 +874,30 @@ envelopeEngine <-
   # ...........................................................
   # save functions and/or patterns if so commanded
 
-  if(savefuns) {
-    alldata <- cbind(rvals, simvals)
-    simnames <- paste("sim", 1:Nsim, sep="")
-    colnames(alldata) <- c("r", simnames)
-    alldata <- as.data.frame(alldata)
-    SimFuns <- fv(alldata,
-                  argu="r",
-                  ylab=attr(funX, "ylab"),
-                  valu="sim1",
-                  fmla= deparse(. ~ r),
-                  alim=attr(funX, "alim"),
-                  labl=names(alldata),
-                  desc=c("distance argument r",
-                    paste("Simulation ", 1:Nsim, sep="")),
-                  fname=attr(funX, "fname"),
-                  yexp=attr(funX, "yexp"),
-                  unitname=unitname(funX))
-    fvnames(SimFuns, ".") <- simnames
-  } 
-  if(savepatterns)
-    SimPats <- if(simtype == "list") SimDataList else Caughtpatterns
-
+  if(!gaveup) {
+    if(savefuns) {
+      alldata <- cbind(rvals, simvals)
+      simnames <- paste("sim", 1:Nsim, sep="")
+      colnames(alldata) <- c("r", simnames)
+      alldata <- as.data.frame(alldata)
+      SimFuns <- fv(alldata,
+                    argu="r",
+                    ylab=attr(funX, "ylab"),
+                    valu="sim1",
+                    fmla= deparse(. ~ r),
+                    alim=attr(funX, "alim"),
+                    labl=names(alldata),
+                    desc=c("distance argument r",
+                           paste("Simulation ", 1:Nsim, sep="")),
+                    fname=attr(funX, "fname"),
+                    yexp=attr(funX, "yexp"),
+                    unitname=unitname(funX))
+      fvnames(SimFuns, ".") <- simnames
+    } 
+    if(savepatterns)
+      SimPats <- if(simtype == "list") SimDataList else Caughtpatterns
+  }
+  
   ######### COMPUTE ENVELOPES #######################
 
   etype <- if(global) "global" else if(VARIANCE) "variance" else "pointwise"
@@ -896,27 +915,30 @@ envelopeEngine <-
                             csr=csr, use.theory=use.theory,
                             nrank=nrank, ginterval=ginterval, nSD=nSD,
                             Yname=Yname, do.pwrong=do.pwrong,
-                            weights=weights)
+                            weights=weights, gaveup=gaveup)
 
-  # tack on envelope information
-  attr(result, "einfo") <- envelopeInfo
+  ## tack on envelope information
+  attr(result, "einfo") <- resolve.defaults(envelopeInfo,
+                                            attr(result, "einfo"))
 
-  # tack on functions and/or patterns if so commanded   
-  if(savefuns)
-    attr(result, "simfuns") <- SimFuns
-  if(savepatterns) {
-    attr(result, "simpatterns") <- SimPats
-    attr(result, "datapattern") <- X
+  if(!gaveup) {
+    ## tack on functions and/or patterns if so commanded   
+    if(savefuns)
+      attr(result, "simfuns") <- SimFuns
+    if(savepatterns) {
+      attr(result, "simpatterns") <- SimPats
+      attr(result, "datapattern") <- X
+    }
+    ## undocumented - tack on values of some other quantity
+    if(savevalues) {
+      attr(result, "simvalues") <- SavedValues
+      attr(result, "datavalue") <- saveresultof(X)
+    }
   }
-  # save function weights 
+
+  ## save function weights 
   if(use.weights)
     attr(result, "weights") <- weights
-
-  # undocumented - tack on values of some other quantity
-  if(savevalues) {
-    attr(result, "simvalues") <- SavedValues
-    attr(result, "datavalue") <- saveresultof(X)
-  }
   return(result)
 }
 
@@ -1129,7 +1151,8 @@ envelope.matrix <- function(Y, ...,
                             Yname=NULL,
                             do.pwrong=FALSE,
                             weights=NULL,
-                            precomputed=NULL) {
+                            precomputed=NULL,
+                            gaveup=FALSE) {
   if(is.null(Yname))
     Yname <- short.deparse(substitute(Y))
 
@@ -1144,13 +1167,13 @@ envelope.matrix <- function(Y, ...,
   cheat <- !is.null(precomputed)
 
   if(is.null(rvals) && is.null(observed) && !is.null(funX)) {
-    # assume funX is summary function for observed data
+    ## assume funX is summary function for observed data
     rvals <- with(funX, .x)
     observed <- with(funX, .y)
     theory <- if(use.theory) funX[["theo"]] else NULL
     if(check) stopifnot(nrow(funX) == nrow(Y)) 
   } else if(check) {
-    # validate vectors of data
+    ## validate vectors of data
     if(is.null(rvals)) stop("rvals must be supplied")
     if(is.null(observed)) stop("observed must be supplied")
     stopifnot(length(rvals) == nrow(Y))
@@ -1170,41 +1193,43 @@ envelope.matrix <- function(Y, ...,
               fname="f")
 
   fname <- atr$fname
+
+  NAvector <- rep(NA_real_, length(rvals))
   
   if(!cheat) {
-    # ................   standard calculation .....................
-    # validate weights
-    if(use.weights) 
+    ## ................   standard calculation .....................
+    ## validate weights
+    if(use.weights && !gaveup) 
       check.nvector(weights, ncol(simvals), 
                     things="simulated functions", naok=TRUE)
 
-    # determine numbers of columns used
-      Ncol <- ncol(simvals)
-      if(Ncol < 2)
-        stop("Need at least 2 columns of function values")
+    ## determine numbers of columns used
+    Ncol <- if(!gaveup) ncol(simvals) else Inf
+    if(Ncol < 2)
+      stop("Need at least 2 columns of function values")
       
-      if(is.null(jsim) && !is.null(nsim)) {
-        # usual case - 'nsim' determines 'jsim'
-        if(nsim > Ncol)
-          stop(paste(nsim, "simulations are not available; only",
+    if(is.null(jsim) && !is.null(nsim)) {
+      ## usual case - 'nsim' determines 'jsim'
+      if(nsim > Ncol)
+        stop(paste(nsim, "simulations are not available; only",
+                   Ncol, "columns provided"))
+      jsim <- 1:nsim
+      if(!is.null(nsim2)) {
+        ## 'nsim2' determines 'jsim.mean'
+        if(nsim + nsim2 > Ncol)
+          stop(paste(nsim, "+", nsim2, "=", nsim+nsim2, 
+                     "simulations are not available; only",
                      Ncol, "columns provided"))
-        jsim <- 1:nsim
-        if(!is.null(nsim2)) {
-          # 'nsim2' determines 'jsim.mean'
-          if(nsim + nsim2 > Ncol)
-            stop(paste(nsim, "+", nsim2, "=", nsim+nsim2, 
-                       "simulations are not available; only",
-                       Ncol, "columns provided"))
-          jsim.mean <- nsim + 1:nsim2
-        }
+        jsim.mean <- nsim + 1:nsim2
       }
+    }
       
-      restrict.columns <- !is.null(jsim)
-      dual <- !is.null(jsim.mean)
+    restrict.columns <- !is.null(jsim)
+    dual <- !is.null(jsim.mean)
 
   } else {
-    # ................ precomputed values ..................
-    # validate weights
+    ## ................ precomputed values ..................
+    ## validate weights
     if(use.weights) 
       check.nvector(weights, nsim,
                     things="simulations", naok=TRUE)
@@ -1213,11 +1238,14 @@ envelope.matrix <- function(Y, ...,
   }
 
   shadenames <- NULL
+  nsim.mean <- NULL
   
   switch(type,
          pointwise = {
-           # ....... POINTWISE ENVELOPES ...............................
-           if(cheat) {
+           ## ....... POINTWISE ENVELOPES ...............................
+           if(gaveup) {
+             lo <- hi <- NAvector
+           } else if(cheat) {
              stopifnot(checkfields(precomputed, c("lo", "hi")))
              lo <- precomputed$lo
              hi <- precomputed$hi
@@ -1228,7 +1256,6 @@ envelope.matrix <- function(Y, ...,
                if(use.weights) weights <- weights[jsim]
              }
              nsim <- ncol(simvals)
-             nsim.mean <- NULL
              if(nrank == 1L) {
                lohi <- apply(simvals, 1L, range)
              } else {
@@ -1243,17 +1270,17 @@ envelope.matrix <- function(Y, ...,
            lo.name <- "lower pointwise envelope of %s from simulations"
            hi.name <- "upper pointwise envelope of %s from simulations"
            ##
-           switch(alternative,
-                  two.sided = { },
-                  less = {
-                    hi <- rep.int(Inf, length(hi))
-                    hi.name <- "infinite upper limit"
-                  },
-                  greater = {
-                    lo <- rep.int(-Inf, length(lo))
-                    lo.name <- "infinite lower limit"
-                  })
-           #
+           if(!gaveup)
+             switch(alternative,
+                    two.sided = { },
+                    less = {
+                      hi <- rep.int(Inf, length(hi))
+                      hi.name <- "infinite upper limit"
+                    },
+                    greater = {
+                      lo <- rep.int(-Inf, length(lo))
+                      lo.name <- "infinite lower limit"
+                    })
            if(use.theory) {
              results <- data.frame(r=rvals,
                                    obs=fX,
@@ -1261,7 +1288,8 @@ envelope.matrix <- function(Y, ...,
                                    lo=lo,
                                    hi=hi)
            } else {
-             m <- if(cheat) precomputed$mmean else 
+             m <- if(gaveup) NAvector else
+                  if(cheat) precomputed$mmean else 
                   if(!use.weights) apply(simvals, 1L, mean, na.rm=TRUE) else
                   apply(simvals, 1L, weighted.mean, w=weights, na.rm=TRUE)
              results <- data.frame(r=rvals,
@@ -1272,8 +1300,10 @@ envelope.matrix <- function(Y, ...,
            }
            shadenames <- c("lo", "hi")
            if(do.pwrong) {
-             # estimate the p-value for the 'wrong test'
-             if(cheat) {
+             ## estimate the p-value for the 'wrong test'
+             if(gaveup) {
+               pwrong <- NA_real_
+             } else if(cheat) {
                pwrong <- precomputed$pwrong
                do.pwrong <- !is.null(pwrong) && !badprobability(pwrong, FALSE)
              } else {
@@ -1284,16 +1314,17 @@ envelope.matrix <- function(Y, ...,
                                    less = lower.signif,
                                    greater = upper.signif,
                                    two.sided = lower.signif | upper.signif)
-#               is.signif.somewhere <- apply(is.signif, 2, any)
                is.signif.somewhere <- matcolany(is.signif)
                pwrong <- sum(is.signif.somewhere)/nsim
              }
            }
          },
          global = {
-           # ..... SIMULTANEOUS ENVELOPES ..........................
-           if(cheat) {
-             # ... use precomputed values ..
+           ## ..... SIMULTANEOUS ENVELOPES ..........................
+           if(gaveup) {
+             lo <- hi <- reference <- NAvector
+           } else if(cheat) {
+             ## ... use precomputed values ..
              stopifnot(checkfields(precomputed, c("lo", "hi")))
              lo <- precomputed$lo
              hi <- precomputed$hi
@@ -1303,10 +1334,9 @@ envelope.matrix <- function(Y, ...,
                stopifnot(checkfields(precomputed, "mmean"))
                reference <- precomputed$mmean
              }
-             nsim.mean <- NULL
              domain <- rep.int(TRUE, length(rvals))
            } else {
-             # ... normal case: compute envelopes from simulations
+             ## ... normal case: compute envelopes from simulations
              if(!is.null(ginterval)) {
                domain <- (rvals >= ginterval[1L]) & (rvals <= ginterval[2L])
                funX <- funX[domain, ]
@@ -1319,7 +1349,6 @@ envelope.matrix <- function(Y, ...,
                  simvals <- simvals[, jsim]
                  if(use.weights) weights <- weights[jsim]
                }
-               nsim.mean <- NULL
              } else if(dual) {
                # Estimate the mean from one set of columns
                # Form envelopes from another set of columns
@@ -1342,7 +1371,6 @@ envelope.matrix <- function(Y, ...,
                reference <- 
                  if(!use.weights) apply(simvals.mean, 1L, mean, na.rm=TRUE) else
                  apply(simvals.mean, 1L, weighted.mean, w=weights, na.rm=TRUE)
-               nsim.mean <- NULL
              }
              nsim <- ncol(simvals)
              # compute deviations
@@ -1387,16 +1415,17 @@ envelope.matrix <- function(Y, ...,
            lo.name <- "lower critical boundary for %s"
            hi.name <- "upper critical boundary for %s"
 
-           switch(alternative,
-                  two.sided = { },
-                  less = {
-                    hi <- rep.int(Inf, length(hi))
-                    hi.name <- "infinite upper boundary"
-                  },
-                  greater = {
-                    lo <- rep.int(-Inf, length(lo))
-                    lo.name <- "infinite lower boundary"
-                  })
+           if(!gaveup)
+             switch(alternative,
+                    two.sided = { },
+                    less = {
+                      hi <- rep.int(Inf, length(hi))
+                      hi.name <- "infinite upper boundary"
+                    },
+                    greater = {
+                      lo <- rep.int(-Inf, length(lo))
+                      lo.name <- "infinite lower boundary"
+                    })
 
            if(use.theory)
              results <- data.frame(r=rvals[domain],
@@ -1416,14 +1445,16 @@ envelope.matrix <- function(Y, ...,
                            "it is not relevant to global envelopes"))
          },
          variance={
-           # ....... POINTWISE MEAN, VARIANCE etc ......................
-           if(cheat) {
+           ## ....... POINTWISE MEAN, VARIANCE etc ......................
+           if(gaveup) {
+             Ef <- varf <- NAvector
+           } else if(cheat) {
              # .... use precomputed values ....
              stopifnot(checkfields(precomputed, c("Ef", "varf")))
              Ef   <- precomputed$Ef
              varf <- precomputed$varf
            } else {
-             # .... normal case: compute from simulations
+             ## .... normal case: compute from simulations
              simvals[is.infinite(simvals)] <- NA
              if(restrict.columns) {
                simvals <- simvals[, jsim]
@@ -1438,37 +1469,41 @@ envelope.matrix <- function(Y, ...,
                varf <- apply(simvals, 1L, weighted.var,  w=weights, na.rm=TRUE)
              }
            }
-           nsim.mean <- NULL
-           # derived quantities
-           sd <- sqrt(varf)
-           stdres <- (fX-Ef)/sd
-           stdres[!is.finite(stdres)] <- NA
-           # critical limits
-           lo <- Ef - nSD * sd
-           hi <- Ef + nSD * sd
+           if(gaveup) {
+             sd <- stdres <- lo <- hi <- loCI <- hiCI <- NAvector
+           } else {
+             ## derived quantities
+             sd <- sqrt(varf)
+             stdres <- (fX-Ef)/sd
+             stdres[!is.finite(stdres)] <- NA
+             ## critical limits
+             lo <- Ef - nSD * sd
+             hi <- Ef + nSD * sd
+             ## confidence interval 
+             loCI <- Ef - nSD * sd/sqrt(nsim)
+             hiCI <- Ef + nSD * sd/sqrt(nsim)
+           }
            lo.name <- paste("lower", nSD, "sigma critical limit for %s")
            hi.name <- paste("upper", nSD, "sigma critical limit for %s")
-           # confidence interval 
-           loCI <- Ef - nSD * sd/sqrt(nsim)
-           hiCI <- Ef + nSD * sd/sqrt(nsim)
            loCI.name <- paste("lower", nSD, "sigma confidence bound",
                               "for mean of simulated %s")
            hiCI.name <- paste("upper", nSD, "sigma confidence bound",
-                              "for mean of simulated %s")
+                                "for mean of simulated %s")
            ##
-           switch(alternative,
-                  two.sided = { },
-                  less = {
-                    hi <- hiCI <- rep.int(Inf, length(hi))
-                    hi.name <- "infinite upper boundary"
-                    hiCI.name <- "infinite upper confidence limit"
-                  },
-                  greater = {
-                    lo <- loCI <- rep.int(-Inf, length(lo))
-                    lo.name <- "infinite lower boundary"
-                    loCI.name <- "infinite lower confidence limit"
-                  })
-           # put together
+           if(!gaveup)
+             switch(alternative,
+                    two.sided = { },
+                    less = {
+                      hi <- hiCI <- rep.int(Inf, length(hi))
+                      hi.name <- "infinite upper boundary"
+                      hiCI.name <- "infinite upper confidence limit"
+                    },
+                    greater = {
+                      lo <- loCI <- rep.int(-Inf, length(lo))
+                      lo.name <- "infinite lower boundary"
+                      loCI.name <- "infinite lower confidence limit"
+                    })
+           ## put together
            if(use.theory) {
              results <- data.frame(r=rvals,
                                    obs=fX,
@@ -1482,10 +1517,12 @@ envelope.matrix <- function(Y, ...,
                                      stdres=stdres,
                                      loCI=loCI,
                                      hiCI=hiCI)
-             loCIlabel <- if(alternative == "greater") "-infinity" else
-                         makefvlabel(NULL, NULL, fname, "loCI")
-             hiCIlabel <- if(alternative == "less") "infinity" else 
-                         makefvlabel(NULL, NULL, fname, "hiCI")
+             loCIlabel <-
+               if(alternative == "greater" && !gaveup) "-infinity" else
+               makefvlabel(NULL, NULL, fname, "loCI")
+             hiCIlabel <-
+               if(alternative == "less" && !gaveup) "infinity" else 
+               makefvlabel(NULL, NULL, fname, "hiCI")
              mslabl <- c(makefvlabel(NULL, "bar", fname),
                          makefvlabel("var", "hat", fname),
                          makefvlabel("res", "hat", fname),
@@ -1510,10 +1547,12 @@ envelope.matrix <- function(Y, ...,
                                      stdres=stdres,
                                      loCI=loCI,
                                      hiCI=hiCI)
-             loCIlabel <- if(alternative == "greater") "-infinity" else
-                         makefvlabel(NULL, NULL, fname, "loCI")
-             hiCIlabel <- if(alternative == "less") "infinity" else 
-                         makefvlabel(NULL, NULL, fname, "hiCI")
+             loCIlabel <-
+               if(alternative == "greater" && !gaveup) "-infinity" else
+               makefvlabel(NULL, NULL, fname, "loCI")
+             hiCIlabel <-
+               if(alternative == "less" && !gaveup) "infinity" else 
+               makefvlabel(NULL, NULL, fname, "hiCI")
              mslabl <- c(makefvlabel("var", "hat", fname),
                          makefvlabel("res", "hat", fname),
                          makefvlabel("stdres", "hat", fname),
@@ -1526,8 +1565,10 @@ envelope.matrix <- function(Y, ...,
                          loCI.name, hiCI.name)
            }
            if(do.pwrong) {
-             # estimate the p-value for the 'wrong test'
-             if(cheat) {
+             ## estimate the p-value for the 'wrong test'
+             if(gaveup) {
+               pwrong <- NA_real_
+             } else if(cheat) {
                pwrong <- precomputed$pwrong
                do.pwrong <- !is.null(pwrong) && !badprobability(pwrong, FALSE)
              } else {
@@ -1558,9 +1599,9 @@ envelope.matrix <- function(Y, ...,
                       "sample mean of %s from simulations")
   }
 
-  lolabl <- if(alternative == "greater") "-infinity" else
+  lolabl <- if(alternative == "greater" && !gaveup) "-infinity" else
              makefvlabel(NULL, "hat", fname, "lo")
-  hilabl <- if(alternative == "less") "infinity" else
+  hilabl <- if(alternative == "less"&& !gaveup) "infinity" else
              makefvlabel(NULL, "hat", fname, "hi")
 
   result <- fv(results,
@@ -1616,10 +1657,11 @@ envelope.matrix <- function(Y, ...,
                                 nsim2 = nsim.mean,
                                 Yname = Yname,
                                 do.pwrong=do.pwrong,
-                                use.weights=use.weights)
+                                use.weights=use.weights,
+                                gaveup = gaveup)
 
   # tack on saved functions
-  if(savefuns) {
+  if(savefuns && !gaveup) {
     nSim <- ncol(Y)
     alldata <- cbind(rvals, Y)
     simnames <- paste("sim", 1:nSim, sep="")

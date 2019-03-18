@@ -133,6 +133,15 @@
   \code{\link{envelope}} to control the number of
   simulations, the random process generating the simulations,
   the construction of envelopes, and so on. 
+
+  When \code{envelope=TRUE} it is possible that errors could occur
+  because the simulated point patterns do not satisfy the requirements
+  of the summary function (for example, because the simulated pattern
+  is empty and \code{fun} requires at least one point). If the number
+  of such errors exceeds the maximum permitted number \code{maxnerr},
+  then the envelope algorithm will give up, and will return
+  the empirical summary function for the data point pattern,
+  \code{fun(X)}, in place of the envelope.
 }
 \value{
   A function array (an object of class \code{"fasp"},

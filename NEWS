@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.58-2.057
+        CHANGES IN spatstat VERSION 1.58-2.058
 
 OVERVIEW
 
@@ -160,6 +160,12 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o parres
     The argument 'covariate' may be omitted if the model involves
     only one covariate.
+
+    o alltypes
+    If 'envelope=TRUE' and the envelope computation reaches the
+    maximum permitted number of errors (maxnerr) in evaluating
+    the summary function for the simulated patterns, then instead
+    of triggering a fatal error, the envelope limits will be set to NA.
     
 BUG FIXES
 

@@ -1,7 +1,7 @@
 #
 #      alltypes.R
 #
-#   $Revision: 1.35 $   $Date: 2017/06/05 10:31:58 $
+#   $Revision: 1.37 $   $Date: 2019/03/18 09:22:24 $
 #
 #
                                   
@@ -104,6 +104,8 @@ alltypes <- function(X, fun="K", ...,
   fns  <- list()
   k   <- 0
 
+  maxerr.action <- if(verb) "warn" else "null"
+  
   for(i in 1L:nrow(witch)) {
     Y <- if(apply.to.split) ppsplit[[i]] else X
     for(j in 1L:ncol(witch)) {
@@ -121,7 +123,9 @@ alltypes <- function(X, fun="K", ...,
                                    list(simulate=L, internal=intern),
                                    list(verbose=FALSE),
                                    list(...),
-                                   list(Yname=dataname),
+                                   list(Yname=dataname,
+                                        silent=TRUE,
+                                        maxerr.action=maxerr.action),
                                    switch(1L+indices.expected,
                                           NULL,
                                           list(i=ma[i]),
@@ -130,6 +134,16 @@ alltypes <- function(X, fun="K", ...,
       k <- k+1
       fns[[k]] <- as.fv(currentfv)
     }
+  }
+
+  einfo <- lapply(fns, attr, which="einfo")
+  gaveup <- sapply(lapply(einfo, getElement, name="gaveup"), isTRUE)
+  if(any(gaveup)) {
+    ng <- sum(gaveup)
+    warning(paste(ng, "out of", length(fns), "envelopes",
+                  ngettext(ng, "was", "were"),
+                  "not computed, due to errors in evaluating",
+                  "the summary functions for simulated patterns"))
   }
 
   # wrap up into 'fasp' object

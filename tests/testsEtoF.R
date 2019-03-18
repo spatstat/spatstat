@@ -25,7 +25,7 @@ local({
 #
 #  Test validity of envelope data
 #
-#  $Revision: 1.13 $  $Date: 2018/10/31 03:52:34 $
+#  $Revision: 1.15 $  $Date: 2019/03/18 09:49:49 $
 #
 
 require(spatstat)
@@ -182,6 +182,14 @@ local({
   #' Fails with spatstat.utils 1.12-0
   set.seed(42)
   EP <- envelope(longleaf, pcf, nsim=10, nrank=2)
+})
+
+local({
+  #' Test case when the maximum permitted number of failures is exceeded
+  X <- amacrine[1:153] # contains exactly one point with mark='off'
+  #' High probability of generating a pattern with no marks = 'off'
+  E <- envelope(X, Kcross, nsim=39, maxnerr=2, maxerr.action="warn")
+  A <- alltypes(X, Kcross, envelope=TRUE, nsim=39, maxnerr=2)
 })
 #
 #    tests/factorbugs.R

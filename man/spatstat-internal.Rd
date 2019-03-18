@@ -940,7 +940,9 @@ envelopeEngine(X, fun, simul,
            savefuns, savepatterns, saveresultof,
            weights,
            nsim2, VARIANCE, nSD,
-           Yname, maxnerr, internal, cl,
+           Yname,
+           silent, maxnerr, maxerr.action,
+           internal, cl,
            envir.user, expected.arg, do.pwrong,
            foreignclass, collectrubbish)
 envelopeProgressData(X, fun, \dots, exponent,
@@ -956,7 +958,7 @@ envelopeTest(X, \dots, exponent, alternative,
 \method{envelope}{matrix}(Y, \dots, rvals, observed, theory, funX,
   nsim, nsim2, jsim, jsim.mean,
   type, alternative, scale, clamp, csr, use.theory, nrank, ginterval, nSD,
-  savefuns, check, Yname, do.pwrong, weights, precomputed)
+  savefuns, check, Yname, do.pwrong, weights, precomputed, gaveup)
 equalpairs(U, X, marked=FALSE)
 equalpairs.quad(Q)
 equals.quad(Q)          

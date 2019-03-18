@@ -1150,5 +1150,27 @@ Change log from 1.58-2 to 1.58-3
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+18 feb 2019
 
+   envelope.R
+   spatstat-internal.Rd
+	New arguments to envelopeEngine to control the action
+	when the simulated functions cause too many errors.
+
+   alltypes.R
+   alltypes.Rd
+	Doesn't fall over when the simulated functions cause too many errors,
+	when envelope=TRUE.
+
+   tests/envelopes.R
+	Added test of envelope() and alltypes() when the
+	simulated functions cause too many errors.
 	
+    DESCRIPTION
+    NEWS
+        Version 1.58-2.058
+	
+------------- passed R-3.5.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
