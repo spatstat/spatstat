@@ -3,7 +3,7 @@
 #
 #   computes simulation envelopes 
 #
-#   $Revision: 2.93 $  $Date: 2019/03/18 09:22:33 $
+#   $Revision: 2.95 $  $Date: 2019/03/19 06:06:21 $
 #
 
 envelope <- function(Y, fun, ...) {
@@ -446,11 +446,13 @@ envelopeEngine <-
       simtype <- "list"
       SimDataList <- simulate
       # expression that will be evaluated
-      simexpr <- expression(SimDataList[[i]])
+      simexpr <- expression(SimDataList[[i+nerr]])
       dont.complain.about(SimDataList)
       envir <- envir.here
       # ensure that `i' is defined
       i <- 1L
+      nerr <- 0L
+      maxnerr <- min(length(SimDataList)-nsim, maxnerr)
       # any messages?
       if(!is.null(mess <- attr(simulate, "internal"))) {
         # determine whether these point patterns are realisations of CSR
@@ -753,11 +755,11 @@ envelopeEngine <-
   gaveup <- FALSE
   if(verbose) pstate <- list()
   for(i in 1:Nsim) {
-    ok <- FALSE
-    # safely generate a random pattern and apply function
-    while(!ok && !gaveup) {
+    ## safely generate a random pattern and apply function
+    success <- FALSE
+    while(!success && !gaveup) {
       Xsim <- eval(simexpr, envir=envir)
-      # check valid point pattern
+      ## check valid point pattern
       if(!inherits(Xsim, Xclass))
         switch(simtype,
                csr=stop(paste("Internal error:", Xobjectname, "not generated")),
@@ -789,22 +791,26 @@ envelopeEngine <-
       ## apply function safely
       funXsim <- try(do.call(fun, c(list(Xsim), funargs)), silent=silent)
 
-      ok <- !inherits(funXsim, "try-error")
+      success <- !inherits(funXsim, "try-error")
 
-      if(!ok) {
-        nerr <- nerr + 1L
+      if(!success) {
+        #' error in computing summary function
+        nerr <- nerr + 1L 
         if(nerr > maxnerr) {
+          gaveup <- TRUE
           whinge <- paste("Exceeded maximum number of errors",
                           paren(maxnerr),
-                          "when evaluating summary function",
-                          "for simulated patterns")
+                          "when evaluating summary function for",
+                          if(simtype == "list") "supplied" else "simulated",
+                          "point patterns")
           switch(maxerr.action,
                  fatal = stop(whinge),
                  warn  = warning(whinge),
                  null  = {})
-          gaveup <- TRUE
         } else if(!silent) cat("[retrying]\n")
-      } 
+      }
+
+      #' ..... end of while(!success) ................
     }
     
     if(gaveup) break; # exit loop now
