@@ -3,7 +3,7 @@
 ##
 ##   simulating from Neyman-Scott processes
 ##
-##   $Revision: 1.25 $  $Date: 2018/05/07 04:35:20 $
+##   $Revision: 1.26 $  $Date: 2019/03/19 08:32:39 $
 ##
 ##    Original code for rCauchy and rVarGamma by Abdollah Jalilian
 ##    Other code and modifications by Adrian Baddeley
@@ -182,7 +182,7 @@ rMatClust <- local({
       for(i in 1:nsim) {
         parents <- attr(result[[i]], "parents")
         Lambda <- clusterfield("MatClust", parents, scale=scale, mu=mu, ...)
-        attr(result[[i]], "Lambda") <- Lambda[win]
+        attr(result[[i]], "Lambda") <- Lambda[win, drop=FALSE]
       }
     }
     return(if(nsim == 1 && drop) result[[1]] else result)
@@ -239,7 +239,7 @@ rThomas <- local({
         for(i in 1:nsim) {
           parents <- attr(result[[i]], "parents")
           Lambda <- clusterfield("Thomas", parents, scale=scale, mu=mu, ...)
-          attr(result[[i]], "Lambda") <- Lambda[win]
+          attr(result[[i]], "Lambda") <- Lambda[win, drop=FALSE]
         }
       }
       return(if(nsim == 1 && drop) result[[1]] else result)
@@ -313,7 +313,7 @@ rCauchy <- local({
       for(i in 1:nsim) {
         parents <- attr(result[[i]], "parents")
         Lambda <- clusterfield("Cauchy", parents, scale=scale, mu=mu, ...)
-        attr(result[[i]], "Lambda") <- Lambda[win]
+        attr(result[[i]], "Lambda") <- Lambda[win, drop=FALSE]
       }
     }
     return(if(nsim == 1 && drop) result[[1]] else result)
@@ -399,7 +399,7 @@ rVarGamma <- local({
         parents <- attr(result[[i]], "parents")
         Lambda <- clusterfield("VarGamma", parents, scale=scale,
                                nu=nu, mu=mu, ...)
-        attr(result[[i]], "Lambda") <- Lambda[win]
+        attr(result[[i]], "Lambda") <- Lambda[win, drop=FALSE]
       }
     }
     return(if(nsim == 1 && drop) result[[1]] else result)

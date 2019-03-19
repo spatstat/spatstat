@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.58-2.060
+        CHANGES IN spatstat VERSION 1.58-2.061
 
 OVERVIEW
 
@@ -294,7 +294,12 @@ BUG FIXES
     o plot.tess
     The names of the tiles were sometimes re-ordered in the legend.
     Fixed.
-    
+
+    o rThomas, rMatClust, rCauchy, rVarGamma
+    If the simulation window was not a rectangle,
+    the attribute 'Lambda' was a numeric vector, rather than a pixel image.
+    Fixed.
+
         CHANGES IN spatstat VERSION 1.58-2
 
 OVERVIEW

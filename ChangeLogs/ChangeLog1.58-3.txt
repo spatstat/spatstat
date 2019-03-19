@@ -1197,3 +1197,15 @@ Change log from 1.58-2 to 1.58-3
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+    randomNS.R
+	Bug fix (attribute 'Lambda' was not an image
+	unless the window was a rectangle)
+
+    DESCRIPTION
+    NEWS
+        Version 1.58-2.061
+	
+------------- passed R-3.5.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
