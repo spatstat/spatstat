@@ -1185,3 +1185,15 @@ Change log from 1.58-2 to 1.58-3
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+    kppm.R
+    simulate.kppm.Rd
+	Additional arguments '...' are passed to the simulation function.
+
+    DESCRIPTION
+    NEWS
+        Version 1.58-2.060
+	
+------------- passed R-3.5.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+

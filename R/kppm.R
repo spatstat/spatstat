@@ -3,7 +3,7 @@
 #
 # kluster/kox point process models
 #
-# $Revision: 1.142 $ $Date: 2019/02/22 10:20:19 $
+# $Revision: 1.143 $ $Date: 2019/03/19 07:59:00 $
 #
 
 kppm <- function(X, ...) {
@@ -1382,26 +1382,26 @@ simulate.kppm <- function(object, nsim=1, seed=NULL, ...,
          Thomas={
            kappa <- mp$kappa
            sigma <- mp$sigma
-           cmd <- expression(rThomas(kappa,sigma,mu,win))
+           cmd <- expression(rThomas(kappa,sigma,mu,win, ...))
            dont.complain.about(kappa, sigma, mu)
          },
          MatClust={
            kappa <- mp$kappa
            r     <- mp$R
-           cmd   <- expression(rMatClust(kappa,r,mu,win))
+           cmd   <- expression(rMatClust(kappa,r,mu,win, ...))
            dont.complain.about(kappa, r)
          },
          Cauchy = {
            kappa <- mp$kappa
            omega <- mp$omega
-           cmd   <- expression(rCauchy(kappa, omega, mu, win))
+           cmd   <- expression(rCauchy(kappa, omega, mu, win, ...))
            dont.complain.about(kappa, omega, mu)
          },
          VarGamma = {
            kappa  <- mp$kappa
            omega  <- mp$omega
            nu.ker <- object$covmodel$margs$nu.ker
-           cmd    <- expression(rVarGamma(kappa, nu.ker, omega, mu, win))
+           cmd    <- expression(rVarGamma(kappa, nu.ker, omega, mu, win, ...))
            dont.complain.about(kappa, nu.ker, omega, mu)
          },
          LGCP={

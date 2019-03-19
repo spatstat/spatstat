@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.58-2.059
+        CHANGES IN spatstat VERSION 1.58-2.060
 
 OVERVIEW
 
@@ -166,6 +166,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
     maximum permitted number of errors (maxnerr) in evaluating
     the summary function for the simulated patterns, then instead
     of triggering a fatal error, the envelope limits will be set to NA.
+
+    o simulate.kppm
+    Additional arguments '...' are now passed to
+    the function that performs the simulation.
     
 BUG FIXES
 

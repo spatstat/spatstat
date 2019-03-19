@@ -22,7 +22,10 @@
     be used in a call to \code{\link[base:Random]{set.seed}}
     before simulating the point patterns. 
   }
-  \item{\dots}{Ignored.}
+  \item{\dots}{
+    Additional arguments passed to the relevant random generator.
+    See Details.
+  }
   \item{window}{
     Optional. Window (object of class \code{"owin"}) in which the
     model should be simulated.
@@ -49,9 +52,18 @@
   \code{\link[stats]{simulate}} for the class \code{"kppm"} of fitted
   cluster point process models.
   
-  Simulations are performed by \code{\link{rThomas}},
-  \code{\link{rMatClust}} or \code{\link{rLGCP}}
+  Simulations are performed by
+  \code{\link{rThomas}},
+  \code{\link{rMatClust}},
+  \code{\link{rCauchy}},
+  \code{\link{rVarGamma}}
+  or \code{\link{rLGCP}}
   depending on the model.
+
+  Additional arguments \code{\dots} are passed to the relevant function
+  performing the simulation.
+  For example the argument \code{saveLambda} is recognised by all of the
+  simulation functions.
 
   The return value is a list of point patterns.
   It also carries an attribute \code{"seed"} that
@@ -79,6 +91,8 @@
   \code{\link{kppm}},
   \code{\link{rThomas}},
   \code{\link{rMatClust}},
+  \code{\link{rCauchy}},
+  \code{\link{rVarGamma}},
   \code{\link{rLGCP}},
   \code{\link{simulate.ppm}},
   \code{\link[stats]{simulate}}
