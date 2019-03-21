@@ -3,28 +3,25 @@
 #'
 #'    densityVoronoi.lpp
 #'
-#'    $Revision: 1.7 $  $Date: 2019/02/14 00:47:12 $
+#'    $Revision: 1.10 $  $Date: 2019/03/21 03:01:49 $
 #' 
 
 densityVoronoi.lpp <- function(X, f = 1, ..., nrep = 1, verbose = TRUE){
   # Check input
   stopifnot(is.lpp(X))
-  npts <- npoints(X)
   check.1.real(f)
   if(badprobability(f))
     stop("f should be a probability between 0 and 1")
   check.1.integer(nrep)
   stopifnot(nrep >= 1)
 
-  #' average intensity
-  lambdabar <- intensity(unmark(X))
-
   #' secret argument
   what <- resolve.1.default(list(what="image"), list(...))
   what <- match.arg(what, c("image", "function"))
 
-  if(f == 0) {
+  if(f == 0 || npoints(X) == 0) {
     #' uniform estimate
+    lambdabar <- intensity(unmark(X))
     fun <- function(x, y, seg, tp) { rep(lambdabar, length(seg)) }
     g <- linfun(fun, domain(X))
     if(what == "image") g <- as.linim(g, ...)
@@ -102,8 +99,8 @@ bw.voronoi <- function(X, ..., probrange = c(0.2,0.8), nprob = 10,
   segX <- cooX$seg
   tpX <- cooX$tp
 
-  lambdabar <- nX/volume(as.linnet(X))
-
+  if(nX == 0) return(max(prob))
+  
   if(verbose) {
     cat("Performing", nrep, "replicates... ")
     pstate <- list()

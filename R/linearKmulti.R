@@ -1,7 +1,7 @@
 #
 # linearKmulti
 #
-# $Revision: 1.16 $ $Date: 2019/03/04 07:49:33 $
+# $Revision: 1.17 $ $Date: 2019/03/21 02:53:35 $
 #
 # K functions for multitype point pattern on linear network
 #
@@ -218,25 +218,19 @@ linearKmultiEngine <- function(X, I, J, ..., r=NULL, reweight=NULL, denom=1,
     return(K)
   }
   #
-  nI <- sum(I)
-  nJ <- sum(J)
-  whichI <- which(I)
-  whichJ <- which(J)
+  ## nI <- sum(I)
+  ## nJ <- sum(J)
+  ## whichI <- which(I)
+  ## whichJ <- which(J)
   clash <- I & J
   has.clash <- any(clash)
-  # compute pairwise distances
-  if(exists("crossdist.lpp")) {
-    DIJ <- crossdist(X[I], X[J], check=FALSE)
-    if(has.clash) {
-      # exclude pairs of identical points from consideration
-      Iclash <- which(clash[I])
-      Jclash <- which(clash[J])
-      DIJ[cbind(Iclash,Jclash)] <- Inf
-    }
-  } else {
-    D <- pairdist(X)
-    diag(D) <- Inf
-    DIJ <- D[I, J]
+  ## compute pairwise distances
+  DIJ <- crossdist(X[I], X[J], check=FALSE)
+  if(has.clash) {
+    ## exclude pairs of identical points from consideration
+    Iclash <- which(clash[I])
+    Jclash <- which(clash[J])
+    DIJ[cbind(Iclash,Jclash)] <- Inf
   }
   #---  compile into K function ---
   if(correction == "none" && is.null(reweight)) {
@@ -312,13 +306,13 @@ DoCountCrossEnds <- function(X, I, J, DIJ, toler) {
         Xindex <- which(relevant)
         ## classify them
         Isub <- I[relevant]
-        Jsub <- J[relevant]
+        ## Jsub <- J[relevant]
         ## identify relevant submatrix of DIJ
         rowsub <- relevant[I]
         colsub <- relevant[J]
         ## corresponding indices in X
-        rowXindex <- whichI[rowsub]
-        colXindex <- whichJ[colsub]
+        ## rowXindex <- whichI[rowsub]
+        ## colXindex <- whichJ[colsub]
         ## handle
         for(k in which(colsub)) {
           j <- whichJ[k]

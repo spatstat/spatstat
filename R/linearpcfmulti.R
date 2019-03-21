@@ -1,7 +1,7 @@
 #
 # linearpcfmulti.R
 #
-# $Revision: 1.13 $ $Date: 2019/03/04 08:39:25 $
+# $Revision: 1.14 $ $Date: 2019/03/21 02:55:10 $
 #
 # pair correlation functions for multitype point pattern on linear network
 #
@@ -219,25 +219,19 @@ linearPCFmultiEngine <- function(X, I, J, ..., r=NULL, reweight=NULL, denom=1,
     return(g)
   }
   #
-  nI <- sum(I)
-  nJ <- sum(J)
-  whichI <- which(I)
-  whichJ <- which(J)
+  ##  nI <- sum(I)
+  ## nJ <- sum(J)
+  ## whichI <- which(I)
+  ## whichJ <- which(J)
   clash <- I & J
   has.clash <- any(clash)
-  # compute pairwise distances
-  if(exists("crossdist.lpp")) {
-    DIJ <- crossdist(X[I], X[J], check=FALSE)
-    if(has.clash) {
-      # exclude pairs of identical points from consideration
-      Iclash <- which(clash[I])
-      Jclash <- which(clash[J])
-      DIJ[cbind(Iclash,Jclash)] <- Inf
-    }
-  } else {
-    D <- pairdist(X)
-    diag(D) <- Inf
-    DIJ <- D[I, J]
+  ## compute pairwise distances
+  DIJ <- crossdist(X[I], X[J], check=FALSE)
+  if(has.clash) {
+    ## exclude pairs of identical points from consideration
+    Iclash <- which(clash[I])
+    Jclash <- which(clash[J])
+    DIJ[cbind(Iclash,Jclash)] <- Inf
   }
   #---  compile into pair correlation function ---
   if(correction == "none" && is.null(reweight)) {

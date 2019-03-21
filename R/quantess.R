@@ -2,7 +2,7 @@
 #' 
 #'     Quantile Tessellation
 #'
-#'   $Revision: 1.17 $  $Date: 2019/03/16 11:34:51 $
+#'   $Revision: 1.18 $  $Date: 2019/03/21 02:56:53 $
 
 quantess <- function(M, Z, n, ...) {
   UseMethod("quantess")
@@ -153,7 +153,6 @@ quantess.ppp <- function(M, Z, n, ..., type=2, origin=c(0,0), eps=NULL) {
 
 quantess.im <- function(M, Z, n, ..., type=2, origin=c(0,0)) {
   W <- Window(M)
-  B <- boundingbox(W)
   tcross <- MinimalTess(W, ...)
   force(n)
   if(!(type %in% c(1,2)))

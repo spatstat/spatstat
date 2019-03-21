@@ -1209,3 +1209,23 @@ Change log from 1.58-2 to 1.58-3
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+21 mar 2019
+
++++++++++++++ passed 'make bookcheck'  +++++++++++++++
+
+    densitylppVoronoi.R
+	Bug fixes in handling empty point patterns
+
+    densitylppVoronoi.R
+    linearKmulti.R
+    linearpcfmulti.R
+    quantess.R
+	Removed unused variables.
+
+    DESCRIPTION
+    NEWS
+        Version 1.58-2.062
+	
+------------- passed R-3.5.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
