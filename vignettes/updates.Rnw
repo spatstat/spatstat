@@ -628,7 +628,7 @@ Following is a list of all the functions that have been added.
     Interactively add points on a linear network.
     
     \item \texttt{envelopeArray}:
-    Ggenerate an array of envelopes
+    Generate an array of envelopes
     using a function that returns \texttt{fasp} objects.
 
     \item \texttt{bw.pcf}:
@@ -1049,6 +1049,12 @@ listed alphabetically.
   
 \item \texttt{affine.owin}:
   Allows transformation matrix to be singular, if the window is polygonal.
+
+\item \texttt{alltypes}:
+    If \texttt{envelope=TRUE} and the envelope computation reaches the
+    maximum permitted number of errors (\texttt{maxnerr}) in evaluating
+    the summary function for the simulated patterns, then instead
+    of triggering a fatal error, the envelope limits will be set to \texttt{NA}.
 
 \item \texttt{anova.mppm}: Now handles Gibbs models,
   and performs the adjusted composite likelihood ratio test.
@@ -2271,7 +2277,11 @@ listed alphabetically.
    versions of spatstat, revert to the slower code by setting
    \texttt{spatstat.options(fastthin=FALSE, fastpois=FALSE)}.
 
-   \item \texttt{simulate.ppm}
+   \item \texttt{simulate.kppm}:
+     Additional arguments \verb!...! are now passed to
+    the function that performs the simulation.
+   
+   \item \texttt{simulate.ppm}:
    New argument \texttt{w} controls the window of the simulated patterns.
    New argument \texttt{verbose}.
    

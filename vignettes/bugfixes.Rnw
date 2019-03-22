@@ -658,6 +658,13 @@ of potential impact.
  \item \texttt{plot.tess}:  the legend showed the tile names
    in lexicographical order, rather than their original order.
    \bugger{1.55-1}{april 2018}{1.59-0}{march 2019}
+
+  \item \texttt{rThomas}, \texttt{rMatClust},
+    \texttt{rCauchy}, \texttt{rVarGamma}:
+    If the simulation window was not a rectangle,
+    the attribute \texttt{Lambda} was a numeric vector, 
+    rather than a pixel image as intended.
+    \bugger{1.43-0}{october 2015}{1.59-0}{march 2019}
 \end{itemize}
 
 \begin{thebibliography}{1}
