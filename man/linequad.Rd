@@ -24,10 +24,11 @@ linequad(X, Y, \dots, eps = NULL, nd = 1000, random = FALSE)
   }
   \item{eps}{
     Optional. Spacing between successive dummy points along each
-    segment.
+    segment. (This is the maximum spacing; some spacings will be shorter.)
   }
   \item{nd}{
     Optional. Total number of dummy points to be generated.
+    (Actual number may be larger.)
   }
   \item{random}{
     Logical value indicating whether the sequence of dummy points
@@ -49,7 +50,15 @@ linequad(X, Y, \dots, eps = NULL, nd = 1000, random = FALSE)
   along each line segment of the network. The dummy points are 
   evenly-spaced with spacing \code{eps}. The default is
   \code{eps = totlen/nd} where \code{totlen} is the total length of
-  all line segments in the network. 
+  all line segments in the network.
+
+  Every line segment of the network will contain at least one dummy
+  point. Consequently the actual number of dummy points generated
+  will typically be greater than \code{nd},
+  especially when \code{nd} is small.
+  If \code{eps} is specified, the
+  number of dummy points will be greater than \code{totlen/eps},
+  especially when \code{eps} is large.
 }
 \value{
   A quadrature scheme (object of class \code{"quad"}).

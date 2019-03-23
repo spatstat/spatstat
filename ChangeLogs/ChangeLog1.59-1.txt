@@ -1,0 +1,20 @@
+Change log from 1.59-0 to 1.59-1
+================================
+
+22 mar 2019
+
+   DESCRIPTION
+   NEWS
+   Nickname.txt
+	Version 1.59-0.001
+	Nickname "Insistez bien sur les pieds"
+
+23 mar 2019
+
+   tests/Kfuns.R
+	Added a test of validity of Ripley's isotropic correction.
+
+------------- passed R-3.5.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+

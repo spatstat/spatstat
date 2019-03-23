@@ -1243,3 +1243,20 @@ Change log from 1.58-2 to 1.58-3
 ------------- passed R-3.5.3 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
+
+............. passed codetools check   ...............
+............. passed 'make bookcheck'  ...............
+............. passed 'make develcheck' ...............
+
+    linequad.Rd
+	More explanation
+
+    DESCRIPTION
+    NEWS
+        Version 1.59-0
+	
+------------- passed R-3.5.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+	
+

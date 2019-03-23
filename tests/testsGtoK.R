@@ -325,11 +325,11 @@ local({
 #'
 #'   Various K and L functions and pcf
 #'
-#'   $Revision: 1.12 $  $Date: 2019/02/13 07:00:15 $
+#'   $Revision: 1.14 $  $Date: 2019/03/23 08:46:05 $
 #'
 
 require(spatstat)
-myfun <- function(x,y){(x+1) * y }
+myfun <- function(x,y){(x+1) * y } # must be outside
 local({
   #' supporting code
   implemented.for.K(c("border", "bord.modif", "translate", "good", "best"),
@@ -437,6 +437,34 @@ local({
                     same="trans", different="tcom")
 })
   
+local({
+  #' From Ege, in response to a stackoverflow question.
+  #' The following example has two points separated by r = 1 with 1/4 of the
+  #' circumference outside the 10x10 window (i.e. area 100).
+  #' Thus the value of K^(r) should jump from 0 to 
+  #' 100/(2\cdot 1)\cdot ((3/4)^{-1} + (3/4)^{-1}) = 100 \cdot 4/3 = 133.333.
+  x <- c(4.5,5.5)
+  y <- c(10,10)-sqrt(2)/2
+  W <- square(10)
+  X <- ppp(x, y, W)
+  compere <- function(a, b, what) {
+    err <- max(abs(as.numeric(a)-as.numeric(b)))
+    if(err > sqrt(.Machine$double.eps))
+      stop(paste("Discrepancy in edge correction for", what), call.=FALSE)
+    invisible(TRUE)
+  }
+  ## Testing:
+  eX <- edge.Ripley(X, c(1,1))
+  compere(eX, c(4/3,4/3), "interior point of rectangle")
+  ## Corner case:
+  Y <- X
+  Y$x <- X$x-4.5+sqrt(2)/2
+  eY1 <- edge.Ripley(rotate(Y, pi/4), c(1,1))
+  compere(eY1, c(2,4/3), "point near corner of rectangle")
+  ## Invoke polygonal code:
+  eY2 <- edge.Ripley(rotate(Y, pi/4), c(1,1))
+  compere(eY2, c(2,4/3), "interior point of polygon")
+})
 #
 # tests/kppm.R
 #
