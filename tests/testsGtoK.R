@@ -325,7 +325,7 @@ local({
 #'
 #'   Various K and L functions and pcf
 #'
-#'   $Revision: 1.14 $  $Date: 2019/03/23 08:46:05 $
+#'   $Revision: 1.15 $  $Date: 2019/03/24 08:15:54 $
 #'
 
 require(spatstat)
@@ -447,23 +447,28 @@ local({
   y <- c(10,10)-sqrt(2)/2
   W <- square(10)
   X <- ppp(x, y, W)
-  compere <- function(a, b, what) {
+  compere <- function(a, b, where, tol=1e-6) {
     err <- max(abs(as.numeric(a)-as.numeric(b)))
-    if(err > sqrt(.Machine$double.eps))
-      stop(paste("Discrepancy in edge correction for", what), call.=FALSE)
+    descrip <- paste("discrepancy in isotropic edge correction", where)
+    blurb <- paste(descrip, "is", paste0(signif(err, 4), ","), 
+                   if(err > tol) "exceeding" else "within",
+                   "tolerance of", tol)
+    message(blurb)
+    if(err > tol) stop(paste("excessive", descrip), call.=FALSE) 
     invisible(TRUE)
   }
   ## Testing:
   eX <- edge.Ripley(X, c(1,1))
-  compere(eX, c(4/3,4/3), "interior point of rectangle")
+  compere(eX, c(4/3,4/3), "at interior point of rectangle")
   ## Corner case:
   Y <- X
   Y$x <- X$x-4.5+sqrt(2)/2
-  eY1 <- edge.Ripley(rotate(Y, pi/4), c(1,1))
-  compere(eY1, c(2,4/3), "point near corner of rectangle")
+  eY <- edge.Ripley(Y, c(1,1))
+  compere(eY, c(2,4/3), "near corner of rectangle")
   ## Invoke polygonal code:
-  eY2 <- edge.Ripley(rotate(Y, pi/4), c(1,1))
-  compere(eY2, c(2,4/3), "interior point of polygon")
+  Z <- rotate(Y, pi/4)
+  eZ <- edge.Ripley(Z, c(1,1))
+  compere(eZ, c(2,4/3), "at interior point of polygon")
 })
 #
 # tests/kppm.R

@@ -18,3 +18,16 @@ Change log from 1.59-0 to 1.59-1
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+24 mar 2019
+
+   tests/Kfuns.R
+	Slackened the tolerance of numerical error in the
+	test of validity of Ripley's isotropic correction.
+
+   DESCRIPTION
+   NEWS
+	Version 1.59-0.002
+
+------------- passed R-3.5.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
