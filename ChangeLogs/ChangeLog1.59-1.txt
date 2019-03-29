@@ -62,3 +62,16 @@ Change log from 1.59-0 to 1.59-1
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+   tests/Kfuns.R
+	Test edge.Ripley with and without debugging
+	in case there are quirks of compiler optimisation
+	(trying to reproduce errors encountered in appveyor tests)
+	
+   DESCRIPTION
+   NEWS
+	Version 1.59-0.005
+
+------------- passed R-3.5.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+

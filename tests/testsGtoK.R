@@ -325,7 +325,7 @@ local({
 #'
 #'   Various K and L functions and pcf
 #'
-#'   $Revision: 1.15 $  $Date: 2019/03/24 08:15:54 $
+#'   $Revision: 1.16 $  $Date: 2019/03/29 04:46:31 $
 #'
 
 require(spatstat)
@@ -458,16 +458,19 @@ local({
     invisible(TRUE)
   }
   ## Testing:
-  eX <- edge.Ripley(X, c(1,1), method="debug")
+  eX <- edge.Ripley(X, c(1,1))
   compere(eX, c(4/3,4/3), "at interior point of rectangle")
   ## Corner case:
   Y <- X
   Y$x <- X$x-4.5+sqrt(2)/2
-  eY <- edge.Ripley(Y, c(1,1), method="debug")
+  eY <- edge.Ripley(Y, c(1,1))
   compere(eY, c(2,4/3), "near corner of rectangle")
-  ## Invoke polygonal code:
+  ## Invoke polygonal code
   Z <- rotate(Y, pi/4)
-  eZ <- edge.Ripley(Z, c(1,1), method="debug")
+  eZdebug <- edge.Ripley(Z, c(1,1), method="debug")
+  compere(eZdebug, c(2,4/3), "at interior point of polygon")
+  ## test validity without debugger, in case of quirks of compiler optimisation
+  eZ <- edge.Ripley(Z, c(1,1))
   compere(eZ, c(2,4/3), "at interior point of polygon")
 })
 #
