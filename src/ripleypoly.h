@@ -14,7 +14,7 @@
   *CHUNKLOOP     defined in chunkloop.h
   TWOPI          defined in Rmath.h
 
-  $Revision: 1.2 $     $Date: 2019/03/29 01:28:43 $
+  $Revision: 1.4 $     $Date: 2019/03/29 03:56:58 $
 
   Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2019
   Licence: GNU Public Licence >= 2
@@ -46,7 +46,7 @@ void RIPLEYFUN(nc, xc, yc, nr, rmat, nseg, x0, y0, x1, y1, out)
       xcentre = xc[i];
       ycentre = yc[i];
 #ifdef DEBUGPOLY
-      Rprintf("centre = (%lf, %lf)\n", xcentre, ycentre);
+      Rprintf("------- centre = (%lf, %lf) ------\n", xcentre, ycentre);
 #endif
 
       for(j = 0; j < nradperpt; j++) {
@@ -59,7 +59,7 @@ void RIPLEYFUN(nc, xc, yc, nr, rmat, nseg, x0, y0, x1, y1, out)
 	total = 0.0;
 	for(k=0; k < m; k++) {
 #ifdef DEBUGPOLY
-	  Rprintf("k = %d\n", k);
+	  Rprintf("... k = %d ... \n", k);
 #endif
 	  ncut = 0;
 	  xx0 = x0[k];
@@ -73,18 +73,18 @@ void RIPLEYFUN(nc, xc, yc, nr, rmat, nseg, x0, y0, x1, y1, out)
 	  dx0 = xx0 - xcentre;
 	  det = radius2 - dx0 * dx0;
 #ifdef DEBUGPOLY
-	  Rprintf("det = %lf\n", det);
+	  Rprintf("Left: det = %lf\n", det);
 #endif
 	  if(det > 0) {
 #ifdef DEBUGPOLY
-	    Rprintf("det > 0\n");
+	    Rprintf("\tdet > 0\n");
 #endif
 	    sqrtdet = sqrt(det);
 	    y = ycentre + sqrtdet;
 	    if(y < yy0) {
 	      theta[ncut] = atan2(y - ycentre, dx0);
 #ifdef DEBUGPOLY
-	      Rprintf("cut left at theta= %lf\n", theta[ncut]);
+	      Rprintf("\tcut left at theta= %lf\n", theta[ncut]);
 #endif
 	      ncut++;
 	    }
@@ -92,18 +92,18 @@ void RIPLEYFUN(nc, xc, yc, nr, rmat, nseg, x0, y0, x1, y1, out)
 	    if(y < yy0) {
 	      theta[ncut] = atan2(y-ycentre, dx0);
 #ifdef DEBUGPOLY
-	      Rprintf("cut left at theta= %lf\n", theta[ncut]);
+	      Rprintf("\tcut left at theta= %lf\n", theta[ncut]);
 #endif
 	      ncut++;
 	    }
 	  } else if(det == 0) {
 #ifdef DEBUGPOLY
-	    Rprintf("det = 0\n");
+	    Rprintf("\tdet = 0\n");
 #endif
 	    if(ycentre < yy0) {
 	      theta[ncut] = atan2(0.0, dx0);
 #ifdef DEBUGPOLY
-	      Rprintf("tangent left at theta= %lf\n", theta[ncut]);
+	      Rprintf("\ttangent left at theta= %lf\n", theta[ncut]);
 #endif
 	      ncut++;
 	    }
@@ -112,18 +112,18 @@ void RIPLEYFUN(nc, xc, yc, nr, rmat, nseg, x0, y0, x1, y1, out)
 	  dx1 = xx1 - xcentre;
 	  det = radius2 - dx1 * dx1;
 #ifdef DEBUGPOLY
-	  Rprintf("det = %lf\n", det);
+	  Rprintf("Right: det = %lf\n", det);
 #endif
 	  if(det > 0) {
 #ifdef DEBUGPOLY
-	    Rprintf("det > 0\n");
+	    Rprintf("\tdet > 0\n");
 #endif
 	    sqrtdet = sqrt(det);
 	    y = ycentre + sqrtdet;
 	    if(y < yy1) {
 	      theta[ncut] = atan2(y - ycentre, dx1);
 #ifdef DEBUGPOLY
-	      Rprintf("cut right at theta= %lf\n", theta[ncut]);
+	      Rprintf("\tcut right at theta= %lf\n", theta[ncut]);
 #endif
 	      ncut++;
 	    }
@@ -131,18 +131,18 @@ void RIPLEYFUN(nc, xc, yc, nr, rmat, nseg, x0, y0, x1, y1, out)
 	    if(y < yy1) {
 	      theta[ncut] = atan2(y - ycentre, dx1);
 #ifdef DEBUGPOLY
-	      Rprintf("cut right at theta= %lf\n", theta[ncut]);
+	      Rprintf("\tcut right at theta= %lf\n", theta[ncut]);
 #endif
 	      ncut++;
 	    }
 	  } else if(det == 0) {
 #ifdef DEBUGPOLY
-	    Rprintf("det = 0\n");
+	    Rprintf("\tdet = 0\n");
 #endif
 	    if(ycentre < yy1) {
 	      theta[ncut] = atan2(0.0, dx1);
 #ifdef DEBUGPOLY
-	      Rprintf("tangent right at theta= %lf\n", theta[ncut]);
+	      Rprintf("\ttangent right at theta= %lf\n", theta[ncut]);
 #endif
 	      ncut++;
 	    }
@@ -155,7 +155,13 @@ void RIPLEYFUN(nc, xc, yc, nr, rmat, nseg, x0, y0, x1, y1, out)
 	  b = 2 * (xx01 * dx0 + yy01 * dy0);
 	  c = dx0 * dx0 + dy0 * dy0 - radius2;
 	  det = b * b - 4 * a * c;
+#ifdef DEBUGPOLY
+	  Rprintf("Top: det = %lf\n", det);
+#endif
 	  if(det > 0) {
+#ifdef DEBUGPOLY
+	    Rprintf("\tdet > 0\n");
+#endif
 	    sqrtdet = sqrt(det);
 	    t = (sqrtdet - b)/(2 * a);
 	    if(t >= 0 && t <= 1) {
@@ -163,7 +169,7 @@ void RIPLEYFUN(nc, xc, yc, nr, rmat, nseg, x0, y0, x1, y1, out)
 	      y = yy0 + t * yy01;
 	      theta[ncut] = atan2(y - ycentre, x - xcentre);
 #ifdef DEBUGPOLY
-	      Rprintf("hits segment: t = %lf, theta = %lf\n", 
+	      Rprintf("\thits + segment: t = %lf, theta = %lf\n", 
 		      t, theta[ncut]);
 #endif
 	      ++ncut;
@@ -174,24 +180,30 @@ void RIPLEYFUN(nc, xc, yc, nr, rmat, nseg, x0, y0, x1, y1, out)
 	      y = yy0 + t * yy01;
 	      theta[ncut] = atan2(y - ycentre, x - xcentre);
 #ifdef DEBUGPOLY
-	      Rprintf("hits segment: t = %lf, theta = %lf\n", 
+	      Rprintf("\thits - segment: t = %lf, theta = %lf\n", 
 		      t, theta[ncut]);
 #endif
 	      ++ncut;
 	    }
 	  } else if(det == 0) {
+#ifdef DEBUGPOLY
+	    Rprintf("\tdet = 0\n");
+#endif
 	    t = - b/(2 * a);
 	    if(t >= 0 && t <= 1) {
 	      x = xx0 + t * xx01;
 	      y = yy0 + t * yy01;
 	      theta[ncut] = atan2(y - ycentre, x - xcentre);
 #ifdef DEBUGPOLY
-	      Rprintf("tangent to segment: t = %lf, theta = %lf\n", 
+	      Rprintf("\ttangent to segment: t = %lf, theta = %lf\n", 
 		      t, theta[ncut]);
 #endif
 	      ++ncut;
 	    }
 	  }
+#ifdef DEBUGPOLY
+	  Rprintf("Finished cutting; ncut = %d\n", ncut);
+#endif
 	  /* for safety, force all angles to be in range [0, 2 * pi] */
 	  if(ncut > 0) 
 	    for(l = 0; l < ncut; l++)
@@ -269,7 +281,7 @@ void RIPLEYFUN(nc, xc, yc, nr, rmat, nseg, x0, y0, x1, y1, out)
 	}
 	out[ j * n + i] = total;
 #ifdef DEBUGPOLY
-	Rprintf("total = %lf\n", total);
+	Rprintf("total = %lf = %lf * (2 * pi)\n\n\n", total, total/TWOPI);
 #endif
       }
     }
