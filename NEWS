@@ -1,9 +1,17 @@
 
-        CHANGES IN spatstat VERSION 1.59-0.005
+        CHANGES IN spatstat VERSION 1.59-0.006
 
 OVERVIEW
 
-    o Nothing yet.
+    o Accelerated some code.
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o rLGCP
+    Accelerated.
+
+    o simulate.kppm
+    Accelerated, for LGCP models. 
 
         CHANGES IN spatstat VERSION 1.59-0
 

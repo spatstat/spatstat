@@ -14,7 +14,7 @@
   *CHUNKLOOP     defined in chunkloop.h
   TWOPI          defined in Rmath.h
 
-  $Revision: 1.4 $     $Date: 2019/03/29 03:56:58 $
+  $Revision: 1.5 $     $Date: 2019/03/29 07:03:45 $
 
   Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2019
   Licence: GNU Public Licence >= 2
@@ -71,7 +71,7 @@ void RIPLEYFUN(nc, xc, yc, nr, rmat, nseg, x0, y0, x1, y1, out)
 #endif
 	  /* intersection with left edge */
 	  dx0 = xx0 - xcentre;
-	  det = radius2 - dx0 * dx0;
+	  det = (double) (radius2 - dx0 * dx0);
 #ifdef DEBUGPOLY
 	  Rprintf("Left: det = %lf\n", det);
 #endif
@@ -79,7 +79,7 @@ void RIPLEYFUN(nc, xc, yc, nr, rmat, nseg, x0, y0, x1, y1, out)
 #ifdef DEBUGPOLY
 	    Rprintf("\tdet > 0\n");
 #endif
-	    sqrtdet = sqrt(det);
+	    sqrtdet = (double) sqrt(det);
 	    y = ycentre + sqrtdet;
 	    if(y < yy0) {
 	      theta[ncut] = atan2(y - ycentre, dx0);
@@ -110,7 +110,7 @@ void RIPLEYFUN(nc, xc, yc, nr, rmat, nseg, x0, y0, x1, y1, out)
 	  }
 	  /* intersection with right edge */
 	  dx1 = xx1 - xcentre;
-	  det = radius2 - dx1 * dx1;
+	  det = (double) (radius2 - dx1 * dx1);
 #ifdef DEBUGPOLY
 	  Rprintf("Right: det = %lf\n", det);
 #endif
@@ -118,7 +118,7 @@ void RIPLEYFUN(nc, xc, yc, nr, rmat, nseg, x0, y0, x1, y1, out)
 #ifdef DEBUGPOLY
 	    Rprintf("\tdet > 0\n");
 #endif
-	    sqrtdet = sqrt(det);
+	    sqrtdet = (double) sqrt(det);
 	    y = ycentre + sqrtdet;
 	    if(y < yy1) {
 	      theta[ncut] = atan2(y - ycentre, dx1);
@@ -154,7 +154,7 @@ void RIPLEYFUN(nc, xc, yc, nr, rmat, nseg, x0, y0, x1, y1, out)
 	  a = xx01 * xx01 + yy01 * yy01;
 	  b = 2 * (xx01 * dx0 + yy01 * dy0);
 	  c = dx0 * dx0 + dy0 * dy0 - radius2;
-	  det = b * b - 4 * a * c;
+	  det = (double) (b * b - 4 * a * c);
 #ifdef DEBUGPOLY
 	  Rprintf("Top: det = %lf\n", det);
 #endif
@@ -162,7 +162,7 @@ void RIPLEYFUN(nc, xc, yc, nr, rmat, nseg, x0, y0, x1, y1, out)
 #ifdef DEBUGPOLY
 	    Rprintf("\tdet > 0\n");
 #endif
-	    sqrtdet = sqrt(det);
+	    sqrtdet = (double) sqrt(det);
 	    t = (sqrtdet - b)/(2 * a);
 	    if(t >= 0 && t <= 1) {
 	      x = xx0 + t * xx01;
