@@ -162,6 +162,7 @@ static const R_CMethodDef CEntries[] = {
     {"Rcallpcf3",         (DL_FUNC) &Rcallpcf3,         18},
     {"ripleybox",         (DL_FUNC) &ripleybox,         11},
     {"ripleypoly",        (DL_FUNC) &ripleypoly,        11},
+    {"rippolDebug",       (DL_FUNC) &rippolDebug,       11},
     {"scantrans",         (DL_FUNC) &scantrans,         11},
     {"seg2pixI",          (DL_FUNC) &seg2pixI,           8},
     {"seg2pixL",          (DL_FUNC) &seg2pixL,          11},

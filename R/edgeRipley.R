@@ -1,7 +1,7 @@
 #
 #        edgeRipley.R
 #
-#    $Revision: 1.16 $    $Date: 2017/06/05 10:31:58 $
+#    $Revision: 1.17 $    $Date: 2019/03/29 01:40:16 $
 #
 #    Ripley isotropic edge correction weights
 #
@@ -32,6 +32,9 @@ edge.Ripley <- local({
     X <- as.ppp(X, W)
     W <- X$window
 
+    method <- match.arg(method, c("C", "interpreted", "debug"))
+    if(debugC <- (method == "debug")) method <- "C"
+    
     switch(W$type,
            rectangle={},
            polygonal={
@@ -64,8 +67,6 @@ edge.Ripley <- local({
   
     x <- X$x
     y <- X$y
-
-    stopifnot(method %in% c("interpreted", "C"))
 
     switch(method,
            interpreted = {
@@ -144,19 +145,35 @@ edge.Ripley <- local({
                     },
                     polygonal={
                       Y <- edges(W)
-                      z <- .C("ripleypoly",
-                              nc=as.integer(n),
-                              xc=as.double(x),
-                              yc=as.double(y),
-                              nr=as.integer(Nc),
-                              rmat=as.double(r),
-                              nseg=as.integer(Y$n),
-                              x0=as.double(Y$ends$x0),
-                              y0=as.double(Y$ends$y0),
-                              x1=as.double(Y$ends$x1),
-                              y1=as.double(Y$ends$y1),
-                              out=as.double(numeric(Nr * Nc)),
-                              PACKAGE = "spatstat")
+                      if(!debugC) {
+                        z <- .C("ripleypoly",
+                                nc=as.integer(n),
+                                xc=as.double(x),
+                                yc=as.double(y),
+                                nr=as.integer(Nc),
+                                rmat=as.double(r),
+                                nseg=as.integer(Y$n),
+                                x0=as.double(Y$ends$x0),
+                                y0=as.double(Y$ends$y0),
+                                x1=as.double(Y$ends$x1),
+                                y1=as.double(Y$ends$y1),
+                                out=as.double(numeric(Nr * Nc)),
+                                PACKAGE = "spatstat")
+                      } else {
+                        z <- .C("rippolDebug",
+                                nc=as.integer(n),
+                                xc=as.double(x),
+                                yc=as.double(y),
+                                nr=as.integer(Nc),
+                                rmat=as.double(r),
+                                nseg=as.integer(Y$n),
+                                x0=as.double(Y$ends$x0),
+                                y0=as.double(Y$ends$y0),
+                                x1=as.double(Y$ends$x1),
+                                y1=as.double(Y$ends$y1),
+                                out=as.double(numeric(Nr * Nc)),
+                                PACKAGE = "spatstat")
+                      }
                       angles <- matrix(z$out, nrow = Nr, ncol = Nc)
                       weight <- 2 * pi/angles
                     }

@@ -31,3 +31,24 @@ Change log from 1.59-0 to 1.59-1
 ------------- passed R-3.5.2 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
+
+29 mar 2019
+
+   src/corrections.c
+   src/ripleypoly.h [New file]
+   edgeRipley.R
+	edgeRipley now accepts method="debug"
+	which prints debug info in the polygonal case.
+
+   tests/Kfuns.R
+	The tests for edge.Ripley now use method="debug"
+
+   DESCRIPTION
+   NEWS
+	Version 1.59-0.003
+
+------------- passed R-3.5.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+

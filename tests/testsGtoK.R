@@ -458,16 +458,16 @@ local({
     invisible(TRUE)
   }
   ## Testing:
-  eX <- edge.Ripley(X, c(1,1))
+  eX <- edge.Ripley(X, c(1,1), method="debug")
   compere(eX, c(4/3,4/3), "at interior point of rectangle")
   ## Corner case:
   Y <- X
   Y$x <- X$x-4.5+sqrt(2)/2
-  eY <- edge.Ripley(Y, c(1,1))
+  eY <- edge.Ripley(Y, c(1,1), method="debug")
   compere(eY, c(2,4/3), "near corner of rectangle")
   ## Invoke polygonal code:
   Z <- rotate(Y, pi/4)
-  eZ <- edge.Ripley(Z, c(1,1))
+  eZ <- edge.Ripley(Z, c(1,1), method="debug")
   compere(eZ, c(2,4/3), "at interior point of polygon")
 })
 #
