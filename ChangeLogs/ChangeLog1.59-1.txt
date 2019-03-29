@@ -89,3 +89,14 @@ Change log from 1.59-0 to 1.59-1
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+   src/ripleypoly.h
+	More robustification
+	
+   DESCRIPTION
+   NEWS
+	Version 1.59-0.007
+
+------------- passed R-3.5.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+

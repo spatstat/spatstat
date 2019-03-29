@@ -14,7 +14,7 @@
   *CHUNKLOOP     defined in chunkloop.h
   TWOPI          defined in Rmath.h
 
-  $Revision: 1.5 $     $Date: 2019/03/29 07:03:45 $
+  $Revision: 1.6 $     $Date: 2019/03/29 09:25:03 $
 
   Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2019
   Licence: GNU Public Licence >= 2
@@ -80,7 +80,7 @@ void RIPLEYFUN(nc, xc, yc, nr, rmat, nseg, x0, y0, x1, y1, out)
 	    Rprintf("\tdet > 0\n");
 #endif
 	    sqrtdet = (double) sqrt(det);
-	    y = ycentre + sqrtdet;
+	    y = (double) (ycentre + sqrtdet);
 	    if(y < yy0) {
 	      theta[ncut] = atan2(y - ycentre, dx0);
 #ifdef DEBUGPOLY
@@ -88,7 +88,7 @@ void RIPLEYFUN(nc, xc, yc, nr, rmat, nseg, x0, y0, x1, y1, out)
 #endif
 	      ncut++;
 	    }
-	    y = ycentre - sqrtdet;
+	    y = (double) (ycentre - sqrtdet);
 	    if(y < yy0) {
 	      theta[ncut] = atan2(y-ycentre, dx0);
 #ifdef DEBUGPOLY
@@ -119,7 +119,7 @@ void RIPLEYFUN(nc, xc, yc, nr, rmat, nseg, x0, y0, x1, y1, out)
 	    Rprintf("\tdet > 0\n");
 #endif
 	    sqrtdet = (double) sqrt(det);
-	    y = ycentre + sqrtdet;
+	    y = (double) (ycentre + sqrtdet);
 	    if(y < yy1) {
 	      theta[ncut] = atan2(y - ycentre, dx1);
 #ifdef DEBUGPOLY
@@ -127,7 +127,7 @@ void RIPLEYFUN(nc, xc, yc, nr, rmat, nseg, x0, y0, x1, y1, out)
 #endif
 	      ncut++;
 	    }
-	    y = ycentre - sqrtdet;
+	    y = (double) (ycentre - sqrtdet);
 	    if(y < yy1) {
 	      theta[ncut] = atan2(y - ycentre, dx1);
 #ifdef DEBUGPOLY
@@ -163,7 +163,7 @@ void RIPLEYFUN(nc, xc, yc, nr, rmat, nseg, x0, y0, x1, y1, out)
 	    Rprintf("\tdet > 0\n");
 #endif
 	    sqrtdet = (double) sqrt(det);
-	    t = (sqrtdet - b)/(2 * a);
+	    t = (double) ((sqrtdet - b)/(2 * a));
 	    if(t >= 0 && t <= 1) {
 	      x = xx0 + t * xx01;
 	      y = yy0 + t * yy01;
@@ -174,7 +174,7 @@ void RIPLEYFUN(nc, xc, yc, nr, rmat, nseg, x0, y0, x1, y1, out)
 #endif
 	      ++ncut;
 	    }
-	    t = (-sqrtdet - b)/(2 * a);
+	    t = (double) ((-sqrtdet - b)/(2 * a));
 	    if(t >= 0 && t <= 1) {
 	      x = xx0 + t * xx01;
 	      y = yy0 + t * yy01;
@@ -189,7 +189,7 @@ void RIPLEYFUN(nc, xc, yc, nr, rmat, nseg, x0, y0, x1, y1, out)
 #ifdef DEBUGPOLY
 	    Rprintf("\tdet = 0\n");
 #endif
-	    t = - b/(2 * a);
+	    t = (double) (- b/(2 * a));
 	    if(t >= 0 && t <= 1) {
 	      x = xx0 + t * xx01;
 	      y = yy0 + t * yy01;
