@@ -14,7 +14,7 @@
   *CHUNKLOOP     defined in chunkloop.h
   TWOPI          defined in Rmath.h
 
-  $Revision: 1.6 $     $Date: 2019/03/29 09:25:03 $
+  $Revision: 1.7 $     $Date: 2019/03/30 01:16:01 $
 
   Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2019
   Licence: GNU Public Licence >= 2
@@ -75,7 +75,7 @@ void RIPLEYFUN(nc, xc, yc, nr, rmat, nseg, x0, y0, x1, y1, out)
 #ifdef DEBUGPOLY
 	  Rprintf("Left: det = %lf\n", det);
 #endif
-	  if(det > 0) {
+	  if(det > 0.0) {
 #ifdef DEBUGPOLY
 	    Rprintf("\tdet > 0\n");
 #endif
@@ -96,7 +96,7 @@ void RIPLEYFUN(nc, xc, yc, nr, rmat, nseg, x0, y0, x1, y1, out)
 #endif
 	      ncut++;
 	    }
-	  } else if(det == 0) {
+	  } else if(det == 0.0) {
 #ifdef DEBUGPOLY
 	    Rprintf("\tdet = 0\n");
 #endif
@@ -114,7 +114,7 @@ void RIPLEYFUN(nc, xc, yc, nr, rmat, nseg, x0, y0, x1, y1, out)
 #ifdef DEBUGPOLY
 	  Rprintf("Right: det = %lf\n", det);
 #endif
-	  if(det > 0) {
+	  if(det > 0.0) {
 #ifdef DEBUGPOLY
 	    Rprintf("\tdet > 0\n");
 #endif
@@ -135,7 +135,7 @@ void RIPLEYFUN(nc, xc, yc, nr, rmat, nseg, x0, y0, x1, y1, out)
 #endif
 	      ncut++;
 	    }
-	  } else if(det == 0) {
+	  } else if(det == 0.0) {
 #ifdef DEBUGPOLY
 	    Rprintf("\tdet = 0\n");
 #endif
@@ -158,13 +158,13 @@ void RIPLEYFUN(nc, xc, yc, nr, rmat, nseg, x0, y0, x1, y1, out)
 #ifdef DEBUGPOLY
 	  Rprintf("Top: det = %lf\n", det);
 #endif
-	  if(det > 0) {
+	  if(det > 0.0) {
 #ifdef DEBUGPOLY
 	    Rprintf("\tdet > 0\n");
 #endif
 	    sqrtdet = (double) sqrt(det);
 	    t = (double) ((sqrtdet - b)/(2 * a));
-	    if(t >= 0 && t <= 1) {
+	    if(t >= 0.0 && t <= 1.0) {
 	      x = xx0 + t * xx01;
 	      y = yy0 + t * yy01;
 	      theta[ncut] = atan2(y - ycentre, x - xcentre);
@@ -175,7 +175,7 @@ void RIPLEYFUN(nc, xc, yc, nr, rmat, nseg, x0, y0, x1, y1, out)
 	      ++ncut;
 	    }
 	    t = (double) ((-sqrtdet - b)/(2 * a));
-	    if(t >= 0 && t <= 1) {
+	    if(t >= 0.0 && t <= 1.0) {
 	      x = xx0 + t * xx01;
 	      y = yy0 + t * yy01;
 	      theta[ncut] = atan2(y - ycentre, x - xcentre);
@@ -185,12 +185,12 @@ void RIPLEYFUN(nc, xc, yc, nr, rmat, nseg, x0, y0, x1, y1, out)
 #endif
 	      ++ncut;
 	    }
-	  } else if(det == 0) {
+	  } else if(det == 0.0) {
 #ifdef DEBUGPOLY
 	    Rprintf("\tdet = 0\n");
 #endif
 	    t = (double) (- b/(2 * a));
-	    if(t >= 0 && t <= 1) {
+	    if(t >= 0.0 && t <= 1.0) {
 	      x = xx0 + t * xx01;
 	      y = yy0 + t * yy01;
 	      theta[ncut] = atan2(y - ycentre, x - xcentre);
@@ -255,7 +255,7 @@ void RIPLEYFUN(nc, xc, yc, nr, rmat, nseg, x0, y0, x1, y1, out)
 	    contrib = 0.0;
 	    for(l = 0; l <= ncut; l++) {
 #ifdef DEBUGPOLY
-	      Rprintf("delta[%d] = %lf\n", l, delta[l]);
+	      Rprintf("delta[%d] = %lf", l, delta[l]);
 #endif
 	      xtest = xcentre + radius * cos(tmid[l]);
 	      ytest = ycentre + radius * sin(tmid[l]);
@@ -271,8 +271,8 @@ void RIPLEYFUN(nc, xc, yc, nr, rmat, nseg, x0, y0, x1, y1, out)
 	    }
 	  }
 	  /* multiply by sign of trapezium */
-	  if(xx0  < xx1)
-	    contrib *= -1;
+	  if(ncut > 0 && xx0  < xx1)
+	    contrib = -contrib;
 
 #ifdef DEBUGPOLY
 	  Rprintf("contrib = %lf\n", contrib);
@@ -281,7 +281,7 @@ void RIPLEYFUN(nc, xc, yc, nr, rmat, nseg, x0, y0, x1, y1, out)
 	}
 	out[ j * n + i] = total;
 #ifdef DEBUGPOLY
-	Rprintf("total = %lf = %lf * (2 * pi)\n\n\n", total, total/TWOPI);
+	Rprintf("\nTotal = %lf = %lf * (2 * pi)\n", total, total/TWOPI);
 #endif
       }
     }

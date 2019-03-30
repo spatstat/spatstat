@@ -4,7 +4,7 @@
 
   Edge corrections
 
-  $Revision: 1.14 $     $Date: 2019/03/29 01:34:08 $
+  $Revision: 1.15 $     $Date: 2019/03/30 01:15:48 $
 
   Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2018
   Licence: GNU Public Licence >= 2
@@ -28,13 +28,13 @@
 
 #define MIN(A,B) (((A) < (B)) ? (A) : (B))
 
-#define BETWEEN(X,X0,X1) (((X) - (X0)) * ((X) - (X1)) <= 0)
+#define BETWEEN(X,X0,X1) ((double) ( ( (X) - (X0) ) * ( (X) - (X1) ) ) <= 0.0)
 
 #define UNDER(X,Y,X0,Y0,X1,Y1) \
-  (((Y1) - (Y0)) * ((X) - (X0)) >= ((Y) - (Y0)) * ((X1)- (X0)))
+  ((double) ( ( (Y1) - (Y0) ) * ( (X) - (X0) ) ) >= (double) ( ( (Y) - (Y0) ) * ( (X1) - (X0) ) ) )
 
 #define UNDERNEATH(X,Y,X0,Y0,X1,Y1) \
-    (((X0) < (X1)) ? UNDER(X,Y,X0,Y0,X1,Y1) : UNDER(X,Y,X1,Y1,X0,Y0))
+  ((((double) (X0)) < ((double) (X1))) ? UNDER(X,Y,X0,Y0,X1,Y1) : UNDER(X,Y,X1,Y1,X0,Y0))
 
 #define TESTINSIDE(X,Y,X0,Y0,X1,Y1) \
   (BETWEEN(X,X0,X1) && UNDERNEATH(X, Y, X0, Y0, X1, Y1))

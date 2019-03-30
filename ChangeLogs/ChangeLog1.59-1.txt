@@ -100,3 +100,20 @@ Change log from 1.59-0 to 1.59-1
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+30 mar 2019
+   
+   src/ripleypoly.h
+   src/corrections.c
+	More robustification
+
+   tests/Kfuns.R
+	Tweak the test to increase information
+	
+   DESCRIPTION
+   NEWS
+	Version 1.59-0.008
+
+------------- passed R-3.5.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
