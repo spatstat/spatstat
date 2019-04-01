@@ -325,7 +325,7 @@ local({
 #'
 #'   Various K and L functions and pcf
 #'
-#'   $Revision: 1.17 $  $Date: 2019/03/30 01:23:20 $
+#'   $Revision: 1.21 $  $Date: 2019/03/30 08:43:31 $
 #'
 
 require(spatstat)
@@ -448,14 +448,14 @@ local({
   W <- square(10)
   X <- ppp(x, y, W)
   compere <- function(a, b, where, tol=1e-6) {
-    err <- abs(as.numeric(a)-as.numeric(b))
-    maxerr <- max(err)
     descrip <- paste("discrepancy in isotropic edge correction", where)
+    err <- as.numeric(a) - as.numeric(b)
+    maxerr <- max(abs(err))
     blurb <- paste(descrip, "is", paste0(signif(maxerr, 4), ","), 
                    if(maxerr > tol) "exceeding" else "within",
                    "tolerance of", tol)
     message(blurb)
-    if(err > tol) {
+    if(maxerr > tol) {
       message(paste("Discrepancies:", paste(err, collapse=", ")))
       stop(paste("excessive", descrip), call.=FALSE)
     }
@@ -472,12 +472,10 @@ local({
   ## Invoke polygonal code
   Z <- rotate(Y, pi/4)
   eZdebug <- edge.Ripley(Z, c(1,1), method="debug")
-  compere(eZdebug, c(2,4/3), "at interior point of polygon")
-  eZ1 <- edge.Ripley(Z[1], 1, method="debug")
-  compere(eZ1, 2, "at interior point [1] of polygon")
+  compere(eZdebug, c(2,4/3), "at interior point of polygon (debug on)")
   ## test validity without debugger, in case of quirks of compiler optimisation
   eZ <- edge.Ripley(Z, c(1,1))
-  compere(eZ, c(2,4/3), "at interior point of polygon")
+  compere(eZ,      c(2,4/3), "at interior point of polygon (debug off)")
 })
 #
 # tests/kppm.R

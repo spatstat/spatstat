@@ -14,12 +14,32 @@
   *CHUNKLOOP     defined in chunkloop.h
   TWOPI          defined in Rmath.h
 
-  $Revision: 1.7 $     $Date: 2019/03/30 01:16:01 $
+  $Revision: 1.16 $     $Date: 2019/04/01 07:12:49 $
 
   Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2019
   Licence: GNU Public Licence >= 2
 
  */
+
+#undef DEBUGLEVEL
+
+#ifndef DEBUGPOLY
+#define DEBUGLEVEL 0
+#else
+#define DEBUGLEVEL 3
+#endif
+
+/* SPLITPOINT is used only when DEBUGLEVEL = 2 */
+#undef SPLITPOINT
+#define SPLITPOINT 0
+
+#undef ROUNDED
+#ifdef _WIN32
+/* Avoid quirks of Windows i386 */
+#define ROUNDED(X) ((float)(X))
+#else 
+#define ROUNDED(X) ((double)(X))
+#endif
 
 void RIPLEYFUN(nc, xc, yc, nr, rmat, nseg, x0, y0, x1, y1, out) 
      /* inputs */
@@ -40,70 +60,86 @@ void RIPLEYFUN(nc, xc, yc, nr, rmat, nseg, x0, y0, x1, y1, out)
   nradperpt = *nr;
   m = *nseg;
 
+#if (DEBUGLEVEL == 2)  
+  Rprintf("/// Debug level 2, split point %d ///\n", (int) SPLITPOINT);
+#elif (DEBUGLEVEL > 0)
+  Rprintf("/// Debug level %d ///\n", (int) DEBUGLEVEL);
+#endif
+  
   OUTERCHUNKLOOP(i, n, maxchunk, 16384) {
     R_CheckUserInterrupt();
     INNERCHUNKLOOP(i, n, maxchunk, 16384) {
       xcentre = xc[i];
       ycentre = yc[i];
-#ifdef DEBUGPOLY
-      Rprintf("------- centre = (%lf, %lf) ------\n", xcentre, ycentre);
-#endif
-
+#if (DEBUGLEVEL >= 3)
+      Rprintf("------- centre[%d] = (%lf, %lf) ------\n", i, xcentre, ycentre);
+#elif ((DEBUGLEVEL == 2) && (SPLITPOINT >= 1))
+      Rprintf("------- centre[%d] ------\n", i);
+#endif      
       for(j = 0; j < nradperpt; j++) {
 	radius = rmat[ j * n + i];
-	radius2 = radius * radius;
-#ifdef DEBUGPOLY
-	Rprintf("radius = %lf\n", radius);
+	radius2 = (double) (radius * radius);
+#if (DEBUGLEVEL >= 3)	
+	Rprintf("radius[%d] = %lf\n", j, radius);
+#elif (DEBUGLEVEL >= 2)	
+	Rprintf("radius[%d]\n", j);
 #endif
-
 	total = 0.0;
 	for(k=0; k < m; k++) {
-#ifdef DEBUGPOLY
-	  Rprintf("... k = %d ... \n", k);
-#endif
 	  ncut = 0;
 	  xx0 = x0[k];
 	  yy0 = y0[k];
 	  xx1 = x1[k];
 	  yy1 = y1[k];
-#ifdef DEBUGPOLY
-	  Rprintf("(%lf,%lf) to (%lf,%lf)\n", xx0, yy0, xx1, yy1);
+#if (DEBUGLEVEL >= 3)	  
+	  Rprintf("... Edge[%d] = (%lf,%lf) to (%lf,%lf)\n",
+		  k, xx0, yy0, xx1, yy1);
+#elif ((DEBUGLEVEL == 2) && (SPLITPOINT >= 2))
+	  Rprintf("... Edge[%d]\n", k);
 #endif
 	  /* intersection with left edge */
 	  dx0 = xx0 - xcentre;
 	  det = (double) (radius2 - dx0 * dx0);
-#ifdef DEBUGPOLY
+#if (DEBUGLEVEL >= 3)	  
 	  Rprintf("Left: det = %lf\n", det);
+#elif ((DEBUGLEVEL == 2) && (SPLITPOINT >= 3))
+	  Rprintf("Left:\n");
 #endif
-	  if(det > 0.0) {
-#ifdef DEBUGPOLY
+	  if(ROUNDED(det) > ROUNDED(0.0)) {
+#if ((DEBUGLEVEL >= 3) || ((DEBUGLEVEL == 2) && (SPLITPOINT >= 4)))
 	    Rprintf("\tdet > 0\n");
-#endif
+#endif	    
 	    sqrtdet = (double) sqrt(det);
 	    y = (double) (ycentre + sqrtdet);
-	    if(y < yy0) {
-	      theta[ncut] = atan2(y - ycentre, dx0);
-#ifdef DEBUGPOLY
+	    if(ROUNDED(y) < ROUNDED(yy0)) {
+	      theta[ncut] = (double) atan2(y - ycentre, dx0);
+#if (DEBUGLEVEL >= 3)	      
 	      Rprintf("\tcut left at theta= %lf\n", theta[ncut]);
+#elif ((DEBUGLEVEL == 2) && (SPLITPOINT >= 5))
+	      Rprintf("\tcut left (+)\n");
 #endif
 	      ncut++;
 	    }
 	    y = (double) (ycentre - sqrtdet);
-	    if(y < yy0) {
-	      theta[ncut] = atan2(y-ycentre, dx0);
-#ifdef DEBUGPOLY
+	    if(ROUNDED(y) < ROUNDED(yy0)) {
+	      theta[ncut] = (double) atan2(y-ycentre, dx0);
+#if (DEBUGLEVEL >= 3)	      
 	      Rprintf("\tcut left at theta= %lf\n", theta[ncut]);
+#elif ((DEBUGLEVEL == 2) && (SPLITPOINT >= 6))
+	      Rprintf("\tcut left (-)\n");
 #endif
 	      ncut++;
 	    }
-	  } else if(det == 0.0) {
-#ifdef DEBUGPOLY
+	  } else if(ROUNDED(det) == ROUNDED(0.0)) {
+#if ((DEBUGLEVEL >= 3) || ((DEBUGLEVEL == 2) && (SPLITPOINT >= 7)))
 	    Rprintf("\tdet = 0\n");
 #endif
-	    if(ycentre < yy0) {
-	      theta[ncut] = atan2(0.0, dx0);
-#ifdef DEBUGPOLY
+	    if(ROUNDED(ycentre) < ROUNDED(yy0)) {
+	      theta[ncut] = (double) atan2(0.0, dx0);
+#if (DEBUGLEVEL >= 3)	      
 	      Rprintf("\ttangent left at theta= %lf\n", theta[ncut]);
+#elif ((DEBUGLEVEL == 2) && (SPLITPOINT >= 8))
+	      Rprintf("\ttangent left\n");
 #endif
 	      ncut++;
 	    }
@@ -111,38 +147,46 @@ void RIPLEYFUN(nc, xc, yc, nr, rmat, nseg, x0, y0, x1, y1, out)
 	  /* intersection with right edge */
 	  dx1 = xx1 - xcentre;
 	  det = (double) (radius2 - dx1 * dx1);
-#ifdef DEBUGPOLY
+#if (DEBUGLEVEL >= 3)	  
 	  Rprintf("Right: det = %lf\n", det);
+#elif ((DEBUGLEVEL == 2) && (SPLITPOINT >= 9))
+	  Rprintf("Right:\n");
 #endif
-	  if(det > 0.0) {
-#ifdef DEBUGPOLY
+	  if(ROUNDED(det) > ROUNDED(0.0)) {
+#if ((DEBUGLEVEL >= 3) || ((DEBUGLEVEL == 2) && (SPLITPOINT >= 10)))
 	    Rprintf("\tdet > 0\n");
 #endif
 	    sqrtdet = (double) sqrt(det);
 	    y = (double) (ycentre + sqrtdet);
-	    if(y < yy1) {
-	      theta[ncut] = atan2(y - ycentre, dx1);
-#ifdef DEBUGPOLY
+	    if(ROUNDED(y) < ROUNDED(yy1)) {
+	      theta[ncut] = (double) atan2(y - ycentre, dx1);
+#if (DEBUGLEVEL >= 3)	      
 	      Rprintf("\tcut right at theta= %lf\n", theta[ncut]);
+#elif ((DEBUGLEVEL == 2) && (SPLITPOINT >= 11))
+	      Rprintf("\tcut right (+)\n");
 #endif
 	      ncut++;
 	    }
 	    y = (double) (ycentre - sqrtdet);
-	    if(y < yy1) {
-	      theta[ncut] = atan2(y - ycentre, dx1);
-#ifdef DEBUGPOLY
+	    if(ROUNDED(y) < ROUNDED(yy1)) {
+	      theta[ncut] = (double) atan2(y - ycentre, dx1);
+#if (DEBUGLEVEL >= 3)	      
 	      Rprintf("\tcut right at theta= %lf\n", theta[ncut]);
+#elif ((DEBUGLEVEL == 2) && (SPLITPOINT >= 12))
+	      Rprintf("\tcut right (-)\n");
 #endif
 	      ncut++;
 	    }
-	  } else if(det == 0.0) {
-#ifdef DEBUGPOLY
+	  } else if(ROUNDED(det) == ROUNDED(0.0)) {
+#if ((DEBUGLEVEL >= 3) || ((DEBUGLEVEL == 2) && (SPLITPOINT >= 13)))
 	    Rprintf("\tdet = 0\n");
 #endif
 	    if(ycentre < yy1) {
-	      theta[ncut] = atan2(0.0, dx1);
-#ifdef DEBUGPOLY
+	      theta[ncut] = (double) atan2(0.0, dx1);
+#if (DEBUGLEVEL >= 3)	      
 	      Rprintf("\ttangent right at theta= %lf\n", theta[ncut]);
+#elif ((DEBUGLEVEL == 2) && (SPLITPOINT >= 14))
+	      Rprintf("\ttangent right\n");
 #endif
 	      ncut++;
 	    }
@@ -155,53 +199,61 @@ void RIPLEYFUN(nc, xc, yc, nr, rmat, nseg, x0, y0, x1, y1, out)
 	  b = 2 * (xx01 * dx0 + yy01 * dy0);
 	  c = dx0 * dx0 + dy0 * dy0 - radius2;
 	  det = (double) (b * b - 4 * a * c);
-#ifdef DEBUGPOLY
+#if (DEBUGLEVEL >= 3)	  
 	  Rprintf("Top: det = %lf\n", det);
-#endif
-	  if(det > 0.0) {
-#ifdef DEBUGPOLY
+#elif ((DEBUGLEVEL == 2) && (SPLITPOINT >= 15))
+	  Rprintf("Top:\n");
+#endif	  
+          if(ROUNDED(det) > ROUNDED(0.0)) {
+#if ((DEBUGLEVEL >= 3) || ((DEBUGLEVEL == 2) && (SPLITPOINT >= 16)))
 	    Rprintf("\tdet > 0\n");
 #endif
 	    sqrtdet = (double) sqrt(det);
 	    t = (double) ((sqrtdet - b)/(2 * a));
-	    if(t >= 0.0 && t <= 1.0) {
+	    if(ROUNDED(0.0) <= ROUNDED(t) && ROUNDED(t) <= ROUNDED(1.0)) {
 	      x = xx0 + t * xx01;
 	      y = yy0 + t * yy01;
-	      theta[ncut] = atan2(y - ycentre, x - xcentre);
-#ifdef DEBUGPOLY
+	      theta[ncut] = (double) atan2(y - ycentre, x - xcentre);
+#if (DEBUGLEVEL >= 3)	      
 	      Rprintf("\thits + segment: t = %lf, theta = %lf\n", 
 		      t, theta[ncut]);
+#elif ((DEBUGLEVEL == 2) && (SPLITPOINT >= 17))
+	      Rprintf("\thits + segment\n");
 #endif
 	      ++ncut;
 	    }
 	    t = (double) ((-sqrtdet - b)/(2 * a));
-	    if(t >= 0.0 && t <= 1.0) {
+	    if(ROUNDED(0.0) <= ROUNDED(t) && ROUNDED(t) <= ROUNDED(1.0)) {
 	      x = xx0 + t * xx01;
 	      y = yy0 + t * yy01;
-	      theta[ncut] = atan2(y - ycentre, x - xcentre);
-#ifdef DEBUGPOLY
+	      theta[ncut] = (double) atan2(y - ycentre, x - xcentre);
+#if (DEBUGLEVEL >= 3)	      	      
 	      Rprintf("\thits - segment: t = %lf, theta = %lf\n", 
 		      t, theta[ncut]);
+#elif ((DEBUGLEVEL == 2) && (SPLITPOINT >= 18))
+	      Rprintf("\thits - segment\n");
 #endif
 	      ++ncut;
 	    }
-	  } else if(det == 0.0) {
-#ifdef DEBUGPOLY
+	  } else if(ROUNDED(det) == ROUNDED(0.0)) {
+#if ((DEBUGLEVEL >= 3) || ((DEBUGLEVEL == 2) && (SPLITPOINT >= 19)))
 	    Rprintf("\tdet = 0\n");
 #endif
 	    t = (double) (- b/(2 * a));
-	    if(t >= 0.0 && t <= 1.0) {
+	    if(ROUNDED(0.0) <= ROUNDED(t) && ROUNDED(t) <= ROUNDED(1.0)) {
 	      x = xx0 + t * xx01;
 	      y = yy0 + t * yy01;
-	      theta[ncut] = atan2(y - ycentre, x - xcentre);
-#ifdef DEBUGPOLY
+	      theta[ncut] = (double) atan2(y - ycentre, x - xcentre);
+#if (DEBUGLEVEL >= 3)	      	      	      
 	      Rprintf("\ttangent to segment: t = %lf, theta = %lf\n", 
 		      t, theta[ncut]);
+#elif ((DEBUGLEVEL == 2) && (SPLITPOINT >= 20))
+	      Rprintf("\ttangent to segment\n");
 #endif
 	      ++ncut;
 	    }
 	  }
-#ifdef DEBUGPOLY
+#if ((DEBUGLEVEL >= 3) || ((DEBUGLEVEL == 2) && (SPLITPOINT >= 21)))
 	  Rprintf("Finished cutting; ncut = %d\n", ncut);
 #endif
 	  /* for safety, force all angles to be in range [0, 2 * pi] */
@@ -225,7 +277,7 @@ void RIPLEYFUN(nc, xc, yc, nr, rmat, nseg, x0, y0, x1, y1, out)
 	      }
 	    } while(nchanges > 0);
 	  }
-#ifdef DEBUGPOLY
+#if (DEBUGLEVEL >= 3)	  
 	  if(ncut > 0) {
 	    for(l = 0; l < ncut; l++)
 	      Rprintf("theta[%d] = %lf\n", l, theta[l]);
@@ -254,17 +306,19 @@ void RIPLEYFUN(nc, xc, yc, nr, rmat, nseg, x0, y0, x1, y1, out)
 	    tmid[ncut] = (TWOPI + theta[ncut-1])/2;
 	    contrib = 0.0;
 	    for(l = 0; l <= ncut; l++) {
-#ifdef DEBUGPOLY
-	      Rprintf("delta[%d] = %lf", l, delta[l]);
+#if (DEBUGLEVEL >= 3)	      
+	      Rprintf("Interval %d, width %lf:", l, delta[l]);
+#elif ((DEBUGLEVEL == 2) && (SPLITPOINT >= 22))
+	      Rprintf("Interval %d:", l);
 #endif
-	      xtest = xcentre + radius * cos(tmid[l]);
-	      ytest = ycentre + radius * sin(tmid[l]);
+	      xtest = (double) (xcentre + radius * cos(tmid[l]));
+	      ytest = (double) (ycentre + radius * sin(tmid[l]));
 	      if(TESTINSIDE(xtest, ytest, xx0, yy0, xx1, yy1)) {
 		contrib += delta[l];
-#ifdef DEBUGPOLY 
-		Rprintf("... inside\n");
+#if ((DEBUGLEVEL >= 3) || ((DEBUGLEVEL == 2) && (SPLITPOINT >= 23)))
+		Rprintf("inside\n");
 	      } else {
-		Rprintf("... outside\n");
+		Rprintf("outside\n");
 #endif
 	      }
 
@@ -274,18 +328,16 @@ void RIPLEYFUN(nc, xc, yc, nr, rmat, nseg, x0, y0, x1, y1, out)
 	  if(ncut > 0 && xx0  < xx1)
 	    contrib = -contrib;
 
-#ifdef DEBUGPOLY
+#if (DEBUGLEVEL >= 3)
 	  Rprintf("contrib = %lf\n", contrib);
 #endif
 	  total += contrib;
 	}
 	out[ j * n + i] = total;
-#ifdef DEBUGPOLY
+#if (DEBUGLEVEL >= 1)
 	Rprintf("\nTotal = %lf = %lf * (2 * pi)\n", total, total/TWOPI);
 #endif
       }
     }
   }
 }
-
-

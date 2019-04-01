@@ -117,3 +117,41 @@ Change log from 1.59-0 to 1.59-1
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+
+   tests/Kfuns.R
+	Yet more tweaks
+	
+   DESCRIPTION
+   NEWS
+	Version 1.59-0.008
+
+------------- passed R-3.5.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+31 mar 2019
+
+   src/ripleypoly.h
+   src/corrections.c
+   tests/Kfuns.R
+	tweaks for debugging
+
+   DESCRIPTION
+   NEWS
+	Version 1.59-0.009
+
+01 apr 2019
+
+   src/ripleypoly.h
+   src/corrections.c
+   tests/Kfuns.R
+	yet more tweaks
+	Bug seems to be fixed.
+	
+   DESCRIPTION
+   NEWS
+	Version 1.59-0.010
+
+------------- passed R-3.5.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
