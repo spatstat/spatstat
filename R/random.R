@@ -3,7 +3,7 @@
 ##
 ##    Functions for generating random point patterns
 ##
-##    $Revision: 4.96 $   $Date: 2019/02/04 07:16:40 $
+##    $Revision: 4.97 $   $Date: 2019/04/05 03:41:12 $
 ##
 ##
 ##    runifpoint()      n i.i.d. uniform random points ("binomial process")
@@ -34,7 +34,7 @@
 simulationresult <- function(resultlist, nsim, drop, NameBase="Simulation") {
   if(nsim == 1 && drop)
     return(resultlist[[1L]])
-  return(as.solist(resultlist, .NameBase=NameBase))
+  return(as.solist(resultlist, .NameBase=NameBase, demote=TRUE))
 }
 
 runifrect <- function(n, win=owin(c(0,1),c(0,1)), nsim=1, drop=TRUE)
@@ -925,12 +925,15 @@ thinjump <- function(n, p) {
 }
 
 rthin <- function(X, P, ..., nsim=1, drop=TRUE) {
-  stopifnot(is.ppp(X) || is.lpp(X))
+  if(!(is.ppp(X) || is.lpp(X) || is.pp3(X) || is.ppx(X) || is.psp(X)))
+    stop(paste("X should be a point pattern (class ppp, lpp, pp3 or ppx)",
+               "or a line segment pattern (class psp)"),
+         call.=FALSE)
   if(!missing(nsim)) {
     check.1.integer(nsim)
     stopifnot(nsim >= 1)
   }
-  nX <- npoints(X)
+  nX <- nobjects(X)
   if(nX == 0) {
     result <- rep(list(X), nsim)
     result <- simulationresult(result, nsim, drop)
@@ -965,6 +968,10 @@ rthin <- function(X, P, ..., nsim=1, drop=TRUE) {
       stop("P contains NA's")
   } else if(is.function(P)) {
     ## function - evaluate it at points of X
+    if(!(is.ppp(X) || is.lpp(X)))
+      stop(paste("Don't know how to apply a function to an object of class",
+                 commasep(sQuote(class(X)))),
+           call.=FALSE)
     pX <- if(inherits(P, c("linfun", "funxy"))) P(X, ...) else P(X$x, X$y, ...)
     if(length(pX) != nX)
       stop("Function P returned a vector of incorrect length")
@@ -974,6 +981,10 @@ rthin <- function(X, P, ..., nsim=1, drop=TRUE) {
       stop("Function P returned some NA values")
   } else if(is.im(P)) {
     ## image - look it up
+    if(!(is.ppp(X) || is.lpp(X)))
+      stop(paste("Don't know how to apply image values to an object of class",
+                 commasep(sQuote(class(X)))),
+           call.=FALSE)
     if(!(P$type %in% c("integer", "real")))
       stop("Values of image P should be numeric")
     pX <- P[X, drop=FALSE]

@@ -153,5 +153,20 @@ Change log from 1.59-0 to 1.59-1
 	Version 1.59-0.010
 
 ------------- passed R-3.5.2 CMD check ---------------
+---------- passed rhub::check_on_windows ------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+05 apr 2019
+
+   random.R
+   rthin.Rd
+	rthin handles pp3, ppx, psp
+
+   DESCRIPTION
+   NEWS
+	Version 1.59-0.011
+
+------------- passed R-3.5.2 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------

@@ -1,12 +1,18 @@
 
-        CHANGES IN spatstat VERSION 1.59-0.010
+        CHANGES IN spatstat VERSION 1.59-0.011
 
 OVERVIEW
 
     o Accelerated some code.
 
+    o Thinning of spatial patterns
+
 SIGNIFICANT USER-VISIBLE CHANGES
 
+    o rthin
+    Now handles point patterns of all classes (ppp, lpp, pp3, ppx)
+    and line segment patterns (psp).
+    
     o rLGCP
     Accelerated.
 
