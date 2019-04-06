@@ -36,7 +36,7 @@ local({
 #
 # Also test nnorient()
 #
-#   $Revision: 1.22 $  $Date: 2019/02/21 03:01:30 $
+#   $Revision: 1.23 $  $Date: 2019/04/05 09:10:36 $
 #
 
 require(spatstat)
@@ -249,6 +249,12 @@ local({
   X <- cells[nndist(cells) > bdist.points(cells)]
   f <- nnorient(X)
 })
+
+local({
+  #' nnclean
+  X <- nnclean(shapley, k=17, edge.correct=TRUE)
+  A <- nnclean(runifpoint3(300), 3)
+})
 ## 
 ##    tests/percy.R
 ##
@@ -409,7 +415,7 @@ local({
 #' Tests of ppm(method='logi')
 #'    and related code (predict, leverage etc)
 #'
-#' $Revision: 1.7 $  $Date: 2017/07/11 08:13:18 $
+#' $Revision: 1.8 $  $Date: 2019/04/05 09:00:50 $
 #'
 
 require(spatstat)
@@ -450,6 +456,14 @@ local({
   Y <- quadscheme.logi(runifpoint(5), runifpoint(5))
   fut <- ppm(Y ~ A+B, data=df, method="logi")
   sf <- summary(fut)
+})
+
+local({
+  #' vblogit code, just to check that it runs.
+  fee <- ppm(cells ~ x, method="VBlogi")
+  fee
+  summary(fee)
+  Z <- predict(fee)
 })
 #
 #   tests/ppmmarkorder.R

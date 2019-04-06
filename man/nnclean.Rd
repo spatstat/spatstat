@@ -119,10 +119,12 @@
   \code{\link{cut.ppp}}
 }
 \examples{
-  data(shapley)
+  # shapley galaxy cluster
   X <- nnclean(shapley, k=17, plothist=TRUE)
-  plot(X, which.marks=1, chars=c(".", "+"), cols=1:2)
-  plot(X, which.marks=2, cols=function(x)hsv(0.2+0.8*(1-x),1,1))
+  plot(X, which.marks=1, chars=c(".", "+"), cols=1:2,
+       main="Shapley data, cluster and noise")
+  plot(X, which.marks=2, cols=function(x)hsv(0.2+0.8*(1-x),1,1),
+       main="Shapley data, probability of cluster")
   Y <- split(X, un=TRUE)
   plot(Y, chars="+", cex=0.5)
   marks(X) <- marks(X)$prob

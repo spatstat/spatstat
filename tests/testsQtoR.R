@@ -59,7 +59,7 @@ local({
 })
 #'  tests/randoms.R
 #'   Further tests of random generation code
-#'  $Revision: 1.4 $ $Date: 2018/07/06 03:14:39 $
+#'  $Revision: 1.5 $ $Date: 2019/04/05 09:33:45 $
 
 require(spatstat)
 local({
@@ -86,6 +86,17 @@ local({
   b4 <- boxx(c(0,1), c(0,1), c(0,1), c(0,1))
   X <- rMaternInhibition(2, kappa=20, r=0.1, win=b3)
   Y <- rMaternInhibition(2, kappa=20, r=0.1, win=b4)
+
+  #' cluster models + bells + whistles
+  X <- rThomas(10, 0.2, 5, saveLambda=TRUE)
+  X <- rMatClust(10, 0.05, 4, saveLambda=TRUE)
+  X <- rCauchy(30, 0.01, 5, saveLambda=TRUE)
+  X <- rVarGamma(30, 2, 0.02, 5, saveLambda=TRUE)
+  Z <- as.im(function(x,y){ 5 * exp(2 * x - 1) }, owin())
+  Y <- rThomas(10, 0.2, Z, saveLambda=TRUE)
+  Y <- rMatClust(10, 0.05, Z, saveLambda=TRUE)
+  Y <- rCauchy(30, 0.01, Z, saveLambda=TRUE)
+  Y <- rVarGamma(30, 2, 0.02, Z, saveLambda=TRUE)
 })
 
 reset.spatstat.options()

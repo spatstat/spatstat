@@ -289,7 +289,7 @@ local({
 ##
 ##  Colour value manipulation and colour maps
 ##
-## $Revision: 1.3 $ $Date: 2018/06/08 13:33:39 $
+## $Revision: 1.4 $ $Date: 2019/04/05 09:23:24 $
 ##
 
 require(spatstat)
@@ -305,7 +305,12 @@ local({
    b <- colourmap(rainbow(12), inputs=month.name)
    plot(b, vertical=FALSE)
    plot(b, vertical=TRUE)
-   
+   to.grey(b)
+   to.grey(b, transparent=TRUE)
+
+   argh <- list(a="iets", e="niets", col=b, f=42)
+   arr <- col.args.to.grey(argh)
+   rrgh <- col.args.to.grey(argh, transparent=TRUE)
 })
 #'
 #'   tests/contrib.R

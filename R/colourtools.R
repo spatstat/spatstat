@@ -1,7 +1,7 @@
 #
 #  colourtools.R
 #
-#   $Revision: 1.20 $   $Date: 2017/10/11 07:19:33 $
+#   $Revision: 1.21 $   $Date: 2019/04/05 09:20:59 $
 #
 
 
@@ -133,7 +133,7 @@ to.grey <- function(x, weights=c(0.299, 0.587, 0.114), transparent=FALSE) {
     yy <- col2rgb(x, alpha=TRUE)
     y <- yy[1:3, , drop=FALSE]
     g <- (weights %*% y)/(255 * sum(weights))
-    z <- grey(g, alpha=y[4L,])
+    z <- grey(g, alpha=yy[4L,]/255.0)
   }
   return(z)
 }

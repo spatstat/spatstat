@@ -480,7 +480,7 @@ local({
 #
 # tests/kppm.R
 #
-# $Revision: 1.27 $ $Date: 2019/02/22 10:20:11 $
+# $Revision: 1.28 $ $Date: 2019/04/05 09:27:59 $
 #
 # Test functionality of kppm that depends on RandomFields
 # Test update.kppm for old style kppm objects
@@ -501,7 +501,7 @@ local({
  
  #' various methods
  ff <- as.fv(fitx)
- Y <- simulate(fitx, seed=42)[[1]]
+ Y <- simulate(fitx, seed=42, saveLambda=TRUE)[[1]]
  uu <- unitname(fitx)
  unitname(fitCx) <- "furlong"
  mo <- model.images(fitCx)
@@ -538,21 +538,21 @@ local({
  if(require(RandomFields)) {
    fit0 <- kppm(redwood ~1, "LGCP")
    is.poisson(fit0)
-   Y0 <- simulate(fit0)[[1]]
+   Y0 <- simulate(fit0, saveLambda=TRUE)[[1]]
    stopifnot(is.ppp(Y0))
 
    ## fit LGCP using K function: slow
    fit1 <- kppm(redwood ~x, "LGCP",
                 covmodel=list(model="matern", nu=0.3),
                 control=list(maxit=3))
-   Y1 <- simulate(fit1)[[1]]
+   Y1 <- simulate(fit1, saveLambda=TRUE)[[1]]
    stopifnot(is.ppp(Y1))
 
    ## fit LGCP using pcf
    fit1p <- kppm(redwood ~x, "LGCP",
                  covmodel=list(model="matern", nu=0.3),
                  statistic="pcf")
-   Y1p <- simulate(fit1p)[[1]]
+   Y1p <- simulate(fit1p, saveLambda=TRUE)[[1]]
    stopifnot(is.ppp(Y1p))
 
    ## .. and using different fitting methods
@@ -562,16 +562,16 @@ local({
    ## image covariate (a different code block) 
    xx <- as.im(function(x,y) x, Window(redwood))
    fit1xx <- update(fit1p, . ~ xx, data=solist(xx=xx))
-   Y1xx <- simulate(fit1xx)[[1]]
+   Y1xx <- simulate(fit1xx, saveLambda=TRUE)[[1]]
    stopifnot(is.ppp(Y1xx))
    fit1xxVG <- update(fit1xx, clusters="VarGamma", nu=-1/4)
-   Y1xxVG <- simulate(fit1xxVG)[[1]]
+   Y1xxVG <- simulate(fit1xxVG, saveLambda=TRUE)[[1]]
    stopifnot(is.ppp(Y1xxVG))
    
    # ... and Abdollah's code
 
    fit2 <- kppm(redwood ~x, cluster="Cauchy", statistic="K")
-   Y2 <- simulate(fit2)[[1]]
+   Y2 <- simulate(fit2, saveLambda=TRUE)[[1]]
    stopifnot(is.ppp(Y2))
 
  }
@@ -584,7 +584,7 @@ local({
   fet <- update(fut, redwood3)
   fot <- update(fut, trend=~y)
   fit <- kppm(redwoodfull ~ x)
-  Y <- simulate(fit, window=redwoodfull.extra$regionII)
+  Y <- simulate(fit, window=redwoodfull.extra$regionII, saveLambda=TRUE)
   gut <- improve.kppm(fit, type="wclik1")
   gut <- improve.kppm(fit, vcov=TRUE, fast.vcov=TRUE, save.internals=TRUE)
   hut <- kppm(redwood ~ x, method="clik", weightfun=NULL)
@@ -657,6 +657,14 @@ local({
   futFF1 <- kppm(redwood)
   futFF2 <- kppm(redwood, method="palm")
   futFF3 <- kppm(redwood, method="clik2")
+})
+
+local({
+  #' cover a few code blocks
+  fut <- kppm(redwood ~ x, method="clik")
+  summary(fut)
+  fut2 <- kppm(redwood ~ x, "LGCP", method="palm")
+  summary(fut2)
 })
 
 reset.spatstat.options()

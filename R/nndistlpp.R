@@ -1,7 +1,7 @@
 #
 # nndistlpp.R
 #
-#  $Revision: 1.23 $ $Date: 2018/02/24 11:00:51 $
+#  $Revision: 1.24 $ $Date: 2019/04/06 14:06:45 $
 #
 # Methods for nndist, nnwhich, nncross for linear networks
 #
@@ -412,7 +412,7 @@ nncross.lpp <- local({
   need.dist <- ("dist" %in% what) || exclude
   need.which <- ("which" %in% what) || exclude
   
-  fast <- (method == "C") && spatstat.options("Cnncrosslpp")
+  fast <- (method == "C") && (spatstat.options("Cnncrosslpp") || (kmax > 1))
 
   if(!fast) {
     ## require dpath matrix
@@ -633,6 +633,8 @@ nncross.lpp <- local({
   }
   if(exclude) {
     ## now find neighbours that don't have the same id number
+    if(!is.matrix(nnw)) nnw <- as.matrix(nnw, ncol=1)
+    if(!is.matrix(nnd)) nnd <- as.matrix(nnd, ncol=1)
     avoid <- matrix(iX[as.vector(row(nnw))] != iY[as.vector(nnw)],
                     nrow=nrow(nnw), ncol=ncol(nnw))
     colind <- apply(avoid, 1, whichcoltrue, m=seq_len(ncol(avoid)-1))

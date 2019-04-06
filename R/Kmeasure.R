@@ -1,7 +1,7 @@
 #
 #           Kmeasure.R
 #
-#           $Revision: 1.68 $    $Date: 2018/10/04 09:15:16 $
+#           $Revision: 1.69 $    $Date: 2019/04/05 10:25:34 $
 #
 #     Kmeasure()         compute an estimate of the second order moment measure
 #
@@ -248,7 +248,14 @@ second.moment.engine <-
       Kern <- evaluate2Dkernel(kernel, xker, yker,
                                sigma=sigma, varcov=varcov,
                                scalekernel=scalekernel,
-                               ...) 
+                               ...)
+      if(!all(ok <- is.finite(Kern))) {
+        if(anyNA(Kern))  stop("kernel function produces NA values")
+        if(any(is.nan(Kern))) stop("kernel function produces NaN values")
+        ra <- range(Kern[ok])
+        Kern[Kern == Inf] <- ra[2]
+        Kern[Kern == -Inf] <- ra[1]
+      }
       Kern <- matrix(Kern, ncol=2*nc, nrow=2*nr)
       Kern <- Kern/sum(Kern)
     }
