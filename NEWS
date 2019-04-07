@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.59-0.012
+        CHANGES IN spatstat VERSION 1.59-0.013
 
 OVERVIEW
 
@@ -7,6 +7,8 @@ OVERVIEW
 
     o Thinning of spatial patterns
 
+    o Version nickname: 'Mostly Harmless'
+    
 SIGNIFICANT USER-VISIBLE CHANGES
 
     o rthin
