@@ -217,6 +217,19 @@ Change log from 1.59-0 to 1.59-1
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+08 apr 2019
+
+   tests/ppmlogi.R
+	Further tweak to avoid crash due to insufficient memory
+	
+   DESCRIPTION
+   NEWS
+	Version 1.59-0.014
+
+------------- passed R-3.5.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
 
 
 

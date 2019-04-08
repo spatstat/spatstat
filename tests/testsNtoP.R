@@ -415,7 +415,7 @@ local({
 #' Tests of ppm(method='logi')
 #'    and related code (predict, leverage etc)
 #'
-#' $Revision: 1.9 $  $Date: 2019/04/07 08:18:11 $
+#' $Revision: 1.10 $  $Date: 2019/04/08 08:23:42 $
 #'
 
 require(spatstat)
@@ -461,9 +461,10 @@ local({
 local({
   #' vblogit code, just to check that it runs.
   fee <- ppm(cells ~ x, method="VBlogi", nd=21)
-  fee
+  print(fee)
   summary(fee)
-  Z <- predict(fee)
+  Z <- predict(fee, ngrid=7)
+  summary(Z)
 })
 #
 #   tests/ppmmarkorder.R
