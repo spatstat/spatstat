@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.59-0.014
+        CHANGES IN spatstat VERSION 1.59-0.015
 
 OVERVIEW
 
@@ -21,6 +21,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o simulate.kppm
     Accelerated, for LGCP models. 
 
+    o predict.ppm
+    Accelerated, for models fitted with method="VBlogi"
+    
         CHANGES IN spatstat VERSION 1.59-0
 
 OVERVIEW

@@ -230,6 +230,19 @@ Change log from 1.59-0 to 1.59-1
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+12 apr 2019
 
+   vblogistic.R
+	Accelerated predict.vblogit
 
+   tests/ppmlogi.R
+	Increased number of prediction points
+
+   DESCRIPTION
+   NEWS
+	Version 1.59-0.015
+
+------------- passed R-3.5.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
 

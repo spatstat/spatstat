@@ -7,7 +7,7 @@
 #' 
 #' Special version for 'spatstat'
 #'
-#'    $Revision: 1.5 $ $Date: 2015/04/02 02:17:19 $
+#'    $Revision: 1.6 $ $Date: 2019/04/12 03:34:48 $
 #' 
 ####################################################
 #' Used inside ppm
@@ -213,7 +213,8 @@ predict.vblogit <- local({
       mu <- object$m
       S <- object$S
       mua <- as.numeric(X%*%mu)+offset
-      s2a <- diag(X%*%S%*%t(X) )
+      #' was:        s2a <- diag(X%*%S%*%t(X) )
+      s2a <- quadform(X, S)
       predictor <- sigmoid( as.numeric( mua/sqrt(1+pi*s2a/8) ) ) 
       names(predictor) <- rownames(X)
     }

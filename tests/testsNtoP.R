@@ -415,7 +415,7 @@ local({
 #' Tests of ppm(method='logi')
 #'    and related code (predict, leverage etc)
 #'
-#' $Revision: 1.10 $  $Date: 2019/04/08 08:23:42 $
+#' $Revision: 1.11 $  $Date: 2019/04/12 03:35:12 $
 #'
 
 require(spatstat)
@@ -463,7 +463,7 @@ local({
   fee <- ppm(cells ~ x, method="VBlogi", nd=21)
   print(fee)
   summary(fee)
-  Z <- predict(fee, ngrid=7)
+  Z <- predict(fee)
   summary(Z)
 })
 #
