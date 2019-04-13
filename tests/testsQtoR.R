@@ -59,7 +59,7 @@ local({
 })
 #'  tests/randoms.R
 #'   Further tests of random generation code
-#'  $Revision: 1.5 $ $Date: 2019/04/05 09:33:45 $
+#'  $Revision: 1.7 $ $Date: 2019/04/13 14:39:48 $
 
 require(spatstat)
 local({
@@ -86,7 +86,25 @@ local({
   b4 <- boxx(c(0,1), c(0,1), c(0,1), c(0,1))
   X <- rMaternInhibition(2, kappa=20, r=0.1, win=b3)
   Y <- rMaternInhibition(2, kappa=20, r=0.1, win=b4)
+})
 
+local({
+  f1 <- function(x,y){(x^2 + y^3)/10}
+  f2 <- function(x,y){(x^3 + y^2)/10}
+  ZZ <- solist(A=as.im(f1, letterR),
+               B=as.im(f2, letterR))
+  XX <- rmpoispp(ZZ, nsim=3)
+  YY <- rmpoint(10, f=ZZ, nsim=3)
+  g <- function(x,y,m){(10+as.integer(m)) * (x^2 + y^3)}
+  VV <- rpoint.multi(10, f=g,
+                     marks=factor(sample(letters[1:3], 10, replace=TRUE)),
+                     nsim=3)
+  L <- edges(letterR)
+  E <- runifpoisppOnLines(5, L)
+  G <- rpoisppOnLines(ZZ, L)
+})
+
+local({
   #' cluster models + bells + whistles
   X <- rThomas(10, 0.2, 5, saveLambda=TRUE)
   X <- rMatClust(10, 0.05, 4, saveLambda=TRUE)

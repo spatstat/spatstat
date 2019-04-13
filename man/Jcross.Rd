@@ -146,7 +146,7 @@ Jcross(X, i, j, eps=NULL, r=NULL, breaks=NULL, \dots, correction=NULL)
   The argument \code{r} is the vector of values for the
   distance \eqn{r} at which \eqn{J_{ij}(r)}{Jij(r)} should be evaluated. 
   The values of \eqn{r} must be increasing nonnegative numbers
-  and the maximum \eqn{r} value must exceed the radius of the
+  and the maximum \eqn{r} value must not exceed the radius of the
   largest disc contained in the window.
 }
 \references{

@@ -129,8 +129,12 @@ if(xFI > 0.01) stop(paste("density.psp FFT algorithm relative error =", xFI))
 
   #' segment crossing code
   X <- psp(runif(30),runif(30),runif(30),runif(30), window=owin())
+  Y <- psp(runif(30),runif(30),runif(30),runif(30), window=owin())
+  Z <- edges(letterR)[c(FALSE,TRUE)]
   spatstat.options(selfcrossing.psp.useCall=FALSE)
   selfcrossing.psp(X)
+  selfcrossing.psp(Z)
+  crossing.psp(X,Y,details=TRUE)
   spatstat.options(selfcrossing.psp.useCall=TRUE)
 })
 
