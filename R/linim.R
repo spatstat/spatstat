@@ -1,7 +1,7 @@
 #
 # linim.R
 #
-#  $Revision: 1.53 $   $Date: 2018/10/09 02:57:06 $
+#  $Revision: 1.54 $   $Date: 2019/04/21 09:15:27 $
 #
 #  Image/function on a linear network
 #
@@ -155,6 +155,7 @@ plot.linim <- local({
     xname <- short.deparse(substitute(x))
     style <- match.arg(style)
     leg.side <- match.arg(leg.side)
+    check.1.real(leg.scale)
 
     if(missing(zlim) || is.null(zlim)) {
       zlim <- NULL
@@ -321,17 +322,20 @@ plot.linim <- local({
                pltpoly(x = xx, y = yy, grafpar, sign(wvals[j]))
 	     }
 	   })
-     # add text labels
-     check.1.real(leg.scale)
-     glabs <- leg.args$labels %orifnull% signif(leg.scale * gvals, 2)
-     switch(leg.side,
-            right  = text(xr[2], y,     pos=4, labels=glabs),
-            left   = text(xr[1], y,     pos=2, labels=glabs),
-	    bottom = text(x,     yr[1], pos=1, labels=glabs),
-	    top    = text(x,     yr[2], pos=3, labels=glabs))
+      ## add text labels
+      glabs <- signif(leg.scale * gvals, 2)
+      textpos <- switch(leg.side,
+                        right  = list(x=xr[2], y=y,     pos=4),
+                        left   = list(x=xr[1], y=y,     pos=2),
+                        bottom = list(x=x,     y=yr[1], pos=1),
+                        top    = list(x=x,     y=yr[2], pos=3))
+      textargs <- resolve.defaults(textpos,
+                                   leg.args,
+                                   list(labels=glabs))
+      do.call.matched(text, textargs, extrargs=graphicsPars("text"))
+    }
+    return(invisible(result))
   }
-  return(invisible(result))
-}
 
   pltseg <- function(xx, yy, vv, ang, pars) {
     ## draw polygon around segment

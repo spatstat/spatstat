@@ -551,7 +551,7 @@ if(!identical(wsim, wcel))
 #
 #  tests of rmh, running multitype point processes
 #
-#   $Revision: 1.6 $  $Date: 2015/12/29 08:54:49 $
+#   $Revision: 1.8 $  $Date: 2019/04/17 09:12:41 $
 
 require(spatstat)
 
@@ -593,11 +593,30 @@ spatstat.options(expand=1.1)
                                    nrep=nr,nverb=nv))
    stopifnot(all(table(X3.straussm$marks) == c(60,20)))
 
-   # Multitype Strauss hardcore:
+   # Multitype hardcore:
    rhc  <- matrix(c(9.1,5.0,5.0,2.5),2,2)
+   mod085 <- list(cif="multihard",par=list(beta=beta,hradii=rhc),
+                  w=c(0,250,0,250))
+   X.multihard <- rmh(model=mod085,start=list(n.start=80),
+                      control=list(ptypes=c(0.75,0.25),nrep=nr,nverb=nv))
+   X.multihardP <- rmh(model=mod085,start=list(n.start=80),
+                       control=list(ptypes=c(0.75,0.25),nrep=nr,nverb=nv,
+                                    periodic=TRUE))
+   #' check handling of initial state which violates hard core
+   Xclose <- ppp(c(10,12,20),c(10,10,10), marks=factor(c(1,1,2)),
+              c(0,250),c(0,250))
+   X.multihard.close <- rmh(model=mod085,start=list(x.start=Xclose),
+                            control=list(ptypes=c(0.75,0.25),nrep=nr,nverb=nv))
+   X.multihard.closeP <- rmh(model=mod085,start=list(x.start=Xclose),
+                             control=list(ptypes=c(0.75,0.25),nrep=nr,nverb=nv,
+                                          periodic=TRUE))
+
+   # Multitype Strauss hardcore:
    mod09 <- list(cif="straushm",par=list(beta=beta,gamma=gmma,
                 iradii=r,hradii=rhc),w=c(0,250,0,250))
    X.straushm <- rmh(model=mod09,start=list(n.start=80),
+                     control=list(ptypes=c(0.75,0.25),nrep=nr,nverb=nv))
+   X.straushm.close <- rmh(model=mod09,start=list(x.start=Xclose),
                      control=list(ptypes=c(0.75,0.25),nrep=nr,nverb=nv))
 
    # Multitype Strauss hardcore with trends for each type:

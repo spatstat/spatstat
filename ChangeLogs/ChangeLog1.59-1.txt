@@ -259,7 +259,7 @@ Change log from 1.59-0 to 1.59-1
    Kdot.inhom.Rd
 	Correct misstatement
 
-DESCRIPTION
+   DESCRIPTION
    NEWS
 	Version 1.59-0.016
 
@@ -267,6 +267,26 @@ DESCRIPTION
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+15 apr 2019
 
+   tests/rmhMulti.R
+	Test of multihard.c, straushm.c with initial state violating hard core.
 
+21 apr 2019
+
+   linim.R
+	In plot.linim, all relevant entries of leg.args
+	are now passed to text.default
+
+   plot.linim.Rd
+   plot.im.Rd
+	Added more information about control of legend
 	
+   DESCRIPTION
+   NEWS
+	Version 1.59-0.017
+
+------------- passed R-3.5.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+

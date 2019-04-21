@@ -171,6 +171,8 @@
   tick-marks, use \code{ribargs=list(axes=FALSE)}.
   To ensure that the numerals or symbols printed next to the colour map
   are oriented horizontally, use \code{ribargs=list(las=1)}.
+  To double the size of the numerals or symbols, 
+  use \code{ribargs=list(cex.axis=2)}.
   To control the number of tick-marks, use \code{ribargs=list(nint=N)}
   where \code{N} is the desired number of intervals (so there will
   be \code{N+1} tickmarks, subject to the vagaries of \R internal code). 

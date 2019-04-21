@@ -31,7 +31,8 @@
     if \code{style="width"}.
   }
   \item{style}{
-    Character string specifying the type of plot. See Details.
+    Character string (partially matched)
+    specifying the type of plot. See Details.
   }
   \item{scale}{
     Physical scale factor for representing the pixel values as
@@ -50,7 +51,7 @@
     (colour ribbon or scale bar).
   }
   \item{leg.side}{
-    Character string indicating where to display the legend
+    Character string (partially matched) indicating where to display the legend
     relative to the main image.
   }
   \item{leg.sep}{
@@ -88,11 +89,34 @@
 
   If \code{style="colour"} (the default) then
   the pixel values of \code{x} are plotted as colours,
-  using \code{\link{plot.im}}. 
+  using \code{\link{plot.im}}.
+  The mapping from pixel values to colours is determined by any
+  additional arguments \code{\dots} which are passed to \code{\link{plot.im}}.
 
   If \code{style="width"} then
   the pixel values of \code{x} are used to determine the widths of
   thick lines centred on the line segments of the linear network.
+  The mapping from pixel values to line widths is determined by
+  the arguments \code{scale} and \code{adjust}.
+  The plotting of colours and borders of the lines is controlled by
+  the additional arguments \code{\dots} which are passed to
+  \code{\link[graphics]{polygon}}. A different set of colours and borders can be
+  assigned to negative pixel values by passing a list of arguments in
+  \code{negative.args} as shown in the Examples.
+
+  A legend is displayed alongside the plot
+  if \code{legend=TRUE} (the default). The legend
+  displays the relationship between pixel values and colours
+  (if \code{style="colour"}) or between pixel values and
+  line widths (if \code{style="width"}).
+
+  The plotting of the legend itself is controlled by the arguments
+  \code{leg.side}, \code{leg.sep}, \code{leg.wid}, \code{leg.scale}
+  and the list of arguments \code{leg.args}, which are described above.
+  If \code{style="colour"}, these arguments are mapped to
+  the arguments \code{ribside}, \code{ribsep}, \code{ribwid},
+  \code{ribscale} and \code{ribargs} respectively, which are passed
+  to \code{\link{plot.im}}.
 }
 \value{
   If \code{style="colour"}, the result is
