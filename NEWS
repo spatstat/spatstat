@@ -1,14 +1,14 @@
 
-        CHANGES IN spatstat VERSION 1.59-0.017
+        CHANGES IN spatstat VERSION 1.59-0.018
 
 OVERVIEW
 
+    o We thank Mehdi Moradi for contributions.
+    
     o Accelerated some code.
 
-    o Thinning of spatial patterns
+    o Thinning of spatial patterns extended to different types of pattern.
 
-    o we thank Mehdi Moradi for contributions.
-    
     o Version nickname: 'Mostly Harmless'
     
 SIGNIFICANT USER-VISIBLE CHANGES
@@ -16,7 +16,7 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o rthin
     Now handles point patterns of all classes (ppp, lpp, pp3, ppx)
     and line segment patterns (psp).
-    
+
     o rLGCP
     Accelerated.
 
@@ -26,12 +26,19 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o predict.ppm
     Accelerated, for models fitted with method="VBlogi"
 
+    o rlabel
+    New arguments 'nsim' and 'drop'.
+    
 BUG FIXES
 
     o plot.linim, plot.linfun
     Not all the entries of 'leg.args' were passed to text.default.
     Fixed.
 
+    o im.apply
+    Crashed if 'FUN' returned factor values.
+    Fixed.
+    
         CHANGES IN spatstat VERSION 1.59-0
 
 OVERVIEW

@@ -290,3 +290,14 @@ Change log from 1.59-0 to 1.59-1
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+   eval.im.R
+	Bug fix in im.apply
+
+   DESCRIPTION
+   NEWS
+	Version 1.59-0.018
+
+------------- passed R-3.5.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+

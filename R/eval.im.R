@@ -8,7 +8,7 @@
 #        harmonise.im()       Harmonise images
 #        commonGrid()
 #
-#     $Revision: 1.52 $     $Date: 2019/01/07 07:37:36 $
+#     $Revision: 1.54 $     $Date: 2019/04/21 11:42:27 $
 #
 
 eval.im <- local({
@@ -267,15 +267,19 @@ im.apply <- function(X, FUN, ..., fun.handles.na=FALSE, check=TRUE) {
               })
   if(funtype == "general" && length(y) != n)
     stop("FUN should yield one value per pixel")
-  ## pack up, with attention to type of data
-  if(full) {
-    resultmat <- matrix(y, d[1L], d[2L])
-  } else {
-    resultmat <- matrix(y[1L], d[1L], d[2L])
-    resultmat[ok] <- y
-    resultmat[!ok] <- NA
+  
+  if(!full) {
+    ## put the NA's back (preserving type of 'y')
+    yfull <- rep(y[1L], prod(d))
+    yfull[ok] <- y
+    yfull[!ok] <- NA
+    y <- yfull
   }
-  result <- as.im(resultmat, W=X[[1L]])
-  if(is.factor(y)) levels(result) <- levels(y)
+  
+  ## pack up (preserving type of 'y')
+  result <- im(y,
+               xcol=template$xcol, yrow=template$yrow,
+               xrange=template$xrange, yrange=template$yrange,
+               unitname=template$unitname)
   return(result)
 }

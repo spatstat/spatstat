@@ -7,7 +7,7 @@
   from the existing marks.
 }
 \usage{
-   rlabel(X, labels=marks(X), permute=TRUE)
+   rlabel(X, labels=marks(X), permute=TRUE, nsim=1, drop=TRUE)
 }
 \arguments{
   \item{X}{
@@ -23,9 +23,17 @@
     by randomly permuting \code{labels} or
     by drawing a random sample with replacement.
   }
+  \item{nsim}{Number of simulated realisations to be generated.}
+  \item{drop}{
+    Logical. If \code{nsim=1} and \code{drop=TRUE} (the default), the
+    result will be a point pattern, rather than a list 
+    containing a point pattern.
+  }
 }
 \value{
-  A marked point pattern (of the same class as \code{X}).
+  If \code{nsim = 1} and \code{drop=TRUE},
+  a marked point pattern (of the same class as \code{X}).
+  If \code{nsim > 1}, a list of point patterns.
 }
 \details{
   This very simple function allocates random marks to
