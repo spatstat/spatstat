@@ -1,7 +1,7 @@
 #'
 #'  densityVoronoi.R
 #'
-#'  $Revision: 1.16 $   $Date: 2019/02/06 04:46:29 $
+#'  $Revision: 1.18 $   $Date: 2019/04/25 04:03:11 $
 #'
 
 densityVoronoi <- function(X, ...) {
@@ -19,6 +19,7 @@ densityVoronoi.ppp <- function(X, f=1, ...,
     stop("f should be a probability between 0 and 1")
   check.1.integer(nrep)
   stopifnot(nrep >= 1)
+  duped <- anyDuplicated(X)
   ##
   ntess <- floor(f * nX)
   if(ntess == 0) {
@@ -31,9 +32,18 @@ densityVoronoi.ppp <- function(X, f=1, ...,
   }
   if(ntess == nX) {
     ## Voronoi/Dirichlet estimate
-    tes <- dirichlet(X)
-    tesim <- nnmap(X, what="which", ...)
-    lam <- 1/tile.areas(tes)
+    if(!duped) {
+      tes <- dirichlet(X)
+      tesim <- nnmap(X, what="which", ...)
+      num <- 1
+    } else {
+      UX <- unique(X)
+      tes <- dirichlet(UX)
+      tesim <- nnmap(UX, what="which", ...)
+      idx <- nncross(X, UX, what="which")
+      num <- as.integer(table(factor(idx, levels=seq_len(npoints(UX)))))
+    }
+    lam <- num/tile.areas(tes)
     out <- eval.im(lam[tesim])
     return(out)
   }
@@ -62,6 +72,7 @@ densityVoronoi.ppp <- function(X, f=1, ...,
     tessfrac <- as.numeric(ntess)/nX
   }
   Xtess <- X[itess]
+  if(duped) Xtess <- unique(Xtess)
   ## make tessellation
   tes <- dirichlet(Xtess)
   ## estimate intensity in each tile

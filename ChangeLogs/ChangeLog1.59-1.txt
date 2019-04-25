@@ -301,3 +301,30 @@ Change log from 1.59-0 to 1.59-1
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+24 april 2019
+
+   rlabel.R
+	Now handles 'psp' objects
+
+   bw.abram.R
+   bw.abram.Rd
+	New argument 'smoother' determines how the pilot is computed.
+	
+   densityVoronoi.R
+        Bug fix in handling duplicated points.
+
+   rmhmodel.R
+	Improved print method.
+	
+   tests/rmhBasic.R
+	tweak
+
+   DESCRIPTION
+   NEWS
+	Version 1.59-0.019
+
+------------- passed R-3.5.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+   

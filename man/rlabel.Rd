@@ -12,7 +12,8 @@
 \arguments{
   \item{X}{
     Point pattern (object of class \code{"ppp"},
-    \code{"lpp"}, \code{"pp3"} or \code{"ppx"}).
+    \code{"lpp"}, \code{"pp3"} or \code{"ppx"})
+    or line segment pattern (object of class \code{"psp"}).
   }
   \item{labels}{
     Vector of values from which the new marks will be drawn
@@ -38,7 +39,8 @@
 \details{
   This very simple function allocates random marks to
   an existing point pattern \code{X}. It is useful
-  for hypothesis testing purposes.
+  for hypothesis testing purposes. (The function can also be applied
+  to line segment patterns.)
 
   In the simplest case, the command \code{rlabel(X)} yields
   a point pattern obtained from \code{X} by randomly permuting
@@ -61,7 +63,7 @@
   \code{\link{marks<-}} to assign arbitrary marks.
 }
 \examples{
-   data(amacrine)
+   amacrine
 
    # Randomly permute the marks "on" and "off"
    # Result always has 142 "off" and 152 "on"
@@ -75,11 +77,8 @@
    data(cells)
    Y <- rlabel(cells, labels=factor(c("A", "B")), permute=FALSE)
 }
-\author{\adrian
-  
-  
-  and \rolf
-  
+\author{
+  \spatstatAuthors.
 }
 \keyword{spatial}
 \keyword{datagen}

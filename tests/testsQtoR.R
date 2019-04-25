@@ -268,7 +268,7 @@ local({
 ##
 ##   tests/rmhBasic.R
 ##
-##   $Revision: 1.16 $  $Date: 2019/02/11 10:24:31 $
+##   $Revision: 1.17 $  $Date: 2019/04/25 03:11:55 $
 #
 # Test examples for rmh.default
 # run to reasonable length
@@ -452,7 +452,7 @@ spatstat.options(expand=1.1)
       X.lookup <- rmh(model=mod17,start=list(n.start=100),
                       control=list(nrep=nr, periodic=TRUE))
       X.lookup2 <- rmh(model=mod17,start=list(n.start=100),
-                       control=list(nrep=nr, periodic=FALSE))
+                       control=list(nrep=nr, expand=1, periodic=FALSE))
 
    # Strauss with trend
    tr <- function(x,y){x <- x/250; y <- y/250;

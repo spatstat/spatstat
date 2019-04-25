@@ -2,7 +2,7 @@
 #
 #   rmhmodel.R
 #
-#   $Revision: 1.75 $  $Date: 2019/02/20 03:34:50 $
+#   $Revision: 1.76 $  $Date: 2019/04/25 05:16:27 $
 #
 #
 
@@ -273,36 +273,51 @@ rmhmodel.default <- local({
 print.rmhmodel <- function(x, ...) {
   verifyclass(x, "rmhmodel")
 
-  cat("Metropolis-Hastings algorithm, model parameters\n")
+  splat("Metropolis-Hastings algorithm, model parameters\n")
 
   Ncif <- length(x$cif)
-  cat(paste("Conditional intensity:",
-            if(Ncif == 1) "cif=" else "hybrid of cifs",
-            commasep(sQuote(x$cif)), "\n"))
+  splat("Conditional intensity:",
+        if(Ncif == 1) "cif=" else "hybrid of cifs",
+        commasep(sQuote(x$cif)))
   
   if(!is.null(x$types)) {
     if(length(x$types) == 1)
-      cat("Univariate process.\n")
+      splat("Univariate process.")
     else {
       cat("Multitype process with types =\n")
       print(x$types)
       if(!x$multitype.interact)
-        cat("Interaction does not depend on type\n")
+        splat("Interaction does not depend on type")
     }
-  } else if(x$multitype.interact) 
-    cat("Multitype process, types not yet specified.\n")
+  } else if(x$multitype.interact) {
+      splat("Multitype process, types not yet specified.")
+  } else {
+    typ <- try(rmhResolveTypes(x, rmhstart(), rmhcontrol()))
+    if(!inherits(typ, "try-error")) {
+      ntyp <- length(typ)
+      if(ntyp > 1) {
+        splat("Data imply a multitype process with", ntyp, "types of points.")
+        splat("Interaction does not depend on type.")
+      }
+    }
+  }
   
-  cat("Numerical parameters: par =\n")
+  cat("\nNumerical parameters: par =\n")
   print(x$par)
   if(is.null(x$C.ipar))
-    cat("Parameters have not yet been checked for compatibility with types.\n")
-  if(is.owin(x$w)) print(x$w) else cat("Window: not specified.\n")
-  cat("Trend: ")
-  if(!is.null(x$trend)) print(x$trend) else cat("none.\n")
-  if(!is.null(x$integrable) && !x$integrable) {
-    cat("\n*Warning: model is not integrable and cannot be simulated*\n")
+    splat("Parameters have not yet been checked for compatibility with types.")
+  if(is.owin(x$w)) print(x$w) else splat("Window: not specified.")
+  cat("\nTrend: ")
+  tren <- x$trend
+  if(is.null(tren)) {
+    cat("none.\n")
+  } else {
+    if(is.list(tren)) cat(paste0("List of ", length(tren), ":\n"))
+    print(tren)
   }
-  invisible(NULL)
+  if(!is.null(x$integrable) && !x$integrable) 
+    cat("\n*Warning: model is not integrable and cannot be simulated*\n")
+  return(invisible(NULL))
 }
 
 reach.rmhmodel <- function(x, ...) {

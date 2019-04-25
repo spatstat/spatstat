@@ -34,6 +34,7 @@
 simulationresult <- function(resultlist, nsim, drop, NameBase="Simulation") {
   if(nsim == 1 && drop)
     return(resultlist[[1L]])
+  #' return 'solist' if appropriate, otherwise 'anylist'
   return(as.solist(resultlist, .NameBase=NameBase, demote=TRUE))
 }
 

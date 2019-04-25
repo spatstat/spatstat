@@ -3,12 +3,14 @@
 #'
 #'   Abramson bandwidths
 #'
-#'   $Revision: 1.6 $ $Date: 2019/03/07 02:46:08 $
+#'   $Revision: 1.8 $ $Date: 2019/04/25 05:34:49 $
 #'
 
-bw.abram <- function(X, h0, 
-                     at=c("points", "pixels"), ...,
-                     hp=h0, pilot=NULL, trim=5){
+bw.abram <- function(X, h0,
+                     ..., 
+                     at=c("points", "pixels"), 
+                     hp=h0, pilot=NULL, trim=5,
+                     smoother=density.ppp){
   stopifnot(is.ppp(X))
   at <- match.arg(at)
 
@@ -38,8 +40,12 @@ bw.abram <- function(X, h0,
     stop("if supplied, 'pilot' must be a pixel image or a point pattern",
          call.=FALSE)
   
-  if(!is.im(pilot))
-    pilot <- density(pilot.data,sigma=hp,positive=TRUE,...)
+  if(!is.im(pilot)) {
+    if(is.character(smoother)) {
+      smoother <- get(smoother, mode="function")
+    } else stopifnot(is.function(smoother))
+    pilot <- smoother(pilot.data,sigma=hp,positive=TRUE,...)
+  }
   
   pilot <- pilot/integral(pilot) # scale to probability density
   pilotvalues <- safelookup(pilot, pilot.data, warn=FALSE)

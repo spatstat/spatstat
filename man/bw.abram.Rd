@@ -8,8 +8,10 @@
   according to the inverse-square-root rule of Abramson (1982).
 }
 \usage{
-bw.abram(X, h0, at=c("points", "pixels"),
-         \dots, hp = h0, pilot = NULL, trim=5)
+bw.abram(X, h0, 
+         \dots,
+         at=c("points", "pixels"),
+         hp = h0, pilot = NULL, trim=5, smoother=density.ppp)
 }
 \arguments{
   \item{X}{
@@ -21,29 +23,29 @@ bw.abram(X, h0, at=c("points", "pixels"),
     in the same units as the coordinates of \code{X}.
     The default is \code{h0=\link{bw.ppl}(X)}.
   }
+  \item{\dots}{
+    Additional arguments passed to
+    \code{\link{as.im}} to control the pixel resolution,
+    or passed to \code{\link[spatstat]{density.ppp}} or \code{smoother}
+    to control the type of smoothing, when computing the pilot estimate.
+  }
   \item{at}{
     Character string (partially matched) specifying whether
     to compute bandwidth values at the points of \code{X}
     (\code{at="points"}, the default) or to compute bandwidths
     at every pixel in a fine pixel grid (\code{at="pixels"}).
   }
-  \item{\dots}{
-    Additional arguments passed to
-    either \code{\link[spatstat]{density.ppp}}
-    and \code{\link{as.im}} to control the pixel resolution
-    and the type of smoothing.
-  }
   \item{hp}{
-    Optional. A scalar pilot bandwidth, for fixed-bandwidth estimation
-    of the pilot density. Ignored if \code{pilot} is a pixel image
+    Optional. A scalar pilot bandwidth, used for estimation
+    of the pilot density if required. Ignored if \code{pilot} is a pixel image
     (object of class \code{"im"}); see below.
   }
   \item{pilot}{
     Optional. Specification of a pilot density
     (possibly unnormalised).
-    If \code{pilot=NULL} (the default) the pilot density
-    is computed using a fixed-bandwidth estimate based
-    on \code{X} and \code{hp}.
+    If \code{pilot=NULL} the pilot density
+    is computed by applying fixed-bandwidth density estimation to
+    \code{X} using bandwidth \code{hp}.
     If \code{pilot} is a point pattern, the pilot density is 
     is computed using a fixed-bandwidth estimate based
     on \code{pilot} and \code{hp}.
@@ -54,6 +56,12 @@ bw.abram(X, h0, at=c("points", "pixels"),
   \item{trim}{
     A trimming value required to curb excessively large bandwidths.
     See Details. The default is sensible in most cases.
+  }
+  \item{smoother}{
+    Smoother for the pilot.
+    A function or character string, specifying the function
+    to be used to compute the pilot estimate when
+    \code{pilot} is \code{NULL} or is a point pattern.
   }
 }
 \details{
@@ -90,16 +98,28 @@ bw.abram(X, h0, at=c("points", "pixels"),
     computed as a fixed-bandwidth kernel
     intensity estimate using \code{\link{density.ppp}} applied to
     the data pattern \code{X} using
-    the pilot bandwidth \code{hp}. 
+    the pilot bandwidth \code{hp}.
     \item
     If \code{pilot} is a different point pattern on the same spatial
     domain as \code{X}, then the pilot intensity is
     computed as a fixed-bandwidth kernel
     intensity estimate using \code{\link{density.ppp}} applied to
-    \code{pilot}.
+    \code{pilot} using the pilot bandwidth \code{hp}.
   }
   In each case the pilot density or intensity is renormalised to
   become a probability density, and then the Abramson rule is applied.
+
+  Instead of calculating the pilot as a fixed-bandwidth density
+  estimate, the user can specify another density estimation procedure
+  using the argument \code{smoother}. This should be either a function
+  or the character string name of a function. It will replace
+  \code{\link{density.ppp}} as the function used to calculate the
+  pilot estimate. The pilot estimate will be computed as
+  \code{smoother(X, sigma=hp, ...)} if \code{pilot} is \code{NULL},
+  or \code{smoother(pilot, sigma=hp, ...)} if \code{pilot} is a point
+  pattern. If \code{smoother} does not recognise the argument name
+  \code{sigma} for the smoothing bandwidth, then \code{hp} is effectively
+  ignored, as shown in the Examples.  
 }
 \value{
   Either a numeric vector of length \code{npoints(X)}
@@ -153,6 +173,9 @@ if(interactive()) hist(h.pool)
 # get full image used for 'h' above
 him <- bw.abram(ch,h0=1,hp=0.7,at="pixels")
 plot(him);points(ch,col="grey")
+
+# use Voronoi-Dirichlet pilot ('hp' is ignored)
+hvo <- bw.abram(ch, h0=1, smoother=densityVoronoi)
 }
 \keyword{spatial}
 \keyword{nonparametric}
