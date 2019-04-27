@@ -757,6 +757,16 @@ mod4 <- ppm(X ~ sin(x), data=solist(B=Z))
 parres(mod4, "sin(x)")
 parres(mod4, "B")
 
+#' models with interaction
+mod5 <- ppm(cells ~ x, AreaInter(0.06))
+parres(mod5, "x")
+dlin <- distfun(copper$SouthLines)
+copfit <- ppm(copper$SouthPoints ~ dlin, Geyer(1,1))
+parres(copfit, "dlin")
+
+#' covariate need not be specified if there is only one.
+parres(mod5)
+parres(copfit)
 })
 #'
 #'     tests/threedee.R

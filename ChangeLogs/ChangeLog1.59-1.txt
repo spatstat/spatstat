@@ -327,4 +327,22 @@ Change log from 1.59-0 to 1.59-1
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
-   
+27 april 2019
+
+   predict.ppm.R
+	Bug fix when type="trend" and se=TRUE
+
+   parres.R
+	Bug fix in handling models with interaction.
+
+   tests/testparres.R
+   tests/prediction.R
+	Tests of these bugs.
+	
+   DESCRIPTION
+   NEWS
+	Version 1.59-0.020
+
+------------- passed R-3.5.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------

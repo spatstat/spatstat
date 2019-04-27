@@ -1,7 +1,7 @@
 #
 #    predict.ppm.S
 #
-#	$Revision: 1.110 $	$Date: 2019/02/20 03:34:50 $
+#	$Revision: 1.111 $	$Date: 2019/04/27 07:22:19 $
 #
 #    predict.ppm()
 #	   From fitted model obtained by ppm(),	
@@ -491,7 +491,7 @@ predict.ppm <- local({
         ## extract variance-covariance matrix of parameters
         vc <- vcov(model)
         ## compute model matrix
-        fmla <- formula(model)
+        fmla <- rhs.of.formula(formula(glmfit))
 #        mf <- model.frame(fmla, newdata, ..., na.action=na.pass)
 #        mm <- model.matrix(fmla, mf, ..., na.action=na.pass)
         mf <- model.frame(fmla, newdata, na.action=na.pass)
@@ -499,6 +499,8 @@ predict.ppm <- local({
         if(nrow(mm) != nrow(newdata))
           stop("Internal error: row mismatch in SE calculation")
         ## compute relative variance = diagonal of quadratic form
+        if(ncol(mm) != ncol(vc))
+          stop("Internal error: column mismatch in SE calculation")
         vv <- quadform(mm, vc)
         ## standard error
         SE <- lambda * sqrt(vv)

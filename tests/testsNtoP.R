@@ -754,7 +754,7 @@ local({
 #
 # Things that might go wrong with predict()
 #
-#  $Revision: 1.10 $ $Date: 2019/01/14 07:07:20 $
+#  $Revision: 1.11 $ $Date: 2019/04/27 09:25:59 $
 #
 
 require(spatstat)
@@ -823,9 +823,22 @@ local({
                    Interaction=sample(0:1, 10, TRUE))
   m10 <- PPMmodelmatrix(fut, data=df)
   mmm <- PPMmodelmatrix(fut, Q=quad.ppm(fut))
-  fut1 <- ppm(cells ~ 1, Strauss(0.1))
-  effectfun(fut1, "x")
-  effectfun(fut1, "y")
+  #' effectfun for Gibbs
+  effectfun(fut, "x")
+  effectfun(fut, "x", se.fit=TRUE)
+  #' implicit covariate when there is only one
+  effectfun(fut)
+  effectfun(fut, se.fit=TRUE)
+  #' 
+  dlin <- distfun(copper$SouthLines)
+  copfit <- ppm(copper$SouthPoints ~ dlin, Geyer(1,1))
+  effectfun(copfit, "dlin")
+  effectfun(copfit)
+  # external covariate
+  effectfun(fut, "y", x=0)
+  futS <- ppm(cells ~ 1, Strauss(0.1))
+  effectfun(futS, "x")
+  effectfun(futS, "y")
 
   ## ppm with covariate values in data frame
   X <- rpoispp(42)

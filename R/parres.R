@@ -3,7 +3,7 @@
 #
 # code to plot transformation diagnostic
 #
-#   $Revision: 1.11 $  $Date: 2019/03/14 08:04:11 $
+#   $Revision: 1.12 $  $Date: 2019/04/27 09:08:21 $
 #
 
 parres <- function(model, covariate, ...,
@@ -17,7 +17,7 @@ parres <- function(model, covariate, ...,
   modelname <- deparse(substitute(model))
 
   stopifnot(is.ppm(model))
-
+  
   if(missing(covariate)) {
     mc <- model.covariates(model)
     if(length(mc) == 1) covariate <- mc else stop("covariate must be provided")
@@ -215,8 +215,12 @@ parres <- function(model, covariate, ...,
       gd <- getglmdata(model)
       goodrow <- min(which(complete.cases(gd)))
       defaultdata <- gd[goodrow, , drop=FALSE]
+      #' set interaction terms to zero
+      if(length(Vnames <- model$internal$Vnames))
+        defaultdata[,Vnames] <- 0
+      gf <- getglmfit(model)
       effectfundata.can <- list(covname=covname,
-                            fmla = formula(model),
+                            fmla = rhs.of.formula(formula(gf)),
                             termbetas = termbetas,
                             defaultdata = defaultdata,
                             relevant = relevant,
@@ -283,8 +287,12 @@ parres <- function(model, covariate, ...,
       gd <- getglmdata(model)
       goodrow <- min(which(complete.cases(gd)))
       defaultdata <- gd[goodrow, , drop=FALSE]
+      #' set interaction terms to zero
+      if(length(Vnames <- model$internal$Vnames))
+        defaultdata[,Vnames] <- 0
+      gf <- getglmfit(model)
       effectfundata.off <- list(covname=covname,
-                                fmla = formula(model),
+                                fmla = rhs.of.formula(formula(gf)),
                                 defaultdata = defaultdata,
                                 offnames = offnames)
       effectFun.off <- function(x) {

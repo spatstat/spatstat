@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.59-0.019
+        CHANGES IN spatstat VERSION 1.59-0.020
 
 OVERVIEW
 
@@ -54,6 +54,14 @@ BUG FIXES
     Did not correctly handle patterns containing duplicated points.
     Fixed.
 
+    o predict.ppm, effectfun
+    Crashed in some cases, with the message 'ncol(x)=nrow(v) is not TRUE'.
+    Fixed.
+
+    o parres
+    Crashed in some cases, with the message 'logical subscript too long'.
+    Fixed.
+    
         CHANGES IN spatstat VERSION 1.59-0
 
 OVERVIEW
