@@ -14,7 +14,7 @@ local({
 #
 #  tests/segments.R
 #
-#  $Revision: 1.13 $  $Date: 2018/07/22 02:15:02 $
+#  $Revision: 1.14 $  $Date: 2019/04/28 02:06:12 $
 
 require(spatstat)
 
@@ -113,17 +113,31 @@ if(xFI > 0.01) stop(paste("density.psp FFT algorithm relative error =", xFI))
   B <- as.psp(df, window=square(1))
   colnames(df) <- c("xmid", "ymid", "length", "angle", "marks")
   E <- as.psp(df, window=square(c(-1,2)))
-
+  G <- E %mark% factor(sample(letters[1:3], nsegments(E), replace=TRUE))
+  
 #' print and summary methods
   A
   B
   E
+  G
   summary(B)
   M <- B
   marks(M) <- data.frame(id=marks(B), len=lengths.psp(B))
   M
   summary(M)
+  subset(M, select=len)
 
+#' miscellaneous cases
+  marks(M) <- marks(M)[1,,drop=FALSE]
+
+#' plot method cases  
+  spatstat.options(monochrome=TRUE)
+  plot(B)
+  plot(G)
+  spatstat.options(monochrome=FALSE)
+  plot(B)
+  plot(G)
+  
 #' undocumented  
   as.ppp(B)
 

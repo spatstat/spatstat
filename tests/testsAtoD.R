@@ -255,7 +255,7 @@ reset.spatstat.options()
 #'   Tests of "click*" functions
 #'   using queueing feature of spatstatLocator
 #'
-#'   $Revision: 1.1 $ $Date: 2018/10/19 10:03:23 $
+#'   $Revision: 1.2 $ $Date: 2019/04/28 02:20:37 $
 
 require(spatstat)
 local({
@@ -284,6 +284,11 @@ local({
   XL <- clicklpp(simplenet)
   spatstat.utils::queueSpatstatLocator(Y)
   XM <- clicklpp(simplenet, n=3, types=c("a", "b"))
+  #' identify.psp
+  E <- edges(letterR)[c(FALSE, TRUE)]
+  Z <- ppp(c(2.86, 3.65, 3.15), c(1.69, 1.98, 2.56), window=Frame(letterR))
+  spatstat.utils::queueSpatstatLocator(Z)
+  identify(E)
 })
 ## tests/colour.R
 ##
