@@ -36,7 +36,7 @@ local({
 #
 # Also test nnorient()
 #
-#   $Revision: 1.23 $  $Date: 2019/04/05 09:10:36 $
+#   $Revision: 1.24 $  $Date: 2019/04/29 06:34:29 $
 #
 
 require(spatstat)
@@ -248,13 +248,17 @@ local({
   #' degenerate case
   X <- cells[nndist(cells) > bdist.points(cells)]
   f <- nnorient(X)
+  #' nnclean
+  A <- nnclean(shapley, k=17, edge.correct=TRUE)
+  B <- nnclean(runifpoint3(300), 3)
+  #' stienen set
+  #' bug when disc radius is zero
+  Y <- unmark(humberside)[40:100] # contains duplicated points
+  stienen(Y)
+  Z <- stienenSet(Y)
 })
 
-local({
-  #' nnclean
-  X <- nnclean(shapley, k=17, edge.correct=TRUE)
-  A <- nnclean(runifpoint3(300), 3)
-})
+  
 ## 
 ##    tests/percy.R
 ##

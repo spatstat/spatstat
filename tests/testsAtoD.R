@@ -105,7 +105,7 @@ local({
 ##  tests/closeshave.R
 ## check 'closepairs/crosspairs' code
 ## validity and memory allocation
-## $Revision: 1.17 $ $Date: 2019/01/25 03:57:38 $
+## $Revision: 1.19 $ $Date: 2019/04/29 06:00:38 $
 
 local({
   r <- 0.12
@@ -145,6 +145,7 @@ local({
   ## ...............................................
   #' compare with older, slower code
   op <- spatstat.options(closepairs.newcode=FALSE,
+                         closepairs.altcode=FALSE,
                          crosspairs.newcode=FALSE)
   ## ...............................................
   old.close.ij <- closepairs(redwood, r, what="indices")
@@ -153,7 +154,7 @@ local({
   stopifnot(samesame(cross.ij, old.cross.ij))
   # execute only:
   old.close.every <- closepairs(redwood, r, what="all", distinct=FALSE)
-  old.cross.every <- crosspairs(on, off, r, what="all", distinct=FALSE)
+  old.close.once <- closepairs(redwood, r, what="all", twice=FALSE)
   ## ...............................................
   spatstat.options(op)
   ## ...............................................
@@ -246,6 +247,18 @@ local({
   wi <- weightedclosepairs(redwood, 0.05, "isotropic")
   wt <- weightedclosepairs(redwood, 0.05, "translate")
   wp <- weightedclosepairs(redwood, 0.05, "periodic")
+})
+
+local({
+  #' experimental
+  r <- 0.08
+  a <- closepairs(redwood, r)
+  b <- tweak.closepairs(a, r, 26, 0.1, 0.1)
+  X <- runifpoint3(30)
+  rr <- 0.2
+  cl <- closepairs(X, rr)
+  ii <- cl$i[[1]]
+  xl <- tweak.closepairs(cl, rr, ii, 0.05, -0.05, 0.05)
 })
 
 reset.spatstat.options()

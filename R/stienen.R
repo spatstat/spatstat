@@ -51,9 +51,13 @@ stienenSet <- function(X, edge=TRUE) {
   n <- npoints(X)
   if(n == 0) return(emptywindow(Window(X)))
   if(n == 1) return(Window(X))
-  d <- nnd/2
-  delta <- 2 * pi * max(d)/128
-  Z <- disc(d[1], X[1], delta=delta)
-  for(i in 2:n) Z <- union.owin(Z, disc(d[i], X[i], delta=delta))
+  rad <- nnd/2
+  if(!all(ok <- (rad > 0))) {
+    eps <- min(rad[ok], shortside(Frame(X)))/100
+    rad <- pmax(rad, eps)
+  }
+  delta <- 2 * pi * max(rad)/128
+  Z <- disc(rad[1], X[1], delta=delta)
+  for(i in 2:n) Z <- union.owin(Z, disc(rad[i], X[i], delta=delta))
   return(Z)
 }

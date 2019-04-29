@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.59-0.021
+        CHANGES IN spatstat VERSION 1.59-0.022
 
 OVERVIEW
 
@@ -7,7 +7,8 @@ OVERVIEW
     
     o Accelerated some code.
 
-    o Thinning of spatial patterns extended to different types of pattern.
+    o Random thinning and random labelling of spatial patterns
+    extended to different types of pattern.
 
     o Minor bug fixes.
     
@@ -15,13 +16,11 @@ OVERVIEW
     
 SIGNIFICANT USER-VISIBLE CHANGES
 
-    o rthin
-    Now handles point patterns of all classes (ppp, lpp, pp3, ppx)
-    and line segment patterns (psp).
+    o rthin, rlabel
+    These functions now work on point patterns of all classes
+    (ppp, lpp, pp3, ppx) and line segment patterns (psp).
 
     o rlabel
-    Now handles point patterns of all classes (ppp, lpp, pp3, ppx)
-    and line segment patterns (psp).
     New arguments 'nsim' and 'drop'.
 
     o bw.abram
@@ -54,6 +53,10 @@ BUG FIXES
     Did not correctly handle patterns containing duplicated points.
     Fixed.
 
+    o stienenSet
+    Crashed if the data contained duplicated points.
+    Fixed.
+
     o predict.ppm, effectfun
     Crashed in some cases, with the message 'ncol(x)=nrow(v) is not TRUE'.
     Fixed.
@@ -61,6 +64,7 @@ BUG FIXES
     o parres
     Crashed in some cases, with the message 'logical subscript too long'.
     Fixed.
+
     
         CHANGES IN spatstat VERSION 1.59-0
 

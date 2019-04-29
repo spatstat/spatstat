@@ -174,7 +174,7 @@
    d <- nndist(x, y)
 
    # Stienen diagram
-   plot(cells \%mark\% (nndist(cells)/2), markscale=1)
+   plot(cells \%mark\% nndist(cells), markscale=1)
 
    # distance to nearest neighbour of each type
    nnda <- nndist(ants, by=marks(ants)) 

@@ -359,10 +359,32 @@ Change log from 1.59-0 to 1.59-1
 	
    DESCRIPTION
    NEWS
-	Version 1.59-0.020
-
+	Version 1.59-0.021
 
 ------------- passed R-3.5.2 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
+
+29 april 2019
+
+............. passed 'make bookcheck'  ...............
+
+   tests/closeshave.R
+	Extended coverage of code in closepairs.R
+
+   man/nndist.Rd
+	Corrected out-of-date usage
+
+   stienen.R
+	Bug fix for case where nndist=0
+
+   DESCRIPTION
+   NEWS
+	Version 1.59-0.022
+
+------------- passed R-3.5.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+
 
