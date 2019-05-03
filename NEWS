@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.59-0.022
+        CHANGES IN spatstat VERSION 1.59-0.023
 
 OVERVIEW
 
@@ -11,6 +11,8 @@ OVERVIEW
     extended to different types of pattern.
 
     o Minor bug fixes.
+
+    o Package built under R 3.6.0.
     
     o Version nickname: 'Mostly Harmless'
     
