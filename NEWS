@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.59-0.024
+        CHANGES IN spatstat VERSION 1.59-0.025
 
 OVERVIEW
 
@@ -37,6 +37,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o rLGCP
     Accelerated.
 
+    o anyDuplicated.ppp
+    Accelerated.
+    
     o simulate.kppm
     Accelerated, for LGCP models. 
 

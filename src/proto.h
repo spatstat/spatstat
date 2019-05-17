@@ -196,6 +196,7 @@ void CspaWtSumSymOut(int *, int *, int *, int *, int *, int *, double *, int *, 
 void Ccrosspaircounts(int *, double *, double *, int *, double *, double *, double *, int *); 
 void Cclosepaircounts(int *, double *, double *, double *, int *);
 void uniqmapxy(int *, double *, double *, int *);
+void anydupxy(int *, double *, double *, int *);
 void poly2imI(double *, double *, int *, int *, int *, int *); 
 void bdrymask(int *, int *, int *, int *); 
 void discs2grid(int *, double *, double *, int *, double *, double *, int *, double *, double *, double *, int *);

@@ -1,7 +1,7 @@
 #
 #   unique.ppp.R
 #
-# $Revision: 1.33 $  $Date: 2018/11/02 01:19:08 $
+# $Revision: 1.35 $  $Date: 2019/05/17 11:32:25 $
 #
 # Methods for 'multiplicity' co-authored by Sebastian Meyer
 # Copyright 2013 Adrian Baddeley and Sebastian Meyer 
@@ -69,7 +69,19 @@ duplicated.ppp <- function(x, ...,
 }
 
 anyDuplicated.ppp <- function(x, ...) {
-  anyDuplicated(as.data.frame(x), ...)
+  #' first check duplication of coordinates using fast code
+  n <- npoints(x)
+  if(n <= 1) return(FALSE)
+  xx <- x$x
+  yy <- x$y
+  o <- order(xx, seq_len(n))
+  anydupXY <- .C("anydupxy",
+                 n=as.integer(n),
+                 x=as.double(xx[o]),
+                 y=as.double(yy[o]),
+                 anydup=as.integer(integer(1)),
+                 PACKAGE="spatstat")$anydup
+  anydupXY && (!is.marked(x) || anyDuplicated(as.data.frame(x), ...))
 }
 
 ## utility to check whether two rows are identical

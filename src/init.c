@@ -20,6 +20,7 @@ static const R_CMethodDef CEntries[] = {
     {"acrdenspt",         (DL_FUNC) &acrdenspt,         10},
     {"acrsmoopt",         (DL_FUNC) &acrsmoopt,         10},
     {"adenspt",           (DL_FUNC) &adenspt,            7},
+    {"anydupxy",          (DL_FUNC) &anydupxy,           4},
     {"areaBdif",          (DL_FUNC) &areaBdif,          11},
     {"areadifs",          (DL_FUNC) &areadifs,           7},
     {"asmoopt",           (DL_FUNC) &asmoopt,            8},
