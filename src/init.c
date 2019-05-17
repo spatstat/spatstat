@@ -172,6 +172,7 @@ static const R_CMethodDef CEntries[] = {
     {"tabsumweight",      (DL_FUNC) &tabsumweight,       6},
     {"trigraf",           (DL_FUNC) &trigraf,           10},
     {"trigrafS",          (DL_FUNC) &trigrafS,          10},
+    {"uniqmapxy",         (DL_FUNC) &uniqmapxy,          4},
     {"wtcrdenspt",        (DL_FUNC) &wtcrdenspt,        10},
     {"wtcrsmoopt",        (DL_FUNC) &wtcrsmoopt,        11},
     {"wtdenspt",          (DL_FUNC) &wtdenspt,           7},

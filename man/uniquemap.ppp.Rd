@@ -1,0 +1,55 @@
+\name{uniquemap.ppp}
+\alias{uniquemap}
+\alias{uniquemap.ppp}
+\title{
+  Map Duplicate Entries to Unique Entries
+}
+\description{
+  Determine whether points in a point pattern are duplicated,
+  choose a unique representative for each set of duplicates,
+  and map the duplicates to the unique representative.
+}
+\usage{
+uniquemap(x)
+
+\method{uniquemap}{ppp}(x)
+}
+\arguments{
+  \item{x}{
+    A point pattern.
+  }
+}
+\details{
+  This function determines whether any points of \code{x} are
+  duplicated (i.e. their spatial coordinates are identical)
+  and constructs a mapping of the indices of \code{x}
+  so that all duplicates are mapped to a unique representative index.
+
+  The result is an integer vector \code{u} such that
+  \code{u[j] = i} if
+  the points \code{x[i]} and \code{x[j]} are identical and
+  point \code{i} has been chosen as the unique representative.
+  The entry \code{u[i] = i} means either that point \code{i} is
+  unique, or that it has been chosen as the unique representative
+  of its equivalence class.
+
+  It is \emph{not} guaranteed that the
+  unique representative point is the one with the lowest
+  index (earliest position in the sequence). 
+}
+\value{
+  An integer vector.
+}
+\author{
+  \spatstatAuthors.
+}
+\seealso{
+  \code{\link{unique.ppp}}, \code{\link{duplicated.ppp}}
+}
+\examples{
+  Y <- runifpoint(4)
+  X <- Y[c(1,2,3,4,2,1)]
+  uniquemap(X)
+}
+\keyword{spatial}
+\keyword{methods}

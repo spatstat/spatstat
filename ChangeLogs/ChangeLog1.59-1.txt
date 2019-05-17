@@ -399,3 +399,25 @@ Change log from 1.59-0 to 1.59-1
 ------------- committed to GitHub      ---------------
 
 
+16 may 2019
+
+   unique.ppp.R
+	Attempted to accelerate, but not successful.
+	Edits removed again.
+
+17 may 2019
+
+   uniquemap.h [New file]
+   uniquemap.c [New file]
+   uniquemap.R [New file]
+   uniquemap.ppp.Rd [New file]
+   	New function 'uniquemap'
+
+   DESCRIPTION
+   NEWS
+	Version 1.59-0.024
+
+------------- passed R-3.6.0 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+

@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.59-0.023
+        CHANGES IN spatstat VERSION 1.59-0.024
 
 OVERVIEW
 
@@ -15,6 +15,11 @@ OVERVIEW
     o Package built under R 3.6.0.
     
     o Version nickname: 'Mostly Harmless'
+
+NEW FUNCTIONS
+
+    o uniquemap
+    Map duplicate points to unique representatives
     
 SIGNIFICANT USER-VISIBLE CHANGES
 
