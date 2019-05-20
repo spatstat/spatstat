@@ -964,18 +964,21 @@ local({
 #'
 #'  Tests of duplicated/multiplicity code
 #'
-#' $Revision: 1.2 $ $Date: 2018/11/02 01:23:09 $
+#' $Revision: 1.3 $ $Date: 2019/05/20 05:09:51 $
 
 require(spatstat)
 local({
    X <- ppp(c(1,1,0.5,1), c(2,2,1,2), window=square(3), check=FALSE)
-   m <- multiplicity(X)
    Y <- X %mark% factor(letters[c(3,2,4,3)])
+   ZM <- Y %mark% matrix(c(3,2,4,3), 4, 2)
+   ZD <- ZM
+   marks(ZD) <- as.data.frame(marks(ZM))
+
+   #' multiplicity
+   m <- multiplicity(X)
    mf <- multiplicity(Y)
-   Z <- Y %mark% matrix(c(3,2,4,3), 4, 2)
-   mm <- multiplicity(Z)
-   marks(Z) <- as.data.frame(marks(Z))
-   mz <- multiplicity(Z)
+   mm <- multiplicity(ZM)
+   mz <- multiplicity(ZD)
    ## default method
    kk <- c(1,2,3,1,1,2)
    mk <- multiplicity(kk)
@@ -989,4 +992,17 @@ local({
    df <- data.frame(x=c(1:4, 1,3,2,4, 0,0, 3,4),
                     y=factor(rep(letters[1:4], 3)))
    md <- multiplicity(df)
+
+   ## uniquemap.ppp
+   checkum <- function(X, blurb) {
+     a <- uniquemap(X)
+     if(any(a > seq_along(a)))
+       stop(paste("uniquemap", blurb,
+                  "does not respect sequential ordering"))
+     return(invisible(NULL))
+   }
+   checkum(X, "<unmarked pattern>")
+   checkum(Y, "<multitype pattern>")
+   checkum(ZM, "<pattern with matrix of marks>")
+   checkum(ZD, "<pattern with several columns of marks>")
 })

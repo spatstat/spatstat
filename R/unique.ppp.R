@@ -1,7 +1,7 @@
 #
 #   unique.ppp.R
 #
-# $Revision: 1.35 $  $Date: 2019/05/17 11:32:25 $
+# $Revision: 1.36 $  $Date: 2019/05/20 04:21:52 $
 #
 # Methods for 'multiplicity' co-authored by Sebastian Meyer
 # Copyright 2013 Adrian Baddeley and Sebastian Meyer 
@@ -21,37 +21,28 @@ duplicated.ppp <- function(x, ...,
   rule <- match.arg(rule)
   if(rule == "deldir")
     return(deldir::duplicatedxy(x))
-  if(rule == "unmark")
-    x <- unmark(x)
   n <- npoints(x)
+  xloc <- unmark(x)
+  if(!anyDuplicated(xloc))
+    return(logical(n)) # i.e. vector of FALSE
+  if(rule == "unmark")
+    x <- xloc
   switch(markformat(x),
          none = {
-           # unmarked points
-           # check for duplication of x and y separately (a necessary condition)
-           xx <- x$x
-           yy <- x$y
-           possible <- duplicated(xx) & duplicated(yy)
-           if(!any(possible))
-             return(possible)
-           # split by x coordinate of duplicated x values
-           result <- possible
-           xvals <- unique(xx[possible])
-           for(xvalue in xvals) {
-             sub <- (xx == xvalue)
-           # compare y values
-             result[sub] <- duplicated(yy[sub])
-           }
+           #' unmarked points
+           u <- uniquemap(x)
+           result <- (u != seq_along(u))
          },
          vector = {
-           # marked points - split by mark value
+           #' marked points - convert mark to integer
            m <- marks(x)
-           um <- if(is.factor(m)) levels(m) else unique(m)
-           xx <- unmark(x)
-           result <- logical(n)
-           for(i in seq_along(um)) {
-             sub <- (m == um[i])
-             result[sub] <- duplicated.ppp(xx[sub])
+           if(is.factor(m)) {
+             marks(x) <- as.integer(m)
+           } else {
+             um <- unique(m)
+             marks(x) <- match(m, um)
            }
+           result <- duplicated(as.data.frame(x))
          },
          dataframe = {
            result <- duplicated(as.data.frame(x))

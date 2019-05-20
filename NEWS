@@ -1,20 +1,20 @@
 
-        CHANGES IN spatstat VERSION 1.59-0.025
+        CHANGES IN spatstat VERSION 1.59-0.026
 
 OVERVIEW
 
-    o We thank Tilman Davies and Mehdi Moradi for contributions.
+    o We thank Ottmar Cronie, Tilman Davies and Mehdi Moradi for contributions.
     
-    o Accelerated some code.
-
     o Random thinning and random labelling of spatial patterns
     extended to different types of pattern.
+
+    o Accelerated some code.
 
     o Minor bug fixes.
 
     o Package built under R 3.6.0.
     
-    o Version nickname: 'Mostly Harmless'
+    o Version nickname: 'Kangaroos in the top paddock'
 
 NEW FUNCTIONS
 
@@ -40,6 +40,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o anyDuplicated.ppp
     Accelerated.
     
+    o duplicated.ppp
+    Accelerated, in most cases.
+    
     o simulate.kppm
     Accelerated, for LGCP models. 
 
@@ -55,12 +58,12 @@ BUG FIXES
     Not all the entries of 'leg.args' were passed to text.default.
     Fixed.
 
-    o im.apply
-    Crashed if 'FUN' returned factor values.
-    Fixed.
-
     o densityVoronoi.ppp
     Did not correctly handle patterns containing duplicated points.
+    Fixed.
+
+    o im.apply
+    Crashed if 'FUN' returned factor values.
     Fixed.
 
     o stienenSet
