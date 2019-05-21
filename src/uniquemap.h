@@ -16,7 +16,9 @@
 
   ZCOORD     if defined, coordinates are 3-dimensional
 
-  $Revision: 1.5 $ $Date: 2019/05/17 08:19:25 $
+  MARKED     if defined, points have INTEGER marks (tested for equality)
+
+  $Revision: 1.6 $ $Date: 2019/05/21 07:30:51 $
 
   Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2019
   Licence: GNU Public Licence >= 2
@@ -35,6 +37,9 @@ void FUNNAME(int *n,
 #ifdef ZCOORD
 	     double *z,
 #endif
+#ifdef MARKED
+	     int *marks,
+#endif	     
 #ifdef QUITANY
 	     int *anydup
 #else
@@ -46,6 +51,9 @@ void FUNNAME(int *n,
 #ifdef ZCOORD
   double zi, dz;
 #endif
+#ifdef MARKED
+  int mi;
+#endif  
 
   int N, maxchunk, i, j;
 
@@ -68,6 +76,9 @@ void FUNNAME(int *n,
 #ifdef ZCOORD
       zi = z[i];
 #endif
+#ifdef MARKED
+      mi = marks[i];
+#endif      
 
       if(i + 1 < N) {
 #ifndef QUITANY
@@ -86,13 +97,19 @@ void FUNNAME(int *n,
 	      d2 = d2 + dz * dz;
 #endif
 	      if(d2 <= 0.0) {
-		/* j is a duplicate of i */
+#ifdef MARKED
+		if(marks[j] == mi) {
+#endif		  
+		  /* j is a duplicate of i */
 #ifdef QUITANY
-		*anydup = 1; /* i.e. TRUE */
-		return;
+		  *anydup = 1; /* i.e. TRUE */
+		  return;
 #else	      
-		uniqmap[j] = i + 1; /* R indexing */
+		  uniqmap[j] = i + 1; /* R indexing */
 #endif	      
+#ifdef MARKED
+		}
+#endif		
 	      }
 #ifdef ZCOORD
 	    }

@@ -450,3 +450,18 @@ Change log from 1.59-0 to 1.59-1
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+21 may 2019
+
+   uniquemap.h
+   uniquemap.c
+	Handle point patterns with integer or factor marks
+	
+   DESCRIPTION
+   NEWS
+	Version 1.59-0.027
+
+------------- passed R-3.6.0 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+   

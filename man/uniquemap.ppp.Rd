@@ -21,8 +21,7 @@ uniquemap(x)
 }
 \details{
   This function determines whether any points of \code{x} are
-  duplicated (i.e. their spatial coordinates are identical)
-  and constructs a mapping of the indices of \code{x}
+  duplicated, and constructs a mapping of the indices of \code{x}
   so that all duplicates are mapped to a unique representative index.
 
   The result is an integer vector \code{u} such that
@@ -32,10 +31,6 @@ uniquemap(x)
   The entry \code{u[i] = i} means either that point \code{i} is
   unique, or that it has been chosen as the unique representative
   of its equivalence class.
-
-  It is \emph{not} guaranteed that the
-  unique representative point is the one with the lowest
-  index (earliest position in the sequence). 
 }
 \value{
   An integer vector.
