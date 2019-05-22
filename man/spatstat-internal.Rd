@@ -226,6 +226,7 @@
 \alias{hiermat}
 \alias{ho.engine}
 \alias{hsvNA}
+\alias{IdenticalRowPair}
 \alias{IdenticalRows}
 \alias{idorempty}
 \alias{illegal.iformula}
@@ -1052,6 +1053,7 @@ hierarchicalordering(i, s)
 hiermat(x, h)
 ho.engine(model, \dots, nsim, nrmh, start, control, verb)
 hsvNA(h, s, v, alpha)
+IdenticalRowPair(i,j,a,b)
 IdenticalRows(i,j,a,b)
 idorempty(w, r, caller)
 illegal.iformula(ifmla, itags, dfvarnames)

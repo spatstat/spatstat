@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.59-0.027
+        CHANGES IN spatstat VERSION 1.59-0.028
 
 OVERVIEW
 
@@ -18,8 +18,11 @@ OVERVIEW
 
 NEW FUNCTIONS
 
-    o uniquemap
+    o uniquemap.ppp
     Map duplicate points to unique representatives
+    
+    o uniquemap.data.frame
+    Map duplicate rows to unique representatives
     
 SIGNIFICANT USER-VISIBLE CHANGES
 

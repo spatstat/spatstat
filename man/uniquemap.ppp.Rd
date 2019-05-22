@@ -1,6 +1,8 @@
 \name{uniquemap.ppp}
 \alias{uniquemap}
 \alias{uniquemap.ppp}
+\alias{uniquemap.lpp}
+\alias{uniquemap.ppx}
 \title{
   Map Duplicate Entries to Unique Entries
 }
@@ -13,13 +15,21 @@
 uniquemap(x)
 
 \method{uniquemap}{ppp}(x)
+
+\method{uniquemap}{lpp}(x)
+
+\method{uniquemap}{ppx}(x)
 }
 \arguments{
   \item{x}{
-    A point pattern.
+    A point pattern (object of class \code{"ppp"}, \code{"lpp"},
+    \code{"pp3"} or \code{"ppx"}).
   }
 }
 \details{
+  The function \code{uniquemap} is generic, with methods for
+  point patterns and data frames.
+
   This function determines whether any points of \code{x} are
   duplicated, and constructs a mapping of the indices of \code{x}
   so that all duplicates are mapped to a unique representative index.
@@ -39,7 +49,8 @@ uniquemap(x)
   \spatstatAuthors.
 }
 \seealso{
-  \code{\link{unique.ppp}}, \code{\link{duplicated.ppp}}
+  \code{\link{unique.ppp}}, \code{\link{duplicated.ppp}},
+  \code{\link{uniquemap.default}}
 }
 \examples{
   Y <- runifpoint(4)

@@ -4,9 +4,46 @@
 #'   Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2019
 #'   Licence: GNU Public Licence >= 2
 #'
-#'   $Revision: 1.10 $  $Date: 2019/05/21 09:23:35 $
+#'   $Revision: 1.11 $  $Date: 2019/05/22 09:06:15 $
 
 uniquemap <- function(x) { UseMethod("uniquemap") }
+
+uniquemap.default <- function(x) {
+  result <- seqn <- seq_along(x)
+  if(length(x) <= 1) return(result)
+  if(is.atomic(x) && (is.factor(x) || (is.vector(x) && is.numeric(x)))) {
+    if(is.factor(x)) x <- as.integer(x)
+    o <- order(x, seqn)
+    isfirst <- c(TRUE, (diff(x[o]) != 0))
+    omap <- cumsum(isfirst)
+    result <- seqn
+    result[o] <- o[isfirst][omap]
+    return(result)
+  }
+  dup <- duplicated(x)
+  ux <- x[!dup]
+  mapdup <- match(x[dup], ux)
+  result[dup] <- which(!dup)[mapdup]
+  return(result)
+}
+
+uniquemap.data.frame <- function(x) {
+  n <- nrow(x)
+  result <- seqn <- seq_len(n)
+  if(n <= 1 || !anyDuplicated(x))
+    return(result)
+  dup <- duplicated(x)
+  uni <- which(!dup)
+  for(j in which(dup)) {
+    for(i in uni[uni < j]) {
+      if(IdenticalRowPair(i, j, x)) {
+        result[j] <- i
+        break
+      }
+    }
+  }
+  return(result)
+}
 
 uniquemap.ppp <- function(x) {
   n <- npoints(x)
@@ -82,5 +119,16 @@ uniquemap.ppp <- function(x) {
   result <- integer(n)
   result[o] <- o[umap]
   return(result)
+}
+
+uniquemap.lpp <- function(x) {
+  n <- npoints(x)
+  if(n <= 1 || !anyDuplicated(as.ppp(x))) return(seq_len(n))
+  result <- uniquemap(as.data.frame(x))
+  return(result)
+}
+
+uniquemap.ppx <- function(x) {
+  uniquemap(as.data.frame(x))
 }
 

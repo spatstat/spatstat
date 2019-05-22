@@ -1,7 +1,7 @@
 #
 #   unique.ppp.R
 #
-# $Revision: 1.36 $  $Date: 2019/05/20 04:21:52 $
+# $Revision: 1.37 $  $Date: 2019/05/22 09:04:57 $
 #
 # Methods for 'multiplicity' co-authored by Sebastian Meyer
 # Copyright 2013 Adrian Baddeley and Sebastian Meyer 
@@ -77,16 +77,25 @@ anyDuplicated.ppp <- function(x, ...) {
 
 ## utility to check whether two rows are identical
 
-IdenticalRows <- local({
-  id <- function(i,j, a, b=a) {
-    ai <- a[i,]
-    bj <- b[j,]
-    row.names(ai) <- row.names(bj) <- NULL
-    identical(ai, bj)
-  }
-  Vectorize(id, c("i", "j"))
-})
-    
+IdenticalRowPair <- function(i,j, a, b=a) {
+  #' i and j are row indices (single integers)
+  ai <- a[i,]
+  bj <- b[j,]
+  row.names(ai) <- row.names(bj) <- NULL
+  identical(ai, bj)
+}
+
+## vectorised
+
+IdenticalRows <- function(i, j, a, b=a) {
+  #' i and j are row index vectors of equal length
+  #' result[k] = identical( a[i[k],]  , b[j[k],] )
+  Mo <- if(missing(b)) list(a=a) else list(a=a, b=b)
+  mapply(IdenticalRowPair, i=i, j=j, MoreArgs=Mo,
+         SIMPLIFY=TRUE, USE.NAMES=FALSE)
+}
+
+## .......... multiplicity .............
 
 multiplicity <- function(x) {
   UseMethod("multiplicity")
