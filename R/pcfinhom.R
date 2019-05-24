@@ -1,7 +1,7 @@
 #
 #   pcfinhom.R
 #
-#   $Revision: 1.22 $   $Date: 2018/04/19 02:31:31 $
+#   $Revision: 1.23 $   $Date: 2019/05/24 10:24:48 $
 #
 #   inhomogeneous pair correlation function of point pattern 
 #
@@ -98,12 +98,9 @@ pcfinhom <- function(X, lambda=NULL, ..., r=NULL,
         if(is.ppm(model)) {
           model <- update(model, Q=X)
           lambda <- fitted(model, dataonly=TRUE, leaveoneout=leaveoneout)
-        } else if(is.kppm(model)) {
-          model <- update(model, X=X)
-          lambda <- fitted(model, dataonly=TRUE, leaveoneout=leaveoneout)
         } else {
           model <- update(model, X=X)
-          lambda <- fitted(model, dataonly=TRUE)
+          lambda <- fitted(model, dataonly=TRUE, leaveoneout=leaveoneout)
         }
         danger <- FALSE
         if(miss.update) 

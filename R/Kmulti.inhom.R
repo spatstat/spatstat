@@ -1,7 +1,7 @@
 #
 #	Kmulti.inhom.S		
 #
-#	$Revision: 1.50 $	$Date: 2016/06/28 08:06:01 $
+#	$Revision: 1.52 $	$Date: 2019/05/24 10:21:38 $
 #
 #
 # ------------------------------------------------------------------------
@@ -239,16 +239,9 @@ function(X, I, J, lambdaI=NULL, lambdaJ=NULL,
         if(is.ppm(model)) {
           model <- update(model, Q=X)
           lambdaX <- fitted(model, dataonly=TRUE, leaveoneout=leaveoneout)
-        } else if(is.kppm(model)) {
-          model <- update(model, X=X)
-          lambdaX <- fitted(model, dataonly=TRUE, leaveoneout=leaveoneout)
         } else {
           model <- update(model, X=X)
-          if(leaveoneout && !miss.leave)
-            warn.once("dppm.leaveoneout",
-                      "fitted.dppm(leaveoneout=TRUE)",
-                      "is not yet implemented")
-          lambdaX <- fitted(model, dataonly=TRUE)
+          lambdaX <- fitted(model, dataonly=TRUE, leaveoneout=leaveoneout)
         }
         lambdaI <- lambdaX[I]
         lambdaJ <- lambdaX[J]
@@ -294,16 +287,10 @@ function(X, I, J, lambdaI=NULL, lambdaJ=NULL,
         if(is.ppm(model)) {
           model <- update(model, Q=X)
           lambdaX <- fitted(model, dataonly=TRUE, leaveoneout=leaveoneout)
-        } else if(is.kppm(model)) {
+        } else {
+          #' kppm or dppm
           model <- update(model, X=X)
           lambdaX <- fitted(model, dataonly=TRUE, leaveoneout=leaveoneout)
-        } else {
-          model <- update(model, X=X)
-          if(leaveoneout && !miss.leave)
-            warn.once("dppm.leaveoneout",
-                      "fitted.dppm(leaveoneout=TRUE)",
-                      "is not yet implemented")
-          lambdaX <- fitted(model, dataonly=TRUE)
         }
         lambdaI <- lambdaX[I]
         dangerI <- FALSE
@@ -346,16 +333,9 @@ function(X, I, J, lambdaI=NULL, lambdaJ=NULL,
           model <- update(model, Q=X)
           if(leaveoneout && !miss.leave)
           lambdaX <- fitted(model, dataonly=TRUE, leaveoneout=leaveoneout)
-        } else if(is.kppm(model)) {
-          model <- update(model, X=X)
-          lambdaX <- fitted(model, dataonly=TRUE, leaveoneout=leaveoneout)
         } else {
           model <- update(model, X=X)
-          if(leaveoneout && !miss.leave)
-            warn.once("dppm.leaveoneout",
-                      "fitted.pppm(leaveoneout=TRUE)",
-                      "is not yet implemented")
-          lambdaX <- fitted(model, dataonly=TRUE)
+          lambdaX <- fitted(model, dataonly=TRUE, leaveoneout=leaveoneout)
         }
         lambdaJ <- lambdaX[J]
         dangerJ <- FALSE

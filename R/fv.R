@@ -4,7 +4,7 @@
 ##
 ##    class "fv" of function value objects
 ##
-##    $Revision: 1.153 $   $Date: 2018/07/21 04:05:00 $
+##    $Revision: 1.154 $   $Date: 2019/05/24 10:12:16 $
 ##
 ##
 ##    An "fv" object represents one or more related functions
@@ -375,6 +375,10 @@ fvnames <- function(X, a=".") {
   fvnames(x, ".")  <- value[ind.]
   if(length(inds) > 0)
     fvnames(x, ".s") <- value[inds]
+  namemap <- setNames(lapply(value, as.name), nama)
+  formula(x) <- flat.deparse(eval(substitute(substitute(fom, um),
+                                             list(fom=as.formula(formula(x)),
+                                                  um=namemap))))
   return(x)
 }
 

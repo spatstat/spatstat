@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.59-0.028
+        CHANGES IN spatstat VERSION 1.59-0.029
 
 OVERVIEW
 
@@ -26,6 +26,14 @@ NEW FUNCTIONS
     
 SIGNIFICANT USER-VISIBLE CHANGES
 
+    o Kinhom, pcfinhom
+    Leave-one-out calculation is implemented when 'lambda' is a fitted model
+    of class 'dppm'.
+    
+    o Kcross.inhom, Kdot.inhom, Lcross.inhom, Ldot.inhom
+    Leave-one-out calculation is implemented when 'lambdaX' is a fitted model
+    of class 'dppm'.
+    
     o rthin, rlabel
     These functions now work on point patterns of all classes
     (ppp, lpp, pp3, ppx) and line segment patterns (psp).
@@ -65,6 +73,11 @@ BUG FIXES
     Did not correctly handle patterns containing duplicated points.
     Fixed.
 
+    o names<-.fv
+    Did not adjust the plotting formula, so that a subsequent call to plot.fv
+    would complain about missing variables.
+    Fixed.
+    
     o im.apply
     Crashed if 'FUN' returned factor values.
     Fixed.

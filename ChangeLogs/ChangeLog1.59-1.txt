@@ -482,3 +482,25 @@ Change log from 1.59-0 to 1.59-1
 ------------- committed to GitHub      ---------------
 
    
+24 may 2019
+
+   eval.fv.R
+   compatible.fv.Rd
+	compatible.fv has new argument 'samenames'
+
+   fv.R
+	Bug fix in names<-.fv (did not adjust the formula)
+
+   Kmulti.inhom.R
+   Kinhom.R
+   pcfinhom.R
+	Removed unnecessary block on dppm in leaveoneout case
+
+   DESCRIPTION
+   NEWS
+	Version 1.59-0.029
+
+------------- passed R-3.6.0 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+

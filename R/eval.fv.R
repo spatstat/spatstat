@@ -6,7 +6,7 @@
 #
 #        compatible.fv()       Check whether two fv objects are compatible
 #
-#     $Revision: 1.37 $     $Date: 2019/02/20 03:34:50 $
+#     $Revision: 1.38 $     $Date: 2019/05/24 07:45:25 $
 #
 
 eval.fv <- local({
@@ -176,20 +176,25 @@ compatible.fv <- local({
 
   approx.equal <- function(x, y) { max(abs(x-y)) <= .Machine$double.eps }
 
-  compatible.fv <- function(A, B, ...) {
+  compatible.fv <- function(A, B, ..., samenames=TRUE) {
     verifyclass(A, "fv")
     if(missing(B)) {
       answer <- if(length(...) == 0) TRUE else compatible(A, ...)
       return(answer)
     }
     verifyclass(B, "fv")
-    ## are columns the same?
-    namesmatch <-
-      isTRUE(all.equal(names(A),names(B))) &&
-        (fvnames(A, ".x") == fvnames(B, ".x")) &&
-          (fvnames(A, ".y") == fvnames(B, ".y"))
-    if(!namesmatch)
+    ## is the function argument the same?
+    samearg <- (fvnames(A, ".x") == fvnames(B, ".x"))
+    if(!samearg)
       return(FALSE)
+    if(samenames) {
+      ## are all columns the same, and in the same order?
+      namesmatch <- isTRUE(all.equal(names(A),names(B))) &&
+                    samearg &&
+                    (fvnames(A, ".y") == fvnames(B, ".y"))
+      if(!namesmatch)
+        return(FALSE)
+    }
     ## are 'r' values the same ?
     rA <- with(A, .x)
     rB <- with(B, .x)

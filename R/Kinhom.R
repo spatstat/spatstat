@@ -1,7 +1,7 @@
 #
 #	Kinhom.S	Estimation of K function for inhomogeneous patterns
 #
-#	$Revision: 1.94 $	$Date: 2018/10/19 03:19:54 $
+#	$Revision: 1.95 $	$Date: 2019/05/24 10:23:38 $
 #
 #	Kinhom()	compute estimate of K_inhom
 #
@@ -174,12 +174,9 @@
             if(is.ppm(model)) {
               model <- update(model, Q=X)
               lambda <- fitted(model, dataonly=TRUE, leaveoneout=leaveoneout)
-            } else if(is.kppm(model)) {
-              model <- update(model, X=X)
-              lambda <- fitted(model, dataonly=TRUE, leaveoneout=leaveoneout)
             } else {
               model <- update(model, X=X)
-              lambda <- fitted(model, dataonly=TRUE)
+              lambda <- fitted(model, dataonly=TRUE, leaveoneout=leaveoneout)
             }
             danger <- FALSE
             if(miss.update) 
