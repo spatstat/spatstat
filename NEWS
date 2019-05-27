@@ -1,9 +1,10 @@
 
-        CHANGES IN spatstat VERSION 1.59-0.029
+        CHANGES IN spatstat VERSION 1.59-0.030
 
 OVERVIEW
 
-    o We thank Ottmar Cronie, Tilman Davies and Mehdi Moradi for contributions.
+    o We thank Ottmar Cronie, Tilman Davies, Mehdi Moradi
+    and Tim Pollington for contributions.
     
     o Random thinning and random labelling of spatial patterns
     extended to different types of pattern.
@@ -73,6 +74,11 @@ BUG FIXES
     Did not correctly handle patterns containing duplicated points.
     Fixed.
 
+    o markcorr
+    The argument 'correction="none"' did not generate any results.
+    [Spotted by Tim Pollington.]
+    Fixed.
+    
     o names<-.fv
     Did not adjust the plotting formula, so that a subsequent call to plot.fv
     would complain about missing variables.

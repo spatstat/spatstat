@@ -504,3 +504,24 @@ Change log from 1.59-0 to 1.59-1
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+27 may 2019
+
+   [Pull request merged]
+
+   markcorr.R
+	Bug fix in handling correction="none"
+
+   DESCRIPTION
+   NEWS
+   spatstat-package.Rd
+	Acknowledged Tim Pollington
+
+   DESCRIPTION
+   NEWS
+	Version 1.59-0.030
+
+------------- passed R-3.6.0 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+   
