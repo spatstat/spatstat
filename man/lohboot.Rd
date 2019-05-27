@@ -7,7 +7,7 @@
 }
 \usage{
   lohboot(X,
-          fun=c("pcf", "Kest", "Lest", "pcfinhom", "Kinhom", "Linhom"),
+          fun=c("pcf", "Kest", "Lest", "pcfinhom", "Kinhom", "Linhom", "Kcross.inhom", "Lcross.inhom"),
           \dots,
            block=FALSE, global=FALSE, basicboot=FALSE, Vcorrection=FALSE,
            confidence=0.95, nx = 4, ny = nx, nsim=200, type=7) 
@@ -19,7 +19,7 @@
   \item{fun}{
     Name of the summary function for which confidence intervals are
     desired: one of the strings \code{"pcf"}, \code{"Kest"}, \code{"Lest"},
-    \code{"pcfinhom"}, \code{"Kinhom"} or \code{"Linhom"}.
+    \code{"pcfinhom"}, \code{"Kinhom"} \code{"Linhom"}, \code{"Kcross.inhom"} or \code{"Lcross.inhom"}.
     Alternatively, the function itself; it must be
     one of the functions listed here.
   }

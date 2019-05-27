@@ -99,8 +99,52 @@ function(X, from, ..., correction="Ripley", verbose=TRUE, rvalue=NULL)
   return(result)
 }
 
+"localKcross.inhom" <-
+  function(X, from, to, lambdaFrom=NULL, lambdaTo=NULL, ...,
+           correction = "Ripley",
+           sigma=NULL, varcov=NULL,
+           lambdaX=NULL, update=TRUE, leaveoneout=TRUE)
+  {
+    verifyclass(X, "ppp")
+    if(!is.multitype(X, dfok=FALSE))
+      stop("Point pattern must be multitype")
+    miss.update <- missing(update)
+    miss.leave <- missing(leaveoneout)
+    marx <- marks(X)
+    if(missing(from))
+      from <- levels(marx)[1]
+    if(missing(to))
+      to <- levels(marx)[2]
+    I <- (marx == from)
+    J <- (marx == to)
+    Iname <- paste("points with mark i =", from)
+    Jname <- paste("points with mark j =", to)
+    K <- localKmultiEngine(X, I, J, lambdaFrom, lambdaTo, ...,
+                           correction=correction,
+                           sigma=sigma, varcov=varcov,
+                           Iname=Iname, Jname=Jname,
+                           lambdaX=lambdaX, update=update, leaveoneout=leaveoneout,
+                           miss.update=miss.update, miss.leave=miss.leave)
+    iname <- make.parseable(paste(from))
+    jname <- make.parseable(paste(to))
+    result <-
+      rebadge.fv(K,
+                 substitute(K[inhom,i,j](r),
+                            list(i=iname,j=jname)),
+                 c("K", paste0("list", paren(paste("inhom", from, to, sep=",")))),
+                 new.yexp=substitute(K[list(inhom,i,j)](r),
+                                     list(i=iname,j=jname)))
+    attr(result, "dangerous") <- attr(K, "dangerous")
+    return(result)
+
+  }
+
+localLcross.inhom <- function(X, from, to, lambdaFrom = NULL, lambdaTo = NULL, ...) {
+  localKcross.inhom(X, from, to, lambdaFrom, lambdaTo, ..., wantL = TRUE)
+}
+
 "localKmultiEngine" <-
-  function(X, from, to, ..., wantL=FALSE, lambdaFrom=NULL, lambdaTo=NULL,
+  function(X, from, to, lambdaFrom=NULL, lambdaTo=NULL, ..., wantL=FALSE,
            correction="Ripley", verbose=TRUE, rvalue=NULL,
            sigma=NULL, varcov=NULL,
            lambdaX=NULL, update=TRUE, leaveoneout=TRUE)
