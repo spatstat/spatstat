@@ -479,6 +479,17 @@ markcorr <-
   
   #### Compute estimates ##############
         
+  if(all(correction == "none")) {
+    ## no edge corrections
+    XJ <- ppp(close$xj, close$yj, window=W, check=FALSE)
+    edgewt <- rep.int(1,XJ$n)
+    ## get smoothed estimate of mark covariance
+    Mnone <- sewsmod(dIJ, ff, edgewt, Efdenom, r, method, ...)
+    result <- bind.fv(result,
+                      data.frame(nocorrec=Mnone), "{hat(%s)[%s]^{nocorrec}}(r)",
+                      "no edge-correction estimate of %s",
+                      "nocorrec")
+  }
   if(any(correction == "translate")) {
     ## translation correction
     XJ <- ppp(close$xj, close$yj, window=W, check=FALSE)
