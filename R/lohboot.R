@@ -72,7 +72,7 @@ id <- match(list(fun), flist)
   # first n columns are the local pcfs (etc) for the n points of X
   n <- npoints(X)
   ### TEMPORARY HACK for cross functions. It is not always the case that n <- ncol(f)-2
-  if(grep("cross", fun)){
+  if(grepl("cross", fun)){
     n <- ncol(f)-2
   }
   y <- as.matrix(as.data.frame(f))[, 1:n]

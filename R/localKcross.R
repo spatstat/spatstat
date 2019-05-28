@@ -189,8 +189,12 @@ localLcross.inhom <- function(X, from, to, lambdaFrom = NULL, lambdaTo = NULL, .
     weighted <- !is.null(lambdaFrom)
     if(weighted){
       stopifnot(!is.null(lambdaTo))
-      lambdas <- resolve_lambda_cross(X, from, to, lambdaFrom, lambdaTo,
-                                      lambdaX, caller = "localKcrossEngine")
+      lambdas <- resolve_lambda_cross(X, from, to, lambdaFrom, lambdaTo, ...,
+                                      lambdaX = lambdaX, sigma = sigma, varcov = varcov,
+                                      leaveoneout = leaveoneout, update = update,
+                                      Iname = Iname, Jname = Jname,
+                                      miss.leave = miss.leave, miss.update = miss.update,
+                                      caller = "localKcrossEngine")
       lambdaFrom <- lambdas$lambdaI
       lambdaTo <- lambdas$lambdaJ
     }
@@ -380,11 +384,16 @@ localLcross.inhom <- function(X, from, to, lambdaFrom = NULL, lambdaTo = NULL, .
     return(K)
   }
 
-resolve_lambda_cross <- function(X, I, J, lambdaI, lambdaJ, lambdaX, lambdaIJ=NULL, caller){
+resolve_lambda_cross <- function(X, I, J, lambdaI, lambdaJ, ..., lambdaX,
+                                 sigma, varcov, leaveoneout, update,
+                                 Iname, Jname, miss.leave, miss.update,
+                                 lambdaIJ=NULL, caller){
   dangerous <- c("lambdaI", "lambdaJ")
   dangerI <- dangerJ <- TRUE
   XI <- X[I]
   XJ <- X[J]
+  nI <- npoints(XI)
+  nJ <- npoints(XJ)
 
   if(!is.null(lambdaX)) {
     ## Intensity values for all points of X
