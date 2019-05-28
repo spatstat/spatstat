@@ -69,12 +69,13 @@ id <- match(list(fun), flist)
          border    = { ctag <- "bord";  cadj <- "border-corrected" },
          translate = { ctag <- "trans"; cadj <- "translation-corrected" },
          isotropic = { ctag <- "iso";   cadj <- "Ripley isotropic corrected" })
+  ### TEMPORARY HACK for cross functions. Uses a possibly temporary attribute
+  ### to overwrite X with only "from" points.
+  if(grepl("cross", fun)){
+    X <- attr(f, "Xfrom")
+  }
   # first n columns are the local pcfs (etc) for the n points of X
   n <- npoints(X)
-  ### TEMPORARY HACK for cross functions. It is not always the case that n <- ncol(f)-2
-  if(grepl("cross", fun)){
-    n <- ncol(f)-2
-  }
   y <- as.matrix(as.data.frame(f))[, 1:n]
   nr <- nrow(y)
     

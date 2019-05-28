@@ -132,7 +132,7 @@
     \bold{fun} \tab \bold{local version} \cr
     \code{\link{pcf}} \tab \code{\link{localpcf}} \cr
     \code{\link{Kest}} \tab \code{\link{localK}} \cr
-    \code{\link{Lest}} \tab \code{\link{localK}} \cr
+    \code{\link{Lest}} \tab \code{\link{localL}} \cr
     \code{\link{pcfinhom}} \tab \code{\link{localpcfinhom}} \cr
     \code{\link{Kinhom}} \tab \code{\link{localKinhom}} \cr
     \code{\link{Linhom}} \tab \code{\link{localLinhom}} \cr

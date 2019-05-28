@@ -1,37 +1,9 @@
-"localLcross" <- function(X, from, to, ...) {
-  if(!is.multitype(X, dfok=FALSE)) 
-	stop("Point pattern must be multitype")
-  if(missing(from)) from <- levels(marks(X))[1]
-  if(missing(to)) to <- levels(marks(X))[2]
-  K <- localKcross(X, from, to, ...)
-  L <- eval.fv(sqrt(K/pi))
-  # relabel the fv object
-  fromname <- make.parseable(paste(from))
-  toname <- make.parseable(paste(to))
-  L <- rebadge.fv(L,
-                  substitute(L[loc,i,j](r),
-                             list(i=fromname,j=toname)),
-                  c("L", paste0("list(loc,", fromname, ",", toname, ")")),
-                  new.yexp=substitute(L[list(loc,i,j)](r),
-                                      list(i=fromname,j=toname)))
-  attr(L, "labl") <- attr(K, "labl")
-  return(L)  
+"localLcross" <- function(X, from, to, ..., correction = "Ripley") {
+  localKcross(X, from, to, ..., correction = correction, wantL = TRUE)
 }
 
-"localLdot" <- function(X, from, ...) {
-  if(!is.multitype(X, dfok=FALSE)) 
-	stop("Point pattern must be multitype")
-  if(missing(from)) from <- levels(marks(X))[1]
-  K <- localKdot(X, from, ...)
-  L <- eval.fv(sqrt(K/pi))
-  # relabel the fv object
-  fromname <- make.parseable(paste(from))
-  L <- rebadge.fv(L,
-                  substitute(L[loc, i ~ dot](r), list(i=fromname)),
-                  c("L", paste("loc,", fromname, "~ symbol(\"\\267\")")), 
-                  new.yexp=substitute(L[loc, i ~ symbol("\267")](r), list(i=fromname)))
-  attr(L, "labl") <- attr(K, "labl")
-  return(L)  
+"localLdot" <- function(X, from, ..., correction = "Ripley") {
+  localKdot(X, from, ..., correction = correction, wantL = TRUE)
 }
 
 "localKcross" <-
@@ -63,14 +35,6 @@
         result <-localKmultiEngine(X, I, J, ..., correction=correction,
                                    verbose=verbose, rvalue=rvalue)
     }
-    fromname <- make.parseable(paste(from))
-    toname <- make.parseable(paste(to))
-    result <-
-      rebadge.fv(result, 
-                 substitute(Kcross[i,j](r), list(i=fromname,j=toname)),
-                 c("K", paste0("list(", fromname, ",", toname, ")")), 
-                 new.yexp=substitute(K[list(i,j)](r),
-                                     list(i=fromname,j=toname)))
     return(result)
   }
 
@@ -90,12 +54,6 @@ function(X, from, ..., correction="Ripley", verbose=TRUE, rvalue=NULL)
 	
   result <- localKmultiEngine(X, I, J, ..., correction=correction,
                               verbose=verbose, rvalue=rvalue)
-  fromname <- make.parseable(paste(from))
-  result <-
-    rebadge.fv(result,
-               substitute(K[loc, i ~ dot](r), list(i=fromname)),
-               c("K", paste0("loc,", fromname, "~ symbol(\"\\267\")")),
-               new.yexp=substitute(K[loc, i ~ symbol("\267")](r), list(i=fromname)))
   return(result)
 }
 
@@ -381,6 +339,8 @@ localLcross.inhom <- function(X, from, to, lambdaFrom = NULL, lambdaTo = NULL, .
     attr(K, "correction") <- correction
     if(weighted && lambdas$danger)
       attr(K, "dangerous") <- lambdas$dangerous
+    ### TEMPORARY HACK to save info about the "from" points
+    attr(K, "Xfrom") <- X_from
     return(K)
   }
 
