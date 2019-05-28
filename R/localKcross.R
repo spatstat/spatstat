@@ -75,26 +75,12 @@ function(X, from, ..., correction="Ripley", verbose=TRUE, rvalue=NULL)
       to <- levels(marx)[2]
     I <- (marx == from)
     J <- (marx == to)
-    Iname <- paste("points with mark i =", from)
-    Jname <- paste("points with mark j =", to)
     K <- localKmultiEngine(X, I, J, lambdaFrom, lambdaTo, ...,
                            correction=correction,
                            sigma=sigma, varcov=varcov,
-                           Iname=Iname, Jname=Jname,
                            lambdaX=lambdaX, update=update, leaveoneout=leaveoneout,
                            miss.update=miss.update, miss.leave=miss.leave)
-    iname <- make.parseable(paste(from))
-    jname <- make.parseable(paste(to))
-    result <-
-      rebadge.fv(K,
-                 substitute(K[inhom,i,j](r),
-                            list(i=iname,j=jname)),
-                 c("K", paste0("list", paren(paste("inhom", from, to, sep=",")))),
-                 new.yexp=substitute(K[list(inhom,i,j)](r),
-                                     list(i=iname,j=jname)))
-    attr(result, "dangerous") <- attr(K, "dangerous")
-    return(result)
-
+    return(K)
   }
 
 localLcross.inhom <- function(X, from, to, lambdaFrom = NULL, lambdaTo = NULL, ...) {
@@ -114,8 +100,6 @@ localLcross.inhom <- function(X, from, to, lambdaFrom = NULL, lambdaTo = NULL, .
                  miss.leave=missing(leaveoneout))
   
     extrargs <- resolve.defaults(list(...), dflt)
-    if(length(extrargs) > length(dflt))
-      warning("Additional arguments unrecognised")
     Iname <- extrargs$Iname
     Jname <- extrargs$Jname
     miss.update <- extrargs$miss.update
@@ -150,8 +134,6 @@ localLcross.inhom <- function(X, from, to, lambdaFrom = NULL, lambdaTo = NULL, .
       lambdas <- resolve_lambda_cross(X, from, to, lambdaFrom, lambdaTo, ...,
                                       lambdaX = lambdaX, sigma = sigma, varcov = varcov,
                                       leaveoneout = leaveoneout, update = update,
-                                      Iname = Iname, Jname = Jname,
-                                      miss.leave = miss.leave, miss.update = miss.update,
                                       caller = "localKcrossEngine")
       lambdaFrom <- lambdas$lambdaI
       lambdaTo <- lambdas$lambdaJ
@@ -346,8 +328,17 @@ localLcross.inhom <- function(X, from, to, lambdaFrom = NULL, lambdaTo = NULL, .
 
 resolve_lambda_cross <- function(X, I, J, lambdaI, lambdaJ, ..., lambdaX,
                                  sigma, varcov, leaveoneout, update,
-                                 Iname, Jname, miss.leave, miss.update,
                                  lambdaIJ=NULL, caller){
+    dflt <- list(Iname="points satisfying condition I",
+                 Jname="points satisfying condition J",
+                 miss.update=missing(update),
+                 miss.leave=missing(leaveoneout))
+  
+    extrargs <- resolve.defaults(list(...), dflt)
+    Iname <- extrargs$Iname
+    Jname <- extrargs$Jname
+    miss.update <- extrargs$miss.update
+    miss.leave <- extrargs$miss.leave
   dangerous <- c("lambdaI", "lambdaJ")
   dangerI <- dangerJ <- TRUE
   XI <- X[I]
