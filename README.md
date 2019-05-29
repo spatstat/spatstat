@@ -61,13 +61,16 @@ the user. To access these utility functions directly, you need to type
 
 There are also *extension packages* which provide additional capabilities
 and must be loaded explicitly when you need them. 
-Currently there are two extension packages:
+Currently there are three extension packages:
 
    . [spatstat.local](https://github.com/baddstats/spatstat.local)
    for local model-fitting, 
 
    . [spatstat.sphere](https://github.com/spatstat/spatstat.sphere)
-   for analysing point patterns on a sphere.
+   for analysing point patterns on a sphere,
+
+   . [spatstat.Knet](https://github.com/spatstat/spatstat.Knet)
+   for analysing point patterns on a network of lines.
 
 ## Installation
 
