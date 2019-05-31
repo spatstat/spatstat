@@ -71,7 +71,12 @@
 \seealso{
   \code{\link{psp.object}},
   \code{\link{ppp.object}},
-  \code{\link{midpoints.psp}}
+  \code{\link{marks.psp}},
+  \code{\link{summary.psp}},
+  \code{\link{midpoints.psp}},
+  \code{\link{lengths.psp}},
+  \code{\link{angles.psp}},
+  \code{\link{extrapolate.psp}}.
 }
 \examples{
   a <- psp(runif(10), runif(10), runif(10), runif(10), window=owin())

@@ -20,9 +20,12 @@
   The midpoint of each line segment is computed.
 }
 \seealso{
+  \code{\link{marks.psp}},
   \code{\link{summary.psp}},
-  \code{\link{lengths.psp}},
-  \code{\link{angles.psp}}
+  \code{\link{lengths.psp}}
+  \code{\link{angles.psp}},
+  \code{\link{endpoints.psp}},
+  \code{\link{extrapolate.psp}}.
 }
 \examples{
   a <- psp(runif(10), runif(10), runif(10), runif(10), window=owin())

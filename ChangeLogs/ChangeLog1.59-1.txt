@@ -524,4 +524,24 @@ Change log from 1.59-0 to 1.59-1
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
-   
+31 may 2019
+
+   psp.R
+   extrapolate.psp.Rd [New file]
+        New function extrapolate.psp
+
+   psp.Rd
+   angles.psp.Rd
+   endpoints.psp.Rd
+   lengths.psp.Rd
+   midpoints.psp.Rd
+	Added cross-references.
+
+   DESCRIPTION
+   NEWS
+	Version 1.59-0.031
+
+------------- passed R-3.6.0 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+

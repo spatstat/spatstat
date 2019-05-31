@@ -39,9 +39,13 @@
   then adding \eqn{\pi}{\pi} to any negative angles.
 }
 \seealso{
+  \code{\link{psp}},
+  \code{\link{marks.psp}},
   \code{\link{summary.psp}},
   \code{\link{midpoints.psp}},
-  \code{\link{lengths.psp}}
+  \code{\link{lengths.psp}},
+  \code{\link{endpoints.psp}},
+  \code{\link{extrapolate.psp}}.
 }
 \examples{
   a <- psp(runif(10), runif(10), runif(10), runif(10), window=owin())

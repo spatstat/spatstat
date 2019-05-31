@@ -1,7 +1,7 @@
 #
 #  psp.R
 #
-#  $Revision: 1.96 $ $Date: 2019/02/22 11:13:34 $
+#  $Revision: 1.97 $ $Date: 2019/05/31 05:50:13 $
 #
 # Class "psp" of planar line segment patterns
 #
@@ -614,7 +614,15 @@ print.summary.psp <- function(x, ...) {
   return(invisible(NULL))
 }
 
-  
+extrapolate.psp <- function(x, ...) {
+  verifyclass(x, "psp")
+  theta <- (angles.psp(x) + pi/2) %% (2*pi)
+  p <- with(x$ends, x1*cos(theta) + y1 * sin(theta))
+  result <- infline(p=p, theta=theta)
+  return(result)
+}
+
+
 ########################################################
 #  subsets
 ########################################################

@@ -76,8 +76,17 @@
   \code{\link{as.psp}},
   \code{\link{owin.object}},
   \code{\link{owin}},
-  \code{\link{as.owin}},
-  \code{\link{marks.psp}}
+  \code{\link{as.owin}}.
+
+  Function for extracting information from a segment pattern:
+  \code{\link{marks.psp}},
+  \code{\link{summary.psp}},
+  \code{\link{midpoints.psp}},
+  \code{\link{lengths.psp}}
+  \code{\link{angles.psp}},
+  \code{\link{endpoints.psp}}
+
+  Convert line segments to infinite lines: \code{\link{extrapolate.psp}}.
 }
 \examples{
   X <- psp(runif(10), runif(10), runif(10), runif(10), window=owin())

@@ -31,9 +31,12 @@
   is faster than \code{min(lengths.psp(x))}.
 }
 \seealso{
+  \code{\link{marks.psp}},
   \code{\link{summary.psp}},
   \code{\link{midpoints.psp}},
-  \code{\link{angles.psp}}
+  \code{\link{angles.psp}},
+  \code{\link{endpoints.psp}},
+  \code{\link{extrapolate.psp}}.
 }
 \examples{
   a <- psp(runif(10), runif(10), runif(10), runif(10), window=owin())

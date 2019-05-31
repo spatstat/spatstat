@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.59-0.030
+        CHANGES IN spatstat VERSION 1.59-0.031
 
 OVERVIEW
 
@@ -19,12 +19,15 @@ OVERVIEW
 
 NEW FUNCTIONS
 
+    o extrapolate.psp
+    Extrapolate line segments to obtain infinite lines.
+    
     o uniquemap.ppp
     Map duplicate points to unique representatives
     
     o uniquemap.data.frame
     Map duplicate rows to unique representatives
-    
+
 SIGNIFICANT USER-VISIBLE CHANGES
 
     o Kinhom, pcfinhom
