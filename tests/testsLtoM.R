@@ -745,7 +745,7 @@ local({
 #' tests/mctests.R
 #' Monte Carlo tests
 #'        (mad.test, dclf.test, envelopeTest, hasenvelope)
-#' $Revision: 1.1 $ $Date: 2018/04/19 01:33:42 $
+#' $Revision: 1.2 $ $Date: 2019/06/03 10:39:31 $
 
 require(spatstat)
 local({
@@ -756,6 +756,11 @@ local({
   
   fitx <- ppm(redwood~x)
   envelopeTest(fitx, exponent=2, nsim=9, savefuns=TRUE)
+
+  envelopeTest(redwood, Lest, exponent=1, nsim=19,
+               rinterval=c(0, 0.1), alternative="greater", clamp=TRUE)
+  envelopeTest(redwood, pcf, exponent=Inf, nsim=19,
+               rinterval=c(0, 0.1), alternative="greater", clamp=TRUE)
 })
 
 #'  tests/morpho.R

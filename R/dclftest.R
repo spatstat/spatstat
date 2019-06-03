@@ -1,7 +1,7 @@
 #
 #  dclftest.R
 #
-#  $Revision: 1.38 $  $Date: 2019/02/27 08:51:51 $
+#  $Revision: 1.40 $  $Date: 2019/06/03 10:39:13 $
 #
 #  Monte Carlo tests for CSR (etc)
 #
@@ -137,8 +137,12 @@ envelopeTest <-
       }
     }
     ## determine interval of r values for computation
-    rok <- r
-    if(!is.null(rinterval)) {
+    if(is.null(rinterval)) {
+      rinterval <- range(r)
+      ok <- rep(TRUE, nr)
+      first <- 1L
+    } else {
+      #' argument 'rinterval' specified
       check.range(rinterval)
       if(max(r) < rinterval[2L]) {
         oldrinterval <- rinterval
@@ -157,44 +161,44 @@ envelopeTest <-
                         "it has been trimmed to", prange(rinterval)))
       }
       ok <- (rinterval[1L] <= r & r <= rinterval[2L])
-      nr <- sum(ok)
-      if(nr == 0) {
-        ## rinterval is very short: pick nearest r value
-        ok <- which.min(abs(r - mean(rinterval)))
-        nr <- 1L
+      first <- min(which(ok))
+    }
+
+    #' check for valid function values, and possibly adjust rinterval
+    bad <- !matrowall(is.finite(as.matrix(X)))
+    if(any(bad[ok])) {
+      if(bad[first] && !any(bad[ok][-1L])) {
+        ## ditch smallest r value (usually zero)
+        ok[first] <- FALSE
+        first <- first + 1L
+        rmin <- r[first]
+        if(verbose)
+          warning(paste("Some function values were infinite, NA or NaN",
+                        "at distance r =", paste0(rinterval[1L], ";"),
+                        "lower limit of r interval was reset to",
+                        rmin, summary(unitname(X))$plural))
+        rinterval[1] <- rmin
+      } else {
+        ## problem
+        rbadmax <- paste(max(r[bad]), summary(unitname(X))$plural)
+        stop(paste("Some function values were infinite, NA or NaN",
+                   "at distances r up to",
+                   paste(rbadmax, ".", sep=""),
+                   "Please specify a shorter", sQuote("rinterval")))
       }
-      rok <- r[ok]
-      obs <- obs[ok]
-      sim <- sim[ok, , drop=FALSE]
-      reference <- reference[ok]
-    } else {
-      rinterval <- range(r)
-      bad <- !matrowall(is.finite(as.matrix(X)))
-      if(any(bad)) {
-        if(bad[1L] && !any(bad[-1L])) {
-          ## ditch r = 0
-          rinterval <- c(r[2L], max(r))
-          if(verbose)
-            warning(paste("Some function values were infinite or NaN",
-                          "at distance r = 0;",
-                          "interval of r values was reset to",
-                          prange(rinterval)))
-          ok <- (rinterval[1L] <= r & r <= rinterval[2L])
-          rok <- r[ok]
-          obs <- obs[ok]
-          sim <- sim[ok, ]
-          reference <- reference[ok]
-          nr <- sum(ok)
-        } else {
-          ## problem
-          rbadmax <- paste(max(r[bad]), summary(unitname(X))$plural)
-          stop(paste("Some function values were infinite or NaN",
-                     "at distances r up to",
-                     paste(rbadmax, ".", sep=""),
-                     "Please specify a shorter", sQuote("rinterval")))
-        }
-      } 
-    } 
+    }
+
+    #' finally trim data
+    rok <- r[ok]
+    obs <- obs[ok]
+    sim <- sim[ok, ]
+    reference <- reference[ok]
+    nr <- sum(ok)
+    if(nr == 0) {
+      ## rinterval is very short: pick nearest r value
+      ok <- which.min(abs(r - mean(rinterval)))
+      nr <- 1L
+    }
 
     ## determine rescaling if any
     if(is.null(scale)) {
@@ -223,6 +227,11 @@ envelopeTest <-
     ddat <- RelevantDeviation(rawdevDat, alternative, clamp, scaling)
     dsim <- RelevantDeviation(rawdevSim, alternative, clamp, scaling)
 
+    if(!all(is.finite(ddat)))
+      stop("Internal error: some deviation values were Inf, NA or NaN") 
+    if(!all(is.finite(dsim)))
+      stop("Internal error: some simulated deviations were Inf, NA or NaN")
+    
     ## compute test statistic
     if(is.infinite(exponent)) {
       ## MAD

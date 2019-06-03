@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.59-0.031
+        CHANGES IN spatstat VERSION 1.59-0.032
 
 OVERVIEW
 
@@ -103,6 +103,9 @@ BUG FIXES
     Crashed in some cases, with the message 'logical subscript too long'.
     Fixed.
 
+    o dclf.test, mad.test, dg.test, bits.test
+    Crashed in some cases if the summary function values were infinite or NA.
+    Fixed.
     
         CHANGES IN spatstat VERSION 1.59-0
 
