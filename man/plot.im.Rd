@@ -14,7 +14,7 @@
                    ribbon=show.all, show.all=!add,
                    ribside=c("right", "left", "bottom", "top"),
                    ribsep=0.15, ribwid=0.05, ribn=1024,
-                   ribscale=1, ribargs=list(), colargs=list(),
+                   ribscale=1, ribargs=list(), riblab=NULL, colargs=list(),
                    useRaster=NULL, workaround=FALSE,
                    do.plot=TRUE) 
 
@@ -26,7 +26,7 @@
                    ribbon=show.all, show.all=!add,
                    ribside=c("right", "left", "bottom", "top"),
                    ribsep=0.15, ribwid=0.05, ribn=1024,
-                   ribscale=1, ribargs=list(), colargs=list(),
+                   ribscale=1, ribargs=list(), riblab=NULL, colargs=list(),
                    useRaster=NULL, workaround=FALSE, 
                    do.plot=TRUE) 
 }
@@ -106,6 +106,12 @@
     to control the display of the ribbon and its scale axis. These may override
     the \code{\dots} arguments. 
   }
+  \item{riblab}{
+    Text to be plotted in the margin near the ribbon.
+    A character string or expression to be interpreted as text,
+    or a list of arguments to be passed to
+    \code{\link[graphics]{mtext}}.
+  }
   \item{colargs}{
     List of additional arguments passed to
     \code{col} if it is a function.
@@ -135,7 +141,11 @@
   The colour map used. An object of class \code{"colourmap"}.
 
   Also has an attribute \code{"bbox"} giving a bounding box
-  for the colour image (including the ribbon if present).
+  for the plot (containing the main colour image and the
+  colour ribbon if plotted).
+  If a ribbon was plotted, there is also an attribute
+  \code{"bbox.legend"} giving a bounding box for the ribbon image.
+  Text annotation occurs outside these bounding boxes.
 }
 \details{
   This is the \code{plot} method for the class \code{"im"}.
@@ -176,9 +186,16 @@
   To control the number of tick-marks, use \code{ribargs=list(nint=N)}
   where \code{N} is the desired number of intervals (so there will
   be \code{N+1} tickmarks, subject to the vagaries of \R internal code). 
+
+  The argument \code{riblab} contains text that will be displayed
+  in the margin next to the ribbon. 
   
   The argument \code{ribscale} is used
-  to rescale the numerals printed next to the colour map.
+  to rescale the numerical values printed next to the colour map,
+  for convenience. 
+  For example if the pixel values in \code{x} range between 1000 and
+  4000, it would be sensible to use \code{ribscale=1/1000} so that the
+  colour map tickmarks would be labelled 1 to 4. 
 
   Normally the pixel values are displayed using the colours given in the
   argument \code{col}. This may be either

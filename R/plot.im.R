@@ -1,7 +1,7 @@
 #
 #   plot.im.R
 #
-#  $Revision: 1.127 $   $Date: 2019/03/08 10:13:03 $
+#  $Revision: 1.128 $   $Date: 2019/06/10 06:07:10 $
 #
 #  Plotting code for pixel images
 #
@@ -169,7 +169,7 @@ plot.im <- local({
                      ribbon=show.all, show.all=!add,
                      ribside=c("right", "left", "bottom", "top"),
                      ribsep=0.15, ribwid=0.05, ribn=1024,
-                     ribscale=1, ribargs=list(), colargs=list(),
+                     ribscale=1, ribargs=list(), riblab=NULL, colargs=list(),
                      useRaster=NULL, workaround=FALSE,
                      do.plot=TRUE) {
     if(missing(main)) main <- short.deparse(substitute(x))
@@ -722,6 +722,11 @@ plot.im <- local({
       do.call.plotfun(graphics::axis,
                       resolve.defaults(ribargs, axisargs, dotargs, posargs),
                       extrargs=graphicsPars("axis"))
+    }
+    if(!is.null(riblab)) {
+      riblabel <- if(is.list(riblab)) riblab else list(text=riblab)
+      riblabel$side <- rib.iside
+      do.call(mtext, riblabel)
     }
     #
     return(invisible(output.colmap))

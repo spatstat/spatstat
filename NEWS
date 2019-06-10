@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.59-0.032
+        CHANGES IN spatstat VERSION 1.59-0.033
 
 OVERVIEW
 
@@ -11,7 +11,7 @@ OVERVIEW
 
     o Accelerated some code.
 
-    o Minor bug fixes.
+    o Minor bug fixes and improvements.
 
     o Package built under R 3.6.0.
     
@@ -42,6 +42,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
     These functions now work on point patterns of all classes
     (ppp, lpp, pp3, ppx) and line segment patterns (psp).
 
+    o plot.im
+    New argument 'riblab'.
+    
     o rlabel
     New arguments 'nsim' and 'drop'.
 
