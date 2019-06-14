@@ -6,30 +6,30 @@
 #
 
 "localL" <-
-  function(X, ..., correction="Ripley", verbose=TRUE, rvalue=NULL)
+  function(X, ..., rmax = NULL, correction="Ripley", verbose=TRUE, rvalue=NULL)
 {
-  localK(X, wantL=TRUE,
+  localK(X, wantL=TRUE, rmax = rmax,
          correction=correction, verbose=verbose, rvalue=rvalue)
 }
 
 "localLinhom" <-
-  function(X, lambda=NULL, ..., correction="Ripley", verbose=TRUE, rvalue=NULL,
+  function(X, lambda=NULL, ..., rmax = NULL, correction="Ripley", verbose=TRUE, rvalue=NULL,
            sigma=NULL, varcov=NULL)
 {
-  localKinhom(X, lambda=lambda, wantL=TRUE, ..., 
+  localKinhom(X, lambda=lambda, wantL=TRUE, ..., rmax = rmax, 
               correction=correction, verbose=verbose, rvalue=rvalue,
               sigma=sigma, varcov=varcov)
 }
 
 "localK" <-
-  function(X, ..., correction="Ripley", verbose=TRUE, rvalue=NULL)
+  function(X, ..., rmax = NULL, correction="Ripley", verbose=TRUE, rvalue=NULL)
 {
   verifyclass(X, "ppp")
-  localKengine(X, ..., correction=correction, verbose=verbose, rvalue=rvalue)
+  localKengine(X, ..., rmax = rmax, correction=correction, verbose=verbose, rvalue=rvalue)
 }
 
 "localKinhom" <-
-  function(X, lambda=NULL, ..., correction="Ripley", verbose=TRUE, rvalue=NULL,
+  function(X, lambda=NULL, ..., rmax = NULL, correction="Ripley", verbose=TRUE, rvalue=NULL,
            sigma=NULL, varcov=NULL)
 {
   verifyclass(X, "ppp")
@@ -53,12 +53,12 @@
     else stop(paste(sQuote("lambda"),
                     "should be a vector, a pixel image, or a function"))
   }  
-  localKengine(X, lambda=lambda, ...,
+  localKengine(X, lambda=lambda, ..., rmax = rmax,
                correction=correction, verbose=verbose, rvalue=rvalue)
 }
 
 "localKengine" <-
-  function(X, ..., wantL=FALSE, lambda=NULL,
+  function(X, ..., wantL=FALSE, lambda=NULL, rmax = NULL,
            correction="Ripley", verbose=TRUE, rvalue=NULL)
 {
   npts <- npoints(X)
@@ -70,7 +70,7 @@
   weighted <- !is.null(lambda)
 
   if(is.null(rvalue)) 
-    rmaxdefault <- rmax.rule("K", W, lambda.ave)
+    rmaxdefault <- rmax %orifnull% rmax.rule("K", W, lambda.ave)
   else {
     stopifnot(is.numeric(rvalue))
     stopifnot(length(rvalue) == 1)

@@ -1145,9 +1145,9 @@ linearKmultiEngine(X, I, J, \dots,
 linearPCFmultiEngine(X, I, J, \dots,
                    r, reweight, denom, correction, showworking)
 listof(\dots)
-localKengine(X, \dots, wantL, lambda, correction, verbose, rvalue)
+localKengine(X, \dots, wantL, lambda, rmax = NULL, correction, verbose, rvalue)
 localKmultiEngine(X, from, to,
-           lambdaFrom, lambdaTo, \dots, wantL,
+           lambdaFrom, lambdaTo, \dots, rmax = NULL, wantL,
            correction, verbose, rvalue, sigma, varcov,
            lambdaX, update, leaveoneout)
 localpcfengine(X, \dots, delta, rmax, nr, stoyan, lambda)

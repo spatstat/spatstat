@@ -5,16 +5,16 @@
 #' 
 #'     $Revision: 1.1 $ $Date: 2019/06/14 05:58:58 $
 
-"localLcross" <- function(X, from, to, ..., correction = "Ripley") {
-  localKcross(X, from, to, ..., correction = correction, wantL = TRUE)
+"localLcross" <- function(X, from, to, ..., rmax = NULL, correction = "Ripley") {
+  localKcross(X, from, to, ..., rmax = rmax, correction = correction, wantL = TRUE)
 }
 
-"localLdot" <- function(X, from, ..., correction = "Ripley") {
-  localKdot(X, from, ..., correction = correction, wantL = TRUE)
+"localLdot" <- function(X, from, ..., rmax = NULL, correction = "Ripley") {
+  localKdot(X, from, ..., rmax = rmax, correction = correction, wantL = TRUE)
 }
 
 "localKcross" <-
-  function(X, from, to, ..., correction="Ripley", verbose=TRUE, rvalue=NULL)
+  function(X, from, to, ..., rmax = NULL, correction="Ripley", verbose=TRUE, rvalue=NULL)
   {
     verifyclass(X, "ppp")
     if(!is.multitype(X, dfok=FALSE)) 
@@ -31,6 +31,7 @@
       ## use Kest
       result <- do.call(localK,
                         resolve.defaults(list(X=X[I],
+                                              rmax=rmax,
                                               correction=correction,
                                               verbose=verbose,
                                               rvalue=rvalue),
@@ -39,14 +40,14 @@
       J <- (marx == to)
       if(!any(J))
         stop(paste("No points have mark =", to))
-        result <-localKmultiEngine(X, I, J, ..., correction=correction,
+        result <-localKmultiEngine(X, I, J, ..., rmax = NULL, correction=correction,
                                    verbose=verbose, rvalue=rvalue)
     }
     return(result)
   }
 
 "localKdot" <- 
-function(X, from, ..., correction="Ripley", verbose=TRUE, rvalue=NULL)
+function(X, from, ..., rmax = NULL, correction="Ripley", verbose=TRUE, rvalue=NULL)
 {
   verifyclass(X, "ppp")
   if(!is.multitype(X, dfok=FALSE)) 
@@ -59,13 +60,13 @@ function(X, from, ..., correction="Ripley", verbose=TRUE, rvalue=NULL)
 	
   if(!any(I)) stop(paste("No points have mark =", from))
 	
-  result <- localKmultiEngine(X, I, J, ..., correction=correction,
+  result <- localKmultiEngine(X, I, J, ..., rmax = rmax, correction=correction,
                               verbose=verbose, rvalue=rvalue)
   return(result)
 }
 
 "localKcross.inhom" <-
-  function(X, from, to, lambdaFrom=NULL, lambdaTo=NULL, ...,
+  function(X, from, to, lambdaFrom=NULL, lambdaTo=NULL, ..., rmax = NULL,
            correction = "Ripley",
            sigma=NULL, varcov=NULL,
            lambdaX=NULL, update=TRUE, leaveoneout=TRUE)
@@ -82,7 +83,7 @@ function(X, from, ..., correction="Ripley", verbose=TRUE, rvalue=NULL)
       to <- levels(marx)[2]
     I <- (marx == from)
     J <- (marx == to)
-    K <- localKmultiEngine(X, I, J, lambdaFrom, lambdaTo, ...,
+    K <- localKmultiEngine(X, I, J, lambdaFrom, lambdaTo, ..., rmax = rmax,
                            correction=correction,
                            sigma=sigma, varcov=varcov,
                            lambdaX=lambdaX, update=update, leaveoneout=leaveoneout,
@@ -90,12 +91,12 @@ function(X, from, ..., correction="Ripley", verbose=TRUE, rvalue=NULL)
     return(K)
   }
 
-localLcross.inhom <- function(X, from, to, lambdaFrom = NULL, lambdaTo = NULL, ...) {
-  localKcross.inhom(X, from, to, lambdaFrom, lambdaTo, ..., wantL = TRUE)
+localLcross.inhom <- function(X, from, to, lambdaFrom = NULL, lambdaTo = NULL, ..., rmax = NULL) {
+  localKcross.inhom(X, from, to, lambdaFrom, lambdaTo, ..., rmax = rmax, wantL = TRUE)
 }
 
 "localKmultiEngine" <-
-  function(X, from, to, lambdaFrom=NULL, lambdaTo=NULL, ..., wantL=FALSE,
+  function(X, from, to, lambdaFrom=NULL, lambdaTo=NULL, ..., rmax = NULL, wantL=FALSE,
            correction="Ripley", verbose=TRUE, rvalue=NULL,
            sigma=NULL, varcov=NULL,
            lambdaX=NULL, update=TRUE, leaveoneout=TRUE)
@@ -147,7 +148,7 @@ localLcross.inhom <- function(X, from, to, lambdaFrom = NULL, lambdaTo = NULL, .
     }
     
     if(is.null(rvalue)) 
-      rmaxdefault <- rmax.rule("K", W, lambda.ave)
+      rmaxdefault <- rmax %orifnull% rmax.rule("K", W, lambda.ave)
     else {
       stopifnot(is.numeric(rvalue))
       stopifnot(length(rvalue) == 1)

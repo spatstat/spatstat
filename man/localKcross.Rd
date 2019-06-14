@@ -8,9 +8,9 @@
   the local K function.
 }
 \usage{
-  localKcross(X, from, to, \dots,
+  localKcross(X, from, to, \dots, rmax = NULL,
               correction = "Ripley", verbose = TRUE, rvalue=NULL)
-  localLcross(X, from, to, \dots, correction = "Ripley")
+  localLcross(X, from, to, \dots, rmax = NULL, correction = "Ripley")
 }
 \arguments{
   \item{X}{
@@ -20,6 +20,9 @@
   \item{\dots}{
     Further arguments passed from \code{localLcross} to
     \code{localKcross}.
+  }
+  \item{rmax}{
+    Optional. Maximum desired value of the argument \eqn{r}.
   }
   \item{from}{
     Type of points from which distances should be measured.

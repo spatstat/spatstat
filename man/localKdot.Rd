@@ -8,9 +8,9 @@
   the local K function.
 }
 \usage{
-  localKdot(X, from, \dots,
+  localKdot(X, from, \dots, rmax = NULL,
               correction = "Ripley", verbose = TRUE, rvalue=NULL)
-  localLdot(X, from, \dots, correction = "Ripley")
+  localLdot(X, from, \dots, rmax = NULL, correction = "Ripley")
 }
 \arguments{
   \item{X}{
@@ -20,6 +20,9 @@
   \item{\dots}{
     Further arguments passed from \code{localLdot} to
     \code{localKdot}.
+  }
+  \item{rmax}{
+    Optional. Maximum desired value of the argument \eqn{r}.
   }
   \item{from}{
     Type of points from which distances should be measured.
