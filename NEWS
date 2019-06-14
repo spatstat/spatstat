@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.59-0.033
+        CHANGES IN spatstat VERSION 1.59-0.034
 
 OVERVIEW
 
@@ -8,6 +8,8 @@ OVERVIEW
     
     o Random thinning and random labelling of spatial patterns
     extended to different types of pattern.
+
+    o Confidence intervals for multitype K function.
 
     o Accelerated some code.
 
@@ -28,8 +30,15 @@ NEW FUNCTIONS
     o uniquemap.data.frame
     Map duplicate rows to unique representatives
 
+    o localKcross, localLcross, localKdot, localLdot,
+    localKcross.inhom, localLcross.inhom
+    Multitype local K functions.
+    
 SIGNIFICANT USER-VISIBLE CHANGES
 
+    o lohboot
+    Now works for multitype K functions Kcross, Kdot, Lcross, Ldot
+    
     o Kinhom, pcfinhom
     Leave-one-out calculation is implemented when 'lambda' is a fitted model
     of class 'dppm'.

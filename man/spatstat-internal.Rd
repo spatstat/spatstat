@@ -308,6 +308,7 @@
 \alias{linearPCFmultiEngine}
 \alias{listof}
 \alias{localKengine}
+\alias{localKmultiEngine}
 \alias{localpcfengine}
 \alias{localpcfmatrix}
 \alias{local2lpp}
@@ -543,6 +544,7 @@
 \alias{representativeRows}
 \alias{resolveEinfo}
 \alias{resolve.vargamma.shape}
+\alias{resolve.lambda.cross}
 \alias{rgbNA}
 \alias{rhohatEngine}
 \alias{rhohatCalc}
@@ -1144,6 +1146,10 @@ linearPCFmultiEngine(X, I, J, \dots,
                    r, reweight, denom, correction, showworking)
 listof(\dots)
 localKengine(X, \dots, wantL, lambda, correction, verbose, rvalue)
+localKmultiEngine(X, from, to,
+           lambdaFrom, lambdaTo, \dots, wantL,
+           correction, verbose, rvalue, sigma, varcov,
+           lambdaX, update, leaveoneout)
 localpcfengine(X, \dots, delta, rmax, nr, stoyan, lambda)
 localpcfmatrix(X, i, \dots, lambda, delta, rmax, nr, stoyan)
 local2lpp(L, seg, tp, X, df.only)
@@ -1428,6 +1434,9 @@ replacementIndex(ii, stuff)
 representativeRows(x)
 resolveEinfo(x, what, fallback, warn, atomic)
 resolve.vargamma.shape(\dots, nu.ker, nu.pcf, default = FALSE)
+resolve.lambda.cross(X, I, J, lambdaI, lambdaJ, \dots, lambdaX,
+                     sigma, varcov, leaveoneout, update,
+                     lambdaIJ, caller)
 rgbNA(red, green, blue, alpha, maxColorValue)
 rhohatEngine(model, covariate, reference, volume, \dots,
                subset, weights, method, horvitz, smoother, resolution, 

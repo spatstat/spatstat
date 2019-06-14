@@ -1,3 +1,10 @@
+#'
+#'     localKcross.R
+#'
+#'     original by Ege Rubak
+#' 
+#'     $Revision: 1.1 $ $Date: 2019/06/14 05:58:58 $
+
 "localLcross" <- function(X, from, to, ..., correction = "Ripley") {
   localKcross(X, from, to, ..., correction = correction, wantL = TRUE)
 }
@@ -131,7 +138,7 @@ localLcross.inhom <- function(X, from, to, lambdaFrom = NULL, lambdaTo = NULL, .
     weighted <- !is.null(lambdaFrom)
     if(weighted){
       stopifnot(!is.null(lambdaTo))
-      lambdas <- resolve_lambda_cross(X, from, to, lambdaFrom, lambdaTo, ...,
+      lambdas <- resolve.lambda.cross(X, from, to, lambdaFrom, lambdaTo, ...,
                                       lambdaX = lambdaX, sigma = sigma, varcov = varcov,
                                       leaveoneout = leaveoneout, update = update,
                                       caller = "localKcrossEngine")
@@ -326,7 +333,7 @@ localLcross.inhom <- function(X, from, to, lambdaFrom = NULL, lambdaTo = NULL, .
     return(K)
   }
 
-resolve_lambda_cross <- function(X, I, J, lambdaI, lambdaJ, ..., lambdaX,
+resolve.lambda.cross <- function(X, I, J, lambdaI, lambdaJ, ..., lambdaX,
                                  sigma, varcov, leaveoneout, update,
                                  lambdaIJ=NULL, caller){
     dflt <- list(Iname="points satisfying condition I",

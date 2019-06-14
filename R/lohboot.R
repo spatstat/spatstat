@@ -1,7 +1,7 @@
 #
 #  lohboot.R
 #
-#  $Revision: 1.19 $   $Date: 2019/01/21 10:34:36 $
+#  $Revision: 1.20 $   $Date: 2019/06/14 05:59:30 $
 #
 #  Loh's bootstrap CI's for local pcf, local K etc
 #

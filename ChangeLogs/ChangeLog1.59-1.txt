@@ -574,3 +574,23 @@ Change log from 1.59-0 to 1.59-1
 ------------- passed R-3.6.0 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
+
+14 june 2019
+
+   localKcross.R [New file]
+   	local multitype K functions (written by Ege)
+
+   localKcross.Rd	 [New file]
+   localKcross.inhom.Rd [New file]
+   localKdot.Rd		 [New file]
+   	Rough bash at the documentation
+
+   DESCRIPTION
+   NEWS
+	Version 1.59-0.034
+
+------------- passed R-3.6.0 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+   
