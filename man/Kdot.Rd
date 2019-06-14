@@ -131,7 +131,7 @@ Kdot(X, i, r=NULL, breaks=NULL, correction, ..., ratio=FALSE, from)
   may have arbitrary shape.
   Biases due to edge effects are
   treated in the same manner as in \code{\link{Kest}},
-  using the border correction.
+  using the chosen edge correction(s).
 
   The argument \code{r} is the vector of values for the
   distance \eqn{r} at which \eqn{K_{i\bullet}(r)}{Ki.(r)} should be evaluated. 
@@ -174,8 +174,7 @@ Kdot(X, i, r=NULL, breaks=NULL, correction, ..., ratio=FALSE, from)
 
   The reduced sample estimator of \eqn{K_{i\bullet}}{Ki.} is pointwise approximately 
   unbiased, but need not be a valid distribution function; it may 
-  not be a nondecreasing function of \eqn{r}. Its range is always 
-  within \eqn{[0,1]}.
+  not be a nondecreasing function of \eqn{r}.
 }
 \seealso{
  \code{\link{Kdot}},

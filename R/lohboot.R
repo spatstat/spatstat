@@ -8,7 +8,8 @@
 
 lohboot <-
   function(X,
-           fun=c("pcf", "Kest", "Lest", "pcfinhom", "Kinhom", "Linhom"),
+           fun=c("pcf", "Kest", "Lest", "pcfinhom", "Kinhom", "Linhom",
+                 "Kcross", "Lcross", "Kcross.inhom", "Lcross.inhom"),
            ...,
            block=FALSE,
            global=FALSE,
@@ -24,8 +25,10 @@ lohboot <-
     fun <- match.arg(fun)
   } else if(is.function(fun)) {
     flist <- list(pcf=pcf, Kest=Kest, Lest=Lest,
-                  pcfinhom=pcfinhom, Kinhom=Kinhom, Linhom=Linhom)
-    id <- match(list(fun), flist)
+                  pcfinhom=pcfinhom, Kinhom=Kinhom, Linhom=Linhom,
+                  Kcross = Kcross, Lcross = Lcross,
+                  Kcross.inhom = Kcross.inhom, Lcross.inhom = Lcross.inhom)
+id <- match(list(fun), flist)
     if(is.na(id))
       stop(paste("Loh's bootstrap is not supported for the function",
                  sQuote(fun.name)))
@@ -45,7 +48,6 @@ lohboot <-
     warning(paste("confidence level", confidence,
                   "corresponds to a non-integer rank", paren(rank),
                   "so quantiles will be interpolated"))
-  n <- npoints(X)
   # compute local functions
   localfun <- switch(fun,
                      pcf=localpcf,
@@ -53,7 +55,11 @@ lohboot <-
                      Lest=localL,
                      pcfinhom=localpcfinhom,
                      Kinhom=localKinhom,
-                     Linhom=localLinhom)
+                     Linhom=localLinhom,
+                     Kcross = localKcross,
+                     Lcross = localLcross,
+                     Kcross.inhom = localKcross.inhom,
+                     Lcross.inhom = localLcross.inhom)
   f <- localfun(X, ...)
   theo <- f$theo
   # parse edge correction info
@@ -63,7 +69,13 @@ lohboot <-
          border    = { ctag <- "bord";  cadj <- "border-corrected" },
          translate = { ctag <- "trans"; cadj <- "translation-corrected" },
          isotropic = { ctag <- "iso";   cadj <- "Ripley isotropic corrected" })
+  ### TEMPORARY HACK for cross functions. Uses a possibly temporary attribute
+  ### to overwrite X with only "from" points.
+  if(grepl("cross", fun)){
+    X <- attr(f, "Xfrom")
+  }
   # first n columns are the local pcfs (etc) for the n points of X
+  n <- npoints(X)
   y <- as.matrix(as.data.frame(f))[, 1:n]
   nr <- nrow(y)
     
@@ -181,7 +193,11 @@ lohboot <-
          Lest={ fname <- "L" ; ylab <- quote(L(r)) },
          pcfinhom={ fname <- "g[inhom]" ; ylab <- quote(g[inhom](r)) },
          Kinhom={ fname <- "K[inhom]" ; ylab <- quote(K[inhom](r)) },
-         Linhom={ fname <- "L[inhom]" ; ylab <- quote(L[inhom](r)) })
+         Linhom={ fname <- "L[inhom]" ; ylab <- quote(L[inhom](r)) },
+         Kcross={ fname <- "K[list(i,j)]" ; ylab <- quote(K[list(i,j)](r)) },
+         Lcross={ fname <- "L[list(i,j)]" ; ylab <- quote(L[list(i,j)](r)) },
+         Kcross.inhom={ fname <- "K[list(inhom,i,j)]" ; ylab <- quote(K[list(inhom,i,j)](r)) },
+         Lcross.inhom={ fname <- "L[list(inhom,i,j)]" ; ylab <- quote(L[list(inhom,i,j)](r)) })
   g <- fv(df, "r", ylab, ctag, , c(0, max(f$r)), labl, desc, fname=fname)
   formula(g) <- . ~ r
   fvnames(g, ".") <- c(ctag, "theo", "hi", "lo")
