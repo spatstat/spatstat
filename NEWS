@@ -1,16 +1,19 @@
 
-        CHANGES IN spatstat VERSION 1.59-0.034
+        CHANGES IN spatstat VERSION 1.59-0.035
 
 OVERVIEW
 
-    o We thank Ottmar Cronie, Tilman Davies, Mehdi Moradi
-    and Tim Pollington for contributions.
+    o We thank Ottmar Cronie, Tilman Davies, Andrew Hardegen,
+    Tom Lawrence, Robin Milne, Mehdi Moradi, Gopalan Nair,
+    Tim Pollington and Suman Rakshit for contributions.
     
     o Random thinning and random labelling of spatial patterns
     extended to different types of pattern.
 
     o Confidence intervals for multitype K function.
 
+    o Envelopes for balanced two-stage test
+    
     o Accelerated some code.
 
     o Minor bug fixes and improvements.
@@ -21,6 +24,10 @@ OVERVIEW
 
 NEW FUNCTIONS
 
+    o bits.envelope
+    Global envelope corresponding to bits.test,
+    the balanced independent two-stage Monte Carlo test.
+    
     o extrapolate.psp
     Extrapolate line segments to obtain infinite lines.
     

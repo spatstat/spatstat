@@ -1,15 +1,16 @@
-\name{dg.envelope}
-\alias{dg.envelope}
+\name{bits.envelope}
+\alias{bits.envelope}
 \title{
-  Global Envelopes for Dao-Genton Test
+  Global Envelopes for Balanced Independent Two-Stage Test
 }
 \description{
   Computes the global envelopes
-  corresponding to the Dao-Genton test of goodness-of-fit.
+  corresponding to the balanced independent two-stage
+  Monte Carlo test of goodness-of-fit.
 }
 \usage{
-dg.envelope(X, \dots,
-            nsim = 19, nsimsub=nsim-1, nrank = 1,
+bits.envelope(X, \dots,
+            nsim = 19, nrank = 1,
             alternative=c("two.sided", "less", "greater"),
             leaveout=1, interpolate = FALSE,
             savefuns=FALSE, savepatterns=FALSE,
@@ -31,14 +32,12 @@ dg.envelope(X, \dots,
     \code{verbose=FALSE} to turn off the messages.
   }
   \item{nsim}{
-    Number of simulated patterns to be generated in the primary
-    experiment. 
-  }
-  \item{nsimsub}{
+    Number of simulated patterns to be generated in each stage.
     Number of simulations in each basic test. There will be \code{nsim}
-    repetitions of the basic test, each involving \code{nsimsub} simulated
+    repetitions of the basic test, each involving \code{nsim} simulated
+    realisations, together with one independent set of \code{nsim}
     realisations, so there will be a total
-    of \code{nsim * (nsimsub + 1)} simulations.
+    of \code{nsim * (nsim + 1)} simulations.
   }
   \item{nrank}{
     Integer. Rank of the envelope value amongst the \code{nsim} simulated
@@ -77,14 +76,18 @@ dg.envelope(X, \dots,
 }
 \details{
   Computes global simulation envelopes corresponding to the
-  Dao-Genton (2014) adjusted Monte Carlo goodness-of-fit test.
-  The envelopes are described in Baddeley et al (2015).
-  
+  balanced independent two-stage Monte Carlo test of goodness-of-fit
+  described by Baddeley et al (2017). 
+  The envelopes are described in Baddeley et al (2019).
+
   If \code{X} is a point pattern, the null hypothesis is CSR.
 
   If \code{X} is a fitted model, the null hypothesis is that model.
 
-  The Dao-Genton test is biased when the significance level is very small
+  This command is similar to \code{\link{dg.envelope}} which corresponds
+  to the Dao-Genton test of goodness-of-fit.
+  It was shown in Baddeley et al (2017) that
+  the Dao-Genton test is biased when the significance level is very small
   (small \eqn{p}-values are not reliable) and
   we recommend \code{\link{bits.envelope}} in this case.
 }
@@ -98,35 +101,35 @@ dg.envelope(X, \dots,
   \emph{Journal of Graphical and Computational Statistics}
   \bold{23}, 497--517.
 
+  Baddeley, A., Hardegen, A., Lawrence, T.,
+  Milne, R.K., Nair, G. and Rakshit, S. (2017)
+  On two-stage Monte Carlo tests of composite
+  hypotheses. \emph{Computational Statistics and Data Analysis}
+  \bold{114}, {75--87}.
+
   Baddeley, A., Hardegen, A., Lawrence, L., 
-  Milne, R.K., Nair, G.M. and Rakshit, S. (2015)
+  Milne, R.K., Nair, G.M. and Rakshit, S. (2019)
   Pushing the envelope: extensions of graphical
-  Monte Carlo tests. Submitted for publication.
+  Monte Carlo tests. In preparation.
 }
 \author{
-  \adrian, Andrew Hardegen, Tom Lawrence,
+  Adrian Baddeley, Andrew Hardegen, Tom Lawrence,
   Robin Milne, Gopalan Nair and Suman Rakshit.
-  Implemented by
-  \adrian
-  
-  
-  \rolf
-  
-  and \ege
-  
+  Implemented by \adrian.
 }
 \seealso{
-  \code{\link{dg.test}},
+  \code{\link{dg.envelope}},
+  \code{\link{bits.test}},
   \code{\link{mad.test}},
   \code{\link{envelope}}
 }
 \examples{
   ns <- if(interactive()) 19 else 4
-  E <- dg.envelope(swedishpines, Lest, nsim=ns)
+  E <- bits.envelope(swedishpines, Lest, nsim=ns)
   E
   plot(E)
-  Eo <- dg.envelope(swedishpines, Lest, alternative="less", nsim=ns)
-  Ei <- dg.envelope(swedishpines, Lest, interpolate=TRUE, nsim=ns)
+  Eo <- bits.envelope(swedishpines, Lest, alternative="less", nsim=ns)
+  Ei <- bits.envelope(swedishpines, Lest, interpolate=TRUE, nsim=ns)
 }
 \keyword{spatial}
 \keyword{htest}

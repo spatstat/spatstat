@@ -1,9 +1,9 @@
 ##
-##  daogenton.R
+##  twostage.R
 ##
-##  Dao-Genton adjusted p-values
+##  Two-stage Monte Carlo tests and envelopes
 ##
-##  $Revision: 1.15 $  $Date: 2018/09/28 04:51:38 $
+##  $Revision: 1.16 $  $Date: 2019/06/16 05:03:27 $
 ##
 
 bits.test <- function(X, ..., exponent=2, nsim=19,
@@ -46,10 +46,11 @@ twostage.test <- function(X, ..., exponent=2, nsim=19, nsimsub=nsim,
   alternative <- match.arg(alternative)
   env.here <- sys.frame(sys.nframe())
   Xismodel <- is.ppm(X) || is.kppm(X) || is.lppm(X) || is.slrm(X)
-  # top-level test
+  ## first-stage p-value
   if(verbose) cat("Applying first-stage test to original data... ")
   tX <- envelopeTest(X, ...,
-                     nsim=nsim, alternative=alternative,
+                     nsim=if(reuse) nsim else nsimsub,
+                     alternative=alternative,
                      leaveout=leaveout,
                      interpolate=interpolate,
                      exponent=exponent,
@@ -59,7 +60,7 @@ twostage.test <- function(X, ..., exponent=2, nsim=19, nsimsub=nsim,
                      envir.simul=env.here)
   pX <- tX$p.value
   ## check special case
-  afortiori <- !interpolate && (nsimsub < nsim) &&
+  afortiori <- !interpolate && !reuse && (nsimsub < nsim) &&
                (pX == (1/(nsim+1)) || pX == 1)
   if(afortiori) {
     ## result is determined
@@ -142,13 +143,59 @@ dg.envelope <- function(X, ..., nsim=19,
                         interpolate = FALSE,
                         savefuns=FALSE, savepatterns=FALSE,
                         verbose=TRUE) {
+  twostage.envelope(X, ...,
+                    nsim=nsim, nsimsub=nsimsub, reuse=TRUE, nrank=nrank, 
+                    alternative=match.arg(alternative),
+                    leaveout=leaveout, interpolate=interpolate,
+                    savefuns=savefuns, savepatterns=savepatterns,
+                    verbose=verbose, testlabel="bits")
+}
+
+bits.envelope <- function(X, ..., nsim=19,
+                          nrank=1,
+                          alternative=c("two.sided", "less", "greater"),
+                          leaveout=1,
+                          interpolate = FALSE,
+                          savefuns=FALSE, savepatterns=FALSE,
+                          verbose=TRUE) {
+  twostage.envelope(X, ...,
+                    nsim=nsim, nsimsub=nsim, reuse=FALSE, nrank=nrank, 
+                    alternative=match.arg(alternative),
+                    leaveout=leaveout, interpolate=interpolate,
+                    savefuns=savefuns, savepatterns=savepatterns,
+                    verbose=verbose, testlabel="bits")
+}
+
+                          
+twostage.envelope <- function(X, ..., nsim=19, nsimsub=nsim,
+                              nrank=1,
+                              alternative=c("two.sided", "less", "greater"),
+                              reuse=FALSE, 
+                              leaveout=1,
+                              interpolate = FALSE,
+                              savefuns=FALSE, savepatterns=FALSE,
+                              verbose=TRUE,
+                              testlabel="twostage") {
   #  Xname <- short.deparse(substitute(X))
   alternative <- match.arg(alternative)
   env.here <- sys.frame(sys.nframe())
   Xismodel <- is.ppm(X) || is.kppm(X) || is.lppm(X) || is.slrm(X)
-  # top-level test
-  if(verbose) cat("Applying test to original data... ")
+  ##############  first stage   ##################################
+  if(verbose) cat("Applying first-stage test to original data... ")
   tX <- envelopeTest(X, ...,
+                     alternative=alternative,
+                     leaveout=leaveout,
+                     interpolate = interpolate,
+                     nsim=if(reuse) nsim else nsimsub,
+                     nrank=nrank,
+                     exponent=Inf, savepatterns=TRUE, savefuns=TRUE,
+                     verbose=FALSE,
+                     envir.simul=env.here)
+  if(verbose) cat("Done.\n")
+  envX <- attr(tX, "envelope")
+  if(!reuse) {
+    if(verbose) cat("Repeating first-stage test... ")
+    tXX <- envelopeTest(X, ...,
                      alternative=alternative,
                      leaveout=leaveout,
                      interpolate = interpolate,
@@ -156,13 +203,15 @@ dg.envelope <- function(X, ..., nsim=19,
                      exponent=Inf, savepatterns=TRUE, savefuns=TRUE,
                      verbose=FALSE,
                      envir.simul=env.here)
+    ## extract simulated patterns 
+    Ylist <- attr(attr(tXX, "envelope"), "simpatterns")
+  } else {
+    Ylist <- attr(attr(tX, "envelope"), "simpatterns")
+  }
   if(verbose) cat("Done.\n")
-  ## extract info
-  envX <- attr(tX, "envelope")
-  ## extract simulated patterns 
-  Ylist <- attr(envX, "simpatterns")
-  ##     SimFuns <- attr(envX, "simfuns")
-  # apply same test to each simulated pattern
+
+  ##############  second stage   #################################
+  ## apply same test to each simulated pattern
   if(verbose) cat(paste("Running tests on", nsim, "simulated patterns... "))
   pvalY <- numeric(nsim)
   for(i in 1:nsim) {
@@ -183,13 +232,13 @@ dg.envelope <- function(X, ..., nsim=19,
   if(!interpolate) {
     ## find critical rank 'l'
     rankY <- pvalY * (nsimsub + 1)
-    dg.rank <- orderstats(rankY, k=nrank)
-    if(verbose) cat("dg.rank=", dg.rank, fill=TRUE)
+    twostage.rank <- orderstats(rankY, k=nrank)
+    if(verbose) cat(paste0(testlabel, ".rank"), "=", twostage.rank, fill=TRUE)
     ## extract deviation values from top-level simulation
     simdev <- attr(tX, "statistics")[["sim"]]
     ## find critical deviation
-    dg.crit <- orderstats(simdev, decreasing=TRUE, k=dg.rank)
-    if(verbose) cat("dg.crit=", dg.crit, fill=TRUE)
+    twostage.crit <- orderstats(simdev, decreasing=TRUE, k=twostage.rank)
+    if(verbose) cat(paste0(testlabel, ".crit"), "=", twostage.crit, fill=TRUE)
   } else {
     ## compute estimated cdf of t
     fhat <- attr(tX, "density")[c("x", "y")]
@@ -197,7 +246,7 @@ dg.envelope <- function(X, ..., nsim=19,
     ## find critical (second stage) p-value
     pcrit <- orderstats(pvalY, k=nrank)
     ## compute corresponding upper quantile of estimated density of t
-    dg.crit <- with(fhat, { min(x[z >= 1 - pcrit]) })
+    twostage.crit <- with(fhat, { min(x[z >= 1 - pcrit]) })
   }
   ## make fv object, for now
   refname <- if("theo" %in% names(envX)) "theo" else "mmean"
@@ -207,8 +256,8 @@ dg.envelope <- function(X, ..., nsim=19,
                             refname)]
   refval <- envX[[refname]]
   ## 
-  newdata <- data.frame(hi=refval + dg.crit,
-                        lo=refval - dg.crit)
+  newdata <- data.frame(hi=refval + twostage.crit,
+                        lo=refval - twostage.crit)
   newlabl <- c(makefvlabel(NULL, NULL, fname, "hi"),
                makefvlabel(NULL, NULL, fname, "lo"))
   alpha <- nrank/(nsim+1)

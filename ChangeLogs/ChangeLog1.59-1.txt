@@ -581,7 +581,7 @@ Change log from 1.59-0 to 1.59-1
    	local multitype K functions (written by Ege)
 
    localKcross.Rd	 [New file]
-   localKcross.inhom.Rd [New file]
+   localKcross.inhom.Rd  [New file]
    localKdot.Rd		 [New file]
    	Rough bash at the documentation
 
@@ -593,4 +593,20 @@ Change log from 1.59-0 to 1.59-1
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
-   
+16 june 2019
+
+   daogenton.R => twostage.R [Renamed file]
+       Internal bug fix in twostage.test
+
+   twostage.R
+   bits.envelope.Rd [New file]
+   spatstat-internal.Rd
+       New function bits.envelope
+
+   DESCRIPTION
+   NEWS
+	Version 1.59-0.035
+
+------------- passed R-3.6.0 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------

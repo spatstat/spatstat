@@ -688,6 +688,7 @@
 \alias{tweak.ratfv.entry}
 \alias{tweak.coefs}
 \alias{twostage.test}
+\alias{twostage.envelope}
 \alias{\%unit\%} %DoNotExport
 %NAMESPACE export("%unit%")
 \alias{unitname.default}
@@ -1611,6 +1612,9 @@ tweak.coefs(model, new.coef)
 twostage.test(X, \dots, exponent, nsim, nsimsub,
               alternative, reuse, leaveout, interpolate,
               savefuns, savepatterns, verbose, testblurb)
+twostage.envelope(X, \dots, nsim, nsimsub, nrank,
+                  alternative, reuse, leaveout, interpolate,
+                  savefuns, savepatterns, verbose, testlabel)
 x \%unit\% u
 \method{unitname}{default}(x) 
 \method{unitname}{default}(x) <- value 
