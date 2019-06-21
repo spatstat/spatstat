@@ -143,7 +143,8 @@
   }
   For \code{fun="Lest"}, the calculations are first performed
   as if \code{fun="Kest"}, and then the square-root transformation is
-  applied to obtain the \eqn{L}-function. 
+  applied to obtain the \eqn{L}-function. Similarly for
+  \code{fun="Linhom", "Lcross", "Lcross.inhom"}.
 
   Note that the confidence bands computed by 
   \code{lohboot(fun="pcf")} may not contain the estimate of the

@@ -3,7 +3,7 @@
 #'
 #'     original by Ege Rubak
 #' 
-#'     $Revision: 1.2 $ $Date: 2019/06/21 04:12:48 $
+#'     $Revision: 1.3 $ $Date: 2019/06/21 10:54:44 $
 
 "localLcross" <- function(X, from, to, ..., rmax = NULL, correction = "Ripley") {
   localKcross(X, from, to, ..., rmax = rmax, correction = correction, wantL = TRUE)
@@ -24,6 +24,8 @@
       from <- levels(marx)[1]
     if(missing(to))
       to <- levels(marx)[2]
+    fromName <- make.parseable(from)
+    toName <- make.parseable(to)
     I <- (marx == from)
     if(!any(I))
       stop(paste("No points have mark =", from))
@@ -63,6 +65,7 @@ function(X, from, ..., rmax = NULL, correction="Ripley", verbose=TRUE, rvalue=NU
 	
   result <- localKmultiEngine(X, I, J, ..., rmax = rmax, correction=correction,
                               verbose=verbose, rvalue=rvalue)
+  attr(result, "indices") <- list(from=from)
   return(result)
 }
 
@@ -89,6 +92,7 @@ function(X, from, ..., rmax = NULL, correction="Ripley", verbose=TRUE, rvalue=NU
                            sigma=sigma, varcov=varcov,
                            lambdaX=lambdaX, update=update, leaveoneout=leaveoneout,
                            miss.update=miss.update, miss.leave=miss.leave)
+    attr(K, "indices") <- list(from=from, to=to)
     return(K)
   }
 

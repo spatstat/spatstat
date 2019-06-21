@@ -638,6 +638,21 @@ Change log from 1.59-0 to 1.59-1
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+   lohboot.R
+   lohboot.Rd
+	Confidence bands for L functions are now computed
+	by using local K functions and transforming them.
+
+   lohboot.R
+	Modified fv labels.
+
+   DESCRIPTION
+   NEWS
+	Version 1.59-0.037
+
+------------- passed R-3.6.0 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
 
 
    
