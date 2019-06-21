@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.59-0.035
+        CHANGES IN spatstat VERSION 1.59-0.036
 
 OVERVIEW
 
@@ -25,14 +25,15 @@ OVERVIEW
 NEW FUNCTIONS
 
     o bits.envelope
-    Global envelope corresponding to bits.test,
+    Global simulation envelope corresponding to bits.test,
     the balanced independent two-stage Monte Carlo test.
     
     o extrapolate.psp
     Extrapolate line segments to obtain infinite lines.
     
-    o uniquemap.ppp
-    Map duplicate points to unique representatives
+    o uniquemap
+    Map duplicate points to unique representatives.
+    Generic with methods for ppp, lpp, ppx
     
     o uniquemap.data.frame
     Map duplicate rows to unique representatives
@@ -58,15 +59,18 @@ SIGNIFICANT USER-VISIBLE CHANGES
     These functions now work on point patterns of all classes
     (ppp, lpp, pp3, ppx) and line segment patterns (psp).
 
+    o bw.abram
+    New argument 'smoother' determines how the pilot estimate is computed.
+    Formal arguments rearranged. 
+    
     o plot.im
     New argument 'riblab'.
     
     o rlabel
     New arguments 'nsim' and 'drop'.
 
-    o bw.abram
-    New argument 'smoother' determines how the pilot estimate is computed.
-    Formal arguments rearranged. 
+    o localK, localKinhom
+    New argument 'rmax'.
     
     o rLGCP
     Accelerated.

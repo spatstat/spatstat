@@ -3,7 +3,7 @@
 #'
 #'     original by Ege Rubak
 #' 
-#'     $Revision: 1.1 $ $Date: 2019/06/14 05:58:58 $
+#'     $Revision: 1.2 $ $Date: 2019/06/21 04:12:48 $
 
 "localLcross" <- function(X, from, to, ..., rmax = NULL, correction = "Ripley") {
   localKcross(X, from, to, ..., rmax = rmax, correction = correction, wantL = TRUE)
@@ -40,8 +40,9 @@
       J <- (marx == to)
       if(!any(J))
         stop(paste("No points have mark =", to))
-        result <-localKmultiEngine(X, I, J, ..., rmax = NULL, correction=correction,
-                                   verbose=verbose, rvalue=rvalue)
+      result <-localKmultiEngine(X, I, J, ...,
+                                 rmax = rmax, correction=correction,
+                                 verbose=verbose, rvalue=rvalue)
     }
     return(result)
   }

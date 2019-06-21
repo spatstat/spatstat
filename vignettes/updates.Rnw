@@ -172,6 +172,13 @@ the News and Release Notes for each update.
 
   \item \spst\ now suggests the package \pkg{fftwtools}.
 
+  \item Random thinning and random labelling of spatial patterns
+    extended to different types of pattern.
+
+  \item Confidence intervals for multitype $K$ function.
+
+  \item Envelopes for balanced two-stage test
+    
   \item Extensions to adaptive intensity estimators
 
   \item `Dartboard' tessellation using polar coordinates.
@@ -435,6 +442,25 @@ Following is a list of all the functions that have been added.
 
 \begin{itemize}
   
+    \item \texttt{bits.envelope}:
+    Global simulation envelope corresponding to \texttt{bits.test},
+    the balanced independent two-stage Monte Carlo test.
+    
+    \item \texttt{extrapolate.psp}:
+    Extrapolate line segments to obtain infinite lines.
+    
+    \item \texttt{uniquemap}:
+    Map duplicate points to unique representatives.
+    Generic with methods for \texttt{ppp}, \texttt{lpp}, \texttt{ppx}
+    
+    \item \texttt{uniquemap.data.frame}:
+    Map duplicate rows to unique representatives
+
+    \item \texttt{localKcross}, \texttt{localLcross}, 
+      \texttt{localKdot}, \texttt{localLdot},
+    \texttt{localKcross.inhom}, \texttt{localLcross.inhom}:
+    Multitype local $K$ functions.
+
   \item \texttt{polartess}: tessellation using polar coordinates.
 
   \item \texttt{densityVoronoi}: adaptive estimate of point process intensity
@@ -1059,6 +1085,8 @@ listed alphabetically.
 \item \texttt{anova.mppm}: Now handles Gibbs models,
   and performs the adjusted composite likelihood ratio test.
   New argument \texttt{fine}.
+
+\item \texttt{anyDuplicated.ppp}: Accelerated.
   
  \item \texttt{as.function.tess}:
     New argument \texttt{values} specifies the function values.
@@ -1140,6 +1168,15 @@ listed alphabetically.
  \item \texttt{bind.fv}:
    New argument \texttt{clip}.
    
+ \item \texttt{bw.abram}:
+   \begin{itemize}
+   \item 
+     New argument \texttt{smoother} determines 
+     how the pilot estimate is computed.
+   \item 
+     Formal arguments rearranged. 
+   \end{itemize}
+
  \item \texttt{bw.diggle}, \texttt{bw.ppl}, \texttt{bw.relrisk}, 
    \texttt{bw.smoothppp}:
     These functions now extract and store the name of the unit of length
@@ -1357,6 +1394,9 @@ listed alphabetically.
     in the minimum contrast algorithm. Individually-named arguments
     \texttt{q,p,rmax,rmin} now take precedence over entries
     with the same names in the list \texttt{ctrl}.
+    
+    
+  \item \texttt{duplicated.ppp}: accelerated.
 
 %%E
     
@@ -1544,9 +1584,17 @@ listed alphabetically.
 %%K
 
  \item \texttt{Kcross.inhom}, \texttt{Kdot.inhom}, \texttt{Kmulti.inhom}:
+   \begin{itemize}
+   \item 
     These functions now allow intensity values to be given by
     a fitted point process model.
+  \item 
     New arguments \texttt{update}, \texttt{leaveoneout}, \texttt{lambdaX}.
+  \item 
+    Leave-one-out calculation is now implemented
+    when \texttt{lambbdaX} is a fitted model of class \texttt{"dppm"}.
+   \end{itemize}
+
 
  \item \texttt{Kest}
     Accelerated computation (for translation and rigid corrections)
@@ -1561,6 +1609,10 @@ listed alphabetically.
    New argument \texttt{ratio}.
  \item 
    Stops gracefully if \texttt{lambda} contains any zero values.
+ \item 
+   Leave-one-out calculation is implemented when \texttt{lambda}
+   is a fitted model of class \texttt{"dppm"}.
+
    \end{itemize}
 
     
@@ -1697,6 +1749,9 @@ listed alphabetically.
     New arguments \texttt{block}, \texttt{basicboot}, \texttt{Vcorrection}.
   \item 
     Accelerated when the window is a rectangle.
+  \item 
+    Now works for multitype $K$
+    functions \texttt{Kcross}, \texttt{Kdot}, \texttt{Lcross}, \texttt{Ldot}
    \end{itemize}
 
  \item \texttt{lpp}:
@@ -1813,6 +1868,9 @@ listed alphabetically.
    \item 
      New argument \texttt{close} for advanced use.
    \item Now handles \texttt{correction="good"}
+ \item 
+   Leave-one-out calculation is implemented when \texttt{lambda}
+   is a fitted model of class \texttt{"dppm"}.
    \end{itemize}
 
  \item \code{persp.funxy}:
@@ -1864,6 +1922,7 @@ listed alphabetically.
   \item Improved behaviour when all pixel values are \texttt{NA}.
   \item Improved handling of tickmarks on colour ribbon.
   \item Improved behaviour when the image values are almost constant.
+  \item New argument \texttt{riblab}.
    \end{itemize}
 
  \item \texttt{plot.imlist}:
@@ -2072,6 +2131,7 @@ listed alphabetically.
       \code{dimyx} and \code{eps} for specifying the
       resolution of the grid of prediction points.
     \item New argument \code{ignore.hardcore}.
+    \item Accelerated for models fitted with \texttt{method="VBlogi"}
     \end{itemize}
 
   \item \texttt{predict.rhohat}:    
@@ -2082,6 +2142,8 @@ listed alphabetically.
   \item \texttt{print.linim}: More information is printed.
     
   \item \texttt{print.quad}: More information is printed.
+
+  \item \texttt{print.rmhmodel}: More information is printed.
     
   \item \texttt{progressreport}
     \begin{itemize}
@@ -2167,9 +2229,23 @@ listed alphabetically.
    \texttt{rhohat.lpp}:
    New argument \texttt{random} controls placement of dummy points.
 
- \item \texttt{rLGCP}:
-    This function no longer requires the package \pkg{RandomFields}
-   to be loaded explicitly. 
+   \item \texttt{rlabel}: 
+     \begin{itemize}
+     \item New arguments \texttt{nsim} and \texttt{drop}.
+     \item 
+       \texttt{X} can now be a point pattern of any type
+       (\texttt{ppp}, \texttt{lpp}, \texttt{pp3}, 
+       \texttt{ppx}) or a line segment pattern (\texttt{psp}).
+     \end{itemize}
+
+     \item \texttt{rLGCP}:
+       \begin{itemize}
+       \item Accelerated.
+       \item 
+         This function no longer requires the package \pkg{RandomFields}
+         to be loaded explicitly. 
+       \end{itemize}
+
 
   \item \texttt{rMaternI, rMaternII}:
     These functions can now generate random patterns in 
@@ -2229,9 +2305,10 @@ listed alphabetically.
       \item	
       Accelerated, when \texttt{P} is a single number.
       \item
-       \texttt{X} can now be a point pattern on a linear network
-     (class \texttt{lpp}).
-   \end{itemize}
+       \texttt{X} can now be a point pattern of any type
+       (\texttt{ppp}, \texttt{lpp}, \texttt{pp3}, 
+       \texttt{ppx}) or a line segment pattern (\texttt{psp}).
+     \end{itemize}
 
    \item \texttt{rThomas, rMatClust, rCauchy, rVarGamma}:
      \begin{itemize}
@@ -2278,8 +2355,13 @@ listed alphabetically.
    \texttt{spatstat.options(fastthin=FALSE, fastpois=FALSE)}.
 
    \item \texttt{simulate.kppm}:
+     \begin{itemize}
+     \item Accelerated for LGCP models.
+     \item 
      Additional arguments \verb!...! are now passed to
     the function that performs the simulation.
+     \end{itemize}
+
    
    \item \texttt{simulate.ppm}:
    New argument \texttt{w} controls the window of the simulated patterns.

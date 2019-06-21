@@ -610,3 +610,34 @@ Change log from 1.59-0 to 1.59-1
 ------------- passed R-3.6.0 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
+
+   NEWS
+	tweak
+
+   updates.Rnw
+	updated to cover all the above.
+
+21 june 2019
+
+   localK.R
+   localKcross.R
+   localK.Rd
+   localKcross.Rd
+   localKcross.inhom.Rd
+   localKdot.Rd
+   localKinhom.Rd
+   spatstat-internal.Rd
+	Added argument 'rmax' (changes by Ege)
+	Plus a couple of minor bug fixes
+
+   DESCRIPTION
+   NEWS
+	Version 1.59-0.036
+
+------------- passed R-3.6.0 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+
+
+   
