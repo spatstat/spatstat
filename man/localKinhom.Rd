@@ -7,10 +7,10 @@
   the local \eqn{K}-function or \eqn{L}-function.
 }
 \usage{
-  localKinhom(X, lambda, ...,
+  localKinhom(X, lambda, ..., rmax = NULL,
               correction = "Ripley", verbose = TRUE, rvalue=NULL,
               sigma = NULL, varcov = NULL)
-  localLinhom(X, lambda, ..., 
+  localLinhom(X, lambda, ..., rmax = NULL, 
               correction = "Ripley", verbose = TRUE, rvalue=NULL,
               sigma = NULL, varcov = NULL)
 }
@@ -29,6 +29,9 @@
   \item{\dots}{
     Extra arguments. Ignored if \code{lambda} is present.
     Passed to \code{\link{density.ppp}} if \code{lambda} is omitted.
+  }
+  \item{rmax}{
+    Optional. Maximum desired value of the argument \eqn{r}.
   }
   \item{correction}{
     String specifying the edge correction to be applied.

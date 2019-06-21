@@ -9,11 +9,11 @@
 \usage{
   localKcross.inhom(X, from, to,
               lambdaFrom=NULL, lambdaTo=NULL,
-              \dots,
+              \dots, rmax = NULL,
               correction = "Ripley", sigma=NULL, varcov=NULL,
               lambdaX=NULL, update=TRUE, leaveoneout=TRUE)
   localLcross.inhom(X, from, to,
-              lambdaFrom=NULL, lambdaTo=NULL, \dots)
+              lambdaFrom=NULL, lambdaTo=NULL, \dots, rmax = NULL)
 }
 \arguments{
   \item{X}{A point pattern (object of class \code{"ppp"}).}
@@ -43,6 +43,9 @@
   \item{\dots}{
     Extra arguments. Ignored if \code{lambda} is present.
     Passed to \code{\link{density.ppp}} if \code{lambda} is omitted.
+  }
+  \item{rmax}{
+    Optional. Maximum desired value of the argument \eqn{r}.
   }
   \item{correction}{
     String specifying the edge correction to be applied.
