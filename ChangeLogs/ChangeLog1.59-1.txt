@@ -654,5 +654,23 @@ Change log from 1.59-0 to 1.59-1
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+22 june 2019
 
-   
+   tests/Kfuns.R
+	Test the local Kcross functions and their use in lohboot.
+
+   localK.R
+   localKcross.R
+	Tweaked the fv labels.
+	
+   updates.Rnw
+	Updated to cover all the above.
+	
+   DESCRIPTION
+   NEWS
+	Version 1.59-0.038
+
+------------- passed R-3.6.0 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+

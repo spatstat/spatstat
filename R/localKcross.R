@@ -3,7 +3,7 @@
 #'
 #'     original by Ege Rubak
 #' 
-#'     $Revision: 1.3 $ $Date: 2019/06/21 10:54:44 $
+#'     $Revision: 1.4 $ $Date: 2019/06/22 05:58:32 $
 
 "localLcross" <- function(X, from, to, ..., rmax = NULL, correction = "Ripley") {
   localKcross(X, from, to, ..., rmax = rmax, correction = correction, wantL = TRUE)
@@ -43,6 +43,7 @@
       if(!any(J))
         stop(paste("No points have mark =", to))
       result <-localKmultiEngine(X, I, J, ...,
+                                 Iname=fromName, Jname=toName,
                                  rmax = rmax, correction=correction,
                                  verbose=verbose, rvalue=rvalue)
     }
@@ -57,13 +58,16 @@ function(X, from, ..., rmax = NULL, correction="Ripley", verbose=TRUE, rvalue=NU
   	stop("Point pattern must be multitype")
   marx <- marks(X)
   if(missing(from)) from <- levels(marx)[1]
-
+  fromName <- make.parseable(paste(from))
+  
   I <- (marx == from)
   J <- rep.int(TRUE, X$n)  # i.e. all points
 	
   if(!any(I)) stop(paste("No points have mark =", from))
 	
-  result <- localKmultiEngine(X, I, J, ..., rmax = rmax, correction=correction,
+  result <- localKmultiEngine(X, I, J, ...,
+                              Iname=fromName, Jname=".",
+                              rmax = rmax, correction=correction,
                               verbose=verbose, rvalue=rvalue)
   attr(result, "indices") <- list(from=from)
   return(result)
@@ -101,7 +105,8 @@ localLcross.inhom <- function(X, from, to, lambdaFrom = NULL, lambdaTo = NULL, .
 }
 
 "localKmultiEngine" <-
-  function(X, from, to, lambdaFrom=NULL, lambdaTo=NULL, ..., rmax = NULL, wantL=FALSE,
+  function(X, from, to, lambdaFrom=NULL, lambdaTo=NULL, ...,
+           rmax = NULL, wantL=FALSE,
            correction="Ripley", verbose=TRUE, rvalue=NULL,
            sigma=NULL, varcov=NULL,
            lambdaX=NULL, update=TRUE, leaveoneout=TRUE)
@@ -219,8 +224,6 @@ localLcross.inhom <- function(X, from, to, lambdaFrom = NULL, lambdaTo = NULL, .
     df <- as.data.frame(matrix(NA, length(r), n_from))
     labl <- desc <- character(n_from)
     
-    bkt <- function(x) { paste("[", x, "]", sep="") }
-    
     if(verbose) state <- list()
     
     switch(correction,
@@ -237,7 +240,7 @@ localLcross.inhom <- function(X, from, to, lambdaFrom = NULL, lambdaTo = NULL, .
                df[,i] <- Knone
                icode <- numalign(i, n_from)
                names(df)[i] <- paste("un", icode, sep="")
-               labl[i] <- paste("%s", bkt(icode), "(r)", sep="")
+               labl[i] <- makefvlabel(NULL, NULL, character(2), icode)
                desc[i] <- paste("uncorrected estimate of %s",
                                 "for point", icode)
                if(verbose) state <- progressreport(i, n_from, state=state)
@@ -260,7 +263,7 @@ localLcross.inhom <- function(X, from, to, lambdaFrom = NULL, lambdaTo = NULL, .
                df[,i] <- Ktrans
                icode <- numalign(i, n_from)
                names(df)[i] <- paste("trans", icode, sep="")
-               labl[i] <- paste("%s", bkt(icode), "(r)", sep="")
+               labl[i] <- makefvlabel(NULL, NULL, character(2), icode)
                desc[i] <- paste("translation-corrected estimate of %s",
                                 "for point", icode)
                if(verbose) state <- progressreport(i, n_from, state=state)
@@ -283,7 +286,7 @@ localLcross.inhom <- function(X, from, to, lambdaFrom = NULL, lambdaTo = NULL, .
                df[,i] <- Kiso
                icode <- numalign(i, n_from)
                names(df)[i] <- paste("iso", icode, sep="")
-               labl[i] <- paste("%s", bkt(icode), "(r)", sep="")
+               labl[i] <- makefvlabel(NULL, NULL, character(2), icode)
                desc[i] <- paste("Ripley isotropic correction estimate of %s", 
                                 "for point", icode)
                if(verbose) state <- progressreport(i, n_from, state=state)
@@ -308,26 +311,31 @@ localLcross.inhom <- function(X, from, to, lambdaFrom = NULL, lambdaTo = NULL, .
     if(!wantL) {
       df <- cbind(df, data.frame(r=r, theo=pi * r^2))
       if(!weighted) {
-        ylab <- quote(K[list(loc, I, J)](r))
-        fnam <- "K[list(loc,I,J)][',']"
+        fnam <- c("K", paste0("list(loc,", Iname, ",", Jname, ")"))
+        ylab <- substitute(K[loc,I,J](r), list(I=Iname, J=Jname))
+        yexp <- substitute(K[list(loc,I,J)](r), list(I=Iname, J=Jname))
       } else {
-        ylab <- quote(Kinhom[list(loc, I, J)](r))
-        fnam <- "Kinhom[list(loc,I,J)][',']"
+        fnam <- c("K", paste0("list(inhom,loc,", Iname, ",", Jname, ")"))
+        ylab <- substitute(K[inhom,loc,I,J](r), list(I=Iname, J=Jname))
+        yexp <- substitute(K[list(inhom,loc,I,J)](r), list(I=Iname, J=Jname))
       }
     } else {
       df <- cbind(df, data.frame(r=r, theo=r))
       if(!weighted) {
-        ylab <- quote(L[list(loc, I, J)](r))
-        fnam <- "L[list(loc,I,J)][',']"
+        fnam <- c("L", paste0("list(loc,", Iname, ",", Jname, ")"))
+        ylab <- substitute(L[loc,I,J](r), list(I=Iname, J=Jname))
+        yexp <- substitute(L[list(loc,I,J)](r), list(I=Iname, J=Jname))
       } else {
-        ylab <- quote(Linhom[list(loc, I, J)](r))
-        fnam <- "Linhom[list(loc,I,J)][',']"
+        fnam <- c("L", paste0("list(inhom,loc,", Iname, ",", Jname, ")"))
+        ylab <- substitute(L[inhom,loc,I,J](r), list(I=Iname, J=Jname))
+        yexp <- substitute(L[list(inhom,loc,I,J)](r), list(I=Iname, J=Jname))
       }
     }
     desc <- c(desc, c("distance argument r", "theoretical Poisson %s"))
-    labl <- c(labl, c("r", "%s[pois](r)"))
+    labl <- c(labl, c("r", "{%s[%s]^{pois}}(r)"))
     # create fv object
-    K <- fv(df, "r", ylab, "theo", , alim, labl, desc, fname=fnam)
+    K <- fv(df, "r", ylab, "theo", , alim, labl, desc,
+            fname=fnam, yexp=yexp)
     # default is to display them all
     formula(K) <- . ~ r
     unitname(K) <- unitname(X)

@@ -113,8 +113,6 @@
   df <- as.data.frame(matrix(NA, length(r), npts))
   labl <- desc <- character(npts)
 
-  bkt <- function(x) { paste("[", x, "]", sep="") }
-
   if(verbose) state <- list()
   
   switch(correction,
@@ -127,7 +125,7 @@
              df[,i] <- cumsum(wh)
              icode <- numalign(i, npts)
              names(df)[i] <- paste("un", icode, sep="")
-             labl[i] <- paste("%s", bkt(icode), "(r)", sep="")
+             labl[i] <- makefvlabel(NULL, NULL, character(2), icode)
              desc[i] <- paste("uncorrected estimate of %s",
                               "for point", icode)
              if(verbose) state <- progressreport(i, npts, state=state)
@@ -147,7 +145,7 @@
              df[,i] <- Ktrans
              icode <- numalign(i, npts)
              names(df)[i] <- paste("trans", icode, sep="")
-             labl[i] <- paste("%s", bkt(icode), "(r)", sep="")
+             labl[i] <- makefvlabel(NULL, NULL, character(2), icode)
              desc[i] <- paste("translation-corrected estimate of %s",
                               "for point", icode)
              if(verbose) state <- progressreport(i, npts, state=state)
@@ -168,7 +166,7 @@
              df[,i] <- Kiso
              icode <- numalign(i, npts)
              names(df)[i] <- paste("iso", icode, sep="")
-             labl[i] <- paste("%s", bkt(icode), "(r)", sep="")
+             labl[i] <- makefvlabel(NULL, NULL, character(2), icode)
              desc[i] <- paste("Ripley isotropic correction estimate of %s", 
                               "for point", icode)
              if(verbose) state <- progressreport(i, npts, state=state)
@@ -193,24 +191,26 @@
   if(!wantL) {
     df <- cbind(df, data.frame(r=r, theo=pi * r^2))
     if(!weighted) {
-      ylab <- quote(K[loc](r))
-      fnam <- "K[loc][',']"
+      fnam <- c("K", "loc")
+      yexp <- ylab <- quote(K[loc](r))
     } else {
-      ylab <- quote(Kinhom[loc](r))
-      fnam <- "Kinhom[loc][',']"
+      fnam <- c("K", "list(inhom,loc)")
+      ylab <- quote(K[inhom,loc](r))
+      yexp <- quote(K[list(inhom,loc)](r))
     }
   } else {
     df <- cbind(df, data.frame(r=r, theo=r))
     if(!weighted) {
-      ylab <- quote(L[loc](r))
-      fnam <- "L[loc][',']"
+      fnam <- c("L", "loc")
+      yexp <- ylab <- quote(L[loc](r))
     } else {
-      ylab <- quote(Linhom[loc](r))
-      fnam <- "Linhom[loc][',']"
+      fnam <- c("L", "list(inhom,loc)")
+      ylab <- quote(L[inhom,loc](r))
+      yexp <- quote(L[list(inhom,loc)](r))
     }
   }
   desc <- c(desc, c("distance argument r", "theoretical Poisson %s"))
-  labl <- c(labl, c("r", "%s[pois](r)"))
+  labl <- c(labl, c("r", "{%s[%s]^{pois}}(r)"))
   # create fv object
   K <- fv(df, "r", ylab, "theo", , alim, labl, desc, fname=fnam)
   # default is to display them all

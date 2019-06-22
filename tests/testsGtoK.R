@@ -325,7 +325,7 @@ local({
 #'
 #'   Various K and L functions and pcf
 #'
-#'   $Revision: 1.21 $  $Date: 2019/03/30 08:43:31 $
+#'   $Revision: 1.22 $  $Date: 2019/06/22 05:17:10 $
 #'
 
 require(spatstat)
@@ -422,6 +422,18 @@ local({
   a <- localLinhom(swedishpines, lambda=Lam)
   a <- localLinhom(swedishpines, lambda=Z, correction="none")
   a <- localLinhom(swedishpines, lambda=Z, correction="translate")
+  a <- localLcross(amacrine)
+  a <- localKcross.inhom(amacrine)
+  a <- localLcross.inhom(amacrine)
+  fat <- ppm(amacrine ~ x * marks)
+  Zed <- predict(fat)
+  Lum <- fitted(fat, dataonly=TRUE)
+  moff <- (marks(amacrine) == "off")
+  a <- localLcross.inhom(amacrine, from="off", to="on", lambdaX=Zed)
+  a <- localLcross.inhom(amacrine, from="off", to="on", lambdaX=Lum)
+  a <- localLcross.inhom(amacrine, from="off", to="on", lambdaX=fat)
+  a <- localLcross.inhom(amacrine, from="off", to="on",
+                         lambdaFrom=Lum[moff], lambdaTo=Lum[!moff])
   #'
   #'   lohboot code blocks
   #'
@@ -429,6 +441,15 @@ local({
   Bred <- lohboot(redwood, block=TRUE, basicboot=TRUE, global=FALSE)
   X <- runifpoint(100, letterR)
   AX <- lohboot(X, block=TRUE, nx=7, ny=10)
+  Lred <- lohboot(redwood, Linhom)
+  Zred <- predict(ppm(redwood ~ x+y))
+  Lred <- lohboot(redwood, Linhom, lambda=Zred)
+  b <- lohboot(amacrine, Lcross.inhom)
+  b <- lohboot(amacrine, Lcross.inhom, from="off", to="on", lambdaX=Zed)
+  b <- lohboot(amacrine, Lcross.inhom, from="off", to="on", lambdaX=Lum)
+  b <- lohboot(amacrine, Lcross.inhom, from="off", to="on", lambdaX=fat)
+  b <- lohboot(amacrine, Lcross.inhom, from="off", to="on", 
+                         lambdaFrom=Lum[moff], lambdaTo=Lum[!moff])
   #'
   #'  residual K functions etc
   #'
