@@ -4,7 +4,7 @@
 #'   Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2019
 #'   Licence: GNU Public Licence >= 2
 #'
-#'   $Revision: 1.11 $  $Date: 2019/05/22 09:06:15 $
+#'   $Revision: 1.12 $  $Date: 2019/06/23 04:41:32 $
 
 uniquemap <- function(x) { UseMethod("uniquemap") }
 
@@ -29,7 +29,7 @@ uniquemap.default <- function(x) {
 
 uniquemap.data.frame <- function(x) {
   n <- nrow(x)
-  result <- seqn <- seq_len(n)
+  result <- seq_len(n)
   if(n <= 1 || !anyDuplicated(x))
     return(result)
   dup <- duplicated(x)

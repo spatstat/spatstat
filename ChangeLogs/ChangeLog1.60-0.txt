@@ -1,4 +1,4 @@
-Change log from 1.59-0 to 1.59-1
+Change log from 1.59-0 to 1.60-0
 ================================
 
 22 mar 2019
@@ -708,5 +708,45 @@ Change log from 1.59-0 to 1.59-1
 	Version 1.59-0.040
 
 ------------- passed R-3.6.0 CMD check ---------------
+============= passed R-devel CMD check ===============
+              (2019-06-21 r76731)
+
+   localK.R
+	Tweaked resolve.lambda.cross
+
+   Kinhom.R
+   spatstat-internal.Rd
+	New function 'resolve.lambda'
+
+   localpcf.R
+   localpcf.Rd
+	New arguments 'update', 'leaveoneout'
+	Tweaked fv labels
+
+   localK.R
+   localKinhom.Rd
+   localKcross.R
+	Internal changes
+
+   updates.Rnw
+	Updated to cover all the above.
+	
+   DESCRIPTION
+   NEWS
+   Nickname.txt
+	Redubbed version 1.60-0
+	Nickname: "Swinging Sixties"
+	
+------------- passed R-3.6.0 CMD check ---------------
 ------------- installed on laptop      ---------------
+============= passed R-devel CMD check ===============
+              (2019-06-21 r76731)
+------------- passed 'make bookcheck'  ---------------
+!!!!!!!!!!!!!    submitted to CRAN     !!!!!!!!!!!!!!!
+
+   spatstat-package.Rd
+	Fixed URLs as required by CRAN
+
+!!!!!!!!!!!!!  resubmitted to CRAN     !!!!!!!!!!!!!!!
 ------------- committed to GitHub      ---------------
+

@@ -1,7 +1,7 @@
 #
 #   localpcf.R
 #
-#  $Revision: 1.22 $  $Date: 2017/06/05 10:31:58 $
+#  $Revision: 1.23 $  $Date: 2019/06/23 06:38:19 $
 #
 #
 
@@ -13,30 +13,18 @@ localpcf <- function(X, ..., delta=NULL, rmax=NULL, nr=512, stoyan=0.15) {
 }
 
 localpcfinhom <- function(X, ..., delta=NULL, rmax=NULL, nr=512, stoyan=0.15,
-                     lambda=NULL, sigma=NULL, varcov=NULL) {
+                          lambda=NULL, sigma=NULL, varcov=NULL,
+                          update=TRUE, leaveoneout=TRUE) {
   stopifnot(is.ppp(X))
-  if(is.null(lambda)) {
-    # No intensity data provided
-    # Estimate density by leave-one-out kernel smoothing
-    lambda <- density(X, ..., sigma=sigma, varcov=varcov,
-                            at="points", leaveoneout=TRUE)
-    lambda <- as.numeric(lambda)
-  } else {
-    # validate
-    if(is.im(lambda)) 
-      lambda <- safelookup(lambda, X)
-    else if(is.ppm(lambda))
-      lambda <- predict(lambda, locations=X, type="trend")
-    else if(is.function(lambda)) 
-      lambda <- lambda(X$x, X$y)
-    else if(is.numeric(lambda) && is.vector(as.numeric(lambda)))
-      check.nvector(lambda, npoints(X))
-    else stop(paste(sQuote("lambda"),
-                    "should be a vector, a pixel image, or a function"))
-  }
-  localpcfengine(X,
-                 delta=delta, rmax=rmax, nr=nr, stoyan=stoyan,
-                 lambda=lambda)
+  a <- resolve.lambda(X, lambda, ...,
+                      sigma=sigma, varcov=varcov,
+                      update=update, leaveoneout=leaveoneout)
+  result <- localpcfengine(X, ...,
+                           delta=delta, rmax=rmax, nr=nr, stoyan=stoyan,
+                           lambda=a$lambda)
+  if(a$danger)
+    attr(result, "dangerous") <- a$dangerous
+  return(result)
 }
  
 localpcfengine <- function(X, ...,

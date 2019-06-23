@@ -3,7 +3,7 @@
 #'
 #'     original by Ege Rubak
 #' 
-#'     $Revision: 1.5 $ $Date: 2019/06/23 02:37:22 $
+#'     $Revision: 1.6 $ $Date: 2019/06/23 06:13:31 $
 
 "localLcross" <- function(X, from, to, ..., rmax = NULL, correction = "Ripley") {
   localKcross(X, from, to, ..., rmax = rmax, correction = correction, wantL = TRUE)
@@ -450,9 +450,7 @@ resolve.lambda.cross <- function(X, I, J, lambdaI, lambdaJ, ..., lambdaX,
       lambdaI <- lambdaI(XI$x, XI$y)
     } else if(is.numeric(lambdaI) && is.vector(as.numeric(lambdaI))) {
       ## validate intensity vector
-      if(length(lambdaI) != nI)
-        stop(paste("The length of", sQuote("lambdaI"),
-                   "should equal the number of", Iexplain))
+      check.nvector(lambdaI, nI, things=Iexplain)
     } else if(is.ppm(lambdaI) || is.kppm(lambdaI) || is.dppm(lambdaI)) {
       ## point process model provides intensity
       model <- lambdaI
@@ -461,18 +459,12 @@ resolve.lambda.cross <- function(X, I, J, lambdaI, lambdaJ, ..., lambdaX,
         lambdaI <- predict(model, locations=XI, type="trend")
       } else {
         ## re-fit model to data X
-        if(is.ppm(model)) {
-          model <- update(model, Q=X)
-          lambdaX <- fitted(model, dataonly=TRUE, leaveoneout=leaveoneout)
-        } else {
-          #' kppm or dppm
-          model <- update(model, X=X)
-          lambdaX <- fitted(model, dataonly=TRUE, leaveoneout=leaveoneout)
-        }
+        model <- if(is.ppm(model)) update(model, Q=X) else update(model, X=X)
+        lambdaX <- fitted(model, dataonly=TRUE, leaveoneout=leaveoneout)
         lambdaI <- lambdaX[I]
         dangerI <- FALSE
         dangerous <- setdiff(dangerous, "lambdaI")
-        if(miss.update & caller == "Kmulti.inhom")
+        if(miss.update && caller == "Kmulti.inhom")
           warn.once(key="Kmulti.inhom.update",
                     "The behaviour of Kmulti.inhom when lambda is a ppm object",
                     "has changed (in spatstat 1.45-3 and later).",
@@ -494,9 +486,7 @@ resolve.lambda.cross <- function(X, I, J, lambdaI, lambdaJ, ..., lambdaX,
       lambdaJ <- lambdaJ(XJ$x, XJ$y)
     } else if(is.numeric(lambdaJ) && is.vector(as.numeric(lambdaJ))) {
       ## validate intensity vector
-      if(length(lambdaJ) != npoints(XJ))
-        stop(paste("The length of", sQuote("lambdaJ"),
-                   "should equal the number of", Jexplain))
+      check.nvector(lambdaJ, nJ, things=Jexplain)
     } else if(is.ppm(lambdaJ) || is.kppm(lambdaJ) || is.dppm(lambdaJ)) {
       ## point process model provides intensity
       model <- lambdaJ
@@ -505,14 +495,8 @@ resolve.lambda.cross <- function(X, I, J, lambdaI, lambdaJ, ..., lambdaX,
         lambdaJ <- predict(model, locations=XJ, type="trend")
       } else {
         ## re-fit model to data X
-        if(is.ppm(model)) {
-          model <- update(model, Q=X)
-          if(leaveoneout && !miss.leave)
-            lambdaX <- fitted(model, dataonly=TRUE, leaveoneout=leaveoneout)
-        } else {
-          model <- update(model, X=X)
-          lambdaX <- fitted(model, dataonly=TRUE, leaveoneout=leaveoneout)
-        }
+        model <- if(is.ppm(model)) update(model, Q=X) else update(model, X=X)
+        lambdaX <- fitted(model, dataonly=TRUE, leaveoneout=leaveoneout)
         lambdaJ <- lambdaX[J]
         dangerJ <- FALSE
         dangerous <- setdiff(dangerous, "lambdaJ")

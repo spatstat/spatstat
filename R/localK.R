@@ -1,7 +1,7 @@
 #
 #	localK.R		Getis-Franklin neighbourhood density function
 #
-#	$Revision: 1.23 $	$Date: 2019/06/23 02:33:53 $
+#	$Revision: 1.25 $	$Date: 2019/06/23 06:30:55 $
 #
 #
 
@@ -13,48 +13,40 @@
 }
 
 "localLinhom" <-
-  function(X, lambda=NULL, ..., rmax = NULL, correction="Ripley", verbose=TRUE, rvalue=NULL,
-           sigma=NULL, varcov=NULL)
+  function(X, lambda=NULL, ..., rmax = NULL, correction="Ripley",
+           verbose=TRUE, rvalue=NULL,
+           sigma=NULL, varcov=NULL, update=TRUE, leaveoneout=TRUE)
 {
   localKinhom(X, lambda=lambda, wantL=TRUE, ..., rmax = rmax, 
               correction=correction, verbose=verbose, rvalue=rvalue,
-              sigma=sigma, varcov=varcov)
+              sigma=sigma, varcov=varcov,
+              update=update, leaveoneout=leaveoneout)
 }
 
 "localK" <-
   function(X, ..., rmax = NULL, correction="Ripley", verbose=TRUE, rvalue=NULL)
 {
   verifyclass(X, "ppp")
-  localKengine(X, ..., rmax = rmax, correction=correction, verbose=verbose, rvalue=rvalue)
+  localKengine(X, ..., rmax = rmax,
+               correction=correction, verbose=verbose, rvalue=rvalue)
 }
 
 "localKinhom" <-
-  function(X, lambda=NULL, ..., rmax = NULL, correction="Ripley", verbose=TRUE, rvalue=NULL,
-           sigma=NULL, varcov=NULL)
+  function(X, lambda=NULL, ...,
+           rmax = NULL, correction="Ripley", verbose=TRUE, rvalue=NULL,
+           sigma=NULL, varcov=NULL, update=TRUE, leaveoneout=TRUE)
 {
   verifyclass(X, "ppp")
 
-  if(is.null(lambda)) {
-    # No intensity data provided
-    # Estimate density by leave-one-out kernel smoothing
-    lambda <- density(X, ..., sigma=sigma, varcov=varcov,
-                            at="points", leaveoneout=TRUE)
-    lambda <- as.numeric(lambda)
-  } else {
-    # validate
-    if(is.im(lambda)) 
-      lambda <- safelookup(lambda, X)
-    else if(is.ppm(lambda))
-      lambda <- predict(lambda, locations=X, type="trend")
-    else if(is.function(lambda)) 
-      lambda <- lambda(X$x, X$y)
-    else if(is.numeric(lambda) && is.vector(as.numeric(lambda)))
-      check.nvector(lambda, npoints(X))
-    else stop(paste(sQuote("lambda"),
-                    "should be a vector, a pixel image, or a function"))
-  }  
-  localKengine(X, lambda=lambda, ..., rmax = rmax,
-               correction=correction, verbose=verbose, rvalue=rvalue)
+  a <- resolve.lambda(X, lambda, ...,
+                      sigma=sigma, varcov=varcov,
+                      update=update, leaveoneout=leaveoneout)
+  result <- localKengine(X, lambda=a$lambda, ..., rmax = rmax,
+                         correction=correction,
+                         verbose=verbose, rvalue=rvalue)
+  if(a$danger)
+    attr(result, "dangerous") <- a$dangerous
+  return(result)
 }
 
 "localKengine" <-
@@ -212,7 +204,8 @@
   desc <- c(desc, c("distance argument r", "theoretical Poisson %s"))
   labl <- c(labl, c("r", "{%s[%s]^{pois}}(r)"))
   # create fv object
-  K <- fv(df, "r", ylab, "theo", , alim, labl, desc, fname=fnam)
+  K <- fv(df, "r", ylab, "theo", , alim, labl, desc,
+          fname=fnam, yexp=yexp)
   # default is to display them all
   formula(K) <- . ~ r
   unitname(K) <- unitname(X)

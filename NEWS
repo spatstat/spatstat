@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.59-0.039
+        CHANGES IN spatstat VERSION 1.60-0
 
 OVERVIEW
 
@@ -20,7 +20,7 @@ OVERVIEW
 
     o Package built under R 3.6.0.
     
-    o Version nickname: 'Kangaroos in the top paddock'
+    o Version nickname: 'Swinging Sixties'
 
 NEW FUNCTIONS
 

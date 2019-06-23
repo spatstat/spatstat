@@ -1,7 +1,7 @@
 #
 #	Kinhom.S	Estimation of K function for inhomogeneous patterns
 #
-#	$Revision: 1.95 $	$Date: 2019/05/24 10:23:38 $
+#	$Revision: 1.96 $	$Date: 2019/06/23 06:30:46 $
 #
 #	Kinhom()	compute estimate of K_inhom
 #
@@ -499,4 +499,41 @@ validate.weights <- function(x, recip=FALSE, how = NULL,
     stop(paste(how, "yielded", offenders), call.=FALSE)
   }
   return(TRUE)
+}
+
+resolve.lambda <- function(X, lambda=NULL, ...,
+                           sigma=NULL, varcov=varcov,
+                           leaveoneout=TRUE, update=TRUE) {
+  dangerous <- "lambda"
+  danger <- TRUE
+  if(is.null(lambda)) {
+    ## No intensity data provided
+    ## Estimate density by leave-one-out kernel smoothing
+    lambda <- density(X, ..., sigma=sigma, varcov=varcov,
+                      at="points", leaveoneout=leaveoneout)
+    lambda <- as.numeric(lambda)
+    danger <- FALSE
+  } else if(is.im(lambda)) {
+    lambda <- safelookup(lambda, X)
+  } else if(is.function(lambda)) {
+    lambda <- lambda(X$x, X$y)
+  } else if(is.numeric(lambda) && is.vector(as.numeric(lambda))) {
+    check.nvector(lambda, npoints(X))
+  } else if(is.ppm(lambda) || is.kppm(lambda) || is.dppm(lambda)) {
+    model <- lambda
+    if(!update) {
+      ## use intensity of model
+      lambda <- predict(model, locations=X, type="trend")
+    } else {
+      ## re-fit model to data X
+      model <- if(is.ppm(model)) update(model, Q=X) else update(model, X=X)
+      lambda <- fitted(model, dataonly=TRUE, leaveoneout=leaveoneout)
+      danger <- FALSE
+    }
+  } else stop(paste(sQuote("lambda"),
+                    "should be a vector, a pixel image,",
+                    "a fitted model, or a function"))
+  return(list(lambda=lambda,
+              danger=danger,
+              dangerous=if(danger) dangerous else NULL))
 }

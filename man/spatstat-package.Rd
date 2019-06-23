@@ -65,7 +65,7 @@
   the package vignette \emph{Getting started with spatstat}
   installed with \pkg{spatstat}. To read that document, you can either
   \itemize{
-    \item visit \url{cran.r-project.org/web/packages/spatstat}
+    \item visit \url{https://cran.r-project.org/package=spatstat}
     and click on \code{Getting Started with Spatstat}
     \item
     start \R, type \code{library(spatstat)} and \code{vignette('getstart')}
@@ -94,7 +94,7 @@
   For information on converting your data into \pkg{spatstat} format,
   read Chapter 3 of Baddeley, Rubak and Turner (2015).
   This chapter is available free online, as one of the sample chapters
-  at the book companion website, \url{spatstat.github.io/book}.
+  at the book companion website, \url{https://spatstat.github.io/book}.
 
   For information about handling data in \bold{shapefiles},
   see Chapter 3, or the Vignette

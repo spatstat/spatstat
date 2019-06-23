@@ -1730,6 +1730,11 @@ listed alphabetically.
     Argument \texttt{df} can be missing or \texttt{NULL}, 
     resulting in a tesellation with only one tile.
   
+  \item \texttt{localpcfinhom}:
+    \begin{itemize}
+    \item New arguments \texttt{update} and \texttt{leaveoneout}.
+    \end{itemize}
+    
   \item \texttt{logLik.ppm}:
     \begin{itemize}
     \item  New argument \texttt{absolute}.

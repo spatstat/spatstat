@@ -28,7 +28,8 @@ pcfinhom(X, lambda = NULL, ..., r = NULL,
     at the points of the pattern \code{X},
     a pixel image (object of class \code{"im"}) giving the
     intensity values at all locations, a fitted point process model
-    (object of class \code{"ppm"}) or a \code{function(x,y)} which
+    (object of class \code{"ppm"}, \code{"kppm"} or \code{"dppm"})
+    or a \code{function(x,y)} which
     can be evaluated to give the intensity value at any location.
   }
   \item{r}{

@@ -9,10 +9,10 @@
 \usage{
   localKinhom(X, lambda, ..., rmax = NULL,
               correction = "Ripley", verbose = TRUE, rvalue=NULL,
-              sigma = NULL, varcov = NULL)
+              sigma = NULL, varcov = NULL, update=TRUE, leaveoneout=TRUE)
   localLinhom(X, lambda, ..., rmax = NULL, 
               correction = "Ripley", verbose = TRUE, rvalue=NULL,
-              sigma = NULL, varcov = NULL)
+              sigma = NULL, varcov = NULL, update=TRUE, leaveoneout=TRUE)
 }
 \arguments{
   \item{X}{A point pattern (object of class \code{"ppp"}).}
@@ -23,7 +23,8 @@
     at the points of the pattern \code{X},
     a pixel image (object of class \code{"im"}) giving the
     intensity values at all locations, a fitted point process model
-    (object of class \code{"ppm"}) or a \code{function(x,y)} which
+    (object of class \code{"ppm"} or \code{"kppm"} or \code{"dppm"})
+    or a \code{function(x,y)} which
     can be evaluated to give the intensity value at any location.
   }
   \item{\dots}{
@@ -49,6 +50,21 @@
     Optional arguments passed to \code{\link{density.ppp}} to control
     the kernel smoothing procedure for estimating \code{lambda},
     if \code{lambda} is missing.
+  }
+  \item{leaveoneout}{
+    Logical value (passed to \code{\link{density.ppp}} or
+    \code{\link{fitted.ppm}}) specifying whether to use a
+    leave-one-out rule when calculating the intensity.
+  }
+  \item{update}{
+    Logical value indicating what to do when \code{lambda} is a fitted model
+    (class \code{"ppm"}, \code{"kppm"} or \code{"dppm"}).
+    If \code{update=TRUE} (the default),
+    the model will first be refitted to the data \code{X}
+    (using \code{\link{update.ppm}} or \code{\link{update.kppm}})
+    before the fitted intensity is computed.
+    If \code{update=FALSE}, the fitted intensity of the
+    model will be computed without re-fitting it to \code{X}.
   }
 }
 \details{

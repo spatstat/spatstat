@@ -544,6 +544,7 @@
 \alias{representativeRows}
 \alias{resolveEinfo}
 \alias{resolve.vargamma.shape}
+\alias{resolve.lambda}
 \alias{resolve.lambda.cross}
 \alias{rgbNA}
 \alias{rhohatEngine}
@@ -1436,6 +1437,7 @@ replacementIndex(ii, stuff)
 representativeRows(x)
 resolveEinfo(x, what, fallback, warn, atomic)
 resolve.vargamma.shape(\dots, nu.ker, nu.pcf, default = FALSE)
+resolve.lambda(X, lambda, \dots, sigma, varcov, leaveoneout, update)
 resolve.lambda.cross(X, I, J, lambdaI, lambdaJ, \dots, lambdaX,
                      sigma, varcov, leaveoneout, update, lambdaIJ,
                      Iexplain, Jexplain, miss.update, miss.leave,

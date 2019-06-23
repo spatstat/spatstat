@@ -9,7 +9,8 @@
 \usage{
   localpcf(X, ..., delta=NULL, rmax=NULL, nr=512, stoyan=0.15)
   localpcfinhom(X, ..., delta=NULL, rmax=NULL, nr=512, stoyan=0.15,
-         lambda=NULL, sigma=NULL, varcov=NULL)
+         lambda=NULL, sigma=NULL, varcov=NULL,
+         update=TRUE, leaveoneout=TRUE)
 }
 \arguments{
   \item{X}{A point pattern (object of class \code{"ppp"}).}
@@ -37,7 +38,8 @@
     at the points of the pattern \code{X},
     a pixel image (object of class \code{"im"}) giving the
     intensity values at all locations, a fitted point process model
-    (object of class \code{"ppm"}) or a \code{function(x,y)} which
+    (object of class \code{"ppm"}, \code{"kppm"} or \code{"dppm"})
+    or a \code{function(x,y)} which
     can be evaluated to give the intensity value at any location.
   }
   \item{sigma,varcov,\dots}{
@@ -45,6 +47,21 @@
     but are passed by \code{localpcfinhom} (when \code{lambda=NULL})
     to the function \code{\link{density.ppp}}
     to control the kernel smoothing estimation of \code{lambda}.
+  }
+  \item{leaveoneout}{
+    Logical value (passed to \code{\link{density.ppp}} or
+    \code{\link{fitted.ppm}}) specifying whether to use a
+    leave-one-out rule when calculating the intensity.
+  }
+  \item{update}{
+    Logical value indicating what to do when \code{lambda} is a fitted model
+    (class \code{"ppm"}, \code{"kppm"} or \code{"dppm"}).
+    If \code{update=TRUE} (the default),
+    the model will first be refitted to the data \code{X}
+    (using \code{\link{update.ppm}} or \code{\link{update.kppm}})
+    before the fitted intensity is computed.
+    If \code{update=FALSE}, the fitted intensity of the
+    model will be computed without re-fitting it to \code{X}.
   }
 }
 \details{
@@ -96,7 +113,8 @@
   at the points of the pattern \code{X},
   a pixel image (object of class \code{"im"}) giving the
   intensity values at all locations, a fitted point process model
-  (object of class \code{"ppm"}) or a \code{function(x,y)} which
+  (object of class \code{"ppm"}, \code{"kppm"} or \code{"dppm"})
+  or a \code{function(x,y)} which
   can be evaluated to give the intensity value at any location.
   If \code{lambda} is not given, then it will be estimated
   using a leave-one-out kernel density smoother as described
