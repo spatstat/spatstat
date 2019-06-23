@@ -1150,7 +1150,8 @@ localKengine(X, \dots, wantL, lambda, rmax, correction, verbose, rvalue)
 localKmultiEngine(X, from, to,
            lambdaFrom, lambdaTo, \dots, rmax, wantL,
            correction, verbose, rvalue, sigma, varcov,
-           lambdaX, update, leaveoneout)
+           lambdaX, update, leaveoneout,
+           Iexplain, Jexplain, Ikey, Jkey, miss.update, miss.leave)
 localpcfengine(X, \dots, delta, rmax, nr, stoyan, lambda)
 localpcfmatrix(X, i, \dots, lambda, delta, rmax, nr, stoyan)
 local2lpp(L, seg, tp, X, df.only)
@@ -1436,8 +1437,9 @@ representativeRows(x)
 resolveEinfo(x, what, fallback, warn, atomic)
 resolve.vargamma.shape(\dots, nu.ker, nu.pcf, default = FALSE)
 resolve.lambda.cross(X, I, J, lambdaI, lambdaJ, \dots, lambdaX,
-                     sigma, varcov, leaveoneout, update,
-                     lambdaIJ, caller)
+                     sigma, varcov, leaveoneout, update, lambdaIJ,
+                     Iexplain, Jexplain, miss.update, miss.leave,
+                     caller)
 rgbNA(red, green, blue, alpha, maxColorValue)
 rhohatEngine(model, covariate, reference, volume, \dots,
                subset, weights, method, horvitz, smoother, resolution, 

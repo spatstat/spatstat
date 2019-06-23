@@ -1751,12 +1751,14 @@ listed alphabetically.
     Accelerated when the window is a rectangle.
   \item 
     Now works for multitype $K$
-    functions \texttt{Kcross}, \texttt{Kdot}, \texttt{Lcross}, \texttt{Ldot}
+    functions \texttt{Kcross}, \texttt{Kdot}, \texttt{Lcross}, \texttt{Ldot},
+    \texttt{Kcross.inhom}, \texttt{Lcross.inhom}
   \item 
     Confidence bands for \texttt{Lest}, \texttt{Linhom},
-    \texttt{Lcross}, \texttt{Lcross.inhom} are now computed differently.
+    \texttt{Lcross}, \texttt{Ldot}, \texttt{Lcross.inhom} 
+    are now computed differently.
     First a confidence band is computed for the corresponding $K$
-    function \texttt{Kest}, \texttt{Kinhom}, \texttt{Kcross},
+    function \texttt{Kest}, \texttt{Kinhom}, \texttt{Kcross}, \texttt{Kdot},
     \texttt{Kcross.inhom} respectively. Then this is transformed 
     to a confidence band for the $L$ function by applying the 
     square root transformation.

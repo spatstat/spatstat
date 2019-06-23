@@ -8,7 +8,8 @@
 \usage{
   lohboot(X,
           fun=c("pcf", "Kest", "Lest", "pcfinhom", "Kinhom", "Linhom",
-                "Kcross", "Lcross", "Kcross.inhom", "Lcross.inhom"),
+                "Kcross", "Lcross", "Kdot", "Ldot",
+                "Kcross.inhom", "Lcross.inhom"),
           \dots,
            block=FALSE, global=FALSE, basicboot=FALSE, Vcorrection=FALSE,
            confidence=0.95, nx = 4, ny = nx, nsim=200, type=7) 
@@ -21,7 +22,8 @@
     Name of the summary function for which confidence intervals are
     desired: one of the strings \code{"pcf"}, \code{"Kest"}, \code{"Lest"},
     \code{"pcfinhom"}, \code{"Kinhom"} \code{"Linhom"}, \code{"Kcross"},
-    \code{"Lcross"}, \code{"Kcross.inhom"} or \code{"Lcross.inhom"}.
+    \code{"Lcross"}, \code{"Kdot"}, \code{"Ldot"},
+    \code{"Kcross.inhom"} or \code{"Lcross.inhom"}.
     Alternatively, the function itself; it must be
     one of the functions listed here.
   }
@@ -138,13 +140,15 @@
     \code{\link{Linhom}} \tab \code{\link{localLinhom}} \cr
     \code{\link{Kcross}} \tab \code{\link{localKcross}} \cr
     \code{\link{Lcross}} \tab \code{\link{localLcross}} \cr
+    \code{\link{Kdot}} \tab \code{\link{localKdot}} \cr
+    \code{\link{Ldot}} \tab \code{\link{localLdot}} \cr
     \code{\link{Kcross.inhom}} \tab \code{\link{localKcross.inhom}} \cr
     \code{\link{Lcross.inhom}} \tab \code{\link{localLcross.inhom}}
   }
   For \code{fun="Lest"}, the calculations are first performed
   as if \code{fun="Kest"}, and then the square-root transformation is
   applied to obtain the \eqn{L}-function. Similarly for
-  \code{fun="Linhom", "Lcross", "Lcross.inhom"}.
+  \code{fun="Linhom", "Lcross", "Ldot", "Lcross.inhom"}.
 
   Note that the confidence bands computed by 
   \code{lohboot(fun="pcf")} may not contain the estimate of the
@@ -188,7 +192,13 @@
   \code{\link{localK}},
   \code{\link{localpcf}},
   \code{\link{localKinhom}},
-  \code{\link{localpcfinhom}}.
+  \code{\link{localpcfinhom}},
+  \code{\link{localKcross}},
+  \code{\link{localKdot}},
+  \code{\link{localLcross}},
+  \code{\link{localLdot}}.
+  \code{\link{localKcross.inhom}},
+  \code{\link{localLcross.inhom}}.
 
   See \code{\link{varblock}} for an alternative bootstrap technique.
 }

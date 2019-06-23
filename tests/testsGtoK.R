@@ -325,7 +325,7 @@ local({
 #'
 #'   Various K and L functions and pcf
 #'
-#'   $Revision: 1.22 $  $Date: 2019/06/22 05:17:10 $
+#'   $Revision: 1.23 $  $Date: 2019/06/23 03:00:51 $
 #'
 
 require(spatstat)
@@ -423,6 +423,8 @@ local({
   a <- localLinhom(swedishpines, lambda=Z, correction="none")
   a <- localLinhom(swedishpines, lambda=Z, correction="translate")
   a <- localLcross(amacrine)
+  a <- localKdot(amacrine)
+  a <- localLdot(amacrine)
   a <- localKcross.inhom(amacrine)
   a <- localLcross.inhom(amacrine)
   fat <- ppm(amacrine ~ x * marks)
@@ -444,6 +446,9 @@ local({
   Lred <- lohboot(redwood, Linhom)
   Zred <- predict(ppm(redwood ~ x+y))
   Lred <- lohboot(redwood, Linhom, lambda=Zred)
+  #'    multitype
+  b <- lohboot(amacrine, Lcross)
+  b <- lohboot(amacrine, Ldot)
   b <- lohboot(amacrine, Lcross.inhom)
   b <- lohboot(amacrine, Lcross.inhom, from="off", to="on", lambdaX=Zed)
   b <- lohboot(amacrine, Lcross.inhom, from="off", to="on", lambdaX=Lum)

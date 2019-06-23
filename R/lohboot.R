@@ -1,7 +1,7 @@
 #
 #  lohboot.R
 #
-#  $Revision: 1.22 $   $Date: 2019/06/21 11:02:07 $
+#  $Revision: 1.23 $   $Date: 2019/06/23 02:48:06 $
 #
 #  Loh's bootstrap CI's for local pcf, local K etc
 #
@@ -34,6 +34,12 @@ spatstatLocalFunctionInfo <- function(key) {
     Lcross       = list(Global=Lcross,
                         Local=localKcross,  # stet!
                         L=TRUE,   inhom=FALSE,  indices=2), 
+    Kdot         = list(Global=Kdot,
+                        Local=localKdot,
+                        L=FALSE,  inhom=FALSE,  indices=1),
+    Ldot         = list(Global=Ldot,
+                        Local=localKdot,  # stet!
+                        L=TRUE,   inhom=FALSE,  indices=1), 
     Kcross.inhom = list(Global=Kcross.inhom,
                         Local=localKcross.inhom,
                         L=FALSE,  inhom=TRUE,   indices=2),
@@ -58,7 +64,8 @@ spatstatLocalFunctionInfo <- function(key) {
 lohboot <-
   function(X,
            fun=c("pcf", "Kest", "Lest", "pcfinhom", "Kinhom", "Linhom",
-                 "Kcross", "Lcross", "Kcross.inhom", "Lcross.inhom"),
+                 "Kcross", "Lcross", "Kdot", "Ldot",
+                 "Kcross.inhom", "Lcross.inhom"),
            ...,
            block=FALSE,
            global=FALSE,
@@ -124,9 +131,9 @@ lohboot <-
   to <- resolve.1.default(list(to=types[2]), list(...))
   fromName <- make.parseable(paste(from))
   toName <- make.parseable(paste(to))
-  ### TEMPORARY HACK for cross functions. Uses a possibly temporary attribute
-  ### to overwrite X with only "from" points.
-  if(grepl("cross", fun)){
+  ## TEMPORARY HACK for cross/dot functions.
+  ## Uses a possibly temporary attribute to overwrite X with only "from" points.
+  if(info$indices > 0) {
     X <- attr(f, "Xfrom")
   }
   # first n columns are the local pcfs (etc) for the n points of X
@@ -234,7 +241,9 @@ lohboot <-
     hilo <- sqrt(hilo/pi)
     warn.once("lohbootLfun",
               "The calculation of confidence intervals for L functions",
-              "in lohboot() has changed in spatstat 1.60-0 and later.")
+              "in lohboot() has changed in spatstat 1.60-0 and later;",
+              "they are now computed by transforming the confidence intervals",
+              "for the corresponding K functions.")
   }
 
   ## create fv object
@@ -289,6 +298,20 @@ lohboot <-
                               list(fra=fromName,til=toName))
            yexp <- substitute(L[list(fra,til)](r),
                               list(fra=fromName,til=toName))
+         },
+         Kdot={
+           fname <- c("K", paste0(fromName, "~ symbol(\"\\267\")"))
+           ylab <- substitute(K[fra ~ dot](r),
+                              list(fra=fromName))
+           yexp <- substitute(K[fra ~ symbol("\267")](r),
+                              list(fra=fromName))
+         },
+         Ldot={
+           fname <- c("L", paste0(fromName, "~ symbol(\"\\267\")"))
+           ylab <- substitute(L[fra ~ dot](r),
+                              list(fra=fromName))
+           yexp <- substitute(L[fra ~ symbol("\267")](r),
+                              list(fra=fromName))
          },
          Kcross.inhom={
            fname <- c("K", paste0("list(inhom,", fromName, ",", toName, ")"))

@@ -3,7 +3,7 @@
 #'
 #'     original by Ege Rubak
 #' 
-#'     $Revision: 1.4 $ $Date: 2019/06/22 05:58:32 $
+#'     $Revision: 1.5 $ $Date: 2019/06/23 02:37:22 $
 
 "localLcross" <- function(X, from, to, ..., rmax = NULL, correction = "Ripley") {
   localKcross(X, from, to, ..., rmax = rmax, correction = correction, wantL = TRUE)
@@ -24,11 +24,11 @@
       from <- levels(marx)[1]
     if(missing(to))
       to <- levels(marx)[2]
-    fromName <- make.parseable(from)
-    toName <- make.parseable(to)
     I <- (marx == from)
     if(!any(I))
       stop(paste("No points have mark =", from))
+    Iexplain <- paste("points having mark =", from)
+    Ikey <- make.parseable(paste(from))
     if(from == to) {
       ## use Kest
       result <- do.call(localK,
@@ -42,8 +42,11 @@
       J <- (marx == to)
       if(!any(J))
         stop(paste("No points have mark =", to))
+      Jexplain <- paste("points having mark =", to)
+      Jkey <- make.parseable(paste(to))
       result <-localKmultiEngine(X, I, J, ...,
-                                 Iname=fromName, Jname=toName,
+                                 Ikey=Ikey, Jkey=Jkey,
+                                 Iexplain=Iexplain, Jexplain=Jexplain,
                                  rmax = rmax, correction=correction,
                                  verbose=verbose, rvalue=rvalue)
     }
@@ -58,15 +61,19 @@ function(X, from, ..., rmax = NULL, correction="Ripley", verbose=TRUE, rvalue=NU
   	stop("Point pattern must be multitype")
   marx <- marks(X)
   if(missing(from)) from <- levels(marx)[1]
-  fromName <- make.parseable(paste(from))
   
   I <- (marx == from)
   J <- rep.int(TRUE, X$n)  # i.e. all points
-	
+  Iexplain <- paste("points having mark =", from)
+  Jexplain <- "points of any type"
+  Ikey <- make.parseable(paste(from))
+  Jkey <- "."
+  
   if(!any(I)) stop(paste("No points have mark =", from))
 	
   result <- localKmultiEngine(X, I, J, ...,
-                              Iname=fromName, Jname=".",
+                              Iexplain=Iexplain, Jexplain=Jexplain,
+                              Ikey=Ikey, Jkey=Jkey,
                               rmax = rmax, correction=correction,
                               verbose=verbose, rvalue=rvalue)
   attr(result, "indices") <- list(from=from)
@@ -91,10 +98,17 @@ function(X, from, ..., rmax = NULL, correction="Ripley", verbose=TRUE, rvalue=NU
       to <- levels(marx)[2]
     I <- (marx == from)
     J <- (marx == to)
+    Iexplain <- paste("points having mark =", from)
+    Jexplain <- paste("points having mark =", to)
+    Ikey <- make.parseable(paste(from))
+    Jkey <- make.parseable(paste(to))
     K <- localKmultiEngine(X, I, J, lambdaFrom, lambdaTo, ..., rmax = rmax,
+                           Iexplain=Iexplain, Jexplain=Jexplain,
+                           Ikey=Ikey, Jkey=Jkey,
                            correction=correction,
                            sigma=sigma, varcov=varcov,
-                           lambdaX=lambdaX, update=update, leaveoneout=leaveoneout,
+                           lambdaX=lambdaX, update=update,
+                           leaveoneout=leaveoneout,
                            miss.update=miss.update, miss.leave=miss.leave)
     attr(K, "indices") <- list(from=from, to=to)
     return(K)
@@ -109,24 +123,17 @@ localLcross.inhom <- function(X, from, to, lambdaFrom = NULL, lambdaTo = NULL, .
            rmax = NULL, wantL=FALSE,
            correction="Ripley", verbose=TRUE, rvalue=NULL,
            sigma=NULL, varcov=NULL,
-           lambdaX=NULL, update=TRUE, leaveoneout=TRUE)
+           lambdaX=NULL, update=TRUE, leaveoneout=TRUE,
+           Iexplain="points satisfying condition I",
+           Jexplain="points satisfying condition J",
+           Ikey="I",
+           Jkey="J",
+           miss.update=missing(update),
+           miss.leave=missing(leaveoneout))
   {
-  
-    dflt <- list(Iname="points satisfying condition I",
-                 Jname="points satisfying condition J",
-                 miss.update=missing(update),
-                 miss.leave=missing(leaveoneout))
-  
-    extrargs <- resolve.defaults(list(...), dflt)
-    Iname <- extrargs$Iname
-    Jname <- extrargs$Jname
-    miss.update <- extrargs$miss.update
-    miss.leave <- extrargs$miss.leave
-    
     npts <- npoints(X)
-    W <- X$window
+    W <- Window(X)
     areaW <- area(W)
-    # Needed?
     lambda.ave <- npts/areaW
     
     from <- ppsubset(X, from)
@@ -150,8 +157,14 @@ localLcross.inhom <- function(X, from, to, lambdaFrom = NULL, lambdaTo = NULL, .
     if(weighted){
       stopifnot(!is.null(lambdaTo))
       lambdas <- resolve.lambda.cross(X, from, to, lambdaFrom, lambdaTo, ...,
-                                      lambdaX = lambdaX, sigma = sigma, varcov = varcov,
-                                      leaveoneout = leaveoneout, update = update,
+                                      lambdaX = lambdaX,
+                                      sigma = sigma, varcov = varcov,
+                                      leaveoneout = leaveoneout,
+                                      update = update,
+                                      Iexplain=Iexplain,
+                                      Jexplain=Jexplain,
+                                      miss.update=miss.update,
+                                      miss.leave=miss.leave,
                                       caller = "localKcrossEngine")
       lambdaFrom <- lambdas$lambdaI
       lambdaTo <- lambdas$lambdaJ
@@ -240,7 +253,7 @@ localLcross.inhom <- function(X, from, to, lambdaFrom = NULL, lambdaTo = NULL, .
                df[,i] <- Knone
                icode <- numalign(i, n_from)
                names(df)[i] <- paste("un", icode, sep="")
-               labl[i] <- makefvlabel(NULL, NULL, character(2), icode)
+               labl[i] <- makefvlabel(NULL, "hat", character(2), icode)
                desc[i] <- paste("uncorrected estimate of %s",
                                 "for point", icode)
                if(verbose) state <- progressreport(i, n_from, state=state)
@@ -263,7 +276,7 @@ localLcross.inhom <- function(X, from, to, lambdaFrom = NULL, lambdaTo = NULL, .
                df[,i] <- Ktrans
                icode <- numalign(i, n_from)
                names(df)[i] <- paste("trans", icode, sep="")
-               labl[i] <- makefvlabel(NULL, NULL, character(2), icode)
+               labl[i] <- makefvlabel(NULL, "hat", character(2), icode)
                desc[i] <- paste("translation-corrected estimate of %s",
                                 "for point", icode)
                if(verbose) state <- progressreport(i, n_from, state=state)
@@ -286,7 +299,7 @@ localLcross.inhom <- function(X, from, to, lambdaFrom = NULL, lambdaTo = NULL, .
                df[,i] <- Kiso
                icode <- numalign(i, n_from)
                names(df)[i] <- paste("iso", icode, sep="")
-               labl[i] <- makefvlabel(NULL, NULL, character(2), icode)
+               labl[i] <- makefvlabel(NULL, "hat", character(2), icode)
                desc[i] <- paste("Ripley isotropic correction estimate of %s", 
                                 "for point", icode)
                if(verbose) state <- progressreport(i, n_from, state=state)
@@ -306,33 +319,41 @@ localLcross.inhom <- function(X, from, to, lambdaFrom = NULL, lambdaTo = NULL, .
         stop("Internal error - rvalue not attained")
       return(as.numeric(df[nr,]))
     }
-    # function value table required
-    # add r and theo
-    if(!wantL) {
-      df <- cbind(df, data.frame(r=r, theo=pi * r^2))
-      if(!weighted) {
-        fnam <- c("K", paste0("list(loc,", Iname, ",", Jname, ")"))
-        ylab <- substitute(K[loc,I,J](r), list(I=Iname, J=Jname))
-        yexp <- substitute(K[list(loc,I,J)](r), list(I=Iname, J=Jname))
-      } else {
-        fnam <- c("K", paste0("list(inhom,loc,", Iname, ",", Jname, ")"))
-        ylab <- substitute(K[inhom,loc,I,J](r), list(I=Iname, J=Jname))
-        yexp <- substitute(K[list(inhom,loc,I,J)](r), list(I=Iname, J=Jname))
-      }
-    } else {
-      df <- cbind(df, data.frame(r=r, theo=r))
-      if(!weighted) {
-        fnam <- c("L", paste0("list(loc,", Iname, ",", Jname, ")"))
-        ylab <- substitute(L[loc,I,J](r), list(I=Iname, J=Jname))
-        yexp <- substitute(L[list(loc,I,J)](r), list(I=Iname, J=Jname))
-      } else {
-        fnam <- c("L", paste0("list(inhom,loc,", Iname, ",", Jname, ")"))
-        ylab <- substitute(L[inhom,loc,I,J](r), list(I=Iname, J=Jname))
-        yexp <- substitute(L[list(inhom,loc,I,J)](r), list(I=Iname, J=Jname))
-      }
-    }
+    ## function value table required
+    ## add r and theo
+    df <- cbind(df,
+                data.frame(r=r,
+                           theo=if(wantL) r else (pi * r^2)))
     desc <- c(desc, c("distance argument r", "theoretical Poisson %s"))
     labl <- c(labl, c("r", "{%s[%s]^{pois}}(r)"))
+    ## Handle 'dot' symbol
+    if(identical(Jkey, ".")) {
+      Jkeyname <- "symbol(\"\\267\")"
+      Jkeylab  <- quote(dot)
+      Jkeyexpr <- quote(symbol("\267"))
+    } else Jkeyname <- Jkeylab <- Jkeyexpr <- Jkey
+    ## Determine fv labels
+    if(!wantL) {
+      if(!weighted) {
+        fnam <- c("K", paste0("list(loc,", Ikey, ",", Jkeyname, ")"))
+        ylab <- substitute(K[loc,I,J](r), list(I=Ikey, J=Jkeylab))
+        yexp <- substitute(K[list(loc,I,J)](r), list(I=Ikey, J=Jkeyexpr))
+      } else {
+        fnam <- c("K", paste0("list(inhom,loc,", Ikey, ",", Jkeyname, ")"))
+        ylab <- substitute(K[inhom,loc,I,J](r), list(I=Ikey, J=Jkeylab))
+        yexp <- substitute(K[list(inhom,loc,I,J)](r), list(I=Ikey, J=Jkeyexpr))
+      }
+    } else {
+      if(!weighted) {
+        fnam <- c("L", paste0("list(loc,", Ikey, ",", Jkeyname, ")"))
+        ylab <- substitute(L[loc,I,J](r), list(I=Ikey, J=Jkeylab))
+        yexp <- substitute(L[list(loc,I,J)](r), list(I=Ikey, J=Jkeyexpr))
+      } else {
+        fnam <- c("L", paste0("list(inhom,loc,", Ikey, ",", Jkeyname, ")"))
+        ylab <- substitute(L[inhom,loc,I,J](r), list(I=Ikey, J=Jkeylab))
+        yexp <- substitute(L[list(inhom,loc,I,J)](r), list(I=Ikey, J=Jkeyexpr))
+      }
+    }
     # create fv object
     K <- fv(df, "r", ylab, "theo", , alim, labl, desc,
             fname=fnam, yexp=yexp)
@@ -349,17 +370,12 @@ localLcross.inhom <- function(X, from, to, lambdaFrom = NULL, lambdaTo = NULL, .
 
 resolve.lambda.cross <- function(X, I, J, lambdaI, lambdaJ, ..., lambdaX,
                                  sigma, varcov, leaveoneout, update,
-                                 lambdaIJ=NULL, caller){
-    dflt <- list(Iname="points satisfying condition I",
-                 Jname="points satisfying condition J",
-                 miss.update=missing(update),
-                 miss.leave=missing(leaveoneout))
-  
-    extrargs <- resolve.defaults(list(...), dflt)
-    Iname <- extrargs$Iname
-    Jname <- extrargs$Jname
-    miss.update <- extrargs$miss.update
-    miss.leave <- extrargs$miss.leave
+                                 lambdaIJ=NULL,
+                                 Iexplain="points satisfying condition I",
+                                 Jexplain="points satisfying condition J",
+                                 miss.update=missing(update),
+                                 miss.leave=missing(leaveoneout),
+                                 caller){
   dangerous <- c("lambdaI", "lambdaJ")
   dangerI <- dangerJ <- TRUE
   XI <- X[I]
@@ -436,7 +452,7 @@ resolve.lambda.cross <- function(X, I, J, lambdaI, lambdaJ, ..., lambdaX,
       ## validate intensity vector
       if(length(lambdaI) != nI)
         stop(paste("The length of", sQuote("lambdaI"),
-                   "should equal the number of", Iname))
+                   "should equal the number of", Iexplain))
     } else if(is.ppm(lambdaI) || is.kppm(lambdaI) || is.dppm(lambdaI)) {
       ## point process model provides intensity
       model <- lambdaI
@@ -480,7 +496,7 @@ resolve.lambda.cross <- function(X, I, J, lambdaI, lambdaJ, ..., lambdaX,
       ## validate intensity vector
       if(length(lambdaJ) != npoints(XJ))
         stop(paste("The length of", sQuote("lambdaJ"),
-                   "should equal the number of", Jname))
+                   "should equal the number of", Jexplain))
     } else if(is.ppm(lambdaJ) || is.kppm(lambdaJ) || is.dppm(lambdaJ)) {
       ## point process model provides intensity
       model <- lambdaJ
@@ -516,16 +532,16 @@ resolve.lambda.cross <- function(X, I, J, lambdaI, lambdaJ, ..., lambdaX,
       if(!is.matrix(lambdaIJ))
         stop("lambdaIJ should be a matrix")
       if(nrow(lambdaIJ) != nI)
-        stop(paste("nrow(lambdaIJ) should equal the number of", Iname))
+        stop(paste("nrow(lambdaIJ) should equal the number of", Iexplain))
       if(ncol(lambdaIJ) != nJ)
-        stop(paste("ncol(lambdaIJ) should equal the number of", Jname))
+        stop(paste("ncol(lambdaIJ) should equal the number of", Jexplain))
     } else {
       dangerIJ <- FALSE
     }
     
     danger <- dangerI || dangerJ || dangerIJ
     
-    return(list(lambdaI = lambdaI, lambdaJ = lambdaJ,
+    return(list(lambdaI = lambdaI, lambdaJ = lambdaJ, lambdaIJ=lambdaIJ,
                 danger = danger, dangerous = dangerous))
   }
 }

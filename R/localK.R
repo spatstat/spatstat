@@ -1,7 +1,7 @@
 #
 #	localK.R		Getis-Franklin neighbourhood density function
 #
-#	$Revision: 1.22 $	$Date: 2019/06/21 04:13:01 $
+#	$Revision: 1.23 $	$Date: 2019/06/23 02:33:53 $
 #
 #
 
@@ -125,7 +125,7 @@
              df[,i] <- cumsum(wh)
              icode <- numalign(i, npts)
              names(df)[i] <- paste("un", icode, sep="")
-             labl[i] <- makefvlabel(NULL, NULL, character(2), icode)
+             labl[i] <- makefvlabel(NULL, "hat", character(2), icode)
              desc[i] <- paste("uncorrected estimate of %s",
                               "for point", icode)
              if(verbose) state <- progressreport(i, npts, state=state)
@@ -145,7 +145,7 @@
              df[,i] <- Ktrans
              icode <- numalign(i, npts)
              names(df)[i] <- paste("trans", icode, sep="")
-             labl[i] <- makefvlabel(NULL, NULL, character(2), icode)
+             labl[i] <- makefvlabel(NULL, "hat", character(2), icode)
              desc[i] <- paste("translation-corrected estimate of %s",
                               "for point", icode)
              if(verbose) state <- progressreport(i, npts, state=state)
@@ -166,7 +166,7 @@
              df[,i] <- Kiso
              icode <- numalign(i, npts)
              names(df)[i] <- paste("iso", icode, sep="")
-             labl[i] <- makefvlabel(NULL, NULL, character(2), icode)
+             labl[i] <- makefvlabel(NULL, "hat", character(2), icode)
              desc[i] <- paste("Ripley isotropic correction estimate of %s", 
                               "for point", icode)
              if(verbose) state <- progressreport(i, npts, state=state)

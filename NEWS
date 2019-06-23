@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.59-0.038
+        CHANGES IN spatstat VERSION 1.59-0.039
 
 OVERVIEW
 
@@ -10,7 +10,7 @@ OVERVIEW
     o Random thinning and random labelling of spatial patterns
     extended to different types of pattern.
 
-    o Confidence intervals for multitype K function.
+    o Confidence intervals for multitype K functions.
 
     o Envelopes for balanced two-stage test
     
@@ -45,7 +45,8 @@ NEW FUNCTIONS
 SIGNIFICANT USER-VISIBLE CHANGES
 
     o lohboot
-    Now works for multitype K functions Kcross, Kdot, Lcross, Ldot
+    Now works for multitype K functions Kcross, Kdot, Lcross, Ldot,
+    Kcross.inhom, Lcross.inhom.
     
     o Kinhom, pcfinhom
     Leave-one-out calculation is implemented when 'lambda' is a fitted model
