@@ -1,0 +1,14 @@
+Change log from 1.60-0 to 1.60-1
+================================
+
+23 june 2019
+
+   DESCRIPTION
+   NEWS
+   Nickname.txt
+	Version 1.60-1
+	Incremented for administrative reasons.
+
+
+   
+

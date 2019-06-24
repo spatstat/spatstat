@@ -1,7 +1,7 @@
 #
 #  lohboot.R
 #
-#  $Revision: 1.23 $   $Date: 2019/06/23 02:48:06 $
+#  $Revision: 1.24 $   $Date: 2019/06/24 03:15:26 $
 #
 #  Loh's bootstrap CI's for local pcf, local K etc
 #
@@ -330,8 +330,8 @@ lohboot <-
   labl <- c("r",
             makefvlabel(NULL, NULL, fname, "pois"),
             makefvlabel(NULL, "hat", fname, clab),
-            makefvlabel(NULL, NULL, fname, "loCI"),
-            makefvlabel(NULL, NULL, fname, "hiCI"))
+            makefvlabel(NULL, "hat", fname, "loCI"),
+            makefvlabel(NULL, "hat", fname, "hiCI"))
   g <- fv(df, "r", ylab=ylab,
           ckey, , c(0, max(f$r)), labl, desc,
           fname=fname, yexp=yexp)
