@@ -877,12 +877,17 @@ local({
 #
 #  tests/undoc.R
 #
-#   $Revision: 1.6 $   $Date: 2018/10/19 09:45:52 $
+#   $Revision: 1.8 $   $Date: 2019/07/01 08:38:48 $
 #
 #  Test undocumented hacks, etc
 
 require(spatstat)
 local({
+  ## cases of 'pickoption'
+  aliases <- c(Lenin="Ulyanov", Stalin="Djugashvili", Trotsky="Bronstein")
+  surname <- "Trot"
+  pickoption("leader", surname,  aliases)
+  pickoption("leader", surname,  aliases, exact=TRUE, die=FALSE)
   ## pixellate.ppp accepts a data frame of weights
   pixellate(cells, weights=data.frame(a=1:42, b=42:1))
   ## test parts of 'rmhsnoop' that don't require interaction with user
@@ -914,6 +919,17 @@ local({
   ##
   A <- Strauss(0.1)
   A <- reincarnate.interact(A)
+  ##
+  ## special lists
+  B <- solist(a=cells, b=redwood, c=japanesepines)
+  BB <- as.ppplist(B)
+  BL <- as.layered(B)
+  DB <- as.imlist(lapply(B, density))
+  is.solist(B)
+  is.ppplist(B)
+  is.imlist(DB)
+  ## case of density.ppplist 
+  DEB <- density(BB, se=TRUE)
 })
 
 

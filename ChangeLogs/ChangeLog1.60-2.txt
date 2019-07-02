@@ -16,6 +16,42 @@ Change log from 1.60-1 to 1.60-2
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+30 june 2019
+
+   pickoption.R
+	tweaked
+	
+   tests/undoc.R
+	Added tests of 'pickoption'
+
+02 july 2019
+
+   localKcross.R
+   localKcross.Rd
+	Argument 'lambdaX' can be a list of pixel images.
+	Tweaked formal arguments of resolve.lambda.cross
+	
+   tests/Kfuns.R
+	More tests of resolve.lambda.cross
+
+   tests/deepeepee.R
+	Tests of methods for class dppm
+
+   tests/undoc.R
+	More tests of imlist, ppplist code.
+	
+   anylist.Rd
+	tweak
+
+   DESCRIPTION
+   NEWS
+	Version 1.60-1.002
+	
+------------- passed R-3.6.0 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+	
 
    
 

@@ -1,7 +1,7 @@
 #
 #  pickoption.R
 #
-#  $Revision: 1.6 $  $Date: 2016/04/25 02:34:40 $
+#  $Revision: 1.7 $  $Date: 2019/06/30 07:49:10 $
 #
 
 pickoption <- function(what="option", key, keymap, ...,
@@ -21,7 +21,7 @@ pickoption <- function(what="option", key, keymap, ...,
   allow.all <- allow.all && multi
 
   id <-
-    if(allow.all && identical(key, "all")) {
+    if(allow.all && "all" %in% key) {
       seq_along(keymap)
     } else if(exact) {
       match(key, names(keymap), nomatch=NA)
@@ -44,7 +44,7 @@ pickoption <- function(what="option", key, keymap, ...,
       return(NULL)
   }
 
-  key <- keymap[id]
+  key <- unique(keymap[id])
   names(key) <- NULL
   return(key)
 }

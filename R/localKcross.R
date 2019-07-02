@@ -3,7 +3,7 @@
 #'
 #'     original by Ege Rubak
 #' 
-#'     $Revision: 1.6 $ $Date: 2019/06/23 06:13:31 $
+#'     $Revision: 1.12 $ $Date: 2019/07/02 02:57:52 $
 
 "localLcross" <- function(X, from, to, ..., rmax = NULL, correction = "Ripley") {
   localKcross(X, from, to, ..., rmax = rmax, correction = correction, wantL = TRUE)
@@ -152,10 +152,9 @@ localLcross.inhom <- function(X, from, to, lambdaFrom = NULL, lambdaTo = NULL, .
     
     lambdaFrom.ave <- n_from/areaW
     lambdaTo.ave <- n_to/areaW
-    
-    weighted <- !is.null(lambdaFrom)
+
+    weighted <- !is.null(lambdaFrom) || !is.null(lambdaTo) || !is.null(lambdaX)
     if(weighted){
-      stopifnot(!is.null(lambdaTo))
       lambdas <- resolve.lambda.cross(X, from, to, lambdaFrom, lambdaTo, ...,
                                       lambdaX = lambdaX,
                                       sigma = sigma, varcov = varcov,
@@ -368,14 +367,18 @@ localLcross.inhom <- function(X, from, to, lambdaFrom = NULL, lambdaTo = NULL, .
     return(K)
   }
 
-resolve.lambda.cross <- function(X, I, J, lambdaI, lambdaJ, ..., lambdaX,
-                                 sigma, varcov, leaveoneout, update,
+resolve.lambda.cross <- function(X, I, J,
+                                 lambdaI=NULL, lambdaJ=NULL,
+                                 ...,
+                                 lambdaX=NULL,
+                                 sigma=NULL, varcov=NULL,
+                                 leaveoneout=TRUE, update=TRUE,
                                  lambdaIJ=NULL,
                                  Iexplain="points satisfying condition I",
                                  Jexplain="points satisfying condition J",
                                  miss.update=missing(update),
                                  miss.leave=missing(leaveoneout),
-                                 caller){
+                                 caller="direct"){
   dangerous <- c("lambdaI", "lambdaJ")
   dangerI <- dangerJ <- TRUE
   XI <- X[I]
@@ -383,20 +386,50 @@ resolve.lambda.cross <- function(X, I, J, lambdaI, lambdaJ, ..., lambdaX,
   nI <- npoints(XI)
   nJ <- npoints(XJ)
 
-  if(!is.null(lambdaX)) {
+  lamIname <- short.deparse(substitute(lambdaI))
+  lamJname <- short.deparse(substitute(lambdaJ))
+  bothnames <- c(lamIname, lamJname)
+  givenI <- !is.null(lambdaI)
+  givenJ <- !is.null(lambdaJ)
+  givenX <- !is.null(lambdaX)
+
+  if(givenI != givenJ) {
+    givenone <- bothnames[c(givenI, givenJ)]
+    missedone <- setdiff(bothnames, givenone)
+    stop(paste("If", givenone, "is given, then",
+               missedone, "should also be given"),
+         call.=FALSE)
+  }
+  if(givenX && givenI && givenJ)
+    warning(paste(paste(sQuote(bothnames), collapse=" and "),
+                  "were ignored because", sQuote("lambdaX"),
+                  "was given"),
+            call.=FALSE)
+
+  if(givenX) {
     ## Intensity values for all points of X
-    if(!is.null(lambdaI))
-      warning("lambdaI was ignored, because lambdaX was given", call.=FALSE)
-    if(!is.null(lambdaJ))
-      warning("lambdaJ was ignored, because lambdaX was given", call.=FALSE)
     if(is.im(lambdaX)) {
       ## Look up intensity values
       lambdaI <- safelookup(lambdaX, XI)
       lambdaJ <- safelookup(lambdaX, XJ)
+    } else if(is.imlist(lambdaX) &&
+              is.multitype(X) &&
+              length(lambdaX) == length(levels(marks(X)))) {
+      ## Look up intensity values
+      Y <- split(X)
+      lamY <- mapply("[", x=lambdaX, i=Y, SIMPLIFY=FALSE)
+      lamX <- unsplit(lamY, marks(X))
+      lambdaI <- lamX[I]
+      lambdaJ <- lamX[J]
     } else if(is.function(lambdaX)) {
       ## evaluate function at locations
-      lambdaI <- lambdaX(XI$x, XI$y)
-      lambdaJ <- lambdaX(XJ$x, XJ$y)
+      if(!is.marked(X) || length(formals(lambdaX)) == 2) {
+        lambdaI <- lambdaX(XI$x, XI$y)
+        lambdaJ <- lambdaX(XJ$x, XJ$y)
+      } else {
+        lambdaI <- lambdaX(XI$x, XI$y, marks(XI))
+        lambdaJ <- lambdaX(XJ$x, XJ$y, marks(XJ))
+      }
     } else if(is.numeric(lambdaX) && is.vector(as.numeric(lambdaX))) {
       ## vector of intensity values
       if(length(lambdaX) != npoints(X))
@@ -436,7 +469,7 @@ resolve.lambda.cross <- function(X, I, J, lambdaI, lambdaJ, ..., lambdaX,
                       "or a fitted point process model (ppm, kppm or dppm)"))
   } else {
     ## lambdaI, lambdaJ expected
-    if(is.null(lambdaI)) {
+    if(!givenI) {
       ## estimate intensity
       dangerI <- FALSE
       dangerous <- setdiff(dangerous, "lambdaI")
@@ -472,7 +505,7 @@ resolve.lambda.cross <- function(X, I, J, lambdaI, lambdaJ, ..., lambdaX,
       }
     } else stop(paste(sQuote("lambdaI"), "should be a vector or an image"))
     
-    if(is.null(lambdaJ)) {
+    if(!givenJ) {
       ## estimate intensity
       dangerJ <- FALSE
       dangerous <- setdiff(dangerous, "lambdaJ")
@@ -508,24 +541,24 @@ resolve.lambda.cross <- function(X, I, J, lambdaI, lambdaJ, ..., lambdaX,
       }
     } else 
       stop(paste(sQuote("lambdaJ"), "should be a vector or an image"))
-    
-    ## Weight for each pair
-    if(!is.null(lambdaIJ)) {
-      dangerIJ <- TRUE
-      dangerous <- union(dangerous, "lambdaIJ")
-      if(!is.matrix(lambdaIJ))
-        stop("lambdaIJ should be a matrix")
-      if(nrow(lambdaIJ) != nI)
-        stop(paste("nrow(lambdaIJ) should equal the number of", Iexplain))
-      if(ncol(lambdaIJ) != nJ)
-        stop(paste("ncol(lambdaIJ) should equal the number of", Jexplain))
-    } else {
-      dangerIJ <- FALSE
-    }
-    
-    danger <- dangerI || dangerJ || dangerIJ
-    
-    return(list(lambdaI = lambdaI, lambdaJ = lambdaJ, lambdaIJ=lambdaIJ,
-                danger = danger, dangerous = dangerous))
   }
+  
+  ## Weight for each pair
+  if(!is.null(lambdaIJ)) {
+    dangerIJ <- TRUE
+    dangerous <- union(dangerous, "lambdaIJ")
+    if(!is.matrix(lambdaIJ))
+      stop("lambdaIJ should be a matrix")
+    if(nrow(lambdaIJ) != nI)
+      stop(paste("nrow(lambdaIJ) should equal the number of", Iexplain))
+    if(ncol(lambdaIJ) != nJ)
+      stop(paste("ncol(lambdaIJ) should equal the number of", Jexplain))
+  } else {
+    dangerIJ <- FALSE
+  }
+    
+  danger <- dangerI || dangerJ || dangerIJ
+    
+  return(list(lambdaI = lambdaI, lambdaJ = lambdaJ, lambdaIJ=lambdaIJ,
+                danger = danger, dangerous = dangerous))
 }

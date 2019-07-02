@@ -325,7 +325,7 @@ local({
 #'
 #'   Various K and L functions and pcf
 #'
-#'   $Revision: 1.23 $  $Date: 2019/06/23 03:00:51 $
+#'   $Revision: 1.25 $  $Date: 2019/07/02 02:58:08 $
 #'
 
 require(spatstat)
@@ -436,6 +436,27 @@ local({
   a <- localLcross.inhom(amacrine, from="off", to="on", lambdaX=fat)
   a <- localLcross.inhom(amacrine, from="off", to="on",
                          lambdaFrom=Lum[moff], lambdaTo=Lum[!moff])
+  a <- localLcross.inhom(amacrine, from="off", to="on", lambdaX=Zed,
+                         correction="none")
+  a <- localLcross.inhom(amacrine, from="off", to="on", lambdaX=Zed,
+                         correction="translate")
+  #'
+  #' cases of resolve.lambda.cross
+  #'
+  h <- resolve.lambda.cross(amacrine, moff, !moff)
+  h <- resolve.lambda.cross(amacrine, moff, !moff, lambdaX=Zed)
+  h <- resolve.lambda.cross(amacrine, moff, !moff, lambdaX=Lum)
+  h <- resolve.lambda.cross(amacrine, moff, !moff, lambdaX=fat)
+  h <- resolve.lambda.cross(amacrine, moff, !moff, lambdaX=fat, update=FALSE)
+  h <- resolve.lambda.cross(amacrine, moff, !moff,
+                            lambdaI=Zed[["off"]], lambdaJ=Zed[["on"]])
+  h <- resolve.lambda.cross(amacrine, moff, !moff,
+                            lambdaI=Lum[moff], lambdaJ=Lum[!moff])
+  h <- resolve.lambda.cross(amacrine, moff, !moff,
+                            lambdaI=fat, lambdaJ=fat)
+  h <- resolve.lambda.cross(amacrine, moff, !moff,
+                            lambdaI=fat, lambdaJ=fat,
+                            update=FALSE)
   #'
   #'   lohboot code blocks
   #'

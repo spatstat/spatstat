@@ -52,6 +52,7 @@ as.anylist(x)
 }
 \examples{
   anylist(cells, intensity(cells), Kest(cells))
+  anylist()
 }
 \keyword{list}
 \keyword{manip}

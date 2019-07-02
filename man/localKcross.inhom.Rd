@@ -65,8 +65,10 @@
     Either a vector giving the intensity values
     at each point of \code{X},
     a pixel image (object of class \code{"im"}) giving the
-    intensity values at all locations, a fitted point process model
-    (object of class \code{"ppm"}) or a \code{function(x,y)} which
+    intensity values at all locations, a list of pixel images
+    giving the intensity values at all locations for each type of point,
+    or a fitted point process model (object of class \code{"ppm"})
+    or a \code{function(x,y)} or \code{function(x,y,m)} which
     can be evaluated to give the intensity value at any location.
   }
   \item{update}{
