@@ -15,7 +15,7 @@
                    ribside=c("right", "left", "bottom", "top"),
                    ribsep=0.15, ribwid=0.05, ribn=1024,
                    ribscale=1, ribargs=list(), riblab=NULL, colargs=list(),
-                   useRaster=NULL, workaround=FALSE,
+                   useRaster=NULL, workaround=FALSE, zap=1,
                    do.plot=TRUE) 
 
   \method{image}{im}(x, \dots,
@@ -27,7 +27,7 @@
                    ribside=c("right", "left", "bottom", "top"),
                    ribsep=0.15, ribwid=0.05, ribn=1024,
                    ribscale=1, ribargs=list(), riblab=NULL, colargs=list(),
-                   useRaster=NULL, workaround=FALSE, 
+                   useRaster=NULL, workaround=FALSE, zap=1,
                    do.plot=TRUE) 
 }
 \arguments{
@@ -129,6 +129,13 @@
     which occurs with some device drivers in \R, in which the image
     has the wrong spatial orientation. See the section on
     \bold{Image is Displayed in Wrong Spatial Orientation} below.
+  }
+  \item{zap}{
+    Noise threshold factor. A numerical value greater than or equal to 1.
+    If the range of pixel values is less than
+    \code{zap * .Machine$double.eps}, the image will be treated as
+    constant. This avoids displaying images which should be constant
+    but contain small numerical errors.
   }
   \item{do.plot}{
     Logical value indicating whether to actually plot the image
@@ -346,6 +353,15 @@
   setting the graphics device parameter \code{colormodel="grey"}
   when starting a new graphics device, or in a call to
   \code{\link{ps.options}} or \code{\link{pdf.options}}.
+}
+\section{Image Looks Like Noise}{
+  An image plot which looks like digital noise
+  can be produced when the pixel values are almost exactly equal
+  but include a tiny amount of numerical error.
+  To check this, look at the numerals plotted next to the colour ribbon,
+  or compute \code{diff(range(x))}, to determine whether the range
+  of pixel values is almost zero. The behaviour can be suppressed
+  by picking a larger value of the argument \code{zap}.
 }
 \section{Image Rendering Errors and Problems}{
   The help for \code{\link[graphics]{image.default}}

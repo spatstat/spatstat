@@ -1,7 +1,7 @@
 #
 #   plot.im.R
 #
-#  $Revision: 1.129 $   $Date: 2019/07/03 01:05:58 $
+#  $Revision: 1.130 $   $Date: 2019/07/03 03:33:42 $
 #
 #  Plotting code for pixel images
 #
@@ -170,7 +170,7 @@ plot.im <- local({
                      ribside=c("right", "left", "bottom", "top"),
                      ribsep=0.15, ribwid=0.05, ribn=1024,
                      ribscale=1, ribargs=list(), riblab=NULL, colargs=list(),
-                     useRaster=NULL, workaround=FALSE,
+                     useRaster=NULL, workaround=FALSE, zap=1,
                      do.plot=TRUE) {
     if(missing(main)) main <- short.deparse(substitute(x))
     verifyclass(x, "im")
@@ -331,7 +331,7 @@ plot.im <- local({
                vrange <- range(imagebreaks)
                col <- s$outputs
              } 
-             trivial <- (diff(vrange) <= .Machine$double.eps)
+             trivial <- (diff(vrange) <= zap * .Machine$double.eps)
              #' ribbonvalues: domain of colour map (pixel values)
              #' ribbonrange: (min, max) of pixel values in image
              #' nominalrange: range of values shown on ribbon 

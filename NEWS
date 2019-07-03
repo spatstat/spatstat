@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.60-1.003
+        CHANGES IN spatstat VERSION 1.60-1.004
 
 OVERVIEW
 
@@ -9,6 +9,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o plot.im
     Axes are now prevented from extending outside the image rectangle.
+
+    o plot.im
+    New argument 'zap'.
     
 BUG FIXES
 
