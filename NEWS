@@ -1,10 +1,15 @@
 
-        CHANGES IN spatstat VERSION 1.60-1.002
+        CHANGES IN spatstat VERSION 1.60-1.003
 
 OVERVIEW
 
     o Bug fixes and minor improvements.
 
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o plot.im
+    Axes are now prevented from extending outside the image rectangle.
+    
 BUG FIXES
 
     o localKcross.inhom, localLcross.inhom

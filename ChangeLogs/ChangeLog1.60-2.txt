@@ -51,7 +51,19 @@ Change log from 1.60-1 to 1.60-2
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+03 july 2019
+
+   plot.im.R
+	Axes are prevented from extending outside the image rectangle
+
+   DESCRIPTION
+   NEWS
+	Version 1.60-1.003
 	
+------------- passed R-3.6.0 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
 
    
 

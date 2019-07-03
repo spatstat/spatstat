@@ -1,7 +1,7 @@
 #
 #   plot.im.R
 #
-#  $Revision: 1.128 $   $Date: 2019/06/10 06:07:10 $
+#  $Revision: 1.129 $   $Date: 2019/07/03 01:05:58 $
 #
 #  Plotting code for pixel images
 #
@@ -98,8 +98,8 @@ plot.im <- local({
     if(box)
       rect(xr[1], yr[1], xr[2], yr[2])
     if(axes) {
-      px <- pretty(xr)
-      py <- pretty(yr)
+      px <- prettyinside(xr)
+      py <- prettyinside(yr)
       do.call.plotfun(graphics::axis,
                       resolve.defaults(
                                        list(side=1, at=px), 
