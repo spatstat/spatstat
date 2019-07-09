@@ -5,7 +5,7 @@
 #
 #   original code by Abdollah Jalilian
 #
-#  $Revision: 1.20 $    $Date: 2019/03/29 06:46:01 $
+#  $Revision: 1.21 $    $Date: 2019/07/09 09:52:18 $
 #
 
 rLGCP <- local({
@@ -84,7 +84,7 @@ rLGCP <- local({
     result <- vector(mode="list", length=nsim)
     for(i in 1:nsim) {
       ## Extract i-th realisation of Z; convert to log-Gaussian image
-      Lambda[] <- exp(muxy + z[,,i])
+      Lambda$v[] <- exp(muxy + z[,,i])
       ## generate Poisson points
       X <- rpoispp(Lambda)[win]
       ## 

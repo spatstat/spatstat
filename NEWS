@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.60-1.004
+        CHANGES IN spatstat VERSION 1.60-1.005
 
 OVERVIEW
 
@@ -12,13 +12,17 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o plot.im
     New argument 'zap'.
-    
+
 BUG FIXES
 
     o localKcross.inhom, localLcross.inhom
     Argument lambdaX was ignored.
     Fixed.
 
+    o rLGCP
+    Crashed if 'win' was not a rectangle and 'mu' was not a constant.
+    Fixed.
+    
         CHANGES IN spatstat VERSION 1.60-1
 
 OVERVIEW

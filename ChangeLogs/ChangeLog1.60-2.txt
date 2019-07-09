@@ -76,4 +76,13 @@ Change log from 1.60-1 to 1.60-2
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+   rLGCP.R
+	Bug fix (temporary)
 
+   DESCRIPTION
+   NEWS
+	Version 1.60-1.005
+	
+------------- passed R-3.6.0 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
