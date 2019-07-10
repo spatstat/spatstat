@@ -70,7 +70,7 @@ densityVoronoi.lpp <- function(X, f = 1, ..., nrep = 1, verbose = TRUE){
       }
       v <- tile.lengths(tes)
       tilevalueslist[[i]] <- num/v
-      dflist[[i]] <- rslt$df
+      dflist[[i]] <- tes$df
     }
   }
   #' Make the result into a function on the linear network 
