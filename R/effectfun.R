@@ -1,7 +1,7 @@
 #
 #  effectfun.R
 #
-#   $Revision: 1.22 $ $Date: 2019/03/14 07:52:51 $
+#   $Revision: 1.23 $ $Date: 2019/07/10 08:58:46 $
 #
 
 effectfun <- local({
@@ -123,8 +123,13 @@ effectfun <-  function(model, covname, ..., se.fit=FALSE, nvalues=256) {
   fakeloc <- resolve.defaults(dotargs,
                               list(x=0, y=0))[c("x","y")]
   if(is.marked.ppm(model)) {
-    lev <- levels(marks(data.ppm(model)))
-    fakeloc$marks <- lev[1L]
+    if("marks" %in% names(dotargs)) {
+      fakeloc$marks <- dotargs$marks
+      dotargs <- dotargs[names(dotargs) != "marks"]
+    } else {
+      lev <- levels(marks(data.ppm(model)))
+      fakeloc$marks <- lev[1L]
+    }
   }
   fakeloc <- lapply(fakeloc, padout, N=N)
   fakecov <- lapply(dotargs, padout, N=N)

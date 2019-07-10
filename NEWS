@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.60-1.005
+        CHANGES IN spatstat VERSION 1.60-1.006
 
 OVERVIEW
 
@@ -19,6 +19,11 @@ BUG FIXES
     Argument lambdaX was ignored.
     Fixed.
 
+    o effectfun
+    In a multitype point process model, effectfun() ignored any
+    user-specified value of 'marks'.
+    Fixed.
+    
     o rLGCP
     Crashed if 'win' was not a rectangle and 'mu' was not a constant.
     Fixed.

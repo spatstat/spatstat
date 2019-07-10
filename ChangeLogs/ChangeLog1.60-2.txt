@@ -76,12 +76,27 @@ Change log from 1.60-1 to 1.60-2
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+9 july 2019
+
    rLGCP.R
 	Bug fix (temporary)
 
    DESCRIPTION
    NEWS
 	Version 1.60-1.005
+	
+------------- passed R-3.6.0 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+10 july 2019
+
+   effectfun.R
+	Bug fix in marked case
+
+   DESCRIPTION
+   NEWS
+	Version 1.60-1.006
 	
 ------------- passed R-3.6.0 CMD check ---------------
 ------------- installed on laptop      ---------------
