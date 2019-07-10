@@ -29,9 +29,17 @@ densityVoronoi.lpp <- function(X, f = 1, ..., nrep = 1, verbose = TRUE){
   }
   if(f == 1) {
     #' Voronoi estimate
-    tes <- lineardirichlet(X)
+    if(!anyDuplicated(X)) {
+      tes <- lineardirichlet(X)
+      num <- 1
+    } else {
+      UX <- unique(X)
+      tes <- lineardirichlet(UX)
+      idx <- nncross(X, UX, what="which")
+      num <- as.integer(table(factor(idx, levels=seq_len(npoints(UX)))))
+    }
     v <- tile.lengths(tes)
-    g <- as.linfun(tes, values=1/v, navalue=0)
+    g <- as.linfun(tes, values=num/v, navalue=0)
     if(what == "image") g <- as.linim(g, ...)
     return(g)
   }
@@ -51,8 +59,17 @@ densityVoronoi.lpp <- function(X, f = 1, ..., nrep = 1, verbose = TRUE){
       tilevalueslist[[i]] <- 0
       dflist[[i]]         <- blankentry
     } else {
-      rslt <- lineardirichlet(Xthin)
-      tilevalueslist[[i]] <- 1/tile.lengths(rslt)
+      if(!anyDuplicated(Xthin)) {
+        tes <- lineardirichlet(Xthin)
+        num <- 1
+      } else {
+        UXthin <- unique(Xthin)
+        tes <- lineardirichlet(UXthin)
+        idx <- nncross(Xthin, UXthin, what="which")
+        num <- as.integer(table(factor(idx, levels=seq_len(npoints(UXthin)))))
+      }
+      v <- tile.lengths(tes)
+      tilevalueslist[[i]] <- num/v
       dflist[[i]] <- rslt$df
     }
   }
