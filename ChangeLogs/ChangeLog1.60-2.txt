@@ -101,3 +101,24 @@ Change log from 1.60-1 to 1.60-2
 ------------- passed R-3.6.0 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
+
+12 july 2019
+
+   leverage.ppm.Rd
+   influence.ppm.Rd
+   dfbetas.ppm.Rd
+   dffit.ppm.Rd
+	Updated citations
+
+13 july 2019
+
+   shapefiles.Rnw
+	Added caveat about lat-long coordinates
+	
+   DESCRIPTION
+   NEWS
+	Version 1.60-1.007
+	
+------------- passed R-3.6.0 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------

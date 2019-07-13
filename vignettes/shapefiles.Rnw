@@ -86,6 +86,37 @@ in \R. These standard data types can be handled by many other packages,
 so it is useful to convert your spatial data into one of the 
 data types supported by \pkg{sp}.
 
+\section{Caveat about longitude-latitude coordinates}
+
+The shapefile format supports geographical coordinates, usually 
+longitude-latitude coordinates, which specify locations on the curved surface of
+the Earth. 
+However, \texttt{spatstat} deals only with spatial data on 
+a flat two-dimensional plane. 
+
+When shapefile data are converted into \texttt{spatstat} objects,
+longitude and latitude coordinates are (currently)
+treated as $x$ and $y$ coordinates,
+so that the Earth's surface is effectively mapped to a rectangle.
+This mapping distorts distances and areas. 
+
+If your study region is a \emph{small} region of the Earth's surface 
+(about 3 degrees, 180 nautical miles, 200 statute miles, 320 km across) then
+a reasonable approach is to use the latitude and longitude as 
+$x$ and $y$ coordinates, after multiplying the longitude coordinates by the 
+cosine of the latitude of the centre of the region. This will
+approximately preserve areas and distances. 
+This calculation is a simple example of 
+a \emph{geographical projection} and there are some much better 
+projections available. It may be wise to use another package
+to perform the appropriate projection for you, and then to convert
+the projected data into \texttt{spatstat} objects.
+
+If your study region is a large part of the sphere, then your data 
+may not be amenable to the techniques provided by \texttt{spatstat}
+because the geometry is fundamentally different.
+Please consider the extension package \texttt{spatstat.sphere}.
+
 \section{How to read shapefiles into \pkg{spatstat}} 
 
 To read shapefile data into \pkg{spatstat}, you follow two steps:
