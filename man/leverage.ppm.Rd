@@ -42,7 +42,8 @@ leverage(model, \dots)
   
   Given a fitted spatial point process model \code{model},
   the function \code{leverage.ppm} computes the leverage of the model,
-  described in Baddeley, Chang and Song (2013).
+  described in Baddeley, Chang and Song (2013)
+  and Baddeley, Rubak and Turner (2019).
   
   The leverage of a spatial point process model
   is a function of spatial location, and is typically
@@ -86,6 +87,10 @@ leverage(model, \dots)
   Baddeley, A., Chang, Y.M. and Song, Y. (2013)
   Leverage and influence diagnostics for spatial point process models.
   \emph{Scandinavian Journal of Statistics} \bold{40}, 86--104.
+  
+  Baddeley, A., Rubak, E. and Turner, R. (2019)
+  Leverage and influence diagnostics for Gibbs spatial point processes.
+  \emph{Spatial Statistics} \bold{29}, {15--48}.
 }
 \author{
   \spatstatAuthors.

@@ -40,16 +40,15 @@ dffit(object, \dots)
 
   For a spatial point process model, \code{dffit} computes
   the analogous spatial case deletion diagnostic, described in
-  Baddeley, Rubak and Turner (2018).
+  Baddeley, Rubak and Turner (2019).
 }
 \value{
   A measure (object of class \code{"msr"}).
 }
 \references{
-  Baddeley, A., Rubak, E. and Turner, R. (2018)
-  \emph{Leverage and influence diagnostics for Gibbs spatial point
-    processes}.
-  In preparation.
+  Baddeley, A., Rubak, E. and Turner, R. (2019)
+  Leverage and influence diagnostics for Gibbs spatial point processes.
+  \emph{Spatial Statistics} \bold{29}, {15--48}.
 }
 \author{
   \spatstatAuthors.
