@@ -122,3 +122,27 @@ Change log from 1.60-1 to 1.60-2
 ------------- passed R-3.6.0 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
+
+15 july 2019
+
+   blur.R
+   blur.Rd
+	Added formal argument 'kernel'
+	
+   quickndirty.R [New file]
+   densityQuick.lpp.Rd [New file]
+   spatstat-internal.Rd
+         New function densityQuick.lpp
+
+   density.lpp.R
+   density.lpp.Rd 
+	New argument 'distance'
+
+   DESCRIPTION
+   NEWS
+	Version 1.60-1.008
+
+------------- passed R-3.6.0 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+

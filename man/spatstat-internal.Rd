@@ -526,6 +526,7 @@
 \alias{print.yardstick}
 \alias{project3Dhom}
 \alias{putlastshift}
+\alias{qkdeEngine}
 \alias{qtPrepareCoordinate}
 \alias{quad}
 \alias{quad.mppm}
@@ -1419,6 +1420,10 @@ prepareTitle(main)
 \method{print}{yardstick}(x, \dots)
 project3Dhom(xyz, eye, org, vert)
 putlastshift(X, vec)
+qkdeEngine(X, sigma, \dots, at, what,
+           leaveoneout, diggle, raw, edge2D, edge,
+           weights, varcov, positive, shortcut,
+           precomputed, savecomputed) 
 qtPrepareCoordinate(covname, W, origin)
 quad(data, dummy, w, param)
 quad.mppm(x)

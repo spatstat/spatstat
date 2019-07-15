@@ -6,9 +6,11 @@
   Applies a Gaussian blur to a pixel image.
 }
 \usage{
-blur(x, sigma = NULL, ..., normalise=FALSE, bleed = TRUE, varcov=NULL)
+blur(x, sigma = NULL, \dots,
+     kernel="gaussian", normalise=FALSE, bleed = TRUE, varcov=NULL)
 
-\method{Smooth}{im}(X, sigma = NULL, ...,
+\method{Smooth}{im}(X, sigma = NULL, \dots,
+                    kernel="gaussian",
                     normalise=FALSE, bleed = TRUE, varcov=NULL)
 }
 \arguments{
@@ -18,6 +20,11 @@ blur(x, sigma = NULL, ..., normalise=FALSE, bleed = TRUE, varcov=NULL)
   }
   \item{\dots}{
     Ignored.
+  }
+  \item{kernel}{
+    String (partially matched) specifying the smoothing kernel.
+    Current options are \code{"gaussian"}, \code{"epanechnikov"},
+    \code{"quartic"} or \code{"disc"}.
   }
   \item{normalise}{
     Logical flag indicating whether the output values should be divided
@@ -82,7 +89,6 @@ blur(x, sigma = NULL, ..., normalise=FALSE, bleed = TRUE, varcov=NULL)
   \code{\link{Smooth.ppp}} for interpolating marks attached to points.
 }
 \examples{
-   data(letterR)
    Z <- as.im(function(x,y) { 4 * x^2 + 3 * y }, letterR)
    par(mfrow=c(1,3))
    plot(Z)
@@ -93,11 +99,9 @@ blur(x, sigma = NULL, ..., normalise=FALSE, bleed = TRUE, varcov=NULL)
    plot(letterR, add=TRUE)
    par(mfrow=c(1,1))
 }
-\author{\adrian
-  
-  
+\author{
+  \adrian
   and \rolf
-  
 }
 \keyword{spatial}
 \keyword{nonparametric}

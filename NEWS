@@ -1,15 +1,31 @@
 
-        CHANGES IN spatstat VERSION 1.60-1.007
+        CHANGES IN spatstat VERSION 1.60-1.008
 
 OVERVIEW
 
+    o Fast kernel estimation on a linear network.
+    
     o Bug fixes and minor improvements.
 
+NEW FUNCTIONS
+
+    o densityQuick.lpp
+    Fast kernel estimator of point process intensity on a network.
+    
 SIGNIFICANT USER-VISIBLE CHANGES
+
+    o density.lpp
+    New argument 'distance' offers a choice of different kernel methods.
 
     o plot.im
     Axes are now prevented from extending outside the image rectangle.
 
+    o blur
+    New argument 'kernel'.
+    
+    o Smooth.im
+    New argument 'kernel'.
+    
     o plot.im
     New argument 'zap'.
 

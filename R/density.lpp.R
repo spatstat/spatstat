@@ -6,16 +6,21 @@
 #'    Copyright (C) 2017 Greg McSwiggan and Adrian Baddeley
 #'
 
-density.lpp <- function(x, sigma, ...,
+density.lpp <- function(x, sigma=NULL, ...,
                         weights=NULL,
+                        distance=c("path", "euclidean"),
                         kernel="gaussian", 
                         continuous=TRUE,
                         epsilon=1e-6,
                         verbose=TRUE, debug=FALSE, savehistory=TRUE,
                         old=FALSE) {
   stopifnot(inherits(x, "lpp"))
-  kernel <- match.kernel(kernel)
+  distance <- match.arg(distance)
 
+  if(distance == "euclidean") 
+    return(densityQuick.lpp(x, sigma, ..., kernel=kernel, weights=weights))
+  
+  kernel <- match.kernel(kernel)
   if(continuous && (kernel == "gaussian") && !old)
      return(PDEdensityLPP(x, sigma, ..., weights=weights))
 
@@ -177,7 +182,7 @@ density.lpp <- function(x, sigma, ...,
   return(out)
 }
 
-density.splitppx <- function(x, sigma, ...) {
+density.splitppx <- function(x, sigma=NULL, ...) {
   if(!all(sapply(x, is.lpp)))
     stop("Only implemented for patterns on a linear network")
   solapply(x, density.lpp, sigma=sigma, ...)

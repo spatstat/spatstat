@@ -9,15 +9,16 @@
   by applying kernel smoothing to the point pattern data.
 }
 \usage{
-\method{density}{lpp}(x, sigma, \dots,
+\method{density}{lpp}(x, sigma=NULL, \dots,
         weights=NULL,
+        distance=c("path", "euclidean"),
         kernel="gaussian",
         continuous=TRUE,
         epsilon = 1e-06, verbose = TRUE,
         debug = FALSE, savehistory = TRUE,
         old=FALSE)
 
-\method{density}{splitppx}(x, sigma, \dots)
+\method{density}{splitppx}(x, sigma=NULL, \dots)
 }
 \arguments{
   \item{x}{
@@ -36,6 +37,11 @@
     Optional. Numeric vector of weights associated with the
     points of \code{x}. Weights may be positive, negative or zero.
   }
+  \item{distance}{
+    Character string (partially matched) specifying whether to use
+    a kernel based on paths in the network (\code{distance="path"}, the default)
+    or a two-dimensional kernel (\code{distance="euclidean"}). 
+  }
   \item{kernel}{
     Character string specifying the smoothing kernel.
     See \code{\link{dkernel}} for possible options.
@@ -44,7 +50,7 @@
     Logical value indicating whether to compute the
     \dQuote{equal-split continuous} smoother (\code{continuous=TRUE}, the
     default) or the \dQuote{equal-split discontinuous} smoother
-    (\code{continuous=FALSE}).
+    (\code{continuous=FALSE}). Applies only when \code{distance="path"}.
   }
   \item{epsilon}{
     Tolerance value. A tail of the kernel with total mass
@@ -67,34 +73,48 @@
 }
 \details{
   Kernel smoothing is applied to the points of \code{x}
-  using one of the rules described in Okabe and Sugihara (2012)
-  and McSwiggan et al (2016).
+  using either a kernel based on path distances in the network,
+  or a two-dimensional kernel.
   The result is a pixel image on the linear network (class
   \code{"linim"}) which can be plotted.
 
-  If \code{continuous=TRUE} (the default), smoothing is performed
-  using the \dQuote{equal-split continuous} rule described in
-  Section 9.2.3 of Okabe and Sugihara (2012).
-  The resulting function is continuous on the linear network.
-
-  If \code{continuous=FALSE}, smoothing is performed
-  using the \dQuote{equal-split discontinuous} rule described in
-  Section 9.2.2 of Okabe and Sugihara (2012). The
-  resulting function is not continuous.
-
-  In the default case
-  (where \code{continuous=TRUE} and \code{kernel="gaussian"}
-  and \code{old=FALSE}),
-  computation is performed rapidly by solving the classical heat equation
-  on the network, as described in McSwiggan et al (2016).
-  Computational time is short, but increases quadratically with \code{sigma}.
-  The arguments \code{epsilon,debug,verbose,savehistory} are ignored.
-  
-  In all other cases, computation is performed by path-tracing
-  as described in Okabe and Sugihara (2012);
-  computation can be extremely slow, and time
-  increases exponentially with \code{sigma}.
-
+  \itemize{
+    \item If \code{distance="path"} (the default)
+    then the smoothing is performed
+    using a kernel based on path distances in the network, as described in
+    described in Okabe and Sugihara (2012) and McSwiggan et al (2016).
+    \itemize{
+      \item
+      If \code{continuous=TRUE} (the default), smoothing is performed
+      using the \dQuote{equal-split continuous} rule described in
+      Section 9.2.3 of Okabe and Sugihara (2012).
+      The resulting function is continuous on the linear network.
+      \item
+      If \code{continuous=FALSE}, smoothing is performed
+      using the \dQuote{equal-split discontinuous} rule described in
+      Section 9.2.2 of Okabe and Sugihara (2012). The
+      resulting function is not continuous.
+      \item
+      In the default case
+      (where \code{distance="path"} and
+      \code{continuous=TRUE} and \code{kernel="gaussian"}
+      and \code{old=FALSE}),
+      computation is performed rapidly by solving the classical heat equation
+      on the network, as described in McSwiggan et al (2016).
+      Computational time is short, but increases quadratically
+      with \code{sigma}.
+      The arguments \code{epsilon,debug,verbose,savehistory} are ignored.
+      \item
+      In all other cases, computation is performed by path-tracing
+      as described in Okabe and Sugihara (2012);
+      computation can be extremely slow, and time
+      increases exponentially with \code{sigma}.
+    }
+    \item If \code{distance="euclidean"}, the smoothing is performed
+    using a two-dimensional kernel. The arguments are passed to
+    \code{\link{densityQuick.lpp}} to perform the computation.
+    See the help for \code{\link{densityQuick.lpp}} for further details.
+  }
   There is also a method for split point patterns on a linear network
   (class \code{"splitppx"}) which will return a list of pixel images.
 }
@@ -106,7 +126,6 @@ McSwiggan, G., Baddeley, A. and Nair, G. (2016)
 Kernel density estimation on a linear network.
 \emph{Scandinavian Journal of Statistics} \bold{44}, 324--345.
 
-
 Okabe, A. and Sugihara, K. (2012)
   \emph{Spatial analysis along networks}.
   Wiley.
@@ -116,7 +135,8 @@ Okabe, A. and Sugihara, K. (2012)
 }
 \seealso{
   \code{\link{lpp}},
-  \code{\link{linim}}
+  \code{\link{linim}},
+  \code{\link{densityQuick.lpp}}
 }
 \examples{
   X <- runiflpp(3, simplenet)
