@@ -146,3 +146,21 @@ Change log from 1.60-1 to 1.60-2
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+17 july 2019
+
+   tests/undoc.R
+	Added tests of fft2D and internal code
+
+   tests/ppp.R
+	Added tests of [<-.ppp
+
+   tests/ppm.R
+	Added tests of internal code
+
+   DESCRIPTION
+   NEWS
+	Version 1.60-1.009
+
+------------- passed R-3.6.0 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------

@@ -877,7 +877,7 @@ local({
 #
 #  tests/undoc.R
 #
-#   $Revision: 1.8 $   $Date: 2019/07/01 08:38:48 $
+#   $Revision: 1.9 $   $Date: 2019/07/17 11:47:35 $
 #
 #  Test undocumented hacks, etc
 
@@ -930,6 +930,12 @@ local({
   is.imlist(DB)
   ## case of density.ppplist 
   DEB <- density(BB, se=TRUE)
+  
+  ## fft
+  z <- matrix(1:16, 4, 4)
+  a <- fft2D(z, west=FALSE)
+  if(fftwAvailable())
+    b <- fft2D(z, west=TRUE)
 })
 
 
