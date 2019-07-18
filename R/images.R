@@ -1,7 +1,7 @@
 #
 #       images.R
 #
-#      $Revision: 1.154 $     $Date: 2019/02/22 09:16:49 $
+#      $Revision: 1.155 $     $Date: 2019/07/18 02:32:56 $
 #
 #      The class "im" of raster images
 #
@@ -422,7 +422,7 @@ update.im <- function(object, ...) {
   return(X)
 }
 
-"[<-.im" <- function(x, i, j, value) {
+"[<-.im" <- function(x, i, j, ..., drop=TRUE, value) {
   # detect 'blank' arguments like second argument of x[i, ] 
   ngiven <- length(sys.call())
   nmatched <- length(match.call())
@@ -445,14 +445,23 @@ update.im <- function(object, ...) {
     value <- value$v
 
   if(itype == "missing" && jtype == "missing") {
-    # no index provided
-    # set all pixels to 'value'
+    #' no index provided
+    #' set all pixels to 'value'
+    #' (if drop=TRUE, this applies only to pixels inside the window)
     v <- X$v
     if(!is.factor(value)) {
-      v[!is.na(v)] <- value
+      if(!drop) {
+        v[] <- value
+      } else {
+        v[!is.na(v)] <- value
+      }
     } else {
       vnew <- matrix(NA_integer_, ncol(v), nrow(v))
-      vnew[!is.na(v)] <- as.integer(value)
+      if(!drop) {
+        vnew[] <- as.integer(value)
+      } else {
+        vnew[!is.na(v)] <- as.integer(value)
+      }
       v <- factor(vnew, labels=levels(value))
     }
     X$v <- v

@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.60-1.009
+        CHANGES IN spatstat VERSION 1.60-1.010
 
 OVERVIEW
 
@@ -14,6 +14,10 @@ NEW FUNCTIONS
     
 SIGNIFICANT USER-VISIBLE CHANGES
 
+    o [<-.im
+    New argument 'drop' controls behaviour when indices are missing
+    as in 'x[] <- value'
+    
     o density.lpp
     New argument 'distance' offers a choice of different kernel methods.
 

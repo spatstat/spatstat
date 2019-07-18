@@ -164,3 +164,18 @@ Change log from 1.60-1 to 1.60-2
 ------------- passed R-3.6.0 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
+
+18 july 2019
+
+   images.R
+   Replace.im.Rd
+       [<-.im has new argument 'drop'.
+
+
+   DESCRIPTION
+   NEWS
+	Version 1.60-1.010
+
+------------- passed R-3.6.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------

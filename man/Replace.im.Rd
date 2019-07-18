@@ -5,7 +5,7 @@
   Reset the values in a subset of a pixel image.
 }
 \usage{
-  \method{[}{im}(x, i, j) <- value
+  \method{[}{im}(x, i, j, \dots, drop=TRUE) <- value
 }
 \arguments{
   \item{x}{
@@ -25,6 +25,11 @@
     if matrix indexing is being used.  Ignored if \code{i} is
     appropriate to some sort of replacement \emph{other than}
     matrix indexing.
+  }
+  \item{\dots}{Ignored.}
+  \item{drop}{
+    Logical value specifying what happens when \code{i} and \code{j}
+    are both missing. See Details.
   }
   \item{value}{
      Vector, matrix, factor or pixel image
@@ -71,6 +76,23 @@
   by \code{\link{as.ppp}(i, W=Window(x))}.
   Again the values of the pixel image at the points of
   this pattern are changed.
+
+  If \code{i} and \code{j} are both missing, as in the call
+  \code{x[] <- value}, then all pixel values in \code{x}
+  are replaced by \code{value}:
+  \itemize{
+    \item
+    If \code{drop=TRUE} (the default), then
+    this replacement applies only to pixels whose values are currently defined
+    (i.e. where the current pixel value is not \code{NA}).
+    If \code{value} is a vector, then its length must equal
+    the number of pixels whose values are currently defined.
+    \item
+    If \code{drop=FALSE} then the replacement applies to all
+    pixels inside the rectangle \code{Frame(x)}.
+    If \code{value} is a vector, then its length 
+    must equal the number of pixels in the entire rectangle.
+  }
 }
 \section{Warning}{
   If you have a 2-column matrix containing the \eqn{x,y} coordinates
@@ -122,12 +144,23 @@
  X[cbind(1:257,1:257)] <- 10
  X[cbind(257:1,1:257)] <- 10
  plot(X)
+
+ # Blank indices
+ Y <- as.im(letterR)
+ plot(Y)
+ Y[] <- 42  # replace values only inside the window 'R'
+ plot(Y)
+ Y[drop=FALSE] <- 7 # replace all values in the rectangle
+ plot(Y)
+
+ Z <- as.im(letterR)
+ Z[] <- raster.x(Z, drop=TRUE) # excludes NA
+ plot(Z)
+ Z[drop=FALSE] <- raster.y(Z, drop=FALSE) # includes NA
+ plot(Z)
 }
-\author{\adrian
-  
-  
-  and \rolf
-  
+\author{
+  \spatstatAuthors.
 }
 \keyword{spatial}
 \keyword{manip}
