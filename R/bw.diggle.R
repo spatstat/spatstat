@@ -6,12 +6,19 @@
 ## $Revision: 1.5 $ $Date: 2017/06/05 10:31:58 $
 ##
 
-bw.scott <- function(X) {
-  stopifnot(is.ppp(X))
-  n <- npoints(X)
-  sdx <- sqrt(var(X$x))
-  sdy <- sqrt(var(X$y))
-  return(c(sigma.x=sdx, sigma.y=sdy) * n^(-1/6))
+bw.scott <- function(X, isotropic=FALSE, d=NULL) {
+  stopifnot(is.ppp(X) || is.lpp(X) || is.pp3(X) || is.ppx(X))
+  if(is.null(d)) { d <- spatdim(X, intrinsic=FALSE) } else check.1.integer(d)
+  nX <- npoints(X)
+  cX <- coords(X, spatial=TRUE, temporal=FALSE, local=FALSE)
+  sdX <- apply(cX, 2, sd)
+  if(isotropic) {
+    #' geometric mean
+    sdX <- exp(mean(log(pmax(sdX, .Machine$double.eps))))
+  }
+  b <- sdX * nX^(-1/(d+4))
+  names(b) <- if(isotropic) "sigma" else paste0("sigma.", colnames(cX))
+  return(b)
 }
 
 bw.diggle <- local({

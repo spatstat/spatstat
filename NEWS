@@ -1,12 +1,16 @@
 
-        CHANGES IN spatstat VERSION 1.60-1.010
+        CHANGES IN spatstat VERSION 1.60-1.011
 
 OVERVIEW
 
     o Fast kernel estimation on a linear network.
+
+    o Extension of Scott's rule for bandwidth selection.
     
     o Bug fixes and minor improvements.
 
+    o Nickname: 'Breakfast of Champions'
+    
 NEW FUNCTIONS
 
     o densityQuick.lpp
@@ -17,9 +21,13 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o [<-.im
     New argument 'drop' controls behaviour when indices are missing
     as in 'x[] <- value'
-    
+
     o density.lpp
     New argument 'distance' offers a choice of different kernel methods.
+
+    o bw.scott
+    Now handles point patterns of any dimension.
+    New arguments 'isotropic' and 'd'.
 
     o plot.im
     Axes are now prevented from extending outside the image rectangle.

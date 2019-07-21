@@ -5,10 +5,16 @@
   Extracts the spatial dimension of an object in the
   \pkg{spatstat} package.
 }
-\usage{spatdim(X)}
+\usage{spatdim(X, intrinsic=FALSE)}
 \arguments{
-  \item{X}{Object belonging to any class defined in the
-    \pkg{spatstat} package.}
+  \item{X}{
+    Object belonging to any class defined in the
+    \pkg{spatstat} package.
+  }
+  \item{intrinsic}{
+    Logical value indicating whether to return the
+    number of intrinsic dimensions. See Details.
+  }
 }
 \value{
   An integer, or \code{NA}.
@@ -29,19 +35,26 @@
   }
   Note that time dimensions are not counted.
 
+  Some spatial objects are lower-dimensional subsets of the
+  space in which they live. This lower number of dimensions
+  is returned if \code{intrinsic=TRUE}. For example, a dataset
+  on a linear network
+  (an object \code{X} of class \code{"linnet", "lpp", "linim", "linfun"}
+  or \code{"lintess"}) returns \code{spatdim(X) = 2} but
+  \code{spatdim(X, intrinsic=TRUE) = 1}.
+  
   If \code{X} is not a recognised spatial object, the result is \code{NA}.
 }
 \author{
-  \adrian
-  
-  
-  \rolf
-  
-  and \ege
-  
+  \spatstatAuthors.
 }
 \examples{
   spatdim(lansing)
+  A <- osteo$pts[[1]]
+  spatdim(A)
+  spatdim(domain(A))
+  spatdim(chicago)
+  spatdim(chicago, intrinsic=TRUE)
 }
 
 

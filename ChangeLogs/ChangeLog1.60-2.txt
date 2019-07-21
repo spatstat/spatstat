@@ -171,10 +171,30 @@ Change log from 1.60-1 to 1.60-2
    Replace.im.Rd
        [<-.im has new argument 'drop'.
 
-
    DESCRIPTION
    NEWS
 	Version 1.60-1.010
+
+------------- passed R-3.6.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+21 july 2019
+
+   ppx.R
+   spatdim.Rd
+	spatdim has new argument 'intrinsic'
+
+   bw.diggle.R
+   bw.scott.Rd
+	bw.scott handles point patterns of any dimension
+	and has new arguments 'isotropic', 'd'
+
+   DESCRIPTION
+   NEWS
+   Nickname.txt
+        Nickname changed to 'Breakfast of Champions'
+	Version 1.60-1.011
 
 ------------- passed R-3.6.1 CMD check ---------------
 ------------- installed on laptop      ---------------

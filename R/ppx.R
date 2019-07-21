@@ -3,7 +3,7 @@
 #
 #  class of general point patterns in any dimension
 #
-#  $Revision: 1.62 $  $Date: 2019/01/02 07:56:32 $
+#  $Revision: 1.63 $  $Date: 2019/07/21 06:33:14 $
 #
 
 ppx <- local({
@@ -537,9 +537,13 @@ inside.boxx <- function(..., w = NULL){
 }
 
 
-spatdim <- function(X) {
+spatdim <- function(X, intrinsic=FALSE) {
+  if(intrinsic) {
+    if(inherits(X, c("lpp", "linnet", "linim", "linfun", "lintess"))) return(1L)
+    if(inherits(X, c("s2pp", "s2", "s2region"))) return(2L)
+  }
   if(is.sob(X)) 2L else
-  if(inherits(X, "box3")) 3 else
+  if(inherits(X, "box3")) 3L else
   if(inherits(X, "boxx")) length(X$ranges) else 
   if(is.ppx(X)) as.integer(sum(X$ctype == "spatial")) else NA_integer_
 }
