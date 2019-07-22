@@ -26,7 +26,8 @@ densityQuick.lpp(X, sigma=NULL, \dots,
     Smoothing bandwidth. A single numeric value,
     in the same units as the coordinates of \code{X}.
     Alternatively \code{sigma} may be a function which selects a
-    bandwidth.
+    bandwidth when applied to \code{X},
+    for example, \code{\link{bw.scott.iso}}.
   }
   \item{\dots}{
     Additional arguments passed to \code{\link{as.mask}}
@@ -98,11 +99,17 @@ densityQuick.lpp(X, sigma=NULL, \dots,
 \author{
   Adrian Baddeley, Suman Rakshit and Tilman Davies
 }
-\seealso{\code{\link{density.lpp}}}
+\seealso{
+  \code{\link{density.lpp}}, the main function for density estimation
+  on a network.
+
+  \code{\link{bw.scott}}, \code{\link{bw.scott.iso}} for bandwidth selection.
+}
 \examples{
    X <- unmark(chicago)
    plot(densityQuick.lpp(X, 500))
    plot(densityQuick.lpp(X, 500, diggle=TRUE))
+   plot(densityQuick.lpp(X, bw.scott.iso))
    plot(densityQuick.lpp(X, 500, what="se"))
 }
 \keyword{spatial}

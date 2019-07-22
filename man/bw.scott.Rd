@@ -1,5 +1,6 @@
 \name{bw.scott}
 \alias{bw.scott}
+\alias{bw.scott.iso}
 \title{
   Scott's Rule for Bandwidth Selection for Kernel Density
 }
@@ -9,6 +10,8 @@
 }
 \usage{
    bw.scott(X, isotropic=FALSE, d=NULL)
+
+   bw.scott.iso(X)
 }
 \arguments{
   \item{X}{
@@ -28,10 +31,13 @@
   }
 }
 \details{
-  This function selects a bandwidth \code{sigma}
+  These functions select a bandwidth \code{sigma}
   for the kernel estimator of point process intensity
   computed by \code{\link{density.ppp}} or \code{\link{density.lpp}}
   or other appropriate functions.
+  They can be applied to a point pattern
+  belonging to any class \code{"ppp"}, \code{"lpp"}, \code{"pp3"}
+  or \code{"ppx"}.
 
   The bandwidth \eqn{\sigma}{\sigma} is computed by the rule of thumb
   of Scott (1992, page 152, equation 6.42). 
@@ -43,15 +49,14 @@
   than \code{\link{bw.diggle}}. It is useful for estimating
   gradual trend.
 
-  If \code{isotropic=FALSE} (the default), the rule provides a
+  If \code{isotropic=FALSE} (the default), \code{bw.scott} provides a
   separate bandwidth for each coordinate axis, and the result of the
   function is a vector, of length equal to the number of coordinates.
   If \code{isotropic=TRUE}, a single bandwidth value is computed
   and the result is a single numeric value.
-  
-  This function can be applied to a point pattern
-  belonging to any class \code{"ppp"}, \code{"lpp"}, \code{"pp3"}
-  or \code{"ppx"}.
+
+  \code{bw.scott.iso(X)} is equivalent to
+  \code{bw.scott(X, isotropic=TRUE)}.
 
   The default value of \eqn{d} is as follows:
   \tabular{ll}{
@@ -84,7 +89,7 @@
   \donttest{
    plot(density(hickory, b))
   }
-  bw.scott(hickory, isotropic=TRUE)
+  bw.scott.iso(hickory)
   bw.scott(chicago)
   bw.scott(osteo$pts[[1]])
 }

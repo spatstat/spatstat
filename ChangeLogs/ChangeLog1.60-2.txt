@@ -199,3 +199,24 @@ Change log from 1.60-1 to 1.60-2
 ------------- passed R-3.6.1 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
+
+22 july 2019
+
+   bw.diggle.R
+   bw.scott.R [New file]
+   bw.scott.Rd
+       Moved bw.scott to its own file.
+       New function bw.scott.iso
+
+   densityQuick.lpp.Rd
+	Added example of bandwidth selection
+
+   DESCRIPTION
+   NEWS
+	Version 1.60-1.012
+
+------------- passed R-3.6.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+

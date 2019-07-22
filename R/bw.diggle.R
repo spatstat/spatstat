@@ -1,25 +1,10 @@
 ##
 ## bw.diggle.R
 ##
-## bandwidth selection rules bw.diggle and bw.scott (for density.ppp)
+## bandwidth selection rule bw.diggle (for density.ppp)
 ##
-## $Revision: 1.5 $ $Date: 2017/06/05 10:31:58 $
+## $Revision: 1.6 $ $Date: 2019/07/22 11:40:05 $
 ##
-
-bw.scott <- function(X, isotropic=FALSE, d=NULL) {
-  stopifnot(is.ppp(X) || is.lpp(X) || is.pp3(X) || is.ppx(X))
-  if(is.null(d)) { d <- spatdim(X, intrinsic=FALSE) } else check.1.integer(d)
-  nX <- npoints(X)
-  cX <- coords(X, spatial=TRUE, temporal=FALSE, local=FALSE)
-  sdX <- apply(cX, 2, sd)
-  if(isotropic) {
-    #' geometric mean
-    sdX <- exp(mean(log(pmax(sdX, .Machine$double.eps))))
-  }
-  b <- sdX * nX^(-1/(d+4))
-  names(b) <- if(isotropic) "sigma" else paste0("sigma.", colnames(cX))
-  return(b)
-}
 
 bw.diggle <- local({
 

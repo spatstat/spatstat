@@ -1,9 +1,9 @@
 
-        CHANGES IN spatstat VERSION 1.60-1.011
+        CHANGES IN spatstat VERSION 1.60-1.012
 
 OVERVIEW
 
-    o Fast kernel estimation on a linear network.
+    o Fast kernel estimation on a linear network using 2D kernels.
 
     o Extension of Scott's rule for bandwidth selection.
     
@@ -14,13 +14,13 @@ OVERVIEW
 NEW FUNCTIONS
 
     o densityQuick.lpp
-    Fast kernel estimator of point process intensity on a network.
+    Fast kernel estimator of point process intensity on a network
+    using 2D smoothing kernel.
+
+    o bw.scott.iso
+    Isotropic version of Scott's rule (for point patterns in any dimension).
     
 SIGNIFICANT USER-VISIBLE CHANGES
-
-    o [<-.im
-    New argument 'drop' controls behaviour when indices are missing
-    as in 'x[] <- value'
 
     o density.lpp
     New argument 'distance' offers a choice of different kernel methods.
@@ -28,6 +28,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o bw.scott
     Now handles point patterns of any dimension.
     New arguments 'isotropic' and 'd'.
+
+    o [<-.im
+    New argument 'drop' controls behaviour when indices are missing
+    as in 'x[] <- value'
 
     o plot.im
     Axes are now prevented from extending outside the image rectangle.
