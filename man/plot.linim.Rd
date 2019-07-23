@@ -27,7 +27,7 @@
   }
   \item{\dots}{
     Extra graphical parameters, passed to \code{\link{plot.im}}
-    if \code{style="colour"}, or to \code{\link{polygon}}
+    if \code{style="colour"}, or to \code{\link[graphics]{polygon}}
     if \code{style="width"}.
   }
   \item{style}{
@@ -135,7 +135,7 @@
 \seealso{
   \code{\link{linim}},
   \code{\link{plot.im}},
-  \code{\link{polygon}}
+  \code{\link[graphics]{polygon}}
 }
 \references{
   Ang, Q.W., Baddeley, A. and Nair, G. (2012)

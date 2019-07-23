@@ -59,8 +59,9 @@
   \url{http://www.dominic.schuhmacher.name}
 }
 \seealso{
-  \code{\link{matchingdist}}
-  \code{\link{pppmatching}}
+  \code{\link{matchingdist}},
+  \code{\link{pppmatching}},
+  \code{\link{plot.pppmatching}}
 }
 \examples{
   # a random complete unweighted matching

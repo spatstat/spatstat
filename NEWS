@@ -1,12 +1,12 @@
 
-        CHANGES IN spatstat VERSION 1.60-1.012
+        CHANGES IN spatstat VERSION 1.60-1.013
 
 OVERVIEW
 
     o Fast kernel estimation on a linear network using 2D kernels.
 
     o Extension of Scott's rule for bandwidth selection.
-    
+
     o Bug fixes and minor improvements.
 
     o Nickname: 'Breakfast of Champions'
@@ -41,6 +41,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
     
     o Smooth.im
     New argument 'kernel'.
+
+    o plot.pppmatching
+    This existing function now has a help file.
+    New argument 'adjust'.
     
     o plot.im
     New argument 'zap'.
@@ -58,6 +62,10 @@ BUG FIXES
     
     o rLGCP
     Crashed if 'win' was not a rectangle and 'mu' was not a constant.
+    Fixed.
+    
+    o plot.pppmatching
+    Issued spurious warnings about unrecognised plot arguments.
     Fixed.
     
         CHANGES IN spatstat VERSION 1.60-1

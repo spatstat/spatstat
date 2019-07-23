@@ -181,7 +181,8 @@
   \url{http://www.dominic.schuhmacher.name}
 }
 \seealso{
-  \code{\link{pppmatching.object}}, \code{\link{matchingdist}}
+  \code{\link{pppmatching.object}}, \code{\link{matchingdist}},
+  \code{\link{plot.pppmatching}}
 }
 \examples{
 # equal cardinalities

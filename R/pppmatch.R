@@ -49,25 +49,28 @@ pppmatching <- function(X, Y, am, type = NULL, cutoff = NULL,
    res
 }
 
-plot.pppmatching <- function(x, addmatch = NULL, main = NULL, ...) {
+plot.pppmatching <- function(x, addmatch = NULL, main = NULL, ..., adjust=1) {
    if (is.null(main))
-      main <- short.deparse(substitute(x))
+     main <- short.deparse(substitute(x))
    pp1 <- x$pp1
    pp2 <- x$pp2
-   plot.owin(pp1$window, main = main, ...)
+   do.call.matched(plot.owin,
+                   list(x=pp1$window, main = main, ...),
+                   extrargs=graphicsPars("owin"))
    here <- which((x$matrix > 0), arr.ind = TRUE)
    if (!is.null(addmatch)) {
-      addhere <- which((addmatch > 0), arr.ind = TRUE)
-      seg <- as.psp(from=pp1[addhere[,1]], to=pp2[addhere[,2]])
-      plot(seg, add=TRUE, lty = 2, col="gray70")
+     stopifnot(is.matrix(addmatch))
+     addhere <- which((addmatch > 0), arr.ind = TRUE)
+     seg <- as.psp(from=pp1[addhere[,1]], to=pp2[addhere[,2]])
+     plot(seg, add=TRUE, lty = 2, col="gray70")
    }
    if (length(here) > 0) {
      seg <- as.psp(from=pp1[here[,1]], to=pp2[here[,2]])
      marks(seg) <- x$matrix[here]
-     plot(seg, add=TRUE, ..., style="width")
+     plot(seg, add=TRUE, ..., style="width", adjust=adjust)
    }
-   points(x$pp1, pch=20, col=2, ...)
-   points(x$pp2, pch=20, col=4, ...)
+   plot(x$pp1, add=TRUE, pch=20, col=2, ...)
+   plot(x$pp2, add=TRUE, pch=20, col=4, ...)
    return(invisible(NULL))
 }
 

@@ -219,4 +219,31 @@ Change log from 1.60-1 to 1.60-2
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+23 july 2019
 
+   pppmatching.R
+	Added argument 'adjust' to plot.pppmatching
+	and tightened handling of plotting arguments
+
+   plot.pppmatching.Rd [New file]
+   spatstat-internal.Rd
+	Documented existing plot.pppmatching
+
+   pppdist.Rd
+   pppmatching.Rd
+   pppmatching.object.Rd
+	Cross-referenced
+	
+   plot.linim.Rd
+	tweak
+
+   DESCRIPTION
+   NEWS
+	Version 1.60-1.013
+
+------------- passed R-3.6.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+
+   

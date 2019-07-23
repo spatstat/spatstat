@@ -422,7 +422,6 @@
 \alias{plot.minconfit}
 \alias{plot.parres}
 \alias{plot.plotpairsim}
-\alias{plot.pppmatching}
 \alias{plot.profilepl}
 \alias{plot.qqppm}
 \alias{plot.spatialcdf}
@@ -1303,7 +1302,6 @@ plotPolygonBdry(x, \dots)
 \method{plot}{lurk}(x, \dots, shade)
 \method{plot}{minconfit}(x, \dots)
 \method{plot}{parres}(x, \dots)
-\method{plot}{pppmatching}(x, addmatch = NULL, main = NULL, \dots)
 \method{plot}{plotpairsim}(x, \dots)
 \method{plot}{profilepl}(x, \dots, add, main, tag, coeff, xvariable,
                          col, lty, lwd, col.opt, lty.opt, lwd.opt)
