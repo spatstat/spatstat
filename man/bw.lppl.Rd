@@ -1,19 +1,20 @@
-\name{bw.ppl}
-\alias{bw.ppl}
+\name{bw.lppl}
+\alias{bw.lppl}
 \title{
-  Likelihood Cross Validation Bandwidth Selection for Kernel Density
+  Likelihood Cross Validation Bandwidth Selection for Kernel Density on
+  a Linear Network
 }
 \description{
   Uses likelihood cross-validation to select a smoothing bandwidth
-  for the kernel estimation of point process intensity.
+  for the kernel estimation of point process intensity on a linear network.
 }
 \usage{
-   bw.ppl(X, \dots, srange=NULL, ns=16, sigma=NULL, weights=NULL,
-          shortcut=FALSE)
+   bw.lppl(X, \dots, srange=NULL, ns=16, sigma=NULL, weights=NULL,
+           distance="euclidean", shortcut=FALSE)
 }
 \arguments{
   \item{X}{
-    A point pattern (object of class \code{"ppp"}).
+    A point pattern on a linear network (object of class \code{"lpp"}).
   }
   \item{srange}{
     Optional numeric vector of length 2 giving the
@@ -29,11 +30,14 @@
   }
   \item{weights}{
     Optional. Numeric vector of weights for the points of \code{X}.
-    Argument passed to \code{\link{density.ppp}}.
+    Argument passed to \code{\link{density.lpp}}.
+  }
+  \item{distance}{
+    Argument passed to \code{\link{density.lpp}} controlling the
+    type of kernel estimator. 
   }
   \item{\dots}{
-    Additional arguments passed to
-    \code{\link{density.ppp}}.
+    Additional arguments passed to \code{\link{density.lpp}}.
   }
   \item{shortcut}{
     Logical value indicating whether to speed up the calculation
@@ -43,15 +47,18 @@
 \details{
   This function selects an appropriate bandwidth \code{sigma}
   for the kernel estimator of point process intensity
-  computed by \code{\link{density.ppp}}.
+  computed by \code{\link{density.lpp}}.
+
+  The argument \code{X} should be a point pattern on a linear network
+  (class \code{"lpp"}).
 
   The bandwidth \eqn{\sigma}{\sigma} is chosen to 
   maximise the point process likelihood cross-validation criterion
   \deqn{
     \mbox{LCV}(\sigma) =
-    \sum_i \log\hat\lambda_{-i}(x_i) - \int_W \hat\lambda(u) \, {\rm d}u
+    \sum_i \log\hat\lambda_{-i}(x_i) - \int_L \hat\lambda(u) \, {\rm d}u
   }{
-    LCV(\sigma) = sum[i] log(\lambda[-i](x[i])) - integral[W] \lambda(u) du
+    LCV(\sigma) = sum[i] log(\lambda[-i](x[i])) - integral[L] \lambda(u) du
   }
   where the sum is taken over all the data points \eqn{x_i}{x[i]},
   where \eqn{\hat\lambda_{-i}(x_i)}{\lambda[-i](x_i)} is the
@@ -63,7 +70,7 @@
   See Loader(1999, Section 5.3).
 
   The value of \eqn{\mbox{LCV}(\sigma)}{LCV(\sigma)} is computed
-  directly, using \code{\link{density.ppp}}, 
+  directly, using \code{\link{density.lpp}}, 
   for \code{ns} different values of \eqn{\sigma}{\sigma}
   between \code{srange[1]} and \code{srange[2]}.
 
@@ -82,23 +89,20 @@
   which can be plotted.
 }
 \seealso{
-  \code{\link{density.ppp}},
-  \code{\link{bw.diggle}},
-  \code{\link{bw.scott}},
-  \code{\link{bw.CvL}},
-  \code{\link{bw.frac}}.
+  \code{\link{density.lpp}},
+  \code{\link{bw.scott}}.
 
-  For point patterns on a linear network, use \code{\link{bw.lppl}}.
+  For point patterns in two-dimensional space, use \code{\link{bw.ppl}}.
 }
 \examples{
   if(interactive()) {
-    b <- bw.ppl(redwood)
-    plot(b, main="Likelihood cross validation for redwoods")
-    plot(density(redwood, b))
+    b <- bw.lppl(spiders)
+    plot(b, main="Likelihood cross validation for spiders")
+    plot(density(spiders, b, distance="e"))
   }
   \testonly{
-    b1 <- bw.ppl(redwood, srange=c(0.03, 0.07), ns=2)
-    b2 <- bw.ppl(redwood, srange=c(0.03, 0.07), ns=2, shortcut=TRUE)
+    b1 <- bw.lppl(spiders, ns=2)
+    b2 <- bw.lppl(spiders, ns=2, shortcut=TRUE)
   }
 }
 \references{
@@ -107,7 +111,8 @@
   Springer, New York.
 }
 \author{
-  \spatstatAuthors.
+  Suman Rakshit.
+  Tweaks by \adrian.
 }
 \keyword{spatial}
 \keyword{methods}

@@ -245,5 +245,25 @@ Change log from 1.60-1 to 1.60-2
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+   bw.ppl.R
+   bw.ppl.Rd
+	New argument 'shortcut'
+	Dot arguments '...' are now passed to density.ppp
+	
+   bw.ppl.R
+   bw.lppl.Rd [New file]
+	New function bw.lppl
 
+   DESCRIPTION
+   NEWS
+	Version 1.60-1.014
+
+------------- passed R-3.6.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+
+
+
+	
    

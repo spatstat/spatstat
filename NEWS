@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.60-1.013
+        CHANGES IN spatstat VERSION 1.60-1.014
 
 OVERVIEW
 
@@ -7,6 +7,8 @@ OVERVIEW
 
     o Extension of Scott's rule for bandwidth selection.
 
+    o Cross-validated bandwidth selection on a linear network.
+    
     o Bug fixes and minor improvements.
 
     o Nickname: 'Breakfast of Champions'
@@ -29,6 +31,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
     Now handles point patterns of any dimension.
     New arguments 'isotropic' and 'd'.
 
+    o bw.ppl
+    New argument 'shortcut' allows faster computation.
+    Additional arguments '...' are now passed to density.ppp.
+    
     o [<-.im
     New argument 'drop' controls behaviour when indices are missing
     as in 'x[] <- value'
