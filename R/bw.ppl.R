@@ -6,7 +6,7 @@
 #'   bw.ppl    class ppp
 #'   bw.lppl   class lpp
 #' 
-#'   $Revision: 1.9 $ $Date: 2019/07/29 05:52:09 $
+#'   $Revision: 1.10 $ $Date: 2019/07/29 09:25:20 $
 #'
 
 bw.ppl <- function(X, ..., srange=NULL, ns=16, sigma=NULL,
@@ -64,20 +64,41 @@ bw.lppl <- function(X, ..., srange=NULL, ns=16, sigma=NULL,
   }
   cv <- numeric(ns)
   if(shortcut) {
+    #' omit calculation of integral term
+    #' precompute the geometry data
+    lam1 <- density(X, sigma=sigma[1], weights=weights, distance=distance, ...,
+                     savecomputed=TRUE)
+    precooked <- attr(lam1, "savedstuff")
     for(i in 1:ns) {
       si <- sigma[i]
       lamx <- density(X, sigma=si, at="points", leaveoneout=TRUE,
-                      weights=weights, distance=distance, ...)
+                      weights=weights, distance=distance,
+                      precomputed=precooked, ...)
+      lamx <- pmax(0, lamx)
       cv[i] <- sum(log(lamx))
     }
   } else {
+    #' full calculation
+    precooked <- NULL
+    cooking <- TRUE
     for(i in 1:ns) {
       si <- sigma[i]
       lamx <- density(X, sigma=si, at="points", leaveoneout=TRUE,
-                      weights=weights, distance=distance, ...)
+                      weights=weights, distance=distance, 
+                      precomputed=precooked,
+                      ...)
       lam <- density(X, sigma=si,
-                     weights=weights, distance=distance, ...)
-      cv[i] <- sum(log(lamx)) - integral.im(lam)
+                     weights=weights, distance=distance,
+                     precomputed=precooked,
+                     savecomputed=cooking,
+                     ...)
+      if(cooking) {
+        #' save geometry info for re-use in subsequent iterations
+        precooked <- attr(lam, "savedstuff")
+        cooking <- FALSE
+      }
+      lamx <- pmax(0, lamx)
+      cv[i] <- sum(log(lamx)) - integral(lam)
     }
   }
   result <- bw.optim(cv, sigma, iopt=which.max(cv), 
