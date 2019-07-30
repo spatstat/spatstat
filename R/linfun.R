@@ -3,7 +3,7 @@
 #
 #   Class of functions of location on a linear network
 #
-#   $Revision: 1.13 $   $Date: 2019/02/22 09:28:28 $
+#   $Revision: 1.14 $   $Date: 2019/07/30 07:12:50 $
 #
 
 linfun <- function(f, L) {
@@ -57,7 +57,10 @@ as.linim.linfun <- function(X, L=domain(X),
   if(is.null(L))
     L <- domain(X)
   #' create template
-  typical <- X(runiflpp(1, L))
+  typical <- X(runiflpp(1, L), ...)
+  if(length(typical) != 1)
+    stop(paste("The function must return a single value",
+               "when applied to a single point"))
   Y <- as.linim(typical, L, eps=eps, dimyx=dimyx, xy=xy, delta=delta)
   # extract coordinates of sample points along network
   df <- attr(Y, "df")

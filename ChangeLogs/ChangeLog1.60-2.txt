@@ -273,3 +273,13 @@ Change log from 1.60-1 to 1.60-2
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+   linfun.R
+	Added validity check in as.linim.linfun
+
+   DESCRIPTION
+   NEWS
+	Version 1.60-1.016
+
+------------- passed R-3.6.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
