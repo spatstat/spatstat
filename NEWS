@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.60-1.016
+        CHANGES IN spatstat VERSION 1.60-1.017
 
 OVERVIEW
 
@@ -61,9 +61,21 @@ BUG FIXES
     Argument lambdaX was ignored.
     Fixed.
 
+    o "[.linim"
+    Factor values were erroneously converted to integers, in some cases.
+    Fixed.
+    
     o effectfun
     In a multitype point process model, effectfun() ignored any
     user-specified value of 'marks'.
+    Fixed.
+
+    o as.linim.linfun
+    Additional arguments (other than spatial coordinates) were ignored.
+    Fixed.
+
+    o colourtable
+    Crashed in some cases when 'breaks' was given.
     Fixed.
     
     o rLGCP
@@ -73,7 +85,11 @@ BUG FIXES
     o plot.pppmatching
     Issued spurious warnings about unrecognised plot arguments.
     Fixed.
-    
+
+    o shift.lpp, rotate.lpp
+    Issued spurious warnings if argument 'origin' was given.
+    Fixed.
+
         CHANGES IN spatstat VERSION 1.60-1
 
 OVERVIEW

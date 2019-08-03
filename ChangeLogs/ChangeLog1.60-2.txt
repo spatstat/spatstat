@@ -283,3 +283,33 @@ Change log from 1.60-1 to 1.60-2
 ------------- passed R-3.6.1 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
+
+01 august 2019
+
+   tests/markcor.R
+   tests/Kfuns.R
+   Emark.Rd
+	More examples/tests of code for mark correlations.
+
+   tests/lppstuff.R
+	More tests of lpp class support
+
+03 august 2019
+
+   linim.R
+	Bug fix
+	
+   colourtables.R
+	Bug fix
+
+   tests/colour.R
+   tests/kppm.R
+	More code coverage
+	
+   DESCRIPTION
+   NEWS
+	Version 1.60-1.017
+
+------------- passed R-3.6.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------

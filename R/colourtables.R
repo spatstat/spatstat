@@ -3,7 +3,7 @@
 #
 # support for colour maps and other lookup tables
 #
-# $Revision: 1.43 $ $Date: 2019/03/08 09:59:28 $
+# $Revision: 1.44 $ $Date: 2019/08/03 06:40:10 $
 #
 
 colourmap <- function(col, ..., range=NULL, breaks=NULL, inputs=NULL, gamma=1) {
@@ -31,20 +31,20 @@ lut <- function(outputs, ..., range=NULL, breaks=NULL, inputs=NULL, gamma=1) {
   if(is.null(gamma)) gamma <- 1
   n <- length(outputs)
   given <- c(!is.null(range), !is.null(breaks), !is.null(inputs))
-  names(given) <- c("range", "breaks", "inputs")
+  names(given) <- nama <- c("range", "breaks", "inputs")
   ngiven <- sum(given)
-  if(ngiven == 0)
+  if(ngiven == 0L)
     stop(paste("One of the arguments",
-               sQuote("range"), ",", sQuote("breaks"), "or", sQuote("inputs"),
+               commasep(sQuote(nama), "or"),
                "should be given"))
   if(ngiven > 1L) {
-    offending <- names(breaks)[given]
+    offending <- nama[given]
     stop(paste("The arguments",
                commasep(sQuote(offending)),
                "are incompatible"))
   }
   if(!is.null(inputs)) {
-    # discrete set of input values mapped to output values
+    #' discrete set of input values mapped to output values
     stopifnot(length(inputs) == length(outputs))
     stuff <- list(n=n, discrete=TRUE, inputs=inputs, outputs=outputs)
     f <- function(x, what="value") {
@@ -54,16 +54,16 @@ lut <- function(outputs, ..., range=NULL, breaks=NULL, inputs=NULL, gamma=1) {
       cout <- stuff$outputs[m]
       return(cout)
     }
-  } else if(!is.null(range) && inherits(range, c("Date", "POSIXt"))) {
-    # date/time interval mapped to colours
-    timeclass <- if(inherits(range, "Date")) "Date" else "POSIXt"
+  } else {
+    #' range of numbers, or date/time interval, mapped to colours
+    #' determine type of domain
+    timeclasses <- c("Date", "POSIXt")
+    is.time <- inherits(range, timeclasses) || inherits(breaks, timeclasses)
+    #' determine breaks
     if(is.null(breaks)) {
       breaks <- gammabreaks(range, n + 1L, gamma)
       gamma.used <- gamma
     } else {
-      if(!inherits(breaks, timeclass))
-        stop(paste("breaks should belong to class", dQuote(timeclass)),
-             call.=FALSE)
       stopifnot(length(breaks) >= 2)
       stopifnot(length(breaks) == length(outputs) + 1L)
       if(!all(diff(breaks) > 0))
@@ -72,38 +72,28 @@ lut <- function(outputs, ..., range=NULL, breaks=NULL, inputs=NULL, gamma=1) {
     }
     stuff <- list(n=n, discrete=FALSE, breaks=breaks, outputs=outputs,
                   gamma=gamma.used)
-    f <- function(x, what="value") {
-      x <- as.vector(as.numeric(x))
-      z <- findInterval(x, stuff$breaks,
-                        rightmost.closed=TRUE)
-      if(what == "index")
-        return(z)
-      cout <- stuff$outputs[z]
-      return(cout)
-    }
-  } else {
-    # interval of real line mapped to colours
-    if(is.null(breaks)) {
-      breaks <- gammabreaks(range, n + 1L, gamma)
-      gamma.used <- gamma
+    #' use appropriate function
+    if(is.time) {
+      f <- function(x, what="value") {
+        x <- as.vector(as.numeric(x))
+        z <- findInterval(x, stuff$breaks,
+                          rightmost.closed=TRUE)
+        if(what == "index")
+          return(z)
+        cout <- stuff$outputs[z]
+        return(cout)
+      }
     } else {
-      stopifnot(is.numeric(breaks) && length(breaks) >= 2L)
-      stopifnot(length(breaks) == length(outputs) + 1L)
-      if(!all(diff(breaks) > 0))
-        stop("breaks must be increasing")
-      gamma.used <- NULL
-    }
-    stuff <- list(n=n, discrete=FALSE, breaks=breaks, outputs=outputs,
-                  gamma=gamma.used)
-    f <- function(x, what="value") {
-      stopifnot(is.numeric(x))
-      x <- as.vector(x)
-      z <- findInterval(x, stuff$breaks,
-                        rightmost.closed=TRUE)
-      if(what == "index")
-        return(z)
-      cout <- stuff$outputs[z]
-      return(cout)
+      f <- function(x, what="value") {
+        stopifnot(is.numeric(x))
+        x <- as.vector(x)
+        z <- findInterval(x, stuff$breaks,
+                          rightmost.closed=TRUE)
+        if(what == "index")
+          return(z)
+        cout <- stuff$outputs[z]
+        return(cout)
+      }
     }
   }
   attr(f, "stuff") <- stuff

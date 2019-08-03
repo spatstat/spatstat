@@ -1,7 +1,7 @@
 #
 # linim.R
 #
-#  $Revision: 1.54 $   $Date: 2019/04/21 09:15:27 $
+#  $Revision: 1.55 $   $Date: 2019/08/03 07:43:15 $
 #
 #  Image/function on a linear network
 #
@@ -554,6 +554,10 @@ as.linnet.linim <- function(X, ...) {
   if(!missing(i) && is.lpp(i)) {
     n <- npoints(i)
     result <- vector(mode=typeof(x$v), length=n)
+    if(is.factor(x$v)) {
+      lev <- levels(x$v)
+      result <- factor(result, levels=seq_along(lev), labels=lev)
+    }
     if(n == 0) return(result)
     if(!is.null(df <- attr(x, "df"))) {
       #' use data frame of sample points along network

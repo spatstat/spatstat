@@ -174,6 +174,9 @@ Vmark(X, r=NULL,
     plot(Emark(spruces))
     E <- Emark(spruces, method="density", kernel="epanechnikov")
     plot(Vmark(spruces))
+
+    plot(Emark(finpines))
+    V <- Vmark(finpines)
 }
 \author{
   \adrian

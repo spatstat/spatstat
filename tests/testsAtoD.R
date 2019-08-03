@@ -307,7 +307,7 @@ local({
 ##
 ##  Colour value manipulation and colour maps
 ##
-## $Revision: 1.4 $ $Date: 2019/04/05 09:23:24 $
+## $Revision: 1.5 $ $Date: 2019/08/03 06:50:40 $
 ##
 
 require(spatstat)
@@ -316,19 +316,46 @@ local({
    f <- function(n) grey(seq(0,1,length=n))
    z <- to.grey(f)
 
+   h <- colourmap(rainbow(9), range=c(0.01, 0.1))
+   plot(h, labelmap=100)
+   
    a <- colourmap(rainbow(12), range=as.Date(c("2018-01-01", "2018-12-31")))
    print(a)
    print(summary(a))
-
+   a(as.Date("2018-06-15"))
+   
+   g <- colourmap(rainbow(4),
+                  breaks=as.Date(c("2018-01-01", "2018-04-01",
+                                   "2018-07-01", "2018-10-01", "2018-12-31")))
+   print(g)
+   print(summary(g))
+   g(as.Date("2018-06-15"))
+   
    b <- colourmap(rainbow(12), inputs=month.name)
-   plot(b, vertical=FALSE)
-   plot(b, vertical=TRUE)
+   print(b)
+   print(summary(b))
    to.grey(b)
    to.grey(b, transparent=TRUE)
+   plot(b, vertical=FALSE)
+   plot(b, vertical=TRUE)
+   plot(b, vertical=FALSE, gap=0)
+   plot(b, vertical=TRUE, gap=0)
+   plot(b, vertical=FALSE, xlim=c(0, 2))
+   plot(b, vertical=TRUE, xlim=c(0,2))
+   plot(b, vertical=FALSE, ylim=c(0, 2))
+   plot(b, vertical=TRUE, ylim=c(0,2))
 
    argh <- list(a="iets", e="niets", col=b, f=42)
    arr <- col.args.to.grey(argh)
    rrgh <- col.args.to.grey(argh, transparent=TRUE)
+
+   niets <- lut()
+   print(niets)
+   summary(niets)
+   niets <- colourmap()
+   print(niets)
+   summary(niets)
+   plot(niets)
 })
 #'
 #'   tests/contrib.R

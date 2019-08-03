@@ -345,14 +345,33 @@ local({
 #
 # Tests for lpp code
 #
-#  $Revision: 1.28 $  $Date: 2019/04/05 09:48:27 $
+#  $Revision: 1.29 $  $Date: 2019/08/01 06:43:26 $
 
 
 require(spatstat)
 
 local({
-  # check 'normalise' option in linearKinhom
-  X <- rpoislpp(5, simplenet)
+  #' lpp class support
+  X <- runiflpp(5, simplenet)
+  Xone <- X %mark% runif(5)
+  Xtwo <- X %mark% data.frame(a=1:5, b=runif(5))
+  print(summary(Xone))
+  print(summary(Xtwo))
+  plot(X, show.window=TRUE)
+  plot(Xone)
+  plot(Xtwo, do.several=FALSE)
+  #' geometry etc
+  rotate(X, pi/3, centre=c(0.2,0.3))
+  superimpose.lpp(L=simplenet)
+  #' cut.lpp
+  tes <- lineardirichlet(runiflpp(4, simplenet))
+  f <- as.linfun(tes)
+  Z <- as.linim(f)
+  cut(X, tes)
+  cut(X, f)
+  cut(X, Z)
+
+  #' check 'normalise' option in linearKinhom
   fit <- lppm(X ~x)
   K <- linearKinhom(X, lambda=fit, normalise=FALSE)
   plot(K)
@@ -713,7 +732,7 @@ local({
 ##
 ##   Tests of mark correlation code (etc)
 ##
-## $Revision: 1.4 $ $Date: 2015/12/29 08:54:49 $
+## $Revision: 1.5 $ $Date: 2019/08/01 06:32:20 $
 
 require(spatstat)
 
@@ -728,6 +747,8 @@ local({
   if(check.testfun(fm, X=longleaf)$ftype != "mul")
     warning("check.testfun fails to recognise mark product function")
   check.testfun(fs, X=longleaf)
+  check.testfun("mul")
+  check.testfun("equ")
   
   ## test all is well in Kmark -> Kinhom 
   MA <- Kmark(amacrine,function(m1,m2){m1==m2})
@@ -737,9 +758,22 @@ local({
   if(isTRUE(all.equal(MA,MR)))
     stop("Kmark unexpectedly ignores marks")
 
-  ## cover code blocks in markcorr.R
+  ## cover code blocks in markcorr()
+  X <- runifpoint(100) %mark% runif(100)
+  Y <- X %mark% data.frame(u=runif(100), v=runif(100))
+  ww <- runif(100)
+  fone <- function(x) { x/2 }
+  ffff <- function(x,y) { fone(x) * fone(y) }
+  aa <- markcorr(Y)
+  bb <- markcorr(Y, ffff, weights=ww, normalise=TRUE)
+  bb <- markcorr(Y, ffff, weights=ww, normalise=FALSE)
+  bb <- markcorr(Y, f1=fone, weights=ww, normalise=TRUE)
+  bb <- markcorr(Y, f1=fone, weights=ww, normalise=FALSE)
+
+  ## markcrosscorr
+  a <- markcrosscorr(betacells, normalise=FALSE)
   if(require(sm)) {
-    a <- markcrosscorr(betacells, method="sm")
+    b <- markcrosscorr(betacells, method="sm")
   }
 })
 #' tests/mctests.R

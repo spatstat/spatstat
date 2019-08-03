@@ -325,7 +325,7 @@ local({
 #'
 #'   Various K and L functions and pcf
 #'
-#'   $Revision: 1.25 $  $Date: 2019/07/02 02:58:08 $
+#'   $Revision: 1.26 $  $Date: 2019/08/01 06:32:48 $
 #'
 
 require(spatstat)
@@ -371,13 +371,15 @@ local({
   Off <- split(amacrine)$off
   K4 <- Kcross.inhom(amacrine, lambdaI=ppm(On), lambdaJ=ppm(Off))
   K5 <- Kcross.inhom(amacrine, correction="bord.modif")
-  #' Kmark, markcorr
+  #' Kmark (=markcorrint)
   X <- runifpoint(100) %mark% runif(100)
   km <- Kmark(X, f=atan2)
   km <- Kmark(X, f1=sin)
   km <- Kmark(X, f="myfun")
-  Y <- X %mark% data.frame(u=runif(100), v=runif(100))
-  mk <- markcorr(Y)
+  aa <- Kmark(X, normalise=FALSE, returnL=FALSE)
+  aa <- Kmark(X, normalise=FALSE, returnL=TRUE)
+  aa <- Kmark(X, normalise=TRUE,  returnL=FALSE)
+  aa <- Kmark(X, normalise=TRUE,  returnL=TRUE)
   #'
   rr <- rep(0.1, npoints(cells))
   eC <- edge.Ripley(cells, rr)
@@ -527,7 +529,7 @@ local({
 #
 # tests/kppm.R
 #
-# $Revision: 1.28 $ $Date: 2019/04/05 09:27:59 $
+# $Revision: 1.29 $ $Date: 2019/08/03 07:01:46 $
 #
 # Test functionality of kppm that depends on RandomFields
 # Test update.kppm for old style kppm objects
@@ -710,8 +712,10 @@ local({
   #' cover a few code blocks
   fut <- kppm(redwood ~ x, method="clik")
   summary(fut)
+  a <- residuals(fut)
   fut2 <- kppm(redwood ~ x, "LGCP", method="palm")
   summary(fut2)
+  b <- residuals(fut2)
 })
 
 reset.spatstat.options()

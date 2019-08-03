@@ -1,7 +1,7 @@
 #
 # lpp.R
 #
-#  $Revision: 1.62 $   $Date: 2019/02/07 05:13:00 $
+#  $Revision: 1.63 $   $Date: 2019/08/03 07:27:37 $
 #
 # Class "lpp" of point patterns on linear networks
 
@@ -479,7 +479,11 @@ affine.lpp <- function(X,  mat=diag(c(1,1)), vec=c(0,0), ...) {
 shift.lpp <- function(X, vec=c(0,0), ..., origin=NULL) {
   verifyclass(X, "lpp")
   Y <- X
-  Y$domain <- shift(X$domain, vec=vec, ..., origin=origin)
+  Y$domain <- if(missing(vec)) {
+                shift(X$domain, ..., origin=origin)
+              } else {
+                shift(X$domain, vec=vec, ..., origin=origin)
+              }
   vec <- getlastshift(Y$domain)
   Y$data[, c("x","y")] <- shiftxy(X$data[, c("x","y")], vec=vec)
   # tack on shift vector
