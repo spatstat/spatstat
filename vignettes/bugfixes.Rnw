@@ -650,6 +650,10 @@ of potential impact.
   \item \verb![.linim!: the result sometimes had the wrong class.
   \bugger{1.53-0}{september 2017}{1.55-1}{april 2015}
 
+  \item \verb![.linim!: factor values were erroneously converted to 
+    integers, in some cases.
+  \bugger{1.53-0}{september 2017}{1.60-2}{august 2019}
+
 \item \verb!is.subset.owin!: sometimes gave the wrong result for polygonal
   windows due to numerical rounding error.
    {\small (Bug was always present.
@@ -665,6 +669,11 @@ of potential impact.
     the attribute \texttt{Lambda} was a numeric vector, 
     rather than a pixel image as intended.
     \bugger{1.43-0}{october 2015}{1.59-0}{march 2019}
+
+  \item \texttt{effectfun}:
+    In a multitype point process model, \texttt{effectfun} ignored any
+    user-specified value of \texttt{marks}.
+    \bugger{1.52-0}{august 2017}{1.60-2}{august 2019}
 \end{itemize}
 
 \begin{thebibliography}{1}

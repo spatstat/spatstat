@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.60-1.017
+        CHANGES IN spatstat VERSION 1.60-1.018
 
 OVERVIEW
 
@@ -42,6 +42,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o plot.im
     Axes are now prevented from extending outside the image rectangle.
 
+    o plot.im
+    New argument 'zap'.
+
     o blur
     New argument 'kernel'.
     
@@ -52,9 +55,6 @@ SIGNIFICANT USER-VISIBLE CHANGES
     This existing function now has a help file.
     New argument 'adjust'.
     
-    o plot.im
-    New argument 'zap'.
-
 BUG FIXES
 
     o localKcross.inhom, localLcross.inhom

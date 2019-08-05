@@ -313,3 +313,18 @@ Change log from 1.60-1 to 1.60-2
 ------------- passed R-3.6.1 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
+
+05 august 2019
+
+   updates.Rnw
+   bugfixes.Rnw
+	Updated to cover all the above.
+
+   DESCRIPTION
+   NEWS
+	Version 1.60-1.018
+
+------------- passed R-3.6.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+

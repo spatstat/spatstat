@@ -172,6 +172,12 @@ the News and Release Notes for each update.
 
   \item \spst\ now suggests the package \pkg{fftwtools}.
 
+  \item Fast kernel estimation on a linear network using 2D kernels.
+
+  \item Extension of Scott's rule for bandwidth selection.
+
+  \item Cross-validated bandwidth selection on a linear network.
+    
   \item Random thinning and random labelling of spatial patterns
     extended to different types of pattern.
 
@@ -442,6 +448,13 @@ Following is a list of all the functions that have been added.
 
 \begin{itemize}
   
+    \item \texttt{densityQuick.lpp}:
+    Fast kernel estimator of point process intensity on a network
+    using 2D smoothing kernel.
+
+    \item \texttt{bw.scott.iso}:
+    Isotropic version of Scott's rule (for point patterns in any dimension).  
+
     \item \texttt{bits.envelope}:
     Global simulation envelope corresponding to \texttt{bits.test},
     the balanced independent two-stage Monte Carlo test.
@@ -1167,6 +1180,9 @@ listed alphabetically.
    
  \item \texttt{bind.fv}:
    New argument \texttt{clip}.
+
+ \item \texttt{blur}:
+   New argument \texttt{kernel}.
    
  \item \texttt{bw.abram}:
    \begin{itemize}
@@ -1184,10 +1200,22 @@ listed alphabetically.
     is plotted, the name of the unit of length is shown on the x-axis.
    
  \item \texttt{bw.ppl}:
+   \begin{itemize}
+   \item 
    New arguments \texttt{weights} and \texttt{sigma}.
+ \item New argument \texttt{shortcut} allows faster computation.
+ \item Additional arguments \verb!...! are now passed to \texttt{density.ppp}.
+   \end{itemize}
+
    
-  \item \texttt{bw.scott}: the two bandwidth values in the result
+  \item \texttt{bw.scott}: 
+    \begin{itemize}
+    \item 
+    the two bandwidth values in the result
     now have names \texttt{sigma.x} and \texttt{sigma.y}.
+  \item Now handles point patterns of any dimension.
+  \item New arguments \texttt{isotropic} and \texttt{d}.
+    \end{itemize}
 
   \item \texttt{bw.stoyan}: The rule has been modified so that, 
     if the pattern is empty,
@@ -1327,6 +1355,8 @@ listed alphabetically.
      determines the choice of smoother.
    \item 
      New arguments \texttt{weights} and \texttt{old}.
+   \item New argument \texttt{distance} offers a choice of different
+     kernel methods.
    \end{itemize}
    
  \item \texttt{density.ppp}:
@@ -1938,6 +1968,8 @@ listed alphabetically.
   \item Improved handling of tickmarks on colour ribbon.
   \item Improved behaviour when the image values are almost constant.
   \item New argument \texttt{riblab}.
+  \item Axes are prevented from extending outside the image rectangle.
+  \item New argument \texttt{zap}.
    \end{itemize}
 
  \item \texttt{plot.imlist}:
@@ -2395,6 +2427,7 @@ listed alphabetically.
      or \texttt{Inf}.
    \item New argument \texttt{geometric} supports geometric-mean smoothing.
    \item The arguments \texttt{adjust}, \texttt{edge}, \texttt{diggle}
+     and \texttt{kernel}
      are now explicit formal arguments.
    \end{itemize}
 
@@ -2538,12 +2571,16 @@ listed alphabetically.
 %%Z
    
  \item \verb![<-.im!
+   \begin{itemize}
+   \item 
   Accepts an array for \texttt{value}.
-
- \item \verb![.im!
-   The subset index \texttt{i} can now be a linear network.
-   Then the result of \verb!x[i, drop=FALSE]! is a pixel image of
-   class \texttt{linim}.
+   \item 
+  The subset index \texttt{i} can now be a linear network.
+  Then the result of \verb!x[i, drop=FALSE]! is a pixel image of
+  class \texttt{linim}.
+  \item New argument \texttt{drop} controls behaviour when indices are missing
+    as in \verb!x[] <- value!
+   \end{itemize}
 
  \item \verb![.layered!:
    \begin{itemize}
