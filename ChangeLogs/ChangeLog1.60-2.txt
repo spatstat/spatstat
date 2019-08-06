@@ -328,3 +328,23 @@ Change log from 1.60-1 to 1.60-2
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+06 august 2019
+
+   as.im.R
+   as.im.Rd
+       as.im.function has new argument 'stringsAsFactors'
+
+   plot.im.Rd
+       More examples 
+
+   tests/imageops.R
+       More tests for as.im and plot.im with character/factor values
+
+   DESCRIPTION
+   NEWS
+	Version 1.60-1.019
+
+------------- passed R-3.6.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+

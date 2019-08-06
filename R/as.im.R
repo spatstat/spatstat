@@ -3,7 +3,7 @@
 #
 #    conversion to class "im"
 #
-#    $Revision: 1.55 $   $Date: 2018/09/28 05:14:12 $
+#    $Revision: 1.57 $   $Date: 2019/08/06 08:40:02 $
 #
 #    as.im()
 #
@@ -103,7 +103,9 @@ as.im.funxy <- function(X, W=Window(X), ...) {
 
 as.im.function <- function(X, W=NULL, ...,
                            eps=NULL, dimyx=NULL, xy=NULL,
-                           na.replace=NULL, strict=FALSE, drop=TRUE) {
+                           na.replace=NULL,
+                           stringsAsFactors=default.stringsAsFactors(),
+                           strict=FALSE, drop=TRUE) {
   f <- X
   if(is.null(W))
     stop("A window W is required")
@@ -121,13 +123,15 @@ as.im.function <- function(X, W=NULL, ...,
   #' evaluate function value at each pixel 
   if(!funnywindow) {
     values <- do.call(f, append(list(xx, yy), argh))
-    slices <- as.list(as.data.frame(values))
+    slices <- as.list(as.data.frame(values,
+                                    stringsAsFactors=stringsAsFactors))
     ns <- length(slices)
   } else {
     #' evaluate only inside window
     inside <- as.vector(m)
     values.inside <- do.call(f, append(list(xx[inside], yy[inside]), argh))
-    slices.inside <- as.list(as.data.frame(values.inside))
+    slices.inside <- as.list(as.data.frame(values.inside,
+                                           stringsAsFactors=stringsAsFactors))
     ns <- length(slices.inside)
     #' pad out
     msize <- length(m)
@@ -306,12 +310,18 @@ do.as.im <- function(x, action, ...,
 }
 
 na.handle.im <- function(X, na.replace) {
-if(is.null(na.replace))
+  if(is.null(na.replace))
+    return(X)
+  if(length(na.replace) != 1)
+    stop("na.replace should be a single value")
+  if(X$type == "factor") {
+    lev <- levels(X)
+    newlev <- union(lev, na.replace)
+    if(length(newlev) > length(lev))
+      levels(X) <- newlev
+  }
+  X$v[is.na(X$v)] <- na.replace
   return(X)
-if(length(na.replace) != 1)
-  stop("na.replace should be a single value")
-X$v[is.na(X$v)] <- na.replace
-return(X)
 }
 
 repair.old.factor.image <- function(x) {

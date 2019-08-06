@@ -84,7 +84,7 @@ local({
 #
 #  tests/imageops.R
 #
-#   $Revision: 1.17 $   $Date: 2019/02/19 04:49:41 $
+#   $Revision: 1.18 $   $Date: 2019/08/06 08:47:52 $
 #
 
 require(spatstat)
@@ -185,11 +185,21 @@ local({
   ZS <- shift(Z, origin="centroid")
   ZS <- shift(Z, origin="bottomleft")
 
-  plot(Z, ribside="left")
-  plot(Z, ribside="top")
-  
   h <- hist(Z)
   plot(h)
+
+  #' plot.im code blocks
+  plot(Z, ribside="left")
+  plot(Z, ribside="top")
+  plot(Z, clipwin=square(0.5))
+  plot(Z - mean(Z), log=TRUE)
+
+  #' handling and plotting of character and factor images
+  Afactor    <- as.im(col2hex("green"), letterR, na.replace=col2hex("blue"))
+  Acharacter <- as.im(col2hex("green"), letterR, na.replace=col2hex("blue"),
+                      stringsAsFactors=FALSE)
+  plot(Afactor)
+  plot(Acharacter, valuesAreColours=TRUE)
 
   #' safelookup (including extrapolation case)
   Z <- as.im(function(x,y) { x - y }, letterR)

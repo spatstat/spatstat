@@ -37,7 +37,9 @@
 
   \method{as.im}{function}(X, W=NULL, \dots,
         eps=NULL, dimyx=NULL, xy=NULL,
-        na.replace=NULL, strict=FALSE, drop=TRUE)
+        na.replace=NULL,
+        stringsAsFactors=default.stringsAsFactors(),
+        strict=FALSE, drop=TRUE)
 
   \method{as.im}{funxy}(X, W=Window(X), \dots)
 
@@ -108,6 +110,15 @@
     If \code{drop=TRUE} (the default), the pixel image is extracted
     and the result is a pixel image.
     If \code{drop=FALSE}, this list is returned as the result.
+  }
+  \item{stringsAsFactors}{
+    Logical value (passed to \code{\link[base]{data.frame}})
+    specifying how to handle pixel values which
+    are character strings. If \code{TRUE}, character values are
+    interpreted as factor levels. If \code{FALSE}, they remain
+    as character strings. The factory-fresh befault is \code{TRUE},
+    but that can be changed by setting
+    \code{options(stringsAsFactors=FALSE)}.
   }
   \item{approx}{
    Logical value indicating whether to compute an approximate result
@@ -272,6 +283,15 @@
   If \code{X} is a \code{function(x,y)} which returns a matrix of
   values, then \code{as.im(X, W)} will be a list of pixel images.
 }
+\section{Character-valued images}{
+  By default, if the pixel value data are character strings, they will be
+  treated as levels of a factor, and the resulting image will be
+  factor-valued. To prevent the conversion of character strings to
+  factors, use the argument \code{stringsAsFactors=FALSE},
+  which is recognised by most of the
+  methods for \code{as.im}, or alternatively set
+  \code{options(stringsAsFactors=FALSE)}.
+}
 \value{
   A pixel image (object of class \code{"im"}),
   or a list of pixel images, 
@@ -326,6 +346,10 @@
   slope <- as.im(slopedata)
   unitname(grad) <- unitname(slope) <- unitname(grad) # for compatibility
   all.equal(slope, grad) # TRUE
+
+  ## handling of character values
+  as.im("a", W=letterR, na.replace="b")
+  as.im("a", W=letterR, na.replace="b", stringsAsFactors=FALSE)
 }
 \author{
   \spatstatAuthors
