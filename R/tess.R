@@ -3,7 +3,7 @@
 #
 # support for tessellations
 #
-#   $Revision: 1.92 $ $Date: 2019/03/16 11:15:58 $
+#   $Revision: 1.94 $ $Date: 2019/08/07 07:31:40 $
 #
 tess <- function(..., xgrid=NULL, ygrid=NULL, tiles=NULL, image=NULL,
                  window=NULL, marks=NULL, keepempty=FALSE,
@@ -745,88 +745,104 @@ domain.tess <- Window.tess <- function(X, ...) { as.owin(X) }
 intersect.tess <- function(X, Y, ..., keepmarks=FALSE, sep="x") {
   X <- as.tess(X)
   check.1.string(sep)
-  if(is.owin(Y) && Y$type == "mask") {
-    # special case
-    # convert to pixel image 
-    result <- as.im(Y)
-    Xtiles <- tiles(X)
-    for(i in seq_along(Xtiles)) {
-      tilei <- Xtiles[[i]]
-      result[tilei] <- i
-    }
-    result <- result[Y, drop=FALSE]
-    out <- tess(image=result, window=Y)
-    if(keepmarks) marks(out) <- marks(X)
-    return(out)
-  }
+
   if(is.owin(Y)) {
-    # efficient code when Y is a window, retaining names of tiles of X
-    Ztiles <- lapply(tiles(X), intersect.owin, B=Y, ..., fatal=FALSE)
-    isempty <- sapply(Ztiles, is.empty)
-    Ztiles <- Ztiles[!isempty]
-    Xwin <- as.owin(X)
-    Ywin <- Y
-    if(keepmarks) {
-      marksX <- marks(X)
-      if(!is.null(marksX))
-        marx <- as.data.frame(marksX)[!isempty, ]
-    }
-  } else {
-    # general case
-    Y <- as.tess(Y)
-    Xtiles <- tiles(X)
-    Ytiles <- tiles(Y)
-    Ztiles <- list()
-    namesX <- tilenames(X)
-    namesY <- tilenames(Y)
-    if(keepmarks) {
-      Xmarks <- as.data.frame(marks(X))
-      Ymarks <- as.data.frame(marks(Y))
-      gotXmarks <- (ncol(Xmarks) > 0)
-      gotYmarks <- (ncol(Ymarks) > 0)
-      if(gotXmarks && gotYmarks) {
-        colnames(Xmarks) <- paste0("X", colnames(Xmarks))
-        colnames(Ymarks) <- paste0("Y", colnames(Ymarks))
+    ## intersection of a tessellation with a window
+    if(Y$type == "mask") {
+      ## convert to pixel image 
+      result <- as.im(Y)
+      Xtiles <- tiles(X)
+      seqXtiles <- seq_along(Xtiles)
+      for(i in seqXtiles) {
+        tilei <- Xtiles[[i]]
+        result[tilei] <- i
       }
-      if(gotXmarks || gotYmarks) {
-        marx <- if(gotXmarks && gotYmarks) {
-          cbind(Xmarks[integer(0), , drop=FALSE],
-                Ymarks[integer(0), , drop=FALSE])
-        } else if(gotXmarks) {
-          Xmarks[integer(0), , drop=FALSE]
-        } else {
-          Ymarks[integer(0), , drop=FALSE]
-        }
-      } else keepmarks <- FALSE
-    }
-    Xtrivial <- (length(Xtiles) == 1)
-    for(i in seq_along(Xtiles)) {
-      Xi <- Xtiles[[i]]
-      Ti <- lapply(Ytiles, intersect.owin, B=Xi, ..., fatal=FALSE)
-      isempty <- sapply(Ti, is.empty)
-      nonempty <- !isempty
-      if(any(nonempty)) {
-        Ti <- Ti[nonempty]
-        names(Ti) <- if(Xtrivial) namesY[nonempty] else
-                     paste(namesX[i], namesY[nonempty], sep=sep)
-        Ztiles <- append(Ztiles, Ti)
-        if(keepmarks) {
-          extra <- if(gotXmarks && gotYmarks) {
-            data.frame(X=Xmarks[i, ,drop=FALSE],
-                       Y=Ymarks[nonempty, ,drop=FALSE],
-                       row.names=NULL)
-          } else if(gotYmarks) {
-            Ymarks[nonempty, ,drop=FALSE]
-          } else {
-            Xmarks[rep(i, sum(nonempty)), ,drop=FALSE]
-          }
-          marx <- rbind(marx, extra)
-        }
+      result <- result[Y, drop=FALSE]
+      out <- tess(image=result, window=Y)
+      if(keepmarks && !is.null(marx <- marks(X))) {
+        #' identify non-empty tiles
+        tab <- table(factor(result[], levels=seqXtiles))
+        marks(out) <- marksubset(marx, tab > 0)
       }
+      return(out)
+    } else {
+      ## efficient code when Y is a window, retaining names of tiles of X
+      Ztiles <- lapply(tiles(X), intersect.owin, B=Y, ..., fatal=FALSE)
+      isempty <- sapply(Ztiles, is.empty)
+      Ztiles <- Ztiles[!isempty]
+      Xwin <- as.owin(X)
+      Ywin <- Y
+      Zwin <- intersect.owin(Xwin, Ywin)
+      out <- tess(tiles=Ztiles, window=Zwin)
+      if(keepmarks) {
+        marx <- marks(X)
+        if(!is.null(marx))
+          marx <- as.data.frame(marx)[!isempty, ]
+        marks(out) <- marx
+      }
+      return(out)
     }
-    Xwin <- as.owin(X)
-    Ywin <- as.owin(Y)
   }
+  
+  ## general case: intersection of two tessellations
+  Y <- as.tess(Y)
+  Xtiles <- tiles(X)
+  Ytiles <- tiles(Y)
+  Ztiles <- list()
+  namesX <- tilenames(X)
+  namesY <- tilenames(Y)
+
+  if(keepmarks) {
+    ## initialise the mark variables to be inherited from parent tessellations
+    Xmarks <- as.data.frame(marks(X))
+    Ymarks <- as.data.frame(marks(Y))
+    gotXmarks <- (ncol(Xmarks) > 0)
+    gotYmarks <- (ncol(Ymarks) > 0)
+    if(gotXmarks && gotYmarks) {
+      colnames(Xmarks) <- paste0("X", colnames(Xmarks))
+      colnames(Ymarks) <- paste0("Y", colnames(Ymarks))
+    }
+    if(gotXmarks || gotYmarks) {
+      marx <- if(gotXmarks && gotYmarks) {
+                cbind(Xmarks[integer(0), , drop=FALSE],
+                      Ymarks[integer(0), , drop=FALSE])
+              } else if(gotXmarks) {
+                Xmarks[integer(0), , drop=FALSE]
+              } else {
+                Ymarks[integer(0), , drop=FALSE]
+              }
+    } else keepmarks <- FALSE
+  }
+
+  ## now compute intersection tiles
+  Xtrivial <- (length(Xtiles) == 1)
+  for(i in seq_along(Xtiles)) {
+    Xi <- Xtiles[[i]]
+    Ti <- lapply(Ytiles, intersect.owin, B=Xi, ..., fatal=FALSE)
+    isempty <- sapply(Ti, is.empty)
+    nonempty <- !isempty
+    if(any(nonempty)) {
+      Ti <- Ti[nonempty]
+      names(Ti) <- if(Xtrivial) namesY[nonempty] else
+                   paste(namesX[i], namesY[nonempty], sep=sep)
+      Ztiles <- append(Ztiles, Ti)
+      if(keepmarks) {
+        extra <- if(gotXmarks && gotYmarks) {
+                   data.frame(X=Xmarks[i, ,drop=FALSE],
+                              Y=Ymarks[nonempty, ,drop=FALSE],
+                              row.names=NULL)
+                 } else if(gotYmarks) {
+                   Ymarks[nonempty, ,drop=FALSE]
+                 } else {
+                   Xmarks[rep(i, sum(nonempty)), ,drop=FALSE]
+                 }
+        marx <- rbind(marx, extra)
+      }
+    }
+  }
+  ## form tessellation object
+  Xwin <- as.owin(X)
+  Ywin <- as.owin(Y)
   Zwin <- intersect.owin(Xwin, Ywin)
   out <- tess(tiles=Ztiles, window=Zwin)
   if(keepmarks) 

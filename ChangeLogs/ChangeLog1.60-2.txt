@@ -348,3 +348,21 @@ Change log from 1.60-1 to 1.60-2
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+   undoc.R
+        Test of Saturated()
+	
+   tess.R
+	Bug fix in intersect.tess
+
+   tests/tessera.R
+	Test of intersect.tess
+	Tests of geometrical transformations
+
+   DESCRIPTION
+   NEWS
+	Version 1.60-1.020
+
+------------- passed R-3.6.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
