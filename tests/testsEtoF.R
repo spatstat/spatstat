@@ -25,7 +25,7 @@ local({
 #
 #  Test validity of envelope data
 #
-#  $Revision: 1.15 $  $Date: 2019/03/18 09:49:49 $
+#  $Revision: 1.16 $  $Date: 2019/08/07 09:11:06 $
 #
 
 require(spatstat)
@@ -71,6 +71,8 @@ Ep <- envelope(fit, Kest, nsim=4, savepatterns=TRUE, global=TRUE)
 #' check handling of 'dangerous' cases
 fut <- ppm(redwood ~ x)
 Ek <- envelope(fut, Kinhom, update=FALSE, nsim=4)
+kfut <- kppm(redwood3 ~ x)
+Ekk <- envelope(kfut, Kinhom, lambda=density(redwood3), nsim=7)
 
 # check conditional simulation
 e1 <- envelope(cells, Kest, nsim=4, fix.n=TRUE)
@@ -120,6 +122,10 @@ local({
   D <- envelope(cells, "Lest", nsim=5)
   fit <- ppm(cells ~ 1, Strauss(0.07))
   U <- envelope(fit, nsim=3, simulate=expression(runifpoint(20)))
+  kfit <- kppm(redwood3 ~ x)
+  UU <- envelope(kfit, nsim=7, simulate=expression(simulate(kfit, drop=TRUE)))
+  VV <- envelope(kfit, nsim=7, weights=1:7)
+  MM <- envelope(kfit, nsim=7, Kinhom, lambda=density(redwood3))
   #'  envelopes based on sample variance
   E <- envelope(cells, nsim=8, VARIANCE=TRUE)
   G <- envelope(cells, nsim=8, VARIANCE=TRUE,

@@ -348,6 +348,8 @@ Change log from 1.60-1 to 1.60-2
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+07 august 2019
+
    undoc.R
         Test of Saturated()
 	
@@ -366,3 +368,18 @@ Change log from 1.60-1 to 1.60-2
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+   tests/envelopes.R
+	Tests of envelope.kppm
+
+11 aug 2019
+
+   tests/undoc.R
+	Tests of infrastructure in istat
+
+   DESCRIPTION
+   NEWS
+	Version 1.60-1.021
+
+------------- passed R-3.6.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
