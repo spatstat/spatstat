@@ -32,6 +32,8 @@ Hest(X, r=NULL, breaks=NULL, ...,
     to be taken as the window of observation.
     The contact distribution function will be estimated
     from values of the contact distance inside \code{W}.
+    The default is \code{W=Frame(X)} when \code{X} is a window,
+    and \code{W=Window(X)} otherwise.
   }
   \item{correction}{
    Optional.

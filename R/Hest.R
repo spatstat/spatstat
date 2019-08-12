@@ -18,13 +18,14 @@ Hest <- local({
       XX <- X
       W0 <- Frame(X)
     } else if(is.im(X)) {
-      if(X$type != "logical")
+      if(!is.logical(ZeroValue(X)))
         stop("When X is an image, its pixel values should be logical values")
       XX <- solutionset(X)
       W0 <- Window(X)
     } else stop("X should be an object of class ppp, psp, owin or im")
     ##
-    if(given.W <- !missing(W)) {
+    if(given.W <- !missing(W) && !is.null(W)) {
+      stopifnot(is.owin(W))
       if(!is.subset.owin(W, W0))
         stop("W is not a subset of the observation window of X")
     } else {

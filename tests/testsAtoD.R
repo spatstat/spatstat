@@ -358,6 +358,27 @@ local({
    plot(niets)
 })
 #'
+#'     contact.R
+#'
+#'   Check machinery for first contact distributions
+#'
+#'   $Revision: 1.4 $  $Date: 2019/08/12 09:51:55 $
+
+require(spatstat)
+local({
+  #' reduce complexity
+  Y <- as.mask(heather$coarse, dimyx=c(100, 50))
+
+  X <- runifpoint(100, win = complement.owin(Y))
+  G <- Gfox(X, Y)
+  J <- Jfox(X, Y)
+
+  Y <- as.polygonal(Y)
+  X <- runifpoint(100, win = complement.owin(Y))
+  G <- Gfox(X, Y)
+  J <- Jfox(X, Y)
+})
+#'
 #'   tests/contrib.R
 #'
 #'   Tests for user-contributed code in spatstat

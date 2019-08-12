@@ -543,6 +543,7 @@
 \alias{replacementIndex}
 \alias{representativeRows}
 \alias{resolveEinfo}
+\alias{resolve.foxall.window}
 \alias{resolve.vargamma.shape}
 \alias{resolve.lambda}
 \alias{resolve.lambda.cross}
@@ -1439,7 +1440,8 @@ repair.image.xycoords(x)
 replacementIndex(ii, stuff)
 representativeRows(x)
 resolveEinfo(x, what, fallback, warn, atomic)
-resolve.vargamma.shape(\dots, nu.ker, nu.pcf, default = FALSE)
+resolve.foxall.window(X, Y, W)
+resolve.vargamma.shape(\dots, nu.ker, nu.pcf, default)
 resolve.lambda(X, lambda, \dots, sigma, varcov, leaveoneout, update)
 resolve.lambda.cross(X, I, J, lambdaI, lambdaJ, \dots, lambdaX,
                      sigma, varcov, leaveoneout, update, lambdaIJ,

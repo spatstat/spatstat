@@ -417,4 +417,23 @@ Change log from 1.60-1 to 1.60-2
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+   GJfox.R
+   Gfox.Rd
+   spatstat-internal.Rd
+	Bug fix in handling Y = <owin>
+	New argument 'W'.
+	Accepts Y = <im> with logical values
+
+   Hest.R
+	Tweaks
+
+   tests/contact.R [New file]
+        test behaviour of Gfox, Jfox, Hest
    
+   DESCRIPTION
+   NEWS
+	Version 1.60-1.024
+
+------------- passed R-3.6.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------

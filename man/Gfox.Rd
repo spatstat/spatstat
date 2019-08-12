@@ -9,8 +9,8 @@
   compute estimates of Foxall's  \eqn{G} and \eqn{J} functions.
 }
 \usage{
-Gfox(X, Y, r = NULL, breaks = NULL, correction = c("km", "rs", "han"), ...)
-Jfox(X, Y, r = NULL, breaks = NULL, correction = c("km", "rs", "han"), ...)
+Gfox(X, Y, r = NULL, breaks = NULL, correction = c("km", "rs", "han"), W, \dots)
+Jfox(X, Y, r = NULL, breaks = NULL, correction = c("km", "rs", "han"), W, \dots)
 }
 \arguments{
   \item{X}{
@@ -19,7 +19,8 @@ Jfox(X, Y, r = NULL, breaks = NULL, correction = c("km", "rs", "han"), ...)
   }
   \item{Y}{
     An object of class \code{"ppp"}, \code{"psp"} or \code{"owin"}
-    to which distances will be measured.
+    to which distances will be measured. Alternatively a pixel image
+    (class \code{"im"}) with logical values.
   }
   \item{r}{Optional. Numeric vector. The values of the argument \eqn{r}
     at which \eqn{Gfox(r)} or \eqn{Jfox(r)}
@@ -38,6 +39,13 @@ Jfox(X, Y, r = NULL, breaks = NULL, correction = c("km", "rs", "han"), ...)
     \code{"none"}, \code{"rs"}, \code{"km"}, \code{"cs"}
     and \code{"best"}.
     Alternatively \code{correction="all"} selects all options.
+  }
+  \item{W}{
+    Optional. A window (object of class \code{"owin"})
+    to be taken as the window of observation.
+    The distribution function will be estimated from data inside \code{W}.
+    The default is \code{W=Frame(Y)} when \code{Y} is a window,
+    and \code{W=Window(Y)} otherwise.
   }
   \item{\dots}{
     Extra arguments affecting the discretisation of distances.
