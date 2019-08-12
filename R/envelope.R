@@ -3,7 +3,7 @@
 #
 #   computes simulation envelopes 
 #
-#   $Revision: 2.95 $  $Date: 2019/03/19 06:06:21 $
+#   $Revision: 2.96 $  $Date: 2019/08/12 01:19:56 $
 #
 
 envelope <- function(Y, fun, ...) {
@@ -459,7 +459,8 @@ envelopeEngine <-
         csr <- !is.null(mc <- mess$csr) && mc
       }
     } else stop(paste(sQuote("simulate"),
-                      "should be an expression, or a list of point patterns"))
+                      "should be an expression,",
+                      "or a list of point patterns of the same kind as X"))
   }
   # -------------------------------------------------------------------
   # Determine clipping window

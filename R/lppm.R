@@ -275,6 +275,7 @@ as.owin.lppm <- function(W, ..., fatal=TRUE) {
 
 Window.lppm <- function(X, ...) { as.owin(X) }
 
+data.lppm <- function(object) { object$X }
 
 model.images.lppm <- local({
 
@@ -363,4 +364,3 @@ emend.lppm <- function(object, ...) {
   return(object)
 }
 
-  

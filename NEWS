@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.60-1.021
+        CHANGES IN spatstat VERSION 1.60-1.022
 
 OVERVIEW
 
@@ -23,6 +23,9 @@ NEW FUNCTIONS
 
     o bw.scott.iso
     Isotropic version of Scott's rule (for point patterns in any dimension).
+
+    o data.lppm
+    Extract the original data point pattern from a fitted model of class 'lppm'.
     
 SIGNIFICANT USER-VISIBLE CHANGES
 
@@ -90,6 +93,10 @@ BUG FIXES
 
     o intersect.tess
     Crashed if 'Y' was a window object and 'keepmarks=TRUE'.
+    Fixed.
+
+    o envelope.lppm
+    Crashed if argument 'simulate' was given.
     Fixed.
     
     o plot.pppmatching

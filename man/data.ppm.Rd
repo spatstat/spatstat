@@ -33,16 +33,13 @@
   \code{\link{ppp.object}}
 }
 \examples{
- data(cells)
  fit <- ppm(cells, ~1, Strauss(r=0.1))
  X <- data.ppm(fit)
  # 'X' is identical to 'cells'
 }
-\author{\adrian
-  
-  
-  and \rolf
-  
+\author{
+  \adrian
+  and \rolf.
 }
 \keyword{spatial}
 \keyword{manip}

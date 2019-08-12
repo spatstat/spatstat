@@ -1,7 +1,7 @@
 #
 #  envelopelpp.R
 #
-#  $Revision: 1.24 $   $Date: 2018/10/21 09:58:37 $
+#  $Revision: 1.25 $   $Date: 2019/08/12 01:05:53 $
 #
 #  Envelopes for 'lpp' objects
 #
@@ -154,21 +154,21 @@ envelope.lppm <-
 
   envir.user <- if(!is.null(envir.simul)) envir.simul else parent.frame()
   envir.here <- sys.frame(sys.nframe())
+
+  # Extract data pattern X from fitted model Y
+  X <- data.lppm(Y)
   
   if(!is.null(simulate)) {
     # ...................................................
     # Simulations are determined by 'simulate' argument
     # Processing is deferred to envelopeEngine
     simrecipe <- simulate
-    # Data pattern is argument Y
-    X <- Y
   } else {
     ## ...................................................
     ## Simulation of the fitted model Y
     if(!is.poisson(Y))
       stop("Simulation of non-Poisson models is not yet implemented")
     MODEL <- Y
-    X <- Y$X
     NETWORK <- domain(X)
     lambdaFit <- predict(MODEL)
     Xmarx <- marks(X)

@@ -383,3 +383,25 @@ Change log from 1.60-1 to 1.60-2
 ------------- passed R-3.6.1 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
+
+   envelopelpp.R
+	Bug fix
+
+   envelope.R
+	Improved error message
+	
+   lppm.R
+   data.lppm.Rd [New file]
+        New function data.lppm
+
+   data.ppm.Rd
+	Cross-referenced
+
+   DESCRIPTION
+   NEWS
+	Version 1.60-1.022
+
+------------- passed R-3.6.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
