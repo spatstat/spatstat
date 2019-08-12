@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.60-1.022
+        CHANGES IN spatstat VERSION 1.60-1.023
 
 OVERVIEW
 
@@ -66,6 +66,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
     
 BUG FIXES
 
+    o densityVoronoi.lpp
+    Did not correctly handle patterns containing duplicated points.
+    Fixed.
+    
     o localKcross.inhom, localLcross.inhom
     Argument lambdaX was ignored.
     Fixed.

@@ -3,7 +3,7 @@
 #'
 #'    densityVoronoi.lpp
 #'
-#'    $Revision: 1.10 $  $Date: 2019/03/21 03:01:49 $
+#'    $Revision: 1.12 $  $Date: 2019/08/12 08:34:19 $
 #' 
 
 densityVoronoi.lpp <- function(X, f = 1, ..., nrep = 1, verbose = TRUE){
@@ -33,10 +33,11 @@ densityVoronoi.lpp <- function(X, f = 1, ..., nrep = 1, verbose = TRUE){
       tes <- lineardirichlet(X)
       num <- 1
     } else {
-      UX <- unique(X)
+      um <- uniquemap(X)
+      first <- (um == seq_along(um))
+      UX <- X[first]
       tes <- lineardirichlet(UX)
-      idx <- nncross(X, UX, what="which")
-      num <- as.integer(table(factor(idx, levels=seq_len(npoints(UX)))))
+      num <- as.integer(table(factor(um, levels=um[first])))
     }
     v <- tile.lengths(tes)
     g <- as.linfun(tes, values=num/v, navalue=0)
@@ -63,10 +64,11 @@ densityVoronoi.lpp <- function(X, f = 1, ..., nrep = 1, verbose = TRUE){
         tes <- lineardirichlet(Xthin)
         num <- 1
       } else {
-        UXthin <- unique(Xthin)
+        um <- uniquemap(Xthin)
+        first <- (um == seq_along(um))
+        UXthin <- Xthin[first]
         tes <- lineardirichlet(UXthin)
-        idx <- nncross(Xthin, UXthin, what="which")
-        num <- as.integer(table(factor(idx, levels=seq_len(npoints(UXthin)))))
+        num <- as.integer(table(factor(um, levels=um[first])))
       }
       v <- tile.lengths(tes)
       tilevalueslist[[i]] <- num/v
