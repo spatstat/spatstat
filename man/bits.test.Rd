@@ -123,9 +123,12 @@ bits.test(X, \dots,
   Implemented by \spatstatAuthors.
 }
 \seealso{
+  Simulation envelopes: \code{\link{bits.envelope}}.
+  
+  Other tests:
   \code{\link{dg.test}},
   \code{\link{dclf.test}},
-  \code{\link{mad.test}}
+  \code{\link{mad.test}}.
 }
 \examples{
  ns <- if(interactive()) 19 else 4

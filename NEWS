@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.60-1.024
+        CHANGES IN spatstat VERSION 1.60-1.025
 
 OVERVIEW
 
@@ -13,7 +13,7 @@ OVERVIEW
     
     o Bug fixes and minor improvements.
 
-    o Nickname: 'Breakfast of Champions'
+    o Nickname: 'Much code. So tire. Wow'
     
 NEW FUNCTIONS
 
@@ -60,6 +60,11 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o Smooth.im
     New argument 'kernel'.
 
+    o edge.Ripley
+    Numerical stability has been improved on some platforms.
+    Results may have changed in marginal cases (e.g. where the circle
+    of radius r centred at X is tangent to an edge of the polygonal window). 
+    
     o plot.pppmatching
     This existing function now has a help file.
     New argument 'adjust'.

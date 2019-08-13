@@ -377,6 +377,8 @@
 	remove duplicate points \cr
 	\code{\link{duplicated.ppp}} \tab
 	determine which points are duplicates \cr
+	\code{\link{uniquemap.ppp}} \tab
+	map duplicated points to unique points \cr
 	\code{\link{connected.ppp}} \tab find clumps of points \cr
 	\code{\link{dirichlet}} \tab
 	compute Dirichlet-Voronoi tessellation \cr
@@ -579,6 +581,7 @@
       \code{\link{print.psp}} \tab print basic information \cr
       \code{\link{summary.psp}} \tab print summary information \cr
       \code{\link{[.psp}} \tab extract a subset of a line segment pattern \cr
+      \code{\link{subset.psp}} \tab extract subset of line segment pattern \cr
       \code{\link{as.data.frame.psp}} \tab
       convert line segment pattern to data frame \cr
       \code{\link{marks.psp}} \tab extract marks of line segments \cr
@@ -609,6 +612,8 @@
       \code{\link{selfcut.psp}} \tab cut segments where they cross \cr
       \code{\link{crossing.psp}} \tab find crossing points between
       two line segment patterns \cr
+      \code{\link{extrapolate.psp}} \tab extrapolate line segments to
+      infinite lines \cr
       \code{\link{nncross}} \tab find distance to nearest line segment
       from a given point\cr
       \code{\link{nearestsegment}} \tab find line segment closest to a
@@ -631,8 +636,11 @@
       \code{\link{tess}} \tab create a tessellation \cr
       \code{\link{quadrats}} \tab create a tessellation of rectangles\cr
       \code{\link{hextess}} \tab create a tessellation of hexagons \cr
+      \code{\link{polartess}} \tab tessellation using polar coordinates \cr
       \code{\link{quantess}} \tab quantile tessellation \cr
       \code{\link{venn.tess}} \tab Venn diagram tessellation \cr 
+      \code{\link{dirichlet}} \tab compute Dirichlet-Voronoi tessellation of points\cr
+      \code{\link{delaunay}} \tab compute Delaunay triangulation of points\cr
       \code{\link{as.tess}} \tab convert other data to a tessellation \cr
       \code{\link{plot.tess}} \tab plot a tessellation \cr
       \code{\link{tiles}} \tab extract all the tiles of a tessellation \cr
@@ -641,14 +649,18 @@
       \code{\link{intersect.tess}} \tab intersect two tessellations \cr
                               \tab or restrict a tessellation to a window \cr
       \code{\link{chop.tess}} \tab subdivide a tessellation by a line \cr
-      \code{\link{dirichlet}} \tab compute Dirichlet-Voronoi tessellation of points\cr
-      \code{\link{delaunay}} \tab compute Delaunay triangulation of points\cr
       \code{\link{rpoislinetess}} \tab generate tessellation using Poisson line
       process \cr
       \code{\link{tile.areas}}	\tab
       area of each tile in tessellation \cr
       \code{\link{bdist.tiles}}	\tab
-      boundary distance for each tile in tessellation 
+      boundary distance for each tile in tessellation \cr
+      \code{\link{connected.tess}} \tab find connected components of tiles \cr
+      \code{\link{shift.tess}} \tab shift a tessellation \cr
+      \code{\link{rotate.tess}} \tab rotate a tessellation \cr
+      \code{\link{reflect.tess}} \tab reflect about the origin \cr
+      \code{\link{flipxy.tess}} \tab reflect about the diagonal \cr
+      \code{\link{affine.tess}} \tab apply affine transformation 
     }
 
     \bold{Three-dimensional point patterns}
@@ -815,6 +827,7 @@
                                 for density estimation\cr
     \code{\link{bw.scott}} \tab Scott's rule of thumb 
                                 for density estimation\cr
+    \code{\link{bw.abram}} \tab Abramson's rule for adaptive bandwidths\cr
     \code{\link{bw.relrisk}} \tab cross-validated bandwidth selection
                                for \code{\link{relrisk}} \cr
     \code{\link{bw.smoothppp}} \tab cross-validated bandwidth selection
@@ -938,7 +951,13 @@
     \code{\link{Lcross.inhom},\link{Ldot.inhom}} \tab
     inhomogeneous counterparts of \code{Lcross}, \code{Ldot} \cr
     \code{\link{pcfcross.inhom},\link{pcfdot.inhom}} \tab
-    inhomogeneous counterparts of \code{pcfcross}, \code{pcfdot} 
+    inhomogeneous counterparts of \code{pcfcross}, \code{pcfdot} \cr
+    \code{\link{localKcross},\link{localKdot}} \tab
+    local counterparts of \code{Kcross}, \code{Kdot} \cr
+    \code{\link{localLcross},\link{localLdot}} \tab
+    local counterparts of \code{Lcross}, \code{Ldot} \cr
+    \code{\link{localKcross.inhom},\link{localLcross.inhom}} \tab
+    local counterparts of \code{Kcross.inhom}, \code{Lcross.inhom} 
   }
 
   \bold{Summary statistics for a marked point pattern:}
@@ -953,6 +972,7 @@
     \code{\link{markcorr}} \tab mark correlation function \cr
     \code{\link{markcrosscorr}} \tab mark cross-correlation function \cr
     \code{\link{markvario}} \tab mark variogram \cr
+    \code{\link{markmarkscatter}} \tab mark-mark scatterplot \cr
     \code{\link{Kmark}} \tab mark-weighted \eqn{K} function \cr
     \code{\link{Emark}} \tab mark independence diagnostic \eqn{E(r)} \cr
     \code{\link{Vmark}} \tab mark independence diagnostic \eqn{V(r)} \cr
@@ -1541,6 +1561,8 @@
    \tabular{ll}{
     \code{\link{envelope}} \tab critical envelope for Monte Carlo
     test of goodness-of-fit \cr
+    \code{\link{bits.envelope}} \tab critical envelope for balanced
+    two-stage Monte Carlo test \cr
     \code{\link{qqplot.ppm}} \tab diagnostic plot for interpoint
     interaction \cr
     \code{\link{scan.test}} \tab spatial scan statistic/test \cr
@@ -1575,7 +1597,7 @@
     \code{\link{dg.test}} \tab Dao-Genton test \cr
     \code{\link{bits.test}} \tab Balanced independent two-stage test \cr
     \code{\link{dclf.progress}} \tab Progress plot for DCLF test \cr
-    \code{\link{mad.progress}} \tab Progress plot for MAD test
+    \code{\link{mad.progress}} \tab Progress plot for MAD test \cr
   }
 
 \bold{Sensitivity diagnostics:}
@@ -1587,6 +1609,7 @@
       \code{\link{leverage.ppm}} \tab Leverage for point process model\cr
       \code{\link{influence.ppm}} \tab Influence for point process model\cr
       \code{\link{dfbetas.ppm}} \tab Parameter influence\cr
+      \code{\link{dffit.ppm}} \tab Effect change diagnostic
     }
   
   \bold{Diagnostics for covariate effect:}

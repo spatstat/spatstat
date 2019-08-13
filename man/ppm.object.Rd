@@ -140,8 +140,7 @@
   may change slightly between releases of the \pkg{spatstat} package.
 }
 \examples{
-  data(cells)
-  fit <- ppm(cells, ~ x, Strauss(0.1), correction="periodic")
+  fit <- ppm(cells ~ x, Strauss(0.1), correction="periodic")
   fit
   coef(fit)
   \dontrun{

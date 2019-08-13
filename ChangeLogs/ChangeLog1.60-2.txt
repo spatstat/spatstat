@@ -437,3 +437,21 @@ Change log from 1.60-1 to 1.60-2
 ------------- passed R-3.6.1 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
+
+   src/ripleypoly.h
+	Tentative fix for numerical problem causing test failure on i386.
+
+   spatstat-package.Rd
+   ppm.object.Rd
+   bits.test.Rd
+	Updated cross-references.
+	
+   DESCRIPTION
+   NEWS
+   Nickname.txt
+        Nickname changed to 'Much code. So tire. Wow'
+	Version 1.60-1.025
+
+------------- passed R-3.6.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
