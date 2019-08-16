@@ -4,6 +4,7 @@ RepoStuff/*
 ChangeLogs
 ChangeLogs/ChangeLog*
 .git
+.github
 .gitignore
 ^.*\.Rproj$
 ^\.Rproj\.user$
