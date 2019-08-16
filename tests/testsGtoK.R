@@ -539,7 +539,7 @@ local({
 #
 # tests/kppm.R
 #
-# $Revision: 1.29 $ $Date: 2019/08/03 07:01:46 $
+# $Revision: 1.30 $ $Date: 2019/08/14 03:14:55 $
 #
 # Test functionality of kppm that depends on RandomFields
 # Test update.kppm for old style kppm objects
@@ -726,6 +726,14 @@ local({
   fut2 <- kppm(redwood ~ x, "LGCP", method="palm")
   summary(fut2)
   b <- residuals(fut2)
+  #'
+  po <- ppm(redwood ~ 1)
+  A <- kppmComLik(redwood, Xname="redwood", po=po, clusters="Thomas",
+                  statistic="pcf", statargs=list(), control=list(),
+                  weightfun=NULL, rmax=0.1)
+  A <- kppmPalmLik(redwood, Xname="redwood", po=po, clusters="Thomas",
+                   statistic="pcf", statargs=list(), control=list(),
+                   weightfun=NULL, rmax=0.1)
 })
 
 reset.spatstat.options()

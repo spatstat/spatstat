@@ -543,7 +543,7 @@ grep#
 #
 #   Plus assorted tricks
 #
-#   $Revision: 1.11 $  $Date: 2019/07/17 12:03:28 $
+#   $Revision: 1.12 $  $Date: 2019/08/14 03:28:35 $
 #
 require(spatstat)
 local({
@@ -595,14 +595,26 @@ local({
   fitZ <- ppm(cells ~ Z)
   U <- getppmOriginalCovariates(fitZ)
   logLik(fitZ, absolute=TRUE)
+  fitOK  <- ppm(redwood ~1, Strauss(0.1), emend=TRUE)
+  print(fitOK)
   fitNot <- ppm(redwood ~1, Strauss(0.1))
   fitFast <- emend(fitNot, trace=TRUE)
+  print(fitFast)
   op <- spatstat.options(project.fast=TRUE)
   fitFast <- emend(fitNot, trace=TRUE)
+  print(fitFast)
   spatstat.options(op)
   
   fut <- kppm(redwood ~ x)
   A <- quad.ppm(fut)
+
+  fat <- ppm(cells ~ x, Strauss(0.12))
+  op <- spatstat.options(print.ppm.SE='always')
+  print(fat)
+  spatstat.options(print.ppm.SE='never')
+  print(fat)
+  print(fitZ)
+  spatstat.options(op)
 
   ## (8) support for class profilepl
   rr <- data.frame(r=seq(0.05, 0.15, by=0.02))

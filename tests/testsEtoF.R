@@ -25,7 +25,7 @@ local({
 #
 #  Test validity of envelope data
 #
-#  $Revision: 1.16 $  $Date: 2019/08/07 09:11:06 $
+#  $Revision: 1.17 $  $Date: 2019/08/13 07:48:15 $
 #
 
 require(spatstat)
@@ -120,6 +120,14 @@ local({
   print(A)
   B <- envelope(A, nsim=5, savefuns=TRUE)
   D <- envelope(cells, "Lest", nsim=5)
+  
+  UU <- envelope(cells, nsim=5, foreignclass="ppp", clipdata=TRUE)
+  
+  AA <- envelope(cells, nsim=5, jsim=5, alternative="greater", global=TRUE)
+  AA <- envelope(cells, nsim=5, jsim=5, alternative="less", global=TRUE)
+  AA <- envelope(cells, nsim=5, jsim=5, alternative="greater", VARIANCE=TRUE)
+  AA <- envelope(cells, nsim=5, jsim=5, alternative="greater", VARIANCE=TRUE)
+
   fit <- ppm(cells ~ 1, Strauss(0.07))
   U <- envelope(fit, nsim=3, simulate=expression(runifpoint(20)))
   kfit <- kppm(redwood3 ~ x)

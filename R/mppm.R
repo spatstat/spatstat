@@ -1,7 +1,7 @@
 #
 # mppm.R
 #
-#  $Revision: 1.85 $   $Date: 2017/12/10 03:47:42 $
+#  $Revision: 1.86 $   $Date: 2019/08/15 09:31:04 $
 #
 
 mppm <- local({
@@ -135,15 +135,36 @@ mppm <- local({
     Yclass <- data.sumry$classes[Yname]
     if(Yclass == "ppp") {
       ## convert to quadrature schemes, for efficiency's sake
+      Ydescrip <- "point patterns"
       Y <- solapply(Y, quadscheme)
-    } else {
-      if(Yclass != "quad")
-        stop(paste("Column", dQuote(Yname), "of data",
-                   "does not consist of point patterns (class ppp)",
-                   "nor of quadrature schemes (class quad)"))
+    } else if(Yclass == "quad") {
+      Ydescrip <- "quadrature schemes"
       Y <- as.solist(Y)
+    } else {
+      stop(paste("Column", dQuote(Yname), "of data",
+                 "does not consist of point patterns (class ppp)",
+                 "nor of quadrature schemes (class quad)"),
+           call.=FALSE)
     }
-  
+    ## check consistency of marks
+    if(any(ismrk <- sapply(Y, is.marked))) {
+      if(!all(ismrk))
+        stop(paste("Some, but not all, of the",
+                   Ydescrip, sQuote(Yname), "are marked"),
+             call.=FALSE)
+      ismul <- sapply(Y, is.multitype)
+      if(all(!ismul))
+        stop("Non-factor marks are not supported in mppm")
+      if(!all(ismul))
+        stop(paste("Some, but not all, of the",
+                   Ydescrip, sQuote(Yname), "have factor-valued marks"),
+             call.=FALSE)
+      levlist <- lapply(Y, marklevels)
+      if(length(unique(levlist)) != 1)
+        stop(paste("The", Ydescrip, sQuote(Yname),
+                   "do not all have the same set of possible types"),
+             call.=FALSE)
+    }
     ## Extract sub-hyperframe of data named in formulae
     datanames <- names(data)
     used.cov.names <- allvars[allvars %in% datanames]
@@ -529,6 +550,8 @@ mppm <- local({
 
   allpoisson <- function(x) all(sapply(x, is.poisson.interact))
 
+  marklevels <- function(x) { levels(marks(x)) }
+  
   errorInconsistentRows <- function(what, offending) {
     stop(paste("There are inconsistent",
                what,

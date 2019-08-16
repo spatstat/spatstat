@@ -438,6 +438,8 @@ Change log from 1.60-1 to 1.60-2
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+13 aug 2019
+
    src/ripleypoly.h
 	Tentative fix for numerical problem causing test failure on i386.
 
@@ -455,3 +457,33 @@ Change log from 1.60-1 to 1.60-2
 ------------- passed R-3.6.1 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
+
+14 aug 2019
+
+   tests/envelopes.R
+   tests/kppm.R
+   tests/ppmtricks.R
+	More checks.
+
+15 aug 2019
+
+   mppm.R
+	Added checks on consistency between marks of point pattern datasets
+
+16 aug 2019
+
+   .github/ISSUE_TEMPLATE/custom.md [New file]
+        Template for Issues on github
+
+   .Rbuildignore
+         Ignore template
+	 
+   DESCRIPTION
+   NEWS
+	Version 1.60-1.026
+
+------------- passed R-3.6.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+   
+
