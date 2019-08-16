@@ -106,3 +106,4 @@ rthin(X, P, \dots, nsim=1, drop=TRUE)
 }
 \keyword{spatial}
 \keyword{datagen}
+\keyword{manip}

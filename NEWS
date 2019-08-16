@@ -26,6 +26,9 @@ NEW FUNCTIONS
 
     o data.lppm
     Extract the original data point pattern from a fitted model of class 'lppm'.
+
+    o rthinclumps
+    Divide a spatial region into clumps and randomly delete some of them.
     
 SIGNIFICANT USER-VISIBLE CHANGES
 

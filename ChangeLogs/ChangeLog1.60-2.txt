@@ -486,4 +486,17 @@ Change log from 1.60-1 to 1.60-2
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
    
+   .github/ISSUE_TEMPLATE/custom.md
+        Tweaked.
 
+    randomsets.R [New file]
+    rthinclumps.Rd [New file]
+        new function rthinclumps
+
+   DESCRIPTION
+   NEWS
+	Version 1.60-1.027
+
+------------- passed R-3.6.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
