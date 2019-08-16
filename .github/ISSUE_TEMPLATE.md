@@ -7,8 +7,6 @@ assignees: ''
 
 ---
 
-## Please edit this template to describe the issue.
-
 # STOP! ✋
 ## If you just want to ask a question, please do not open a new Issue!
 ### Issues are bugs or inadequacies in the software.
