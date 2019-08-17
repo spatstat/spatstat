@@ -998,6 +998,18 @@ local({
   anova(modxyS, test="Chi")
 })
 
+local({
+  ## test multitype stuff
+  foo <- flu[1:3,]
+  msh <- MultiStraussHard(iradii=matrix(100, 2, 2),
+                          hradii=matrix(10,2,2),
+                          types=levels(marks(foo$pattern[[1]])))
+  msh0 <- MultiStraussHard(iradii=matrix(100, 2, 2),
+                          hradii=matrix(10,2,2))
+  fit <- mppm(pattern ~ 1, data=foo, interaction=msh0)
+  print(fit)
+  print(summary(fit))
+})
 #'
 #'     tests/msr.R
 #'

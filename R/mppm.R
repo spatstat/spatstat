@@ -1,7 +1,7 @@
 #
 # mppm.R
 #
-#  $Revision: 1.86 $   $Date: 2019/08/15 09:31:04 $
+#  $Revision: 1.89 $   $Date: 2019/08/17 11:21:23 $
 #
 
 mppm <- local({
@@ -146,25 +146,6 @@ mppm <- local({
                  "nor of quadrature schemes (class quad)"),
            call.=FALSE)
     }
-    ## check consistency of marks
-    if(any(ismrk <- sapply(Y, is.marked))) {
-      if(!all(ismrk))
-        stop(paste("Some, but not all, of the",
-                   Ydescrip, sQuote(Yname), "are marked"),
-             call.=FALSE)
-      ismul <- sapply(Y, is.multitype)
-      if(all(!ismul))
-        stop("Non-factor marks are not supported in mppm")
-      if(!all(ismul))
-        stop(paste("Some, but not all, of the",
-                   Ydescrip, sQuote(Yname), "have factor-valued marks"),
-             call.=FALSE)
-      levlist <- lapply(Y, marklevels)
-      if(length(unique(levlist)) != 1)
-        stop(paste("The", Ydescrip, sQuote(Yname),
-                   "do not all have the same set of possible types"),
-             call.=FALSE)
-    }
     ## Extract sub-hyperframe of data named in formulae
     datanames <- names(data)
     used.cov.names <- allvars[allvars %in% datanames]
@@ -291,6 +272,8 @@ mppm <- local({
       ## now the nontrivial interaction terms
       for(j in (1:ninteract)[iused & !trivial]) {
         inter <- interaction[i,j,drop=TRUE]
+        if(!is.null(ss <- inter$selfstart)) 
+          interaction[i,j] <- inter <- ss(Yi$data, inter)
         prepj <- bt.frame(Yi, ~1, inter, ..., covariates=covariates,
                           allcovar=TRUE, use.gam=use.gam,
                           vnamebase=itags[j], vnameprefix=itags[j])

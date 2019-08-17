@@ -4,7 +4,7 @@
 ##
 ##  subset operations for hyperframes
 ##
-##  $Revision: 1.25 $    $Date: 2017/02/07 07:35:32 $
+##  $Revision: 1.28 $    $Date: 2019/08/17 13:48:03 $
 ##
 
 "[.hyperframe" <- function(x, i, j, drop=FALSE, strip=drop, ...) {
@@ -121,12 +121,13 @@ function (x, i, j, value)
   jgiven <- !missing(j)
   if(!igiven) i <- seq_len(dimx[1L])
   if(!jgiven) j <- seq_len(dimx[2L])
-#  singlerow    <- ((is.integer(i) && length(i) == 1 && i > 0)
-#                   || (is.character(i) && length(i) == 1)
-#                   || (is.logical(i) && sum(i) == 1))
+  singlerow    <- ((is.integer(i) && length(i) == 1 && i > 0)
+                   || (is.character(i) && length(i) == 1)
+                   || (is.logical(i) && sum(i) == 1))
   singlecolumn <- ((is.integer(j) && length(j) == 1 && j > 0)
                    || (is.character(j) && length(j) == 1)
                    || (is.logical(j) && sum(j) == 1))
+  
   if(!igiven && jgiven) {
     # x[, j] <- value
     if(singlecolumn) {
@@ -152,11 +153,16 @@ function (x, i, j, value)
     J <- colseq[j]
     ## convert to lists 
     xlist <- as.list(x)
-    hv <- if(is.hyperframe(value)) value else
-          as.hyperframe(as.solist(value, demote=TRUE))
-    vlist <- as.list(hv)
-    nrowV <- dim(hv)[1L]
-    ncolV <- dim(hv)[2L]
+    if(singlerow && singlecolumn) {
+      vlist <- list(anylist(value))
+      nrowV <- ncolV <- 1
+    } else {
+      hv <- if(is.hyperframe(value)) value else
+            as.hyperframe(as.solist(value, demote=TRUE))
+      vlist <- as.list(hv)
+      nrowV <- dim(hv)[1L]
+      ncolV <- dim(hv)[2L]
+    }
     if(nrowV != length(I)) {
       if(nrowV == 1) {
         ## replicate
@@ -174,8 +180,10 @@ function (x, i, j, value)
                   call.=FALSE)
     }
     ## replace entries
-    for(jj in J) 
-      xlist[[jj]][I] <- vlist[[jj]][I]
+    for(k in seq_along(J)) {
+      jj <- J[k]
+      xlist[[jj]][I] <- vlist[[k]]
+    }
     ## put back together
     y <- do.call(hyperframe, append(xlist,
                                       list(row.names=row.names(x))))

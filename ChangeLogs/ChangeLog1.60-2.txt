@@ -500,3 +500,22 @@ Change log from 1.60-1 to 1.60-2
 ------------- passed R-3.6.1 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
+
+17 aug 2019
+
+    hypersub.R
+	Bug fix in [<-.hyperframe
+
+    mppm.R
+        Interactions are now self-started
+
+    tests/mppm.R
+        Added test of multitype mppm
+
+   DESCRIPTION
+   NEWS
+	Version 1.60-1.028
+
+------------- passed R-3.6.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------

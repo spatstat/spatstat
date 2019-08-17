@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.60-1.026
+        CHANGES IN spatstat VERSION 1.60-1.028
 
 OVERVIEW
 
@@ -10,7 +10,9 @@ OVERVIEW
     o Cross-validated bandwidth selection on a linear network.
 
     o More support for character-valued images.
-    
+
+    o Random thinning of clumps.
+
     o Bug fixes and minor improvements.
 
     o Nickname: 'Much code. So tire. Wow'
@@ -47,6 +49,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
     New argument 'drop' controls behaviour when indices are missing
     as in 'x[] <- value'
 
+    o mppm
+    Now supports 'self-starting' interactions.
+
     o as.im
     New argument 'stringsAsFactors' is recognised by many methods.
     It enables the creation of character-string-valued images.
@@ -77,13 +82,17 @@ BUG FIXES
     o densityVoronoi.lpp
     Did not correctly handle patterns containing duplicated points.
     Fixed.
-    
+
     o localKcross.inhom, localLcross.inhom
     Argument lambdaX was ignored.
     Fixed.
 
     o "[.linim"
     Factor values were erroneously converted to integers, in some cases.
+    Fixed.
+
+    o "[<-.hyperframe"
+    Did not handle some classes of objects correctly.
     Fixed.
     
     o effectfun
