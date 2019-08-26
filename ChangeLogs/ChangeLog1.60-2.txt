@@ -519,3 +519,22 @@ Change log from 1.60-1 to 1.60-2
 ------------- passed R-3.6.1 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
+
+26 aug 2019
+
+   rhomono.R [New file]
+   rhohatMonotone.Rd [New file]
+   	New function 'rhohatMonotone'
+
+   rhohat.Rd
+	Cross-reference
+	
+   DESCRIPTION
+   NEWS
+   Nickname.txt
+	Nickname changed to "Watch out for that ... tree"
+	Version 1.60-1.029
+
+------------- passed R-3.6.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------

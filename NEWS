@@ -1,9 +1,11 @@
 
-        CHANGES IN spatstat VERSION 1.60-1.028
+        CHANGES IN spatstat VERSION 1.60-1.029
 
 OVERVIEW
 
     o Fast kernel estimation on a linear network using 2D kernels.
+
+    o Nonparametric maximum likelihood estimation of 'rho'.
 
     o Extension of Scott's rule for bandwidth selection.
 
@@ -15,10 +17,14 @@ OVERVIEW
 
     o Bug fixes and minor improvements.
 
-    o Nickname: 'Much code. So tire. Wow'
+    o Nickname: 'Watch out for that ... tree'
     
 NEW FUNCTIONS
 
+    o rhohatMonotone
+    An alternative to 'rhohat' which uses nonparametric maximum likelihood,
+    assuming the intensity is a monotone function of the covariate.
+    
     o densityQuick.lpp
     Fast kernel estimator of point process intensity on a network
     using 2D smoothing kernel.

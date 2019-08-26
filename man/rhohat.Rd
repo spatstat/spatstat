@@ -322,6 +322,12 @@ rhohat(object, covariate, ...)
   \code{\link{parres}}.
 
   See \code{\link{ppm}} for a parametric method for the same problem.
+
+  The command \code{\link{rhohatMonotone}} estimates the
+  same function \eqn{\rho(z)}{rho(z)} assuming that this is
+  monotonone (i.e. that \eqn{\rho(z)}{rho(z)}
+  is either a decreasing or increasing function of \eqn{z})
+  using nonparametric maximum likelihood.
 }
 \examples{
   X <-  rpoispp(function(x,y){exp(3+3*x)})
@@ -344,4 +350,4 @@ rhohat(object, covariate, ...)
 }
 \keyword{spatial}
 \keyword{models}
-
+\keyword{nonparametric}
