@@ -538,3 +538,25 @@ Change log from 1.60-1 to 1.60-2
 ------------- passed R-3.6.1 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
+
+30 aug 2019
+
+   quadrattest.R
+   spatstat-internal.Rd
+	CressieReadStatistic has new arguments 'normalise' and 'named'
+	for internal use.
+
+   quadrattest.R
+	Bug fix ('CR' was ignored if method="MonteCarlo")
+	Improved labelling of test when 'CR' is given.
+
+   quadrat.test.Rd
+	Added examples of argument 'CR'.
+
+   DESCRIPTION
+   NEWS
+	Version 1.60-1.030
+
+------------- passed R-3.6.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------

@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.60-1.029
+        CHANGES IN spatstat VERSION 1.60-1.030
 
 OVERVIEW
 
@@ -82,6 +82,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o plot.pppmatching
     This existing function now has a help file.
     New argument 'adjust'.
+
+    o quadrat.test
+    Improved labelling of test when argument 'CR' is given.
     
 BUG FIXES
 
@@ -89,6 +92,10 @@ BUG FIXES
     Did not correctly handle patterns containing duplicated points.
     Fixed.
 
+    o quadrat.test
+    Argument 'CR' was ignored when method="MonteCarlo".
+    Fixed.
+    
     o localKcross.inhom, localLcross.inhom
     Argument lambdaX was ignored.
     Fixed.

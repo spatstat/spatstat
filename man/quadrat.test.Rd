@@ -70,7 +70,7 @@ quadrat.test(X, ...)
   }
   \item{CR}{
     Optional. Numerical value of the index \eqn{\lambda}{lambda}
-    for the Cressie-Read test statistic. 
+    for the Cressie-Read test statistic. See Details.
   }
   \item{lambda}{
     Optional. Pixel image (object of class \code{"im"})
@@ -226,12 +226,17 @@ quadrat.test(X, ...)
   \bold{46}, 440--464. 
 }
 \examples{
-  data(simdat)
   quadrat.test(simdat)
   quadrat.test(simdat, 4, 3)
 
   quadrat.test(simdat, alternative="regular")
   quadrat.test(simdat, alternative="clustered")
+
+  ## Likelihood ratio test
+  quadrat.test(simdat, CR=0)
+  ## Power divergence tests
+  quadrat.test(simdat, CR=-1)$p.value
+  quadrat.test(simdat, CR=-2)$p.value
 
   # Using Monte Carlo p-values
   quadrat.test(swedishpines) # Get warning, small expected values.
@@ -249,7 +254,7 @@ quadrat.test(X, ...)
   quadrat.test(qS)
 
   # fitted model: inhomogeneous Poisson
-  fitx <- ppm(simdat, ~x, Poisson())
+  fitx <- ppm(simdat ~ x)
   quadrat.test(fitx)
 
   te <- quadrat.test(simdat, 4)
@@ -272,10 +277,7 @@ quadrat.test(X, ...)
 
 }
 \author{\adrian
-  
-  
   and \rolf
-  
 }
 \keyword{spatial}
 \keyword{htest}
