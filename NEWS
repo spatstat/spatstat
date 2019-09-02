@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.60-1.030
+        CHANGES IN spatstat VERSION 1.60-1.031
 
 OVERVIEW
 
@@ -74,6 +74,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o Smooth.im
     New argument 'kernel'.
 
+    o quadrat.test
+    New argument 'df.est'.
+
     o edge.Ripley
     Numerical stability has been improved on some platforms.
     Results may have changed in marginal cases (e.g. where the circle
@@ -85,6 +88,7 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o quadrat.test
     Improved labelling of test when argument 'CR' is given.
+
     
 BUG FIXES
 

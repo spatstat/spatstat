@@ -1,7 +1,7 @@
 #
 #   quadrattest.R
 #
-#   $Revision: 1.61 $  $Date: 2019/08/30 07:02:13 $
+#   $Revision: 1.62 $  $Date: 2019/08/31 05:07:15 $
 #
 
 quadrat.test <- function(X, ...) {
@@ -13,7 +13,7 @@ quadrat.test.ppp <-
            alternative = c("two.sided", "regular", "clustered"),
            method = c("Chisq", "MonteCarlo"),
            conditional=TRUE, CR=1,
-           lambda=NULL, 
+           lambda=NULL, df.est=NULL,
            ...,
            xbreaks=NULL, ybreaks=NULL,
            tess=NULL, nsim=1999)
@@ -28,6 +28,7 @@ quadrat.test.ppp <-
                                 conditional=conditional,
                                 CR=CR,
                                 fit=lambda,
+                                df.est=df.est,
                                 xbreaks=xbreaks, ybreaks=ybreaks,
                                 tess=tess,
                                 nsim=nsim),
@@ -47,7 +48,7 @@ quadrat.test.ppm <-
   function(X, nx=5, ny=nx,
            alternative = c("two.sided", "regular", "clustered"),      
            method=c("Chisq", "MonteCarlo"),
-           conditional=TRUE, CR=1, ...,
+           conditional=TRUE, CR=1, df.est=NULL, ...,
            xbreaks=NULL, ybreaks=NULL,
            tess=NULL, nsim=1999)
 {
@@ -67,7 +68,8 @@ quadrat.test.ppm <-
                                 xbreaks=xbreaks, ybreaks=ybreaks,
                                 tess=tess,
                                 nsim=nsim, 
-                                fit=X),
+                                fit=X,
+                                df.est=df.est),
                            list(...),
                            list(Xname=dataname, fitname=fitname)))
 }
@@ -77,7 +79,7 @@ quadrat.test.quadratcount <-
            alternative = c("two.sided", "regular", "clustered"),
            method=c("Chisq", "MonteCarlo"),
            conditional=TRUE, CR=1,
-           lambda=NULL, 
+           lambda=NULL, df.est=NULL,
            ...,
            nsim=1999) {
    trap.extra.arguments(...)
@@ -85,7 +87,7 @@ quadrat.test.quadratcount <-
    alternative <- match.arg(alternative)
    quadrat.testEngine(Xcount=X,
                       alternative=alternative,
-                      fit=lambda,
+                      fit=lambda, df.est=df.est,
                       method=method, conditional=conditional, CR=CR, nsim=nsim)
 }
 
@@ -97,7 +99,8 @@ quadrat.testEngine <- function(X, nx, ny,
                                nsim=1999,
                                Xcount=NULL,
                                xbreaks=NULL, ybreaks=NULL, tess=NULL,
-                               fit=NULL, Xname=NULL, fitname=NULL) {
+                               fit=NULL, df.est=NULL,
+                               Xname=NULL, fitname=NULL) {
   trap.extra.arguments(...)
   method <- match.arg(method)
   alternative <- match.arg(alternative)
@@ -105,6 +108,7 @@ quadrat.testEngine <- function(X, nx, ny,
     check.1.real(nsim)
     explain.ifnot(nsim > 0)
   }
+  if(!is.null(df.est)) check.1.integer(df.est)
   if(is.null(Xcount))
     Xcount <- quadratcount(X, nx=nx, ny=ny, xbreaks=xbreaks, ybreaks=ybreaks,
                            tess=tess)
@@ -130,7 +134,7 @@ quadrat.testEngine <- function(X, nx, ny,
     fitmeans <- sum(Xcount) * areas/sum(areas)
     normalised <- TRUE
     df <- switch(method,
-                 Chisq      = length(fitmeans) - 1,
+                 Chisq      = length(fitmeans) - df.est %orifnull% 1,
                  MonteCarlo = NULL)    
   } else {
     if(!is.ppm(fit))
@@ -154,14 +158,12 @@ quadrat.testEngine <- function(X, nx, ny,
                                           weights=masses)
       fitmeans <- as.vector(t(fitmeans))
     } else {
-      U <- as.ppp(Q)
-      V <- marks(cut(U, tess), dfok=FALSE)
-      fitmeans <- tapply(masses, list(tile=V), sum)
-      fitmeans[is.na(fitmeans)] <- 0
+      V <- tileindex(as.ppp(Q), Z=tess)
+      fitmeans <- tapplysum(masses, list(tile=V))
     }
     switch(method,
            Chisq = {
-             df <- length(fitmeans) - length(coef(fit))
+             df <- length(fitmeans) - df.est %orifnull% length(coef(fit))
              if(df < 1)
                stop(paste("Not enough quadrats: degrees of freedom df =", df))
            },

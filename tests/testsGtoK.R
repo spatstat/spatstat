@@ -84,11 +84,22 @@ local({
 #
 #  tests/imageops.R
 #
-#   $Revision: 1.18 $   $Date: 2019/08/06 08:47:52 $
+#   $Revision: 1.19 $   $Date: 2019/08/31 05:30:31 $
 #
 
 require(spatstat)
 local({
+  #' cases of 'im' data
+  tab <- table(sample(factor(letters[1:10]), 30, replace=TRUE))
+  b <- im(tab, xrange=c(0,1), yrange=c(0,10))
+  b <- update(b)
+
+  mat <- matrix(sample(0:4, 12, replace=TRUE), 3, 4)
+  levels(mat) <- 0:4
+  b <- im(mat)
+  b <- update(b)
+
+  #' various manipulations
   AA <- A <- as.im(owin())
   BB <- B <- as.im(owin(c(1.1, 1.9), c(0,1)))
   Z <- imcov(A, B)
@@ -98,6 +109,7 @@ local({
   Frame(BB) <- Frame(A)
   
   ## handling images with 1 row or column
+  
   ycov <- function(x, y) y
   E <- as.im(ycov, owin(), dimyx = c(2,1))
   G <- cut(E, 2)
@@ -147,9 +159,9 @@ local({
   hh <- d[2:4, 3:5, rescue=TRUE]
   if(!is.im(hh)) stop("rectangle was not rescued in [.im")
   ## cases of "[<-.im"
+  d[,] <- d[] + 1
   d[Empty] <- 42
   d[EmptyFun] <- 42
-  
   ## smudge() and rasterfilter()
   dd <- smudge(d)
 

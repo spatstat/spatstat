@@ -1469,7 +1469,7 @@ roseContinuous(ang, rad, unit, \dots,
                start, clockwise, main, labels, at, do.plot)
 ruletextline(ch, n, terse)
 quadrat.testEngine(X, nx, ny, alternative, method, conditional, CR, 
-     \dots, nsim, Xcount, xbreaks, ybreaks, tess, fit, Xname, fitname)
+     \dots, nsim, Xcount, xbreaks, ybreaks, tess, fit, df.est, Xname, fitname)
 quadscheme.replicated(data, dummy, method, \dots)
 quadscheme.spatial(data, dummy, method, \dots)
 pointgrid(W, ngrid)

@@ -3,7 +3,7 @@
 #
 #	A class 'owin' to define the "observation window"
 #
-#	$Revision: 4.184 $	$Date: 2019/02/10 06:42:13 $
+#	$Revision: 4.185 $	$Date: 2019/08/31 04:03:36 $
 #
 #
 #	A window may be either
@@ -945,8 +945,10 @@ inside.owin <- function(x, y, w) {
   # test whether (x,y) is inside window w
   # x, y may be vectors 
 
-  if(missing(y) && all(c("x", "y") %in% names(x)))
-    return(inside.owin(x$x, x$y, w))
+  if((missing(y) || is.null(y)) && all(c("x", "y") %in% names(x))) {
+    y <- x$y
+    x <- x$x
+  }
 
   w <- as.owin(w)
 

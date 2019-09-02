@@ -3,7 +3,7 @@
 #
 # support for tessellations
 #
-#   $Revision: 1.94 $ $Date: 2019/08/07 07:31:40 $
+#   $Revision: 1.95 $ $Date: 2019/08/31 04:05:41 $
 #
 tess <- function(..., xgrid=NULL, ygrid=NULL, tiles=NULL, image=NULL,
                  window=NULL, marks=NULL, keepempty=FALSE,
@@ -659,6 +659,10 @@ as.function.tess <- function(x, ..., values=NULL) {
 
 tileindex <- function(x, y, Z) {
   stopifnot(is.tess(Z))
+  if((missing(y) || is.null(y)) && all(c("x", "y") %in% names(x))) {
+    y <- x$y
+    x <- x$x
+  }
   stopifnot(length(x) == length(y))
   switch(Z$type,
          rect={

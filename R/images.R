@@ -1,7 +1,7 @@
 #
 #       images.R
 #
-#      $Revision: 1.155 $     $Date: 2019/07/18 02:32:56 $
+#      $Revision: 1.157 $     $Date: 2019/08/31 05:19:39 $
 #
 #      The class "im" of raster images
 #
@@ -41,6 +41,7 @@ im <- function(mat, xcol=seq_len(ncol(mat)), yrow=seq_len(nrow(mat)),
       #' handle one-dimensional tables
       nc <- 1
       nr <- length(mat)
+      if(missing(xcol)) xcol <- seq_len(nc)
     }
     if(length(xcol) != nc)
       stop("Length of xcol does not match ncol(mat)")
@@ -687,6 +688,11 @@ lookup.im <- function(Z, x, y, naok=FALSE, strict=TRUE) {
 
   if(Z$type == "factor")
     Z <- repair.old.factor.image(Z)
+
+  if((missing(y) || is.null(y)) && all(c("x", "y") %in% names(x))) {
+    y <- x$y
+    x <- x$x
+  }
   
   if(length(x) != length(y))
     stop("x and y must be numeric vectors of equal length")

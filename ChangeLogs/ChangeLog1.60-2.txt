@@ -560,3 +560,36 @@ Change log from 1.60-1 to 1.60-2
 ------------- passed R-3.6.1 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
+
+02 sep 2019
+
+   window.R
+	inside.owin now accepts x = <ppp>
+
+   images.R
+        lookup.im now accepts x = <ppp>
+
+   tess.R
+   tileindex.R
+        tileindex now accepts x = <ppp>
+
+   quadrattest.R
+   quadrat.test.Rd
+   spatstat-internal.Rd
+	New argument df.est
+
+   images.R
+	Bug fix in handling 1-dim tables
+
+   tests/imageops.R
+	Tests of obscure bugs
+
+   DESCRIPTION
+   NEWS
+	Version 1.60-1.031
+
+------------- passed R-3.6.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+

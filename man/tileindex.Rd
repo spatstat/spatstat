@@ -15,6 +15,9 @@ tileindex(x, y, Z)
   \item{x,y}{
     Spatial coordinates.
     Numeric vectors of equal length.
+    (Alternatively \code{y} may be missing
+    and \code{x} may be an object containing
+    spatial coordinates).
   }
   \item{Z}{
     A tessellation (object of class \code{"tess"}).
@@ -49,6 +52,8 @@ tileindex(x, y, Z)
   X <- runifpoint(7)
   V <- dirichlet(X)
   tileindex(0.1, 0.4, V)
+  tileindex(list(x=0.1, y=0.4), Z=V)
+  tileindex(X, Z=V)
 }
 \keyword{spatial}
 \keyword{manip}
