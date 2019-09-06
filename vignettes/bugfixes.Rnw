@@ -445,6 +445,10 @@ of potential impact.
    for the Cressie-Read tests with \texttt{CR} not equal to $1$ or $-1$.
    \bugger{1.38-0}{august 2014}{1.59-0}{march 2019}
    
+ \item \texttt{quadrat.test}:
+   argument \texttt{CR} was ignored if \texttt{method="MonteCarlo"}.
+   \bugger{1.38-0}{august 2014}{1.60-1}{september 2019}
+   
  \item \texttt{rotmean}:
     If argument \texttt{origin} was given, and if \texttt{result="im"}
     was specified,
@@ -674,6 +678,10 @@ of potential impact.
     In a multitype point process model, \texttt{effectfun} ignored any
     user-specified value of \texttt{marks}.
     \bugger{1.52-0}{august 2017}{1.60-2}{august 2019}
+
+  \item \verb!"[<-.hyperframe"!:
+    Did not handlesome classes of objects correctly,
+    \bugger{1.37-0}{may 2014}{1.60-2}{august 2019}
 \end{itemize}
 
 \begin{thebibliography}{1}

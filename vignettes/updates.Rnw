@@ -448,9 +448,21 @@ Following is a list of all the functions that have been added.
 
 \begin{itemize}
   
+    \item \texttt{rhohatMonotone}:
+    An alternative to \texttt{rhohat}
+    which uses nonparametric maximum likelihood,
+    assuming the intensity is a monotone function of the covariate.
+    
+    \item \texttt{rthinclumps}: 
+          Divide a spatial region into clumps and randomly delete some of them.
+          
     \item \texttt{densityQuick.lpp}:
     Fast kernel estimator of point process intensity on a network
     using 2D smoothing kernel.
+
+    \item \texttt{data.lppm}:
+      Extract the original point pattern  dataset (on a linear network)
+      to which the model was fitted.
 
     \item \texttt{bw.scott.iso}:
     Isotropic version of Scott's rule (for point patterns in any dimension).  
@@ -1108,7 +1120,11 @@ listed alphabetically.
   New argument \texttt{approx} specifies the choice of algorithm.
 
   \item \texttt{as.im.function}:
-  New argument \texttt{strict}.
+    \begin{itemize}
+    \item   New argument \texttt{strict}.
+    \item   New argument \texttt{stringsAsFactors}.
+    \end{itemize}
+
 
   \item \texttt{as.im.leverage.ppm}:
   New argument \texttt{what}.
