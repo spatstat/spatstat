@@ -8,10 +8,10 @@
 \concept{Resource Selection Function}
 \concept{Prospectivity}
 \title{
-  Smoothing Estimate of Intensity as Function of a Covariate
+  Nonparametric Estimate of Intensity as Function of a Covariate
 }
 \description{
-  Computes a smoothing estimate of the intensity of a point process,
+  Computes a nonparametric estimate of the intensity of a point process,
   as a function of a (continuous) spatial covariate.
 }
 \usage{
@@ -21,7 +21,7 @@ rhohat(object, covariate, ...)
        baseline=NULL, weights=NULL,
        method=c("ratio", "reweight", "transform"),
        horvitz=FALSE,
-       smoother=c("kernel", "local"),
+       smoother=c("kernel", "local", "decreasing", "increasing"),
        subset=NULL, 
        dimyx=NULL, eps=NULL,
        n = 512, bw = "nrd0", adjust=1, from = NULL, to = NULL,
@@ -32,7 +32,7 @@ rhohat(object, covariate, ...)
        baseline=NULL, weights=NULL,
        method=c("ratio", "reweight", "transform"),
        horvitz=FALSE,
-       smoother=c("kernel", "local"),
+       smoother=c("kernel", "local", "decreasing", "increasing"),
        subset=NULL, 
        dimyx=NULL, eps=NULL,
        n = 512, bw = "nrd0", adjust=1, from = NULL, to = NULL,
@@ -43,7 +43,7 @@ rhohat(object, covariate, ...)
        weights=NULL,
        method=c("ratio", "reweight", "transform"),
        horvitz=FALSE,
-       smoother=c("kernel", "local"),
+       smoother=c("kernel", "local", "decreasing", "increasing"),
        subset=NULL, 
        dimyx=NULL, eps=NULL,
        n = 512, bw = "nrd0", adjust=1, from = NULL, to = NULL,
@@ -54,7 +54,7 @@ rhohat(object, covariate, ...)
        weights=NULL,
        method=c("ratio", "reweight", "transform"),
        horvitz=FALSE,
-       smoother=c("kernel", "local"),
+       smoother=c("kernel", "local", "decreasing", "increasing"),
        subset=NULL, 
        nd=1000, eps=NULL, random=TRUE, 
        n = 512, bw = "nrd0", adjust=1, from = NULL, to = NULL,
@@ -65,7 +65,7 @@ rhohat(object, covariate, ...)
        weights=NULL,
        method=c("ratio", "reweight", "transform"),
        horvitz=FALSE,
-       smoother=c("kernel", "local"),
+       smoother=c("kernel", "local", "decreasing", "increasing"),
        subset=NULL, 
        nd=1000, eps=NULL, random=TRUE, 
        n = 512, bw = "nrd0", adjust=1, from = NULL, to = NULL,
@@ -165,27 +165,25 @@ rhohat(object, covariate, ...)
   and the covariate is a descriptor of habitat) or
   a \emph{prospectivity index} (if the points are mineral deposits
   and the covariate is a geological variable). 
-  This command uses a nonparametric smoothing method which does not assume a
+  This command uses nonparametric methods which do not assume a
   particular form for the relationship.  
-  
+
   If \code{object} is a point pattern, and \code{baseline} is missing or
   null, this command assumes that \code{object} is a realisation of a
-  Poisson point process with intensity function
+  point process with intensity function
   \eqn{\lambda(u)}{lambda(u)} of the form
   \deqn{\lambda(u) = \rho(Z(u))}{lambda(u) = rho(Z(u))}
   where \eqn{Z} is the spatial
   covariate function given by \code{covariate}, and
-  \eqn{\rho(z)}{rho(z)} is a function to be estimated.  This command
-  computes estimators of \eqn{\rho(z)}{rho(z)} proposed by Baddeley and
-  Turner (2005) and Baddeley et al (2012).
-
-  The covariate \eqn{Z} must have continuous values.
+  \eqn{\rho(z)}{rho(z)} is the resource selection function
+  or prospectivity index.
+  A nonparametric estimator of the function \eqn{\rho(z)}{rho(z)} is computed.
 
   If \code{object} is a point pattern, and \code{baseline} is given,
   then the intensity function is assumed to be
   \deqn{\lambda(u) = \rho(Z(u)) B(u)}{lambda(u) = rho(Z(u)) * B(u)}
   where \eqn{B(u)} is the baseline intensity at location \eqn{u}.
-  A smoothing estimator of the relative intensity  \eqn{\rho(z)}{rho(z)}
+  A nonparametric estimator of the relative intensity  \eqn{\rho(z)}{rho(z)}
   is computed.
 
   If \code{object} is a fitted point process model, suppose \code{X} is
@@ -198,56 +196,53 @@ rhohat(object, covariate, ...)
     lambda(u) = rho(Z(u)) * kappa(u)
   }
   where \eqn{\kappa(u)}{kappa(u)} is the intensity of the fitted model
-  \code{object}. A smoothing estimator of \eqn{\rho(z)}{rho(z)} is computed.
+  \code{object}. A nonparametric estimator of
+  the relative intensity \eqn{\rho(z)}{rho(z)} is computed.
 
-  The estimation procedure is determined by the character strings
-  \code{method} and \code{smoother} and the argument \code{horvitz}.
-  The estimation procedure involves computing several density estimates
-  and combining them. 
-  The algorithm used to compute density estimates is 
-  determined by \code{smoother}:
-  \itemize{
-    \item If \code{smoother="kernel"},
-    each the smoothing procedure is based on
-    fixed-bandwidth kernel density estimation,
-    performed by \code{\link{density.default}}.
-    \item If \code{smoother="local"}, the smoothing procedure
-    is based on local likelihood density estimation, performed by
-    \code{\link[locfit]{locfit}}.
-  }
-  The \code{method} determines how the density estimates will be
-  combined to obtain an estimate of \eqn{\rho(z)}{rho(z)}:
+  The nonparametric estimation procedure is controlled by the
+  arguments \code{smoother}, \code{method} and \code{horvitz}.
+
+  The argument \code{smoother} selects the type of estimation technique.
   \itemize{
     \item
-    If \code{method="ratio"}, then \eqn{\rho(z)}{rho(z)} is
-    estimated by the ratio of two density estimates.
-    The numerator is a (rescaled) density estimate obtained by
-    smoothing the values \eqn{Z(y_i)}{Z(y[i])} of the covariate
-    \eqn{Z} observed at the data points \eqn{y_i}{y[i]}. The denominator
-    is a density estimate of the reference distribution of \eqn{Z}.
+    If \code{smoother="kernel"} (the default) or \code{smoother="local"}, 
+    the nonparametric estimator is a \emph{smoothing estimator}
+    of \eqn{\rho(z)}{rho(z)}, effectively a kind of density estimator
+    (Baddeley et al, 2012).
+    The estimated function \eqn{\rho(z)}{rho(z)} will be
+    a smooth function of \eqn{z}.
+    Confidence bands are also computed, assuming a Poisson point process.
+    See the section on \emph{Smooth estimates}.
     \item
-    If \code{method="reweight"}, then \eqn{\rho(z)}{rho(z)} is
-    estimated by applying density estimation to the 
-    values \eqn{Z(y_i)}{Z(y[i])} of the covariate
-    \eqn{Z} observed at the data points \eqn{y_i}{y[i]},
-    with weights inversely proportional to the reference density of
-    \eqn{Z}.
-    \item 
-    If \code{method="transform"},
-    the smoothing method is variable-bandwidth kernel
-    smoothing, implemented by applying the Probability Integral Transform
-    to the covariate values, yielding values in the range 0 to 1,
-    then applying edge-corrected density estimation on the interval
-    \eqn{[0,1]}, and back-transforming.
+    If \code{smoother="increasing"} or \code{smoother="decreasing"},
+    we use the \emph{nonparametric maximum likelihood estimator}
+    of \eqn{\rho(z)}{rho(z)} described by Sager (1982).
+    This assumes that
+    \eqn{\rho(z)}{rho(z)} is either an increasing function of \eqn{z},
+    or a decreasing function of \eqn{z}.
+    The estimated function will be a step function,
+    increasing or decreasing as a function of \eqn{z}.
+    See the section on \emph{Monotone estimates}.
   }
-  If \code{horvitz=TRUE}, then the calculations described above
-  are modified by using Horvitz-Thompson weighting.
-  The contribution to the numerator from 
-  each data point is weighted by the reciprocal of the
-  baseline value or fitted intensity value at that data point;
-  and a corresponding adjustment is made to the denominator.
+  See Baddeley (2018) for a comparison of these estimation techniques.
   
-  The covariate will be evaluated on a fine grid of locations,
+  If the argument \code{weights} is present, then the contribution
+  from each data point \code{X[i]} to the estimate of \eqn{\rho}{rho} is
+  multiplied by \code{weights[i]}.
+
+  If the argument \code{subset} is present, then the calculations are
+  performed using only the data inside this spatial region.
+
+  This technique assumes that \code{covariate} has continuous values.
+  It is not applicable to covariates with categorical (factor) values
+  or discrete values such as small integers.
+  For a categorical covariate, use
+  \code{\link{intensity.quadratcount}} applied to the result of
+  \code{\link{quadratcount}(X, tess=covariate)}.
+
+  The argument \code{covariate} should be a pixel image, or a function,
+  or one of the strings \code{"x"} or \code{"y"} signifying the
+  cartesian coordinates. It will be evaluated on a fine grid of locations,
   with spatial resolution controlled by the arguments
   \code{dimyx,eps,nd,random}. 
   In two dimensions (i.e.
@@ -260,17 +255,71 @@ rhohat(object, covariate, ...)
   network, \code{eps} specifies the linear separation between test
   locations, and \code{random} specifies whether the test locations
   have a randomised starting position.
+}
+\section{Smooth estimates}{
+  Smooth estimators of \eqn{\rho(z)}{rho(z)}
+  were proposed by Baddeley and Turner (2005) and Baddeley et al (2012).
+  Similar estimators were proposed by Guan (2008) and in the literature
+  on relative distributions (Handcock and Morris, 1999).
 
-  If the argument \code{weights} is present, then the contribution
-  from each data point \code{X[i]} to the estimate of \eqn{\rho}{rho} is
-  multiplied by \code{weights[i]}.
-
-  If the argument \code{subset} is present, then the calculations are
-  performed using only the data inside this spatial region.
-    
+  The estimated function \eqn{\rho(z)}{rho(z)} will be a smooth function
+  of \eqn{z}.
+  
+  The smooth estimation procedure involves computing several density estimates
+  and combining them. The algorithm used to compute density estimates is 
+  determined by \code{smoother}:
+  \itemize{
+    \item
+    If \code{smoother="kernel"},
+    the smoothing procedure is based on
+    fixed-bandwidth kernel density estimation,
+    performed by \code{\link{density.default}}.
+    \item
+    If \code{smoother="local"}, the smoothing procedure
+    is based on local likelihood density estimation, performed by
+    \code{\link[locfit]{locfit}}.
+  }
+  The argument \code{method} determines how the density estimates will be
+  combined to obtain an estimate of \eqn{\rho(z)}{rho(z)}:
+  \itemize{
+    \item
+    If \code{method="ratio"}, then \eqn{\rho(z)}{rho(z)} is
+    estimated by the ratio of two density estimates,
+    The numerator is a (rescaled) density estimate obtained by
+    smoothing the values \eqn{Z(y_i)}{Z(y[i])} of the covariate
+    \eqn{Z} observed at the data points \eqn{y_i}{y[i]}. The denominator
+    is a density estimate of the reference distribution of \eqn{Z}.
+    See Baddeley et al (2012), equation (8). This is similar but not
+    identical to an estimator proposed by Guan (2008).
+    \item
+    If \code{method="reweight"}, then \eqn{\rho(z)}{rho(z)} is
+    estimated by applying density estimation to the 
+    values \eqn{Z(y_i)}{Z(y[i])} of the covariate
+    \eqn{Z} observed at the data points \eqn{y_i}{y[i]},
+    with weights inversely proportional to the reference density of
+    \eqn{Z}.
+    See Baddeley et al (2012), equation (9).
+    \item 
+    If \code{method="transform"},
+    the smoothing method is variable-bandwidth kernel
+    smoothing, implemented by applying the Probability Integral Transform
+    to the covariate values, yielding values in the range 0 to 1,
+    then applying edge-corrected density estimation on the interval
+    \eqn{[0,1]}, and back-transforming.
+    See Baddeley et al (2012), equation (10).
+  }
+  If \code{horvitz=TRUE}, then the calculations described above
+  are modified by using Horvitz-Thompson weighting.
+  The contribution to the numerator from 
+  each data point is weighted by the reciprocal of the
+  baseline value or fitted intensity value at that data point;
+  and a corresponding adjustment is made to the denominator.
+  
   Pointwise confidence intervals for the true value of \eqn{\rho(z)}
-  are also calculated for each \eqn{z} using the central limit theorem,
+  are also calculated for each \eqn{z},
   and will be plotted as grey shading.
+  The confidence intervals are derived using the central limit theorem,
+  based on variance calculations which assume a Poisson point process. 
   If \code{positiveCI=FALSE}, the lower limit of the confidence
   interval may sometimes be negative, because the confidence intervals
   are based on a normal approximation to the estimate of \eqn{\rho(z)}.
@@ -281,21 +330,51 @@ rhohat(object, covariate, ...)
   \code{positiveCI=FALSE} for \code{smoother="kernel"}
   and \code{positiveCI=TRUE} for \code{smoother="local"}.
 }
+\section{Monotone estimates}{
+  The nonparametric maximum likelihood estimator
+  of a monotone function \eqn{\rho(z)}{rho(z)} was described by Sager (1982).
+  This method assumes that
+  \eqn{\rho(z)}{rho(z)} is either an increasing
+  function of \eqn{z}, or a decreasing function of \eqn{z}.
+  The estimated function will be a step function,
+  increasing or decreasing as a function of \eqn{z}.
+
+  This estimator is chosen by specifying
+  \code{smoother="increasing"} or \code{smoother="decreasing"}.
+  The argument \code{method} is ignored this case.
+  
+  To compute the estimate of \eqn{\rho(z)}{rho(z)}, the algorithm first
+  computes several primitive step-function estimates, and then takes
+  the maximum of these primitive functions.
+  
+  If \code{smoother="decreasing"}, each primitive step function
+  takes the form \eqn{\rho(z) = \lambda}{rho(z) = lambda} when \eqn{z \le t},
+  and \eqn{\rho(z) = 0}{rho(z) = 0} when \eqn{z > t}, where
+  and \eqn{\lambda}{lambda} is a primitive estimate of intensity
+  based on the data for \eqn{Z \le t}{Z <= t}. The jump location \eqn{t}
+  will be the value of the covariate \eqn{Z} at one of the
+  data points. The primitive estimate \eqn{\lambda}{lambda}
+  is the average intensity (number of points divided by area)
+  for the region of space where the covariate value is less than
+  or equal to \eqn{t}.
+
+  If \code{horvitz=TRUE}, then the calculations described above
+  are modified by using Horvitz-Thompson weighting.
+  The contribution to the numerator from 
+  each data point is weighted by the reciprocal of the
+  baseline value or fitted intensity value at that data point;
+  and a corresponding adjustment is made to the denominator.
+
+  Confidence intervals are not available
+  for the monotone estimators.
+}
 \value{
   A function value table (object of class \code{"fv"})
-  containing the estimated values of \eqn{\rho}{rho} for a sequence
-  of values of \eqn{Z}.
+  containing the estimated values of \eqn{\rho}{rho}
+  (and confidence limits) for a sequence of values of \eqn{Z}.
   Also belongs to the class \code{"rhohat"}
   which has special methods for \code{print}, \code{plot}
   and \code{predict}.
-}
-\section{Categorical and discrete covariates}{
-  This technique assumes that the covariate has continuous values.
-  It is not applicable to covariates with categorical (factor) values
-  or discrete values such as small integers.
-  For a categorical covariate, use
-  \code{\link{intensity.quadratcount}} applied to the result of
-  \code{\link{quadratcount}(X, tess=covariate)}.
 }
 \references{
   Baddeley, A., Chang, Y.-M., Song, Y. and Turner, R. (2012)
@@ -310,11 +389,34 @@ rhohat(object, covariate, ...)
   Lecture Notes in Statistics number 185. Pages 23--74.
   Springer-Verlag, New York, 2006. 
   ISBN: 0-387-28311-0.  
+
+  Baddeley, A. (2018)
+  A statistical commentary on mineral prospectivity analysis.
+  Chapter 2, pages 25--65
+  in \emph{Handbook of Mathematical Geosciences: Fifty Years of IAMG},
+  edited by B.S. Daya Sagar, Q. Cheng and F.P. Agterberg.
+  Springer, Berlin.
+
+  Guan, Y. (2008) On consistent nonparametric intensity estimation
+  for inhomogeneous spatial point processes.
+  \emph{Journal of the American Statistical Association}
+  \bold{103}, 1238--1247.
+
+  Handcock, M.S. and Morris, M. (1999)
+  \emph{Relative Distribution Methods in the Social Sciences}.
+  Springer, New York.
+  
+  Sager, T.W. (1982) 
+  Nonparametric maximum likelihood estimation of
+  spatial patterns. \emph{Annals of Statistics} \bold{10}, 1125--1136.
 }
 \author{
+  Smoothing algorithm by
   \adrian, 
   Ya-Mei Chang, Yong Song, 
   and \rolf.
+  
+  Nonparametric maximum likelihood algorithm by \adrian.
 }
 \seealso{
   \code{\link{rho2hat}},
@@ -322,12 +424,6 @@ rhohat(object, covariate, ...)
   \code{\link{parres}}.
 
   See \code{\link{ppm}} for a parametric method for the same problem.
-
-  The command \code{\link{rhohatMonotone}} estimates the
-  same function \eqn{\rho(z)}{rho(z)} assuming that this is
-  monotonone (i.e. that \eqn{\rho(z)}{rho(z)}
-  is either a decreasing or increasing function of \eqn{z})
-  using nonparametric maximum likelihood.
 }
 \examples{
   X <-  rpoispp(function(x,y){exp(3+3*x)})
@@ -338,6 +434,9 @@ rhohat(object, covariate, ...)
 
   rhoB <- rhohat(X, "x", method="reweight")
   rhoC <- rhohat(X, "x", method="transform")
+
+  rhoM <- rhohat(X, "x", smoother="increasing")
+  plot(rhoM, add=TRUE, col=5)
 
   \testonly{rh <- rhohat(X, "x", dimyx=32)}
 

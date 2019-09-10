@@ -448,11 +448,6 @@ Following is a list of all the functions that have been added.
 
 \begin{itemize}
   
-    \item \texttt{rhohatMonotone}:
-    An alternative to \texttt{rhohat}
-    which uses nonparametric maximum likelihood,
-    assuming the intensity is a monotone function of the covariate.
-    
     \item \texttt{rthinclumps}: 
           Divide a spatial region into clumps and randomly delete some of them.
           
@@ -2282,6 +2277,11 @@ listed alphabetically.
      
    \texttt{rhohat}:
    \begin{itemize}
+   \item Nonparametric maximum likelihood estimation is now supported,
+     assuming the intensity is a monotone function of the covariate.
+   \item
+     New options \texttt{smoother="increasing"} 
+     and \texttt{smoother="decreasing"}.
    \item 
    New argument \texttt{subset} allows computation for a subset of the data.
    \item

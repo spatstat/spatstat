@@ -1797,6 +1797,7 @@
   Roger Bivand,
   Jose M. Blanco Moreno,
   Florent Bonneu,
+  Jordan Brown,
   Julian Burgos,
   Simon Byers,
   Ya-Mei Chang,

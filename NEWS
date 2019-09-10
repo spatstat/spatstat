@@ -1,9 +1,9 @@
 
-        CHANGES IN spatstat VERSION 1.60-1.032
+        CHANGES IN spatstat VERSION 1.60-1.034
 
 OVERVIEW
 
-    o We thank Tilman Davies for contributions.
+    o We thank Jordan Brown, Tilman Davies and Greg McSwiggan for contributions.
     
     o Fast kernel estimation on a linear network using 2D kernels.
 
@@ -23,10 +23,6 @@ OVERVIEW
     
 NEW FUNCTIONS
 
-    o rhohatMonotone
-    An alternative to 'rhohat' which uses nonparametric maximum likelihood,
-    assuming the intensity is a monotone function of the covariate.
-    
     o densityQuick.lpp
     Fast kernel estimator of point process intensity on a network
     using 2D smoothing kernel.
@@ -42,6 +38,11 @@ NEW FUNCTIONS
     
 SIGNIFICANT USER-VISIBLE CHANGES
 
+    o rhohat
+    Estimation by nonparametric maximum likelihood is now supported,
+    assuming the intensity is a monotone function of the covariate.
+    New options: smoother="increasing" and smoother="decreasing".
+    
     o density.lpp
     New argument 'distance' offers a choice of different kernel methods.
 
@@ -91,7 +92,6 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o quadrat.test
     Improved labelling of test when argument 'CR' is given.
 
-    
 BUG FIXES
 
     o densityVoronoi.lpp

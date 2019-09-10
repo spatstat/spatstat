@@ -606,4 +606,40 @@ Change log from 1.60-1 to 1.60-2
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+09 sept 2019
+
+   rhohat.R
+   rhohat.Rd
+   rhohatMonotone.Rd [Deleted file]
+   rhomono.R         [Deleted file]
+	Nonparametric MPLE is now incorporated into rhohat.
+
+   updates.Rnw
+	Updated to cover the above.
+	
+   DESCRIPTION
+   NEWS
+	Version 1.60-1.033
+
+------------- passed R-3.6.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+10 sept 2019
+
+   rhohat.Rd
+	Polished.
+
+   NEWS
+   DESCRIPTION
+   spatstat-package.Rd
+	Acknowledged Jordan Brown
+	
+   DESCRIPTION
+   NEWS
+	Version 1.60-1.034
+
+------------- passed R-3.6.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
 
