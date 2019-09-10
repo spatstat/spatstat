@@ -1,7 +1,7 @@
 #
 # mppm.R
 #
-#  $Revision: 1.89 $   $Date: 2019/08/17 11:21:23 $
+#  $Revision: 1.90 $   $Date: 2019/09/10 02:11:48 $
 #
 
 mppm <- local({
@@ -135,11 +135,11 @@ mppm <- local({
     Yclass <- data.sumry$classes[Yname]
     if(Yclass == "ppp") {
       ## convert to quadrature schemes, for efficiency's sake
-      Ydescrip <- "point patterns"
       Y <- solapply(Y, quadscheme)
+      ## Ydescrip <- "point patterns" ## not used
     } else if(Yclass == "quad") {
-      Ydescrip <- "quadrature schemes"
       Y <- as.solist(Y)
+      ## Ydescrip <- "quadrature schemes" ## not used
     } else {
       stop(paste("Column", dQuote(Yname), "of data",
                  "does not consist of point patterns (class ppp)",

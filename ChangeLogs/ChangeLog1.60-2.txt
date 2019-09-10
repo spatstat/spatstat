@@ -643,3 +643,17 @@ Change log from 1.60-1 to 1.60-2
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+............. passed 'make bookcheck'  ...............
+
+   localKcross.R
+   mppm.R
+	Removed unused variables detected by codetools
+
+   DESCRIPTION
+   NEWS
+	Version 1.60-1.035
+
+------------- passed R-3.6.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+   
