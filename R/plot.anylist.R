@@ -4,15 +4,21 @@
 ##  Plotting functions for 'solist', 'anylist', 'imlist'
 ##       and legacy class 'listof'
 ##
-##  $Revision: 1.27 $ $Date: 2017/10/10 09:10:48 $
+##  $Revision: 1.29 $ $Date: 2019/09/11 11:52:28 $
 ##
 
 plot.anylist <- plot.solist <- plot.listof <-
   local({
 
   ## auxiliary functions
+  classes.with.do.plot <- c("im", "ppp", "psp", "msr", "layered", "tess")
+  classes.with.multiplot <- c("ppp", "lpp", "msr", "tess",
+                              "leverage.ppm", "influence.ppm")
 
-  has.multiplot <- function(x) { is.ppp(x) }
+  has.multiplot <- function(x) {
+    inherits(x, classes.with.multiplot) ||
+      (is.function(x) && "multiplot" %in% names(formals(x)))
+  }
   
   extraplot <- function(nnn, x, ..., add=FALSE, extrargs=list(),
                         panel.args=NULL, plotcommand="plot") {
@@ -67,8 +73,6 @@ plot.anylist <- plot.solist <- plot.listof <-
     }
   }
 
-  classes.with.do.plot <- c("im", "ppp", "psp", "msr", "layered", "tess")
-  
   ## bounding box, including ribbon for images, legend for point patterns
   getplotbox <- function(x, ..., do.plot, plotcommand="plot", multiplot) {
     if(inherits(x, classes.with.do.plot)) {
@@ -84,9 +88,14 @@ plot.anylist <- plot.solist <- plot.listof <-
         plc <- plotcommand
         if(is.character(plc)) plc <- get(plc)
         if(!is.function(plc)) stop("Unrecognised plot function")
-        if("do.plot" %in% names(args(plc)))
-          return(as.owin(do.call(plc, list(x=x, ..., do.plot=FALSE))))
-        return(as.rectangle(x))
+        if("do.plot" %in% names(args(plc))) {
+          if(has.multiplot(plc)) {
+            y <- do.call(plc, list(x=x, ..., multiplot=FALSE, do.plot=FALSE))
+          } else {
+            y <- do.call(plc, list(x=x, ...,                  do.plot=FALSE))
+          }
+          return(as.owin(y))
+        }
       }
     }
     return(try(as.rectangle(x), silent=TRUE))

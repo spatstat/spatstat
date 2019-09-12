@@ -3,7 +3,7 @@
 #'
 #'   Methods for generic 'unstack'
 #' 
-#'   $Revision: 1.4 $  $Date: 2018/02/25 04:24:40 $
+#'   $Revision: 1.5 $  $Date: 2019/09/12 04:05:58 $
 
 unstack.ppp <- unstack.psp <- unstack.lpp <- unstack.tess <- function(x, ...) {
   trap.extra.arguments(...)
@@ -37,10 +37,10 @@ unstack.msr <- function(x, ...) {
 
 unstackFilter <- function(x) {
   ## deal with a whole swag of classes that do not need to be unstacked
-  nonvectorclasses <- c("im", "owin", "quad", "tess", 
+  nonvectorclasses <- c("im", "owin", "quad", 
                         "quadratcount", "quadrattest", 
                         "funxy", "distfun", "nnfun", 
-                        "linnet", "linfun",
+                        "linnet", "linfun", 
                         "influence.ppm", "leverage.ppm")
   y <- if(inherits(x, nonvectorclasses)) solist(x) else unstack(x)
   return(y)

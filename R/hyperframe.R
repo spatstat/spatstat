@@ -1,7 +1,7 @@
 #
 #  hyperframe.R
 #
-# $Revision: 1.65 $  $Date: 2017/12/30 05:12:36 $
+# $Revision: 1.67 $  $Date: 2019/09/11 11:31:20 $
 #
 
 hyperframe <- local({
@@ -238,13 +238,36 @@ row.names.hyperframe <- function(x) {
 
 "row.names<-.hyperframe" <- function(x, value) {
   y <- unclass(x)
-  df <- y$df
-  row.names(df) <- value
-  y$df <- df
+  row.names(y$df) <- value
   class(y) <- c("hyperframe", class(y))
   return(y)
 }
 
+dimnames.hyperframe <- function(x) {
+  ux <- unclass(x)
+  return(list(row.names(ux$df), ux$vname))
+}
+
+"dimnames<-.hyperframe" <- function(x, value) {
+  if(!is.list(value) || length(value) != 2 || !all(sapply(value, is.character)))
+    stop("Invalid 'dimnames' for a hyperframe", call.=FALSE)
+  rn <- value[[1L]]
+  cn <- value[[2L]]
+  d <- dim(x)
+  if(length(rn) != d[1L])
+    stop(paste("Row names have wrong length:",
+               length(rn), "should be", d[1L]),
+         call.=FALSE)
+  if(length(cn) != d[2L])
+    stop(paste("Column names have wrong length:",
+               length(cn), "should be", d[2L]),
+         call.=FALSE)
+  y <- unclass(x)
+  row.names(y$df) <- value[[1L]]
+  y$vname <- value[[2]]
+  class(y) <- c("hyperframe", class(y))
+  return(y)
+}
 
 ## conversion to hyperframe
 

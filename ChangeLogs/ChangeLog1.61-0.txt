@@ -1,0 +1,731 @@
+Change log from 1.60-1 to 1.61-0
+================================
+
+24 june 2019
+
+   DESCRIPTION
+   NEWS
+   Nickname.txt
+	Version 1.60-1.001
+	Nickname 'See Above'
+
+   lohboot.R
+	Tweaked fv labels for confidence bands.
+	
+------------- passed R-3.6.0 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+30 june 2019
+
+   pickoption.R
+	tweaked
+	
+   tests/undoc.R
+	Added tests of 'pickoption'
+
+02 july 2019
+
+   localKcross.R
+   localKcross.Rd
+	Argument 'lambdaX' can be a list of pixel images.
+	Tweaked formal arguments of resolve.lambda.cross
+	
+   tests/Kfuns.R
+	More tests of resolve.lambda.cross
+
+   tests/deepeepee.R
+	Tests of methods for class dppm
+
+   tests/undoc.R
+	More tests of imlist, ppplist code.
+	
+   anylist.Rd
+	tweak
+
+   DESCRIPTION
+   NEWS
+	Version 1.60-1.002
+	
+------------- passed R-3.6.0 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+03 july 2019
+
+   plot.im.R
+	Axes are prevented from extending outside the image rectangle
+
+   DESCRIPTION
+   NEWS
+	Version 1.60-1.003
+	
+------------- passed R-3.6.0 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+   plot.im.R
+   plot.im.Rd
+	New argument 'zap'
+
+   DESCRIPTION
+   NEWS
+	Version 1.60-1.004
+	
+------------- passed R-3.6.0 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+9 july 2019
+
+   rLGCP.R
+	Bug fix (temporary)
+
+   DESCRIPTION
+   NEWS
+	Version 1.60-1.005
+	
+------------- passed R-3.6.0 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+10 july 2019
+
+   effectfun.R
+	Bug fix in marked case
+
+   DESCRIPTION
+   NEWS
+	Version 1.60-1.006
+	
+------------- passed R-3.6.0 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+12 july 2019
+
+   leverage.ppm.Rd
+   influence.ppm.Rd
+   dfbetas.ppm.Rd
+   dffit.ppm.Rd
+	Updated citations
+
+13 july 2019
+
+   shapefiles.Rnw
+	Added caveat about lat-long coordinates
+	
+   DESCRIPTION
+   NEWS
+	Version 1.60-1.007
+	
+------------- passed R-3.6.0 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+15 july 2019
+
+   blur.R
+   blur.Rd
+	Added formal argument 'kernel'
+	
+   quickndirty.R [New file]
+   densityQuick.lpp.Rd [New file]
+   spatstat-internal.Rd
+         New function densityQuick.lpp
+
+   density.lpp.R
+   density.lpp.Rd 
+	New argument 'distance'
+
+   DESCRIPTION
+   NEWS
+	Version 1.60-1.008
+
+------------- passed R-3.6.0 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+17 july 2019
+
+   tests/undoc.R
+	Added tests of fft2D and internal code
+
+   tests/ppp.R
+	Added tests of [<-.ppp
+
+   tests/ppm.R
+	Added tests of internal code
+
+   DESCRIPTION
+   NEWS
+	Version 1.60-1.009
+
+------------- passed R-3.6.0 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+18 july 2019
+
+   images.R
+   Replace.im.Rd
+       [<-.im has new argument 'drop'.
+
+   DESCRIPTION
+   NEWS
+	Version 1.60-1.010
+
+------------- passed R-3.6.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+21 july 2019
+
+   ppx.R
+   spatdim.Rd
+	spatdim has new argument 'intrinsic'
+
+   bw.diggle.R
+   bw.scott.Rd
+	bw.scott handles point patterns of any dimension
+	and has new arguments 'isotropic', 'd'
+
+   DESCRIPTION
+   NEWS
+   Nickname.txt
+        Nickname changed to 'Breakfast of Champions'
+	Version 1.60-1.011
+
+------------- passed R-3.6.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+22 july 2019
+
+   bw.diggle.R
+   bw.scott.R [New file]
+   bw.scott.Rd
+       Moved bw.scott to its own file.
+       New function bw.scott.iso
+
+   densityQuick.lpp.Rd
+	Added example of bandwidth selection
+
+   DESCRIPTION
+   NEWS
+	Version 1.60-1.012
+
+------------- passed R-3.6.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+23 july 2019
+
+   pppmatching.R
+	Added argument 'adjust' to plot.pppmatching
+	and tightened handling of plotting arguments
+
+   plot.pppmatching.Rd [New file]
+   spatstat-internal.Rd
+	Documented existing plot.pppmatching
+
+   pppdist.Rd
+   pppmatching.Rd
+   pppmatching.object.Rd
+	Cross-referenced
+	
+   plot.linim.Rd
+	tweak
+
+   DESCRIPTION
+   NEWS
+	Version 1.60-1.013
+
+------------- passed R-3.6.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+   bw.ppl.R
+   bw.ppl.Rd
+	New argument 'shortcut'
+	Dot arguments '...' are now passed to density.ppp
+	
+   bw.ppl.R
+   bw.lppl.Rd [New file]
+	New function bw.lppl
+
+   DESCRIPTION
+   NEWS
+	Version 1.60-1.014
+
+------------- passed R-3.6.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+   bw.ppl.R
+	Bug fixes and acceleration
+
+   DESCRIPTION
+   NEWS
+	Version 1.60-1.015
+
+------------- passed R-3.6.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+   linfun.R
+	Added validity check in as.linim.linfun
+
+   DESCRIPTION
+   NEWS
+	Version 1.60-1.016
+
+------------- passed R-3.6.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+01 august 2019
+
+   tests/markcor.R
+   tests/Kfuns.R
+   Emark.Rd
+	More examples/tests of code for mark correlations.
+
+   tests/lppstuff.R
+	More tests of lpp class support
+
+03 august 2019
+
+   linim.R
+	Bug fix
+	
+   colourtables.R
+	Bug fix
+
+   tests/colour.R
+   tests/kppm.R
+	More code coverage
+	
+   DESCRIPTION
+   NEWS
+	Version 1.60-1.017
+
+------------- passed R-3.6.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+05 august 2019
+
+   updates.Rnw
+   bugfixes.Rnw
+	Updated to cover all the above.
+
+   DESCRIPTION
+   NEWS
+	Version 1.60-1.018
+
+------------- passed R-3.6.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+06 august 2019
+
+   as.im.R
+   as.im.Rd
+       as.im.function has new argument 'stringsAsFactors'
+
+   plot.im.Rd
+       More examples 
+
+   tests/imageops.R
+       More tests for as.im and plot.im with character/factor values
+
+   DESCRIPTION
+   NEWS
+	Version 1.60-1.019
+
+------------- passed R-3.6.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+07 august 2019
+
+   undoc.R
+        Test of Saturated()
+	
+   tess.R
+	Bug fix in intersect.tess
+
+   tests/tessera.R
+	Test of intersect.tess
+	Tests of geometrical transformations
+
+   DESCRIPTION
+   NEWS
+	Version 1.60-1.020
+
+------------- passed R-3.6.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+   tests/envelopes.R
+	Tests of envelope.kppm
+
+11 aug 2019
+
+   tests/undoc.R
+	Tests of infrastructure in istat
+
+   DESCRIPTION
+   NEWS
+	Version 1.60-1.021
+
+------------- passed R-3.6.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+   envelopelpp.R
+	Bug fix
+
+   envelope.R
+	Improved error message
+	
+   lppm.R
+   data.lppm.Rd [New file]
+        New function data.lppm
+
+   data.ppm.Rd
+	Cross-referenced
+
+   DESCRIPTION
+   NEWS
+	Version 1.60-1.022
+
+------------- passed R-3.6.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+   densitylppVoronoi.R
+	Pull request from Ege - bug fix in case of duplicated points.
+	[Further accelerated using uniquemap()]
+
+   DESCRIPTION
+   NEWS
+	Version 1.60-1.023
+
+------------- passed R-3.6.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+   GJfox.R
+   Gfox.Rd
+   spatstat-internal.Rd
+	Bug fix in handling Y = <owin>
+	New argument 'W'.
+	Accepts Y = <im> with logical values
+
+   Hest.R
+	Tweaks
+
+   tests/contact.R [New file]
+        test behaviour of Gfox, Jfox, Hest
+   
+   DESCRIPTION
+   NEWS
+	Version 1.60-1.024
+
+------------- passed R-3.6.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+13 aug 2019
+
+   src/ripleypoly.h
+	Tentative fix for numerical problem causing test failure on i386.
+
+   spatstat-package.Rd
+   ppm.object.Rd
+   bits.test.Rd
+	Updated cross-references.
+	
+   DESCRIPTION
+   NEWS
+   Nickname.txt
+        Nickname changed to 'Much code. So tire. Wow'
+	Version 1.60-1.025
+
+------------- passed R-3.6.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+14 aug 2019
+
+   tests/envelopes.R
+   tests/kppm.R
+   tests/ppmtricks.R
+	More checks.
+
+15 aug 2019
+
+   mppm.R
+	Added checks on consistency between marks of point pattern datasets
+
+16 aug 2019
+
+   .github/ISSUE_TEMPLATE/custom.md [New file]
+        Template for Issues on github
+
+   .Rbuildignore
+         Ignore template
+	 
+   DESCRIPTION
+   NEWS
+	Version 1.60-1.026
+
+------------- passed R-3.6.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+   
+   .github/ISSUE_TEMPLATE/custom.md
+        Tweaked.
+
+    randomsets.R [New file]
+    rthinclumps.Rd [New file]
+        new function rthinclumps
+
+   DESCRIPTION
+   NEWS
+	Version 1.60-1.027
+
+------------- passed R-3.6.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+17 aug 2019
+
+    hypersub.R
+	Bug fix in [<-.hyperframe
+
+    mppm.R
+        Interactions are now self-started
+
+    tests/mppm.R
+        Added test of multitype mppm
+
+   DESCRIPTION
+   NEWS
+	Version 1.60-1.028
+
+------------- passed R-3.6.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+26 aug 2019
+
+   rhomono.R [New file]
+   rhohatMonotone.Rd [New file]
+   	New function 'rhohatMonotone'
+
+   rhohat.Rd
+	Cross-reference
+	
+   DESCRIPTION
+   NEWS
+   Nickname.txt
+	Nickname changed to "Watch out for that ... tree"
+	Version 1.60-1.029
+
+------------- passed R-3.6.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+30 aug 2019
+
+   quadrattest.R
+   spatstat-internal.Rd
+	CressieReadStatistic has new arguments 'normalise' and 'named'
+	for internal use.
+
+   quadrattest.R
+	Bug fix ('CR' was ignored if method="MonteCarlo")
+	Improved labelling of test when 'CR' is given.
+
+   quadrat.test.Rd
+	Added examples of argument 'CR'.
+
+   DESCRIPTION
+   NEWS
+	Version 1.60-1.030
+
+------------- passed R-3.6.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+02 sep 2019
+
+   window.R
+	inside.owin now accepts x = <ppp>
+
+   images.R
+        lookup.im now accepts x = <ppp>
+
+   tess.R
+   tileindex.R
+        tileindex now accepts x = <ppp>
+
+   quadrattest.R
+   quadrat.test.Rd
+   spatstat-internal.Rd
+	New argument df.est
+
+   images.R
+	Bug fix in handling 1-dim tables
+
+   tests/imageops.R
+	Tests of obscure bugs
+
+   DESCRIPTION
+   NEWS
+	Version 1.60-1.031
+
+------------- passed R-3.6.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+06 sept 2019
+
+   updates.Rnw
+   bugfixes.Rnw
+	Updated to cover all the above.
+	
+   DESCRIPTION
+   NEWS
+	Version 1.60-1.032
+
+------------- passed R-3.6.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+09 sept 2019
+
+   rhohat.R
+   rhohat.Rd
+   rhohatMonotone.Rd [Deleted file]
+   rhomono.R         [Deleted file]
+	Nonparametric MPLE is now incorporated into rhohat.
+
+   updates.Rnw
+	Updated to cover the above.
+	
+   DESCRIPTION
+   NEWS
+	Version 1.60-1.033
+
+------------- passed R-3.6.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+10 sept 2019
+
+   rhohat.Rd
+	Polished.
+
+   NEWS
+   DESCRIPTION
+   spatstat-package.Rd
+	Acknowledged Jordan Brown
+	
+   DESCRIPTION
+   NEWS
+	Version 1.60-1.034
+
+------------- passed R-3.6.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+............. passed 'make bookcheck'  ...............
+
+   localKcross.R
+   mppm.R
+	Removed unused variables detected by codetools
+
+   DESCRIPTION
+   NEWS
+	Version 1.60-1.035
+
+------------- passed R-3.6.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+   
+11 sep 2019
+
+------------- passed R-devel CMD check ---------------
+               (2019-09-07 r77160)
+	       
+------------- passed 'make bookcheck'  ---------------
+
+   bugfixes.Rnw
+   DESCRIPTION
+   NEWS
+	Version 1.61-0
+
+------------- passed R-3.6.1 CMD check ---------------
+
+   linim.R
+	Added validity check
+	(numerical function values are required in plot.linim(style="w"))
+
+   hyperframe.R
+   spatstat-internal.Rd
+	Added 'dimnames' and 'dimnames<-' methods for hyperframes
+
+   tests/hyperframe.R
+	Added tests for validity of dimnames.
+	
+   plot.anylist.R
+	Bug fix in handling lpp objects with multiple columns of marks.
+
+   lintess.R
+	Functions created by as.linfun.lintess
+	now generate better output when the function is printed.
+
+12 sep 2019
+
+   solist.R
+	Added 'lintess' to the list of classes recognised by is.sob()
+	and hence by solist()
+
+   lpp.R
+	Bug fix in plot.lpp
+
+   lintess.R
+	Bug fix in plot.lintess
+
+   unstack.R
+	Bug fix to unstack.solist handling 'tess'
+	
+   lintess.R
+   spatstat-internal.Rd
+	Method for 'unstack' for 'lintess' (currently does nothing)
+
+   tests/lppstuff.R
+	Test handling of linear network objects by solist, unstack, plot etc
+	
+   localKcross.R
+	Removed unused variable
+	
+   DESCRIPTION
+   NEWS
+   Nickname.txt
+	Version 1.61-0 
+        Nickname: 'Puppy zoomies'
+	
+------------- passed R-3.6.1 CMD check ---------------
+------------- installed on laptop      ---------------
+
+------------- passed R-devel CMD check ---------------
+               (2019-09-07 r77160)
+------------- passed 'make bookcheck'  ---------------
+
+
+  

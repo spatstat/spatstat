@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.60-1.035
+        CHANGES IN spatstat VERSION 1.61-0
 
 OVERVIEW
 
@@ -19,7 +19,7 @@ OVERVIEW
 
     o Bug fixes and minor improvements.
 
-    o Nickname: 'Watch out for that ... tree'
+    o Nickname: 'Puppy zoomies'
     
 NEW FUNCTIONS
 
@@ -35,6 +35,9 @@ NEW FUNCTIONS
 
     o rthinclumps
     Divide a spatial region into clumps and randomly delete some of them.
+
+    o dimnames.hyperframe, dimnames<-.hyperframe
+    Methods for extracting and changing the 'dimnames' of a hyperframe.
     
 SIGNIFICANT USER-VISIBLE CHANGES
 
@@ -85,12 +88,23 @@ SIGNIFICANT USER-VISIBLE CHANGES
     Results may have changed in marginal cases (e.g. where the circle
     of radius r centred at X is tangent to an edge of the polygonal window). 
     
+    o rownames, rownames<-, colnames, colnames<-
+    These operations now work for hyperframes.
+    
+    o quadrat.test
+    Improved labelling of test when argument 'CR' is given.
+
     o plot.pppmatching
     This existing function now has a help file.
     New argument 'adjust'.
 
-    o quadrat.test
-    Improved labelling of test when argument 'CR' is given.
+    o solist, is.sob, lintess
+    Objects of class 'lintess' are now recognised as 2D spatial objects
+    for the purposes of solist() and is.sob().
+    
+    o as.linfun.lintess
+    Functions created by as.linfun.lintess() now generate better output
+    when the function is printed.
 
 BUG FIXES
 
@@ -113,7 +127,7 @@ BUG FIXES
     o "[<-.hyperframe"
     Did not handle some classes of objects correctly.
     Fixed.
-    
+
     o effectfun
     In a multitype point process model, effectfun() ignored any
     user-specified value of 'marks'.
@@ -123,6 +137,17 @@ BUG FIXES
     Additional arguments (other than spatial coordinates) were ignored.
     Fixed.
 
+    o plot.solist
+    Display output was mangled if one entry in the list was
+    an object that would normally generate multiple panels of graphics,
+    such as an 'lpp' or 'tess' object with multiple columns of marks,
+    or a marked 'msr', 'leverage.ppm' or 'influence.ppm' object.
+    Fixed.
+
+    o plot.lpp
+    Return value was mangled when x had multiple columns of marks.
+    Fixed.
+    
     o colourtable
     Crashed in some cases when 'breaks' was given.
     Fixed.
@@ -138,8 +163,19 @@ BUG FIXES
     o envelope.lppm
     Crashed if argument 'simulate' was given.
     Fixed.
+
+    o unstack.solist
+    Did not correctly handle objects of class 'lintess'.
+    
+    o unstack.solist
+    Did not correctly handle objects of class 'tess' if they had multiple
+    columns of marks.
     
     o plot.pppmatching
+    Issued spurious warnings about unrecognised plot arguments.
+    Fixed.
+
+    o plot.lintess
     Issued spurious warnings about unrecognised plot arguments.
     Fixed.
 

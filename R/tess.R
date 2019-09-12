@@ -429,6 +429,7 @@ plot.tess <- local({
 }
 
 tiles <- function(x) {
+  stopifnot(is.tess(x))
   switch(x$type,
          rect={
            out <- list()

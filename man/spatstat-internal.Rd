@@ -108,6 +108,8 @@
 \alias{default.n.tiling}
 \alias{default.ntile}
 \alias{deltasuffstat}
+\alias{dimnames.hyperframe}
+\alias{dimnames<-.hyperframe}
 \alias{DoCountCrossEnds}
 \alias{DoCountEnds}
 \alias{Deviation}
@@ -696,6 +698,7 @@
 \alias{unitname.default}
 \alias{unitname<-.default}
 \alias{unstackFilter}
+\alias{unstack.lintess}
 \alias{update.im}
 \alias{update.ippm}
 \alias{update.msr}
@@ -900,6 +903,8 @@ default.ntile(X)
 deltasuffstat(model, \dots,
               restrict, dataonly, sparseOK, quadsub,
               force, warn.forced, verbose, use.special)
+\method{dimnames}{hyperframe}(x)
+\method{dimnames}{hyperframe}(x) <- value
 DoCountEnds(X, D, toler)
 DoCountCrossEnds(X, I, J, DIJ, toler)
 Deviation(x, ref, leaveout, n, xi)
@@ -1628,6 +1633,7 @@ x \%unit\% u
 \method{unitname}{default}(x) 
 \method{unitname}{default}(x) <- value 
 unstackFilter(x)
+\method{unstack}{lintess}(x, \dots)
 \method{update}{im}(object, \dots) 
 \method{update}{ippm}(object, \dots, envir) 
 \method{update}{msr}(object, \dots) 

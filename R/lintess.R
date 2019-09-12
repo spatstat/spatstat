@@ -3,7 +3,7 @@
 #'
 #'   Tessellations on a Linear Network
 #'
-#'   $Revision: 1.30 $   $Date: 2019/02/07 04:45:47 $
+#'   $Revision: 1.33 $   $Date: 2019/09/12 04:08:58 $
 #'
 
 lintess <- function(L, df) {
@@ -151,23 +151,29 @@ plot.lintess <- function(x, ..., main, add=FALSE,
   vy <- V$y
   #' plot
   if(!add) plot(Frame(x), main=main, type="n")
-  with(df,
-       segments(
-         vx[from] * (1-t0) + vx[to] * t0,
-         vy[from] * (1-t0) + vy[to] * t0,
-         vx[from] * (1-t1) + vx[to] * t1,
-         vy[from] * (1-t1) + vy[to] * t1,
-         col=col[as.integer(tile)],
-         ...)
-       )
+  segdata <- with(df, list(
+                        x0=vx[from] * (1-t0) + vx[to] * t0,
+                        y0=vy[from] * (1-t0) + vy[to] * t0,
+                        x1=vx[from] * (1-t1) + vx[to] * t1,
+                        y1=vy[from] * (1-t1) + vy[to] * t1,
+                        col=col[as.integer(tile)]))
+  do.call.plotfun(segments,
+                  resolve.defaults(segdata,
+                                   list(...),
+                                   .StripNull=TRUE),
+                  extrargs=names(par()))
   return(invisible(cmap))
 }
+
+#' currently lintess does not have 'marks' so cannot be unstacked
+unstack.lintess <- function(x, ...) { solist(x) } 
 
 as.owin.lintess <- function(W, ...) { as.owin(as.linnet(W), ...) }
 
 Window.lintess <- function(X, ...) { as.owin(as.linnet(X)) }
 
 domain.lintess <- as.linnet.lintess <- function(X, ...) { X$L }
+
 
 lineartileindex <- function(seg, tp, Z,
                             method=c("encode", "C", "interpreted")) {
@@ -240,31 +246,58 @@ lineartileindex <- function(seg, tp, Z,
   return(answer)
 }
 
-as.linfun.lintess <- function(X, ..., values, navalue=NA) {
-  L <- X$L
-  Xdf <- X$df
-  tilenames <- levels(Xdf$tile)
-  if(missing(values) || is.null(values)) {
-    tilevalues <- factor(tilenames, levels=tilenames)
-  } else {
-    if(length(values) != length(tilenames))
-      stop("Length of 'values' should equal the number of tiles", call.=FALSE)
-    tilevalues <- values
-  }
-  f <- function(x, y, seg, tp) {
-    k <- as.integer(lineartileindex(seg, tp, Xdf))
-    if(!anyNA(k)) {
-      result <- tilevalues[k]
+as.linfun.lintess <- local({
+
+  as.linfun.lintess <- function(X, ..., values, navalue=NA) {
+    Xdf <- X$df
+    tilenames <- levels(Xdf$tile)
+    value.is.tile <- missing(values) || is.null(values)
+    if(value.is.tile) {
+      tilevalues <- factor(tilenames, levels=tilenames)
     } else {
-      ok <- !is.na(k)
-      result <- rep(navalue, length(seg))
-      result[ok] <- tilevalues[k[ok]]
+      if(length(values) != length(tilenames))
+        stop("Length of 'values' should equal the number of tiles", call.=FALSE)
+      tilevalues <- values
     }
-    return(result)
+    f <- function(x, y, seg, tp) {
+      k <- as.integer(lineartileindex(seg, tp, Xdf))
+      if(!anyNA(k)) {
+        result <- tilevalues[k]
+      } else {
+        ok <- !is.na(k)
+        result <- rep(navalue, length(seg))
+        result[ok] <- tilevalues[k[ok]]
+      }
+      return(result)
+    }
+    g <- linfun(f, X$L)
+    attr(g, "explain") <- uitleggen
+    return(g)
   }
-  g <- linfun(f, L)
-  return(g)
-}
+
+  uitleggen <- function(x, ...) {
+    envf <- environment(attr(x, "f"))
+    Xdf <- get("Xdf", envir=envf)
+    value.is.tile <- get("value.is.tile", envir=envf) %orifnull% FALSE
+    if(value.is.tile) {
+      valuename <- "the tile index"
+    } else {
+      tilevalues <- get("tilevalues", envir=envf)
+      valuetype <- typeof(tilevalues)
+      valuename <- paste("a value", paren(sQuote(valuetype)),
+                         "associated with each tile")
+    }
+    splat("Function on a network, associated with a tessellation,")
+    splat("\treturns", valuename)
+    nt <- length(levels(Xdf$tile))
+    splat("Tessellation has", nt, ngettext(nt, "tile", "tiles"))
+    splat("Function domain:")
+    print(as.linnet(x))
+    return(invisible(NULL))
+  }
+
+  as.linfun.lintess
+})
 
 #'  Divide a linear network into tiles demarcated by
 #' the points of a point pattern

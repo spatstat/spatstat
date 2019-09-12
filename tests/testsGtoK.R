@@ -40,7 +40,7 @@ local({
 #
 # test "[.hyperframe" etc
 #
-#  $Revision: 1.4 $  $Date: 2018/05/15 14:20:38 $
+#  $Revision: 1.5 $  $Date: 2019/09/11 11:33:37 $
 #
 
 require(spatstat)
@@ -61,6 +61,16 @@ local({
   str(h)
   head(h)
   tail(h)
+
+  rn <- rownames(h)
+  r.n <- row.names(h)
+  if(!identical(rn, r.n))
+    stop("rownames and row.names conflict for hyperframes")
+
+  dn <- dimnames(h)
+  dimnames(h) <- dn
+  dimnames(h)[[2]][2] <- "copacetic"
+  dimnames(h)[[1]][2] <- "second"
 })
 
 

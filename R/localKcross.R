@@ -3,7 +3,7 @@
 #'
 #'     original by Ege Rubak
 #' 
-#'     $Revision: 1.13 $ $Date: 2019/09/10 02:07:10 $
+#'     $Revision: 1.14 $ $Date: 2019/09/12 04:51:07 $
 
 "localLcross" <- function(X, from, to, ..., rmax = NULL, correction = "Ripley") {
   localKcross(X, from, to, ..., rmax = rmax, correction = correction, wantL = TRUE)
@@ -226,7 +226,7 @@ localLcross.inhom <- function(X, from, to, lambdaFrom = NULL, lambdaTo = NULL, .
     I <- close$i
     J <- close$j
     if(weighted) {
-      lambdaI <- lambdaFrom[I]
+      ## lambdaI <- lambdaFrom[I] ## not used
       lambdaJ <- lambdaTo[J]
       ## weightI <- 1/lambdaI  ## not used
       weightJ <- 1/lambdaJ

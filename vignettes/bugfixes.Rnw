@@ -447,7 +447,7 @@ of potential impact.
    
  \item \texttt{quadrat.test}:
    argument \texttt{CR} was ignored if \texttt{method="MonteCarlo"}.
-   \bugger{1.38-0}{august 2014}{1.60-1}{september 2019}
+   \bugger{1.38-0}{august 2014}{1.61-0}{september 2019}
    
  \item \texttt{rotmean}:
     If argument \texttt{origin} was given, and if \texttt{result="im"}
@@ -656,7 +656,7 @@ of potential impact.
 
   \item \verb![.linim!: factor values were erroneously converted to 
     integers, in some cases.
-  \bugger{1.53-0}{september 2017}{1.60-2}{august 2019}
+  \bugger{1.53-0}{september 2017}{1.61-0}{september 2019}
 
 \item \verb!is.subset.owin!: sometimes gave the wrong result for polygonal
   windows due to numerical rounding error.
@@ -677,11 +677,11 @@ of potential impact.
   \item \texttt{effectfun}:
     In a multitype point process model, \texttt{effectfun} ignored any
     user-specified value of \texttt{marks}.
-    \bugger{1.52-0}{august 2017}{1.60-2}{august 2019}
+    \bugger{1.52-0}{august 2017}{1.61-0}{september 2019}
 
   \item \verb!"[<-.hyperframe"!:
     Did not handlesome classes of objects correctly,
-    \bugger{1.37-0}{may 2014}{1.60-2}{august 2019}
+    \bugger{1.37-0}{may 2014}{1.61-0}{september 2019}
 \end{itemize}
 
 \begin{thebibliography}{1}

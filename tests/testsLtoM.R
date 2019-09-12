@@ -345,7 +345,7 @@ local({
 #
 # Tests for lpp code
 #
-#  $Revision: 1.29 $  $Date: 2019/08/01 06:43:26 $
+#  $Revision: 1.30 $  $Date: 2019/09/12 04:31:48 $
 
 
 require(spatstat)
@@ -637,6 +637,26 @@ local({
     stop("disagreement between as.linfun.lintess and lineartileindex")
 })
 
+reset.spatstat.options()
+
+local({
+  #' handling by 'solist', 'unstack', 'plot.solist' etc
+  L <- simplenet
+  X <- runiflpp(5, L) %mark% cbind(a=1:5, b=letters[1:5])
+  ns <- nsegments(L)
+  df <- data.frame(seg=1:ns, t0=0, t1=1, tile=letters[1:ns])
+  S <- lintess(L, df)
+  f <- as.linfun(S)
+  g <- as.linfun(S, values=seq_len(nsegments(L)))
+  V <- as.linim(f)
+  Z <- as.linim(g)
+  shebang <- solist(L=L, X=X, S=S, f=f, g=g, V=V, Z=Z)
+  plot(shebang)
+  plot(shebang, valuesAreColours=FALSE)
+  kapow <- unstack(shebang)
+  plot(kapow)
+})
+  
 reset.spatstat.options()
 #'
 #'   lppmodels.R

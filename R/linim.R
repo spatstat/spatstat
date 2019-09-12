@@ -1,7 +1,7 @@
 #
 # linim.R
 #
-#  $Revision: 1.55 $   $Date: 2019/08/03 07:43:15 $
+#  $Revision: 1.56 $   $Date: 2019/09/11 09:29:52 $
 #
 #  Image/function on a linear network
 #
@@ -187,6 +187,12 @@ plot.linim <- local({
     df <- attr(x, "df")
     Llines <- as.psp(L)
     W <- as.owin(L)
+    #' ensure function values are numeric
+    vals <- try(as.numeric(df$values))
+    if(!inherits(vals, "try-error")) {
+      df$values <- vals
+    } else stop("Function values should be numeric: unable to convert them",
+                call.=FALSE)
     #' plan layout
     if(legend) {
       #' use layout procedure in plot.im
