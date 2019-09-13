@@ -9,6 +9,7 @@
                      show.all=!add, show.window=show.all,
                      which.marks=1,
                      style=c("colour", "width", "none"),
+                     col=NULL, 
                      ribbon=show.all,
                      ribsep=0.15, ribwid=0.05, ribn=1024,
                      do.plot=TRUE)
@@ -54,6 +55,16 @@
     If \code{style="width"}, segments are drawn with a width
     proportional to their mark value.
     If \code{style="none"} the mark values are ignored.
+  }
+  \item{col}{
+    Colour information.
+    If \code{style="width"}, then \code{col} should be a single value,
+    interpretable as a colour; the line segments will be plotted
+    using this colour.
+    If \code{style="colour"}, then \code{col} should be a 
+    colour map (object of class \code{"colourmap"}) to be used to represent
+    to the mark values, or (if the marks are a factor)
+    a vector of colour values for each level of the factor.
   }
   \item{ribbon}{
     Logical flag indicating whether to display a ribbon

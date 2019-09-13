@@ -320,6 +320,7 @@
 \alias{logLik.vblogit}
 \alias{looVoronoiLPP}
 \alias{makeLinnetTolerance}
+\alias{markvaluetype}
 \alias{maskLaslett}
 \alias{match2DkernelName}
 \alias{parbreak}
@@ -698,7 +699,6 @@
 \alias{unitname.default}
 \alias{unitname<-.default}
 \alias{unstackFilter}
-\alias{unstack.lintess}
 \alias{update.im}
 \alias{update.ippm}
 \alias{update.msr}
@@ -1173,6 +1173,7 @@ logi.engine(Q, trend, interaction, \dots,
 looVoronoiLPP(X)
 makeLinnetTolerance
 maskLaslett(X, \dots, eps, dimyx, xy, oldX, verbose, plotit)
+markvaluetype(x)
 match2DkernelName(kernel)
 parbreak(terse)
 plan.legend.layout(B, \dots, side, sep, size, sep.frac, size.frac,
@@ -1633,7 +1634,6 @@ x \%unit\% u
 \method{unitname}{default}(x) 
 \method{unitname}{default}(x) <- value 
 unstackFilter(x)
-\method{unstack}{lintess}(x, \dots)
 \method{update}{im}(object, \dots) 
 \method{update}{ippm}(object, \dots, envir) 
 \method{update}{msr}(object, \dots) 

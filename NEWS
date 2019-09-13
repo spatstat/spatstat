@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.61-0.001
+        CHANGES IN spatstat VERSION 1.61-0.003
 
 OVERVIEW
 
@@ -15,6 +15,9 @@ NEW FUNCTIONS
     o tilenames<-.lintess
     Change the names of the tiles in a tessellation on a linear network
 
+    o nobjects.lintess
+    Count the number of tiles in a tessellation on a linear network
+    
 SIGNIFICANT USER-VISIBLE CHANGES
 
     o tilenames, tilenames<-

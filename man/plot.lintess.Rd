@@ -8,7 +8,10 @@
 }
 \usage{
 \method{plot}{lintess}(x, \dots,
-        main, add = FALSE, style = c("segments", "image"), col = NULL)
+        main, add = FALSE,
+        style = c("colour", "width", "image"),
+        col = NULL, values=marks(x),
+        ribbon=TRUE, ribargs=list(), multiplot=TRUE, do.plot=TRUE)
 }
 \arguments{
   \item{x}{
@@ -29,14 +32,47 @@
     existing plot.
   }
   \item{style}{
-    Character string (partially matched) indicating whether to
-    plot the tiles of the tessellation using \code{\link[graphics]{segments}}
-    or to convert the tessellation to a pixel image and use
+    Character string (partially matched) specifying the type of plot.
+    If \code{style="colour"} (the default), tiles are plotted
+    using \code{\link[graphics]{segments}} using colours to distinguish
+    the different tiles or values. If \code{style="width"},
+    tiles are plotted using \code{\link[graphics]{segments}}
+    using different segment widths to distinguish
+    the different tiles or values. If \code{style="image"}, the
+    tessellation is converted to a pixel image and plotted by
     \code{\link{plot.im}}.
   }
   \item{col}{
     Vector of colours, or colour map, determining the colours used
     to plot the different tiles of the tessellation.
+  }
+  \item{values}{
+    Values associated with each tile of the tessellation,
+    used to determine the colours or widths.
+    A vector with one entry for each tile, or a data frame
+    with one row for each tile.
+    The default is \code{marks(x)}, or if that is null, then
+    \code{tilenames(x)}.
+  }
+  \item{ribbon}{
+    Logical value specifying whether to print an explanatory legend
+    for the colour map or width map.
+  }
+  \item{ribargs}{
+    Arguments passed to \code{\link{plot.colourmap}} controlling the
+    display of the colour map legend.
+  }
+  \item{multiplot}{
+    Logical value determining what should happen if \code{marks(x)}
+    has more than one column. If \code{multiplot=TRUE} (the default),
+    several plot panels will be generated, one panel for each column
+    of marks. If \code{multiplot=FALSE}, the first column of marks will
+    be selected.
+  }
+  \item{do.plot}{
+    Logical value specifying whether to actually generate the plot
+    (\code{do.plot=TRUE}, the default) or just to compute the colour map
+    and return it (\code{do.plot=FALSE}).
   }
 }
 \details{
@@ -47,13 +83,20 @@
 
   This function plots the tessellation on the current device.
   It is a method for the generic \code{plot}.
-  
-  If \code{style="segments"}, each tile is plotted using
-  \code{\link[graphics]{segments}}. Colours distinguish the different
-  tiles. 
 
+  If \code{style="colour"}, each tile is plotted using
+  \code{\link[graphics]{segments}}, drawing segments of different colours. 
+  
+  If \code{style="width"}, each tile is plotted using
+  \code{\link[graphics]{segments}}, drawing segments of different widths.
+  
   If \code{style="image"}, the tessellation is converted to a pixel
-  image, and plotted using \code{\link{plot.im}}.
+  image, and plotted as a colour image using \code{\link{plot.im}}.
+
+  The colours or widths are determined by the \code{values}
+  associated with each tile of the tessellation. If \code{values} is
+  missing, the default is to use the marks of the tessellation, or if
+  there are no marks, the names of the tiles.
 }
 \value{
   (Invisible) colour map.
@@ -69,6 +112,8 @@
    Z <- divide.linnet(X)
    plot(Z, main="tessellation on network")
    points(as.ppp(X))
+   plot(Z, main="tessellation on network",
+           values=1:nobjects(Z), style="w")
 }
 \keyword{spatial}
 \keyword{hplot}

@@ -46,6 +46,7 @@ tilenames(x) <- value
   D <- dirichlet(runifpoint(10))
   tilenames(D)
   tilenames(D) <- paste("Cell", 1:10)
+  tilenames(D)
 
   B <- lineardirichlet(runiflpp(5, simplenet))
   tilenames(B)

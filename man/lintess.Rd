@@ -7,15 +7,19 @@
   Create a tessellation on a linear network.
 }
 \usage{
-lintess(L, df)
+lintess(L, df, marks=NULL)
 }
 \arguments{
   \item{L}{
     Linear network (object of class \code{"linnet"}).
   }
   \item{df}{
-    Data frame of coordinates of endpoints of the 
-    tiles of the tessellation. 
+    Data frame of local coordinates for the pieces that make up the 
+    tiles of the tessellation. See Details.
+  }
+  \item{marks}{
+    Vector or data frame of 
+    marks associated with the tiles of the tessellation.
   }
 }
 \details{
@@ -26,6 +30,7 @@ lintess(L, df)
   
   The data frame \code{df} should have columns named
   \code{seg}, \code{t0}, \code{t1} and \code{tile}.
+  Any additional columns will be ignored.
 
   Each row of the data frame specifies one sub-segment of the network
   and allocates it to a particular tile.
@@ -45,6 +50,12 @@ lintess(L, df)
 
   If \code{df} is missing or \code{NULL}, the result is a tessellation
   with only one tile, consisting of the entire network \code{L}.
+
+  Additional data called \emph{marks} may be associated with
+  each tile of the tessellation. The argument \code{marks} should be
+  a vector with one entry for each tile (that is, one entry for each
+  level of \code{df$tile}) or a data frame with one row for each tile.
+  In general \code{df} and \code{marks} will have different numbers of rows.
 }
 \value{
   An object of class \code{"lintess"}.

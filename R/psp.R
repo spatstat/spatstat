@@ -1,7 +1,7 @@
 #
 #  psp.R
 #
-#  $Revision: 1.97 $ $Date: 2019/05/31 05:50:13 $
+#  $Revision: 1.98 $ $Date: 2019/09/13 09:24:52 $
 #
 # Class "psp" of planar line segment patterns
 #
@@ -338,6 +338,7 @@ plot.psp <- function(x, ..., main, add=FALSE,
                      show.window=show.all,
                      which.marks=1,
                      style=c("colour", "width", "none"),
+                     col=NULL,
                      ribbon=show.all, ribsep=0.15, ribwid=0.05, ribn=1024,
                      do.plot=TRUE) {
   if(missing(main) || is.null(main))
@@ -421,39 +422,55 @@ plot.psp <- function(x, ..., main, add=FALSE,
     return(invisible(result))
   }
   
-  # determine colours if any
+  ## determine colours if any
+  colmap <- NULL
   if(!use.marks) {
-    # black
-    col <- colmap <- NULL
+    ## black
+    col <- NULL
   } else {
-    # multicoloured 
+    ## use colours
     marx <- as.data.frame(marx)[, which.marks]
     if(is.character(marx) || length(unique(marx)) == 1)
       marx <- factor(marx)
-    if(is.factor(marx)) {
-      lev <- levels(marx)
-      colmap <- colourmap(col=rainbow(length(lev)), inputs=factor(lev))
-    } else {
-      if(!all(is.finite(marx)))
-        warning("Some mark values are infinite or NaN or NA")
-      colmap <- colourmap(col=rainbow(ribn), range=range(marx, finite=TRUE))
+    if(is.null(col)) {
+      ## no colour info: use default colour palette
+      nc <- if(is.factor(marx)) {
+              length(levels(marx))
+            } else {
+              min(256, length(unique(marx)))
+            }
+      colfun <- spatstat.options("image.colfun")
+      col <- colfun(nc)
     }
+    ## determine colour map
+    if(inherits(col, "colourmap")) {
+      colmap <- colourmap
+    } else if(is.colour(col)) {
+      ## colour values given; create colour map
+      if(is.factor(marx)) {
+        lev <- levels(marx)
+        colmap <- colourmap(col=col, inputs=factor(lev))
+      } else {
+        if(!all(is.finite(marx)))
+          warning("Some mark values are infinite or NaN or NA")
+        colmap <- colourmap(col=col, range=range(marx, finite=TRUE))
+      }
+    } else stop("Format of argument 'col' is not recognised")
+    #' map the mark values to colours
     col <- colmap(marx)
   }
-
   ## convert to greyscale?
   if(spatstat.options("monochrome")) {
     col <- to.grey(col)
     colmap <- to.grey(colmap)
   }
-
   if(do.plot) {
     ## plot segments
     do.call.plotfun(segments,
                     resolve.defaults(as.list(x$ends),
                                      list(...),
                                      list(col=col),
-                                     .StripNull=TRUE),
+                                     .MatchNull=FALSE, .StripNull=TRUE),
                     extrargs=names(par()))
     ## plot ribbon
     if(do.ribbon) 

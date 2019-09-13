@@ -1,7 +1,7 @@
 #
 # marks.R
 #
-#   $Revision: 1.45 $   $Date: 2018/11/26 10:24:13 $
+#   $Revision: 1.46 $   $Date: 2019/09/13 04:48:17 $
 #
 # stuff for handling marks
 #
@@ -393,4 +393,14 @@ coerce.marks.numeric <- function(X, warn=TRUE) {
     }
   }
   return(X)
+}
+
+#' for 'print' methods
+markvaluetype <- function(x) {
+  if(is.hyperframe(x)) return(unclass(x)$vclass)
+  if(!is.null(dim(x))) x <- as.data.frame(x)
+  if(is.data.frame(x)) return(sapply(x, markvaluetype))
+  if(inherits(x, c("POSIXt", "Date"))) return("date-time")
+  if(is.factor(x)) return("factor")
+  return(typeof(x))
 }

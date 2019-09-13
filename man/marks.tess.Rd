@@ -1,7 +1,10 @@
 \name{marks.tess}
 \alias{marks.tess}
+\alias{marks.lintess}
 \alias{marks<-.tess}
+\alias{marks<-.lintess}
 \alias{unmark.tess}
+\alias{unmark.lintess}
 \title{Marks of a Tessellation}
 \description{
   Extract or change the marks attached to
@@ -13,10 +16,17 @@
 \method{marks}{tess}(x, \dots) <- value
 
 \method{unmark}{tess}(X)
+
+\method{marks}{lintess}(x, \dots)           
+
+\method{marks}{lintess}(x, \dots) <- value
+
+\method{unmark}{lintess}(X)
 }
 \arguments{
   \item{x,X}{
-    Tessellation (object of class \code{"tess"}).
+    Tessellation (object of class \code{"tess"})
+    or tessellation on a linear network (object of class \code{"lintess"}).
   }
   \item{\dots}{
     Ignored.
@@ -42,7 +52,8 @@
   attached to each of the tiles in the tessellation \code{x}.
   They are methods for the generic functions
   \code{\link{marks}} and \code{\link{marks<-}}
-  for the class \code{"tess"} of tessellations.
+  for the class \code{"tess"} of tessellations
+  and the class \code{"lintess"} of tessellations on a network.
     
   The expression \code{marks(x)} extracts the marks of \code{x}.
   The assignment \code{marks(x) <- value} assigns new marks to the
@@ -67,15 +78,12 @@
 \examples{
   D <- dirichlet(cells)
   marks(D) <- tile.areas(D)
+
+  B <- lineardirichlet(runiflpp(5, simplenet))
+  marks(B) <- letters[1:5]
 }
 \author{
-\adrian
-
-
-\rolf
-
-and \ege
-
+  \spatstatAuthors.
 }
 \keyword{spatial}
 \keyword{manip}

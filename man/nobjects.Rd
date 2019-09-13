@@ -4,6 +4,7 @@
 \alias{nobjects.ppx}
 \alias{nobjects.psp}
 \alias{nobjects.tess}
+\alias{nobjects.lintess}
 \title{
   Count Number of Geometrical Objects in a Spatial Dataset
 }
@@ -21,6 +22,8 @@
   \method{nobjects}{psp}(x)
 
   \method{nobjects}{tess}(x)
+
+  \method{nobjects}{lintess}(x)
 }
 \arguments{
   \item{x}{A dataset.}
@@ -36,7 +39,7 @@
   The method for line segment patterns (class \code{"psp"})
   counts the number of line segments in the pattern.
 
-  The method for tessellations (class \code{"tess"})
+  The method for tessellations (class \code{"tess"} or \code{"lintess"})
   counts the number of tiles of the tessellation.
 }
 \value{
@@ -52,6 +55,7 @@
    nobjects(redwood)
    nobjects(edges(letterR))
    nobjects(dirichlet(cells))
+   nobjects(lineardirichlet(runiflpp(5, simplenet)))
 }
 \keyword{spatial}
 \keyword{manip}

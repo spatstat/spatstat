@@ -3,7 +3,7 @@
 #
 # support for tessellations
 #
-#   $Revision: 1.96 $ $Date: 2019/09/13 00:54:20 $
+#   $Revision: 1.97 $ $Date: 2019/09/13 04:29:08 $
 #
 tess <- function(..., xgrid=NULL, ygrid=NULL, tiles=NULL, image=NULL,
                  window=NULL, marks=NULL, keepempty=FALSE,
@@ -548,9 +548,10 @@ marks.tess <- function(x, ...) {
   stopifnot(is.tess(x))
   if(!is.null(value)) {
     value <- as.data.frame(value)
-    if(nrow(value) != x$n)
+    ntil <- x$n
+    if(nrow(value) != ntil)
       stop(paste("replacement value for marks has wrong length:",
-                 nrow(value), "should be", x$n),
+                 nrow(value), "should be", ntil),
            call.=FALSE)
     rownames(value) <- NULL
     if(ncol(value) == 1) colnames(value) <- "marks"

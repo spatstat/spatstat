@@ -3,6 +3,7 @@
 \alias{unstack.psp}
 \alias{unstack.lpp}
 \alias{unstack.tess}
+\alias{unstack.lintess}
 \title{
   Separate Multiple Columns of Marks 
 }
@@ -19,13 +20,16 @@
 \method{unstack}{lpp}(x, \dots)
 
 \method{unstack}{tess}(x, \dots)
+
+\method{unstack}{lintess}(x, \dots)
 }
 \arguments{
   \item{x}{
     A spatial point pattern
     (object of class \code{"ppp"} or \code{"lpp"})
     or a spatial pattern of line segments (object of class \code{"psp"})
-    or a spatial tessellation (object of class \code{"tess"}).
+    or a spatial tessellation (object of class \code{"tess"})
+    or a tessellation on a linear network (object of class \code{"lintess"}).
   }
   \item{\dots}{
     Ignored.
