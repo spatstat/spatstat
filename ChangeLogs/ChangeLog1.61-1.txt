@@ -1,0 +1,26 @@
+Change log from 1.61-0 to 1.61-1
+================================
+
+12 sep 2019
+
+   DESCRIPTION
+   NEWS
+   Nickname.txt
+	Version 1.61-0.001
+	Nickname 'Ftang ftang ole biscuit barrel'
+
+------------- passed R-3.6.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+
+13 sep 2019
+
+   tess.R
+   lintess.R
+   tilenames.Rd
+	tilenames() and "tilenames<-"() are now generic
+	with methods for 'tess' and 'lintess'
+
+   plot.im.R
+	Improved message when values are interpreted as colours
+

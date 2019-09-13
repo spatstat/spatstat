@@ -3,7 +3,7 @@
 #'
 #'   Tessellations on a Linear Network
 #'
-#'   $Revision: 1.33 $   $Date: 2019/09/12 04:08:58 $
+#'   $Revision: 1.35 $   $Date: 2019/09/13 01:25:51 $
 #'
 
 lintess <- function(L, df) {
@@ -82,7 +82,16 @@ tile.lengths <- function(x) {
   tilelen <- with(df, tapplysum(fraglen, list(tile)))
   return(tilelen)
 }
-  
+
+tilenames.lintess <- function(x) {
+ levels(x$df$tile) 
+}
+
+"tilenames<-.lintess" <- function(x, value) {
+  levels(x$df$tile) <- value
+  return(x)
+}
+
 summary.lintess <- function(object, ...) {
   df <- object$df
   lev <- levels(df$tile)

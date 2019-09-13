@@ -1,7 +1,7 @@
 #
 #   plot.im.R
 #
-#  $Revision: 1.130 $   $Date: 2019/07/03 03:33:42 $
+#  $Revision: 1.131 $   $Date: 2019/09/13 01:07:21 $
 #
 #  Plotting code for pixel images
 #
@@ -245,7 +245,8 @@ plot.im <- local({
       valuesAreColours <- is.character(strings) && 
       !inherits(try(col2rgb(strings), silent=TRUE), "try-error")
       if(valuesAreColours)
-        cat("Interpreting pixel values as colours\n")
+        splat("Interpreting pixel values as colours",
+              "(valuesAreColours=TRUE)")
     }
     # 
     if(valuesAreColours) {

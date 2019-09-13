@@ -1,4 +1,30 @@
 
+        CHANGES IN spatstat VERSION 1.61-0.001
+
+OVERVIEW
+
+    o More support for tessellations on a linear network.
+    
+    o Nickname: 'Ftang ftang ole biscuit barrel'
+
+NEW FUNCTIONS
+
+    o tilenames.lintess
+    Extract the names of the tiles in a tessellation on a linear network
+
+    o tilenames<-.lintess
+    Change the names of the tiles in a tessellation on a linear network
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o tilenames, tilenames<-
+    These functions are now generic, with methods for 'tess' and 'lintess'
+
+BUG FIXES
+
+    o None
+    None so far!
+
         CHANGES IN spatstat VERSION 1.61-0
 
 OVERVIEW

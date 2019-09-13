@@ -3,7 +3,7 @@
 #
 # support for tessellations
 #
-#   $Revision: 1.95 $ $Date: 2019/08/31 04:05:41 $
+#   $Revision: 1.96 $ $Date: 2019/09/13 00:54:20 $
 #
 tess <- function(..., xgrid=NULL, ygrid=NULL, tiles=NULL, image=NULL,
                  window=NULL, marks=NULL, keepempty=FALSE,
@@ -477,7 +477,10 @@ tiles.empty <- function(x) {
 }
            
 tilenames <- function(x) {
-  stopifnot(is.tess(x))
+  UseMethod("tilenames")
+}
+
+tilenames.tess <- function(x) {
   switch(x$type,
          rect={
            if(!is.null(x$tilenames)) {
@@ -502,7 +505,10 @@ tilenames <- function(x) {
 }
 
 "tilenames<-" <- function(x, value) {
-  stopifnot(is.tess(x))
+  UseMethod("tilenames<-")
+}
+
+"tilenames<-.tess" <- function(x, value) {
   if(!is.null(value)) {
     ## validate length
     value <- as.character(value)
