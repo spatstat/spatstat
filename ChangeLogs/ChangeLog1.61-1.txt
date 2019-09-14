@@ -50,8 +50,6 @@ Change log from 1.61-0 to 1.61-1
    spatstat-internal.Rd
 	unstack.lintess now has a non-trivial task
 
-        (Need to modify plot.lintess)
-
    DESCRIPTION
    NEWS
 	Version 1.61-0.002
@@ -83,4 +81,20 @@ Change log from 1.61-0 to 1.61-1
 ------------- passed R-3.6.1 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
+
+14 sep 2019
+
+   lintess.R
+	Buglet fix in plot method
+
+   lintess.R
+   as.linfun.Rd
+	as.linfun.lintess uses default function values from marks(X)
 	
+   DESCRIPTION
+   NEWS
+	Version 1.61-0.004
+
+------------- passed R-3.6.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------

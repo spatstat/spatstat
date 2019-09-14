@@ -1,14 +1,20 @@
 
-        CHANGES IN spatstat VERSION 1.61-0.003
+        CHANGES IN spatstat VERSION 1.61-0.004
 
 OVERVIEW
 
-    o More support for tessellations on a linear network.
+    o Tessellations on a linear network can now have marks.
     
     o Nickname: 'Ftang ftang ole biscuit barrel'
 
 NEW FUNCTIONS
 
+    o marks<-.lintess, unmark.lintess
+    Assign marks to the tiles of a tessellation on a linear network.
+
+    o marks.lintess
+    Extract the marks of the tiles of a tessellation on a linear network.
+    
     o tilenames.lintess
     Extract the names of the tiles in a tessellation on a linear network
 
@@ -17,12 +23,35 @@ NEW FUNCTIONS
 
     o nobjects.lintess
     Count the number of tiles in a tessellation on a linear network
-    
+
 SIGNIFICANT USER-VISIBLE CHANGES
+
+    o lintess
+    New argument 'marks'
 
     o tilenames, tilenames<-
     These functions are now generic, with methods for 'tess' and 'lintess'
 
+    o unstack.lintess
+    Modified to handle marks.
+    
+    o plot.lintess
+    Modified to display the marks attached to the tiles.
+    Changed options: style=c("colour", "width", "image").
+
+    o as.linfun.lintess
+    The default function values are the marks.
+    
+    o print.lintess, summary.lintess, print.summary.lintess
+    Output now includes information about marks.
+
+    o plot.psp
+    New argument 'col' gives control over the colour map
+    representing the values of marks attached to the segments.
+
+    o plot.im
+    Some warnings are suppressed when do.plot=FALSE.
+    
 BUG FIXES
 
     o None

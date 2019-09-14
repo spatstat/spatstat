@@ -3,7 +3,7 @@
 #'
 #'   Tessellations on a Linear Network
 #'
-#'   $Revision: 1.36 $   $Date: 2019/09/13 09:25:23 $
+#'   $Revision: 1.40 $   $Date: 2019/09/14 11:19:37 $
 #'
 
 lintess <- function(L, df, marks=NULL) {
@@ -269,7 +269,7 @@ plot.lintess <- local({
                              y1=vy[from] * (1-t1) + vy[to] * t1,
                              marks=values[as.integer(tile)]))
     S <- as.psp(segdata, window=Window(L))
-    cmap <- plot(S, style=style, add=add, do.plot=do.plot, 
+    cmap <- plot(S, style=style, add=add, do.plot=do.plot, main=main, 
                  ribbon=ribbon, ribargs=ribargs, col=col, ...)
     return(invisible(cmap))
   }
@@ -379,13 +379,14 @@ lineartileindex <- function(seg, tp, Z,
 
 as.linfun.lintess <- local({
 
-  as.linfun.lintess <- function(X, ..., values, navalue=NA) {
+  as.linfun.lintess <- function(X, ..., values=marks(X), navalue=NA) {
     Xdf <- X$df
     tilenames <- levels(Xdf$tile)
-    value.is.tile <- missing(values) || is.null(values)
+    value.is.tile <- is.null(values)
     if(value.is.tile) {
       tilevalues <- factor(tilenames, levels=tilenames)
     } else {
+      if(!is.null(dim(values))) values <- values[,1]
       if(length(values) != length(tilenames))
         stop("Length of 'values' should equal the number of tiles", call.=FALSE)
       tilevalues <- values

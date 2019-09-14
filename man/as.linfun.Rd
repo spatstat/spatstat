@@ -14,7 +14,7 @@
 
   \method{as.linfun}{linim}(X, \dots)
 
-  \method{as.linfun}{lintess}(X, \dots, values, navalue=NA)
+  \method{as.linfun}{lintess}(X, \dots, values=marks(X), navalue=NA)
 }
 \arguments{
   \item{X}{
@@ -43,11 +43,15 @@
   The method \code{as.linfun.lintess} converts a tessellation
   on a linear network into a function with a different value
   on each tile of the tessellation.
-  If the argument \code{values} is missing or null,
-  then the function returns factor values identifying which tile
-  contains each given point. If \code{values} is given,
-  it should be a vector with one entry for each tile of the tessellation:
+  The function values are specified by the argument \code{values}.
+  It should be a vector with one entry for each tile of the tessellation;
   any point lying in tile number \code{i} will return the value \code{v[i]}.
+  If \code{values} is missing, the marks of the tessellation
+  are taken as the function values. 
+  If \code{values} is missing and the tessellation has no marks,
+  or if \code{values} is given as \code{NULL},
+  then the function returns factor values identifying which tile
+  contains each given point.
 }
 \value{
   Object of class \code{"linfun"}.
