@@ -98,3 +98,17 @@ Change log from 1.61-0 to 1.61-1
 ------------- passed R-3.6.1 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
+
+15 sep 2019
+
+   lpp.R
+	Bug fix in plot.lpp
+
+   DESCRIPTION
+   NEWS
+	Version 1.61-0.005
+
+------------- passed R-3.6.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+

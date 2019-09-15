@@ -1,9 +1,11 @@
 
-        CHANGES IN spatstat VERSION 1.61-0.004
+        CHANGES IN spatstat VERSION 1.61-0.005
 
 OVERVIEW
 
     o Tessellations on a linear network can now have marks.
+
+    o Bug fixes and minor improvements.
     
     o Nickname: 'Ftang ftang ole biscuit barrel'
 
@@ -54,8 +56,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
     
 BUG FIXES
 
-    o None
-    None so far!
+    o plot.lpp
+    Did not correctly handle the argument 'which.marks'.
+    Fixed.
 
         CHANGES IN spatstat VERSION 1.61-0
 

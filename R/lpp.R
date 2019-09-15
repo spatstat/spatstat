@@ -1,7 +1,7 @@
 #
 # lpp.R
 #
-#  $Revision: 1.64 $   $Date: 2019/09/12 03:07:45 $
+#  $Revision: 1.65 $   $Date: 2019/09/15 02:09:20 $
 #
 # Class "lpp" of point patterns on linear networks
 
@@ -110,7 +110,7 @@ plot.lpp <- function(x, ..., main, add=FALSE,
   mx <- marks(x)
   if(use.marks && !is.null(dim(mx))) {
     implied.all <- is.null(which.marks)
-    want.several <- implied.all || !is.null(dim(mx <- mx[,which.marks]))
+    want.several <- implied.all || !is.null(dim(mx <- mx[,which.marks,drop=TRUE]))
     do.several <- want.several && !add && multiplot
     if(want.several)
       mx <- as.data.frame(mx) #' ditch hyperframe columns
@@ -154,6 +154,7 @@ plot.lpp <- function(x, ..., main, add=FALSE,
   ## plot points, legend, title
   ans <- do.call.matched(plot.ppp,
                          c(list(x=P, add=TRUE, main=main,
+                                use.marks=use.marks, which.marks=which.marks,
                                 show.all=show.all, show.window=FALSE),
                            list(...)),
                          extrargs=c("shape", "size", "pch", "cex",
