@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.61-0.005
+        CHANGES IN spatstat VERSION 1.61-0.006
 
 OVERVIEW
 
@@ -35,7 +35,7 @@ SIGNIFICANT USER-VISIBLE CHANGES
     These functions are now generic, with methods for 'tess' and 'lintess'
 
     o unstack.lintess
-    Modified to handle marks.
+    Now handles marks.
     
     o plot.lintess
     Modified to display the marks attached to the tiles.
@@ -53,6 +53,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o plot.im
     Some warnings are suppressed when do.plot=FALSE.
+
+    o plot.linim
+    New explicit argument 'box' determines whether to plot a bounding box.
+    Default is now FALSE in all cases.
     
 BUG FIXES
 

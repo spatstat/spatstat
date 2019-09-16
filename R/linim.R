@@ -1,7 +1,7 @@
 #
 # linim.R
 #
-#  $Revision: 1.56 $   $Date: 2019/09/11 09:29:52 $
+#  $Revision: 1.59 $   $Date: 2019/09/16 05:38:12 $
 #
 #  Image/function on a linear network
 #
@@ -151,6 +151,7 @@ plot.linim <- local({
                          leg.args=list(),
                          leg.scale=1,
                          zlim,
+                         box=FALSE,
                          do.plot=TRUE) {
     xname <- short.deparse(substitute(x))
     style <- match.arg(style)
@@ -181,7 +182,8 @@ plot.linim <- local({
                                       zliminfo, 
                                       list(main=xname,
                                            legend=legend,
-                                           do.plot=do.plot))))
+                                           do.plot=do.plot,
+                                           box=box))))
     #' width style
     L <- attr(x, "L")
     df <- attr(x, "df")
@@ -197,10 +199,10 @@ plot.linim <- local({
     if(legend) {
       #' use layout procedure in plot.im
       z <- do.call(plot.im,
-                   resolve.defaults(list(x, do.plot=FALSE, legend=TRUE),
+                   resolve.defaults(list(x, do.plot=FALSE, ribbon=TRUE),
                                     list(...),
                                     ribstuff,
-                                    list(main=xname)))
+                                    list(main=xname, valuesAreColours=FALSE)))
       bb.all <- attr(z, "bbox")
       bb.leg <- attr(z, "bbox.legend")
     } else {
@@ -221,6 +223,8 @@ plot.linim <- local({
                           resolve.defaults(list(x=bb.all, type="n"),
                                            list(...), list(main=xname)),
                           extrargs="type")
+    if(box)
+      plot(Frame(W), add=TRUE)
     #' resolve graphics parameters for polygons
     names(negative.args) <- paste0(names(negative.args), ".neg")
     grafpar <- resolve.defaults(negative.args,

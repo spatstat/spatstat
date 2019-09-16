@@ -19,6 +19,7 @@
              leg.args=list(),
              leg.scale=1,
              zlim,
+             box=FALSE,
              do.plot=TRUE)
 }
 \arguments{
@@ -77,6 +78,9 @@
     The range of numerical values that should be mapped.
     A numeric vector of length 2.
     Defaults to the range of values of \code{x}.
+  }
+  \item{box}{
+    Logical value indicating whether to draw a bounding box.
   }
   \item{do.plot}{
     Logical value indicating whether to actually perform the plot.

@@ -112,3 +112,20 @@ Change log from 1.61-0 to 1.61-1
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
 
+16 sep 2019
+
+   linim.R
+   plot.linim.Rd
+	plot.linim now has explicit argument 'box' defaulting to FALSE.
+
+   linim.R
+	Buglet fixes
+
+   DESCRIPTION
+   NEWS
+	Version 1.61-0.006
+
+------------- passed R-3.6.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+
