@@ -41,7 +41,8 @@ lppm.formula <- function(X, interaction=NULL, ..., data=NULL) {
     thecall[ncall + 1:nargh] <- argh
     names(thecall)[ncall + 1:nargh] <- names(argh)
   }
-  result <- eval(thecall, parent.frame())
+  callenv <- list2env(as.list(data), parent=parent.frame())
+  result <- eval(thecall, envir=callenv)
 
   result$call <- cl
   result$callstring <- callstring
