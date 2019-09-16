@@ -13,9 +13,9 @@
 \usage{
   nnfun(X, ...)
 
-  \method{nnfun}{ppp}(X, ..., k=1)
+  \method{nnfun}{ppp}(X, ..., k=1, value=c("index", "mark"))
 
-  \method{nnfun}{psp}(X, ...)
+  \method{nnfun}{psp}(X, ..., value=c("index", "mark"))
 }
 \arguments{
   \item{X}{
@@ -29,6 +29,11 @@
   }
   \item{\dots}{
     Extra arguments are ignored. 
+  }
+  \item{value}{
+    String (partially matched) specifying whether to return the
+    index of the neighbour (\code{value="index"}, the default)
+    or the mark value of the neighbour (\code{value="mark"}).
   }
 }
 \details{
@@ -80,15 +85,14 @@
    g <- nnfun(cells, k=2)
    g(0.2, 0.3)
 
+   plot(nnfun(amacrine, value="m"))
+
    L <- psp(runif(10), runif(10), runif(10), runif(10), window=owin())
    h <- nnfun(L)
    h(0.2, 0.3)
 }
-\author{\adrian
-  
-  
-  and \rolf
-  
+\author{
+  \spatstatAuthors.
 }
 \keyword{spatial}
 \keyword{math}

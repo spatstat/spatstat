@@ -129,3 +129,26 @@ Change log from 1.61-0 to 1.61-1
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
 
+   lppm.R
+	Fixed a scoping bug
+
+   DESCRIPTION
+   NEWS
+	Version 1.61-0.007
+
+------------- passed R-3.6.1 CMD check ---------------
+------------- installed on laptop      ---------------
+
+   nnfun.R
+   nnfun.Rd
+   nnfunlpp.R
+   nnfun.lpp.Rd
+	New argument 'value'
+
+   DESCRIPTION
+   NEWS
+	Version 1.61-0.008
+
+------------- passed R-3.6.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------

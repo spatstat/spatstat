@@ -1,10 +1,12 @@
 
-        CHANGES IN spatstat VERSION 1.61-0.006
+        CHANGES IN spatstat VERSION 1.61-0.008
 
 OVERVIEW
 
     o Tessellations on a linear network can now have marks.
 
+    o Nearest Neighbour Index function can now return mark values.
+    
     o Bug fixes and minor improvements.
     
     o Nickname: 'Ftang ftang ole biscuit barrel'
@@ -47,6 +49,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o print.lintess, summary.lintess, print.summary.lintess
     Output now includes information about marks.
 
+    o nnfun.ppp, nnfun.psp, nnfun.lpp
+    New argument 'value' specifies whether to return the index of the
+    nearest neighbour or the mark value of the nearest neighbour.
+    
     o plot.psp
     New argument 'col' gives control over the colour map
     representing the values of marks attached to the segments.
@@ -62,6 +68,11 @@ BUG FIXES
 
     o plot.lpp
     Did not correctly handle the argument 'which.marks'.
+    Fixed.
+
+    o lppm
+    Did not correctly handle the case where the left-hand side of the formula
+    is the name of an entry in the 'data' argument.
     Fixed.
 
         CHANGES IN spatstat VERSION 1.61-0

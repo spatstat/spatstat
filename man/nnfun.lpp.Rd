@@ -8,7 +8,7 @@
   Compute the nearest neighbour function of a point pattern on a linear network.
 }
 \usage{
-  \method{nnfun}{lpp}(X, ..., k=1)
+  \method{nnfun}{lpp}(X, ..., k=1, value=c("index", "mark"))
 }
 \arguments{
   \item{X}{
@@ -18,6 +18,11 @@
   \item{k}{
     Integer. The algorithm finds the \code{k}th nearest neighbour in
     \code{X} from any spatial location.    
+  }
+  \item{value}{
+    String (partially matched) specifying whether to return the
+    index of the neighbour (\code{value="index"}, the default)
+    or the mark value of the neighbour (\code{value="mark"}).
   }
   \item{\dots}{
     Other arguments are ignored. 
@@ -58,7 +63,6 @@
   It can be printed and plotted immediately as shown in the Examples.
   It can be converted to a pixel image
   using \code{\link{as.linim}}.
-
 }
 \value{
   A \code{function} in the \R language, with arguments \code{x,y} and optional
@@ -74,17 +78,14 @@
   \code{\link{distfun.lpp}}.
 }
 \examples{
-   data(letterR)
    X <- runiflpp(3, simplenet)
    f <- nnfun(X)
    f
    plot(f)
+   plot(nnfun(chicago, value="m"))
 }
-\author{\adrian
-  
-  
-  and \rolf
-  
+\author{
+  \spatstatAuthors
 }
 \keyword{spatial}
 \keyword{math}
