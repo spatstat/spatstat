@@ -152,3 +152,16 @@ Change log from 1.61-0 to 1.61-1
 ------------- passed R-3.6.1 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
+
+   lintess.R
+   as.data.frame.lintess.Rd [New file]
+   	Method for as.data.frame
+
+   DESCRIPTION
+   NEWS
+	Version 1.61-0.009
+
+------------- passed R-3.6.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+

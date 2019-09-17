@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.61-0.008
+        CHANGES IN spatstat VERSION 1.61-0.009
 
 OVERVIEW
 
@@ -28,6 +28,9 @@ NEW FUNCTIONS
     o nobjects.lintess
     Count the number of tiles in a tessellation on a linear network
 
+    o as.data.frame.lintess
+    Convert a tessellation on a linear network into a data frame.
+    
 SIGNIFICANT USER-VISIBLE CHANGES
 
     o lintess

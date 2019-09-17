@@ -3,7 +3,7 @@
 #'
 #'   Tessellations on a Linear Network
 #'
-#'   $Revision: 1.40 $   $Date: 2019/09/14 11:19:37 $
+#'   $Revision: 1.41 $   $Date: 2019/09/17 07:23:27 $
 #'
 
 lintess <- function(L, df, marks=NULL) {
@@ -305,6 +305,17 @@ Window.lintess <- function(X, ...) { as.owin(as.linnet(X)) }
 
 domain.lintess <- as.linnet.lintess <- function(X, ...) { X$L }
 
+as.data.frame.lintess <- function(x, ...) {
+  df <- x$df
+  if(!is.null(marx <- marks(x))) {
+    marx <- as.data.frame(marx)
+    if(ncol(marx) == 1L) colnames(marx) <- "marks"
+    marx <- marx[as.integer(df$tile), , drop=FALSE]
+    df <- cbind(df, marx)
+  }
+  df <- as.data.frame(df, ...)
+  return(df)
+}
 
 lineartileindex <- function(seg, tp, Z,
                             method=c("encode", "C", "interpreted")) {
