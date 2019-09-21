@@ -1888,6 +1888,7 @@
   Robin Milne,
   Enrique Miranda,
   Jesper \ifelse{latex}{\out{M\o ller}}{Moller},
+  Annie \ifelse{latex}{\out{Molli{\'e}}}{Mollie},
   Ines Moncada,
   Mehdi Moradi,
   Virginia Morera Pujol,

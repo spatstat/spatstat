@@ -1,7 +1,7 @@
 #
 #        edgeRipley.R
 #
-#    $Revision: 1.17 $    $Date: 2019/03/29 01:40:16 $
+#    $Revision: 1.18 $    $Date: 2019/09/21 05:19:19 $
 #
 #    Ripley isotropic edge correction weights
 #
@@ -27,13 +27,16 @@ edge.Ripley <- local({
     answer
   }
 
-  edge.Ripley <- function(X, r, W=Window(X), method="C", maxweight=100) {
+  edge.Ripley <- function(X, r, W=Window(X),
+                          method=c("C", "interpreted"),
+                          maxweight=100, internal=list()) {
     # X is a point pattern, or equivalent
     X <- as.ppp(X, W)
     W <- X$window
 
-    method <- match.arg(method, c("C", "interpreted", "debug"))
-    if(debugC <- (method == "debug")) method <- "C"
+    method <- match.arg(method)
+    debug  <- resolve.1.default(list(debug=FALSE), internal)
+    repair <- resolve.1.default(list(repair=TRUE), internal)
     
     switch(W$type,
            rectangle={},
@@ -145,11 +148,13 @@ edge.Ripley <- local({
                     },
                     polygonal={
                       Y <- edges(W)
-                      if(!debugC) {
+                      bd <- bdist.points(X)
+                      if(!debug) {
                         z <- .C("ripleypoly",
                                 nc=as.integer(n),
                                 xc=as.double(x),
                                 yc=as.double(y),
+                                bd=as.double(bd),
                                 nr=as.integer(Nc),
                                 rmat=as.double(r),
                                 nseg=as.integer(Y$n),
@@ -164,6 +169,7 @@ edge.Ripley <- local({
                                 nc=as.integer(n),
                                 xc=as.double(x),
                                 yc=as.double(y),
+                                bd=as.double(bd),
                                 nr=as.integer(Nc),
                                 rmat=as.double(r),
                                 nseg=as.integer(Y$n),
@@ -180,9 +186,10 @@ edge.Ripley <- local({
                     )
            }
     )
-    # eliminate wild values
-    weight <- matrix(pmax.int(0, pmin.int(maxweight, weight)),
-                     nrow=Nr, ncol=Nc)
+    ## eliminate wild values
+    if(repair)
+      weight <- matrix(pmax.int(1, pmin.int(maxweight, weight)),
+                       nrow=Nr, ncol=Nc)
     return(weight)
   }
 

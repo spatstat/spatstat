@@ -1,15 +1,17 @@
 
-        CHANGES IN spatstat VERSION 1.61-0.009
+        CHANGES IN spatstat VERSION 1.61-0.010
 
 OVERVIEW
 
+    o We thank Greg McSwiggan and Annie Mollie for contributions.
+    
     o Tessellations on a linear network can now have marks.
 
     o Nearest Neighbour Index function can now return mark values.
     
     o Bug fixes and minor improvements.
     
-    o Nickname: 'Ftang ftang ole biscuit barrel'
+    o Nickname: 'New improved formula'
 
 NEW FUNCTIONS
 
@@ -66,6 +68,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o plot.linim
     New explicit argument 'box' determines whether to plot a bounding box.
     Default is now FALSE in all cases.
+
+    o Kest, Kinhom, pcf, pcfinhom, edge.Ripley
+    Calculation of isotropic edge correction for polygonal windows
+    has been accelerated by about 20 percent in typical cases.
     
 BUG FIXES
 
@@ -78,6 +84,12 @@ BUG FIXES
     is the name of an entry in the 'data' argument.
     Fixed.
 
+    o edge.Ripley, Kest, Kinhom
+    Isotropic correction weights for polygonal windows were sometimes incorrect
+    for small radius 'r' if the polygon contained many small segments.
+    [Spotted by Annie Mollie.]
+    Fixed.
+    
         CHANGES IN spatstat VERSION 1.61-0
 
 OVERVIEW

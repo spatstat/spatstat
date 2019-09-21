@@ -9,7 +9,8 @@
   for a point pattern.
 }
 \usage{
-edge.Ripley(X, r, W = Window(X), method = "C", maxweight = 100)
+edge.Ripley(X, r, W = Window(X), method = c("C", "interpreted"),
+            maxweight = 100, internal=list())
 
 rmax.Ripley(W)
 }
@@ -31,6 +32,7 @@ rmax.Ripley(W)
   \item{maxweight}{
     Maximum permitted value of the edge correction weight.
   }
+  \item{internal}{For developer use only.}
 }
 \details{
   The function \code{edge.Ripley}

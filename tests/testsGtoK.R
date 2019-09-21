@@ -357,7 +357,7 @@ local({
 #'
 #'   Various K and L functions and pcf
 #'
-#'   $Revision: 1.26 $  $Date: 2019/08/01 06:32:48 $
+#'   $Revision: 1.27 $  $Date: 2019/09/21 05:18:07 $
 #'
 
 require(spatstat)
@@ -552,7 +552,7 @@ local({
   compere(eY, c(2,4/3), "near corner of rectangle")
   ## Invoke polygonal code
   Z <- rotate(Y, pi/4)
-  eZdebug <- edge.Ripley(Z, c(1,1), method="debug")
+  eZdebug <- edge.Ripley(Z, c(1,1), internal=list(debug=TRUE))
   compere(eZdebug, c(2,4/3), "at interior point of polygon (debug on)")
   ## test validity without debugger, in case of quirks of compiler optimisation
   eZ <- edge.Ripley(Z, c(1,1))

@@ -165,3 +165,31 @@ Change log from 1.61-0 to 1.61-1
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
 
+21 sept 2019
+
+   src/ripleypoly.h
+	Repaired a bug/numerical instability
+
+   src/ripleypoly.h
+   edgeRipley.R
+	Changed algorithm to use boundary distances.
+	Accelerated in many cases.
+	
+   edgeRipley.R
+   edge.Ripley.Rd
+	Arguments slightly modified.
+	
+   DESCRIPTION
+   NEWS
+   spatstat-package.Rd
+	Acknowledged Annie Mollie
+   
+   DESCRIPTION
+   NEWS
+   Nickname.txt
+        Nickname 'New improved formula'
+	Version 1.61-0.010
+
+------------- passed R-3.6.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
