@@ -193,3 +193,18 @@ Change log from 1.61-0 to 1.61-1
 ------------- passed R-3.6.1 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
+
+23 sept 2019
+
+   src/ripleypoly.h
+	Experimental - revert to double precision comparisons
+	but keep new filtering step
+
+   DESCRIPTION
+   NEWS
+	Version 1.61-0.011
+
+------------- passed R-3.6.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+

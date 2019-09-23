@@ -38,8 +38,8 @@
 /* Avoid quirks of Windows i386 */
 #define ROUNDED(X) ((float)(X))
 #else
-/* define ROUNDED(X) ((double)(X)) */
-#define ROUNDED(X) ((float)(X))
+#define ROUNDED(X) ((double)(X))
+/*  define ROUNDED(X) ((float)(X)) */
 #endif
 
 void RIPLEYFUN(nc, xc, yc, bd, nr, rmat, nseg, x0, y0, x1, y1, out) 
