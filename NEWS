@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.61-0.011
+        CHANGES IN spatstat VERSION 1.61-0.012
 
 OVERVIEW
 
@@ -71,7 +71,8 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o Kest, Kinhom, pcf, pcfinhom, edge.Ripley
     Calculation of isotropic edge correction for polygonal windows
-    has been accelerated by about 20 percent in typical cases.
+    has changed slightly. Results are believed to be more accurate.
+    Computation has been accelerated by about 20 percent in typical cases.
     
 BUG FIXES
 

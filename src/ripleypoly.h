@@ -14,7 +14,7 @@
   *CHUNKLOOP     defined in chunkloop.h
   TWOPI          defined in Rmath.h
 
-  $Revision: 1.19 $     $Date: 2019/09/21 05:09:38 $
+  $Revision: 1.20 $     $Date: 2019/09/25 05:58:56 $
 
   Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2019
   Licence: GNU Public Licence >= 2
@@ -38,8 +38,8 @@
 /* Avoid quirks of Windows i386 */
 #define ROUNDED(X) ((float)(X))
 #else
-#define ROUNDED(X) ((double)(X))
-/*  define ROUNDED(X) ((float)(X)) */
+#define ROUNDED(X) ((float)(X)) 
+/* WAS: define ROUNDED(X) ((double)(X)) */
 #endif
 
 void RIPLEYFUN(nc, xc, yc, bd, nr, rmat, nseg, x0, y0, x1, y1, out) 

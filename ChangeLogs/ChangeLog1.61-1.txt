@@ -208,3 +208,15 @@ Change log from 1.61-0 to 1.61-1
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
 
+25 sept 2019
+
+   src/ripleypoly.h
+	Reinstated floating-point comparisons (and kept filtering step).
+	
+   DESCRIPTION
+   NEWS
+	Version 1.61-0.012
+
+------------- passed R-3.6.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
