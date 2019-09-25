@@ -3,7 +3,7 @@
 #    
 #    Linear networks
 #
-#    $Revision: 1.68 $    $Date: 2019/01/31 08:40:24 $
+#    $Revision: 1.69 $    $Date: 2019/09/25 09:42:51 $
 #
 # An object of class 'linnet' defines a linear network.
 # It includes the following components
@@ -464,7 +464,13 @@ affine.linnet <- function(X,  mat=diag(c(1,1)), vec=c(0,0), ...) {
 shift.linnet <- function(X, vec=c(0,0), ..., origin=NULL) {
   verifyclass(X, "linnet")
   Y <- X
-  Y$window  <- W <- shift(X$window, vec=vec, ..., origin=origin)
+  if(!is.null(origin)) {
+    if(!missing(vec)) 
+      warning("argument vec ignored; argument origin has precedence")
+    locn <- interpretAsOrigin(origin, Window(X))
+    vec <- -locn
+  }
+  Y$window <- W <- shift(X$window, vec=vec, ...)
   v <- getlastshift(W)
   Y$vertices <- shift(X$vertices, vec=v, ...)
   Y$lines    <- shift(X$lines, vec=v, ...)

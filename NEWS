@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.61-0.012
+        CHANGES IN spatstat VERSION 1.61-0.013
 
 OVERVIEW
 
@@ -89,6 +89,10 @@ BUG FIXES
     Isotropic correction weights for polygonal windows were sometimes incorrect
     for small radius 'r' if the polygon contained many small segments.
     [Spotted by Annie Mollie.]
+    Fixed.
+
+    o shift.linnet
+    Generated a spurious warning.
     Fixed.
     
         CHANGES IN spatstat VERSION 1.61-0
