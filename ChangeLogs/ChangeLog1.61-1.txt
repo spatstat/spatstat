@@ -232,3 +232,21 @@ Change log from 1.61-0 to 1.61-1
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
 
+
+26 sept 2019
+
+   lintess.Rd
+   tests/lppstuff.R
+	More test examples of recent code.
+
+   DESCRIPTION
+   NEWS
+	Version 1.61-0.014
+
+------------- passed R-3.6.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+
+
+
+

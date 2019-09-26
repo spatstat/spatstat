@@ -345,7 +345,7 @@ local({
 #
 # Tests for lpp code
 #
-#  $Revision: 1.30 $  $Date: 2019/09/12 04:31:48 $
+#  $Revision: 1.32 $  $Date: 2019/09/26 03:10:52 $
 
 
 require(spatstat)
@@ -617,6 +617,22 @@ local({
   XminusB <- deletebranch(X, "b", tb)
   # extract branch B
   XB <- extractbranch(X, "b", tb)
+
+  ## cases of lintess()
+  A <- lintess(simplenet) # argument df missing 
+  S <- as.psp(simplenet)
+  ns <- nsegments(S)
+  df <- data.frame(seg=1:ns, t0=0, t1=1, tile=letters[1:ns])
+  M <- data.frame(len=lengths.psp(S), ang=angles.psp(S))
+  V <- lintess(simplenet, df, marks=M)
+
+  ## methods for class lintess
+  U <- unmark(V)
+  U <- unstack(V)
+  print(summary(V))
+  W <- Window(V)
+  plot(V, style="image")
+  plot(V, style="width")
 
   ## linear tessellations infrastructure
   nX <- 100

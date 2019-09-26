@@ -92,6 +92,10 @@ lintess(L, df, marks=NULL)
    u <- lintess(simplenet, df)
    u
    plot(u)
+   S <- as.psp(simplenet)
+   marks(u) <- data.frame(len=lengths.psp(S), ang=angles.psp(S))
+   u
+   plot(u)
 }
 \keyword{spatial}
 \keyword{datagen}
