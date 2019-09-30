@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.61-0.014
+        CHANGES IN spatstat VERSION 1.61-0.015
 
 OVERVIEW
 
@@ -73,6 +73,11 @@ SIGNIFICANT USER-VISIBLE CHANGES
     Calculation of isotropic edge correction for polygonal windows
     has changed slightly. Results are believed to be more accurate.
     Computation has been accelerated by about 20 percent in typical cases.
+
+    o bw.diggle, bw.ppl, bw.lppl, bw.pcf, bw.CvL, bw.voronoi
+    A warning is issued if the optimal value of the cross-validation criterion
+    occurs at an endpoint of the search interval.
+    New argument 'warn'.
     
 BUG FIXES
 

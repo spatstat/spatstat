@@ -101,7 +101,7 @@ densityVoronoi.lpp <- function(X, f = 1, ..., nrep = 1, verbose = TRUE){
 }
 
 bw.voronoi <- function(X, ..., probrange = c(0.2,0.8), nprob = 10,
-                       prob = NULL, nrep = 100, verbose = TRUE){
+                       prob = NULL, nrep = 100, verbose = TRUE, warn=TRUE){
   stopifnot(is.lpp(X))
   trap.extra.arguments(..., .Context="in bw.voronoi")
   if(!is.null(prob)) {
@@ -151,6 +151,7 @@ bw.voronoi <- function(X, ..., probrange = c(0.2,0.8), nprob = 10,
   result <- bw.optim(cv, prob, iopt=which.max(cv),
                      creator="bw.voronoi",
                      criterion="Likelihood Cross-Validation",
+                     warnextreme=warn, hargnames=c("probrange", "prob"),
                      unitname=NULL)
   return(result)
 }

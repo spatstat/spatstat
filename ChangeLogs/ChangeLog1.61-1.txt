@@ -247,6 +247,35 @@ Change log from 1.61-0 to 1.61-1
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
 
+30 sept 2019
 
+   bw.optim.R
+   spatstat-internal.Rd
+	bw.optim now checks whether criterion is optimised at an endpoint
 
+   relrisk.R
+   smooth.ppp.R
+	Now use internal checking of bw.optim
+	
+   bw.diggle.R
+   bw.diggle.Rd
+   bw.ppl.R
+   bw.ppl.Rd
+   bw.lppl.Rd
+   bw.pcf.R
+   bw.pcf.Rd
+   bw.CvL.R
+   bw.CvL.Rd
+   densitylppVoronoi.R
+   bw.voronoi.Rd
+	New argument 'warn' 
 
+   DESCRIPTION
+   NEWS
+	Version 1.61-0.015
+
+------------- passed R-3.6.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+
+   

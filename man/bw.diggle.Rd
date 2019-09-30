@@ -8,7 +8,7 @@
   for the kernel estimation of point process intensity.
 }
 \usage{
-   bw.diggle(X, ..., correction="good", hmax=NULL, nr=512)
+   bw.diggle(X, ..., correction="good", hmax=NULL, nr=512, warn=TRUE)
 }
 \arguments{
   \item{X}{
@@ -26,6 +26,11 @@
   \item{nr}{
     Integer. Number of steps in the distance value \eqn{r} to use in computing
     numerical integrals. 
+  }
+  \item{warn}{
+    Logical. If \code{TRUE}, issue a warning if the minimum of
+    the cross-validation criterion occurs at one of the ends of the
+    search interval.
   }
 }
 \details{

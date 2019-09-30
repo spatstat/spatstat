@@ -1,9 +1,9 @@
 #'
 #' bandwidth selection method of Cronie and Van Lieshout
 #' 
-#' $Revision$ $Date$
+#' $Revision: 1.1 $ $Date: 2019/09/30 08:01:20 $
 
-bw.CvL <- function(X, ..., srange=NULL, ns=16, sigma=NULL){
+bw.CvL <- function(X, ..., srange=NULL, ns=16, sigma=NULL, warn=TRUE){
   stopifnot(is.ppp(X))
   W <- Window(X)
   areaW <- area.owin(W)
@@ -27,6 +27,7 @@ bw.CvL <- function(X, ..., srange=NULL, ns=16, sigma=NULL){
   result <- bw.optim(cv, sigma, iopt=which.min(cv), 
                      creator="bw.CvL",
                      criterion="Cronie and van Lieshout",
+                     warnextreme=warn, hargnames="srange",
                      unitname=unitname(X))
   return(result)
 }

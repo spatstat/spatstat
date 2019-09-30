@@ -1,7 +1,7 @@
 #'
 #' bw.pcf.R
 #'
-#' $Revision: 1.4 $  $Date: 2017/06/05 10:31:58 $
+#' $Revision: 1.5 $  $Date: 2019/09/30 07:51:52 $
 #'
 #' bandwidth selection for pcf
 #' with least-squares cross-validation method
@@ -21,7 +21,7 @@
 bw.pcf <- function(X, rmax=NULL, lambda=NULL, divisor="r", 
                    kernel="epanechnikov", nr=10000, bias.correct=TRUE, 
                    cv.method=c("compLik", "leastSQ"), simple=TRUE,
-                   srange=NULL, ..., verbose=FALSE)
+                   srange=NULL, ..., verbose=FALSE, warn=TRUE)
 {
   stopifnot(is.ppp(X))
   X <- unmark(X)
@@ -111,6 +111,7 @@ bw.pcf <- function(X, rmax=NULL, lambda=NULL, divisor="r",
                       leastSQ = "least squares cross-validation")
   result <- bw.optim(cv, sigma, which.max(cv),
                      criterion = criterion,
+                     warnextreme=warn, hargnames=c("rmax", "srange"),
                      unitname=unitname(X))
   return(result)
 }

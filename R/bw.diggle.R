@@ -3,7 +3,7 @@
 ##
 ## bandwidth selection rule bw.diggle (for density.ppp)
 ##
-## $Revision: 1.6 $ $Date: 2019/07/22 11:40:05 $
+## $Revision: 1.7 $ $Date: 2019/09/30 07:45:33 $
 ##
 
 bw.diggle <- local({
@@ -19,7 +19,8 @@ bw.diggle <- local({
   mf <- function(..., method=c("C", "interpreted")) { match.arg(method) }
 
   
-  bw.diggle <- function(X, ..., correction="good", hmax=NULL, nr=512) {
+  bw.diggle <- function(X, ..., correction="good", hmax=NULL,
+                        nr=512, warn=TRUE) {
     stopifnot(is.ppp(X))
     method <- mf(...)
     W <- Window(X)
@@ -76,6 +77,8 @@ bw.diggle <- local({
                        criterion="Berman-Diggle Cross-Validation",
                        J=J,
                        lambda=lambda,
+                       warnextreme=warn,
+                       hargnames="hmax",
                        unitname=unitname(X))
     return(result)
   }

@@ -10,7 +10,7 @@
 }
 \usage{
    bw.lppl(X, \dots, srange=NULL, ns=16, sigma=NULL, weights=NULL,
-           distance="euclidean", shortcut=FALSE)
+           distance="euclidean", shortcut=FALSE, warn=TRUE)
 }
 \arguments{
   \item{X}{
@@ -42,6 +42,11 @@
   \item{shortcut}{
     Logical value indicating whether to speed up the calculation
     by omitting the integral term in the cross-validation criterion.
+  }
+  \item{warn}{
+    Logical. If \code{TRUE}, issue a warning if the maximum of
+    the cross-validation criterion occurs at one of the ends of the
+    search interval.
   }
 }
 \details{

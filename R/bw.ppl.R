@@ -6,11 +6,11 @@
 #'   bw.ppl    class ppp
 #'   bw.lppl   class lpp
 #' 
-#'   $Revision: 1.10 $ $Date: 2019/07/29 09:25:20 $
+#'   $Revision: 1.11 $ $Date: 2019/09/30 07:48:05 $
 #'
 
 bw.ppl <- function(X, ..., srange=NULL, ns=16, sigma=NULL,
-                   weights=NULL, shortcut=FALSE) {
+                   weights=NULL, shortcut=FALSE, warn=TRUE) {
   stopifnot(is.ppp(X))
   if(!is.null(sigma)) {
     stopifnot(is.numeric(sigma) && is.vector(sigma))
@@ -43,13 +43,16 @@ bw.ppl <- function(X, ..., srange=NULL, ns=16, sigma=NULL,
   result <- bw.optim(cv, sigma, iopt=which.max(cv), 
                      creator="bw.ppl",
                      criterion="Likelihood Cross-Validation",
+                     warnextreme=warn,
+                     hargnames="srange",
                      unitname=unitname(X))
   return(result)
 }
 
 
 bw.lppl <- function(X, ..., srange=NULL, ns=16, sigma=NULL,
-                   weights=NULL, distance="euclidean", shortcut=FALSE) {
+                    weights=NULL, distance="euclidean",
+                    shortcut=FALSE, warn=TRUE) {
   stopifnot(is.lpp(X))
   if(!is.null(sigma)) {
     stopifnot(is.numeric(sigma) && is.vector(sigma))
@@ -104,6 +107,8 @@ bw.lppl <- function(X, ..., srange=NULL, ns=16, sigma=NULL,
   result <- bw.optim(cv, sigma, iopt=which.max(cv), 
                      creator="bw.lppl",
                      criterion="Likelihood Cross-Validation",
+                     warnextreme=warn,
+                     hargnames="srange",
                      unitname=unitname(X))
   return(result)
 }

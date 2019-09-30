@@ -3,7 +3,7 @@
 #
 #   Estimation of relative risk
 #
-#  $Revision: 1.41 $  $Date: 2019/01/08 07:32:46 $
+#  $Revision: 1.42 $  $Date: 2019/09/30 07:41:52 $
 #
 
 relrisk <- function(X, ...) UseMethod("relrisk")
@@ -480,19 +480,12 @@ bw.relrisk <- function(X, method="likelihood",
            }
          })
   ## optimize
-  iopt <- which.min(cv)
-  ##
-  if(warn && (iopt == nh || iopt == 1)) 
-    warning(paste("Cross-validation criterion was minimised at",
-                  if(iopt == 1) "left-hand" else "right-hand",
-                  "end of interval",
-                  "[", signif(hmin, 3), ",", signif(hmax, 3), "];",
-                  "use arguments hmin, hmax to specify a wider interval"))
-  ##    
-  result <- bw.optim(cv, h, iopt,
+  result <- bw.optim(cv, h, 
                      hname="sigma", 
                      creator="bw.relrisk",
                      criterion=paste(methodname, "Cross-Validation"),
+                     warnextreme=warn,
+                     hargnames=c("hmin", "hmax"),
                      unitname=unitname(X))
   return(result)
 }

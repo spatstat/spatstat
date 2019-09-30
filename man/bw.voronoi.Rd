@@ -11,7 +11,7 @@
 }
 \usage{
 bw.voronoi(X, \dots, probrange = c(0.2, 0.8), nprob = 10,
-           prob = NULL, nrep = 100, verbose = TRUE)
+           prob = NULL, nrep = 100, verbose = TRUE, warn=TRUE)
 }
 \arguments{
   \item{X}{
@@ -38,6 +38,11 @@ bw.voronoi(X, \dots, probrange = c(0.2, 0.8), nprob = 10,
   }
   \item{verbose}{
     Logical value indicating whether to print progress reports.
+  }
+  \item{warn}{
+    Logical. If \code{TRUE}, issue a warning if the maximum of
+    the cross-validation criterion occurs at one of the ends of the
+    search interval.
   }
 }
 \details{

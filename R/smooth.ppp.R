@@ -3,7 +3,7 @@
 #
 #  Smooth the marks of a point pattern
 # 
-#  $Revision: 1.68 $  $Date: 2018/10/05 03:49:46 $
+#  $Revision: 1.69 $  $Date: 2019/09/30 07:56:34 $
 #
 
 # smooth.ppp <- function(X, ..., weights=rep(1, npoints(X)), at="pixels") {
@@ -706,21 +706,12 @@ bw.smoothppp <- function(X, nh=spatstat.options("n.bandwidth"),
   }
 
   # optimize
-  iopt <- which.min(cv)
-#  hopt <- h[iopt]
-  #
-  if(warn && (iopt == nh || iopt == 1)) 
-    warning(paste("Cross-validation criterion was minimised at",
-                  if(iopt == 1) "left-hand" else "right-hand",
-                  "end of interval",
-                  paste(prange(signif(c(hmin, hmax), 3)), ";", sep=""),
-                  "use arguments hmin, hmax to specify a wider interval"),
-            call.=FALSE)
-  #
-  result <- bw.optim(cv, h, iopt,
+  result <- bw.optim(cv, h, 
                      hname="sigma",
                      creator="bw.smoothppp",
                      criterion="Least Squares Cross-Validation",
+                     warnextreme=warn,
+                     hargnames=c("hmin", "hmax"),
                      unitname=unitname(X))
   return(result)
 }

@@ -8,7 +8,7 @@
   a smoothing bandwidth for the kernel estimation of point process intensity.
 }
 \usage{
-   bw.CvL(X, \dots, srange = NULL, ns = 16, sigma = NULL)
+   bw.CvL(X, \dots, srange = NULL, ns = 16, sigma = NULL, warn=TRUE)
 }
 \arguments{
   \item{X}{
@@ -26,6 +26,10 @@
   \item{sigma}{
     Optional. Vector of values of the bandwidth to be searched.
     Overrides the values of \code{ns} and \code{srange}.
+  }
+  \item{warn}{
+    Logical. If \code{TRUE}, a warning is issued if the optimal value of the
+    cross-validation criterion occurs at one of the ends of the search interval.
   }
 }
 \details{

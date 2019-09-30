@@ -4,18 +4,28 @@
 #  Class of optimised bandwidths
 #  Plotting the object displays the optimisation criterion
 #
-#  $Revision: 1.25 $  $Date: 2016/04/25 02:34:40 $
+#  $Revision: 1.30 $  $Date: 2019/09/30 11:17:34 $
 #
 
 bw.optim <- function(cv, h, iopt=which.min(cv), ...,
                      cvname, hname,
                      criterion="cross-validation",
+                     warnextreme=TRUE, hargnames=NULL,
                      unitname=NULL) {
   if(missing(cvname) || is.null(cvname)) cvname <- deparse(substitute(cv))
   if(missing(hname) || is.null(hname)) hname <- deparse(substitute(h))
   stopifnot(is.numeric(cv))
   stopifnot(is.numeric(h))
   stopifnot(length(h) == length(cv))
+  if(warnextreme && (iopt == length(h) || iopt == 1)) 
+    warning(paste(criterion, "criterion was optimised at",
+                  if(iopt == 1) "left-hand" else "right-hand",
+                  "end of interval",
+                  paste0(prange(signif(range(h), 3)), ";"), 
+                  "use", ngettext(length(hargnames), "argument", "arguments"),
+                  paste(sQuote(hargnames), collapse=", "),
+                  "to specify a wider interval for bandwidth", sQuote(hname)),
+            call.=FALSE)
   result <- h[iopt]
   attr(result, "cv") <- cv
   attr(result, "h") <- h

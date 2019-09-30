@@ -12,7 +12,7 @@
   bw.pcf(X, rmax=NULL, lambda=NULL, divisor="r", 
          kernel="epanechnikov", nr=10000, bias.correct=TRUE, 
          cv.method=c("compLik", "leastSQ"), simple=TRUE, srange=NULL,
-	 \dots, verbose=FALSE)
+	 \dots, verbose=FALSE, warn=TRUE)
 }
 \arguments{
   \item{X}{
@@ -65,6 +65,11 @@
   \item{verbose}{
     Logical value indicating whether to print progress reports
     during the optimization procedure.
+  }
+  \item{warn}{
+    Logical. If \code{TRUE}, issue a warning if the optimum value of
+    the cross-validation criterion occurs at one of the ends of the
+    search interval.
   }
 }
 \details{
