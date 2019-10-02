@@ -59,7 +59,7 @@ local({
 })
 #'  tests/randoms.R
 #'   Further tests of random generation code
-#'  $Revision: 1.7 $ $Date: 2019/04/13 14:39:48 $
+#'  $Revision: 1.8 $ $Date: 2019/10/01 08:23:10 $
 
 require(spatstat)
 local({
@@ -67,8 +67,6 @@ local({
   A <- runifdisc(6, nsim=2)
   A <- runifpoispp(5, nsim=2)
   A <- runifpoispp(0, nsim=2)
-  Z <- as.im(function(x,y) 10*x, square(1))
-  A <- rpoint(n=6, f=Z, fmax=10, nsim=2)
   A <- rSSI(0.05, 6, nsim=2)
   A <- rSSI(0.05, 10, win=square(c(-0.5, 1.5)), x.init=A[[1]], nsim=2)  
   A <- rstrat(nx=4, nsim=2)
@@ -76,6 +74,14 @@ local({
   A <- rthin(cells, P=0.5, nsim=2)
   A <- rthin(cells, runif(42))
   A <- rjitter(cells, nsim=2, retry=FALSE)
+  A <- rcell(square(1), nx=5, nsim=2)
+
+  f <- function(x,y) { 10*x }
+  Z <- as.im(f, square(1))
+  A <- rpoint(n=6, f=f, fmax=10, nsim=2)
+  A <- rpoint(n=6, f=Z, fmax=10, nsim=2)
+  A <- rpoint(n=0, f=f, fmax=10, nsim=2)
+  A <- rpoint(n=0, f=Z, fmax=10, nsim=2)
 
   op <- spatstat.options(fastpois=FALSE)
   A <- runifpoispp(5, nsim=2)
@@ -86,6 +92,9 @@ local({
   b4 <- boxx(c(0,1), c(0,1), c(0,1), c(0,1))
   X <- rMaternInhibition(2, kappa=20, r=0.1, win=b3)
   Y <- rMaternInhibition(2, kappa=20, r=0.1, win=b4)
+
+  X <- rSSI(0.05, 6)
+  Y <- rSSI(0.05, 6, x.init=X) # no extra points 
 })
 
 local({
@@ -107,6 +116,11 @@ local({
 local({
   #' cluster models + bells + whistles
   X <- rThomas(10, 0.2, 5, saveLambda=TRUE)
+  if(is.null(attr(X, "Lambda")))
+    stop("rThomas did not save Lambda image")
+  Y <- rThomas(0, 0.2, 5, saveLambda=TRUE)
+  if(is.null(attr(Y, "Lambda")))
+    stop("rThomas did not save Lambda image when kappa=0")
   X <- rMatClust(10, 0.05, 4, saveLambda=TRUE)
   X <- rCauchy(30, 0.01, 5, saveLambda=TRUE)
   X <- rVarGamma(30, 2, 0.02, 5, saveLambda=TRUE)

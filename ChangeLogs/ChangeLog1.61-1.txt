@@ -278,4 +278,21 @@ Change log from 1.61-0 to 1.61-1
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
 
+01 oct 2019
+
+   tests/lppstuff.R
+	More tests of strange cases of nnwhich.lpp, nncross.lpp
+
+   tests/randoms.R
+	More tests of cases that produce empty patterns
+
+02 oct 2019
+
+   DESCRIPTION
+   NEWS
+	Version 1.61-0.016
+
+------------- passed R-3.6.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
    

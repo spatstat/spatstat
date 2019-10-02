@@ -345,7 +345,7 @@ local({
 #
 # Tests for lpp code
 #
-#  $Revision: 1.32 $  $Date: 2019/09/26 03:10:52 $
+#  $Revision: 1.33 $  $Date: 2019/10/01 08:06:11 $
 
 
 require(spatstat)
@@ -411,6 +411,7 @@ local({
   #' sparse network, older C code
   opa <- spatstat.options(Cnndistlpp=FALSE)
   Bd <- nndist(dendrite) 
+  Bw <- nnwhich(dendrite) 
   spatstat.options(opa)
   #' undefined nearest neighbours
   Ed <- nndist(spiders[1:3], k=1:3)
@@ -473,7 +474,15 @@ local({
 
   # test handling marginal cases
   xyd <- nncross(XX, YY[1])
+  A <- runiflpp(5, simplenet)
+  B <- runiflpp(2, simplenet)
+  aaa <- nncross(A,B,k=3:5) #' all undefined
+  spatstat.options(Cnncrosslpp=FALSE)
+  bbb <- nncross(B,A, iX=1:2, iY=1:5) # another code block
+  spatstat.options(Cnncrosslpp=TRUE)
 
+  reset.spatstat.options()
+  
   ## as.linnet.psp (Suman's example)
   Lines <- as.data.frame(as.psp(simplenet))
   newseg <- c(Lines[1,1:2], Lines[10,3:4])
