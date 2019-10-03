@@ -3,7 +3,7 @@
 #
 # Makes diagnostic plots based on residuals or energy weights
 #
-# $Revision: 1.43 $ $Date: 2016/07/06 06:56:56 $
+# $Revision: 1.44 $ $Date: 2019/10/02 10:33:21 $
 #
 
 diagnose.ppm.engine <- function(object, ..., type="eem", typename, opt,
@@ -70,7 +70,7 @@ diagnose.ppm.engine <- function(object, ..., type="eem", typename, opt,
           Qweights <- Qweights[ok]
         }
         # interpolate continuous part to yield an image for plotting
-        if(type == "inverse" && all(cts > 0)) {
+        if(type == "inverse" && all(cts != 0)) {
           Ydens <- as.im(-1, Y$window)
         } else if(is.stationary.ppm(object) && is.poisson.ppm(object)) {
           # all values of `cts' will be equal

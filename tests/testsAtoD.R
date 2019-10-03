@@ -875,16 +875,26 @@ reset.spatstat.options()
 #'
 #'  Diagnostic tools such as diagnose.ppm, qqplot.ppm
 #'
-#'  $Revision: 1.1 $  $Date: 2018/05/22 11:57:12 $
+#'  $Revision: 1.2 $  $Date: 2019/10/02 10:36:42 $
 #'
 
 require(spatstat)
 local({
   fit <- ppm(cells ~ x)
+  diagE <- diagnose.ppm(fit, type="eem")
+  diagI <- diagnose.ppm(fit, type="inverse")
+  diagP <- diagnose.ppm(fit, type="Pearson")
+  plot(diagE, which="all")
+  plot(diagI, which="smooth")
+  plot(diagP, which="x")
+  #'
   e <- envelope(cells, nsim=4, savepatterns=TRUE, savefuns=TRUE)
   qf <- qqplot.ppm(fit, nsim=4, expr=e, plot.it=FALSE)
   print(qf)
   qg <- qqplot.ppm(fit, nsim=5, style="classical", plot.it=FALSE)
+  #' infinite reach, not border-corrected
+  fut <- ppm(cells ~ x, Softcore(0.5), correction="isotropic")
+  diagnose.ppm(fut)
 })
 #'
 #'  tests/discarea.R

@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.61-0.016
+        CHANGES IN spatstat VERSION 1.61-0.017
 
 OVERVIEW
 
@@ -78,6 +78,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
     A warning is issued if the optimal value of the cross-validation criterion
     occurs at an endpoint of the search interval.
     New argument 'warn'.
+
+    o diagnose.ppm
+    Accelerated, when type="inverse", for models without a hard core.
     
 BUG FIXES
 

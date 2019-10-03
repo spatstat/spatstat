@@ -1166,7 +1166,7 @@ local({
 #
 # Tests of owin geometry code
 #
-#  $Revision: 1.9 $  $Date: 2019/02/10 06:52:45 $
+#  $Revision: 1.10 $  $Date: 2019/10/02 10:16:09 $
 
 require(spatstat)
 local({
@@ -1262,6 +1262,31 @@ local({
   thrash(meanY.owin)
   thrash(intX.owin)
   thrash(intY.owin)
+})
+
+
+local({
+  #' mask conversion
+  M <- as.mask(letterR)
+  D2 <- as.data.frame(M)              # two-column
+  D3 <- as.data.frame(M, drop=FALSE)  # three-column
+  M2 <- as.owin(D2)
+  M3 <- as.owin(D3)
+  W2 <- owin(mask=D2)
+  W3 <- owin(mask=D3)
+  #' void/empty cases
+  nix <- nearest.raster.point(numeric(0), numeric(0), M)
+  E <- emptywindow(Frame(letterR))
+  print(E)
+  #' cases of summary.owin
+  print(summary(E)) # empty
+  print(summary(Window(humberside))) # single polygon
+  #' additional cases of owin()
+  B <- owin(mask=M$m) # no pixel size or coordinate info
+  xy <- as.data.frame(letterR)
+  xxyy <- split(xy[,1:2], xy$id)
+  spatstat.options(checkpolygons=TRUE)
+  H <- owin(poly=xxyy, check=TRUE)
 })
 
 reset.spatstat.options()
