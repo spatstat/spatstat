@@ -106,6 +106,8 @@ Null.
   testpyramidal <- studpermu.test(pyramidal, Neurons ~ group, nperm=np)
   plot(testpyramidal)
   plot(testpyramidal, meanonly=TRUE)
+  plot(testpyramidal, col.theo=8, lwd.theo=4, lty.theo=1)
+  plot(testpyramidal, . ~ pi * r^2)
   op <- par(mfrow=c(1,3))
   plot(testpyramidal, separately=TRUE)
   plot(testpyramidal, separately=TRUE, col=2, lty=1, lwd.mean=2, col.mean=4)

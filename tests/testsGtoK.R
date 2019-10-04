@@ -77,7 +77,7 @@ local({
 #'     tests/hypotests.R
 #'     Hypothesis tests
 #' 
-#'  $Revision: 1.2 $ $Date: 2018/07/21 03:02:20 $
+#'  $Revision: 1.3 $ $Date: 2019/10/04 09:35:31 $
 
 require(spatstat)
 local({
@@ -90,6 +90,15 @@ local({
   a <- quadrat.test(redwood, 3)
   domain(a)
   shift(a, c(1,1))
+
+  #' cases of studpermu.test
+  #' X is a hyperframe
+  b <- studpermu.test(pyramidal, nperm=9)
+  b <- studpermu.test(pyramidal, nperm=9, use.Tbar=TRUE)
+  #' X is a list of lists of ppp
+  ZZ <- split(pyramidal$Neurons, pyramidal$group)
+  bb <- studpermu.test(ZZ, nperm=9)
+  
 })
 #
 #  tests/imageops.R
