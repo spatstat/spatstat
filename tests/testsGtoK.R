@@ -253,6 +253,12 @@ local({
     stop("Unequal results in nearest.valid.pixel")
   if(!identical(a,b)) 
     stop("Equal, but not identical, results in nearest.valid.pixel")
+
+  #' cases of distcdf
+  distcdf(cells[1:5])
+  distcdf(W=cells[1:5], dW=1:5)
+  distcdf(W=Window(cells), V=cells[1:5])
+  distcdf(W=Window(cells), V=cells[1:5], dV=1:5)
 })
 #' indices.R
 #' Tests of code for understanding index vectors etc
@@ -752,10 +758,10 @@ local({
 local({
   #' cover a few code blocks
   fut <- kppm(redwood ~ x, method="clik")
-  summary(fut)
+  print(summary(fut))
   a <- residuals(fut)
   fut2 <- kppm(redwood ~ x, "LGCP", method="palm")
-  summary(fut2)
+  print(summary(fut2))
   b <- residuals(fut2)
   #'
   po <- ppm(redwood ~ 1)

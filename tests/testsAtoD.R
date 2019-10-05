@@ -528,7 +528,7 @@ local({
 #'                    and inhomogeneous summary functions
 #'                    and idw, adaptive.density
 #'
-#'  $Revision: 1.39 $  $Date: 2019/02/11 09:49:23 $
+#'  $Revision: 1.40 $  $Date: 2019/10/05 10:56:33 $
 #'
 
 require(spatstat)
@@ -835,6 +835,10 @@ local({
 #  bw.relrisk(urkiola, hmax=20) is tested in man/bw.relrisk.Rd
   bw.relrisk(urkiola, hmax=20, method="leastsquares")
   bw.relrisk(urkiola, hmax=20, method="weightedleastsquares")
+  ZX <- density(swedishpines, at="points")
+  bw.pcf(swedishpines, lambda=ZX)
+  bw.pcf(swedishpines, lambda=ZX,
+         bias.correct=FALSE, simple=FALSE, cv.method="leastSQ")
   spatstat.options(op)
 })
 
@@ -866,6 +870,15 @@ local({
   B <- adaptive.density(nztrees, nrep=2, f=0.5, counting=TRUE, fixed=TRUE)
   D <- adaptive.density(nztrees, nrep=2, f=0.5, counting=FALSE)
   E <- adaptive.density(nztrees, nrep=2, f=0.5, counting=FALSE, fixed=TRUE)
+  #' adaptive kernel estimation
+  d10 <- nndist(nztrees, k=10)
+  d10fun <- distfun(nztrees, k=10)
+  d10im  <- as.im(d10fun)
+  uN <- 2 * runif(npoints(nztrees))
+  AA <- densityAdaptiveKernel(nztrees, bw=d10)
+  BB <- densityAdaptiveKernel(nztrees, bw=d10, weights=uN)
+  DD <- densityAdaptiveKernel(nztrees, bw=d10fun, weights=uN)
+  EE <- densityAdaptiveKernel(nztrees, bw=d10im, weights=uN)
 })
 
 reset.spatstat.options()

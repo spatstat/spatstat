@@ -637,7 +637,7 @@ reset.spatstat.options()
 #'
 #'   tests/ppp.R
 #'
-#'   $Revision: 1.5 $ $Date: 2019/07/17 11:56:37 $
+#'   $Revision: 1.6 $ $Date: 2019/10/05 10:56:25 $
 #'
 #'  Untested cases in ppp() or associated code
 
@@ -705,6 +705,7 @@ local({
   X <- runifpoint(20)
   A <- superimpose(cells, X, W="convex")
   A <- superimpose(cells, X, W=ripras)
+  B <- superimpose(concatxy(cells), concatxy(X), W=NULL)
   ## superimpose.splitppp
   Y <- superimpose(split(amacrine))
 })
@@ -782,7 +783,7 @@ local({
 #
 # Things that might go wrong with predict()
 #
-#  $Revision: 1.11 $ $Date: 2019/04/27 09:25:59 $
+#  $Revision: 1.13 $ $Date: 2019/10/05 11:38:31 $
 #
 
 require(spatstat)
@@ -876,6 +877,15 @@ local({
   fot <- ppm(Q ~ y + Z, data=data.frame(Z=Zvalues))
   effectfun(fot, "y", Z=0)
   effectfun(fot, "Z", y=0)
+
+  #' multitype
+  modX <- ppm(amacrine ~ polynom(x,2))
+  effectfun(modX)
+  effectfun(modX, "x")
+  modXM <- ppm(amacrine ~ marks*polynom(x,2))
+  effectfun(modXM, "x", marks="on")
+  modXYM <- ppm(amacrine ~ marks*polynom(x,y,2))
+  effectfun(modXYM, "x", y=0, marks="on")
 })
 
 #

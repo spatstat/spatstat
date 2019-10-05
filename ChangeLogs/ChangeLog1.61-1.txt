@@ -328,3 +328,22 @@ Change log from 1.61-0 to 1.61-1
 ------------- passed R-3.6.1 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
+
+05 oct 2019
+
+   tests/formuli.R
+   tests/imageops.R
+   tests/kppm.R
+   tests/lppstuff.R
+   tests/ppp.R
+   tests/prediction.R
+   tests/segments.R
+	Test unusual code cases
+
+   DESCRIPTION
+   NEWS
+	Version 1.61-0.019
+	
+------------- passed R-3.6.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------

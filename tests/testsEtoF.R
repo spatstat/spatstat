@@ -325,7 +325,7 @@ local({
 #'
 #'  Test machinery for manipulating formulae
 #' 
-#' $Revision: 1.4 $  $Date: 2017/02/20 07:35:47 $
+#' $Revision: 1.5 $  $Date: 2019/10/05 11:03:26 $
 
 require(spatstat)
 local({
@@ -350,6 +350,7 @@ local({
 
   ff(y ~ poly(x,2) + poly(z,3), "x", y ~poly(z,3))
 
+  illegal.iformula(~str*g, itags="str", dfvarnames=c("marks", "g", "x", "y"))
 })
 
 

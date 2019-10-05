@@ -14,7 +14,7 @@ local({
 #
 #  tests/segments.R
 #
-#  $Revision: 1.14 $  $Date: 2019/04/28 02:06:12 $
+#  $Revision: 1.15 $  $Date: 2019/10/05 10:31:48 $
 
 require(spatstat)
 
@@ -94,6 +94,12 @@ if(abs(s1 - s2)/s2 > 0.01) {
              "!=", s2, "= sum(lengths.psp(X))"))
 }
 
+#' cases of superimpose.psp
+A <- as.psp(matrix(runif(40), 10, 4), window=owin())
+B <- as.psp(matrix(runif(40), 10, 4), window=owin())
+superimpose(A, B, W=ripras)
+superimpose(A, B, W="convex")
+
 #' tests of density.psp
 Y <- as.psp(simplenet)
 YC <- density(Y, 0.2, method="C", edge=FALSE, dimyx=64)
@@ -103,6 +109,12 @@ xCI <- max(abs(YC/YI - 1))
 xFI <- max(abs(YF/YI - 1))
 if(xCI > 0.01) stop(paste("density.psp C algorithm relative error =", xCI))
 if(xFI > 0.01) stop(paste("density.psp FFT algorithm relative error =", xFI))
+B <- square(0.3)
+density(Y, 0.2, at=B)
+density(Y, 0.2, at=B, edge=TRUE, method="C")
+Z <- runifpoint(3, B)
+density(Y, 0.2, at=Z)
+density(Y, 0.2, at=Z, edge=TRUE, method="C")
 
 #' as.psp.data.frame
 

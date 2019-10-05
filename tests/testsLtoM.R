@@ -345,7 +345,7 @@ local({
 #
 # Tests for lpp code
 #
-#  $Revision: 1.33 $  $Date: 2019/10/01 08:06:11 $
+#  $Revision: 1.34 $  $Date: 2019/10/05 10:41:16 $
 
 
 require(spatstat)
@@ -523,7 +523,19 @@ local({
   testcountends(X)
   # finer scale
   testcountends(X, s=1000)
-
+  #' disconnected
+  L <- thinNetwork(simplenet, retainedges = -c(3,8))
+  S <- as.psp(L)
+  x <- midpoints.psp(S)[1]
+  len <- lengths.psp(S)[1]
+  A <- lineardisc(L, x, len,  plotit=FALSE) # involves many segments of network
+  B <- lineardisc(L, x, len/5, plotit=FALSE) # involves one segment of network
+  op <- spatstat.options(Ccountends=FALSE)
+  A <- lineardisc(L, x, len,  plotit=FALSE)
+  B <- lineardisc(L, x, len/5, plotit=FALSE)
+  spatstat.options(op)
+  reset.spatstat.options()
+  
   ## Test algorithms for boundingradius.linnet
   L <- as.linnet(chicago, sparse=TRUE)
   L$boundingradius <- NULL # artificially remove
@@ -681,8 +693,22 @@ local({
   kapow <- unstack(shebang)
   plot(kapow)
 })
-  
+
 reset.spatstat.options()
+
+local({
+  #' densityVoronoi.lpp and related code
+  X <- runiflpp(5, simplenet)
+  densityVoronoi(X, f=0)
+  densityVoronoi(X, f=1e-8)
+  densityVoronoi(X, f=1)
+  densityVoronoi(X[FALSE], f=0.5)
+  XX <- X[rep(1:5, 4)]
+  densityVoronoi(XX, f=0.99999, nrep=5)
+  #' bandwidth selection
+  bw.voronoi(X, nrep=4, prob=c(0.2, 0.4, 0.6))
+})
+
 #'
 #'   lppmodels.R
 #'
