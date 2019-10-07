@@ -1,7 +1,7 @@
 ##
 ##   Math.linim.R
 ##
-##   $Revision: 1.5 $ $Date: 2017/09/19 09:16:08 $
+##   $Revision: 1.7 $ $Date: 2019/10/07 01:27:14 $
 ##
 
 Ops.linim <- function(e1,e2=NULL){
@@ -47,7 +47,7 @@ Summary.linim <- function(..., na.rm, finite){
 Complex.linim <- function(z){
     L <- attr(z, "L")
     df <- attr(z, "df")
-    m <- do.call(.Generic, list(z=z[drop=TRUE]))
+    m <- do.call(.Generic, list(z=z[,,drop=FALSE]))
     Z <- im(m, xcol = z$xcol, yrow = z$yrow, xrange = z$xrange,
                yrange = z$yrange, unitname = unitname(z))
     df$values <- do.call(.Generic, list(z=df$values))

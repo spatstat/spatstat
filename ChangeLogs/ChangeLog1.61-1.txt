@@ -347,3 +347,24 @@ Change log from 1.61-0 to 1.61-1
 ------------- passed R-3.6.1 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
+
+07 oct 2019
+
+   util.R
+	Allow 'pkg' to be a character string in requireversion()
+
+   Math.linim.R
+	Bug fix in Complex.linim
+
+   tests/lppstuff.R
+	Test code for complex-valued functions/images
+
+   DESCRIPTION
+   NEWS
+	Version 1.61-0.020
+	
+------------- passed R-3.6.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+
+	

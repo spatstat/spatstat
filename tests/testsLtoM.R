@@ -345,7 +345,7 @@ local({
 #
 # Tests for lpp code
 #
-#  $Revision: 1.34 $  $Date: 2019/10/05 10:41:16 $
+#  $Revision: 1.35 $  $Date: 2019/10/07 01:34:44 $
 
 
 require(spatstat)
@@ -709,6 +709,18 @@ local({
   bw.voronoi(X, nrep=4, prob=c(0.2, 0.4, 0.6))
 })
 
+local({
+  #' complex-valued functions and images
+  f <- function(x,y,seg,tp) { x + y * 1i }
+  g <- linfun(f, simplenet)
+  h <- as.linim(g)
+  plot(Re(h))
+  plot(h)
+  plot(g)
+  integral(h)
+  integral(g)
+})
+  
 #'
 #'   lppmodels.R
 #'

@@ -1,7 +1,7 @@
 #
 #    util.R    miscellaneous utilities
 #
-#    $Revision: 1.240 $    $Date: 2018/05/06 05:18:00 $
+#    $Revision: 1.241 $    $Date: 2019/10/07 01:12:09 $
 #
 
 # common invocation of matrixsample
@@ -332,6 +332,8 @@ prepareTitle <- function(main) {
 
 requireversion <- function(pkg, ver) {
   pkgname <- deparse(substitute(pkg))
+  pkgname <- gsub("\"", "", pkgname)
+  pkgname <- gsub("'", "", pkgname)
   v <- read.dcf(file=system.file("DESCRIPTION", package=pkgname), 
                 fields="Version")
   if(package_version(v) < ver)
