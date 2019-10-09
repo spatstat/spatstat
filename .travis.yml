@@ -15,6 +15,7 @@ sudo: required
 dist: trusty
 
 before_install:
+  - sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 762E3157
   - curl -OLs http://eddelbuettel.github.io/r-travis/run.sh && chmod 0755 run.sh
   - ./run.sh bootstrap
 
