@@ -99,8 +99,10 @@ which can then be fitted to point pattern data.
   \code{\link{ppm}},
   \code{\link{pairwise.family}},
   \code{\link{ppm.object}},
-  \code{\link{Strauss}},
-  \code{\link{SatPiece}}
+  \code{\link{Strauss}}.
+
+  To make an interaction object like \code{\link{Geyer}} but having
+  multiple interaction radii, see \code{\link{BadGey}} or \code{\link{Hybrid}}.
 }
 \references{
 Geyer, C.J. (1999)

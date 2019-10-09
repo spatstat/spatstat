@@ -1,13 +1,16 @@
 
-        CHANGES IN spatstat VERSION 1.61-0.020
+        CHANGES IN spatstat VERSION 1.61-0.021
 
 OVERVIEW
 
-    o We thank Greg McSwiggan and Annie Mollie for contributions.
+    o We thank Nestor Luambua, Greg McSwiggan and Annie Mollie
+    for contributions.
     
     o Tessellations on a linear network can now have marks.
 
     o Nearest Neighbour Index function can now return mark values.
+
+    o Important fix in Ripley isotropic correction.
     
     o Bug fixes and minor improvements.
     
@@ -79,6 +82,11 @@ SIGNIFICANT USER-VISIBLE CHANGES
     occurs at an endpoint of the search interval.
     New argument 'warn'.
 
+    o mad.test, dclf.test, dg.test, bits.test
+    Function values which are infinite, NA or NaN are now ignored
+    in the calculation (with a warning) instead of causing an error.
+    Warning messages are more detailed.
+    
     o diagnose.ppm
     Accelerated, when type="inverse", for models without a hard core.
     
@@ -95,8 +103,9 @@ BUG FIXES
 
     o edge.Ripley, Kest, Kinhom
     Isotropic correction weights for polygonal windows were sometimes incorrect
-    for small radius 'r' if the polygon contained many small segments.
-    [Spotted by Annie Mollie]
+    for small radius 'r' if the polygon contained many small segments
+    [spotted by Annie Mollie] or if the polygon was very long and thin
+    [spotted by Nestor Luambua]. Problem arose in spatstat 1.60-0.
     Fixed.
 
     o plot.linim 

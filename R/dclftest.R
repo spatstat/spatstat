@@ -1,7 +1,7 @@
 #
 #  dclftest.R
 #
-#  $Revision: 1.40 $  $Date: 2019/06/03 10:39:13 $
+#  $Revision: 1.46 $  $Date: 2019/10/09 06:25:49 $
 #
 #  Monte Carlo tests for CSR (etc)
 #
@@ -92,6 +92,7 @@ envelopeTest <-
            savefuns = FALSE, 
            savepatterns = FALSE,
            Xname=NULL,
+           badXfatal=TRUE,
            verbose=TRUE) {
     if(is.null(Xname)) Xname <- short.deparse(substitute(X))
     tie.rule <- match.arg(tie.rule)
@@ -165,9 +166,13 @@ envelopeTest <-
     }
 
     #' check for valid function values, and possibly adjust rinterval
-    bad <- !matrowall(is.finite(as.matrix(X)))
-    if(any(bad[ok])) {
-      if(bad[first] && !any(bad[ok][-1L])) {
+    #' observed function values
+    badr <- !is.finite(obs)
+    if(badXfatal && all(badr))
+      stop("Observed function values are all infinite, NA or NaN",
+           call.=FALSE)
+    if(any(badr[ok])) {
+      if(badr[first] && !any(badr[ok][-1L])) {
         ## ditch smallest r value (usually zero)
         ok[first] <- FALSE
         first <- first + 1L
@@ -180,12 +185,25 @@ envelopeTest <-
         rinterval[1] <- rmin
       } else {
         ## problem
-        rbadmax <- paste(max(r[bad]), summary(unitname(X))$plural)
-        stop(paste("Some function values were infinite, NA or NaN",
-                   "at distances r up to",
-                   paste(rbadmax, ".", sep=""),
-                   "Please specify a shorter", sQuote("rinterval")))
+        rbadmax <- paste(max(r[badr]), summary(unitname(X))$plural)
+        warning(paste("Some function values were infinite, NA or NaN",
+                      "at distances r up to",
+                      paste0(rbadmax, "."),
+                      "Consider specifying a shorter", sQuote("rinterval")))
       }
+    }
+    #' simulated function values
+    badsim <- matcolall(!is.finite(sim[ok,,drop=FALSE]))
+    if(all(badsim)) 
+      stop(paste("Simulated function values are all infinite, NA or NaN.",
+                 "Check whether simulated patterns are empty"),
+           call.=FALSE)
+    if(any(badsim)) {
+      warning(paste("In", sum(badsim), "out of", length(badsim), "simulations,",
+                    "the simulated function values were infinite, NA or NaN",
+                    "at every distance r.",
+                    "Check whether some simulated patterns are empty"),
+              call.=FALSE)
     }
 
     #' finally trim data
@@ -228,15 +246,15 @@ envelopeTest <-
     dsim <- RelevantDeviation(rawdevSim, alternative, clamp, scaling)
 
     if(!all(is.finite(ddat)))
-      stop("Internal error: some deviation values were Inf, NA or NaN") 
+      warning("Some deviation values were Inf, NA or NaN") 
     if(!all(is.finite(dsim)))
-      stop("Internal error: some simulated deviations were Inf, NA or NaN")
+      warning("Some simulated deviations were Inf, NA or NaN")
     
     ## compute test statistic
     if(is.infinite(exponent)) {
       ## MAD
-      devdata <- max(ddat)
-      devsim <- apply(dsim, 2, max)
+      devdata <- max(ddat,na.rm=TRUE)
+      devsim <- apply(dsim, 2, max, na.rm=TRUE)
       names(devdata) <- "mad"
       testname <- paste("Maximum", deviationblurb, "test")
       statisticblurb <- paste("Maximum", deviationblurb)
@@ -246,15 +264,15 @@ envelopeTest <-
         ## Cramer-von Mises
         ddat2 <- if(clamp) ddat^2 else (sign(ddat) * ddat^2)
         dsim2 <- if(clamp) dsim^2 else (sign(dsim) * dsim^2)
-        devdata <- L * mean(ddat2)
-        devsim  <- L * .colMeans(dsim2, nr, nsim)
+        devdata <- L * mean(ddat2, na.rm=TRUE)
+        devsim  <- L * .colMeans(dsim2, nr, nsim, na.rm=TRUE)
         names(devdata) <- "u"
         testname <- "Diggle-Cressie-Loosmore-Ford test"
         statisticblurb <- paste("Integral of squared", deviationblurb)
       } else if(exponent == 1) {
         ## integral absolute deviation
-        devdata <- L * mean(ddat)
-        devsim  <- L * .colMeans(dsim, nr, nsim)
+        devdata <- L * mean(ddat, na.rm=TRUE)
+        devsim  <- L * .colMeans(dsim, nr, nsim, na.rm=TRUE)
         names(devdata) <- "L1"
         testname <- paste("Integral", deviationblurb, "test")
         statisticblurb <- paste("Integral of", deviationblurb)
@@ -267,8 +285,8 @@ envelopeTest <-
           ddatp <- sign(ddat) * (abs(ddat)^exponent)
           dsimp <- sign(dsim) * (abs(dsim)^exponent)
         }
-        devdata <- L * mean(ddatp)
-        devsim  <- L * .colMeans(dsimp, nr, nsim)
+        devdata <- L * mean(ddatp, na.rm=TRUE)
+        devsim  <- L * .colMeans(dsimp, nr, nsim, na.rm=TRUE)
         names(devdata) <- "Lp"
         testname <- paste("Integrated",
                           ordinal(exponent), "Power Deviation test")
@@ -280,8 +298,8 @@ envelopeTest <-
     if(!interpolate) {
       ## standard Monte Carlo test 
       ## compute rank and p-value
-      datarank <- sum(devdata < devsim) + 1
-      nties <- sum(devdata == devsim)
+      datarank <- sum(devdata < devsim, na.rm=TRUE) + 1
+      nties <- sum(devdata == devsim, na.rm=TRUE)
       if(nties > 0) {
         tierank <- switch(tie.rule,
                           mean = nties/2,
@@ -295,7 +313,7 @@ envelopeTest <-
       colnames(statistic)[1L] <- names(devdata)
     } else {
       ## Dao-Genton style interpolation
-      fhat <- density(devsim)
+      fhat <- density(devsim, na.rm=TRUE)
       pvalue <- with(fhat, {
         if(max(x) <= devdata) 0 else
         mean(y[x >= devdata]) * (max(x) - devdata)

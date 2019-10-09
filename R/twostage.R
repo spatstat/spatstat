@@ -3,7 +3,7 @@
 ##
 ##  Two-stage Monte Carlo tests and envelopes
 ##
-##  $Revision: 1.16 $  $Date: 2019/06/16 05:03:27 $
+##  $Revision: 1.17 $  $Date: 2019/10/09 04:52:11 $
 ##
 
 bits.test <- function(X, ..., exponent=2, nsim=19,
@@ -40,7 +40,7 @@ twostage.test <- function(X, ..., exponent=2, nsim=19, nsimsub=nsim,
                     alternative=c("two.sided", "less", "greater"),
                     reuse=FALSE, leaveout=1, interpolate=FALSE,
                     savefuns=FALSE, savepatterns=FALSE,
-                    verbose=TRUE,
+                    verbose=TRUE, badXfatal=TRUE,
 		    testblurb="Two-stage Monte Carlo test") {
   Xname <- short.deparse(substitute(X))
   alternative <- match.arg(alternative)
@@ -56,7 +56,7 @@ twostage.test <- function(X, ..., exponent=2, nsim=19, nsimsub=nsim,
                      exponent=exponent,
                      savefuns=savefuns,
                      savepatterns=savepatterns || reuse,
-                     verbose=FALSE,
+                     verbose=FALSE, badXfatal=badXfatal,
                      envir.simul=env.here)
   pX <- tX$p.value
   ## check special case
@@ -75,7 +75,8 @@ twostage.test <- function(X, ..., exponent=2, nsim=19, nsimsub=nsim,
                           leaveout=leaveout,
                           interpolate=interpolate,
                           exponent=exponent,
-                          savefuns=savefuns, savepatterns=TRUE, verbose=FALSE,
+                          savefuns=savefuns, savepatterns=TRUE,
+                          verbose=FALSE, badXfatal=badXfatal,
                           envir.simul=env.here)
       ## extract simulated patterns 
       Ylist <- attr(attr(tXX, "envelope"), "simpatterns")
@@ -96,7 +97,8 @@ twostage.test <- function(X, ..., exponent=2, nsim=19, nsimsub=nsim,
                           nsim=nsimsub, alternative=alternative,
                           leaveout=leaveout,
                           interpolate=interpolate,
-                          exponent=exponent, savepatterns=TRUE, verbose=FALSE,
+                          exponent=exponent, savepatterns=TRUE,
+                          verbose=FALSE, badXfatal=FALSE,
                           envir.simul=env.here)
       pY[i] <- tYi$p.value
     }
@@ -174,7 +176,7 @@ twostage.envelope <- function(X, ..., nsim=19, nsimsub=nsim,
                               leaveout=1,
                               interpolate = FALSE,
                               savefuns=FALSE, savepatterns=FALSE,
-                              verbose=TRUE,
+                              verbose=TRUE, badXfatal=TRUE,
                               testlabel="twostage") {
   #  Xname <- short.deparse(substitute(X))
   alternative <- match.arg(alternative)
@@ -189,7 +191,7 @@ twostage.envelope <- function(X, ..., nsim=19, nsimsub=nsim,
                      nsim=if(reuse) nsim else nsimsub,
                      nrank=nrank,
                      exponent=Inf, savepatterns=TRUE, savefuns=TRUE,
-                     verbose=FALSE,
+                     verbose=FALSE, badXfatal=badXfatal,
                      envir.simul=env.here)
   if(verbose) cat("Done.\n")
   envX <- attr(tX, "envelope")
@@ -201,7 +203,7 @@ twostage.envelope <- function(X, ..., nsim=19, nsimsub=nsim,
                      interpolate = interpolate,
                      nsim=nsim, nrank=nrank,
                      exponent=Inf, savepatterns=TRUE, savefuns=TRUE,
-                     verbose=FALSE,
+                     verbose=FALSE, badXfatal=badXfatal,
                      envir.simul=env.here)
     ## extract simulated patterns 
     Ylist <- attr(attr(tXX, "envelope"), "simpatterns")
@@ -224,7 +226,8 @@ twostage.envelope <- function(X, ..., nsim=19, nsimsub=nsim,
                         leaveout=leaveout,
                         interpolate = interpolate, save.interpolant = FALSE,
                         nsim=nsimsub, nrank=nrank,
-                        exponent=Inf, savepatterns=TRUE, verbose=FALSE,
+                        exponent=Inf, savepatterns=TRUE,
+                        verbose=FALSE, badXfatal=FALSE,
                         envir.simul=env.here)
     pvalY[i] <- tYi$p.value 
   }

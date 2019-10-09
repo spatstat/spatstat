@@ -196,14 +196,30 @@ local({
   #' Fails with spatstat.utils 1.12-0
   set.seed(42)
   EP <- envelope(longleaf, pcf, nsim=10, nrank=2)
-})
 
-local({
   #' Test case when the maximum permitted number of failures is exceeded
   X <- amacrine[1:153] # contains exactly one point with mark='off'
   #' High probability of generating a pattern with no marks = 'off'
   E <- envelope(X, Kcross, nsim=39, maxnerr=2, maxerr.action="warn")
   A <- alltypes(X, Kcross, envelope=TRUE, nsim=39, maxnerr=2)
+})
+
+#'  tests/enveltest.R
+#'     Envelope tests (dclf.test, mad.test)
+#'     and two-stage tests (bits.test, dg.test, bits.envelope, dg.envelope)
+#' 
+#'     $Revision: 1.1 $  $Date: 2019/10/09 06:28:21 $ 
+#'
+require(spatstat)
+local({
+  #' handling of NA function values (due to empty point patterns)
+  set.seed(1234)
+  X <- rThomas(5, 0.05, 10) 
+  fit <- kppm(X ~ 1, "Thomas")
+  set.seed(100000)
+  dclf.test(fit)
+  set.seed(909)
+  dg.test(fit, nsim=9)
 })
 #
 #    tests/factorbugs.R

@@ -367,4 +367,34 @@ Change log from 1.61-0 to 1.61-1
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
 
+09 oct 2019
+
+   Geyer.Rd
+   BadGey.Rd
+	Added cross-references
 	
+   dclftest.R
+   spatstat-internal.Rd
+	Internal calculations ignore NA's.
+	Added more warnings about NA's.
+	envelopeTest has new internal argument 'badXfatal'
+
+   twostage.R
+   spatstat-internal.Rd
+	Use new internal argument 'badXfatal' in calls to envelopeTest.	
+
+   tests/enveltest.R [New file]
+        Test cases where NA's are produced.
+	
+   DESCRIPTION
+   NEWS
+   spatstat-package.Rd
+	Acknowledged Nestor Luambua.
+	
+   DESCRIPTION
+   NEWS
+	Version 1.61-0.021
+	
+------------- passed R-3.6.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------

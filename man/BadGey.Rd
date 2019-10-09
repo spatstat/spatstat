@@ -87,14 +87,33 @@
   parameters \eqn{\gamma}{\gamma} obtained from \code{\link{PairPiece}}).
    
   If \code{r} is a single number, this model is virtually equivalent to the 
-  Geyer process, see \code{\link{Geyer}}. 
+  Geyer process, see \code{\link{Geyer}}.
 }
 \seealso{
   \code{\link{ppm}},
   \code{\link{pairsat.family}},
   \code{\link{Geyer}},
   \code{\link{PairPiece}},
-  \code{\link{SatPiece}}
+  \code{\link{SatPiece}},
+  \code{\link{Hybrid}}
+}
+\section{Hybrids}{
+  A \sQuote{hybrid} interaction is one which is built by combining
+  several different interactions (Baddeley et al, 2013).
+  The \code{BadGey} interaction can be described as a 
+  hybrid of several \code{\link{Geyer}} interactions.
+
+  The \code{\link{Hybrid}} command can be used to build
+  hybrids of any interactions. If the \code{\link{Hybrid}} operator
+  is applied to several \code{\link{Geyer}} models, the result is
+  equivalent to a \code{BadGey} model.
+  This can be useful for incremental model selection.
+}
+\references{
+  Baddeley, A., Turner, R., Mateu, J. and Bevan, A. (2013)
+  Hybrids of Gibbs point process models and their implementation.
+  \emph{Journal of Statistical Software} \bold{55}:11, 1--43.
+  \url{http://www.jstatsoft.org/v55/i11/}
 }
 \examples{
    BadGey(c(0.1,0.2), c(1,1))

@@ -92,10 +92,7 @@ Hybrid(...)
   plot(fitin(fit2), separate=TRUE, mar.panel=rep(4,4))
 }
 \author{\adrian
-  
-  
   and \rolf
-  
 }
 \keyword{spatial}
 \keyword{models}

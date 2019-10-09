@@ -965,7 +965,7 @@ envelopeTest(X, \dots, exponent, alternative,
             rinterval, leaveout, scale, clamp, tie.rule,
             interpolate, save.interpolant,
             save.envelope, savefuns, savepatterns,
-            Xname, verbose)
+            Xname, badXfatal, verbose)
 \method{envelope}{hasenvelope}(Y, \dots, Yname)
 \method{envelope}{matrix}(Y, \dots, rvals, observed, theory, funX,
   nsim, nsim2, jsim, jsim.mean,
@@ -1627,10 +1627,10 @@ tweak.ratfv.entry(x, \dots)
 tweak.coefs(model, new.coef)
 twostage.test(X, \dots, exponent, nsim, nsimsub,
               alternative, reuse, leaveout, interpolate,
-              savefuns, savepatterns, verbose, testblurb)
+              savefuns, savepatterns, verbose, badXfatal, testblurb)
 twostage.envelope(X, \dots, nsim, nsimsub, nrank,
                   alternative, reuse, leaveout, interpolate,
-                  savefuns, savepatterns, verbose, testlabel)
+                  savefuns, savepatterns, verbose, badXfatal, testlabel)
 x \%unit\% u
 \method{unitname}{default}(x) 
 \method{unitname}{default}(x) <- value 
