@@ -4,6 +4,7 @@ spatstat
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/spatstat)](http://cran.r-project.org/web/packages/spatstat)
 [![Travis-CI Build Status](https://travis-ci.org/spatstat/spatstat.png?branch=covr)](https://travis-ci.org/spatstat/spatstat)
 [![codecov.io](https://codecov.io/github/spatstat/spatstat/coverage.svg)](https://codecov.io/github/spatstat/spatstat?branch=covr)
+[![appveyor build status](https://ci.appveyor.com/api/projects/status/github/spatstat/spatstat)](https://ci.appveyor.com/api/projects/status/github/spatstat/spatstat)
 
 ## This is the development version
 
@@ -38,13 +39,13 @@ However, messages from `R` about the installation and loading of the package
 will now show that `spatstat` consists of several pieces.
 Currently there are three pieces:
 
-  . `spatstat`: contains the main functionality of the `spatstat` family.
+  - `spatstat`: contains the main functionality of the `spatstat` family.
 
-  . `spatstat.data`: contains the datasets for the `spatstat` family.
+  - `spatstat.data`: contains the datasets for the `spatstat` family.
   The current development version of `spatstat.data` is
   [here](https://github.com/spatstat/spatstat.data).
 
-  . `spatstat.utils`: utility functions originally included in `spatstat`
+  - `spatstat.utils`: utility functions originally included in `spatstat`
   which are now accessible as a separate package.
   The current development version of `spatstat.utils` is
   [here](https://github.com/spatstat/spatstat.utils).
@@ -99,6 +100,13 @@ If you don't have `remotes` installed you should first run
 ```R
 install.packages('remotes')
 ```
+
+**For Windows users:** installing via `remotes` requires that RTools is installed
+and working. If this is not an option for you, you can also install the
+development version by downloading the zip file from
+[appveyor](https://ci.appveyor.com/project/baddstats/spatstat/build/artifacts)
+(bottom of the page) and installing the package from the downloaded file (which
+will be much, much faster than the `remotes` method).
 
 ## Bug reports 
 
