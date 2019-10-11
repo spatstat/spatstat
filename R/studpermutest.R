@@ -3,7 +3,7 @@
 #' 
 #'  Original by Ute Hahn 2014
 #'
-#' $Revision: 1.5 $ $Date: 2015/10/21 09:06:57 $
+#' $Revision: 1.7 $ $Date: 2019/10/11 00:41:07 $
 #' 
 #' Studentized permutation test for comparison of grouped point patterns;
 #' functions to generate these grouped point patterns;
@@ -184,8 +184,8 @@ studpermu.test <-
            call.=FALSE)
     #' check if number of possible outcomes is small
     #' WAS: npossible <- factorial(sum(m))/prod(factorial(m))/prod(factorial(table(m)))
-    npossible <- exp(lgamma(sum(m)+1)-sum(lgamma(m+1))-sum(lgamma(table(m)+1)))
-    if (npossible < max(100, nperm)) 
+    lognpossible <- lgamma(sum(m)+1)-sum(lgamma(m+1))-sum(lgamma(table(m)+1))
+    if (lognpossible < log(max(100, nperm)))
       warning("Don't expect exact results - group sizes are too small")
   
     #' --------- real preliminaries now ------

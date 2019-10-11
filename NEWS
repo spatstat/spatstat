@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.61-0.021
+        CHANGES IN spatstat VERSION 1.61-0.022
 
 OVERVIEW
 
@@ -119,6 +119,10 @@ BUG FIXES
     o Re, Im, Arg, Mod, Conj
     For pixel images on a linear network (class 'linim')
     these operations crashed if the pixel values were complex numbers.
+
+    o studpermu.test
+    Crashed if the hyperframe was very large.
+    Fixed.
     
     o shift.linnet
     Generated a spurious warning.

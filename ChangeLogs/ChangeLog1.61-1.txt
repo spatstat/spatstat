@@ -398,3 +398,17 @@ Change log from 1.61-0 to 1.61-1
 ------------- passed R-3.6.1 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
+
+11 oct 2019
+
+   studpermutest.R
+	Bug fix (crash if sample space is very large)
+
+   DESCRIPTION
+   NEWS
+	Version 1.61-0.022
+	
+------------- passed R-3.6.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+   
