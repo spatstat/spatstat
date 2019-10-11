@@ -411,4 +411,16 @@ Change log from 1.61-0 to 1.61-1
 ------------- passed R-3.6.1 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
-   
+
+   envelope.R
+   spatstat-internal.Rd
+	envelopeEngine has argument 'rejectNA' which will reject
+	a simulated pattern if the function values are all non-finite
+
+   DESCRIPTION
+   NEWS
+	Version 1.61-0.023
+	
+------------- passed R-3.6.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------

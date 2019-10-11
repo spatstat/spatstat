@@ -3,7 +3,7 @@
 #
 #   computes simulation envelopes 
 #
-#   $Revision: 2.96 $  $Date: 2019/08/12 01:19:56 $
+#   $Revision: 2.98 $  $Date: 2019/10/11 01:46:33 $
 #
 
 envelope <- function(Y, fun, ...) {
@@ -340,6 +340,7 @@ envelopeEngine <-
            nsim2=nsim,
            VARIANCE=FALSE, nSD=2,
            Yname=NULL,
+           rejectNA=FALSE,
            silent=FALSE,
            maxnerr=nsim,
            maxerr.action=c("fatal", "warn", "null"),
@@ -750,6 +751,9 @@ envelopeEngine <-
                      inferred.r.args,
                      list(...),
                      if(usecorrection) list(correction="best") else NULL)
+
+  # reject simulated pattern if function values are all NA (etc)
+  rejectNA <- isTRUE(rejectNA)
   
   # start simulation loop
   nerr <- 0
@@ -792,7 +796,10 @@ envelopeEngine <-
       ## apply function safely
       funXsim <- try(do.call(fun, c(list(Xsim), funargs)), silent=silent)
 
-      success <- !inherits(funXsim, "try-error")
+      success <-
+        !inherits(funXsim, "try-error") &&
+        inherits(funXsim, "fv") &&
+        (!rejectNA || any(is.finite(funXsim[[valname]])))
 
       if(!success) {
         #' error in computing summary function
