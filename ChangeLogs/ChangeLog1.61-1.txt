@@ -424,3 +424,29 @@ Change log from 1.61-0 to 1.61-1
 ------------- passed R-3.6.1 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
+
+   tests/dominic.R
+	Test more code blocks
+
+   vcov.ppm.R
+   vcov.ppm.Rd
+	Now checks whether the model coefficients are finite.
+	New argument 'nacoef.action'
+
+   vcov.mppm.R
+   vcov.mppm.Rd
+	Now checks whether the model coefficients are finite.
+	Recognises argument 'nacoef.action'
+
+   summary.ppm.R
+	Bug fix in handling invalid models
+
+   DESCRIPTION
+   NEWS
+	Version 1.61-0.024
+	
+------------- passed R-3.6.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+
+	

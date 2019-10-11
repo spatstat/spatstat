@@ -11,6 +11,7 @@
                     gam.action=c("warn", "fatal", "silent"),
                     matrix.action=c("warn", "fatal", "silent"),
                     logi.action=c("warn", "fatal", "silent"),
+                    nacoef.action=c("warn", "fatal", "silent"),
                     hessian=FALSE)
 }
 \arguments{
@@ -40,6 +41,10 @@
   \item{logi.action}{String indicating what to do if \code{object} was
     fitted via the logistic regression approximation using a
     non-standard dummy point process.
+  }
+  \item{nacoef.action}{
+    String indicating what to do if some of the fitted coefficients
+    are \code{NA} (so that variance cannot be calculated).
   }
   \item{hessian}{
     Logical. Use the negative Hessian matrix

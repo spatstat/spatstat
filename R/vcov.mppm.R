@@ -1,6 +1,6 @@
 #  Variance-covariance matrix for mppm objects
 #
-# $Revision: 1.19 $ $Date: 2017/12/11 04:10:22 $
+# $Revision: 1.20 $ $Date: 2019/10/11 07:09:16 $
 #
 #
 
@@ -29,9 +29,27 @@ vcov.mppm <- local({
     return(vcmGibbs(object, ..., what=what, err=err))
   }
 
-  vcmPois <- function(object, ..., what, err) {
-    # legacy algorithm for Poisson case
-    
+  vcmPois <- function(object, ..., what, err,
+                      nacoef.action=c("warn", "fatal", "silent")
+                      ) {
+    #' legacy algorithm for Poisson case
+
+    #' detect NA coefficients
+    if(missing(nacoef.action) && !missing(err) && !is.null(err)) {
+      nacoef.action <- err
+    } else {
+      nacoef.action <- match.arg(nacoef.action)
+    }
+    if(!all(is.finite(coef(object)))) {
+      gripe <- "Cannot compute variance; some coefficients are NA, NaN or Inf"
+      switch(nacoef.action,
+             fatal = stop(gripe, call.=FALSE),
+             warn = warning(gripe, call.=FALSE),
+             silent = {})
+      return(NULL)
+    }
+
+    #' get to work
     gf <- object$Fit$FIT
     gd <- object$Fit$moadf
     wt <- gd$.mpl.W
@@ -68,7 +86,8 @@ vcov.mppm <- local({
   vcmGibbs <- function(object, ..., what, err,
                        matrix.action=c("warn", "fatal", "silent"),
                        gam.action=c("warn", "fatal", "silent"),
-                       logi.action=c("warn", "fatal", "silent")
+                       logi.action=c("warn", "fatal", "silent"),
+                       nacoef.action=c("warn", "fatal", "silent")
                        ) {
     if(!missing(err)) {
       if(err == "null") err <- "silent" 
@@ -76,10 +95,21 @@ vcov.mppm <- local({
         if(missing(matrix.action)) err else match.arg(matrix.action)
       gam.action <- if(missing(gam.action)) err else match.arg(gam.action)
       logi.action <- if(missing(logi.action)) err else match.arg(logi.action)
+      nacoef.action <- if(missing(nacoef.action)) err else match.arg(nacoef.action)
     } else {
       matrix.action <- match.arg(matrix.action)
       gam.action <- match.arg(gam.action)
       logi.action <- match.arg(logi.action)
+      nacoef.action <- match.arg(nacoef.action)
+    }
+    #' detect NA coefficients
+    if(!all(is.finite(as.matrix(coef(object))))) {
+      gripe <- "Cannot compute variance; some coefficients are NA, NaN or Inf"
+      switch(nacoef.action,
+             fatal = stop(gripe, call.=FALSE),
+             warn = warning(gripe, call.=FALSE),
+             silent = {})
+      return(NULL)
     }
     #' initialise
     cnames <- names(fixed.effects(object))
@@ -161,7 +191,7 @@ vcov.mppm <- local({
               cmj <- as.character(maps[jcol,])
               if(anyDuplicated(cmi) || anyDuplicated(cmj)) {
                 warning("Internal error: duplicated labels in submodel map")
-              } else {
+              } else if(!is.null(a2i)) {
                 A2[cmi,cmj] <- A2[cmi,cmj] + a2i
                 A3[cmi,cmj] <- A3[cmi,cmj] + a2i
               }

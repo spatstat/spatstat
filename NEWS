@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.61-0.023
+        CHANGES IN spatstat VERSION 1.61-0.024
 
 OVERVIEW
 
@@ -89,6 +89,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
     
     o diagnose.ppm
     Accelerated, when type="inverse", for models without a hard core.
+
+    o vcov.ppm, vcov.mppm
+    New argument 'nacoef.action' specifies what to do if
+    some of the fitted coefficients are NA, NaN or Inf.
     
 BUG FIXES
 
@@ -122,6 +126,10 @@ BUG FIXES
 
     o studpermu.test
     Crashed if the hyperframe was very large.
+    Fixed.
+
+    o vcov.ppm, print.ppm, summary.ppm
+    Crashed in some cases if the fitted coefficients were NA.
     Fixed.
     
     o shift.linnet

@@ -3,7 +3,7 @@
 #
 #    summary() method for class "ppm"
 #
-#    $Revision: 1.77 $   $Date: 2016/12/30 01:44:07 $
+#    $Revision: 1.78 $   $Date: 2019/10/11 06:23:19 $
 #
 #    summary.ppm()
 #    print.summary.ppm()
@@ -282,7 +282,7 @@ summary.ppm <- local({
       # compute standard errors
       se <- x$internal$se
       if(is.null(se)) {
-        vc <- vcov(x, fine=fine, matrix.action="warn")
+        vc <- vcov(x, fine=fine, matrix.action="warn", invalid.action="silent")
         if(!is.null(vc)) {
           se <- if(is.matrix(vc)) sqrt(diag(vc)) else
                 if(length(vc) == 1) sqrt(vc) else NULL

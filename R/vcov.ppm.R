@@ -3,7 +3,7 @@
 ## and Fisher information matrix
 ## for ppm objects
 ##
-##  $Revision: 1.130 $  $Date: 2017/12/10 02:23:46 $
+##  $Revision: 1.132 $  $Date: 2019/10/11 06:51:24 $
 ##
 
 vcov.ppm <- local({
@@ -13,6 +13,7 @@ vcov.ppm <- function(object, ..., what="vcov", verbose=TRUE,
                      gam.action=c("warn", "fatal", "silent"),
                      matrix.action=c("warn", "fatal", "silent"),
                      logi.action=c("warn", "fatal", "silent"),
+                     nacoef.action=c("warn", "fatal", "silent"),
                      hessian=FALSE) {
   verifyclass(object, "ppm")
   argh <- list(...)
@@ -20,6 +21,16 @@ vcov.ppm <- function(object, ..., what="vcov", verbose=TRUE,
   gam.action <- match.arg(gam.action)
   matrix.action <- match.arg(matrix.action)
   logi.action <- match.arg(logi.action)
+  nacoef.action <- match.arg(nacoef.action)
+
+  if(!all(is.finite(coef(object)))) {
+    gripe <- "Cannot compute variance; model is not valid"
+    switch(nacoef.action,
+           fatal = stop(gripe, call.=FALSE),
+           warn = warning(gripe, call.=FALSE),
+           silent = {})
+    return(NULL)
+  }
 
   if(missing(fine) && ("A1dummy" %in% names(argh))) {
     message("Argument 'A1dummy' has been replaced by 'fine'")
@@ -130,6 +141,7 @@ vcov.ppm <- function(object, ..., what="vcov", verbose=TRUE,
 vcalcPois <- function(object, ...,
                       what = c("vcov", "corr", "fisher", "internals", "all"),
                       matrix.action=c("warn", "fatal", "silent"),
+                      nacoef.action=c("warn", "fatal", "silent"),
                       method=c("C", "interpreted"),
                       verbose=TRUE,
                       fisher=NULL,
@@ -146,6 +158,15 @@ vcalcPois <- function(object, ...,
     stopifnot(is.numeric(matwt) && is.vector(matwt))
   internals <- NULL
   nonstandard <- reweighting || !is.null(new.coef) || saveterms
+  ## detect invalid model
+  if(!all(is.finite(coef(object)))) {
+    gripe<-"Cannot compute variance; some coefficients are NA, NaN or infinite"
+    switch(nacoef.action,
+           fatal=stop(gripe, call.=FALSE),
+           warn=warning(gripe, call.=FALSE),
+           silent={})
+    return(NULL)
+  }
   ## compute Fisher information if not known
   if(is.null(fisher) || nonstandard) {
     gf <- getglmfit(object)
