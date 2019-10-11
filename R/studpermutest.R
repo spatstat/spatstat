@@ -183,7 +183,8 @@ studpermu.test <-
                  commasep(m)),
            call.=FALSE)
     #' check if number of possible outcomes is small
-    npossible <- factorial(sum(m))/prod(factorial(m))/prod(factorial(table(m)))
+    #' WAS: npossible <- factorial(sum(m))/prod(factorial(m))/prod(factorial(table(m)))
+    npossible <- exp(lgamma(sum(m)+1)-sum(lgamma(m+1))-sum(lgamma(table(m)+1)))
     if (npossible < max(100, nperm)) 
       warning("Don't expect exact results - group sizes are too small")
   
