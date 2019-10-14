@@ -3,7 +3,7 @@
 #
 #   computes simulation envelopes 
 #
-#   $Revision: 2.98 $  $Date: 2019/10/11 01:46:33 $
+#   $Revision: 2.99 $  $Date: 2019/10/14 05:03:35 $
 #
 
 envelope <- function(Y, fun, ...) {
@@ -55,7 +55,9 @@ envelope.ppp <-
            scale=NULL, clamp=FALSE, 
            savefuns=FALSE, savepatterns=FALSE, nsim2=nsim,
            VARIANCE=FALSE, nSD=2,
-           Yname=NULL, maxnerr=nsim, do.pwrong=FALSE,
+           Yname=NULL,
+           maxnerr=nsim, rejectNA=FALSE, silent=FALSE,
+           do.pwrong=FALSE,
            envir.simul=NULL) {
   cl <- short.deparse(sys.call())
   if(is.null(Yname)) Yname <- short.deparse(substitute(Y))
@@ -185,8 +187,9 @@ envelope.ppp <-
                  alternative=alternative, scale=scale, clamp=clamp,
                  savefuns=savefuns, savepatterns=savepatterns, nsim2=nsim2,
                  VARIANCE=VARIANCE, nSD=nSD,
-                 Yname=Yname, maxnerr=maxnerr, cl=cl,
-                 envir.user=envir.user, do.pwrong=do.pwrong)
+                 Yname=Yname,
+                 maxnerr=maxnerr, rejectNA=rejectNA, silent=silent,
+                 cl=cl, envir.user=envir.user, do.pwrong=do.pwrong)
 }
 
 envelope.ppm <- 
@@ -201,7 +204,9 @@ envelope.ppm <-
            scale=NULL, clamp=FALSE, 
            savefuns=FALSE, savepatterns=FALSE, nsim2=nsim,
            VARIANCE=FALSE, nSD=2,
-           Yname=NULL, maxnerr=nsim, do.pwrong=FALSE,
+           Yname=NULL,
+           maxnerr=nsim, rejectNA=FALSE, silent=FALSE,
+           do.pwrong=FALSE,
            envir.simul=NULL) {
   cl <- short.deparse(sys.call())
   if(is.null(Yname)) Yname <- short.deparse(substitute(Y))
@@ -262,8 +267,9 @@ envelope.ppm <-
                  alternative=alternative, scale=scale, clamp=clamp, 
                  savefuns=savefuns, savepatterns=savepatterns, nsim2=nsim2,
                  VARIANCE=VARIANCE, nSD=nSD,
-                 Yname=Yname, maxnerr=maxnerr, cl=cl,
-                 envir.user=envir.user, do.pwrong=do.pwrong)
+                 Yname=Yname,
+                 maxnerr=maxnerr, rejectNA=rejectNA, silent=silent,
+                 cl=cl, envir.user=envir.user, do.pwrong=do.pwrong)
 }
 
 envelope.kppm <-
@@ -274,7 +280,8 @@ envelope.kppm <-
            alternative=c("two.sided", "less", "greater"),
            scale=NULL, clamp=FALSE,
            savefuns=FALSE, savepatterns=FALSE, nsim2=nsim,
-           VARIANCE=FALSE, nSD=2, Yname=NULL, maxnerr=nsim,
+           VARIANCE=FALSE, nSD=2, Yname=NULL, 
+           maxnerr=nsim, rejectNA=FALSE, silent=FALSE,
            do.pwrong=FALSE, envir.simul=NULL)
 {
   cl <- short.deparse(sys.call())
@@ -314,8 +321,9 @@ envelope.kppm <-
                  alternative=alternative, scale=scale, clamp=clamp,
                  savefuns=savefuns, savepatterns=savepatterns, nsim2=nsim2,
                  VARIANCE=VARIANCE, nSD=nSD,
-                 Yname=Yname, maxnerr=maxnerr, cl=cl,
-                 envir.user=envir.user, do.pwrong=do.pwrong)
+                 Yname=Yname, 
+                 maxnerr=maxnerr, rejectNA=rejectNA, silent=silent,
+                 cl=cl, envir.user=envir.user, do.pwrong=do.pwrong)
 
 }
 
@@ -340,9 +348,9 @@ envelopeEngine <-
            nsim2=nsim,
            VARIANCE=FALSE, nSD=2,
            Yname=NULL,
+           maxnerr=nsim,
            rejectNA=FALSE,
            silent=FALSE,
-           maxnerr=nsim,
            maxerr.action=c("fatal", "warn", "null"),
            internal=NULL, cl=NULL,
            envir.user=envir.user,

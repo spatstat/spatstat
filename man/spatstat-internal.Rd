@@ -953,7 +953,7 @@ envelopeEngine(X, fun, simul,
            weights,
            nsim2, VARIANCE, nSD,
            Yname,
-           rejectNA, silent, maxnerr, maxerr.action,
+           maxnerr, rejectNA, silent, maxerr.action,
            internal, cl,
            envir.user, expected.arg, do.pwrong,
            foreignclass, collectrubbish)

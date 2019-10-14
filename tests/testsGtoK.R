@@ -372,7 +372,7 @@ local({
 #'
 #'   Various K and L functions and pcf
 #'
-#'   $Revision: 1.27 $  $Date: 2019/09/21 05:18:07 $
+#'   $Revision: 1.29 $  $Date: 2019/10/14 05:54:30 $
 #'
 
 require(spatstat)
@@ -402,13 +402,23 @@ local({
   Kn <- Kest(X, correction="none",
              rmax=0.02, weights=Z, ratio=TRUE)
   Knb <- Kest(X, correction=c("border","bord.modif","none"),
-             rmax=0.02, weights=Z, ratio=TRUE)
+              rmax=0.02, weights=Z, ratio=TRUE)
   #' pcf.ppp special code blocks
   pr  <- pcf(cells, ratio=TRUE, var.approx=TRUE)
   pc  <- pcf(cells, domain=square(0.5))
   pcr <- pcf(cells, domain=square(0.5), ratio=TRUE)
   pw <- pcf(redwood, correction="none")
   pwr <- pcf(redwood, correction="none", ratio=TRUE)
+  #' Kinhom code blocks
+  X <- rpoispp(function(x,y) { 100 * x }, 100, square(1))
+  lambda <- 100 * X$x
+  Kin <- Kinhom(X, lambda, correction=c("none", "border"))
+  lambda2 <- outer(lambda, lambda, "*")
+  Ki2 <- Kinhom(X, lambda2=lambda2, diagonal=FALSE,
+                correction=c("translate", "isotropic"))
+  fut <- ppm(X ~ x)
+  Kio <- Kinhom(X, fut, update=FALSE)
+  Kiu <- Kinhom(X, fut, update=TRUE, diagonal=FALSE)
   #' inhomogeneous multitype
   fit <- ppm(amacrine ~ marks)
   K1 <- Kcross.inhom(amacrine, lambdaX=fit)

@@ -1,7 +1,7 @@
 #
 #  envelopelpp.R
 #
-#  $Revision: 1.25 $   $Date: 2019/08/12 01:05:53 $
+#  $Revision: 1.26 $   $Date: 2019/10/14 04:53:06 $
 #
 #  Envelopes for 'lpp' objects
 #
@@ -17,7 +17,9 @@ envelope.lpp <-
            scale=NULL, clamp=FALSE,
            savefuns=FALSE, savepatterns=FALSE, nsim2=nsim,
            VARIANCE=FALSE, nSD=2,
-           Yname=NULL, do.pwrong=FALSE, envir.simul=NULL) {
+           Yname=NULL,
+           maxnerr=nsim, rejectNA=FALSE, silent=FALSE,
+           do.pwrong=FALSE, envir.simul=NULL) {
   cl <- short.deparse(sys.call())
   if(is.null(Yname)) Yname <- short.deparse(substitute(Y))
   if(is.null(fun)) fun <- linearK
@@ -130,8 +132,9 @@ envelope.lpp <-
                  alternative=alternative, scale=scale, clamp=clamp, 
                  savefuns=savefuns, savepatterns=savepatterns, nsim2=nsim2,
                  VARIANCE=VARIANCE, nSD=nSD,
-                 Yname=Yname, cl=cl,
-                 envir.user=envir.user, do.pwrong=do.pwrong)
+                 Yname=Yname,
+                 maxnerr=maxnerr, rejectNA=rejectNA, silent=silent,
+                 cl=cl, envir.user=envir.user, do.pwrong=do.pwrong)
 }
 
 envelope.lppm <-
@@ -143,7 +146,9 @@ envelope.lppm <-
            scale=NULL, clamp=FALSE, 
            savefuns=FALSE, savepatterns=FALSE, nsim2=nsim,
            VARIANCE=FALSE, nSD=2,
-           Yname=NULL, do.pwrong=FALSE, envir.simul=NULL) {
+           Yname=NULL,
+           maxnerr=nsim, rejectNA=FALSE, silent=FALSE,
+           do.pwrong=FALSE, envir.simul=NULL) {
   cl <- short.deparse(sys.call())
   if(is.null(Yname)) Yname <- short.deparse(substitute(Y))
   if(is.null(fun)) fun <- linearK
@@ -208,6 +213,7 @@ envelope.lppm <-
                  alternative=alternative, scale=scale, clamp=clamp,
                  savefuns=savefuns, savepatterns=savepatterns, nsim2=nsim2,
                  VARIANCE=VARIANCE, nSD=nSD,
-                 Yname=Yname, cl=cl,
-                 envir.user=envir.user, do.pwrong=do.pwrong)
+                 Yname=Yname, 
+                 maxnerr=maxnerr, rejectNA=rejectNA, silent=silent,
+                 cl=cl, envir.user=envir.user, do.pwrong=do.pwrong)
 }

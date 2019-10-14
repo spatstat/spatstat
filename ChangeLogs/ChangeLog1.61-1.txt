@@ -449,4 +449,38 @@ Change log from 1.61-0 to 1.61-1
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
 
+13 oct 2019
+
+   tests/Kfuns.R
+	Test some cases of Kinhom
+
+14 oct 2019
+
+   envelope.R
+   envelope.Rd
+	New formal arguments 'rejectNA' and 'silent'
+	for envelope.ppp, envelope.ppm, envelope.kppm
 	
+   envelope3.R
+   envelope.pp3.Rd
+	New formal arguments 'rejectNA' and 'silent'
+	for envelope.pp3
+
+   envelopelpp.R
+   envelope.lpp.Rd
+	New formal arguments 'maxnerr', 'rejectNA' and 'silent'
+	for envelope.lpp, envelope.lppm
+
+   DESCRIPTION
+   NEWS
+	Version 1.61-0.025
+	
+------------- passed R-3.6.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+
+
+   
+
+
+

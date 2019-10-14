@@ -15,7 +15,7 @@ envelope.pp3 <-
            scale=NULL, clamp=FALSE,
            savefuns=FALSE, savepatterns=FALSE, nsim2=nsim,
            VARIANCE=FALSE, nSD=2,
-           Yname=NULL, maxnerr=nsim,
+           Yname=NULL, maxnerr=nsim, rejectNA=FALSE, silent=FALSE,
            do.pwrong=FALSE, envir.simul=NULL) {
   cl <- short.deparse(sys.call())
   if(is.null(Yname)) Yname <- short.deparse(substitute(Y))
@@ -70,7 +70,9 @@ envelope.pp3 <-
                  alternative=alternative, scale=scale, clamp=clamp,
                  savefuns=savefuns, savepatterns=savepatterns, nsim2=nsim2,
                  VARIANCE=VARIANCE, nSD=nSD,
-                 Yname=Yname, maxnerr=maxnerr, cl=cl,
+                 Yname=Yname,
+                 maxnerr=maxnerr, rejectNA=rejectNA, silent=silent,
+                 cl=cl,
                  envir.user=envir.user,
                  expected.arg=c("rmax", "nrval"),
                  do.pwrong=do.pwrong)

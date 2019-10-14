@@ -18,7 +18,8 @@
   alternative=c("two.sided", "less", "greater"),
   scale=NULL, clamp=FALSE, 
   savefuns=FALSE, savepatterns=FALSE,
-  nsim2=nsim, VARIANCE=FALSE, nSD=2, Yname=NULL, maxnerr=nsim,
+  nsim2=nsim, VARIANCE=FALSE, nSD=2, Yname=NULL,
+  maxnerr=nsim, rejectNA=FALSE, silent=FALSE,
   do.pwrong=FALSE, envir.simul=NULL)
 
   \method{envelope}{ppm}(Y, fun=Kest, nsim=99, nrank=1, \dots, 
@@ -30,7 +31,8 @@
   alternative=c("two.sided", "less", "greater"), 
   scale=NULL, clamp=FALSE, 
   savefuns=FALSE, savepatterns=FALSE,
-  nsim2=nsim, VARIANCE=FALSE, nSD=2, Yname=NULL, maxnerr=nsim,
+  nsim2=nsim, VARIANCE=FALSE, nSD=2, Yname=NULL, 
+  maxnerr=nsim, rejectNA=FALSE, silent=FALSE,
   do.pwrong=FALSE, envir.simul=NULL)
 
   \method{envelope}{kppm}(Y, fun=Kest, nsim=99, nrank=1, \dots, 
@@ -41,7 +43,8 @@
   alternative=c("two.sided", "less", "greater"), 
   scale=NULL, clamp=FALSE, 
   savefuns=FALSE, savepatterns=FALSE,
-  nsim2=nsim, VARIANCE=FALSE, nSD=2, Yname=NULL, maxnerr=nsim,
+  nsim2=nsim, VARIANCE=FALSE, nSD=2, Yname=NULL, 
+  maxnerr=nsim, rejectNA=FALSE, silent=FALSE,
   do.pwrong=FALSE, envir.simul=NULL)
 }
 \arguments{
@@ -204,11 +207,22 @@
   }
   \item{maxnerr}{
     Maximum number of rejected patterns.
-    If \code{fun} yields an error when applied to a simulated point
+    If \code{fun} yields a fatal error when applied to a simulated point
     pattern (for example, because the pattern is empty and \code{fun}
     requires at least one point), the pattern will be rejected
     and a new random point pattern will be generated. If this happens
     more than \code{maxnerr} times, the algorithm will give up.
+  }
+  \item{rejectNA}{
+    Logical value specifying whether to reject a simulated pattern
+    if the resulting values of \code{fun} are all equal to \code{NA},
+    \code{NaN} or infinite. If \code{FALSE} (the default), then
+    simulated patterns are only rejected when \code{fun} gives a
+    fatal error. 
+  }
+  \item{silent}{
+    Logical value specifying whether to print a report each time
+    a simulated pattern is rejected.
   }
   \item{do.pwrong}{
     Logical. If \code{TRUE}, the algorithm will also estimate

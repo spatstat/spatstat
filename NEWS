@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.61-0.024
+        CHANGES IN spatstat VERSION 1.61-0.025
 
 OVERVIEW
 
@@ -11,6 +11,10 @@ OVERVIEW
     o Nearest Neighbour Index function can now return mark values.
 
     o Important fix in Ripley isotropic correction.
+
+    o More options for handling bad simulation outcomes in envelope().
+
+    o Bandwidth selectors warn about extreme values of bandwidth.
     
     o Bug fixes and minor improvements.
     
@@ -40,6 +44,7 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o lintess
     New argument 'marks'
+    Tessellations can now have marks.
 
     o tilenames, tilenames<-
     These functions are now generic, with methods for 'tess' and 'lintess'
@@ -60,6 +65,12 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o nnfun.ppp, nnfun.psp, nnfun.lpp
     New argument 'value' specifies whether to return the index of the
     nearest neighbour or the mark value of the nearest neighbour.
+
+    o envelope.ppp, envelope.ppm, envelope.kppm, envelope.pp3
+    New arguments 'rejectNA' and 'silent'.
+    
+    o envelope.lpp, envelope.lppm
+    New arguments 'maxnerr', 'rejectNA' and 'silent'.
     
     o plot.psp
     New argument 'col' gives control over the colour map
