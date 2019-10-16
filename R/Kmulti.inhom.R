@@ -6,12 +6,13 @@
 #
 # ------------------------------------------------------------------------
 
-Lcross.inhom <- function(X, i, j, ...) {
+Lcross.inhom <- function(X, i, j, ..., correction) {
   if(!is.multitype(X, dfok=FALSE))
 	stop("Point pattern must be multitype")
   if(missing(i)) i <- levels(marks(X))[1]
   if(missing(j)) j <- levels(marks(X))[2]
-  K <- Kcross.inhom(X, i, j, ...)
+  if(missing(correction)) correction <- NULL
+  K <- Kcross.inhom(X, i, j, ..., correction=correction)
   L <- eval.fv(sqrt(pmax.int(K,0)/pi))
   iname <- make.parseable(paste(i))
   jname <- make.parseable(paste(j))
@@ -27,11 +28,12 @@ Lcross.inhom <- function(X, i, j, ...) {
   return(L)  
 }
 
-Ldot.inhom <- function(X, i, ...) {
+Ldot.inhom <- function(X, i, ..., correction) {
   if(!is.multitype(X, dfok=FALSE))
 	stop("Point pattern must be multitype")
   if(missing(i)) i <- levels(marks(X))[1]
-  K <- Kdot.inhom(X, i, ...)
+  if(missing(correction)) correction <- NULL
+  K <- Kdot.inhom(X, i, ..., correction=correction)
   L <- eval.fv(sqrt(pmax.int(K,0)/pi))
   # relabel the fv object
   iname <- make.parseable(paste(i))

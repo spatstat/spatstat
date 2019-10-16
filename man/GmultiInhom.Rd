@@ -88,13 +88,16 @@
   \code{\link{Gmulti}}
 }
 \examples{
-  X <- amacrine
+  X <- rescale(amacrine)
   I <- (marks(X) == "on")
   J <- (marks(X) == "off")
   mod <- ppm(X ~ marks * x)
   lam <- fitted(mod, dataonly=TRUE)
   lmin <- min(predict(mod)[["off"]]) * 0.9
   plot(GmultiInhom(X, I, J, lambda=lam, lambdamin=lmin))
+  # equivalent
+  plot(GmultiInhom(X, I, J, lambdaI=lam[I], lambdaJ=lam[J], lambdamin=lmin),
+       main="")
 }
 \keyword{spatial}
 \keyword{nonparametric}

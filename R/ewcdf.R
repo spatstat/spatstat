@@ -1,7 +1,7 @@
 #
 #     ewcdf.R
 #
-#     $Revision: 1.18 $  $Date: 2019/03/12 11:14:36 $
+#     $Revision: 1.19 $  $Date: 2019/10/14 08:40:51 $
 #
 #  With contributions from Kevin Ummel
 #
@@ -155,7 +155,7 @@ quantile.ewcdf <- function(x, probs=seq(0,1,0.25), names=TRUE, ...,
   }
   if (na.p) {
     o.pr[p.ok] <- qs
-    names(o.pr) <- rep("", length(o.pr))
+    names(o.pr) <- rep("NA", length(o.pr))
     names(o.pr)[p.ok] <- names(qs)
     o.pr
   } else qs

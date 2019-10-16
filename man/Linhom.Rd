@@ -1,23 +1,29 @@
 \name{Linhom}
 \alias{Linhom}
-\title{L-function}
+\title{Inhomogeneous L-function}
 \description{
   Calculates an estimate of the inhomogeneous version of
   the \eqn{L}-function (Besag's transformation of Ripley's \eqn{K}-function)
   for a spatial point pattern.
 }
 \usage{
-  Linhom(...)
+  Linhom(X, ..., correction)
 }
 \arguments{
-  \item{\dots}{
-    Arguments passed to \code{\link{Kinhom}}
-    to estimate the inhomogeneous K-function.
+  \item{X}{
+    The observed point pattern, 
+    from which an estimate of \eqn{L(r)} will be computed.
+    An object of class \code{"ppp"}, or data
+    in any format acceptable to \code{\link{as.ppp}()}.
+  }
+  \item{correction,\dots}{
+    Other arguments passed to \code{\link{Kinhom}}
+    to control the estimation procedure.
   }
 }
 \details{
   This command computes an estimate of the inhomogeneous version of
-  the \eqn{L}-function for a spatial point pattern
+  the \eqn{L}-function for a spatial point pattern.
 
   The original \eqn{L}-function is a transformation
   (proposed by Besag) of Ripley's \eqn{K}-function,

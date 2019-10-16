@@ -1,7 +1,7 @@
 #
 #	Kinhom.S	Estimation of K function for inhomogeneous patterns
 #
-#	$Revision: 1.96 $	$Date: 2019/06/23 06:30:46 $
+#	$Revision: 1.99 $	$Date: 2019/10/16 03:26:26 $
 #
 #	Kinhom()	compute estimate of K_inhom
 #
@@ -44,8 +44,9 @@
 #
 # ------------------------------------------------------------------------
 
-"Linhom" <- function(...) {
-  K <- Kinhom(...)
+"Linhom" <- function(X, ..., correction) {
+  if(missing(correction)) correction <- NULL
+  K <- Kinhom(X, ..., correction=correction)
   L <- eval.fv(sqrt(pmax.int(K,0)/pi))
   # relabel the fv object
   L <- rebadge.fv(L, quote(L[inhom](r)), c("L", "inhom"),
@@ -88,6 +89,9 @@
 
     # match corrections
     correction.given <- !missing(correction) && !is.null(correction)
+    if(is.null(correction))
+      correction <- c("border", "bord.modif", "isotropic", "translate")
+
     correction <- pickoption("correction", correction,
                              c(none="none",
                                border="border",

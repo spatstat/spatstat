@@ -1,7 +1,7 @@
 #
 #	Kest.R		Estimation of K function
 #
-#	$Revision: 5.121 $	$Date: 2018/06/02 08:33:53 $
+#	$Revision: 5.124 $	$Date: 2019/10/16 03:05:20 $
 #
 #
 # -------- functions ----------------------------------------
@@ -34,8 +34,9 @@
 #
 # ------------------------------------------------------------------------
 
-"Lest" <- function(X, ...) {
-  K <- Kest(X, ...)
+"Lest" <- function(X, ..., correction) {
+  if(missing(correction)) correction <- NULL
+  K <- Kest(X, ..., correction=correction)
   L <- eval.fv(sqrt(K/pi), dotonly=FALSE)
   # handle variance estimates
   if(any(varcols <- colnames(K) %in% c("rip", "ls"))) {

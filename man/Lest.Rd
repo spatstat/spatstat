@@ -7,7 +7,7 @@
   for a spatial point pattern.
 }
 \usage{
-  Lest(X, ...)
+  Lest(X, ..., correction)
 }
 \arguments{
   \item{X}{
@@ -16,7 +16,7 @@
     An object of class \code{"ppp"}, or data
     in any format acceptable to \code{\link{as.ppp}()}.
   }
-  \item{\dots}{
+  \item{correction,\dots}{
     Other arguments passed to \code{\link{Kest}}
     to control the estimation procedure.
   }

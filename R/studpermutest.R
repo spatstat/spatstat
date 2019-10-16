@@ -3,7 +3,7 @@
 #' 
 #'  Original by Ute Hahn 2014
 #'
-#' $Revision: 1.7 $ $Date: 2019/10/11 00:41:07 $
+#' $Revision: 1.10 $ $Date: 2019/10/16 02:36:54 $
 #' 
 #' Studentized permutation test for comparison of grouped point patterns;
 #' functions to generate these grouped point patterns;
@@ -143,8 +143,8 @@ studpermu.test <-
       ppname <- "pp"
     }
   
-    framename <- deparse(substitute(X))
-    fooname <- deparse(substitute(summaryfunction))
+    framename <- short.deparse(substitute(X))
+    fooname <- short.deparse(substitute(summaryfunction))
   
     #' sorting out the patterns that contain too few points
   
@@ -212,12 +212,31 @@ studpermu.test <-
     #' TO DO!!!! Match function call of summary function with data columns!
     #' use arguments.in.data, if applicable. This is for inhomogeneous summary 
     #' functions
- 
-    #' --------- retrieve arguments for summary function from data, hvis det er 
- 
-    if(arguments.in.data) 
-      fvlist <- multicall(summaryfunction, pp, data, r = rr, ...)
-    else fvlist <- with(data, summaryfunction(pp, r = rr, ...))
+
+    #' Force all calls to summaryfunction to use the same edge correction,
+    #' rather than allowing correction to depend on npoints
+    needcorx <- "correction" %in% names(formals(summaryfunction))
+    gavecorx <- "correction" %in% names(list(...))
+    corx <- if(needcorx && !gavecorx) "best" else NULL
+
+    #' --------- retrieve arguments for summary function from data, hvis det er
+    fvlist <-
+      if(arguments.in.data) {
+        #' use arguments in hyperframe 'data' as well as explicit arguments
+        if(is.null(corx)) {
+          multicall(summaryfunction, pp, data, r = rr, ...)
+        } else {
+          multicall(summaryfunction, pp, data, r = rr, ..., correction=corx)
+        }
+      } else {
+        #' use explicit arguments only
+        if(is.null(corx)) {
+          with(data, summaryfunction(pp, r = rr, ...))
+        } else {
+          with(data, summaryfunction(pp, r = rr, ..., correction=corx))
+        }
+      }
+
     fvtemplate <- fvlist[[1]]
  
     valu <- attr(fvtemplate, "valu")

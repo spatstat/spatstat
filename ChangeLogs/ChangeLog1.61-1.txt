@@ -479,8 +479,50 @@ Change log from 1.61-0 to 1.61-1
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
 
+   plot.pp3.Rd
+	Tweaked example to test the case 'type="h"'
 
-   
+   tests/contact.R
+	Test internal checking code of exactdt
 
+   ewcdf.R
+	Tweak behaviour when NA present
+	
+   tests/NAinCov.R
+	Test handling of NA in quantile.ewcdf
 
+   GmultiInhom.Rd
+	Tweak example
+	
+16 oct 2019
+
+   studpermutest.R
+	Bug fix (incompatible edge corrections)
+
+   tests/hypotests.R
+	Check validity of bug fix
+
+   Kest.R
+   Kinhom.R
+   Kmulti.R
+   Kmulti.inhom.R
+   Lest.Rd
+   Linhom.Rd
+   Lcross.Rd
+   Ldot.Rd
+   Lcross.inhom.Rd
+   Ldot.inhom.Rd
+	Lest, Linhom, Ldot, Lcross, Ldot.inhom, Lcross.inhom
+	now have explicit argument 'correction'.
+
+   Kinhom.R
+	Handles correction=NULL
+	
+   DESCRIPTION
+   NEWS
+	Version 1.61-0.026
+	
+------------- passed R-3.6.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
 

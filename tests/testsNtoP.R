@@ -3,7 +3,7 @@
 #
 # Testing the response to the presence of NA's in covariates
 #
-# $Revision: 1.5 $ $Date: 2015/12/29 08:54:49 $
+# $Revision: 1.6 $ $Date: 2019/10/14 08:39:58 $
 
 require(spatstat)
 local({
@@ -18,6 +18,9 @@ local({
   v <- vcov(misfit)
   ss <- vcov(misfit, what="internals")
   NULL
+  #' quantile.ewcdf
+  f <- ewcdf(runif(100), runif(100))
+  qf <- quantile(f, probs=c(0.1, NA, 0.8))
 })
 
 

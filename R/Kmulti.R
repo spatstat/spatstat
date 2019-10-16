@@ -4,7 +4,7 @@
 #	Compute estimates of cross-type K functions
 #	for multitype point patterns
 #
-#	$Revision: 5.49 $	$Date: 2018/10/13 06:55:41 $
+#	$Revision: 5.50 $	$Date: 2019/10/16 03:09:01 $
 #
 #
 # -------- functions ----------------------------------------
@@ -42,12 +42,13 @@
 #
 # ------------------------------------------------------------------------
 
-"Lcross" <- function(X, i, j, ..., from, to) {
+"Lcross" <- function(X, i, j, ..., from, to, correction) {
   if(!is.multitype(X, dfok=FALSE)) 
 	stop("Point pattern must be multitype")
   if(missing(i)) i <- if(!missing(from)) from else levels(marks(X))[1]
   if(missing(j)) j <- if(!missing(to)) to else levels(marks(X))[2]
-  K <- Kcross(X, i, j, ...)
+  if(missing(correction)) correction <- NULL
+  K <- Kcross(X, i, j, ..., correction=correction)
   L <- eval.fv(sqrt(K/pi))
   # relabel the fv object
   iname <- make.parseable(paste(i))
@@ -62,11 +63,12 @@
   return(L)  
 }
 
-"Ldot" <- function(X, i, ..., from) {
+"Ldot" <- function(X, i, ..., from, correction) {
   if(!is.multitype(X, dfok=FALSE)) 
 	stop("Point pattern must be multitype")
   if(missing(i)) i <- if(!missing(from)) from else levels(marks(X))[1]
-  K <- Kdot(X, i, ...)
+  if(missing(correction)) correction <- NULL
+  K <- Kdot(X, i, ..., correction=correction)
   L <- eval.fv(sqrt(K/pi))
   # relabel the fv object
   iname <- make.parseable(paste(i))

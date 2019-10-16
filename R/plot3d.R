@@ -47,15 +47,15 @@ project3Dhom <- local({
     ## horizontal axis in screen
     vhoriz <- crossprod(vin, vup)
     ##
-    dbg <- FALSE
-    if(dbg) {
-      cat("vin=")
-      print(vin)
-      cat("vup=")
-      print(vup)
-      cat("vhoriz=")
-      print(vhoriz)
-    }
+#    dbg <- FALSE
+#    if(dbg) {
+#      cat("vin=")
+#      print(vin)
+#      cat("vup=")
+#      print(vup)
+#      cat("vhoriz=")
+#      print(vhoriz)
+#    }
     ## homogeneous coordinates
     hom <- t(t(xyz) - eye) %*% cbind(vhoriz, vup, vin)
     colnames(hom) <- c("x", "y", "d")

@@ -77,7 +77,7 @@ local({
 #'     tests/hypotests.R
 #'     Hypothesis tests
 #' 
-#'  $Revision: 1.3 $ $Date: 2019/10/04 09:35:31 $
+#'  $Revision: 1.4 $ $Date: 2019/10/16 02:38:39 $
 
 require(spatstat)
 local({
@@ -98,7 +98,12 @@ local({
   #' X is a list of lists of ppp
   ZZ <- split(pyramidal$Neurons, pyramidal$group)
   bb <- studpermu.test(ZZ, nperm=9)
-  
+
+  #' Issue #115
+  X <- runifpoint(50, nsim = 3)
+  Y <- runifpoint(3000, nsim = 3)
+  h <- hyperframe(ppp = c(X, Y), group = rep(1:2, 3))
+  studpermu.test(h, ppp ~ group)
 })
 #
 #  tests/imageops.R

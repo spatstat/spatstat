@@ -7,7 +7,7 @@
   for a multitype point pattern.
 }
 \usage{
-  Ldot(X, i, ..., from)
+  Ldot(X, i, ..., from, correction)
 }
 \arguments{
   \item{X}{The observed point pattern, 
@@ -22,7 +22,7 @@
     character string).
     Defaults to the first level of \code{marks(X)}.
   }
-  \item{\dots}{
+  \item{correction,\dots}{
     Arguments passed to \code{\link{Kdot}}.
   }
   \item{from}{An alternative way to specify \code{i}.}

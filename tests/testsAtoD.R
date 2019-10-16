@@ -362,7 +362,7 @@ local({
 #'
 #'   Check machinery for first contact distributions
 #'
-#'   $Revision: 1.4 $  $Date: 2019/08/12 09:51:55 $
+#'   $Revision: 1.5 $  $Date: 2019/10/14 08:34:27 $
 
 require(spatstat)
 local({
@@ -377,7 +377,13 @@ local({
   X <- runifpoint(100, win = complement.owin(Y))
   G <- Gfox(X, Y)
   J <- Jfox(X, Y)
+
+  op <- spatstat.options(exactdt.checks.data=TRUE)
+  U <- exactdt(X)
+  spatstat.options(op)
 })
+
+reset.spatstat.options()
 #'
 #'   tests/contrib.R
 #'

@@ -8,7 +8,7 @@
   estimate the inhomogeneous version of the cross-type \eqn{L} function.
 }
 \usage{
-Lcross.inhom(X, i, j, \dots)
+Lcross.inhom(X, i, j, \dots, correction)
 }
 \arguments{
   \item{X}{The observed point pattern, 
@@ -29,7 +29,7 @@ Lcross.inhom(X, i, j, \dots)
     converted to a character string).
     Defaults to the second level of \code{marks(X)}.
   }
-  \item{\dots}{
+  \item{correction,\dots}{
     Other arguments passed to \code{\link{Kcross.inhom}}.
   }
 }

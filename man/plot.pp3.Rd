@@ -75,7 +75,7 @@
   X <- osteo$pts[[1]]
   plot(X, main="Osteocyte lacunae, animal 1, brick 1",
        cex=1.5, pch=16)
-  plot(X, main="", box.back=list(lty=3))
+  plot(X, type="h", main="", box.back=list(lty=3))
 }
 \keyword{spatial}
 \keyword{hplot}
