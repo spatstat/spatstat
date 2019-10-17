@@ -554,3 +554,26 @@ Change log from 1.61-0 to 1.61-1
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
 
+   tests/prediction.R
+	More tests of predict.ppm
+
+   clusterfunctions.R
+   reach.kppm.Rd [New file]
+   	New method reach.kppm
+
+   reach.Rd
+	Added cross-references.
+
+   dppmclass.R
+   repul.Rd [New file]
+   	New generic 'repul' and method 'repul.dppm'
+	
+   DESCRIPTION
+   NEWS
+	Version 1.61-0.029
+	
+------------- passed R-3.6.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+
+

@@ -1,5 +1,6 @@
 # Editor backup files
 *~
+*.bak
 
 # History files
 .Rhistory

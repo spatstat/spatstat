@@ -5,7 +5,7 @@
 ##  - clusterfield
 ##  - clusterradius.
 ##
-##   $Revision: 1.3 $  $Date: 2015/02/23 00:21:39 $
+##   $Revision: 1.4 $  $Date: 2019/10/17 08:46:15 $
 ##
 
 clusterkernel <- function(model, ...) {
@@ -98,4 +98,9 @@ clusterradius.kppm <- function(model, ..., thresh = NULL, precision = FALSE){
               precision = precision)
     a <- append(a, as.list(c(model$clustpar, model$clustargs)))
     do.call(clusterradius.character, a)
+}
+
+reach.kppm <- function(x, ..., epsilon) {
+  thresh <- if(missing(epsilon)) NULL else epsilon
+  2 * clusterradius.kppm(x, ..., thresh=thresh)
 }

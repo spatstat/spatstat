@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.61-0.028
+        CHANGES IN spatstat VERSION 1.61-0.029
 
 OVERVIEW
 
@@ -41,6 +41,12 @@ NEW FUNCTIONS
 
     o as.data.frame.lintess
     Convert a tessellation on a linear network into a data frame.
+
+    o repul
+    Repulsiveness index for a determinantal point process model.
+
+    o reach.kppm
+    Reach (interaction distance) for a Cox or cluster point process model.
     
 SIGNIFICANT USER-VISIBLE CHANGES
 

@@ -786,7 +786,7 @@ local({
 #
 # Things that might go wrong with predict()
 #
-#  $Revision: 1.13 $ $Date: 2019/10/05 11:38:31 $
+#  $Revision: 1.14 $ $Date: 2019/10/17 03:44:24 $
 #
 
 require(spatstat)
@@ -838,6 +838,8 @@ local({
   b <- predict(fit, type="count",                            se=TRUE)
   b <- predict(fit, type="count", window=square(0.5),        se=TRUE)
   b <- predict(fit, type="count", window=quadrats(cells, 3), se=TRUE)
+  d <- predict(fit, type="count", interval="prediction", se=TRUE)
+  d <- predict(fit, type="count", interval="confidence", se=TRUE)
   ## superseded usages
   b <- predict(fit, type="se", getoutofjail=TRUE)
   b <- predict(fit, total=TRUE)

@@ -40,7 +40,8 @@
 }
 \details{
   The `interaction distance' or `interaction range' of a point process
-  model is the smallest distance \eqn{D} such that any two points in the
+  model of class \code{"ppm"}
+  is the smallest distance \eqn{D} such that any two points in the
   process which are separated by a distance greater than \eqn{D} do not
   interact with each other.
 
@@ -110,6 +111,12 @@
   on the scale of the log conditional intensity. This is done
   by setting the argument \code{epsilon} to a positive value.
 }
+\section{Other types of models}{
+  Methods for \code{reach} are also defined for
+  point process models of class \code{"kppm"} and \code{"dppm"}.
+  Their technical definition is different from this one.
+  See \code{\link{reach.kppm}} and \code{\link{reach.dppm}}.
+}
 \seealso{
   \code{\link{ppm}},
     \code{\link{Poisson}},
@@ -127,6 +134,9 @@
     \code{\link{OrdThresh}},
     \code{\link{Ord}},
     \code{\link{rmhmodel}}
+
+    See \code{\link{reach.kppm}} and \code{\link{reach.dppm}}
+    for other types of point process models.
 }
 \examples{
     reach(Poisson())
@@ -144,11 +154,9 @@
     reach(MultiStrauss(matrix(c(1,3,3,1),2,2)))
     # returns 3
 }
-\author{\adrian
-  
-  
+\author{
+  \adrian
   and \rolf
-  
 }
 \keyword{spatial}
 \keyword{models}

@@ -33,3 +33,17 @@ intensity.dppm <- function (X, ...){
 reach.dppm <- function(x, ...){
     reach(x$fitted, ...)
 }
+
+repul <- function(model, ...) {
+  UseMethod("repul")
+}
+
+repul.dppm <- function(model, ...) {
+  g <- pcfmodel(model)
+  f <- function(x) { 2 * pi * x * (1 - g(x)) }
+  rmax <- reach(model)
+  h <- integrate(f, 0, rmax)$value
+  lam <- intensity(model)
+  ans <- h * lam
+  return(ans)
+}

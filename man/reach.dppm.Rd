@@ -27,13 +27,7 @@
 }
 \value{Numeric}
 \author{
-  \adrian
-  
-  
-  \rolf
-  
-  and \ege
-  
+  \spatstatAuthors.
 }
 \examples{
 reach(dppMatern(lambda=100, alpha=.01, nu=1, d=2))
