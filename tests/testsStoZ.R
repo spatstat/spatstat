@@ -650,7 +650,7 @@ local({
 })
 #'   tests/tessera.R
 #'   Tessellation code, not elsewhere tested
-#'   $Revision: 1.6 $ $Date: 2019/08/07 06:56:16 $
+#'   $Revision: 1.7 $ $Date: 2019/10/17 01:45:56 $
 #'
 require(spatstat)
 local({
@@ -740,6 +740,11 @@ local({
   h <- quantess(D, ZFUN, 5)
   g <- quantess(D, "rad", 5, origin=c(4442, 4214))
   g <- quantess(D, "ang", 5, origin=c(4442, 4214))
+  #'
+  X <- shift(chorley, vec = c(1e6, 0))
+  tes <- quantess(X, "x", 4)
+  if(anyDuplicated(tilenames(tes)))
+    stop("quantess produced non-unique tilenames")
 })
 #
 #   tests/testaddvar.R

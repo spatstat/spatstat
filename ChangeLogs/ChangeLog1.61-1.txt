@@ -539,4 +539,18 @@ Change log from 1.61-0 to 1.61-1
 ------------- passed R-3.6.1 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
+
+   tests/tessera.R
+	Added test of aforementioned bug.
+
+   quantess.R
+	Tweaked labels to improve consistency.
+
+   DESCRIPTION
+   NEWS
+	Version 1.61-0.028
 	
+------------- passed R-3.6.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+
