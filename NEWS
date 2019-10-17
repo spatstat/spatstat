@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.61-0.026
+        CHANGES IN spatstat VERSION 1.61-0.027
 
 OVERVIEW
 
@@ -15,6 +15,8 @@ OVERVIEW
     o More options for handling bad simulation outcomes in envelope().
 
     o Bandwidth selectors warn about extreme values of bandwidth.
+
+    o spatstat now requires spatstat.utils version 1.15-0.
     
     o Bug fixes and minor improvements.
     
@@ -152,6 +154,10 @@ BUG FIXES
 
     o vcov.ppm, print.ppm, summary.ppm
     Crashed in some cases if the fitted coefficients were NA.
+    Fixed.
+
+    o quantess.owin, quantess.ppp, quantess.im
+    Crashed in some cases because the tile labels were not unique.
     Fixed.
     
     o shift.linnet

@@ -526,3 +526,17 @@ Change log from 1.61-0 to 1.61-1
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
 
+17 oct 2019
+
+   quantess.R
+	Bug fix (labels could be non-unique)
+	
+   DESCRIPTION
+   NEWS
+	spatstat depends on spatstat.utils 1.15-0
+	Version 1.61-0.027
+	
+------------- passed R-3.6.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+	
