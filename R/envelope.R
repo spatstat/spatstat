@@ -3,7 +3,7 @@
 #
 #   computes simulation envelopes 
 #
-#   $Revision: 2.99 $  $Date: 2019/10/14 05:03:35 $
+#   $Revision: 2.100 $  $Date: 2019/10/18 06:54:34 $
 #
 
 envelope <- function(Y, fun, ...) {
@@ -814,14 +814,24 @@ envelopeEngine <-
         nerr <- nerr + 1L 
         if(nerr > maxnerr) {
           gaveup <- TRUE
-          whinge <- paste("Exceeded maximum number of errors",
-                          paren(maxnerr),
-                          "when evaluating summary function for",
-                          if(simtype == "list") "supplied" else "simulated",
-                          "point patterns")
+          errtype <- if(rejectNA) "fatal errors or NA function values"
+          if(simtype == "list") {
+            whinge <- paste("Exceeded maximum possible number of errors",
+                          "when evaluating summary function:",
+                          length(SimDataList), "patterns provided,",
+                          nsim, "patterns required,",
+                          nerr, ngettext(nerr, "pattern", "pattern"),
+                          "rejected due to", errtype)
+          } else {
+            whinge <- paste("Exceeded maximum permissible number of",
+                            errtype,
+                            paren(paste("maxnerr =", maxnerr)),
+                            "when evaluating summary function",
+                            "for simulated point patterns")
+          }
           switch(maxerr.action,
-                 fatal = stop(whinge),
-                 warn  = warning(whinge),
+                 fatal = stop(whinge, call.=FALSE),
+                 warn  = warning(whinge, call.=FALSE),
                  null  = {})
         } else if(!silent) cat("[retrying]\n")
       }

@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.61-0.030
+        CHANGES IN spatstat VERSION 1.61-0.031
 
 OVERVIEW
 
@@ -11,6 +11,8 @@ OVERVIEW
     o Nearest Neighbour Index function can now return mark values.
 
     o Important fix in Ripley isotropic correction.
+
+    o Index of repulsion strength for determinantal point process models.
 
     o More options for handling bad simulation outcomes in envelope().
 
