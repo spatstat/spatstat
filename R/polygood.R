@@ -21,7 +21,7 @@ owinpolycheck <- function(W, verbose=TRUE) {
 
   # detect very large datasets
   BS <- object.size(B)
-  blowbyblow <- verbose & (BS > 1e4 || npoly > 20)
+  blowbyblow <- verbose && (BS > 1e4 || npoly > 20)
   #
   
   answer <- TRUE

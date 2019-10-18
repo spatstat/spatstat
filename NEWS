@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.61-0.029
+        CHANGES IN spatstat VERSION 1.61-0.030
 
 OVERVIEW
 
@@ -47,6 +47,9 @@ NEW FUNCTIONS
 
     o reach.kppm
     Reach (interaction distance) for a Cox or cluster point process model.
+
+    o summary.dppm, print.summary.dppm
+    Summary method for determinantal point process models.
     
 SIGNIFICANT USER-VISIBLE CHANGES
 

@@ -1,15 +1,8 @@
-is.dppm <- function#Recognise Fitted Determinantal Point Process Models
-### Check that an object inherits the class dppm
-(x
- ### Any object.
- ){
-    inherits(x, "dppm")
-    ### A single logical value.
+#' Methods and support for class dppm
+#'
+#' $Revision: 1.5 $ $Date: 2019/10/18 03:41:43 $
 
-    ##keyword<< spatial
-    ##keyword<< manip
-    ##keyword<< models
-}
+is.dppm <- function(x) { inherits(x, "dppm") }
 
 plot.dppm <- function (x, ..., what = c("intensity", "statistic")){
     objectname <- short.deparse(substitute(x))
@@ -47,3 +40,6 @@ repul.dppm <- function(model, ...) {
   ans <- h * lam
   return(ans)
 }
+
+#' print.dppm is identical to print.kppm and defined in kppm.R
+#' summary.dppm is defined in summary.dppm.R

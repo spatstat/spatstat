@@ -576,4 +576,19 @@ Change log from 1.61-0 to 1.61-1
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
 
+18 oct 2019
+
+   summary.dppm.R [New file]
+   summary.dppm.Rd [New file]
+       Summary method for dppm
+
+   DESCRIPTION
+   NEWS
+	Version 1.61-0.030
+	
+------------- passed R-3.6.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+
+   
 

@@ -1224,6 +1224,11 @@ print.kppm <- print.dppm <- function(x, ...) {
             if(!is.im(mu)) signif(mu, digits) else "[pixel image]")
     }
   }
+  if(isDPP) {
+    rx <- repul(x)
+    splat(if(is.im(rx)) "(Average) strength" else "Strength",
+          "of repulsion:", signif(mean(rx), 4))
+  }
   invisible(NULL)
 }
 

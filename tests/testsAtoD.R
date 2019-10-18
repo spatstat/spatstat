@@ -31,7 +31,7 @@ local({
   b <- split(b, factor(b$i))
   b <- lapply(b, function(z) { as.list(z[,-3]) })
   ## make owin without checking
-  W <- owin(poly=b, check=FALSE)
+  W <- owin(poly=b, check=FALSE, fix=FALSE)
   ## Apply stringent checks
   owinpolycheck(W,verbose=FALSE)
   ## Auto-repair
