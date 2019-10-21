@@ -323,6 +323,7 @@
 \alias{markvaluetype}
 \alias{maskLaslett}
 \alias{match2DkernelName}
+\alias{packupNNdata}
 \alias{parbreak}
 \alias{plan.legend.layout}
 \alias{PairPotentialType}
@@ -1176,6 +1177,7 @@ makeLinnetTolerance
 maskLaslett(X, \dots, eps, dimyx, xy, oldX, verbose, plotit)
 markvaluetype(x)
 match2DkernelName(kernel)
+packupNNdata(NND, NNW, what, k)
 parbreak(terse)
 plan.legend.layout(B, \dots, side, sep, size, sep.frac, size.frac,
                    started, map)

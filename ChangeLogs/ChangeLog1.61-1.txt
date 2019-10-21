@@ -600,3 +600,29 @@ Change log from 1.61-0 to 1.61-1
 ------------- passed R-3.6.1 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
+
+20 oct 2019
+
+   tests/rmhMulti.R
+	repaired a test that wasn't testing the desired code.
+
+21 oct 2019
+
+   distanxD.R
+	New C functions knnXwMD, knnXxMD
+
+   nncross.ppx.Rd [New file]
+   	New function nncross.ppx
+
+   Perfect.cc
+	Commented-out the Print function.
+
+   DESCRIPTION
+   NEWS
+	Version 1.61-0.032
+	
+------------- passed R-3.6.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+
+

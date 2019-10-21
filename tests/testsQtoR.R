@@ -565,7 +565,7 @@ if(!identical(wsim, wcel))
 #
 #  tests of rmh, running multitype point processes
 #
-#   $Revision: 1.8 $  $Date: 2019/04/17 09:12:41 $
+#   $Revision: 1.11 $  $Date: 2019/10/21 06:42:07 $
 
 require(spatstat)
 
@@ -617,21 +617,24 @@ spatstat.options(expand=1.1)
                        control=list(ptypes=c(0.75,0.25),nrep=nr,nverb=nv,
                                     periodic=TRUE))
    #' check handling of initial state which violates hard core
-   Xclose <- ppp(c(10,12,20),c(10,10,10), marks=factor(c(1,1,2)),
-              c(0,250),c(0,250))
-   X.multihard.close <- rmh(model=mod085,start=list(x.start=Xclose),
+   set.seed(19171025)
+   mod087 <- list(cif="multihard",par=list(beta=5*beta,hradii=rhc),
+                  w=square(12))
+   #' (cannot use 'x.start' here because it disables thinning)
+   X.multihard.close <- rmh(model=mod087,start=list(n.start=100),
                             control=list(ptypes=c(0.75,0.25),nrep=nr,nverb=nv))
-   X.multihard.closeP <- rmh(model=mod085,start=list(x.start=Xclose),
+   X.multihard.closeP <- rmh(model=mod087,start=list(n.start=100),
                              control=list(ptypes=c(0.75,0.25),nrep=nr,nverb=nv,
                                           periodic=TRUE))
 
    # Multitype Strauss hardcore:
-   mod09 <- list(cif="straushm",par=list(beta=beta,gamma=gmma,
-                iradii=r,hradii=rhc),w=c(0,250,0,250))
-   X.straushm <- rmh(model=mod09,start=list(n.start=80),
+   mod09 <- list(cif="straushm",par=list(beta=5*beta,gamma=gmma,
+                iradii=r,hradii=rhc),w=square(12))
+   X.straushm <- rmh(model=mod09,start=list(n.start=100),
                      control=list(ptypes=c(0.75,0.25),nrep=nr,nverb=nv))
-   X.straushm.close <- rmh(model=mod09,start=list(x.start=Xclose),
-                     control=list(ptypes=c(0.75,0.25),nrep=nr,nverb=nv))
+   X.straushmP <- rmh(model=mod09,start=list(n.start=100),
+                      control=list(ptypes=c(0.75,0.25),nrep=nr,nverb=nv,
+                                   periodic=TRUE))
 
    # Multitype Strauss hardcore with trends for each type:
    beta  <- c(0.27,0.08)

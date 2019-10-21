@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.61-0.031
+        CHANGES IN spatstat VERSION 1.61-0.032
 
 OVERVIEW
 
@@ -14,6 +14,8 @@ OVERVIEW
 
     o Index of repulsion strength for determinantal point process models.
 
+    o Nearest neighbours between two point patterns in any number of dimensions.
+    
     o More options for handling bad simulation outcomes in envelope().
 
     o Bandwidth selectors warn about extreme values of bandwidth.
@@ -52,6 +54,9 @@ NEW FUNCTIONS
 
     o summary.dppm, print.summary.dppm
     Summary method for determinantal point process models.
+
+    o nncross.ppx
+    Nearest neighbours between two point patterns in any number of dimensions.
     
 SIGNIFICANT USER-VISIBLE CHANGES
 

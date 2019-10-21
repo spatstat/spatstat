@@ -110,7 +110,7 @@ public:
     YCellDim = (Ymax-Ymin)/((double)(MaxYCell+1));
   };
   ~Point2Pattern(){}
-  void Print();
+  //  void Print();
   void Return(double *X, double *Y, int *num, int maxnum);
   long int Count();
   long int UpperCount();  
@@ -120,31 +120,31 @@ public:
   //  void ReadFromFile(char FileName[100]);
 };
 
-void Point2Pattern::Print(){
-  long int i,j,k;
-  k = 0;
-  struct Point2 *TempCell;
-  for(i=0;i<=MaxXCell;i++){
-    for(j=0;j<=MaxYCell;j++){
-      //Rprintf("%d %d:\n",i,j);
-      TempCell = headCell[i][j]->next;
-      CHECK(TempCell, "internal error: TempCell is null in Print()");
-	while(TempCell->next != TempCell){
-	  k++;
-	  Rprintf("%f %f %ld %ld %ld=%d %ld=%d UL0 %d UL1 %d %f\n",
-		  TempCell->X,TempCell->Y,k,
-		  TempCell->No,
-		  i,int(TempCell->X/XCellDim),
-		  j,int(TempCell->Y/YCellDim),
-		  TempCell->InLower[0],TempCell->InLower[1],
-		  TempCell->Beta);
-	  TempCell = TempCell->next;
-	  CHECK(TempCell, "internal error: TempCell is null in Print() loop");
-      }
-    }
-  }
-  Rprintf("Printed %ld points.\n",k);
-}
+// void Point2Pattern::Print(){
+//   long int i,j,k;
+//   k = 0;
+//   struct Point2 *TempCell;
+//   for(i=0;i<=MaxXCell;i++){
+//     for(j=0;j<=MaxYCell;j++){
+//       //Rprintf("%d %d:\n",i,j);
+//       TempCell = headCell[i][j]->next;
+//       CHECK(TempCell, "internal error: TempCell is null in Print()");
+// 	while(TempCell->next != TempCell){
+// 	  k++;
+// 	  Rprintf("%f %f %ld %ld %ld=%d %ld=%d UL0 %d UL1 %d %f\n",
+// 		  TempCell->X,TempCell->Y,k,
+// 		  TempCell->No,
+// 		  i,int(TempCell->X/XCellDim),
+// 		  j,int(TempCell->Y/YCellDim),
+// 		  TempCell->InLower[0],TempCell->InLower[1],
+// 		  TempCell->Beta);
+// 	  TempCell = TempCell->next;
+// 	  CHECK(TempCell, "internal error: TempCell is null in Print() loop");
+//       }
+//     }
+//   }
+//   Rprintf("Printed %ld points.\n",k);
+// }
 
 void Point2Pattern::Return(double *X, double *Y, int *num, int maxnum){
   long int i,j,k;
@@ -533,8 +533,8 @@ void Sampler::Forward(long int TS, long int TT, char TX, char TY,
       CHECK(TempCell, 
 	    "internal error: TempCell is null in Forward() death case loop");
       if(TempCell->next == TempCell) {
-	Rprintf("internal error: unexpected self-reference. Dumping...\n"); 
-	P2P->Print(); 
+	// Rprintf("internal error: unexpected self-reference. Dumping...\n"); 
+	// P2P->Print(); 
         error("internal error: unexpected self-reference");
 	break;
       }

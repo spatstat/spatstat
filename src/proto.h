@@ -67,7 +67,11 @@ void CcrossPdist(int *, double *, double *, int *, double *, double *, double *,
 void nndMD(int *, int *, double *, double *, double *); 
 void knndMD(int *, int *, int *, double *, double *, double *); 
 void nnwMD(int *, int *, double *, double *, int *, double *); 
-void knnwMD(int *, int *, int *, double *, double *, int *, double *);
+void knnwMD(int *, int *, int *, double *, double *, int *, double *); 
+void nnXwMD(int *, int *, double *, int *, double *, double *, int *, double *); 
+void nnXxMD(int *, int *, double *, int *, int *, double *, int *, double *, int *, double *); 
+void knnXwMD(int *, int *, double *, int *, double *, int *, double *, int *, double *); 
+void knnXxMD(int *, int *, double *, int *, int *, double *, int *, int *, double *, int *, double *);
 void distmapbin(double *, double *, double *, double *, int *, int *, int *, double *, double *);
 void ripleybox(int *, double *, double *, double *, int *, double *, double *, double *, double *, double *, double *); 
 void ripleypoly(int *, double *, double *, double *, int *, double *, int *, double *, double *, double *, double *, double *); 
