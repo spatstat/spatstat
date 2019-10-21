@@ -39,7 +39,7 @@ local({
 #
 # Also test nnorient()
 #
-#   $Revision: 1.24 $  $Date: 2019/04/29 06:34:29 $
+#   $Revision: 1.25 $  $Date: 2019/10/21 12:40:52 $
 #
 
 require(spatstat)
@@ -48,7 +48,7 @@ local({
   f <- function(mat,k) { apply(mat, 1, function(z,n) { sort(z)[n]  }, n=k+1) }
   g <- function(mat,k) { apply(mat, 1, function(z,n) { order(z)[n] }, n=k+1) }
 
-  # Two dimensions
+  ## .......  Two dimensions ................
 
   X <- runifpoint(42)
 
@@ -72,7 +72,70 @@ local({
   if(any(nw5 != nw5P))
     stop("nnwhich.ppp(k=5) does not agree with pairdist")
 
-  # Three dimensions
+  ## nncross.ppp without options
+  Y <- runifpoint(30)
+  Y <- Y[nndist(Y) > 0.02]
+  nc <- nncross(X,Y)
+  ncd <- nc$dist
+  ncw <- nc$which
+  cd <- crossdist(X,Y)
+  cdd <- apply(cd, 1, min)
+  cdw <- apply(cd, 1, which.min)
+  if(any(abs(ncd - cdd) > eps))
+    stop("nncross()$dist does not agree with apply(crossdist(), 1, min)")
+  if(any(ncw != cdw))
+    stop("nncross()$which does not agree with apply(crossdist(), 1, which.min)")
+
+  ## nncross with sort on x
+  nc <- nncross(X,Y, sortby="x")
+  ncd <- nc$dist
+  ncw <- nc$which
+  if(any(abs(ncd - cdd) > eps))
+    stop("nncross(sortby=x)$dist does not agree with apply(crossdist(), 1, min)")
+  if(any(ncw != cdw))
+    stop("nncross(sortby=x)$which does not agree with apply(crossdist(), 1, which.min)")
+
+  ## nncross with data pre-sorted on x
+  Y <- Y[order(Y$x)]
+  nc <- nncross(X,Y, is.sorted.Y=TRUE, sortby="x")
+  ncd <- nc$dist
+  ncw <- nc$which
+  cd <- crossdist(X,Y)
+  cdd <- apply(cd, 1, min)
+  cdw <- apply(cd, 1, which.min)
+  if(any(abs(ncd - cdd) > eps))
+    stop("For sorted data, nncross()$dist does not agree with apply(crossdist(), 1, min)")
+  if(any(ncw != cdw))
+    stop("For sorted data, nncross()$which does not agree with apply(crossdist(), 1, which.min)")
+
+  ## sanity check for nncross with k > 1
+  ndw <- nncross(X, Y, k=1:4, what="which")
+  if(any(is.na(ndw)))
+    stop("NA's returned by nncross.ppp(k > 1, what='which')")
+  nnc4 <- nncross(X, Y, k=1:4)
+  iswhich <- (substr(colnames(nnc4), 1, nchar("which")) == "which")
+  ndw <- nnc4[,iswhich]
+  if(any(is.na(ndw)))
+    stop("NA's returned by nncross.ppp(k > 1)$which")
+  
+  ## test of correctness for nncross with k > 1
+  flipcells <- flipxy(cells)
+  calcwhich <- nncross(cells, flipcells, k=1:4, what="which")
+  truewhich <- t(apply(crossdist(cells,flipcells), 1, order))[,1:4]
+  if(any(calcwhich != truewhich))
+    stop("nncross(k > 1) gives wrong answer")
+
+  #' cover some C code blocks
+  Z <- runifpoint(50)
+  X <- Z[1:30]
+  Y <- Z[20:50]
+  iX <- 1:30
+  iY <- 20:50
+  Ndw <- nncross(X,Y, iX, iY, k=3)
+  Nw  <- nncross(X,Y, iX, iY, k=3, what="which")
+  Nd  <- nncross(X,Y, iX, iY, k=3, what="dist")
+  
+  ## .......  Three dimensions ................
 
   X <- runifpoint3(42)
 
@@ -96,13 +159,22 @@ local({
   if(any(nw5 != nw5P))
     stop("nnwhich.pp3(k=5) does not agree with pairdist")
 
-  Y <- runifpoint3(17)
+  ff <- function(mat,k) { apply(mat, 1, function(z,n) { sort(z)[n]  }, n=k) }
+  gg <- function(mat,k) { apply(mat, 1, function(z,n) { order(z)[n] }, n=k) }
+
+  Y <- runifpoint3(20)
+  Y <- Y[nndist(Y) > 0.02]
+  DXY <- crossdist(X,Y)
   a <- nncross(X,Y)
   a <- nncross(X,Y, what="dist")
   a <- nncross(X,Y, what="which")
+  if(any(a != gg(DXY, 1)))
+    stop("incorrect result from nncross.pp3(what='which')")
   a2 <- nncross(X,Y, k=2)
   a2 <- nncross(X,Y, what="dist", k=2)
   a2 <- nncross(X,Y, what="which", k=2)
+  if(any(a2 != gg(DXY, 2)))
+    stop("incorrect result from nncross.pp3(k=2, what='which')")
   iX <- 1:42
   iZ <- 30:42
   Z <- X[iZ]
@@ -112,11 +184,15 @@ local({
   b2 <- nncross(X, Z, iX=iX, iY=iZ, k=2)
   b2 <- nncross(X, Z, iX=iX, iY=iZ, what="which", k=2)
   b2 <- nncross(X, Z, iX=iX, iY=iZ, what="dist", k=2)
+
+  ## .......  m dimensions ................
+
+  B <- boxx(c(0,1),c(0,1),c(0,1),c(0,1))
+  X <- runifpointx(42, B)
+  Y <- runifpointx(50, B)
+  Y <- Y[nndist(Y) > 0.02]
+  DXY <- crossdist(X,Y)
   
-  # m dimensions
-
-  X <- runifpointx(42, boxx(c(0,1),c(0,1),c(0,1),c(0,1)))
-
   nn <- nndist(X)
   nnP <- f(pairdist(X), 1)
   if(any(abs(nn - nnP) > eps))
@@ -137,79 +213,29 @@ local({
   if(any(nw5 != nw5P))
     stop("nnwhich.ppx(k=5) does not agree with pairdist")
 
-  #### nncross in two dimensions
-  X <- runifpoint(42)
-  Y <- runifpoint(42, win=owin(c(1,2),c(1,2)))
+  a <- nncross(X,Y)
+  ncd <- nncross(X,Y, what="dist")
+  ncw <- nncross(X,Y, what="which")
+  if(any(ncw != gg(DXY, 1)))
+    stop("incorrect result from nncross.ppx(what='which')")
+  a2 <- nncross(X,Y, k=2)
+  ncd <- nncross(X,Y, what="dist", k=2)
+  ncw <- nncross(X,Y, what="which", k=2)
+  if(any(ncw != gg(DXY, 2)))
+    stop("incorrect result from nncross.ppx(k=2, what='which')")
+})
 
-  # default nncross
-  nc <- nncross(X,Y)
-  ncd <- nc$dist
-  ncw <- nc$which
-  cd <- crossdist(X,Y)
-  cdd <- apply(cd, 1, min)
-  cdw <- apply(cd, 1, which.min)
-  if(any(abs(ncd - cdd) > eps))
-    stop("nncross()$dist does not agree with apply(crossdist(), 1, min)")
-  if(any(ncw != cdw))
-    stop("nncross()$which does not agree with apply(crossdist(), 1, which.min)")
-
-  # sort on x
-  nc <- nncross(X,Y, sortby="x")
-  ncd <- nc$dist
-  ncw <- nc$which
-  if(any(abs(ncd - cdd) > eps))
-    stop("nncross(sortby=x)$dist does not agree with apply(crossdist(), 1, min)")
-  if(any(ncw != cdw))
-    stop("nncross(sortby=x)$which does not agree with apply(crossdist(), 1, which.min)")
-
-  # pre-sorted on x
-  Y <- Y[order(Y$x)]
-  nc <- nncross(X,Y, is.sorted.Y=TRUE, sortby="x")
-  ncd <- nc$dist
-  ncw <- nc$which
-  cd <- crossdist(X,Y)
-  cdd <- apply(cd, 1, min)
-  cdw <- apply(cd, 1, which.min)
-  if(any(abs(ncd - cdd) > eps))
-    stop("For sorted data, nncross()$dist does not agree with apply(crossdist(), 1, min)")
-  if(any(ncw != cdw))
-    stop("For sorted data, nncross()$which does not agree with apply(crossdist(), 1, which.min)")
-
-  # sanity check for nncross with k > 1
-  ndw <- nncross(X, Y, k=1:4, what="which")
-  if(any(is.na(ndw)))
-    stop("NA's returned by nncross.ppp(k > 1, what='which')")
-  nnc4 <- nncross(X, Y, k=1:4)
-  iswhich <- (substr(colnames(nnc4), 1, nchar("which")) == "which")
-  ndw <- nnc4[,iswhich]
-  if(any(is.na(ndw)))
-    stop("NA's returned by nncross.ppp(k > 1)$which")
-  
-  # test of correctness for nncross with k > 1
-  flipcells <- flipxy(cells)
-  calcwhich <- nncross(cells, flipcells, k=1:4, what="which")
-  truewhich <- t(apply(crossdist(cells,flipcells), 1, order))[,1:4]
-  if(any(calcwhich != truewhich))
-    stop("nncross(k > 1) gives wrong answer")
-
-  #' cover some C code blocks
-  Z <- runifpoint(50)
-  X <- Z[1:30]
-  Y <- Z[20:50]
-  iX <- 1:30
-  iY <- 20:50
-  Ndw <- nncross(X,Y, iX, iY, k=3)
-  Nw  <- nncross(X,Y, iX, iY, k=3, what="which")
-  Nd  <- nncross(X,Y, iX, iY, k=3, what="dist")
-  
-  # test of agreement between nngrid.h and knngrid.h
-  #    dimyx=23 (found by trial-and-error) ensures that there are no ties 
+local({
+  ## test of agreement between nngrid.h and knngrid.h
+  ##    dimyx=23 (found by trial-and-error) ensures that there are no ties 
   a <- as.matrix(nnmap(cells, what="which", dimyx=23))
   b <- as.matrix(nnmap(cells, what="which", dimyx=23, k=1:2)[[1]])
   if(any(a != b))
     stop("algorithms in nngrid.h and knngrid.h disagree")
-
+    
   ## minnndist
+  X <- redwood3
+  eps <- sqrt(.Machine$double.eps)
   mfast <- minnndist(X)
   mslow <- min(nndist(X))
   if(abs(mfast-mslow) > eps)

@@ -625,4 +625,14 @@ Change log from 1.61-0 to 1.61-1
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
 
+   distanxD.R
+	Bug fix
+	
+   DESCRIPTION
+   NEWS
+	Version 1.61-0.033
+	
+------------- passed R-3.6.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
 

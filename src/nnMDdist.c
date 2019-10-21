@@ -4,7 +4,7 @@
 
   Nearest Neighbour Distances in m dimensions
 
-  $Revision: 1.15 $     $Date: 2019/10/21 07:17:09 $
+  $Revision: 1.18 $     $Date: 2019/10/21 11:12:32 $
 
   Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2018
   Licence: GNU Public Licence >= 2
@@ -868,8 +868,9 @@ void knnXwMD(m, n1, x1, n2, x2, kmax, nnd, nnwhich, huge)
   int *nnwhich;
 { 
   int mdimen, npoints1, npoints2, nk, nk1;
-  int i, j, k, k1, left, right, unsorted, itmp;
-  double d2, d2minK, x1i0, dx0, dxj, hu, hu2, tmp;
+  int i, ell, jleft, jright, jwhich, lastjwhich;
+  int k, k1, unsorted, itmp;
+  double d2, d2minK, x1i0, dx0, dxell, hu, hu2, tmp;
   double *d2min, *x1i;
   int *which;
   int maxchunk;
@@ -896,6 +897,8 @@ void knnXwMD(m, n1, x1, n2, x2, kmax, nnd, nnwhich, huge)
   */
   x1i = (double *) R_alloc((size_t) mdimen, sizeof(double));
 
+  lastjwhich = 0;
+  
   /* loop over 'from' points */
 
   OUTERCHUNKLOOP(i, npoints1, maxchunk, 16384) {
@@ -908,271 +911,42 @@ void knnXwMD(m, n1, x1, n2, x2, kmax, nnd, nnwhich, huge)
 
       /* initialise nn distances */
       d2minK = hu2;
+      jwhich = -1;
       for(k = 0; k < nk; k++) {
 	d2min[k] = hu2;
 	which[k] = -1;
       }
       /* copy coordinates of current 'from' point */
-      for(j = 0; j < mdimen; j++)
-	x1i[j] = x1[i* mdimen + j];
+      for(ell = 0; ell < mdimen; ell++)
+	x1i[ell] = x1[i* mdimen + ell];
       x1i0 = x1i[0];
 
 #ifdef SPATSTAT_DEBUG
       Rprintf("\n From (");
-      for(j = 0; j < mdimen; j++)
-	Rprintf("%lf, ", x1[i * mdimen + j]);
+      for(ell = 0; ell < mdimen; ell++)
+	Rprintf("%lf, ", x1[i * mdimen + ell]);
       Rprintf(")\n");
 #endif
 
-      /* search backward */
-      for(left = i - 1; left >= 0; --left) {
+      if(lastjwhich > 0) {
+	/* search backward from previous nearest neighbour */
+	for(jleft = lastjwhich - 1; jleft >= 0; --jleft) {
 
 #ifdef SPATSTAT_DEBUG
-	Rprintf("L=%d, d2minK=%lf\n", left, d2minK);
-	Rprintf("\t 0 ");
+	  Rprintf("L=%d, d2minK=%lf\n", jleft, d2minK);
+	  Rprintf("\t 0 ");
 #endif
-	dx0 = x1i0 - x2[left * mdimen];
-	d2 = dx0 * dx0; 
-	if(d2 > d2minK)
-	  break;
+	  dx0 = x1i0 - x2[jleft * mdimen];
+	  d2 = dx0 * dx0; 
+	  if(d2 > d2minK)
+	    break;
 
-	for(j = 1; j < mdimen && d2 < d2minK; j++) {
+	  for(ell = 1; ell < mdimen && d2 < d2minK; ell++) {
 #ifdef SPATSTAT_DEBUG
-	  Rprintf("%d ", j);
+	    Rprintf("%d ", ell);
 #endif
-	  dxj = x1i[j] - x2[left * mdimen + j];
-	  d2 += dxj * dxj;
-	}
-	if (d2 < d2minK) {
-#ifdef SPATSTAT_DEBUG
-	  Rprintf("\td2=%lf overwrites d2min[%d] = %lf\n", 
-		  d2, nk1, d2min[nk1]);
-#endif
-	  /* overwrite last entry */
-	  d2min[nk1] = d2;
-	  which[nk1] = left;
-	  /* bubble sort */
-#ifdef SPATSTAT_DEBUG
-	  Rprintf("\td2min[] before bubble sort:");
-	  for(k = 0; k < nk; k++)
-	    Rprintf("%lf, ", d2min[k]);
-	  Rprintf("\n");
-	  Rprintf("\twhich[] before bubble sort:");
-	  for(k = 0; k < nk; k++)
-	    Rprintf("%d, ", which[k]);
-	  Rprintf("\n");
-#endif
-	  unsorted = YES;
-	  for(k = nk1; unsorted && k > 0; k--) {
-	    k1 = k - 1;
-	    if(d2min[k] < d2min[k1]) {
-	      /* swap entries */
-	      tmp = d2min[k1];
-	      d2min[k1] = d2min[k];
-	      d2min[k] = tmp;
-	      itmp = which[k1];
-	      which[k1] = which[k];
-	      which[k] = itmp;
-	    } else {
-	      unsorted = NO;
-	    }
-	  }
-#ifdef SPATSTAT_DEBUG
-	  Rprintf("\td2min[] after bubble sort:");
-	  for(k = 0; k < nk; k++)
-	    Rprintf("%lf, ", d2min[k]);
-	  Rprintf("\n");
-	  Rprintf("\twhich[] after bubble sort:");
-	  for(k = 0; k < nk; k++)
-	    Rprintf("%d, ", which[k]);
-	  Rprintf("\n");
-#endif
-	  /* adjust maximum distance */
-	  d2minK = d2min[nk1];
-	}
-      }
-
-      /* search forward */
-      for(right = i + 1; right < npoints2; ++right) {
-
-#ifdef SPATSTAT_DEBUG
-	Rprintf("R=%d, d2minK=%lf\n", right, d2minK);
-	Rprintf("\t 0 ");
-#endif
-	dx0 = x2[right * mdimen] - x1i0;
-	d2 = dx0 * dx0; 
-	if(d2 > d2minK) 
-	  break;
-	for(j = 1; j < mdimen && d2 < d2minK; j++) {
-#ifdef SPATSTAT_DEBUG
-	  Rprintf("%d ", j);
-#endif
-	  dxj = x1i[j] - x2[right * mdimen + j];
-	  d2 += dxj * dxj;
-	}
-	if (d2 < d2minK) {
-#ifdef SPATSTAT_DEBUG
-	  Rprintf("\td2=%lf overwrites d2min[%d] = %lf\n", 
-		  d2, nk1, d2min[nk1]);
-#endif
-	  /* overwrite last entry */
-	  d2min[nk1] = d2;
-	  which[nk1] = right;
-	  /* bubble sort */
-#ifdef SPATSTAT_DEBUG
-	  Rprintf("\td2min[] before bubble sort:");
-	  for(k = 0; k < nk; k++)
-	    Rprintf("%lf, ", d2min[k]);
-	  Rprintf("\n");
-	  Rprintf("\twhich[] before bubble sort:");
-	  for(k = 0; k < nk; k++)
-	    Rprintf("%d, ", which[k]);
-	  Rprintf("\n");
-#endif
-	  unsorted = YES;
-	  for(k = nk1; unsorted && k > 0; k--) {
-	    k1 = k - 1;
-	    if(d2min[k] < d2min[k1]) {
-	      /* swap entries */
-	      tmp = d2min[k1];
-	      d2min[k1] = d2min[k];
-	      d2min[k] = tmp;
-	      itmp = which[k1];
-	      which[k1] = which[k];
-	      which[k] = itmp;
-	    } else {
-	      unsorted = NO;
-	    }
-	  }
-#ifdef SPATSTAT_DEBUG
-	  Rprintf("\td2min[] after bubble sort:");
-	  for(k = 0; k < nk; k++)
-	    Rprintf("%lf, ", d2min[k]);
-	  Rprintf("\n");
-	  Rprintf("\twhich[] after bubble sort:");
-	  for(k = 0; k < nk; k++)
-	    Rprintf("%d, ", which[k]);
-	  Rprintf("\n");
-#endif
-	  /* adjust maximum distance */
-	  d2minK = d2min[nk1];
-	}
-      }
-
-#ifdef SPATSTAT_DEBUG
-      Rprintf("\n");
-#endif
-
-      /* copy nn distances for point i 
-	 to output matrix in ROW MAJOR order
-      */
-      for(k = 0; k < nk; k++) {
-	nnd[nk * i + k] = sqrt(d2min[k]);
-	/* convert index back to R convention */
-	nnwhich[nk * i + k] = which[k] + 1;
-      }
-    }
-  }
-}
-
-
-/* 
-   knnXxMD
-
-   nearest neighbours 1:kmax with exclusions
-
-   returns distances and indices
-
-*/
-
-
-void knnXxMD(m, n1, x1, id1, n2, x2, id2, kmax, nnd, nnwhich, huge)
-  /* inputs */
-  int *m, *n1, *n2, *kmax;
-  double *x1, *x2, *huge;
-  int *id1, *id2;
-  /* output matrix (kmax * n1) */
-  double *nnd;
-  int *nnwhich;
-{ 
-  int mdimen, npoints1, npoints2, nk, nk1;
-  int i, j, k, k1, left, right, unsorted, itmp, id1i;
-  double d2, d2minK, x1i0, dx0, dxj, hu, hu2, tmp;
-  double *d2min, *x1i;
-  int *which;
-  int maxchunk;
-
-  hu = *huge;
-  hu2 = hu * hu;
-
-  npoints1 = *n1;
-  npoints2 = *n2;
-  mdimen   = *m;
-  nk       = *kmax;
-  nk1      = nk - 1;
-
-  /* 
-     create space to store the nearest neighbour distances and indices
-     for the current point
-  */
-
-  d2min = (double *) R_alloc((size_t) nk, sizeof(double));
-  which = (int *) R_alloc((size_t) nk, sizeof(int));
-
-  /* 
-     scratch space for current 'from' point coordinates
-  */
-  x1i = (double *) R_alloc((size_t) mdimen, sizeof(double));
-
-  /* loop over 'from' points */
-
-  OUTERCHUNKLOOP(i, npoints1, maxchunk, 16384) {
-    R_CheckUserInterrupt();
-    INNERCHUNKLOOP(i, npoints1, maxchunk, 16384) {
-
-#ifdef SPATSTAT_DEBUG
-      Rprintf("\ni=%d\n", i); 
-#endif
-
-      /* initialise nn distances */
-      d2minK = hu2;
-      for(k = 0; k < nk; k++) {
-	d2min[k] = hu2;
-	which[k] = -1;
-      }
-      /* copy coordinates of current 'from' point */
-      for(j = 0; j < mdimen; j++)
-	x1i[j] = x1[i* mdimen + j];
-      x1i0 = x1i[0];
-      id1i = id1[i];
-      
-#ifdef SPATSTAT_DEBUG
-      Rprintf("\n From (");
-      for(j = 0; j < mdimen; j++)
-	Rprintf("%lf, ", x1[i * mdimen + j]);
-      Rprintf(")\n");
-#endif
-
-      /* search backward */
-      for(left = i - 1; left >= 0; --left) {
-
-#ifdef SPATSTAT_DEBUG
-	Rprintf("L=%d, d2minK=%lf\n", left, d2minK);
-	Rprintf("\t 0 ");
-#endif
-	dx0 = x1i0 - x2[left * mdimen];
-	d2 = dx0 * dx0; 
-	if(d2 > d2minK)
-	  break;
-
-	/* do not compare identical points */
-	if(id2[left] != id1i) {
-	  for(j = 1; j < mdimen && d2 < d2minK; j++) {
-#ifdef SPATSTAT_DEBUG
-	    Rprintf("%d ", j);
-#endif
-	    dxj = x1i[j] - x2[left * mdimen + j];
-	    d2 += dxj * dxj;
+	    dxell = x1i[ell] - x2[jleft * mdimen + ell];
+	    d2 += dxell * dxell;
 	  }
 	  if (d2 < d2minK) {
 #ifdef SPATSTAT_DEBUG
@@ -1181,7 +955,8 @@ void knnXxMD(m, n1, x1, id1, n2, x2, id2, kmax, nnd, nnwhich, huge)
 #endif
 	    /* overwrite last entry */
 	    d2min[nk1] = d2;
-	    which[nk1] = left;
+	    which[nk1] = jleft;
+	    jwhich = jleft;
 	    /* bubble sort */
 #ifdef SPATSTAT_DEBUG
 	    Rprintf("\td2min[] before bubble sort:");
@@ -1218,31 +993,31 @@ void knnXxMD(m, n1, x1, id1, n2, x2, id2, kmax, nnd, nnwhich, huge)
 	      Rprintf("%d, ", which[k]);
 	    Rprintf("\n");
 #endif
-	  /* adjust maximum distance */
+	    /* adjust maximum distance */
 	    d2minK = d2min[nk1];
 	  }
 	}
       }
-    
+
+      
       /* search forward */
-      for(right = i + 1; right < npoints2; ++right) {
+      if(lastjwhich < npoints2) {
+	for(jright = lastjwhich; jright < npoints2; ++jright) {
 
 #ifdef SPATSTAT_DEBUG
-	Rprintf("R=%d, d2minK=%lf\n", right, d2minK);
-	Rprintf("\t 0 ");
+	  Rprintf("R=%d, d2minK=%lf\n", jright, d2minK);
+	  Rprintf("\t 0 ");
 #endif
-	dx0 = x2[right * mdimen] - x1i0;
-	d2 = dx0 * dx0; 
-	if(d2 > d2minK) 
-	  break;
-	/* do not compare identical points */
-	if(id2[right] != id1i) {
-	  for(j = 1; j < mdimen && d2 < d2minK; j++) {
+	  dx0 = x2[jright * mdimen] - x1i0;
+	  d2 = dx0 * dx0; 
+	  if(d2 > d2minK) 
+	    break;
+	  for(ell = 1; ell < mdimen && d2 < d2minK; ell++) {
 #ifdef SPATSTAT_DEBUG
-	    Rprintf("%d ", j);
+	    Rprintf("%d ", ell);
 #endif
-	    dxj = x1i[j] - x2[right * mdimen + j];
-	    d2 += dxj * dxj;
+	    dxell = x1i[ell] - x2[jright * mdimen + ell];
+	    d2 += dxell * dxell;
 	  }
 	  if (d2 < d2minK) {
 #ifdef SPATSTAT_DEBUG
@@ -1251,7 +1026,8 @@ void knnXxMD(m, n1, x1, id1, n2, x2, id2, kmax, nnd, nnwhich, huge)
 #endif
 	    /* overwrite last entry */
 	    d2min[nk1] = d2;
-	    which[nk1] = right;
+	    which[nk1] = jright;
+	    jwhich = jright;
 	    /* bubble sort */
 #ifdef SPATSTAT_DEBUG
 	    Rprintf("\td2min[] before bubble sort:");
@@ -1306,6 +1082,261 @@ void knnXxMD(m, n1, x1, id1, n2, x2, id2, kmax, nnd, nnwhich, huge)
 	/* convert index back to R convention */
 	nnwhich[nk * i + k] = which[k] + 1;
       }
+      
+      /* save index of last neighbour encountered */
+      lastjwhich = jwhich;
     }
   }
 }
+
+
+/* 
+   knnXxMD
+
+   nearest neighbours 1:kmax with exclusions
+
+   returns distances and indices
+
+*/
+
+
+void knnXxMD(m, n1, x1, id1, n2, x2, id2, kmax, nnd, nnwhich, huge)
+  /* inputs */
+  int *m, *n1, *n2, *kmax;
+  double *x1, *x2, *huge;
+  int *id1, *id2;
+  /* output matrix (kmax * n1) */
+  double *nnd;
+  int *nnwhich;
+{ 
+  int mdimen, npoints1, npoints2, nk, nk1;
+  int i, ell, jleft, jright, jwhich, lastjwhich;
+  int k, k1, unsorted, itmp, id1i;
+  double d2, d2minK, x1i0, dx0, dxell, hu, hu2, tmp;
+  double *d2min, *x1i;
+  int *which;
+  int maxchunk;
+
+  hu = *huge;
+  hu2 = hu * hu;
+
+  npoints1 = *n1;
+  npoints2 = *n2;
+  mdimen   = *m;
+  nk       = *kmax;
+  nk1      = nk - 1;
+
+  /* 
+     create space to store the nearest neighbour distances and indices
+     for the current point
+  */
+
+  d2min = (double *) R_alloc((size_t) nk, sizeof(double));
+  which = (int *) R_alloc((size_t) nk, sizeof(int));
+
+  /* 
+     scratch space for current 'from' point coordinates
+  */
+  x1i = (double *) R_alloc((size_t) mdimen, sizeof(double));
+
+  lastjwhich = 0;
+  
+  /* loop over 'from' points */
+
+  OUTERCHUNKLOOP(i, npoints1, maxchunk, 16384) {
+    R_CheckUserInterrupt();
+    INNERCHUNKLOOP(i, npoints1, maxchunk, 16384) {
+
+#ifdef SPATSTAT_DEBUG
+      Rprintf("\ni=%d\n", i); 
+#endif
+
+      /* initialise nn distances */
+      d2minK = hu2;
+      jwhich = -1;
+      for(k = 0; k < nk; k++) {
+	d2min[k] = hu2;
+	which[k] = -1;
+      }
+      /* copy coordinates of current 'from' point */
+      for(ell = 0; ell < mdimen; ell++)
+	x1i[ell] = x1[i* mdimen + ell];
+      x1i0 = x1i[0];
+
+      id1i = id1[i];
+      
+#ifdef SPATSTAT_DEBUG
+      Rprintf("\n From (");
+      for(ell = 0; ell < mdimen; ell++)
+	Rprintf("%lf, ", x1[i * mdimen + ell]);
+      Rprintf(")\n");
+#endif
+
+      if(lastjwhich > 0) {
+	/* search backward from previous nearest neighbour */
+	for(jleft = lastjwhich - 1; jleft >= 0; --jleft) {
+
+#ifdef SPATSTAT_DEBUG
+	  Rprintf("L=%d, d2minK=%lf\n", jleft, d2minK);
+	  Rprintf("\t 0 ");
+#endif
+	  dx0 = x1i0 - x2[jleft * mdimen];
+	  d2 = dx0 * dx0; 
+	  if(d2 > d2minK)
+	    break;
+
+	  /* don't compare identical points */
+	  if(id2[jleft] != id1i) {
+	    for(ell = 1; ell < mdimen && d2 < d2minK; ell++) {
+#ifdef SPATSTAT_DEBUG
+	      Rprintf("%d ", ell);
+#endif
+	      dxell = x1i[ell] - x2[jleft * mdimen + ell];
+	      d2 += dxell * dxell;
+	    }
+	    if (d2 < d2minK) {
+#ifdef SPATSTAT_DEBUG
+	      Rprintf("\td2=%lf overwrites d2min[%d] = %lf\n", 
+		      d2, nk1, d2min[nk1]);
+#endif
+	      /* overwrite last entry */
+	      d2min[nk1] = d2;
+	      which[nk1] = jleft;
+	      jwhich = jleft;
+	      /* bubble sort */
+#ifdef SPATSTAT_DEBUG
+	      Rprintf("\td2min[] before bubble sort:");
+	      for(k = 0; k < nk; k++)
+		Rprintf("%lf, ", d2min[k]);
+	      Rprintf("\n");
+	      Rprintf("\twhich[] before bubble sort:");
+	      for(k = 0; k < nk; k++)
+		Rprintf("%d, ", which[k]);
+	      Rprintf("\n");
+#endif
+	      unsorted = YES;
+	      for(k = nk1; unsorted && k > 0; k--) {
+		k1 = k - 1;
+		if(d2min[k] < d2min[k1]) {
+		  /* swap entries */
+		  tmp = d2min[k1];
+		  d2min[k1] = d2min[k];
+		  d2min[k] = tmp;
+		  itmp = which[k1];
+		  which[k1] = which[k];
+		  which[k] = itmp;
+		} else {
+		  unsorted = NO;
+		}
+	      }
+#ifdef SPATSTAT_DEBUG
+	      Rprintf("\td2min[] after bubble sort:");
+	      for(k = 0; k < nk; k++)
+		Rprintf("%lf, ", d2min[k]);
+	      Rprintf("\n");
+	      Rprintf("\twhich[] after bubble sort:");
+	      for(k = 0; k < nk; k++)
+		Rprintf("%d, ", which[k]);
+	      Rprintf("\n");
+#endif
+	      /* adjust maximum distance */
+	      d2minK = d2min[nk1];
+	    }
+	  }
+	}
+      }
+
+      
+      /* search forward */
+      if(lastjwhich < npoints2) {
+	for(jright = lastjwhich; jright < npoints2; ++jright) {
+
+#ifdef SPATSTAT_DEBUG
+	  Rprintf("R=%d, d2minK=%lf\n", jright, d2minK);
+	  Rprintf("\t 0 ");
+#endif
+	  dx0 = x2[jright * mdimen] - x1i0;
+	  d2 = dx0 * dx0; 
+	  if(d2 > d2minK) 
+	    break;
+
+	  /* don't compare identical points */
+	  if(id2[jright] != id1i) {
+	    for(ell = 1; ell < mdimen && d2 < d2minK; ell++) {
+#ifdef SPATSTAT_DEBUG
+	      Rprintf("%d ", ell);
+#endif
+	      dxell = x1i[ell] - x2[jright * mdimen + ell];
+	      d2 += dxell * dxell;
+	    }
+	    if (d2 < d2minK) {
+#ifdef SPATSTAT_DEBUG
+	      Rprintf("\td2=%lf overwrites d2min[%d] = %lf\n", 
+		      d2, nk1, d2min[nk1]);
+#endif
+	      /* overwrite last entry */
+	      d2min[nk1] = d2;
+	      which[nk1] = jright;
+	      jwhich = jright;
+	      /* bubble sort */
+#ifdef SPATSTAT_DEBUG
+	      Rprintf("\td2min[] before bubble sort:");
+	      for(k = 0; k < nk; k++)
+		Rprintf("%lf, ", d2min[k]);
+	      Rprintf("\n");
+	      Rprintf("\twhich[] before bubble sort:");
+	      for(k = 0; k < nk; k++)
+		Rprintf("%d, ", which[k]);
+	      Rprintf("\n");
+#endif
+	      unsorted = YES;
+	      for(k = nk1; unsorted && k > 0; k--) {
+		k1 = k - 1;
+		if(d2min[k] < d2min[k1]) {
+		  /* swap entries */
+		  tmp = d2min[k1];
+		  d2min[k1] = d2min[k];
+		  d2min[k] = tmp;
+		  itmp = which[k1];
+		  which[k1] = which[k];
+		  which[k] = itmp;
+		} else {
+		  unsorted = NO;
+		}
+	      }
+#ifdef SPATSTAT_DEBUG
+	      Rprintf("\td2min[] after bubble sort:");
+	      for(k = 0; k < nk; k++)
+		Rprintf("%lf, ", d2min[k]);
+	      Rprintf("\n");
+	      Rprintf("\twhich[] after bubble sort:");
+	      for(k = 0; k < nk; k++)
+		Rprintf("%d, ", which[k]);
+	      Rprintf("\n");
+#endif
+	      /* adjust maximum distance */
+	      d2minK = d2min[nk1];
+	    }
+	  }
+	}
+      }
+
+#ifdef SPATSTAT_DEBUG
+      Rprintf("\n");
+#endif
+
+      /* copy nn distances for point i 
+	 to output matrix in ROW MAJOR order
+      */
+      for(k = 0; k < nk; k++) {
+	nnd[nk * i + k] = sqrt(d2min[k]);
+	/* convert index back to R convention */
+	nnwhich[nk * i + k] = which[k] + 1;
+      }
+      
+      /* save index of last neighbour encountered */
+      lastjwhich = jwhich;
+    }
+  }
+}
+  

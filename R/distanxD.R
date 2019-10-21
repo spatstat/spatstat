@@ -375,7 +375,7 @@ nncross.ppx <- function(X, Y, iX=NULL, iY=NULL,
       witch[notfound] <- NA
     }
     nnd[oX, ] <- matrix(dust, nrow=nX, ncol=kmaxcalc, byrow=TRUE)
-    nnw[oX, ] <- oY[witch]
+    nnw[oX, ] <- matrix(oY[witch], nrow=nX, ncol=kmaxcalc, byrow=TRUE)
   }
 
   ## post-processing
