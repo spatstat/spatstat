@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.61-0.033
+        CHANGES IN spatstat VERSION 1.61-0.034
 
 OVERVIEW
 
@@ -115,6 +115,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
     Function values which are infinite, NA or NaN are now ignored
     in the calculation (with a warning) instead of causing an error.
     Warning messages are more detailed.
+
+    o rmhcontrol, rmh
+    The parameter 'nsave' can now be a vector of integers.
     
     o diagnose.ppm
     Accelerated, when type="inverse", for models without a hard core.

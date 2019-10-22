@@ -1,5 +1,5 @@
 #
-# $Id: rmh.default.R,v 1.110 2019/02/20 03:34:50 adrian Exp adrian $
+# $Id: rmh.default.R,v 1.112 2019/10/22 02:07:45 adrian Exp adrian $
 #
 rmh.default <- function(model,start=NULL,
                         control=default.rmhcontrol(model),
@@ -905,15 +905,28 @@ rmhEngine <- function(InfoList, ...,
     }
   } else {
     # ////////// Multiple blocks /////////////////////////////////
-    # determine length of each block of simulations
-    nblocks <- as.integer(1L + ceiling((nrep - nburn)/nsave))
-    block <- c(nburn, rep.int(nsave, nblocks-1L))
-    block[nblocks] <- block[nblocks] - (sum(block)-nrep)
+    ## determine length of each block of simulations
+    nsuperblocks <- as.integer(1L + ceiling((nrep - nburn)/sum(nsave)))
+    block <- c(nburn, rep.int(nsave, nsuperblocks-1L))
+    block <- block[cumsum(block) <= nrep]
+    if((tot <- sum(block)) < nrep)
+      block <- c(block, nrep-tot)
     block <- block[block >= 1L]
     nblocks <- length(block)
     blockend <- cumsum(block)
-    # set up list to contain the saved point patterns
-    Xlist <- vector(mode="list", length=nblocks)
+    ## set up list to contain the saved point patterns
+    Xlist <- vector(mode="list", length=nblocks+1L)
+    ## save initial state
+    Xinit <- ppp(x=x, y=y, window=w.state, check=FALSE)
+    if(mtype) {
+      ## convert integer marks from C to R
+      marx <- factor(Cmarks, levels=0:(ntypes-1))
+      ## then restore original type levels
+      levels(marx) <- types
+      ## glue to points
+      marks(Xinit) <- marx
+    }
+    Xlist[[1L]] <- Xinit
     # Call the Metropolis-Hastings C code repeatedly:
     xprev <- x
     yprev <- y
@@ -1002,7 +1015,7 @@ rmhEngine <- function(InfoList, ...,
         X <- X[w.clip]
 
       # commit to list
-      Xlist[[I]] <- X
+      Xlist[[I+1L]] <- X
       
       # Extract transition history:
       if(track) {
@@ -1041,7 +1054,7 @@ rmhEngine <- function(InfoList, ...,
     
     # Result of simulation is final state 'X'
     # Tack on the list of intermediate states
-    names(Xlist) <- paste("Iteration", as.integer(blockend), sep="_")
+    names(Xlist) <- paste("Iteration", c(0,as.integer(blockend)), sep="_")
     attr(X, "saved") <- as.solist(Xlist)
   }
 

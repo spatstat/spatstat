@@ -2,7 +2,7 @@
 #
 #   rmhcontrol.R
 #
-#   $Revision: 1.30 $  $Date: 2017/01/29 07:20:51 $
+#   $Revision: 1.33 $  $Date: 2019/10/22 01:41:10 $
 #
 #
 
@@ -64,11 +64,21 @@ rmhcontrol.default <- function(..., p=0.9, q=0.5, nrep=5e5,
   if(!is.null(periodic) && (!is.logical(periodic) || length(periodic) != 1))
     stop(paste(sQuote("periodic"), "should be a logical value or NULL"))
   if(saving <- !is.null(nsave)) {
-    if(!is.numeric(nsave) || length(nsave) != 1
-       || nsave < 0 || nsave >= nrep)
-      stop("nsave should be an integer < nrep")
-    if(is.null(nburn)) nburn <- min(nsave, nrep-nsave)
-    if(!is.null(nburn)) stopifnot(nburn + nsave <= nrep)
+    nsave <- as.integer(as.vector(nsave))
+    if(length(nsave) == 1L) {
+      if(nsave <= 0)
+        stop("nsave should be a positive integer")
+      stopifnot(nsave < nrep)
+    } else {
+      stopifnot(all(nsave > 0))
+      stopifnot(sum(nsave) <= nrep)
+    }
+    if(missing(nburn) || is.null(nburn)) {
+      nburn <- min(nsave[1], nrep-sum(nsave))
+    } else {
+      check.1.integer(nburn)
+      stopifnot(nburn + sum(nsave) <= nrep)
+    }
   }
   stopifnot(is.logical(track))
   pstage <- match.arg(pstage) 
@@ -183,14 +193,23 @@ print.rmhcontrol <- function(x, ...) {
            splat("Conditional simulation of Palm type")
          })
   splat("Number of M-H iterations: nrep =", x$nrep)
-  if(x$saving) 
-    splat("Save point pattern every", x$nsave, "iterations",
-          "after a burn-in of", x$nburn, "iterations.")
+  if(x$saving) {
+    nsave <- x$nsave
+    len <- length(nsave)
+    howmany <- if(len == 1L) nsave else
+               if(len < 5L) commasep(nsave) else
+               paste(paste(nsave[1:5], collapse=", "), "[...]")
+    splat("After a burn-in of", x$nburn, "iterations,",
+          "save point pattern after every", howmany, "iterations.")
+  }
   pstage <- x$pstage %orifnull% "start"
   hdr <- "Generate random proposal points:"
   switch(pstage,
          start = splat(hdr, "at start of simulations."),
-         block = splat(hdr, "before each block of", x$nsave, "iterations."))
+         block = splat(hdr,
+                       "before each block of",
+                       if(length(x$nsave) == 1L) x$nsave else " ",
+                       "iterations."))
   cat(paste("Track proposal type and acceptance/rejection?",
             if(x$track) "yes" else "no", "\n"))
   if(x$nverb > 0)

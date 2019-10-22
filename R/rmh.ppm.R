@@ -1,7 +1,7 @@
 #
 # simulation of FITTED model
 #
-#  $Revision: 1.35 $ $Date: 2018/05/12 16:16:02 $
+#  $Revision: 1.36 $ $Date: 2019/10/22 02:31:58 $
 #
 #
 rmh.ppm <- function(model, start = NULL,
@@ -78,7 +78,7 @@ simulate.ppm <- function(object, nsim=1, ...,
                                list(nburn=nsave),
                                .MatchNull=FALSE)
     if(!is.null(nsave)) {
-      nrep <- nburn + (nsim-1) * nsave
+      nrep <- nburn + (nsim-1) * sum(nsave)
       rcontr <- update(rcontr, nrep=nrep, nsave=nsave, nburn=nburn)
     } 
   }
@@ -112,7 +112,7 @@ simulate.ppm <- function(object, nsim=1, ...,
       rcontr <- update(rcontr, nsave=nsave, nburn=nburn)
     }
     # check nrep is enough
-    nrepmin <- with(rcontr, nburn + (nsim-1) * nsave)
+    nrepmin <- with(rcontr, nburn + (nsim-1) * sum(nsave))
     if(rcontr$nrep < nrepmin)
       rcontr <- update(rcontr, nrep=nrepmin)
     # OK, run it
@@ -125,9 +125,14 @@ simulate.ppm <- function(object, nsim=1, ...,
       cat("Done.\n")
     # extract sampled states
     out <- attr(Y, "saved")
-    if(length(out) != nsim)
+    nout <- length(out)
+    if(nout == nsim+1L && identical(names(out)[1], "Iteration_0")) {
+      ## expected behaviour: first entry is initial state
+      out <- out[-1L]
+    } else if(nout != nsim) {
       stop(paste("Internal error: wrong number of simulations generated:",
-                 length(out), "!=", nsim))
+                 nout, "!=", nsim))
+    }
   } else {
     # //////////////////////////////////////////////////
     # execute 'nsim' independent runs

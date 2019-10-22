@@ -636,3 +636,21 @@ Change log from 1.61-0 to 1.61-1
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
 
+22 oct 2019
+
+   rmh.default.R
+   rmhcontrol.R
+   rmhcontrol.Rd
+	nsave can be a vector.
+
+   rmh.ppm.R
+	Consequential adjustment to simulate.ppm
+	
+   DESCRIPTION
+   NEWS
+	Version 1.61-0.034
+	
+------------- passed R-3.6.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+

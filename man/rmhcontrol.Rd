@@ -205,10 +205,14 @@
       should be printed out.  If nverb is left at 0, the default,
       the simulation proceeds silently.
     }
-    \item{nsave,nburn}{If these integers are given, then the
+    \item{nsave,nburn}{
+      If these integers are given, then the
       current state of the simulation algorithm (i.e. the current
       random point pattern) will be saved every \code{nsave} iterations,
-      starting from iteration \code{nburn}. 
+      starting from iteration \code{nburn}.
+      (Alternatively \code{nsave} can be a vector, specifying
+      different numbers of iterations between each successive save.
+      This vector will be recycled until the end of the simulations.)
     }
     \item{track}{
       Logical flag indicating whether to save the transition
@@ -323,11 +327,8 @@
    # parameters given in rmhcontrol object
    c3 <- rmhcontrol(c1)
 }
-\author{\adrian
-  
-  
-  and \rolf
-  
+\author{
+  \spatstatAuthors.
 }
 \keyword{spatial}
 \keyword{datagen}
