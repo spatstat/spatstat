@@ -654,3 +654,15 @@ Change log from 1.61-0 to 1.61-1
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
 
+   plot3d.R
+	Bug fix in handling vector-valued 'col', etc
+
+   DESCRIPTION
+   NEWS
+	Version 1.61-0.035
+	
+------------- passed R-3.6.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+
+

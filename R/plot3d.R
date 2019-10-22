@@ -1,6 +1,6 @@
 #'  perspective plot of 3D 
 #'
-#'  $Revision: 1.6 $ $Date: 2018/04/30 09:31:33 $
+#'  $Revision: 1.7 $ $Date: 2019/10/22 07:53:14 $
 #'
 
 
@@ -116,18 +116,34 @@ plot3Dpoints <- local({
       uv <- as.data.frame(uv)
       dord <- order(uv$d, decreasing=TRUE)
       uv <- uv[dord, , drop=FALSE]
+      #' capture graphics arguments which might be vectors
+      grarg <- list(..., cex=cex)
+      grarg <- grarg[names(grarg) %in% parsAll]
+      if(any(lengths(grarg) > 1L)) {
+        grarg <- as.data.frame(grarg, stringsAsFactors=FALSE)
+        grarg <- grarg[dord, , drop=FALSE]
+        grarg <- as.list(grarg)
+      }
+      #' draw segments
       if(type == "h") {
         xy0 <- cbind(xyz[,1:2,drop=FALSE], zlim[1])
         uv0 <- as.data.frame(project3Dhom(xy0, eye=eye, org=org))
         uv0 <- uv0[dord, , drop=FALSE]
-        do.call.matched(segments,
-                        list(x0=with(uv0, x/d),
-                             y0=with(uv0, y/d),
-                             x1=with(uv,  x/d),
-                             y1=with(uv,  y/d),
-                             ...))
+        segargs <- grarg[names(grarg) %in% parsSegments]
+        do.call(segments,
+                append(list(x0=with(uv0, x/d),
+                            y0=with(uv0, y/d),
+                            x1=with(uv,  x/d),
+                            y1=with(uv,  y/d)),
+                       segargs))
       }
-      with(uv, points(x/d, y/d, cex=cex * min(d)/d, ...))
+      #' draw points
+      ptargs <- grarg[names(grarg) %in% parsPoints]
+      ptargs$cex <- ptargs$cex * with(uv, min(d)/d)
+      do.call(points,
+              c(list(x=with(uv, x/d),
+                     y=with(uv, y/d)),
+                ptargs))
     }
     if(is.list(box.front)) 
       do.call(plot3DboxPart,
@@ -151,6 +167,10 @@ plot3Dpoints <- local({
   vertexfrom <- vertexind[edgepairs$from,]
   vertexto   <- vertexind[edgepairs$to,]
 
+  parsPoints <- c("cex", "col", "fg", "bg", "pch", "lwd") 
+  parsSegments <- c("col", "lwd", "lty")
+  parsAll <- union(parsPoints, parsSegments)
+  
   hamming <- function(a, b) sum(abs(a-b))
 
   ## determine projected positions of box vertices

@@ -1,10 +1,10 @@
 
-        CHANGES IN spatstat VERSION 1.61-0.034
+        CHANGES IN spatstat VERSION 1.61-0.035
 
 OVERVIEW
 
-    o We thank Nestor Luambua, Greg McSwiggan and Annie Mollie
-    for contributions.
+    o We thank Mohammad Ghorbani, Abdollah Jalilian, Nestor Luambua,
+    Greg McSwiggan and Annie Mollie for contributions.
     
     o Tessellations on a linear network can now have marks.
 
@@ -177,6 +177,11 @@ BUG FIXES
 
     o quantess.owin, quantess.ppp, quantess.im
     Crashed in some cases because the tile labels were not unique.
+    Fixed.
+    
+    o plot.pp3
+    Did not correctly handle graphical arguments ('col', 'pch', 'cex')
+    if they were vectors [Spotted by Abdollah Jalilian].
     Fixed.
     
     o shift.linnet
