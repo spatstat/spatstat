@@ -665,4 +665,28 @@ Change log from 1.61-0 to 1.61-1
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
 
+23 oct 2019
+
+   tests/rmhBasic.R
+	Added tests of new options for nsave, nburn
+
+   bugtable.R
+   bugfixes.Rd
+	Accepts sinceversion="book" or sincedate="book".
+
+   updates.Rnw
+	Updated to cover all the above.
+
+25 oct 2019
+
+   lixel.c
+	Bug fix
+
+   DESCRIPTION
+   NEWS
+	Version 1.61-0.036
+	
+------------- passed R-3.6.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
 

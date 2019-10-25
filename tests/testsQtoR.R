@@ -282,7 +282,7 @@ local({
 ##
 ##   tests/rmhBasic.R
 ##
-##   $Revision: 1.17 $  $Date: 2019/04/25 03:11:55 $
+##   $Revision: 1.18 $  $Date: 2019/10/23 01:26:01 $
 #
 # Test examples for rmh.default
 # run to reasonable length
@@ -496,8 +496,28 @@ spatstat.options(expand=1.1)
                    control=list(nrep=nr, x.cond=YY))
    #' Palm conditioning
    XXpalm <- rmh(model=mod01,start=list(n.start=80),
-             control=list(nrep=nr, x.cond=coords(YY)))
+                 control=list(nrep=nr, x.cond=coords(YY)))
 
+   #' nsave, nburn
+   chq <- function(X) {
+     Xname <- deparse(substitute(X))
+     A <- attr(X, "saved")
+     if(length(A) == 0)
+       stop(paste(Xname, "did not include a saved list of patterns"))
+     return("ok")
+   }
+   XXburn <- rmh(model=mod01,start=list(n.start=80), verbose=FALSE,
+                 control=list(nrep=nr, nsave=500, nburn=100))
+   chq(XXburn)
+   XXburn0 <- rmh(model=mod01,start=list(n.start=80), verbose=FALSE,
+                  control=list(nrep=nr, nsave=500, nburn=0))
+   chq(XXburn0)
+   XXsaves <- rmh(model=mod01,start=list(n.start=80), verbose=FALSE,
+                  control=list(nrep=nr, nsave=c(500, 200)))
+   chq(XXsaves)
+   XXsaves0 <- rmh(model=mod01,start=list(n.start=80), verbose=FALSE,
+                  control=list(nrep=nr, nsave=c(500, 200), nburn=0))
+   chq(XXsaves0)
 
    #' code blocks for various interactions, not otherwise tested
    rr <- seq(0,0.2,length=8)[-1]

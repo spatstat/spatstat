@@ -48,7 +48,7 @@ void Clixellate(ns, fromcoarse, tocoarse,
      double *tpcoarse, *tpfine; /* location coordinate */
      int *spcoarse, *spfine; /* segment id coordinate */
 {
-  int Np, oldNs, oldNv, i, j, k, m, ll;
+  int Np, oldNs, oldNv, i, j, k, ll;
   int oldfromi, oldtoi, newlines, newNv, newNs, SegmentForData;
   double xstart, xend, ystart, yend, xincr, yincr, tn;
 
@@ -68,7 +68,6 @@ void Clixellate(ns, fromcoarse, tocoarse,
   for(i = 0; i < oldNs; i++) {
 
     newlines = nsplit[i]; 
-
     oldfromi = fromcoarse[i];
     oldtoi   = tocoarse[i];
     
@@ -94,9 +93,7 @@ void Clixellate(ns, fromcoarse, tocoarse,
       xincr = (xend-xstart)/newlines;
       yincr = (yend-ystart)/newlines;
 
-      m = newlines - 1;
-
-      for(j = 1; j <= m; j++) {
+      for(j = 1; j < newlines; j++) {
 	/* create new vertex, number 'newNv' */
 	xv[newNv] = xstart + j * xincr;
 	yv[newNv] = ystart + j * yincr;
@@ -124,7 +121,7 @@ void Clixellate(ns, fromcoarse, tocoarse,
       } else {
 	tn = tpcoarse[k] * newlines;
 	ll = (int) floor(tn); 
-	ll = (ll < 0) ? 0 : (ll > newlines) ? newlines: ll;
+	ll = (ll < 0) ? 0 : (ll >= newlines) ? (newlines - 1): ll;
 	tpfine[k] = tn - ll;
 	spfine[k] = newNs - newlines + ll;
       }

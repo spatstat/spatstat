@@ -1,11 +1,16 @@
 #'
 #'        bugtable.R
 #' 
-#'    $Revision: 1.4 $ $Date: 2018/06/20 03:26:25 $
+#'    $Revision: 1.5 $ $Date: 2019/10/23 09:03:40 $
 
 bugfixes <- function(sinceversion=NULL, sincedate=NULL,
                      package="spatstat",
                      show=TRUE) {
+  if(package == "spatstat" && ("book" %in% list(sinceversion, sincedate))) {
+    ## special usage
+    sinceversion <- "1.42-0"
+    sincedate <- NULL
+  }
   if(!is.null(sincedate) && package != "spatstat") {
     #' news items after specified date
     ne <- news(package=package)

@@ -345,7 +345,7 @@ local({
 #
 # Tests for lpp code
 #
-#  $Revision: 1.35 $  $Date: 2019/10/07 01:34:44 $
+#  $Revision: 1.37 $  $Date: 2019/10/25 05:16:43 $
 
 
 require(spatstat)
@@ -721,6 +721,19 @@ local({
   integral(g)
 })
   
+local({
+  ## bug in 'lixellate' (Jakob Gulddahl Rasmussen)
+  X <- ppp(c(0,1), c(0,0), owin())
+  L <- linnet(X, edges = matrix(1:2, ncol=2))
+  Y <- lpp(X, L)
+  ## The left end point is OK
+  lixellate(Y[1], nsplit=30)
+  d <- density(Y[1], .1)
+  ## The right end point gave an error
+  lixellate(Y[2], nsplit=30)
+  d <- density(Y[2], .1)
+})
+
 #'
 #'   lppmodels.R
 #'
