@@ -690,3 +690,24 @@ Change log from 1.61-0 to 1.61-1
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
 
+   bugfixes.Rnw
+	Updated to cover all the above.
+
+28 oct 2019
+
+   closepairs.R
+   close3Dpairs.R
+	Added undocumented option to test memory overflow code.
+	
+   tests/closeshave.R
+	Test memory overflow code.
+
+   DESCRIPTION
+   NEWS
+	Version 1.61-0.037
+	
+------------- passed R-3.6.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+
+

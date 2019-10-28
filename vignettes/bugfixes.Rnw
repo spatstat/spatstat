@@ -419,6 +419,11 @@ of potential impact.
  \subsection{Partially Incorrect}
  \begin{itemize}
    
+ \item \texttt{edge.Ripley}, \texttt{Kest}, \texttt{Kinhom}:
+    Isotropic correction weights for polygonal windows were sometimes incorrect
+    for small radius \texttt{r} if the polygon contained many small segments
+    or if the polygon was very long and thin.
+    \bugger{1.60-0}{june 2019}{1.62-0}{november 2019}.
  
  \item \texttt{beachcolours}, \texttt{beachcolourmap}:
    The number of colours was not always equal to \texttt{ncolours}.
@@ -680,7 +685,7 @@ of potential impact.
     \bugger{1.52-0}{august 2017}{1.61-0}{september 2019}
 
   \item \verb!"[<-.hyperframe"!:
-    Did not handlesome classes of objects correctly,
+    Some classes of objects were not handled correctly.
     \bugger{1.37-0}{may 2014}{1.61-0}{september 2019}
 \end{itemize}
 

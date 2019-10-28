@@ -105,7 +105,7 @@ local({
 ##  tests/closeshave.R
 ## check 'closepairs/crosspairs' code
 ## validity and memory allocation
-## $Revision: 1.19 $ $Date: 2019/04/29 06:00:38 $
+## $Revision: 1.20 $ $Date: 2019/10/28 08:52:46 $
 
 local({
   r <- 0.12
@@ -116,6 +116,9 @@ local({
   stopifnot(identical(close.ij, close.all[c("i","j")]))
   stopifnot(identical(close.ijd, close.all[c("i","j","d")]))
 
+  #' test memory overflow code
+  close.cigar <- closepairs(redwood, r, what="ijd", nsize=2)
+  
   Y <- split(amacrine)
   on <- Y$on
   off <- Y$off
@@ -155,6 +158,8 @@ local({
   # execute only:
   old.close.every <- closepairs(redwood, r, what="all", distinct=FALSE)
   old.close.once <- closepairs(redwood, r, what="all", twice=FALSE)
+  #' test memory overflow code
+  old.close.cigar <- closepairs(redwood, r, what="ijd", nsize=2)
   ## ...............................................
   spatstat.options(op)
   ## ...............................................
@@ -166,6 +171,8 @@ local({
   alt.close.ij <- closepairs(redwood, r, what="indices")
   alt.close.ijd <- closepairs(redwood, r, what="ijd")
   alt.close.all <- closepairs(redwood, r, what="all")
+  #' test memory overflow code
+  alt.close.cigar <- closepairs(redwood, r, what="ijd", nsize=2)
   spatstat.options(op)
   ## ...............................................
   
@@ -230,6 +237,8 @@ local({
   cl <- closepairs(X, 0.2, distinct=FALSE, what="indices")
   cl <- closepairs(X, 0.2, distinct=FALSE, what="ijd")
   cl <- closepairs(X, 0.2, twice=FALSE, neat=TRUE)
+  #' Test memory overflow code
+  cl <- closepairs(X, 0.2, what="ijd", nsize=2)
   #' trap obsolete usage
   cl <- closepairs(X, 0.2, ordered=FALSE)
   #' crosspairs

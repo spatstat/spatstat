@@ -1,7 +1,7 @@
 #
 # closepairs.R
 #
-#   $Revision: 1.43 $   $Date: 2019/02/13 10:50:48 $
+#   $Revision: 1.44 $   $Date: 2019/10/28 08:48:47 $
 #
 #  simply extract the r-close pairs from a dataset
 # 
@@ -61,12 +61,18 @@ closepairs.ppp <- function(X, rmax, twice=TRUE,
     Xsort <- X[oo]
   } 
   ## First make an OVERESTIMATE of the number of unordered pairs
-  nsize <- ceiling(2 * pi * (npts^2) * (rmax^2)/area(Window(X)))
-  nsize <- max(1024, nsize)
-  if(nsize > .Machine$integer.max) {
-    warning("Estimated number of close pairs exceeds maximum possible integer",
-            call.=FALSE)
-    nsize <- .Machine$integer.max
+  nsize <- list(...)$nsize # secret option to test memory overflow code
+  if(!is.null(nsize)) {
+    splat("Using nsize =", nsize)
+  } else {
+    #' normal usage 
+    nsize <- ceiling(2 * pi * (npts^2) * (rmax^2)/area(Window(X)))
+    nsize <- max(1024, nsize)
+    if(nsize > .Machine$integer.max) {
+     warning("Estimated number of close pairs exceeds maximum possible integer",
+              call.=FALSE)
+      nsize <- .Machine$integer.max
+    }
   }
   ## Now extract pairs
   if(periodic) {
