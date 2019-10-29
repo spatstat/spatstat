@@ -345,7 +345,7 @@ local({
 #
 # Tests for lpp code
 #
-#  $Revision: 1.37 $  $Date: 2019/10/25 05:16:43 $
+#  $Revision: 1.38 $  $Date: 2019/10/29 04:14:33 $
 
 
 require(spatstat)
@@ -734,6 +734,15 @@ local({
   d <- density(Y[2], .1)
 })
 
+local({
+  ## make some bad data and repair it
+  X <- runiflpp(4, simplenet)
+  sx1 <- coords(X)$seg[1]
+  ns <- nsegments(X)
+  X$domain$from <- X$domain$from[c(1:ns, sx1)]
+  X$domain$to   <- X$domain$to[c(1:ns, sx1)]
+  Y <- repairNetwork(X)
+})
 #'
 #'   lppmodels.R
 #'

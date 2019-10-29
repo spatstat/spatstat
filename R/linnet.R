@@ -3,7 +3,7 @@
 #    
 #    Linear networks
 #
-#    $Revision: 1.69 $    $Date: 2019/09/25 09:42:51 $
+#    $Revision: 1.71 $    $Date: 2019/10/29 04:24:45 $
 #
 # An object of class 'linnet' defines a linear network.
 # It includes the following components
@@ -305,8 +305,15 @@ as.linnet.psp <- function(X, ..., eps, sparse=FALSE) {
   second <- endpoints.psp(X, "second")
   from <- nncross(first, V, what="which")
   to   <- nncross(second, V, what="which")
-  nontrivial <- (from != to)
-  join <- cbind(from, to)[nontrivial, , drop=FALSE]
+  if(any(reverse <- (from > to))) {
+    newfrom <- ifelse(reverse, to, from)
+    newto   <- ifelse(reverse, from, to)
+    from <- newfrom
+    to   <- newto
+  }
+  fromto <- cbind(from, to)
+  nontrivial <- (from != to) & !duplicated(fromto)
+  join <- fromto[nontrivial, , drop=FALSE]
   result <- linnet(V, edges=join, sparse=sparse)
   if(is.marked(X)) marks(result$lines) <- marks(X[nontrivial])
   return(result)
@@ -505,6 +512,7 @@ rescale.linnet <- function(X, s, unitname) {
 "[.linnet" <- function(x, i, ..., snip=TRUE) {
   if(!is.owin(i))
     stop("In [.linnet: the index i should be a window", call.=FALSE)
+  x <- repairNetwork(x)
   w <- i
   wp <- as.polygonal(w)
   if(is.mask(w)) {

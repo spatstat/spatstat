@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.61-0.037
+        CHANGES IN spatstat VERSION 1.61-0.038
 
 OVERVIEW
 
@@ -28,6 +28,10 @@ OVERVIEW
 
 NEW FUNCTIONS
 
+    o repairNetwork
+    Detect and repair inconsistencies in internal data
+    in a linnet or lpp object.
+    
     o marks<-.lintess, unmark.lintess
     Assign marks to the tiles of a tessellation on a linear network.
 
@@ -137,6 +141,11 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
 BUG FIXES
 
+    o as.linnet.psp
+    Sometimes produced a network with duplicated segments.
+    [Such objects can be repaired using 'repairNetwork'.]
+    Fixed.
+    
     o plot.lpp
     Did not correctly handle the argument 'which.marks'.
     Fixed.
@@ -153,6 +162,11 @@ BUG FIXES
     [spotted by Nestor Luambua]. Problem arose in spatstat 1.60-0.
     Fixed.
 
+    o [.linnet, [.lpp
+    Crashed if x contained inconsistent internal data
+    (when index 'j' was a window, and snip=TRUE).
+    Fixed.
+    
     o plot.linim 
     Crashed if the pixel values were complex numbers.
     Fixed.

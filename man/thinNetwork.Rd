@@ -72,6 +72,8 @@ thinNetwork(X, retainvertices, retainedges)
   \code{\link{linnet}} to make a network;
 
   \code{\link{connected.linnet}} to extract connected components.
+
+  \code{\link{repairNetwork}}.
 }
 \examples{
    L <- simplenet

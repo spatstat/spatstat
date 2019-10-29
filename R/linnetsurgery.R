@@ -3,7 +3,7 @@
 #'
 #' Surgery on linear networks and related objects
 #'
-#' $Revision: 1.13 $  $Date: 2018/06/12 02:55:59 $
+#' $Revision: 1.22 $  $Date: 2019/10/29 07:00:02 $
 #'
 
 insertVertices <- function(L, ...) {
@@ -133,6 +133,46 @@ joinVertices <- function(L, from, to) {
   return(X)
 }
 
+repairNetwork <- function(X) {
+  if(!inherits(X, c("linnet", "lpp")))
+    stop("X should be a linnet or lpp object", call.=FALSE)
+  L <- as.linnet(X)
+  from <- L$from
+  to   <- L$to
+  reverse <- (from > to)
+  if(any(reverse)) {
+    newfrom <- ifelse(reverse, to, from)
+    newto   <- ifelse(reverse, from, to)
+    from <- L$from <- newfrom
+    to   <- L$to   <- newto
+    L$lines$ends[reverse,] <- L$lines$ends[reverse, c(3,4,1,2)]
+    if(is.lpp(X)) { X$domain <- L } else { X <- L }
+  }
+  edgepairs <- cbind(from, to)
+  retainedges <- !duplicated(as.data.frame(edgepairs)) & (from != to)
+  keepall <- all(retainedges)
+  if(is.lpp(X) && (!keepall || any(reverse))) {
+    #' adjust segment coordinates
+    cooX <- coords(X) # hyperframe, may include marks
+    oldseg <- as.integer(unlist(cooX$seg))
+    oldtp  <- as.numeric(unlist(cooX$tp))
+    if(keepall) {
+      newseg <- oldseg
+    } else {
+      segmap <- uniquemap(as.data.frame(edgepairs))
+      newseg <- segmap[oldseg]
+    }
+    newtp  <- ifelse(reverse[oldseg], 1 - oldtp, oldtp)
+    cooX$seg <- newseg
+    cooX$tp <- newtp
+    coords(X) <- cooX
+  } 
+  if(keepall)
+    return(X)
+  Y <- thinNetwork(X, retainedges=retainedges)
+  return(Y)
+}
+
 thinNetwork <- function(X, retainvertices, retainedges) {
   ## thin a network by retaining only the specified edges and/or vertices 
   if(!inherits(X, c("linnet", "lpp")))
@@ -146,6 +186,7 @@ thinNetwork <- function(X, retainvertices, retainedges) {
   to   <- L$to
   V <- L$vertices
   sparse <- identical(L$sparse, TRUE)
+  #' determine which edges/vertices are to be retained
   edgesFALSE <- logical(nsegments(L))
   verticesFALSE <- logical(npoints(V))
   if(!gotedge) {
@@ -175,8 +216,15 @@ thinNetwork <- function(X, retainvertices, retainedges) {
   newserial <- cumsum(retainvertices)
   newfrom <- newserial[from[retainedges]]
   newto   <- newserial[to[retainedges]]
+  ## remove duplicate segments
+  reverse <- (newfrom > newto)
+  edgepairs <- cbind(ifelse(reverse, newto, newfrom),
+                     ifelse(reverse, newfrom, newto))
+  nontrivial <- (newfrom != newto) & !duplicated(edgepairs)
+  edgepairs <- edgepairs[nontrivial,,drop=FALSE]
+  reverse <- reverse[nontrivial]
   ## extract relevant subset of network
-  Lsub <- linnet(Vsub, edges=cbind(newfrom, newto), sparse=sparse)
+  Lsub <- linnet(Vsub, edges=edgepairs, sparse=sparse)
   ## tack on information about subset
   attr(Lsub, "retainvertices") <- retainvertices
   attr(Lsub, "retainedges") <- retainedges
@@ -185,12 +233,18 @@ thinNetwork <- function(X, retainvertices, retainedges) {
     return(Lsub)
   ## X is an lpp object
   ## Find data points that lie on accepted segments
-  dat <- X$data
+  dat <- X$data # hyperframe, may include marks
   ok <- retainedges[unlist(dat$seg)]
   dsub <- dat[ok, , drop=FALSE]
   ## compute new serial numbers for retained segments
   segmap <- cumsum(retainedges)
-  dsub$seg <- segmap[as.integer(unlist(dsub$seg))]
+  oldseg <- as.integer(unlist(dsub$seg))
+  dsub$seg <- newseg <- segmap[oldseg]
+  ## adjust tp coordinate if segment endpoints were reversed
+  if(any(revseg <- reverse[newseg])) {
+    tp  <- as.numeric(unlist(dsub$tp))
+    dsub$tp[revseg] <- 1 - tp[revseg]
+  }
   # make new lpp object
   Y <- ppx(data=dsub, domain=Lsub, coord.type=as.character(X$ctype))
   class(Y) <- c("lpp", class(Y))

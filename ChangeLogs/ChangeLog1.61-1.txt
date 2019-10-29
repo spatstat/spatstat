@@ -710,4 +710,26 @@ Change log from 1.61-0 to 1.61-1
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
 
+29 oct 2019
 
+   linnet.R
+	Bug fix in as.linnet.psp
+
+   linnetsurgery.R
+	Minor improvement to thinNetwork.
+	
+   linnetsurgery.R
+   repairNetwork.Rd [New file]
+   	New function repairNetwork.
+
+   lpp.R
+   linnet.R
+	Now use 'repairNetwork' in [.linnet and [.lpp
+	
+   DESCRIPTION
+   NEWS
+	Version 1.61-0.038
+
+------------- passed R-3.6.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------

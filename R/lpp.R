@@ -1,7 +1,7 @@
 #
 # lpp.R
 #
-#  $Revision: 1.65 $   $Date: 2019/09/15 02:09:20 $
+#  $Revision: 1.66 $   $Date: 2019/10/29 04:16:59 $
 #
 # Class "lpp" of point patterns on linear networks
 
@@ -422,6 +422,7 @@ local2lpp <- function(L, seg, tp, X=NULL, df.only=FALSE) {
   if(missing(j) || is.null(j))
     return(x)
   stopifnot(is.owin(j))
+  x <- repairNetwork(x)
   w <- j
   L <- x$domain
   if(is.vanilla(unitname(w)))
