@@ -1066,7 +1066,7 @@ local({
 #'
 #'  Tests of duplicated/multiplicity code
 #'
-#' $Revision: 1.3 $ $Date: 2019/05/20 05:09:51 $
+#' $Revision: 1.4 $ $Date: 2019/10/29 11:04:24 $
 
 require(spatstat)
 local({
@@ -1107,4 +1107,15 @@ local({
    checkum(Y, "<multitype pattern>")
    checkum(ZM, "<pattern with matrix of marks>")
    checkum(ZD, "<pattern with several columns of marks>")
+
+   ## uniquemap.data.frame
+   dfbase <- as.data.frame(replicate(3, sample(1:20, 10), simplify=FALSE))
+   df <- dfbase[sample(1:10, 30, replace=TRUE), , drop=FALSE]
+   #' faster algorithm for numeric values
+   a <- uniquemap(df)
+   #' general algorithm using 'duplicated' and 'match'
+   dfletters <- as.data.frame(matrix(letters[as.matrix(df)], nrow=nrow(df)))
+   b <- uniquemap(dfletters)
+   if(!isTRUE(all.equal(a,b)))
+     stop("inconsistency between algorithms in uniquemap.data.frame")
 })

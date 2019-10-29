@@ -733,3 +733,19 @@ Change log from 1.61-0 to 1.61-1
 ------------- passed R-3.6.1 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
+
+   uniquemap.R
+	Faster algorithm for uniquemap.data.frame in some cases
+	relevant to networks.
+
+   tests/duplicity.R
+	Added test of validity for uniquemap.data.frame
+	
+   DESCRIPTION
+   NEWS
+	Version 1.61-0.039
+
+------------- passed R-3.6.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+

@@ -4,7 +4,7 @@
 #'   Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2019
 #'   Licence: GNU Public Licence >= 2
 #'
-#'   $Revision: 1.12 $  $Date: 2019/06/23 04:41:32 $
+#'   $Revision: 1.14 $  $Date: 2019/10/29 10:41:31 $
 
 uniquemap <- function(x) { UseMethod("uniquemap") }
 
@@ -29,8 +29,29 @@ uniquemap.default <- function(x) {
 
 uniquemap.data.frame <- function(x) {
   n <- nrow(x)
-  result <- seq_len(n)
-  if(n <= 1 || !anyDuplicated(x))
+  result <- seqn <- seq_len(n)
+  if(n <= 1)
+    return(result)
+  #' faster algorithms for special cases
+  nc <- ncol(x)
+  if(nc == 1L) return(uniquemap(x[,1]))
+  if(all(sapply(x, is.numeric))) {
+    if(nc == 2L) {
+      oo <- order(x[,1], x[,2], seqn)
+      xx <- x[oo, , drop=FALSE]
+      isfirst <- c(TRUE, (diff(xx[,1]) != 0) | (diff(xx[,2]) != 0))
+    } else {
+      oo <- do.call(order, append(unname(as.list(x)), list(seqn)))
+      xx <- x[oo, , drop=FALSE]
+      isfirst <- c(TRUE, matrowany(apply(xx, 2, diff) != 0))
+    }
+    uniqueids <- seqn[oo][isfirst]
+    lastunique <- cumsum(isfirst)
+    result[oo] <- uniqueids[lastunique]
+    return(result)
+  }
+  #' general case
+  if(!anyDuplicated(x))
     return(result)
   dup <- duplicated(x)
   uni <- which(!dup)
