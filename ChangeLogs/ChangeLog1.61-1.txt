@@ -749,3 +749,18 @@ Change log from 1.61-0 to 1.61-1
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
 
+30 oct 2019
+
+   uniquemap.R
+   uniquemap.default.Rd
+	New method uniquemap.matrix
+
+   DESCRIPTION
+   NEWS
+	Version 1.61-0.039
+
+------------- passed R-3.6.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+
+

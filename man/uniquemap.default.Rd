@@ -1,11 +1,13 @@
 \name{uniquemap.default}
 \alias{uniquemap.default}
 \alias{uniquemap.data.frame}
+\alias{uniquemap.matrix}
 \title{
   Map Duplicate Entries to Unique Entries
 }
 \description{
-  Determine whether entries in a vector (or rows in a data frame)
+  Determine whether entries in a vector
+  (or rows in a matrix or data frame)
   are duplicated,
   choose a unique representative for each set of duplicates,
   and map the duplicates to the unique representative.
@@ -14,10 +16,13 @@
 \method{uniquemap}{default}(x)
 
 \method{uniquemap}{data.frame}(x)
+
+\method{uniquemap}{matrix}(x)
 }
 \arguments{
   \item{x}{
-    A vector or data frame.
+    A vector, data frame or matrix,
+    or another type of data.
   }
 }
 \details{
@@ -49,7 +54,8 @@
   \spatstatAuthors.
 }
 \seealso{
-  \code{\link{uniquemap}}
+  \code{\link{uniquemap}},
+  \code{\link{uniquemap.ppp}}
 }
 \examples{
   x <- c(3, 5, 2, 4, 2, 3)
@@ -57,6 +63,9 @@
 
   df <- data.frame(A=x, B=42)
   uniquemap(df)
+
+  z <- cbind(x, 10-x)
+  uniquemap(z)
 }
 \keyword{spatial}
 \keyword{methods}

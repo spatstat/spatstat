@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.61-0.039
+        CHANGES IN spatstat VERSION 1.61-0.040
 
 OVERVIEW
 
@@ -61,6 +61,9 @@ NEW FUNCTIONS
 
     o nncross.ppx
     Nearest neighbours between two point patterns in any number of dimensions.
+
+    o uniquemap.matrix
+    Method for uniquemap for matrices.
     
 SIGNIFICANT USER-VISIBLE CHANGES
 

@@ -4,7 +4,7 @@
 #'   Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2019
 #'   Licence: GNU Public Licence >= 2
 #'
-#'   $Revision: 1.14 $  $Date: 2019/10/29 10:41:31 $
+#'   $Revision: 1.15 $  $Date: 2019/10/30 09:33:01 $
 
 uniquemap <- function(x) { UseMethod("uniquemap") }
 
@@ -24,6 +24,46 @@ uniquemap.default <- function(x) {
   ux <- x[!dup]
   mapdup <- match(x[dup], ux)
   result[dup] <- which(!dup)[mapdup]
+  return(result)
+}
+
+uniquemap.matrix <- function(x) {
+  n <- nrow(x)
+  result <- seqn <- seq_len(n)
+  if(n <= 1)
+    return(result)
+  #' faster algorithms for special cases
+  nc <- ncol(x)
+  if(nc == 1L) return(uniquemap(x[,1]))
+  if(is.numeric(x)) {
+    if(nc == 2L) {
+      oo <- order(x[,1], x[,2], seqn)
+      xx <- x[oo, , drop=FALSE]
+      isfirst <- c(TRUE, (diff(xx[,1]) != 0) | (diff(xx[,2]) != 0))
+    } else {
+      y <- asplit(x, 2)
+      oo <- do.call(order, append(unname(y), list(seqn)))
+      xx <- x[oo, , drop=FALSE]
+      isfirst <- c(TRUE, matrowany(apply(xx, 2, diff) != 0))
+    }
+    uniqueids <- seqn[oo][isfirst]
+    lastunique <- cumsum(isfirst)
+    result[oo] <- uniqueids[lastunique]
+    return(result)
+  }
+  #' non-numeric matrix e.g. character
+  if(!anyDuplicated(x))
+    return(result)
+  dup <- duplicated(x)
+  uni <- which(!dup)
+  for(j in which(dup)) {
+    for(i in uni[uni < j]) {
+      if(IdenticalRowPair(i, j, x)) {
+        result[j] <- i
+        break
+      }
+    }
+  }
   return(result)
 }
 
