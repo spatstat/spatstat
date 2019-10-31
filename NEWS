@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.61-0.040
+        CHANGES IN spatstat VERSION 1.61-0.041
 
 OVERVIEW
 
@@ -216,6 +216,11 @@ BUG FIXES
     Crashed in some cases when a data point was exactly at a vertex.
     [Spotted by Jakob Gulddahl Rasmussen.]
     Fixed.
+
+    o Fest, Jest, Jdot, Jcross, Hest, Iest, rectcontact
+    envelope() commands using one of these summary functions
+    crashed sometimes with a message about illegal spacing of 'r' values.
+    Tentatively fixed.
     
         CHANGES IN spatstat VERSION 1.61-0
 

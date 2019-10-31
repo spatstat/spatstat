@@ -3,13 +3,14 @@
 #
 #	Computes estimates of the empty space function
 #
-#	$Revision: 4.43 $	$Date: 2016/10/04 01:04:13 $
+#	$Revision: 4.46 $	$Date: 2019/10/31 02:19:05 $
 #
 
 Fhazard <- function(X, ...) {
   Z <- Fest(X, ...)
   if(!any(names(Z) == "km"))
     stop("Kaplan-Meier estimator 'km' is required for hazard rate")
+  conserve <- attr(Z, "conserve")
   ## strip off Poisson F
   Z <- Z[, (colnames(Z) != "theo")]
   ## relabel the fv object
@@ -26,6 +27,7 @@ Fhazard <- function(X, ...) {
                   new.preferred="hazard")
   ## strip off unwanted bits
   Z <- Z[, c("r", "hazard", "theo")]
+  attr(Z, "conserve") <- conserve
   return(Z)
 }
 
@@ -34,35 +36,35 @@ Fest <- function(X, ..., eps = NULL, r=NULL, breaks=NULL,
                  domain=NULL) {
   verifyclass(X, "ppp")
   if(!is.null(domain))
-      stopifnot(is.subset.owin(domain, Window(X)))
+    stopifnot(is.subset.owin(domain, Window(X)))
+
   rorbgiven <- !is.null(r) || !is.null(breaks)
-    
+  checkspacing <- !isFALSE(list(...)$checkspacing)
+  
   ## Intensity estimate
-  W <- X$window
+  W <- Window(X)
   npts <- npoints(X)
   lambda <- npts/area(W)
   
-  ## First discretise
+  ## Discretise window
   dwin <- as.mask(W, eps=eps)
   dX <- ppp(X$x, X$y, window=dwin, check=FALSE)
-
-  ## histogram breakpoints
+  
+  ## Histogram breakpoints
   rmaxdefault <- rmax.rule("F", dwin, lambda)
-  breaks <- handle.r.b.args(r, breaks, dwin, eps, 
-                            rmaxdefault=rmaxdefault)
+  breaks <- handle.r.b.args(r, breaks, dwin, eps, rmaxdefault=rmaxdefault)
   rvals <- breaks$r
   rmax  <- breaks$max
-
-  if(rorbgiven) check.finespacing(rvals,
-                                  if(is.null(eps)) NULL else eps/4,
-                                  dwin,
-                                  rmaxdefault=rmaxdefault,
-                                  action="fatal",
-                                  rname="r", 
-                                  context="in Fest(X, r)")
+  if(rorbgiven && checkspacing)
+      check.finespacing(rvals,
+                        if(is.null(eps)) NULL else eps/4,
+                        dwin,
+                        rmaxdefault=rmaxdefault,
+                        action="fatal",
+                        rname="r", 
+                        context="in Fest(X, r)")
                                 
   ## choose correction(s)
-#  correction.given <- !missing(correction) && !is.null(correction)
   if(is.null(correction)) {
     correction <- c("rs", "km", "cs")
   } else correction <- pickoption("correction", correction,
@@ -190,6 +192,10 @@ Fest <- function(X, ..., eps = NULL, r=NULL, breaks=NULL,
   
   ## determine recommended plot range
   attr(Z, "alim") <- with(Z, range(.x[is.finite(.y) & .y <= 0.9]))
+
+  ## arguments to be used in envelope, etc
+  attr(Z, "conserve") <- list(checkspacing=FALSE)
+  
   return(Z)
 }
 

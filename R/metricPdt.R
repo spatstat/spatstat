@@ -3,7 +3,7 @@
 #'
 #'     Metric distance transform of pixel mask
 #'
-#'	$Revision: 1.2 $	$Date: 2018/05/30 01:22:38 $
+#'	$Revision: 1.3 $	$Date: 2019/10/31 02:36:27 $
 
 rectdistmap <- function(X, asp=1.0, npasses=1, verbose=FALSE) {
   w <- as.mask(X)
@@ -119,7 +119,8 @@ rectcontact <- function(X, ..., asp=1.0, npasses=4,
                         correction=c("rs", "km")) {
   verifyclass(X, "im")
   rorbgiven <- !is.null(r) || !is.null(breaks)
-
+  checkspacing <- !isFALSE(list(...)$checkspacing)
+  
   check.1.real(asp)
   stopifnot(asp > 0)
   
@@ -140,13 +141,14 @@ rectcontact <- function(X, ..., asp=1.0, npasses=4,
   rvals <- breaks$r
   rmax  <- breaks$max
 
-  if(rorbgiven) check.finespacing(rvals,
-                                  if(is.null(eps)) NULL else eps/4,
-                                  W,
-                                  rmaxdefault=rmaxdefault,
-                                  action="fatal",
-                                  rname="r", 
-                                  context="in rectcontact(X, r)")
+  if(rorbgiven && checkspacing)
+    check.finespacing(rvals,
+                      if(is.null(eps)) NULL else eps/4,
+                      W,
+                      rmaxdefault=rmaxdefault,
+                      action="fatal",
+                      rname="r", 
+                      context="in rectcontact(X, r)")
                                 
   correction <- pickoption("correction", correction,
                            c(border="rs",
@@ -201,6 +203,7 @@ rectcontact <- function(X, ..., asp=1.0, npasses=4,
 
   fvnames(Z, ".") <- rev(fvnames(Z, "."))
   attr(Z, "alim") <- with(Z, range(.x[is.finite(.y) & .y <= 0.95]))
+  attr(Z, "conserve") <- list(checkspacing=FALSE)
   return(Z)
 }
 

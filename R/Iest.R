@@ -2,7 +2,7 @@
 #
 #	I function
 #
-#	$Revision: 1.15 $	$Date: 2016/04/25 02:34:40 $
+#	$Revision: 1.16 $	$Date: 2019/10/31 03:01:26 $
 #
 #
 #
@@ -25,11 +25,11 @@ Iest <- local({
 
     ## J function of pattern regardless of type
     Jdotdot <- Jest(unmark(X),
-                    correction=correction, r=r, eps=eps, breaks=breaks)
+                    correction=correction, r=r, eps=eps, breaks=breaks, ...)
     rvals <- Jdotdot$r
   
     ## J function of subpattern of each type i
-    Jii <- lapply(Y, Jest, r=rvals, correction=correction)
+    Jii <- lapply(Y, Jest, r=rvals, correction=correction, eps=eps, ...)
     nrvals <- lengths(lapply(Jii, getElement, name="r"))
     if(length(unique(nrvals)) != 1 || nrvals[1] != length(rvals))
       stop("Internal error: J function objects have different lengths")
@@ -73,6 +73,7 @@ Iest <- local({
                    "Kaplan-Meier estimate of %s", "km")
     }
     unitname(Z) <- unitname(X)
+    attr(Z, "conserve") <- attr(Jdotdot, "conserve")
     return(Z)
   }
 

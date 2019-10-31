@@ -3,7 +3,7 @@
 #	Usual invocations to compute multitype J function(s)
 #	if F and G are not required 
 #
-#	$Revision: 4.39 $	$Date: 2014/10/24 00:22:30 $
+#	$Revision: 4.41 $	$Date: 2019/10/31 03:23:03 $
 #
 #
 #
@@ -23,7 +23,8 @@ function(X, i, j, eps=NULL, r=NULL, breaks=NULL, ..., correction=NULL) {
   if(!is.marked(X))
     stop(paste("point pattern has no", sQuote("marks")))
   stopifnot(is.multitype(X))
-#
+  checkspacing <- !isFALSE(list(...)$checkspacing)
+#  
   marx <- marks(X, dfok=FALSE)
   if(missing(i)) i <- levels(marx)[1]
   if(missing(j)) j <- levels(marx)[2]
@@ -33,13 +34,15 @@ function(X, i, j, eps=NULL, r=NULL, breaks=NULL, ..., correction=NULL) {
     stop(paste("No points have mark = ", i))
 #        
   if(i == j)
-    result <- Jest(X[I], eps=eps, r=r, breaks=breaks, correction=correction)
+    result <- Jest(X[I], eps=eps, r=r, breaks=breaks,
+                   correction=correction, checkspacing=checkspacing)
   else {
     J <- (marx == j)
     result <- Jmulti(X, I, J,
                      eps=eps, r=r, breaks=breaks, disjoint=TRUE,
-                     correction=correction)
+                     correction=correction, checkspacing=checkspacing)
   }
+  conserve <- attr(result, "conserve")
   iname <- make.parseable(paste(i))
   jname <- make.parseable(paste(j))
   result <-
@@ -48,7 +51,8 @@ function(X, i, j, eps=NULL, r=NULL, breaks=NULL, ..., correction=NULL) {
                           list(i=iname,j=jname)),
                c("J", paste0("list(", iname, ",", jname, ")")),
                new.yexp=substitute(J[list(i,j)](r),
-                                      list(i=iname,j=jname)))
+                                   list(i=iname,j=jname)))
+  attr(result, "conserve") <- conserve
   return(result)
 }
 
@@ -68,6 +72,7 @@ function(X, i, eps=NULL, r=NULL, breaks=NULL, ..., correction=NULL) {
   if(!is.marked(X))
     stop(paste("point pattern has no", sQuote("marks")))
   stopifnot(is.multitype(X))
+  checkspacing <- !isFALSE(list(...)$checkspacing)
 #
   marx <- marks(X, dfok=FALSE)
   if(missing(i)) i <- levels(marx)[1]
@@ -79,13 +84,15 @@ function(X, i, eps=NULL, r=NULL, breaks=NULL, ..., correction=NULL) {
 #  
   result <- Jmulti(X, I, J,
                    eps=eps, r=r, breaks=breaks, disjoint=FALSE,
-                   correction=correction)
+                   correction=correction, checkspacing=checkspacing)
+  conserve <- attr(result, "conserve")
   iname <- make.parseable(paste(i))
   result <-
     rebadge.fv(result,
                substitute(J[i ~ dot](r), list(i=iname)),
                c("J", paste(iname, "~ symbol(\"\\267\")")),
                new.yexp=substitute(J[i ~ symbol("\267")](r), list(i=iname)))
+  attr(result, "conserve") <- conserve
   return(result)
 }
 
@@ -116,8 +123,9 @@ function(X, I, J, eps=NULL, r=NULL, breaks=NULL, ..., disjoint=NULL,
   J <- ppsubset(X, J)
   if(is.null(I) || is.null(J))
     stop("I and J must be valid subset indices")
-  FJ <- Fest(X[J], eps, breaks=brks, correction=correction)
-  GIJ <- Gmulti(X, I, J, breaks=brks, disjoint=disjoint, correction=correction)
+  FJ <- Fest(X[J], eps, breaks=brks, correction=correction, ...)
+  GIJ <- Gmulti(X, I, J, breaks=brks,
+                disjoint=disjoint, correction=correction, ...)
   rvals <- FJ$r
   Fnames <- names(FJ)
   Gnames <- names(GIJ)
@@ -173,6 +181,7 @@ function(X, I, J, eps=NULL, r=NULL, breaks=NULL, ..., disjoint=NULL,
 # add other info
   attr(Z, "G") <- GIJ
   attr(Z, "F") <- FJ
+  attr(Z, "conserve") <- attr(FJ, "conserve")
   unitname(Z) <- unitname(X)
   return(Z)
 }

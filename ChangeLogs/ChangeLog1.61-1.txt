@@ -757,7 +757,35 @@ Change log from 1.61-0 to 1.61-1
 
    DESCRIPTION
    NEWS
-	Version 1.61-0.039
+	Version 1.61-0.040
+
+------------- passed R-3.6.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+
+31 oct 2019
+
+   Fest.R
+   Jest.R
+   Jmulti.R
+   Hest.R
+   Iest.R
+   metricPdt.R [function rectcontact()]
+	Bug fix arising in envelope() with these summary functions.
+	Each function now recognises the undocumented argument 'checkspacing',
+	and returns attr(, "conserve") = list(checkspacing=FALSE)
+
+   envelope.R
+	Bug fix.
+	attr(fun(X),"conserve") is passed back to the summary function 'fun'
+	when applying it to simulated patterns
+
+   eval.fv.R
+	attr(,"conserve") is conserved
+	
+   DESCRIPTION
+   NEWS
+	Version 1.61-0.041
 
 ------------- passed R-3.6.1 CMD check ---------------
 ------------- installed on laptop      ---------------

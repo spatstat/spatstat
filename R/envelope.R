@@ -3,7 +3,7 @@
 #
 #   computes simulation envelopes 
 #
-#   $Revision: 2.100 $  $Date: 2019/10/18 06:54:34 $
+#   $Revision: 2.101 $  $Date: 2019/10/31 02:27:07 $
 #
 
 envelope <- function(Y, fun, ...) {
@@ -565,6 +565,9 @@ envelopeEngine <-
     stop(paste("The function", fname,
                "must return an object of class", sQuote("fv")))
 
+  ## catch 'conservation' parameters
+  conserveargs <- attr(funX, "conserve")
+
   ## warn about 'dangerous' arguments
   if(!is.null(dang <- attr(funX, "dangerous")) &&
      any(uhoh <- dang %in% names(list(...)))) {
@@ -758,6 +761,7 @@ envelopeEngine <-
     resolve.defaults(funargs,
                      inferred.r.args,
                      list(...),
+                     conserveargs,
                      if(usecorrection) list(correction="best") else NULL)
 
   # reject simulated pattern if function values are all NA (etc)

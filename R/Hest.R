@@ -11,6 +11,7 @@ Hest <- local({
                    correction=c("km", "rs", "han"),
                    conditional=TRUE) {
     rorbgiven <- !is.null(r) || !is.null(breaks)
+    checkspacing <- !isFALSE(list(...)$checkspacing)
     if(is.ppp(X) || is.psp(X)) {
       XX <- X
       W0 <- Window(X)
@@ -64,10 +65,11 @@ Hest <- local({
     dmax <- max(D)
     breaks <- handle.r.b.args(r, breaks, W, NULL, rmaxdefault=dmax)
     rval <- breaks$r
-    if(rorbgiven) check.finespacing(rval, rname="r", eps=pixeps/4, W,
-                                    rmaxdefault=dmax,
-                                    context="in Hest(X,r)",
-                                    action="fatal")
+    if(rorbgiven && checkspacing)
+      check.finespacing(rval, rname="r", eps=pixeps/4, W,
+                        rmaxdefault=dmax,
+                        context="in Hest(X,r)",
+                        action="fatal")
     ##  extract distances and censoring distances
     dist <- as.vector(as.matrix(D))
     bdry <- as.vector(as.matrix(B))
@@ -110,6 +112,7 @@ Hest <- local({
     ## relabel
     Z <- rebadge.fv(Z, substitute(H(r), NULL), "H")
     unitname(Z) <- unitname(X)
+    attr(Z, "conserve") <- list(checkspacing=FALSE)
     return(Z)
   }
 
