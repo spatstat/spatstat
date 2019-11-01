@@ -99,10 +99,7 @@
 }
 
 \author{\adrian
-  
-  
   and \rolf
-  
 }
 \keyword{spatial}
 \keyword{datagen}

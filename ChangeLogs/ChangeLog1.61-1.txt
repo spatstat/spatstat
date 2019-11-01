@@ -834,3 +834,23 @@ Change log from 1.61-0 to 1.61-1
 ------------- passed R-3.6.1 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
+
+   rcellpp.R      [New file]
+   rcellpp.Rd     [New file]
+   rSwitzerlpp.Rd [New file]
+
+   lintessmakers.R [New file]
+   intersect.lintess.Rd [New file]
+   chop.linnet.Rd [New file]
+
+   lintess.R
+   lintessmakers.R
+	Moved 'divide.linnet' to lintessmakers.R
+	
+   DESCRIPTION
+   NEWS
+	Version 1.61-0.044
+
+------------- passed R-3.6.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------

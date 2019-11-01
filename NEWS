@@ -1,13 +1,11 @@
 
-        CHANGES IN spatstat VERSION 1.61-0.043
+        CHANGES IN spatstat VERSION 1.61-0.044
 
 OVERVIEW
 
     o We thank Mohammad Ghorbani, Abdollah Jalilian, Nestor Luambua,
     Greg McSwiggan, Annie Mollie and Jakob Gulddahl Rasmussen for contributions.
     
-    o Tessellations on a linear network can now have marks.
-
     o Nearest Neighbour Index function can now return mark values.
 
     o Important fix in Ripley isotropic correction.
@@ -15,11 +13,17 @@ OVERVIEW
     o Index of repulsion strength for determinantal point process models.
 
     o Nearest neighbours between two point patterns in any number of dimensions.
-    
+
     o More options for handling bad simulation outcomes in envelope().
 
     o Bandwidth selectors warn about extreme values of bandwidth.
 
+    o Tessellations on a linear network can now have marks.
+
+    o New functions for simulating point processes on a linear network.
+
+    o More functions for manipulating tessellations on a linear network.
+    
     o spatstat now requires spatstat.utils version 1.15-0.
     
     o Bug fixes and minor improvements.
@@ -28,6 +32,21 @@ OVERVIEW
 
 NEW FUNCTIONS
 
+    o repul
+    Repulsiveness index for a determinantal point process model.
+
+    o reach.kppm
+    Reach (interaction distance) for a Cox or cluster point process model.
+
+    o summary.dppm, print.summary.dppm
+    Summary method for determinantal point process models.
+
+    o nncross.ppx
+    Nearest neighbours between two point patterns in any number of dimensions.
+
+    o uniquemap.matrix
+    Method for uniquemap for matrices.
+    
     o repairNetwork
     Detect and repair inconsistencies in internal data
     in a linnet or lpp object.
@@ -50,20 +69,17 @@ NEW FUNCTIONS
     o as.data.frame.lintess
     Convert a tessellation on a linear network into a data frame.
 
-    o repul
-    Repulsiveness index for a determinantal point process model.
+    o rcelllpp
+    Simulate the cell point process on a linear network
+    
+    o rSwitzerlpp
+    Simulate the Switzer-type point process on a linear network
 
-    o reach.kppm
-    Reach (interaction distance) for a Cox or cluster point process model.
-
-    o summary.dppm, print.summary.dppm
-    Summary method for determinantal point process models.
-
-    o nncross.ppx
-    Nearest neighbours between two point patterns in any number of dimensions.
-
-    o uniquemap.matrix
-    Method for uniquemap for matrices.
+    o intersect.lintess
+    Form the intersection of two tessellations on a linear network
+    
+    o chop.linnet
+    Divide a linear network into tiles using infinite lines
     
 SIGNIFICANT USER-VISIBLE CHANGES
 
