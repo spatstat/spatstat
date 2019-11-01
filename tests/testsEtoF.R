@@ -479,7 +479,7 @@ local({
 # 
 #    tests/fvproblems.R
 #
-#    $Revision: 1.8 $  $Date: 2019/11/01 01:49:54 $
+#    $Revision: 1.9 $  $Date: 2019/11/01 05:18:11 $
 #
 
 require(spatstat)
@@ -577,7 +577,14 @@ local({
 local({
   ## bug in Jmulti.R colliding with breakpts.R
   B <- owin(c(0,3), c(0,10))
-  X <- superimpose(A=runifpoint(1212, B), B=runifpoint(496, B))
-  JDX <- Jdot(X)
-  JCX <- Jcross(X)
+  Y <- superimpose(A=runifpoint(1212, B), B=runifpoint(496, B))
+  JDX <- Jdot(Y)
+  JCX <- Jcross(Y)
+  Jdif <- function(X, ..., i) {
+    Jidot <- Jdot(X, ..., i=i)
+    J <- Jest(X, ...)
+    dif <- eval.fv(Jidot - J)
+    return(dif)
+  }
+  E <- envelope(Y, Jdif, nsim=19, i="A", simulate=expression(rlabel(Y)))
 })

@@ -59,6 +59,16 @@
   
   The \R function \code{\link{step}} uses these methods.
 }
+\section{Model comparison}{
+  The values of log-likelihood and AIC returned by these functions
+  are based on the \emph{Palm likelihood} of the cluster process or Cox
+  process model. They are available only when the model was fitted
+  using \code{method="palm"}. For model comparison and model selection,
+  it is valid to compare the \code{logLik} values,
+  or to compare the \code{AIC} values, but only when
+  all the models are of class \code{"kppm"}
+  and were fitted using \code{method="palm"}.
+}
 \value{
   \code{logLik} returns a numerical value, belonging to the class
   \code{"logLik"}, with an attribute \code{"df"} giving the degrees of
@@ -81,13 +91,8 @@
   \code{\link{kppm}}, 
   \code{\link{logLik.ppm}}
 }
-\author{\adrian
-  
-  
-  \rolf
-  
-  and \ege
-  
+\author{
+  \spatstatAuthors.
 }
 \examples{
   fit <- kppm(redwood ~ x, "Thomas", method="palm")

@@ -543,7 +543,7 @@ local({
 #'                    and inhomogeneous summary functions
 #'                    and idw, adaptive.density
 #'
-#'  $Revision: 1.40 $  $Date: 2019/10/05 10:56:33 $
+#'  $Revision: 1.43 $  $Date: 2019/11/01 09:03:42 $
 #'
 
 require(spatstat)
@@ -828,20 +828,34 @@ local({
   Zno  <- Kmeasure(redwood, sigma=0.2, expand=FALSE)
   Zyes <- Kmeasure(redwood, sigma=0.2, expand=TRUE)
   #' All code blocks
-  diagmat <- diag(c(1,1))
-  generalmat <- matrix(c(1, 0.5, 0.5, 1), 2, 2)
+  sigmadouble <- rep(0.1, 2)
+  diagmat <- diag(sigmadouble^2)
+  generalmat <- matrix(c(1, 0.5, 0.5, 1)/100, 2, 2)
+  Z <- Kmeasure(redwood, sigma=sigmadouble)
+  Z <- Kmeasure(redwood, varcov=diagmat)
+  Z <- Kmeasure(redwood, varcov=generalmat)
   A <- second.moment.calc(redwood, 0.1, what="all", debug=TRUE)
-  B <- second.moment.calc(redwood, varcov=diagmat/100,    what="all")
-  D <- second.moment.calc(redwood, varcov=generalmat/100, what="all")
+  B <- second.moment.calc(redwood, varcov=diagmat,    what="all")
+  B <- second.moment.calc(redwood, varcov=diagmat,    what="all")
+  D <- second.moment.calc(redwood, varcov=generalmat, what="all")
   PR <- pixellate(redwood)
-  DR <- second.moment.calc(list(PR, PR), 0.1, debug=TRUE,
-                           npts=npoints(redwood), obswin=Window(redwood))
+  DRno  <- second.moment.calc(PR, 0.2, debug=TRUE, expand=FALSE,
+                              npts=npoints(redwood), obswin=Window(redwood))
+  DRyes <- second.moment.calc(PR, 0.2, debug=TRUE, expand=TRUE,
+                              npts=npoints(redwood), obswin=Window(redwood))
+  DR2 <- second.moment.calc(solist(PR, PR), 0.2, debug=TRUE, expand=TRUE,
+                            npts=npoints(redwood), obswin=Window(redwood))
+  Gmat <- generalmat * 100
   isoGauss <- function(x,y) {dnorm(x) * dnorm(y)}
   ee <- evaluate2Dkernel(isoGauss, runif(10), runif(10),
-                         varcov=generalmat, scalekernel=TRUE)
+                         varcov=Gmat, scalekernel=TRUE)
   isoGaussIm <- as.im(isoGauss, square(c(-3,3)))
   gg <- evaluate2Dkernel(isoGaussIm, runif(10), runif(10),
-                         varcov=generalmat, scalekernel=TRUE)
+                         varcov=Gmat, scalekernel=TRUE)
+  ## experimental code
+  op <- spatstat.options(developer=TRUE)
+  DR <- density(redwood, 0.1)
+  spatstat.options(op)
 })
 
 local({

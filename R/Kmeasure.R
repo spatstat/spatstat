@@ -1,13 +1,15 @@
 #
 #           Kmeasure.R
 #
-#           $Revision: 1.69 $    $Date: 2019/04/05 10:25:34 $
+#           $Revision: 1.70 $    $Date: 2019/11/01 08:56:38 $
 #
 #     Kmeasure()         compute an estimate of the second order moment measure
 #
 #     Kest.fft()        use Kmeasure() to form an estimate of the K-function
 #
 #     second.moment.calc()    underlying algorithm
+#
+#     second.moment.engine()    underlying underlying algorithm!
 #
 
 Kmeasure <- function(X, sigma, edge=TRUE, ..., varcov=NULL) {
@@ -42,10 +44,12 @@ Kmeasure <- function(X, sigma, edge=TRUE, ..., varcov=NULL) {
 second.moment.calc <- function(x, sigma=NULL, edge=TRUE,
                                what=c("Kmeasure", "kernel", "smooth", 
                                  "Bartlett", "edge", "smoothedge", "all"),
-                               ..., 
-                               varcov=NULL, expand=FALSE, debug=FALSE) {
+                               ...,
+                               varcov=NULL, expand=FALSE,
+                               obswin, npts=NULL, debug=FALSE) {
   if(is.null(sigma) && is.null(varcov))
     stop("must specify sigma or varcov")
+  obswin.given <- !missing(obswin)
   what <- match.arg(what)
   sig <- if(!is.null(sigma)) sigma else max(c(diag(varcov), sqrt(det(varcov))))
 
@@ -66,8 +70,10 @@ second.moment.calc <- function(x, sigma=NULL, edge=TRUE,
   across <- min(diff(rec$xrange), diff(rec$yrange))
   # determine whether to expand window
   if(!expand || (6 * sig < across)) {
+    if(!obswin.given) obswin <- NULL
     result <- second.moment.engine(x, sigma=sigma, edge=edge,
-                                   what=what, debug=debug, ..., varcov=varcov)
+                                   what=what, debug=debug, ...,
+                                   obswin=obswin, npts=npts, varcov=varcov)
     return(result)
   }
   #' need to expand window
@@ -96,10 +102,13 @@ second.moment.calc <- function(x, sigma=NULL, edge=TRUE,
     X <- lapply(X, rebound.im, rect=bigger)
     X <- lapply(X, na.handle.im, na.replace=0)
   }
-  # Compute!
+  ## handle override arguments
+  ow <- if(obswin.given) obswin else win # may be NULL if given
+  if(!is.null(npts)) np <- npts
+  ## Compute!
   out <- second.moment.engine(X, sigma=sigma, edge=edge,
                               what=what, debug=debug, ...,
-                              obswin=win, varcov=varcov, npts=np)
+                              obswin=ow, varcov=varcov, npts=np)
   # Now clip it
   fbox <- shift(rec, origin="midpoint")
   if(nimages == 1) {
@@ -150,7 +159,8 @@ second.moment.engine <-
 {
   what <- match.arg(what)
   validate2Dkernel(kernel)
-
+  obswin.given <- !missing(obswin) && !is.null(obswin)
+  
   is.second.order <- what %in% c("Kmeasure", "Bartlett", "all")
   needs.kernel <- what %in% c("kernel", "all", "Kmeasure")
   returns.several <- what %in% c("all", "smoothedge")
@@ -180,9 +190,12 @@ second.moment.engine <-
   unitsX <- unitname(X)
   xstep <- X$xstep
   ystep <- X$ystep
-  # ensure obswin has same bounding frame as X
-  if(!missing(obswin))
+  ## ensure obswin has same bounding frame as X
+  if(!obswin.given) {
+    obswin <- Window(X)
+  } else if(!identical(Frame(obswin), Frame(X))) {
     obswin <- rebound.owin(obswin, as.rectangle(X))
+  }
   # go to work
   Y <- X$v
   Ylist <- lapply(Xlist, getElement, name="v")
@@ -267,7 +280,7 @@ second.moment.engine <-
       ctwist <- (-nc):(nc-1) %% (2*nc) + 1
       if(debug) {
         if(any(fave.order(xcol.ker) != rtwist))
-          cat("something round the twist\n")
+          splat("something round the twist")
       }
       Kermit <- Kern[ rtwist, ctwist]
       ker <- im(Kermit, xcol.ker[ctwist], yrow.ker[ rtwist], unitname=unitsX)
@@ -285,11 +298,9 @@ second.moment.engine <-
       fY <- fft2D(Ypad, west=west)
       sm <- fft2D(fY * fK, inverse=TRUE, west=west)/lengthYpad
       if(debug) {
-        cat(paste("smooth: maximum imaginary part=",
-                  signif(max(Im(sm)),3), "\n"))
+        splat("smooth: maximum imaginary part=", signif(max(Im(sm)),3))
         if(!is.null(npts))
-          cat(paste("smooth: mass error=",
-                    signif(sum(Mod(sm))-npts,3), "\n"))
+          splat("smooth: mass error=", signif(sum(Mod(sm))-npts,3))
       }
     } else {
       fYlist <- smlist <- blanklist
@@ -298,11 +309,11 @@ second.moment.engine <-
         smlist[[i]] <- sm.i <-
           fft2D(fY.i * fK, inverse=TRUE, west=west)/lengthYpad
         if(debug) {
-          cat(paste("smooth component", i, ": maximum imaginary part=",
-                    signif(max(Im(sm.i)),3), "\n"))
+          splat("smooth component", i, ": maximum imaginary part=",
+                signif(max(Im(sm.i)),3))
           if(!is.null(npts))
-            cat(paste("smooth component", i, ": mass error=",
-                      signif(sum(Mod(sm.i))-npts,3), "\n"))
+            splat("smooth component", i, ": mass error=",
+                  signif(sum(Mod(sm.i))-npts,3))
         }
       }
     }
@@ -374,11 +385,11 @@ second.moment.engine <-
     if(nimages == 1) {
       mom <- fft2D(bart, inverse=TRUE, west=west)/lengthYpad
       if(debug) {
-        cat(paste("2nd moment measure: maximum imaginary part=",
-                  signif(max(Im(mom)),3), "\n"))
+        splat("2nd moment measure: maximum imaginary part=",
+              signif(max(Im(mom)),3))
         if(!is.null(npts))
-          cat(paste("2nd moment measure: mass error=",
-                    signif(sum(Mod(mom))-npts^2, 3), "\n"))
+          splat("2nd moment measure: mass error=",
+                signif(sum(Mod(mom))-npts^2, 3))
       }
       mom <- Mod(mom)
       # subtract (delta_0 * kernel) * npts
@@ -390,11 +401,11 @@ second.moment.engine <-
       for(i in 1:nimages) {
         mom.i <- fft2D(bartlist[[i]], inverse=TRUE, west=west)/lengthYpad
         if(debug) {
-          cat(paste("2nd moment measure: maximum imaginary part=",
-                    signif(max(Im(mom.i)),3), "\n"))
+          splat("2nd moment measure: maximum imaginary part=",
+                signif(max(Im(mom.i)),3))
           if(!is.null(npts))
-            cat(paste("2nd moment measure: mass error=",
-                      signif(sum(Mod(mom.i))-npts^2, 3), "\n"))
+            splat("2nd moment measure: mass error=",
+                  signif(sum(Mod(mom.i))-npts^2, 3))
         }
         mom.i <- Mod(mom.i)
         # subtract (delta_0 * kernel) * npts
@@ -451,7 +462,7 @@ second.moment.engine <-
     }
     if(debug) {
       if(any(fave.order(xcol.ker) != rtwist))
-        cat("internal error: something round the twist\n")
+        splat("internal error: something round the twist")
     }
   }
   if(what %in% c("edge", "all", "smoothedge")) {

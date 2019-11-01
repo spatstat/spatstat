@@ -1548,7 +1548,7 @@ scanmeasure(X, \dots)
 scanPoisLRTS(nZ, nG, muZ, muG, alternative)
 scanBinomLRTS(nZ, nG, muZ, muG, alternative)
 second.moment.calc(x, sigma, edge, what, \dots,
-                   varcov=NULL, expand=FALSE, debug=FALSE)
+                   varcov, expand, obswin, npts, debug)
 second.moment.engine(x, sigma, edge, what, \dots,
       kernel, scalekernel, obswin, varcov, npts, debug)
 sewpcf(d, w, denargs, lambda2area, divisor)

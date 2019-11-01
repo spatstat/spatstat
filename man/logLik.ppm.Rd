@@ -98,6 +98,19 @@
   
   The \R function \code{\link[stats]{step}} uses these methods.
 }
+\section{Model comparison}{
+  The values of \code{logLik} and \code{AIC} returned by these functions
+  are based on the \emph{pseudolikelihood} of the Gibbs point process
+  model. If the model is a Poisson process, then the pseudolikelihood
+  is the same as the likelihood, but for other Gibbs models,
+  the pseudolikelihood is different from the likelihood (and the
+  likelihood of a Gibbs model is hard to compute).
+
+  For model comparison and model selection,
+  it is valid to compare the \code{logLik} values,
+  or to compare the \code{AIC} values, but only when
+  all the models are of class \code{"ppm"}.
+}
 \value{
   \code{logLik} returns a numerical value, belonging to the class
   \code{"logLik"}, with an attribute \code{"df"} giving the degrees of
@@ -118,6 +131,7 @@
 \seealso{
   \code{\link{ppm}},  
   \code{\link{as.owin}},
+  \code{\link{anova.ppm}},
   \code{\link{coef.ppm}},
   \code{\link{fitted.ppm}},
   \code{\link{formula.ppm}},
@@ -132,13 +146,8 @@
   \code{\link{update.ppm}},
   \code{\link{vcov.ppm}}.
 }
-\author{\adrian
-  
-  
-  \rolf
-  
-  and \ege
-  
+\author{
+  \spatstatAuthors.
 }
 \examples{
   data(cells)
