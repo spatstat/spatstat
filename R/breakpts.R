@@ -6,7 +6,7 @@
 #
 #	even.breaks()
 #
-#	$Revision: 1.21 $	$Date: 2017/06/05 10:31:58 $
+#	$Revision: 1.24 $	$Date: 2019/11/01 01:07:53 $
 #
 #
 #       Other functions in this directory use the standard Splus function
@@ -179,9 +179,10 @@ handle.r.b.args <- function(r=NULL, breaks=NULL, window, pixeps=NULL,
     if(!isTRUE(is.finite(rmaxdefault)))
       rmaxdefault <- NULL
     rmax <- rmaxdefault %orifnull% diameter(Frame(window))
+    #' determine spacing
     if(is.null(pixeps)) {
       pixeps <-
-        if(is.mask(window)) min(window$xstep, window$ystep) else (rmax/128)
+        if(is.mask(window)) min(window$xstep, window$ystep) else rmax/128
     }
     rstep <- pixeps/4
     breaks <- make.even.breaks(rmax, bstep=rstep)

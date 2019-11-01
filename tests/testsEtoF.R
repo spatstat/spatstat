@@ -479,7 +479,7 @@ local({
 # 
 #    tests/fvproblems.R
 #
-#    $Revision: 1.7 $  $Date: 2016/03/08 00:26:23 $
+#    $Revision: 1.8 $  $Date: 2019/11/01 01:49:54 $
 #
 
 require(spatstat)
@@ -572,4 +572,12 @@ local({
   #'
   H <- rebadge.as.crossfun(K, "H", "inhom", 1, 2)
   H <- rebadge.as.dotfun(K, "H", "inhom", 3)
+})
+
+local({
+  ## bug in Jmulti.R colliding with breakpts.R
+  B <- owin(c(0,3), c(0,10))
+  X <- superimpose(A=runifpoint(1212, B), B=runifpoint(496, B))
+  JDX <- Jdot(X)
+  JCX <- Jcross(X)
 })

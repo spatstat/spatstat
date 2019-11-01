@@ -791,4 +791,24 @@ Change log from 1.61-0 to 1.61-1
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
 
+01 nov 2019
 
+   Jmulti.R
+	Fix bug causing errors about spacing of r values.
+
+   tests/fvproblems.R
+	Test an example of this bug.
+
+   Fest.R
+   Hest.R
+   Jmulti.R
+   metricPdt.R
+	Inserted precautionary test code.
+	
+   DESCRIPTION
+   NEWS
+	Version 1.61-0.042
+
+------------- passed R-3.6.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------

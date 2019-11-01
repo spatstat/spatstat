@@ -3,7 +3,7 @@
 #'
 #'     Metric distance transform of pixel mask
 #'
-#'	$Revision: 1.3 $	$Date: 2019/10/31 02:36:27 $
+#'	$Revision: 1.5 $	$Date: 2019/11/01 01:34:30 $
 
 rectdistmap <- function(X, asp=1.0, npasses=1, verbose=FALSE) {
   w <- as.mask(X)
@@ -120,6 +120,7 @@ rectcontact <- function(X, ..., asp=1.0, npasses=4,
   verifyclass(X, "im")
   rorbgiven <- !is.null(r) || !is.null(breaks)
   checkspacing <- !isFALSE(list(...)$checkspacing)
+  testme       <- isTRUE(list(...)$testme)
   
   check.1.real(asp)
   stopifnot(asp > 0)
@@ -141,11 +142,11 @@ rectcontact <- function(X, ..., asp=1.0, npasses=4,
   rvals <- breaks$r
   rmax  <- breaks$max
 
-  if(rorbgiven && checkspacing)
+  if(testme || (rorbgiven && checkspacing))
     check.finespacing(rvals,
                       if(is.null(eps)) NULL else eps/4,
                       W,
-                      rmaxdefault=rmaxdefault,
+                      rmaxdefault=if(rorbgiven) NULL else rmaxdefault,
                       action="fatal",
                       rname="r", 
                       context="in rectcontact(X, r)")

@@ -3,7 +3,7 @@
 #	Usual invocations to compute multitype J function(s)
 #	if F and G are not required 
 #
-#	$Revision: 4.41 $	$Date: 2019/10/31 03:23:03 $
+#	$Revision: 4.43 $	$Date: 2019/11/01 01:35:30 $
 #
 #
 #
@@ -117,13 +117,15 @@ function(X, I, J, eps=NULL, r=NULL, breaks=NULL, ..., disjoint=NULL,
 #
   X <- as.ppp(X)
   W<- X$window
-  rmaxdefault <- rmax.rule("J", W)
-  brks <- handle.r.b.args(r, breaks, W, rmaxdefault=rmaxdefault)$val
   I <- ppsubset(X, I)
   J <- ppsubset(X, J)
   if(is.null(I) || is.null(J))
     stop("I and J must be valid subset indices")
-  FJ <- Fest(X[J], eps, breaks=brks, correction=correction, ...)
+  XJ <- X[J]
+  lambdaJ <- intensity(XJ)
+  rmaxdefault <- rmax.rule("J", W, lambdaJ)
+  brks <- handle.r.b.args(r, breaks, W, rmaxdefault=rmaxdefault)$val
+  FJ <- Fest(XJ, eps, breaks=brks, correction=correction, ...)
   GIJ <- Gmulti(X, I, J, breaks=brks,
                 disjoint=disjoint, correction=correction, ...)
   rvals <- FJ$r

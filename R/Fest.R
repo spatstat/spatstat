@@ -3,7 +3,7 @@
 #
 #	Computes estimates of the empty space function
 #
-#	$Revision: 4.46 $	$Date: 2019/10/31 02:19:05 $
+#	$Revision: 4.47 $	$Date: 2019/11/01 01:32:28 $
 #
 
 Fhazard <- function(X, ...) {
@@ -40,6 +40,7 @@ Fest <- function(X, ..., eps = NULL, r=NULL, breaks=NULL,
 
   rorbgiven <- !is.null(r) || !is.null(breaks)
   checkspacing <- !isFALSE(list(...)$checkspacing)
+  testme       <- isTRUE(list(...)$testme)
   
   ## Intensity estimate
   W <- Window(X)
@@ -55,7 +56,7 @@ Fest <- function(X, ..., eps = NULL, r=NULL, breaks=NULL,
   breaks <- handle.r.b.args(r, breaks, dwin, eps, rmaxdefault=rmaxdefault)
   rvals <- breaks$r
   rmax  <- breaks$max
-  if(rorbgiven && checkspacing)
+  if(testme || (rorbgiven && checkspacing))
       check.finespacing(rvals,
                         if(is.null(eps)) NULL else eps/4,
                         dwin,

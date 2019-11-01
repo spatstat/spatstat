@@ -12,6 +12,7 @@ Hest <- local({
                    conditional=TRUE) {
     rorbgiven <- !is.null(r) || !is.null(breaks)
     checkspacing <- !isFALSE(list(...)$checkspacing)
+    testme       <- isTRUE(list(...)$testme)
     if(is.ppp(X) || is.psp(X)) {
       XX <- X
       W0 <- Window(X)
@@ -65,7 +66,7 @@ Hest <- local({
     dmax <- max(D)
     breaks <- handle.r.b.args(r, breaks, W, NULL, rmaxdefault=dmax)
     rval <- breaks$r
-    if(rorbgiven && checkspacing)
+    if(testme || (rorbgiven && checkspacing))
       check.finespacing(rval, rname="r", eps=pixeps/4, W,
                         rmaxdefault=dmax,
                         context="in Hest(X,r)",
