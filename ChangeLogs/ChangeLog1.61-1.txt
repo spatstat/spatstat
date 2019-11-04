@@ -879,4 +879,18 @@ Change log from 1.61-0 to 1.61-1
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
 
+   window.R
+      Tweak: remove 'names' from 'xrange', etc
+
+   rmhsnoop.R
+      Tweaked header
+      
+   DESCRIPTION
+   NEWS
+	Version 1.61-0.046
+
+------------- passed R-3.6.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+
 

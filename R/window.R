@@ -3,7 +3,7 @@
 #
 #	A class 'owin' to define the "observation window"
 #
-#	$Revision: 4.185 $	$Date: 2019/08/31 04:03:36 $
+#	$Revision: 4.187 $	$Date: 2019/11/04 07:57:54 $
 #
 #
 #	A window may be either
@@ -93,7 +93,11 @@ owin <- local({
      
   if(missing(xrange) != missing(yrange))
     stop("If one of xrange, yrange is specified then both must be.")
-
+  if(!missing(xrange)) {
+    xrange <- unname(xrange)
+    yrange <- unname(yrange)
+  }
+    
   # convert data frames to vanilla lists
   if(poly.given) {
     if(is.data.frame(poly))
@@ -156,7 +160,7 @@ owin <- local({
     
     if(psingle) {
       # single boundary polygon
-      bdry <- list(poly)
+      bdry <- unname(list(poly))
       if(check || calculate) {
         w.area <- Area.xypolygon(poly)
         if(w.area < 0)
@@ -165,9 +169,9 @@ owin <- local({
       }
     } else {
       # multiple boundary polygons
-      bdry <- poly
+      bdry <- unname(poly)
       if(check || calculate) {
-        w.area <- unlist(lapply(poly, Area.xypolygon))
+        w.area <- sapply(poly, Area.xypolygon)
         if(sum(w.area) < 0)
           stop(paste("Area of window is negative;\n",
                      "check that all polygons were traversed",
@@ -304,14 +308,14 @@ owin <- local({
     }
 
     out <- list(type     = "mask",
-                xrange   = xrange,
-                yrange   = yrange,
+                xrange   = unname(xrange),
+                yrange   = unname(yrange),
                 dim      = c(nr, nc),
-                xstep    = xstep,
-                ystep    = ystep,
+                xstep    = unname(xstep),
+                ystep    = unname(ystep),
                 warnings = .Spatstat.Image.Warning,
-                xcol    = xcol, 
-                yrow    = yrow,
+                xcol    = unname(xcol), 
+                yrow    = unname(yrow),
                 m       = mask,
                 units   = unitname)
     class(out) <- "owin"

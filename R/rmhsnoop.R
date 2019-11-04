@@ -3,7 +3,7 @@
 #
 #   visual debug mechanism for rmh
 #
-#   $Revision: 1.26 $  $Date: 2014/10/24 00:22:30 $
+#   $Revision: 1.27 $  $Date: 2019/11/04 07:53:46 $
 #
 #   When rmh is called in visual debug mode (snooping = TRUE),
 #   it calls e <- rmhSnoopEnv(...) to create an R environment 'e'
@@ -216,7 +216,8 @@ rmhsnoop <- local({
     header <- c(paste("Iteration", irep),
                 propname,
                 paste("Hastings ratio =",
-                      signif(numerator, 4), "/", signif(denominator, 4)))
+                      signif(numerator, 4), "/", signif(denominator, 4),
+                      "=", signif(numerator/denominator, 4)))
     info <- list(irep=irep,
                  Wsim=Wsim,
                  Wclip=Wclip.orig,
