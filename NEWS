@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.61-0.044
+        CHANGES IN spatstat VERSION 1.61-0.045
 
 OVERVIEW
 
@@ -236,6 +236,10 @@ BUG FIXES
     o Fest, Jest, Jdot, Jcross, Hest, Iest, rectcontact
     envelope() commands using one of these summary functions
     crashed sometimes with a message about illegal spacing of 'r' values.
+    Fixed.
+
+    o plot.linnet, plot.psp
+    Ignored argument 'col' when style="width".
     Fixed.
     
         CHANGES IN spatstat VERSION 1.61-0

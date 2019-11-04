@@ -351,7 +351,7 @@ local({
 ## 
 ## tests/polygons.R
 ##
-##  $Revision: 1.3 $ $Date: 2018/07/22 02:10:07 $
+##  $Revision: 1.4 $ $Date: 2019/11/03 03:18:05 $
 ##
 require(spatstat)
 local({
@@ -361,6 +361,10 @@ local({
   b <- letterR$bdry
   a <- sapply(b, xypolyselfint, yesorno=TRUE)
   a <- lapply(b, xypolyselfint, proper=TRUE)
+  
+  ## Simple example of self-crossing polygon
+  x <- read.table("selfcross.txt", header=TRUE)
+  y <- xypolyselfint(x)
 })
 
 # 
@@ -572,7 +576,7 @@ grep#
 #
 #   Plus assorted tricks
 #
-#   $Revision: 1.12 $  $Date: 2019/08/14 03:28:35 $
+#   $Revision: 1.14 $  $Date: 2019/11/03 03:33:51 $
 #
 require(spatstat)
 local({
@@ -624,14 +628,23 @@ local({
   fitZ <- ppm(cells ~ Z)
   U <- getppmOriginalCovariates(fitZ)
   logLik(fitZ, absolute=TRUE)
+  unitname(fitZ)
+  unitname(fitZ) <- c("metre", "metres")
+
+  ## (7a) emend.ppm
+  fitZe <- emend(fitZ, trace=TRUE)
+  ZZ <- Z
+  fitZZ <- ppm(cells ~ Z + ZZ)
+  fitZZe <- emend(fitZZ, trace=TRUE)
   fitOK  <- ppm(redwood ~1, Strauss(0.1), emend=TRUE)
   print(fitOK)
   fitNot <- ppm(redwood ~1, Strauss(0.1))
-  fitFast <- emend(fitNot, trace=TRUE)
-  print(fitFast)
+  fitSlow <- emend(fitNot, trace=TRUE)
+  print(fitSlow)
   op <- spatstat.options(project.fast=TRUE)
   fitFast <- emend(fitNot, trace=TRUE)
   print(fitFast)
+  fitZZe <- emend(fitZZ, trace=TRUE)
   spatstat.options(op)
   
   fut <- kppm(redwood ~ x)

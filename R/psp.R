@@ -1,7 +1,7 @@
 #
 #  psp.R
 #
-#  $Revision: 1.98 $ $Date: 2019/09/13 09:24:52 $
+#  $Revision: 1.99 $ $Date: 2019/11/04 01:33:51 $
 #
 # Class "psp" of planar line segment patterns
 #
@@ -358,7 +358,7 @@ plot.psp <- function(x, ..., main, add=FALSE,
     if(length(dim(marx))) marx <- marx[,which.marks]
     f <- function(x,y,seg,tp, values=marx) { values[seg] }
     g <- linfun(f, L)
-    out <- plot(g, style="width", ..., main=main, add=add,
+    out <- plot(g, style="width", ..., main=main, add=add, col=col,
                 show.all=show.all, show.window=show.window, do.plot=do.plot)
     return(invisible(out))
   }
@@ -424,10 +424,7 @@ plot.psp <- function(x, ..., main, add=FALSE,
   
   ## determine colours if any
   colmap <- NULL
-  if(!use.marks) {
-    ## black
-    col <- NULL
-  } else {
+  if(use.marks) {
     ## use colours
     marx <- as.data.frame(marx)[, which.marks]
     if(is.character(marx) || length(unique(marx)) == 1)

@@ -854,3 +854,29 @@ Change log from 1.61-0 to 1.61-1
 ------------- passed R-3.6.1 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
+
+03 nov 2019
+
+   tests/polygons.R
+	Further test of xypolyselfint
+
+   tests/ppmclass.R
+	Further tests of emend.ppm
+
+04 nov 2019
+
+   psp.R
+	Bug fix in handling 'col' when style = "width"
+
+   plot.psp.Rd
+	Improved explanation
+
+   DESCRIPTION
+   NEWS
+	Version 1.61-0.045
+
+------------- passed R-3.6.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+
+

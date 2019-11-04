@@ -58,17 +58,20 @@
   }
   \item{col}{
     Colour information.
-    If \code{style="width"}, then \code{col} should be a single value,
+    If \code{style="width"} or \code{style="none"},
+    then \code{col} should be a single value,
     interpretable as a colour; the line segments will be plotted
     using this colour.
-    If \code{style="colour"}, then \code{col} should be a 
-    colour map (object of class \code{"colourmap"}) to be used to represent
-    to the mark values, or (if the marks are a factor)
-    a vector of colour values for each level of the factor.
+    If \code{style="colour"} and \code{x} has marks,
+    then the mark values will be mapped
+    to colours using the information in \code{col}, which should be a 
+    colour map (object of class \code{"colourmap"})
+    or a vector of colour values.
   }
   \item{ribbon}{
     Logical flag indicating whether to display a ribbon
-    showing the colour map (in which mark values are associated with colours).
+    showing the colour map (in which mark values are associated with
+    colours) when \code{style="colour"}.
   }
   \item{ribsep}{
     Factor controlling the space between the ribbon and the image.
@@ -104,16 +107,36 @@
   Its plotting behaviour may also be modified through the \code{...}
   arguments.
 
-  For a \emph{marked} line segment pattern
-  (i.e. if \code{marks(x)} is not \code{NULL})
-  the line segments are plotted in colours
-  determined by the mark values. 
+  If the segments do not have marks (i.e. if \code{marks(x) = NULL})
+  then 
+
+  There are three different styles of plotting
+  which apply when the segments have marks
+  (i.e. when \code{marks(x)} is not null):
+  \describe{
+    \item{\code{style="colour"} (the default):}{
+      Segments are plotted with different colours depending on their
+      mark values.
+      The colour map, associating mark values with colours,
+      is determined by the argument \code{col}. The colour map will be
+      displayed as a vertical colour ribbon to the right of the plot, if
+      \code{ribbon=TRUE} (the default).
+    }
+    \item{\code{style="width"}:}{
+      Segments are plotted with different widths depending on their
+      mark values.
+      The width map, associating mark values with line widths,
+      is determined by \code{leg.scale} (see \code{\link{plot.linim}}).
+      The width map will be displayed as a vertical stack of lines
+      to the right of the plot, if \code{legend=TRUE} (the default).
+    }
+    \item{\code{style="none"}:}{
+      Mark information is ignored.
+    }
+  }
   If \code{marks(x)} is a data frame, the default is to use the first
   column of \code{marks(x)} to determine the colours. To specify another
   column, use the argument \code{which.marks}.
-  The colour map (associating mark values with colours) will be
-  displayed as a vertical colour ribbon to the right of the plot, if
-  \code{ribbon=TRUE}. 
 }
 \seealso{
   \code{\link{psp.object}},
