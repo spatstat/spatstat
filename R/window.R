@@ -3,7 +3,7 @@
 #
 #	A class 'owin' to define the "observation window"
 #
-#	$Revision: 4.187 $	$Date: 2019/11/04 07:57:54 $
+#	$Revision: 4.188 $	$Date: 2019/11/07 05:35:12 $
 #
 #
 #	A window may be either
@@ -1139,6 +1139,8 @@ print.summary.owin <- function(x, ...) {
         "x",
         prange(zapsmall(x$yrange)),
         pluralunits)
+  splat(paren(paste(signif(x$xrange, 4), "x", signif(x$yrange, 4),
+                    pluralunits)))
   Area <- signif(x$area, 6)
   splat("Window area =", Area, "square",
         if(Area == 1) singularunits else pluralunits)

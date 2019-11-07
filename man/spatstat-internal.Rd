@@ -138,6 +138,7 @@
 \alias{doMultiStraussHard}
 \alias{dppmFixAlgorithm}
 \alias{dppmFixIntensity}
+\alias{drawSignedPoly}
 \alias{emptywindow}
 \alias{envelopeEngine}
 \alias{envelopeProgressData}
@@ -325,9 +326,10 @@
 \alias{match2DkernelName}
 \alias{packupNNdata}
 \alias{parbreak}
-\alias{plan.legend.layout}
 \alias{PairPotentialType}
 \alias{PDEdensityLPP}
+\alias{plan.legend.layout}
+\alias{plotWidthMap}
 \alias{PoisSaddle}
 \alias{PoisSaddleArea}
 \alias{PoisSaddleGeyer}
@@ -944,6 +946,7 @@ do.istat(panel)
 doMultiStraussHard(iradii, hradii, types)
 dppmFixIntensity(DPP, lambda, po)
 dppmFixAlgorithm(algorithm, changealgorithm, clusters, startpar)
+drawSignedPoly(x,y,pars,sgn)
 emptywindow(w)
 envelopeEngine(X, fun, simul,
            nsim, nrank, \dots, funargs, funYargs,
@@ -1184,6 +1187,7 @@ plan.legend.layout(B, \dots, side, sep, size, sep.frac, size.frac,
 PairPotentialType(pairpot)
 PDEdensityLPP(x, sigma, \dots, weights, dx, dt,
               fun, finespacing, finedata)
+plotWidthMap(bb.leg, zlim, phys.scale, leg.scale, leg.side, leg.args, grafpar)
 PoisSaddle(beta, fi)
 PoisSaddleArea(beta, fi)
 PoisSaddleGeyer(beta, fi)

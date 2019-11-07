@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.61-0.046
+        CHANGES IN spatstat VERSION 1.61-0.047
 
 OVERVIEW
 
@@ -160,6 +160,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
     Arguments sinceversion="book" or sincedate="book"
     are interpreted to give all bugs reported after publication
     of the spatstat book.
+
+    o print.summary.owin
+    More information is printed.
 
 BUG FIXES
 
