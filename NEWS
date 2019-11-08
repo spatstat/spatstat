@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.61-0.047
+        CHANGES IN spatstat VERSION 1.61-0.048
 
 OVERVIEW
 
@@ -161,6 +161,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
     are interpreted to give all bugs reported after publication
     of the spatstat book.
 
+    o cbind.hyperframe, rbind.hyperframe
+    The result now retains the row.names of the original arguments.
+    
     o print.summary.owin
     More information is printed.
 

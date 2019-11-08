@@ -909,3 +909,16 @@ Change log from 1.61-0 to 1.61-1
 ------------- passed R-3.6.1 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
+
+08 nov 2019
+
+   hyperframe.R
+	cbind and rbind methods retain row.names
+
+   DESCRIPTION
+   NEWS
+	Version 1.61-0.048
+
+------------- passed R-3.6.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------

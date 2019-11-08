@@ -1,7 +1,7 @@
 #
 #  hyperframe.R
 #
-# $Revision: 1.67 $  $Date: 2019/09/11 11:31:20 $
+# $Revision: 1.71 $  $Date: 2019/11/08 12:54:36 $
 #
 
 hyperframe <- local({
@@ -433,6 +433,13 @@ cbind.hyperframe <- function(...) {
     }
   }
   result <- do.call(hyperframe, columns)
+  ## tack on row names
+  rona <- lapply(aarg, row.names)
+  good <- (lengths(rona) == nrow(result))
+  if(any(good)) {
+    rona <- rona[[min(which(good))]]
+    row.names(result) <- make.names(rona, unique=TRUE)
+  }
   return(result)
 }
 
@@ -473,9 +480,14 @@ rbind.hyperframe <- function(...) {
       rslt[[k]] <- hh
     }
   }
-  # make hyperframe
+  ## collect the row names
+  rona <- sapply(dfs, row.names)
+  rona <- make.names(rona, unique=TRUE)
+  ## make hyperframe
   names(rslt) <- nam
-  out <- do.call(hyperframe, append(rslt, list(stringsAsFactors=FALSE)))
+  out <- do.call(hyperframe, append(rslt,
+                                    list(stringsAsFactors=FALSE,
+                                         row.names=rona)))
   return(out)
 }
 
