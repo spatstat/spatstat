@@ -922,3 +922,17 @@ Change log from 1.61-0 to 1.61-1
 ------------- passed R-3.6.1 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
+
+11 nov 2019
+
+   window.R
+	Buglet fix
+
+   DESCRIPTION
+   NEWS
+	Version 1.61-0.049
+
+------------- passed R-3.6.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+
