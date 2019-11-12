@@ -1010,7 +1010,7 @@ fakemaintitle(bb, main, \dots)
 f3engine(x, y, z, box, vside, range, nval, correction)
 f3Cengine(x, y, z, box, vside, rmax, nrval)
 fasp(fns, which, formulae, dataname, title, rowNames, colNames, checkfv)
-FDMKERNEL(lppobj, sigma, dtt, weights, iterMax, sparse, dtx)
+FDMKERNEL(lppobj, sigma, dtt, weights, iterMax, sparse, dtx, stepnames)
 fft2D(z, inverse, west)
 fftwAvailable()
 fill.coefs(coefs, required)
@@ -1185,7 +1185,7 @@ parbreak(terse)
 plan.legend.layout(B, \dots, side, sep, size, sep.frac, size.frac,
                    started, map)
 PairPotentialType(pairpot)
-PDEdensityLPP(x, sigma, \dots, weights, dx, dt,
+PDEdensityLPP(x, sigma, \dots, weights, dx, dt, iterMax,
               fun, finespacing, finedata)
 plotWidthMap(bb.leg, zlim, phys.scale, leg.scale, leg.side, leg.args, grafpar)
 PoisSaddle(beta, fi)

@@ -189,7 +189,8 @@ density.splitppx <- function(x, sigma=NULL, ...) {
 }
 
 PDEdensityLPP <- function(x, sigma, ..., weights=NULL, 
-                          dx=NULL, dt=NULL,
+                          dx=NULL, dt=NULL, 
+                          iterMax=1e6,
                           fun=FALSE, 
                           finespacing=FALSE, finedata=finespacing) {
   stopifnot(is.lpp(x))
@@ -235,7 +236,8 @@ PDEdensityLPP <- function(x, sigma, ..., weights=NULL,
   }
   a <- FDMKERNEL(lppobj=x, sigma=sigma, dtx=dx, dtt=dt,
                  weights=weights,
-                 iterMax=1e6, sparse=TRUE)
+                 iterMax=iterMax, sparse=TRUE,
+                 stepnames=list(time="dt", space="dx"))
   f <- a$kernel_fun
   if(fun) {
     result <- f
@@ -259,7 +261,8 @@ PDEdensityLPP <- function(x, sigma, ..., weights=NULL,
 
 # Greg's code 
 FDMKERNEL <- function(lppobj, sigma, dtt, weights=NULL, iterMax=5000, 
-	              sparse=FALSE, dtx) {
+	              sparse=FALSE, dtx,
+                      stepnames=list(time="dtt", space="dtx")) {
   net2 <- as.linnet(lppobj)
 #  ends1 <- net2$lines$ends
   lenfs <- lengths.psp(as.psp(net2))
@@ -287,9 +290,14 @@ FDMKERNEL <- function(lppobj, sigma, dtt, weights=NULL, iterMax=5000,
     U0[is.na(U0)] <- 0
   } 
   M <- round((sigma^2)/(2*dtt))
-  if(M < 10) stop("No of time iterations must be > 10, decrease dtt")
+  if(M < 10)
+    stop(paste("No of time iterations must be > 10; decrease time step",
+               stepnames[["time"]]))
   if(M > iterMax)
-    stop("No of time iterations exceeds iterMax; increase dtt or increase iterMax")
+    stop(paste0("No of time iterations = ", M,
+                " exceeds maximum number iterMax = ", iterMax, 
+                "; increase time step ", stepnames[["time"]],
+                ", or increase iterMax"))
 
   alpha <- dtt/(dtx^2)
 
@@ -303,7 +311,12 @@ FDMKERNEL <- function(lppobj, sigma, dtt, weights=NULL, iterMax=5000,
   diag(A2) <- 1 - alpha * degree
   
   if(1 - dmax*alpha < 0)
-     stop("alpha must satisfy (1 - HIGHEST VERTEX DEGREE * ALPHA) > 0; decrease dtt or decrease D")
+    stop(paste0("Algorithm is unstable: alpha = ",
+                stepnames[["time"]], "/", stepnames[["space"]], "^2 = ", alpha,
+                " does not satisfy (dmax * alpha <= 1)",
+                " where DMAX = highest vertex degree = ", dmax,
+                "; decrease time step ", stepnames[["time"]],
+                ", or increase spacing ", stepnames[["space"]]))
 
   if(npoints(lppobj) > 0) {
     v <- as.numeric(U0)

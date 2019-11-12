@@ -948,3 +948,17 @@ Change log from 1.61-0 to 1.61-1
 ------------- passed R-3.6.1 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
+
+   density.lpp.R
+   spatstat-internal.Rd
+	Bug fix in passing argument 'iterMax'.
+	
+   DESCRIPTION
+   NEWS
+	Version 1.61-0.051
+
+------------- passed R-3.6.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+
+

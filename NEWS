@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.61-0.050
+        CHANGES IN spatstat VERSION 1.61-0.051
 
 OVERVIEW
 
@@ -190,6 +190,10 @@ BUG FIXES
     [spotted by Nestor Luambua]. Problem arose in spatstat 1.60-0.
     Fixed.
 
+    o density.lpp
+    Sometimes requested a larger value of 'iterMax' but ignored it.
+    Fixed.
+    
     o [.linnet, [.lpp
     Crashed if x contained inconsistent internal data
     (when index 'j' was a window, and snip=TRUE).
