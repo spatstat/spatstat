@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.61-0.049
+        CHANGES IN spatstat VERSION 1.61-0.050
 
 OVERVIEW
 
@@ -203,6 +203,10 @@ BUG FIXES
     Crashed if the function values were complex numbers.
     Fixed.
 
+    o integral.linim, mean.linim
+    Crashed if the image had logical values.
+    Fixed.
+    
     o Re, Im, Arg, Mod, Conj
     For pixel images on a linear network (class 'linim')
     these operations crashed if the pixel values were complex numbers.
@@ -239,6 +243,10 @@ BUG FIXES
     [Spotted by Jakob Gulddahl Rasmussen.]
     Fixed.
 
+    o plot.linim
+    Crashed (when style="width") if any pixel values were NaN.
+    Fixed.
+    
     o Fest, Jest, Jdot, Jcross, Hest, Iest, rectcontact
     envelope() commands using one of these summary functions
     crashed sometimes with a message about illegal spacing of 'r' values.

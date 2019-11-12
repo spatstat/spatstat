@@ -1,7 +1,7 @@
 #
 # linim.R
 #
-#  $Revision: 1.61 $   $Date: 2019/11/07 07:37:34 $
+#  $Revision: 1.63 $   $Date: 2019/11/12 07:13:55 $
 #
 #  Image/function on a linear network
 #
@@ -191,10 +191,12 @@ plot.linim <- local({
     W <- as.owin(L)
     #' ensure function values are numeric
     vals <- try(as.numeric(df$values))
-    if(!inherits(vals, "try-error")) {
-      df$values <- vals
-    } else stop("Function values should be numeric: unable to convert them",
-                call.=FALSE)
+    if(inherits(vals, "try-error")) 
+      stop("Function values should be numeric: unable to convert them",
+           call.=FALSE)
+    #' convert non-finite values to zero width
+    vals[!is.finite(vals)] <- 0
+    df$values <- vals
     #' plan layout
     if(legend) {
       #' use layout procedure in plot.im
@@ -693,7 +695,7 @@ integral.linim <- function(f, domain=NULL, ...){
   #' take average of data on each segment
   ##  mu <- as.numeric(by(vals, seg, mean, ..., na.rm=TRUE))
   ## mu[is.na(mu)] <- 0
-  num <- tapplysum(vals, list(seg), na.rm=TRUE)
+  num <- tapplysum(as.numeric(vals), list(seg), na.rm=TRUE)
   mu <- num/nper
   #' weighted sum
   len <- lengths.psp(as.psp(L))

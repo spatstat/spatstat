@@ -936,3 +936,15 @@ Change log from 1.61-0 to 1.61-1
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
 
+12 nov 2019
+
+   linim.R
+	Bug fixes in integral.linim and plot.linim.
+
+   DESCRIPTION
+   NEWS
+	Version 1.61-0.050
+
+------------- passed R-3.6.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
