@@ -99,7 +99,7 @@ mincontrast(observed, theoretical, startpar, \dots,
   and \eqn{p,q} are two exponents. The default is \code{q = 1/4},
   \code{p=2} so that the contrast criterion is the integrated squared
   difference between the fourth roots of the two functions
-  (Waagepetersen, 2006).
+  (Waagepetersen, 2007).
 
   The other arguments just make things print nicely.
   The argument \code{fvlab} contains labels for the component
@@ -137,17 +137,15 @@ mincontrast(observed, theoretical, startpar, \dots,
   Statistical Inference and Simulation for Spatial Point Processes.
   Chapman and Hall/CRC, Boca Raton.
 
-  Waagepetersen, R. (2006).
+  Waagepetersen, R. (2007).
   An estimating function approach to inference for
   inhomogeneous Neyman-Scott processes.
-  \emph{Biometrics} \bold{63} (2007) 252--258.
+  \emph{Biometrics} \bold{63}, 252--258.
 }  
 \author{Rasmus Waagepetersen
   \email{rw@math.auc.dk},
   adapted for \pkg{spatstat} by
-  \adrian
-  
-  
+  \adrian.
 }
 \seealso{
   \code{\link{kppm}},

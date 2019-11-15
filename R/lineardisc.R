@@ -2,7 +2,7 @@
 #
 #   disc.R
 #
-#   $Revision: 1.29 $ $Date: 2019/03/04 04:32:29 $
+#   $Revision: 1.30 $ $Date: 2019/11/15 07:13:04 $
 #
 #   Compute the disc of radius r in a linear network
 #
@@ -18,6 +18,7 @@ lineardisc <- function(L, x=locator(1), r, plotit=TRUE,
   if(L$sparse) {
     message("Converting linear network to non-sparse representation..")
     L <- as.linnet(L, sparse=FALSE)
+    message("Done.")
   }
   lines <- L$lines
   vertices <- L$vertices

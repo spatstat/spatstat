@@ -1,6 +1,6 @@
 #' Dominic Schuhmacher's idea
 #'
-#' $Revision: 1.16 $ $Date: 2017/01/07 09:24:04 $
+#' $Revision: 1.17 $ $Date: 2019/11/15 07:12:52 $
 #'
 
 clickppp <- local({
@@ -14,12 +14,14 @@ clickppp <- local({
             "exit: press ESC or another mouse button")
     if(is.null(main))
       main <- instructions
-  
+    
+
     ####  single type #########################
     if(is.null(types)) {
       plot(win, add=add, main=main, invert=TRUE)
       if(!is.null(hook))
         plot(hook, add=TRUE)
+      splat("Ready to click..")
       if(!is.null(n))
         xy <- spatstatLocator(n=n, ...)
       else
