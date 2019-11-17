@@ -33,8 +33,10 @@ rshift.psp <- function(X, ..., group=NULL, which=NULL) {
   }
 
   ############ loop ################
-  result <- psp(numeric(0), numeric(0), numeric(0), numeric(0),
-                X$window)
+ # result <- psp(numeric(0), numeric(0), numeric(0), numeric(0),
+ #               X$window)
+ # U: commented this one out since it creates an unmarked psp
+  result <- NULL
   
   for(i in seq_along(Y)) {
     
@@ -52,7 +54,9 @@ rshift.psp <- function(X, ..., group=NULL, which=NULL) {
     Zsh$window <- W
 
     # append to result
-    result <- append.psp(result, Zsh)
+    # U: not having result now requires a check
+    # old code: result <- append.psp(result, Zsh)
+    result <- if(is.null(result)) Zsh else append.psp(result, Zsh)
   }
 
   # clip 
