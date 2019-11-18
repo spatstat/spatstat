@@ -26,6 +26,9 @@
   the columns must be identical.
 
   (To combine two point patterns, see \code{superimpose}).
+
+  If one of the arguments is \code{NULL}, it will be ignored
+  and the other argument will be returned.
 }
 \seealso{
   \code{\link{psp}},
@@ -37,11 +40,8 @@
   Y <- psp(runif(5), runif(5), runif(5), runif(5),  window=owin())
   append.psp(X,Y)
 }
-\author{\adrian
-  
-  
-  and \rolf
-  
+\author{
+  \spatstatAuthors.
 }
 \keyword{spatial}
 \keyword{manip}

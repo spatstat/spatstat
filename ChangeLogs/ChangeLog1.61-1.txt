@@ -975,3 +975,24 @@ Change log from 1.61-0 to 1.61-1
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
 
+18 nov 2019
+
+   psp.R
+	append.psp now handles NULL arguments.
+
+   rshift.psp.R
+	Bug fix thanks to Ute Hahn
+
+   tests/segments.R
+	Added Ute's example
+
+   psp.R
+	as.psp no longer coerces a 1-column data frame of marks to a vector.
+	
+   DESCRIPTION
+   NEWS
+	Version 1.61-0.053
+
+------------- passed R-3.6.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------

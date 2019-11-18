@@ -1,7 +1,7 @@
 #
 # rshift.psp.R
 #
-#  $Revision: 1.6 $  $Date: 2011/05/18 09:10:12 $
+#  $Revision: 1.7 $  $Date: 2019/11/18 06:22:50 $
 #
 
 
@@ -28,13 +28,12 @@ rshift.psp <- function(X, ..., group=NULL, which=NULL) {
     stopifnot(is.factor(group))
     stopifnot(length(group) == X$n)
     Y <- lapply(levels(group),
-                function(l, X, group) {X[group == l]},
-                X=X, group=group)
+                function(l, Z, group) {Z[group == l]},
+                Z=X, group=group)
   }
 
   ############ loop ################
-  result <- psp(numeric(0), numeric(0), numeric(0), numeric(0),
-                X$window)
+  result <- NULL
   
   for(i in seq_along(Y)) {
     

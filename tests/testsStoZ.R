@@ -14,7 +14,7 @@ local({
 #
 #  tests/segments.R
 #
-#  $Revision: 1.15 $  $Date: 2019/10/05 10:31:48 $
+#  $Revision: 1.17 $  $Date: 2019/11/18 07:28:07 $
 
 require(spatstat)
 
@@ -162,6 +162,21 @@ density(Y, 0.2, at=Z, edge=TRUE, method="C")
   selfcrossing.psp(Z)
   crossing.psp(X,Y,details=TRUE)
   spatstat.options(selfcrossing.psp.useCall=TRUE)
+})
+
+local({
+  #' test rshift.psp and append.psp with marks (Ute Hahn)
+  m <- data.frame(A=1:10, B=letters[1:10])
+  g <- gl(3, 3, length=10)
+  X <- psp(runif(10), runif(10), runif(10), runif(10), window=owin(), marks=m)
+  Y <- rshift(X, radius = 0.1)
+  Y <- rshift(X, radius = 0.1, group=g)
+  #' mark management
+  b <- data.frame(A=1:10)
+  X <- psp(runif(10), runif(10), runif(10), runif(10), window=owin(), marks=b)
+  stopifnot(is.data.frame(marks(X)))
+  Y <- rshift(X, radius = 0.1)
+  Y <- rshift(X, radius = 0.1, group=g)
 })
 
 reset.spatstat.options()

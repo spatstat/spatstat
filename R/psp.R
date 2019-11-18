@@ -1,7 +1,7 @@
 #
 #  psp.R
 #
-#  $Revision: 1.99 $ $Date: 2019/11/04 01:33:51 $
+#  $Revision: 1.101 $ $Date: 2019/11/18 07:05:03 $
 #
 # Class "psp" of planar line segment patterns
 #
@@ -150,7 +150,7 @@ as.psp.data.frame <- function(x, ..., window=NULL, marks=NULL,
   }
 
   if(!is.null(marks)) {
-    if(identical(ncol(marks), 1L)) marks <- marks[,1L]
+    #' SUPPRESSED: if(identical(ncol(marks), 1L)) marks <- marks[,1L]
     #' assign marks directly to avoid infinite recursion
     out$marks <- marks
     out$markformat <- markformat(marks)
@@ -241,6 +241,8 @@ as.data.frame.psp <- function(x, row.names=NULL, ...) {
 #######  manipulation ##########################
 
 append.psp <- function(A,B) {
+  if(is.null(A) && (is.psp(B) || is.null(B))) return(B)
+  if(is.null(B) && is.psp(A)) return(A)
   verifyclass(A, "psp")
   verifyclass(B, "psp")
   stopifnot(identical(A$window, B$window))

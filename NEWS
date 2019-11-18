@@ -1,9 +1,9 @@
 
-        CHANGES IN spatstat VERSION 1.61-0.052
+        CHANGES IN spatstat VERSION 1.61-0.053
 
 OVERVIEW
 
-    o We thank Mohammad Ghorbani, Abdollah Jalilian, Nestor Luambua,
+    o We thank Mohammad Ghorbani, Ute Hahn, Abdollah Jalilian, Nestor Luambua,
     Greg McSwiggan, Annie Mollie and Jakob Gulddahl Rasmussen for contributions.
     
     o Nearest Neighbour Index function can now return mark values.
@@ -167,6 +167,13 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o print.summary.owin
     More information is printed.
 
+    o append.psp
+    Arguments may be NULL.
+
+    o as.psp
+    Now permits a data frame of marks to have only one column,
+    instead of coercing it to a vector.
+    
 BUG FIXES
 
     o as.linnet.psp
@@ -258,6 +265,11 @@ BUG FIXES
 
     o plot.linnet, plot.psp
     Ignored argument 'col' when style="width".
+    Fixed.
+
+    o rshift.psp
+    Crashed if X had a data frame of marks.
+    [Spotted by Ute Hahn.]
     Fixed.
     
         CHANGES IN spatstat VERSION 1.61-0
