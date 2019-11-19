@@ -56,9 +56,9 @@ infline(a = NULL, b = NULL, h = NULL, v = NULL, p = NULL, theta = NULL)
     the polar coordinates \eqn{p} and \eqn{\theta}{theta}
     can be used for any line. The line equation is
     \deqn{
-      y \cos\theta + x \sin\theta = p
+      y \sin\theta + x \cos\theta = p
     }{
-      y * cos(theta) + x * sin(theta) = p
+      y * sin(theta) + x * cos(theta) = p
     }
   }
   The command \code{infline} will accept line coordinates in any
