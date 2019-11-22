@@ -996,3 +996,16 @@ Change log from 1.61-0 to 1.61-1
 ------------- passed R-3.6.1 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
+
+22 nov 2019
+
+   infline.Rd
+	minor correction by Ute 
+
+   DESCRIPTION
+   NEWS
+	Version 1.61-0.054
+
+------------- passed R-3.6.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
