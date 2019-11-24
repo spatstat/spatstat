@@ -305,7 +305,11 @@ of potential impact.
   \subsection{Bugs, Substantially Incorrect, Moderate Impact}
 
   \begin{itemize}
-    
+  \item \texttt{as.linnet.psp}:
+    Sometimes produced a network with duplicated segments.
+    [Such objects can be repaired using \texttt{repairNetwork}.]
+     \bugger{1.41-1}{february 2015}{1.62-0}{december 2019}
+     
  \item \texttt{spatialcdf}:
    Argument \texttt{weights} was ignored, unless it was a fitted model.
    {\small (Bug was present since about 2010.  

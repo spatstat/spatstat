@@ -174,6 +174,10 @@ the News and Release Notes for each update.
 
    \item Tessellations on a linear network can now have marks.
 
+   \item More functions for manipulating tessellations on a linear network.
+    
+   \item New functions for simulating point processes on a linear network.
+
    \item Nearest Neighbour Index function can now return mark values.
 
    \item Index of repulsion strength for determinantal point process models.
@@ -460,6 +464,22 @@ Following is a list of all the functions that have been added.
 
 \begin{itemize}
   
+    \item \texttt{rcelllpp}:
+    Simulate the cell point process on a linear network.
+    
+    \item \texttt{rSwitzerlpp}:
+    Simulate the Switzer-type point process on a linear network.
+
+    \item \texttt{intersect.lintess}:
+    Form the intersection of two tessellations on a linear network.
+    
+    \item \texttt{chop.linnet}:
+    Divide a linear network into tiles using infinite lines.
+    
+   \item \texttt{repairNetwork}:
+     Detect and repair inconsistencies in internal data
+     in a \texttt{linnet} or \texttt{lpp} object.
+
    \item \verb!marks<-.lintess!, \texttt{unmark.lintess}:
     Assign marks to the tiles of a tessellation on a linear network.
 
@@ -515,7 +535,7 @@ Following is a list of all the functions that have been added.
     Map duplicate points to unique representatives.
     Generic with methods for \texttt{ppp}, \texttt{lpp}, \texttt{ppx}
     
-    \item \texttt{uniquemap.data.frame}:
+    \item \texttt{uniquemap.data.frame}, \texttt{uniquemap.matrix}:
     Map duplicate rows to unique representatives
 
     \item \texttt{localKcross}, \texttt{localLcross}, 
@@ -1150,6 +1170,8 @@ listed alphabetically.
 
 \item \texttt{anyDuplicated.ppp}: Accelerated.
   
+\item \texttt{append.psp}: arguments may be \texttt{NULL}.
+  
  \item \texttt{as.function.tess}:
     New argument \texttt{values} specifies the function values.
 
@@ -1217,7 +1239,10 @@ listed alphabetically.
       Can now repair errors in polygon data, if \texttt{repair=TRUE}.
     \item Accelerated when \texttt{w} is a pixel mask.
     \end{itemize}
-
+    
+  \item \texttt{as.psp}: now permits a data frame of marks
+    to have only one column, instead of coercing it to a vector.
+    
   \item \texttt{as.solist}:
     The argument \texttt{x} can now be a spatial object;
     \texttt{as.solist(cells)} is the same as \texttt{solist(cells)}.
@@ -1284,6 +1309,11 @@ listed alphabetically.
     so that a finite bandwidth value is returned.
     
 %%C
+    
+  \item \texttt{cbind.hyperframe}:
+    The result now retains the \texttt{row.names}
+    of the original arguments.
+    
  \item \texttt{cdf.test}:
    \begin{itemize}
    \item    Calculations are more robust against numerical rounding effects.
@@ -1457,9 +1487,14 @@ listed alphabetically.
    \end{itemize}
     
   \item \texttt{diagnose.ppm}:
+    \begin{itemize}
+    \item 
     Infinite values of \texttt{rbord} are now ignored and treated as zero.
     This ensures that \texttt{diagnose.ppm} has a sensible default
     when the fitted model has infinite reach.
+  \item Accelerated, when \texttt{type="inverse"}, for models
+    without a hard core.
+    \end{itemize}
   
   \item \texttt{diagnose.ppm, plot.diagppm}:
     \begin{itemize}
@@ -2356,6 +2391,11 @@ listed alphabetically.
     
 %%R
    
+  \item \texttt{rbind.hyperframe}:
+    The result now retains the \texttt{row.names}
+    of the original arguments.
+    
+
    \item \texttt{rcellnumber}:
      New argument \texttt{mu}.
 
@@ -2701,7 +2741,14 @@ listed alphabetically.
    This is now a method for the generic function \texttt{valid}.
 
    \item \texttt{vcov.mppm}:
-     Now handles models with Gibbs interactions.
+     \begin{itemize}
+     \item      Now handles models with Gibbs interactions.
+     \item New argument \texttt{nacoef.action} specifies what to do
+       if some of the fitted coefficients are \texttt{NA}, \texttt{NaN}
+       or \texttt{Inf}.
+     \end{itemize}
+
+
 
    \item \texttt{vcov.ppm}:
      \begin{itemize}

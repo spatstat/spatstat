@@ -1009,3 +1009,20 @@ Change log from 1.61-0 to 1.61-1
 ------------- passed R-3.6.1 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
+
+24 nov 2019
+
+   tests/ppmtricks.R
+	Test internals of mpl.R
+
+   bugfixes.Rnw
+   updates.Rnw
+	updated to cover all the above.
+
+   DESCRIPTION
+   NEWS
+	Version 1.61-0.055
+
+------------- passed R-3.6.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------

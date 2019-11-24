@@ -576,7 +576,7 @@ grep#
 #
 #   Plus assorted tricks
 #
-#   $Revision: 1.14 $  $Date: 2019/11/03 03:33:51 $
+#   $Revision: 1.15 $  $Date: 2019/11/24 03:26:44 $
 #
 require(spatstat)
 local({
@@ -673,6 +673,16 @@ local({
   print(p)
   plot(p, how="contour")
   plot(p, how="persp")
+
+  ## (10) ppm -> mpl.engine -> mpl.prepare
+  fit <- ppm(cells, NULL)
+  fit <- ppm(cells ~ x, clipwin=square(0.7))
+  fit <- ppm(cells ~ x, subset=square(0.7))
+  DG <- as.im(function(x,y){x+y < 1}, square(1))
+  fit <- ppm(cells ~ x, subset=DG)
+  fit <- ppm(cells ~ x, GLM=glm)
+  fit <- ppm(cells ~ x, famille=quasi(link='log', variance='mu'))
+  fit <- ppm(cells ~ x, Hardcore(0.07), skip.border=TRUE, splitInf=TRUE)
 })
 
 reset.spatstat.options()
