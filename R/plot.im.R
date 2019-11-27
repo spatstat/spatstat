@@ -1,7 +1,7 @@
 #
 #   plot.im.R
 #
-#  $Revision: 1.132 $   $Date: 2019/09/13 15:41:18 $
+#  $Revision: 1.133 $   $Date: 2019/11/27 03:32:04 $
 #
 #  Plotting code for pixel images
 #
@@ -724,7 +724,7 @@ plot.im <- local({
                                xaxp=c(bb.rib$xrange, length(ribbonticks)))
              })
       do.call.plotfun(graphics::axis,
-                      resolve.defaults(ribargs, axisargs, dotargs, posargs),
+                      resolve.defaults(axisargs, ribargs, dotargs, posargs),
                       extrargs=graphicsPars("axis"))
     }
     if(!is.null(riblab)) {

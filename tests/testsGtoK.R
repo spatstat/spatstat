@@ -227,8 +227,16 @@ local({
   #' plot.im code blocks
   plot(Z, ribside="left")
   plot(Z, ribside="top")
+  plot(Z, riblab="value")
   plot(Z, clipwin=square(0.5))
   plot(Z - mean(Z), log=TRUE)
+  plot(Z, valuesAreColours=TRUE) # rejected with a warning
+  IX <- as.im(function(x,y) { as.integer(round(3*x)) }, square(1))
+  co <- colourmap(rainbow(4), inputs=0:3)
+  plot(IX, col=co)
+  CX <- eval.im(col2hex(IX+1L))
+  plot(CX, valuesAreColours=TRUE)
+  plot(CX, valuesAreColours=FALSE)
 
   #' handling and plotting of character and factor images
   Afactor    <- as.im(col2hex("green"), letterR, na.replace=col2hex("blue"))

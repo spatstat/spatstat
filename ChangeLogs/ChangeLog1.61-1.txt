@@ -1026,3 +1026,19 @@ Change log from 1.61-0 to 1.61-1
 ------------- passed R-3.6.1 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
+
+27 nov 2019
+
+   plot.im.R
+	Bug fix
+
+   tests/imageops.R
+	Tests of code in plot.im
+
+   DESCRIPTION
+   NEWS
+	Version 1.61-0.056
+
+------------- passed R-3.6.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------

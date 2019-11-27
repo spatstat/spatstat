@@ -420,6 +420,7 @@
    plot(Z)
    plot(Z, ribside="bottom")
    # stretchable colour map
+   plot(Z, col=rainbow)
    plot(Z, col=terrain.colors(128), axes=FALSE)
    # fixed colour map
    tc <- colourmap(rainbow(128), breaks=seq(-1,2,length=129))
