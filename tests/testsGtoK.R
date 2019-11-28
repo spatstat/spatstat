@@ -599,7 +599,7 @@ local({
 #
 # tests/kppm.R
 #
-# $Revision: 1.30 $ $Date: 2019/08/14 03:14:55 $
+# $Revision: 1.31 $ $Date: 2019/11/28 21:43:33 $
 #
 # Test functionality of kppm that depends on RandomFields
 # Test update.kppm for old style kppm objects
@@ -608,6 +608,7 @@ require(spatstat)
 local({
 
  fit <- kppm(redwood ~1, "Thomas") # sic
+ fitx <- kppm(redwood ~x, "Thomas", verbose=TRUE)
  fitx <- update(fit, ~ . + x)
  fitM <- update(fit, clusters="MatClust")
  fitC <- update(fit, cells)
@@ -615,8 +616,10 @@ local({
 
  #'
  Wsub <- owin(c(0, 0.5), c(-0.5, 0))
- fitsub <- kppm(redwood ~1, "Thomas", subset=Wsub)
- fitsub
+ Zsub <- (bdist.pixels(Window(redwood)) > 0.1)
+ fitWsub <- kppm(redwood ~1, "Thomas", subset=Wsub)
+ fitZsub <- kppm(redwood ~1, "Thomas", subset=Zsub)
+ fitWsub
  
  #' various methods
  ff <- as.fv(fitx)
@@ -624,6 +627,8 @@ local({
  uu <- unitname(fitx)
  unitname(fitCx) <- "furlong"
  mo <- model.images(fitCx)
+ p <- psib(fit)
+ px <- psib(fitx)
  
  # vcov.kppm different algorithms
  vc  <- vcov(fitx)
@@ -639,6 +644,7 @@ local({
  # improve.kppm
  fitI <- update(fit, improve.type="quasi")
  fitxI <- update(fitx, improve.type="quasi")
+ fitxIs <- update(fitx, improve.type="quasi", fast=FALSE) 
  # vcov.kppm
  vcI <- vcov(fitxI)
  
@@ -659,6 +665,7 @@ local({
    is.poisson(fit0)
    Y0 <- simulate(fit0, saveLambda=TRUE)[[1]]
    stopifnot(is.ppp(Y0))
+   p0 <- psib(fit0) # issues a warning
 
    ## fit LGCP using K function: slow
    fit1 <- kppm(redwood ~x, "LGCP",
@@ -686,6 +693,11 @@ local({
    fit1xxVG <- update(fit1xx, clusters="VarGamma", nu=-1/4)
    Y1xxVG <- simulate(fit1xxVG, saveLambda=TRUE)[[1]]
    stopifnot(is.ppp(Y1xxVG))
+   fit1xxLG <- update(fit1xx, clusters="LGCP",
+                      covmodel=list(model="matern", nu=0.3),
+                      statistic="pcf")
+   Y1xxLG <- simulate(fit1xxLG, saveLambda=TRUE, drop=TRUE)
+   stopifnot(is.ppp(Y1xxLG))
    
    # ... and Abdollah's code
 
@@ -776,6 +788,15 @@ local({
   futFF1 <- kppm(redwood)
   futFF2 <- kppm(redwood, method="palm")
   futFF3 <- kppm(redwood, method="clik2")
+  ## unsupported options that give a warning
+  spatstat.options(kppm.canonical=TRUE, kppm.adjusted=TRUE)
+  futXX1 <- kppm(redwood, clusters="MatClust") 
+  futXX2 <- kppm(redwood, clusters="MatClust", method="palm")
+  futXX3 <- kppm(redwood, clusters="MatClust", method="clik2")
+  jpines <- residualspaper$Fig1
+  fut <- dppm(jpines ~ 1, dppGauss)
+  print(fut)
+  spatstat.options(kppm.canonical=FALSE, kppm.adjusted=FALSE)
 })
 
 local({

@@ -1043,6 +1043,8 @@ Change log from 1.61-0 to 1.61-1
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
 
+28 nov 2019
+
    sparse3Darray.R
    indices.R
 	Bug fixes in sparse 3D array code
@@ -1059,6 +1061,26 @@ Change log from 1.61-0 to 1.61-1
 ------------- passed R-3.6.1 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
+
+29 nov 2019
+
+   mincontrast.R
+	Bug fix in experimental code.
+   
+   tests/kppm.R
+	Test experimental code
+
+   lineardisc.c
+	Unused code commented out.
+
+   DESCRIPTION
+   NEWS
+	Version 1.61-0.058
+
+------------- passed R-3.6.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+
 
 
 	

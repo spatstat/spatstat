@@ -7,7 +7,11 @@
 
    Disc of radius r in linear network
 
-   $Revision: 1.13 $  $Date: 2018/12/18 02:43:11 $
+   Clineardisc    determine the linear disc (NOT USED)
+   
+   Ccountends     count the number of endpoints
+
+   $Revision: 1.14 $  $Date: 2019/11/28 20:53:23 $
 
   Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2018
   Licence: GNU Public Licence >= 2
@@ -20,14 +24,15 @@
 
 #undef DEBUG
 
+#ifdef DEBUG
 void 
-lineardisc(f, seg, /* centre of disc (local coords) */
-	   r,      /* radius of disc */
-	   nv, xv, yv,   /* network vertices */
-	   ns, from, to,  /* segments */
-	   dpath,  /* shortest path distances between vertices */
-	   lengths, /* segment lengths */
-	   allinside, boundary, dxv, nendpoints)
+Clineardisc(f, seg, /* centre of disc (local coords, f = tp) */
+	    r,      /* radius of disc */
+	    nv, xv, yv,   /* network vertices */
+	    ns, from, to,  /* segments */
+	    dpath,  /* shortest path distances between vertices */
+	    lengths, /* segment lengths */
+	    allinside, boundary, dxv, nendpoints)
      int *nv, *ns;
      int *from, *to; /* integer vectors (mappings) */
      double *f, *r; 
@@ -126,6 +131,7 @@ lineardisc(f, seg, /* centre of disc (local coords) */
   }
   *nendpoints = nends;
 }
+#endif
 
 /* ------------------------------------------------- */
 /*   count endpoints of several discs in a network   */
