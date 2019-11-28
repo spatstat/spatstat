@@ -3,7 +3,7 @@
 #'
 #' Sparse 3D arrays represented as list(i,j,k,x)
 #' 
-#' $Revision: 1.34 $  $Date: 2018/07/06 01:53:48 $
+#' $Revision: 1.37 $  $Date: 2019/11/28 03:58:51 $
 #'
 
 sparse3Darray <- function(i=integer(0), j=integer(0), k=integer(0),
@@ -164,7 +164,13 @@ print.sparse3Darray <- function(x, ...) {
   dim2 <- dimx[1:2]
   dn2 <- dn[1:2]
   if(typeof(x$x) == "complex") {
-    splat("\t[Complex-valued sparse matrices are not printable]")
+    splat("Complex-valued")
+    splat("\t\tReal component:")
+    stuff <- capture.output(eval(Re(x)))
+    cat(stuff[-1],sep="\n")
+    splat("\n\n\t\tImaginary component:")
+    stuff <- capture.output(eval(Im(x)))
+    cat(stuff[-1],sep="\n")
   } else {
     for(k in seq_along(pieces)) {
       cat(paste0("\n\t[ , , ", dn3[k], "]\n\n"))
@@ -214,7 +220,7 @@ as.array.sparse3Darray <- function(x, ...) {
       if(ncol(i) != 3)
         stop("If i is a matrix, it should have 3 columns", call.=FALSE)
       ## start with vector of 'zero' answers of the correct type
-      answer <- sparseVector(x=RelevantZero(x$x)[integer(0)],
+      answer <- sparseVector(x=RelevantEmpty(x$x),
                              i=integer(0),
                              length=nrow(i))
       ## values outside array return NA
@@ -270,8 +276,18 @@ as.array.sparse3Darray <- function(x, ...) {
       K <- grokIndexVector(if(missing(k)) NULL else k, dimx[3], dn[[3]])
       IJK <- list(I,J,K)
       if(!all(sapply(lapply(IJK, getElement, name="full"), is.null))) {
-        ## indices exceed array bounds; result is a full array containing NA's
-        result <- as.array(x)[I$full$i, J$full$j, K$full$k, drop=drop]
+        ## some indices exceed array bounds;
+        ## result is a full array containing NA's
+        fullindices   <- lapply(IJK, fullIndexSequence)
+        strictindices <- lapply(IJK, strictIndexSequence)
+        result <- array(data=RelevantNA(x$x), dim=lengths(fullindices))
+        matches <- mapply(match, x=fullindices, table=strictindices)
+        ok <- lapply(lapply(matches, is.na), "!")
+        result[ok[[1]], ok[[2]], ok[[3]]] <-
+          as.array(x)[matches[[1]][ok[[1]]],
+                      matches[[2]][ok[[2]]],
+                      matches[[3]][ok[[3]]]]
+        if(drop) result <- result[,,,drop=TRUE]
         return(result)
       }
       IJK <- lapply(IJK, getElement, name="strict")
@@ -427,11 +443,16 @@ rbindCompatibleDataFrames <- function(x) {
   K <- grokIndexVector(if(missing(k)) NULL else k, dimx[3], dn[[3]])
   IJK <- list(I,J,K)
   if(!all(sapply(lapply(IJK, getElement, name="full"), is.null))) {
-    warning("indices exceed array bounds; using full array", call.=FALSE)
-    x <- as.array(x)
-    x[I$full$i, J$full$j, K$full$k] <- value
-    x <- as.sparse3Darray(x)
-    return(x)
+    warning("indices exceed array bounds; extending the array dimensions",
+            call.=FALSE)
+    fullindices   <- lapply(IJK, fullIndexSequence)
+    strictindices <- lapply(IJK, strictIndexSequence)
+    dnew <- pmax(dimx, sapply(fullindices, max))
+    result <- array(data=RelevantZero(x$x), dim=dnew)
+    result[cbind(x$i, x$j, x$k)] <- x$x
+    result[fullindices[[1]], fullindices[[2]], fullindices[[3]]] <- value
+    result <- as.sparse3Darray(result)
+    return(result)
   }
   IJK <- lapply(IJK, getElement, name="strict")
   if(all(sapply(IJK, getElement, name="nind") == 0)) {
@@ -611,6 +632,7 @@ anyNA.sparse3Darray <- function(x, recursive=FALSE) {
 RelevantZero <- function(x) vector(mode=typeof(x), length=1L)
 isRelevantZero <- function(x) identical(x, RelevantZero(x))
 RelevantEmpty <- function(x) vector(mode=typeof(x), length=0L)
+RelevantNA <- function(x) { RelevantZero(x)[2] }
 
 unionOfSparseIndices <- function(A, B) {
   #' A, B are data frames of indices i, j, k
@@ -798,6 +820,18 @@ Math.sparse3Darray <- function(x, ...){
   }
   x$x <- do.call(.Generic, list(x$x))
   return(x)
+}
+
+Complex.sparse3Darray <- function(z) {
+  oo <- RelevantZero(z$x)
+  foo <- do.call(.Generic, list(z=oo))
+  if(!isRelevantZero(foo)) {
+    # result is a full array
+    result <- do.call(.Generic, list(z=as.array(z)))
+    return(result)
+  }
+  z$x <- do.call(.Generic, list(z=z$x))
+  return(z)
 }
 
 Summary.sparse3Darray <- function(..., na.rm=FALSE) {

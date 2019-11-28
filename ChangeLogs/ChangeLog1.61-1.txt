@@ -1042,3 +1042,23 @@ Change log from 1.61-0 to 1.61-1
 ------------- passed R-3.6.1 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
+
+   sparse3Darray.R
+   indices.R
+	Bug fixes in sparse 3D array code
+
+   sparse3Darray.R
+   spatstat-internal.Rd
+	Implemented complex operations for sparse3Darray
+	Support printing of complex-valued sparse 3D arrays.
+
+   DESCRIPTION
+   NEWS
+	Version 1.61-0.057
+
+------------- passed R-3.6.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+
+
+	

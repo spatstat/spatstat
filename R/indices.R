@@ -3,7 +3,7 @@
 #'
 #'   Code for handling vector/array indices
 #'
-#'   $Revision: 1.10 $  $Date: 2018/09/28 05:08:13 $
+#'   $Revision: 1.11 $  $Date: 2019/11/28 03:10:14 $
 #'
 
 grokIndexVector <- function(ind, len, nama=NULL) {
@@ -156,6 +156,11 @@ grokIndexVector <- function(ind, len, nama=NULL) {
   }
   stop("Unrecognised format for index", call.=FALSE)
 }
+
+#' g is the result of 'grokIndexVector'
+
+strictIndexSequence <- function(g) { g$strict$i }
+fullIndexSequence   <- function(g) { g$full$i %orifnull% g$strict$i }
 
 replacementIndex <- function(ii, stuff) {
   ## 'stuff' is predigested information about a subset index.

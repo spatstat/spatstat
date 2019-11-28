@@ -189,6 +189,7 @@
 \alias{format.numberwithunit}
 \alias{FormatFaspFormulae}
 \alias{framebottomleft}
+\alias{fullIndexSequence}
 \alias{fvexprmap}
 \alias{fvlabels}
 \alias{fvlabels<-}
@@ -663,6 +664,7 @@
 \alias{sphere.volume}
 \alias{store.versionstring.spatstat}
 \alias{str.hyperframe}
+\alias{strictIndexSequence}
 \alias{strausscounts}
 \alias{suffloc}
 \alias{suffstat.generic}
@@ -754,9 +756,11 @@
 \alias{[<-.sparse3Darray}
 \alias{anyNA.sparse3Darray}
 \alias{RelevantZero}
+\alias{RelevantNA}
 \alias{RelevantEmpty}
 \alias{isRelevantZero}
 \alias{unionOfSparseIndices}
+\alias{Complex.sparse3Darray}
 \alias{Math.sparse3Darray}
 \alias{Ops.sparse3Darray}
 \alias{Summary.sparse3Darray}
@@ -1025,6 +1029,7 @@ forbid.logi(object)
 \method{format}{numberwithunit}(x, \dots, collapse, modifier)
 FormatFaspFormulae(f, argname)
 framebottomleft(w)
+fullIndexSequence(g)
 fvexprmap(x)
 fvlabels(x, expand=FALSE)
 fvlabels(x) <- value
@@ -1598,6 +1603,7 @@ sp.foundclass(cname, inlist, formalname, argsgiven)
 sp.foundclasses(cnames, inlist, formalname, argsgiven)
 store.versionstring.spatstat()
 \method{str}{hyperframe}(object, \dots)
+strictIndexSequence(g)
 strausscounts(U,X,r,EqualPairs)
 suffloc(object)
 suffstat.generic(model, X, callstring)
@@ -1694,12 +1700,15 @@ as.sparse3Darray(x, \dots)
 \method{[}{sparse3Darray}(x, i, j, k, \dots) <- value
 \method{anyNA}{sparse3Darray}(x, recursive)
 RelevantZero(x)
+RelevantNA(x)
 RelevantEmpty(x)
 isRelevantZero(x)
 unionOfSparseIndices(A,B)
+\special{Complex(z)}
 \special{Math(x, \dots)}
 \special{Ops(e1, e2)}
 \special{Summary(\dots, na.rm = FALSE)}
+%NAMESPACE S3method("Complex", "sparse3Darray")
 %NAMESPACE S3method("Math", "sparse3Darray")
 %NAMESPACE S3method("Ops", "sparse3Darray")
 %NAMESPACE S3method("Summary", "sparse3Darray")

@@ -301,7 +301,7 @@ local({
 
 #'    tests/sparse3Darrays.R
 #'  Basic tests of code in sparse3Darray.R and sparsecommon.R
-#'  $Revision: 1.16 $ $Date: 2018/07/06 01:54:17 $
+#'  $Revision: 1.20 $ $Date: 2019/11/28 04:18:22 $
 
 require(spatstat)
 local({
@@ -338,6 +338,8 @@ local({
   #' vector to sparse array
   A11 <- A[,1,1]
   AA11 <- as.sparse3Darray(A11)
+  #' NULL with warning
+  as.sparse3Darray(list())
 
   #' 
   dim(AA) <- dim(AA) + 1
@@ -366,12 +368,20 @@ local({
     bb <- EntriesToSparse(df, 7)
     cc <- EntriesToSparse(df, c(7, 4))
     dd <- EntriesToSparse(df, c(7, 4, 3))
+    #' duplicated entries
+    dfdup <- df[c(1:3, 2), ]
+    aa <- EntriesToSparse(dfdup, NULL)
+    bb <- EntriesToSparse(dfdup, 7)
+    cc <- EntriesToSparse(dfdup, c(7, 4))
+    dd <- EntriesToSparse(dfdup, c(7, 4, 3))
   }
 
   BB <- evalSparse3Dentrywise(AA + AA/2)
 
   MM <- bind.sparse3Darray(M, M, along=1)
   MM <- bind.sparse3Darray(M, M, along=2)
+
+  RelevantEmpty(42)
 })
 
     
@@ -398,17 +408,26 @@ local({
     M[, 3, , drop=FALSE]
     M[c(FALSE,TRUE,FALSE,FALSE,TRUE), , ]
     M[, , c(FALSE,FALSE), drop=FALSE]
+    M[1:2, 1, 2:3] # exceeds array bounds
     # matrix index
     M[cbind(3:5, 3:5, c(1,2,1))]
     M[cbind(3:5, 3:5, 2)]
     M[cbind(3:5,   2, 2)]
     M[cbind(c(2,2,4), c(3,3,2), 1)] # repeated indices
-    
+    M[cbind(1:4, 1, 2:3)] # exceeds array bounds
+
     MA <- as.array(M)
     UA <- as.array(U)
 
+    Mfix <- sparse3Darray(i=1:3, j=c(3,1,2), k=4:2,
+                          x=runif(3), dims=rep(4, 3))
+    Mfix[cbind(1,3,4)] # single entry - occupied
+    Mfix[cbind(1,2,4)] # single entry - unoccupied
+    Mfix[cbind(1,c(2,3,2,3),4)] # sparse vector with repeated entries
+    
+
     ## tests of "[<-.sparse3Darray"
-    Mflip <- Mzero <- MandM <- Mnew <- M
+    Mflip <- Mzero <- MandM <- Mnew <- Mext <- M
     Mflip[ , , 2:1] <- M
     stopifnot(Mflip[3,1,1] == M[3,1,2])
     Mzero[1:3,1:3,] <- 0
@@ -430,6 +449,7 @@ local({
     V5 <- sparseVector(x=1:2, i=2:3, length=5)
     M[,2,2] <- V5
     M[,,2] <- V5
+    Mext[1,2,3] <- 4 # exceeds array bounds
     ## integer matrix index
     Mnew[cbind(3:5, 3:5, c(1,2,1))] <- 1:3
     Mnew[cbind(3:5, 3:5, 2)] <- 1:3
@@ -437,7 +457,6 @@ local({
     Mnew[cbind(3:5, 3:5, c(1,2,1))] <- V3
     Mnew[cbind(3:5, 3:5, 2)] <- V3
     Mnew[cbind(3:5,   2, 2)] <- V3
-
     ## tests of arithmetic (Math, Ops, Summary)
     negM <- -M
     oneM <- 1 * M
@@ -460,9 +479,9 @@ local({
     ## reconcile dimensions
     Msub <- M[,,1,drop=FALSE]
     Mdif <- M - Msub
-
+    Mduf <- Msub - M
+    
     ## tensor operator
-
     tenseur(c(1,-1), M, 1, 3)
     tenseur(M, M, 1:2, 1:2)
     tenseur(M, M, 1:2, 2:1)
@@ -490,6 +509,12 @@ local({
     # no entries indexed
     Z[integer(0), integer(0), integer(0)] <- 42
     Z[matrix(, 0, 3)] <- 42
+
+    ## complex valued arrays
+    Mcplx <- sparse3Darray(i=1:3, j=c(3,1,2), k=4:2,
+                           x=runif(3)+runif(3)*1i, dims=rep(4, 3))
+    print(Mcplx)
+    
 
     #' -----------  sparsecommon.R -----------------------
     B <- sparseMatrix(i=1:3, j=3:1, x= 10 * (1:3), dims=c(4,4))
