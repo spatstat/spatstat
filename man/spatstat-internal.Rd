@@ -719,6 +719,7 @@
 \alias{varcountEngine}
 %\alias{vblogit} %DoNotExport
 %\alias{vblogit.fmla} %DoNotExport
+\alias{versioncurrency.spatstat}
 \alias{versionstring.interact}
 \alias{versionstring.ppm}
 \alias{versionstring.spatstat}
@@ -1662,6 +1663,7 @@ vanilla.fv(x)
 varcountEngine(g, B, lambdaB, f)
 %vblogit(y, X, offset, eps, m0, S0, S0i, xi0, verb, maxiter, \dots)
 %vblogit.fmla(formula, offset, data, subset, weights, verbose, epsilon, \dots)
+versioncurrency.spatstat(today, checkR)
 versionstring.interact(object)
 versionstring.ppm(object)
 versionstring.spatstat()

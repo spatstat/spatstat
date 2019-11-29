@@ -938,7 +938,7 @@ local({
 #
 #  tests/undoc.R
 #
-#   $Revision: 1.10 $   $Date: 2019/08/07 06:16:45 $
+#   $Revision: 1.11 $   $Date: 2019/11/29 03:41:54 $
 #
 #  Test undocumented hacks, experimental code, etc
 
@@ -1021,6 +1021,13 @@ local({
       a <- do.istat(fakepanel)
     }
   }
+
+  #' version-checking
+  now <- Sys.Date()
+  versioncurrency.spatstat(now + 80, FALSE)
+  versioncurrency.spatstat(now + 140, FALSE)
+  versioncurrency.spatstat(now + 400, FALSE)
+  versioncurrency.spatstat(now + 1000)
 })
 
 ##

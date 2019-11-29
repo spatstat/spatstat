@@ -1081,6 +1081,15 @@ Change log from 1.61-0 to 1.61-1
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
 
+   versions.R
+   First.R
+   tests/undoc.R
+	Reorganised code for checking version currency.
 
+   DESCRIPTION
+   NEWS
+	Version 1.61-0.059
 
-	
+------------- passed R-3.6.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
