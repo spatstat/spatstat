@@ -25,7 +25,7 @@ local({
 #
 #  Test validity of envelope data
 #
-#  $Revision: 1.17 $  $Date: 2019/08/13 07:48:15 $
+#  $Revision: 1.19 $  $Date: 2019/12/02 04:32:45 $
 #
 
 require(spatstat)
@@ -202,6 +202,29 @@ local({
   #' High probability of generating a pattern with no marks = 'off'
   E <- envelope(X, Kcross, nsim=39, maxnerr=2, maxerr.action="warn")
   A <- alltypes(X, Kcross, envelope=TRUE, nsim=39, maxnerr=2)
+})
+
+local({
+  #' Internals: envelope.matrix
+  Y <- matrix(rnorm(200), 10, 20)
+  rr <- 1:10
+  oo <- rnorm(10)
+  zz <- numeric(10)
+  E <- envelope(Y, rvals=rr, observed=oo, nsim=10)
+  E <- envelope(Y, rvals=rr, observed=oo, jsim=1:10)
+  E <- envelope(Y, rvals=rr, observed=oo, theory=zz,
+                type="global", use.theory=TRUE)
+  E <- envelope(Y, rvals=rr, observed=oo, theory=zz,
+                type="global", use.theory=TRUE, nsim=10)
+  E <- envelope(Y, rvals=rr, observed=oo, type="global",
+                nsim=10, nsim2=10)
+  E <- envelope(Y, rvals=rr, observed=oo, type="global",
+                jsim=1:10, jsim.mean=11:20)
+  print(E)
+  E <- envelope(Y, rvals=rr, observed=oo, type="global",
+                nsim=10, jsim.mean=11:20)
+  E <- envelope(Y, rvals=rr, observed=oo, type="global",
+                jsim=1:10, nsim2=10)
 })
 
 #'  tests/enveltest.R

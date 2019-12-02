@@ -3,7 +3,7 @@
 #
 #   computes simulation envelopes 
 #
-#   $Revision: 2.101 $  $Date: 2019/10/31 02:27:07 $
+#   $Revision: 2.104 $  $Date: 2019/12/02 04:30:23 $
 #
 
 envelope <- function(Y, fun, ...) {
@@ -1032,10 +1032,21 @@ print.envelope <- function(x, ...) {
   splat("Obtained from", nsim, descrip)
   #
   if(waxlyrical('extras')) {
-    if(!is.null(e$dual) && e$dual) 
-      splat("Theoretical (i.e. null) mean value of", fname,
-            "estimated from a separate set of",
-            e$nsim2, "simulations")
+    dual <- isTRUE(e$dual)
+    usetheory <- isTRUE(e$use.theory)
+    hownull <- if(usetheory) {
+                 "(known exactly)"
+               } else if(dual) {
+                 paste("(estimated from a separate set of",
+                       e$nsim2, "simulations)")
+               } else NULL
+    formodel <- if(csr) "for CSR" else NULL
+    if(g) {
+      splat("Envelope based on maximum deviation of", fname,
+            "from null value", formodel, hownull)
+    } else if(dual) {
+      splat("Null value of", fname, formodel, hownull)
+    }
     if(!is.null(attr(x, "simfuns"))) 
       splat("(All simulated function values are stored)")
     if(!is.null(attr(x, "simpatterns"))) 
@@ -1243,21 +1254,32 @@ envelope.matrix <- function(Y, ...,
     Ncol <- if(!gaveup) ncol(simvals) else Inf
     if(Ncol < 2)
       stop("Need at least 2 columns of function values")
-      
-    if(is.null(jsim) && !is.null(nsim)) {
-      ## usual case - 'nsim' determines 'jsim'
+
+    ## all columns are used unless 'nsim' or 'jsim' given.
+    if(!(is.null(nsim) && is.null(jsim))) {
+      if(is.null(jsim)) {
+        jsim <- 1:nsim
+      } else if(is.null(nsim)) {
+        nsim <- length(jsim)
+      } else stopifnot(length(jsim) == nsim)
       if(nsim > Ncol)
         stop(paste(nsim, "simulations are not available; only",
                    Ncol, "columns provided"))
-      jsim <- 1:nsim
-      if(!is.null(nsim2)) {
-        ## 'nsim2' determines 'jsim.mean'
-        if(nsim + nsim2 > Ncol)
-          stop(paste(nsim, "+", nsim2, "=", nsim+nsim2, 
-                     "simulations are not available; only",
-                     Ncol, "columns provided"))
-        jsim.mean <- nsim + 1:nsim2
-      }
+    }
+    
+    ## nsim2 or jsim.mean may be given, and imply dual calculation
+    if(!(is.null(nsim2) && is.null(jsim.mean))) {
+      if(is.null(jsim.mean)) {
+        jsim.mean <- setdiff(seq_len(Ncol), jsim)[1:nsim2]
+      } else if(is.null(nsim2)) {
+        nsim2 <- length(jsim.mean)
+      } else stopifnot(length(jsim.mean) == nsim2)
+      if(nsim + nsim2 > Ncol)
+        stop(paste(nsim, "+", nsim2, "=", nsim+nsim2, 
+                   "simulations are not available; only",
+                   Ncol, "columns provided"))
+      if(length(conflict <- intersect(jsim, jsim.mean)))
+        warning("Internal warning: Indices in jsim and jsim.mean overlap")
     }
       
     restrict.columns <- !is.null(jsim)
@@ -1405,8 +1427,8 @@ envelope.matrix <- function(Y, ...,
                }
                # mmean <-
                reference <- 
-                 if(!use.weights) apply(simvals.mean, 1L, mean, na.rm=TRUE) else
-                 apply(simvals.mean, 1L, weighted.mean, w=weights, na.rm=TRUE)
+                 if(!use.weights) apply(simvals, 1L, mean, na.rm=TRUE) else
+                 apply(simvals, 1L, weighted.mean, w=weights, na.rm=TRUE)
              }
              nsim <- ncol(simvals)
              # compute deviations

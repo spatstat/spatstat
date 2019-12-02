@@ -1093,3 +1093,19 @@ Change log from 1.61-0 to 1.61-1
 ------------- passed R-3.6.1 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
+
+02 dec 2019
+
+   envelope.R
+	Bug fixes in envelope.matrix
+
+   tests/envelopes.R
+	Test for bugs in envelope.matrix
+
+   DESCRIPTION
+   NEWS
+	Version 1.61-0.060
+
+------------- passed R-3.6.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
