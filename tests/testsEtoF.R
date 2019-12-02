@@ -25,7 +25,7 @@ local({
 #
 #  Test validity of envelope data
 #
-#  $Revision: 1.19 $  $Date: 2019/12/02 04:32:45 $
+#  $Revision: 1.20 $  $Date: 2019/12/02 06:29:20 $
 #
 
 require(spatstat)
@@ -145,9 +145,11 @@ local({
   #' weights argument
   H1 <- envelope(cells, nsim=4, weights=npoints, savefuns=TRUE)
   H2 <- envelope(cells, nsim=4, weights=npoints, savefuns=TRUE)
-  J <- envelope(cells, nsim=4, weights=npoints, VARIANCE=TRUE)
+  J1 <- envelope(cells, nsim=4, weights=npoints, VARIANCE=TRUE)
+  J2 <- envelope(cells, nsim=4, weights=npoints, VARIANCE=TRUE)
   #' pooling with weights
   H <- pool(H1, H2)
+  J <- pool(J1, J2)
   #' pooling envelopes with non-identical attributes
   H0 <- envelope(cells, nsim=4, savefuns=TRUE)
   HH <- pool(H0, H1)
