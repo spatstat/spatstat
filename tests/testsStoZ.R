@@ -805,19 +805,22 @@ addvar(model, "x", subregion=w, bw.input="points")
 #
 # additional test of parres
 #
-#  $Revision: 1.4 $  $Date: 2019/01/02 08:27:51 $
+#  $Revision: 1.5 $  $Date: 2019/12/03 07:10:07 $
 #
 require(spatstat)
 local({
 X <-  rpoispp(function(x,y){exp(3+x+2*x^2)})
 model <- ppm(X ~x+y)
 
-# options in parres
+# options in parres (and code blocks in print.parres)
 parres(model, "x")
+parres(model, "x", smooth.effect=TRUE)
 parres(model, "x", bw.input="quad")
 w <- square(0.5)
 parres(model, "x", subregion=w)
 parres(model, "x", subregion=w, bw.input="quad")
+f <- function(x,y) { x + y }
+parres(model, f)
 
 # check whether 'update.ppm' has messed up internals
 mod2 <- update(model, ~x)

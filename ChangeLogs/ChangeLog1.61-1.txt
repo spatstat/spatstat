@@ -1120,3 +1120,23 @@ Change log from 1.61-0 to 1.61-1
 ------------- passed R-3.6.1 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
+
+   tests/ppp.R
+	More tests of handling rejected points.
+
+   kppm.R
+	Bug fix in experimental code.
+
+   tests/testparres.R
+	Test some quirks in parres code
+
+   tests/imageops.R
+	Various tests
+	
+   DESCRIPTION
+   NEWS
+	Version 1.61-0.062
+
+------------- passed R-3.6.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------

@@ -380,7 +380,7 @@ clusterfit <- function(X, clusters, lambda = NULL, startpar = NULL,
     startpar <- tocanonical(startpar)
     theoret <- function(par, ...) { htheo(tohuman(par), ...) }
     if(do.adjust)
-      adjustment$data$tohuman <- tohuman
+      adjustment$auxdata$tohuman <- tohuman
   }
   #' ...................................................
   

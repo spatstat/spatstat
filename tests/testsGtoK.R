@@ -108,7 +108,7 @@ local({
 #
 #  tests/imageops.R
 #
-#   $Revision: 1.19 $   $Date: 2019/08/31 05:30:31 $
+#   $Revision: 1.20 $   $Date: 2019/12/03 07:29:10 $
 #
 
 require(spatstat)
@@ -221,8 +221,12 @@ local({
   ZS <- shift(Z, origin="centroid")
   ZS <- shift(Z, origin="bottomleft")
 
+  #' hist.im
   h <- hist(Z)
-  plot(h)
+  h <- hist(Z, plot=FALSE)
+  Zcut <- cut(Z, breaks=5)
+  h <- hist(Zcut) # barplot
+  plot(h) # plot.barplotdata
 
   #' plot.im code blocks
   plot(Z, ribside="left")

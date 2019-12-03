@@ -689,33 +689,37 @@ reset.spatstat.options()
 #'
 #'   tests/ppp.R
 #'
-#'   $Revision: 1.6 $ $Date: 2019/10/05 10:56:25 $
+#'   $Revision: 1.9 $ $Date: 2019/12/03 03:05:34 $
 #'
 #'  Untested cases in ppp() or associated code
 
 require(spatstat)
 local({
   X <- runifpoint(10, letterR)
-  Y <- runifpoint(3, complement.owin(letterR))
+  Y <- runifpoint(10, complement.owin(letterR))
 
   #' test handling of points out-of-bounds
   df <- rbind(as.data.frame(X), as.data.frame(Y))
-  A <- ppp(df$x, df$y, window=letterR, marks=1:13)
+  A <- ppp(df$x, df$y, window=letterR, marks=1:20)
   #' test handling of points with bad coordinates
-  B <- ppp(X$x, c(X$y[1:7], c(Inf, NA, NaN)), window=letterR, marks=1:10)
-  D <- ppp(X$x, c(X$y[1:7], c(Inf, NA, NaN)), window=letterR,
-           marks=data.frame(id=1:10, u=runif(10)))
-
+  df$x[1:3] <- c(Inf, NA, NaN)
+  df$y[18:20] <- c(Inf, NA, NaN)
+  B <- ppp(df$x, df$y, window=letterR, marks=1:20)
+  D <- ppp(df$x, df$y, window=letterR, marks=data.frame(id=1:20, u=runif(20)))
+  
   #' test print/summary/plot methods on these bad objects
   print(A)
   print(B)
   print(D)
-  summary(A)
-  summary(B)
-  summary(D)
+  print(summary(A))
+  print(summary(B))
+  print(summary(D))
   plot(A)
   plot(B)
   plot(D)
+  plot(attr(A, "rejects"))
+  plot(attr(B, "rejects"))
+  plot(attr(D, "rejects"))
   
   #' subset operator --- cases not covered elsewhere
   #'   subset index is a logical image
@@ -760,6 +764,20 @@ local({
   B <- superimpose(concatxy(cells), concatxy(X), W=NULL)
   ## superimpose.splitppp
   Y <- superimpose(split(amacrine))
+
+  ## catch outdated usage of scanpp
+  d <- system.file("rawdata", "amacrine", package="spatstat.data")
+  if(nzchar(d)) {
+    W <- owin(c(0, 1060/662), c(0, 1))
+    Y <- scanpp("amacrine.txt", dir=d, window=W, multitype=TRUE)
+    print(Y)
+  }
+  ## (bad) usage of cobble.xy
+  xx <- runif(10)
+  yy <- runif(10)
+  W1 <- cobble.xy(xx, yy)
+  W2 <- cobble.xy(xx, yy, boundingbox)
+  Wnope <- cobble.xy(xx, yy, function(x,y) {cbind(x,y)}, fatal=FALSE)
 })
 #
 # tests/ppx.R
