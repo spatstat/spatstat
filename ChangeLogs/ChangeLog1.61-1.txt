@@ -1121,6 +1121,8 @@ Change log from 1.61-0 to 1.61-1
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
 
+03 dec 2019
+
    tests/ppp.R
 	More tests of handling rejected points.
 
