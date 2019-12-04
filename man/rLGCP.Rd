@@ -73,8 +73,7 @@
   For a list of available models see 
   \code{\link[RandomFields]{RMmodel}} in the
   \pkg{RandomFields} package. For example the
-  \ifelse{latex}{\out{Mat\'ern}}{Matern}
-  covariance is specified by \code{model="matern"}, corresponding
+  \Matern covariance is specified by \code{model="matern"}, corresponding
   to the function \code{RMmatern} in the \pkg{RandomFields} package.
 
   Standard variance parameters (for all functions beginning with
@@ -110,7 +109,7 @@
 \code{\link{kppm}}
 }
 \references{
-  \ifelse{latex}{\out{M\o ller}}{Moller}, J., Syversveen, A. and Waagepetersen, R. (1998)
+  \Moller, J., Syversveen, A. and Waagepetersen, R. (1998)
   Log Gaussian Cox Processes.
   \emph{Scandinavian Journal of Statistics} \bold{25}, 451--482.
 }

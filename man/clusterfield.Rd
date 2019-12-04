@@ -56,7 +56,7 @@
 
   For the character method \code{model} must be one of:
   \code{model="Thomas"} for the Thomas process,
-  \code{model="MatClust"} for the Matern cluster process,
+  \code{model="MatClust"} for the \Matern cluster process,
   \code{model="Cauchy"} for the Neyman-Scott cluster process with
   Cauchy kernel, or \code{model="VarGamma"} for the Neyman-Scott
   cluster process with Variance Gamma kernel. For all these models the

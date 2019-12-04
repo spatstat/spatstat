@@ -155,7 +155,7 @@ If \code{ratio=TRUE} then the return value also has two
 \details{
   This computes a generalisation of the \eqn{K} function
   for inhomogeneous point patterns, proposed by
-  Baddeley, \ifelse{latex}{\out{M\o ller}}{Moller} and Waagepetersen (2000).
+  Baddeley, \Moller and Waagepetersen (2000).
   
   The ``ordinary'' \eqn{K} function
   (variously known as the reduced second order moment function
@@ -245,7 +245,7 @@ If \code{ratio=TRUE} then the return value also has two
 
   If \code{lambda} is omitted, then it will be estimated using
   a `leave-one-out' kernel smoother,
-  as described in Baddeley, \ifelse{latex}{\out{M\o ller}}{Moller}
+  as described in Baddeley, \Moller
   and Waagepetersen (2000).  The estimate \code{lambda[i]} for the
   point \code{X[i]} is computed by removing \code{X[i]} from the
   point pattern, applying kernel smoothing to the remaining points using
@@ -344,7 +344,7 @@ If \code{ratio=TRUE} then the return value also has two
 }
 \references{
   Baddeley, A.,
-  \ifelse{latex}{\out{M\o ller}}{Moller}, J. and Waagepetersen, R. (2000)
+  \Moller, J. and Waagepetersen, R. (2000)
   Non- and semiparametric estimation of interaction in
   inhomogeneous point patterns.
   \emph{Statistica Neerlandica} \bold{54}, 329--350.

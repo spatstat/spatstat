@@ -3,7 +3,7 @@
 \title{Simulate Matern Model I}
 \description{
   Generate a random point pattern, a simulated realisation of the
-  \ifelse{latex}{\out{Mat\'ern}}{Matern} Model I inhibition process model.
+  \Matern Model I inhibition process model.
 }
 \usage{
  rMaternI(kappa, r, win = owin(c(0,1),c(0,1)), stationary=TRUE, \dots,
@@ -45,7 +45,7 @@
 }
 \details{
   This algorithm generates one or more realisations
-  of \ifelse{latex}{\out{Mat\'ern}}{Matern}'s Model I
+  of \Matern's Model I
   inhibition process inside the window \code{win}.
 
   The process is constructed by first
@@ -59,7 +59,7 @@
   A proposal point is then deleted if it lies within \code{r} units' distance
   of another proposal point. Otherwise it is retained.
   
-  The retained points constitute \ifelse{latex}{\out{Mat\'ern}}{Matern}'s Model I.
+  The retained points constitute \Matern's Model I.
 }
 \seealso{
 \code{\link{rpoispp}},

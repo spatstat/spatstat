@@ -152,8 +152,7 @@ Kcross.inhom(X, i, j, lambdaI=NULL, lambdaJ=NULL, \dots,  r=NULL, breaks=NULL,
   in a manner similar to the function \code{\link{Kinhom}}.
 
   The inhomogeneous cross-type \eqn{K} function is described by
-  \ifelse{latex}{\out{M\o ller}}{Moller}
-  and Waagepetersen (2003, pages 48-49 and 51-53).
+  \Moller and Waagepetersen (2003, pages 48-49 and 51-53).
   
   Briefly, given a multitype point process, suppose the sub-process
   of points of type \eqn{j} has intensity function
@@ -252,13 +251,12 @@ Kcross.inhom(X, i, j, lambdaI=NULL, lambdaJ=NULL, \dots,  r=NULL, breaks=NULL,
   result of \code{Kcross.inhom}; see \code{\link{pcf}}.
 }
 \references{
-  Baddeley, A.,
-  \ifelse{latex}{\out{M\o ller}}{Moller}, J. and Waagepetersen, R. (2000)
+  Baddeley, A., \Moller, J. and Waagepetersen, R. (2000)
   Non- and semiparametric estimation of interaction in
   inhomogeneous point patterns.
   \emph{Statistica Neerlandica} \bold{54}, 329--350.
 
-  \ifelse{latex}{\out{M\o ller}}{Moller}, J. and Waagepetersen, R.
+  \Moller, J. and Waagepetersen, R.
   Statistical Inference and Simulation for Spatial Point Processes
   Chapman and Hall/CRC
   Boca Raton, 2003.

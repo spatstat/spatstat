@@ -29,10 +29,8 @@ npfun(X, ..., r)
   Object of class \code{"fv"} representing a constant function.
 }
 \author{
-  \adrian
-  
-  
-  \ege and Jesper \ifelse{latex}{\out{M\o ller}}{Moller}.
+  \adrian,
+  \ege and Jesper \Moller.
 }
 \seealso{
   \code{\link{psst}}

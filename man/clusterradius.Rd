@@ -40,7 +40,7 @@ clusterradius(model, \dots)
 \details{
   Given a cluster model this function by default returns the effective
   range of the model with the given parameters as used in spatstat. For
-  the Matern cluster model (see e.g. \code{\link{rMatClust}}) this is
+  the \Matern cluster model (see e.g. \code{\link{rMatClust}}) this is
   simply the finite radius of the offsring density given by the paramter
   \code{scale} irrespective of other options given to this function. The
   remaining models in spatstat have infinite theoretical range, and an

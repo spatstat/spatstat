@@ -129,7 +129,7 @@ clusterfit(X, clusters, lambda = NULL, startpar = NULL, \dots,
   \emph{Journal of the Royal Statistical Society, series B}
   \bold{46}, 193 -- 212.
 
-  \ifelse{latex}{\out{M\o ller}}{Moller}, J. and Waagepetersen, R. (2003).
+  \Moller, J. and Waagepetersen, R. (2003).
   Statistical Inference and Simulation for Spatial Point Processes.
   Chapman and Hall/CRC, Boca Raton.
 

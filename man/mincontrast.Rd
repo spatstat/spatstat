@@ -49,7 +49,7 @@ mincontrast(observed, theoretical, startpar, \dots,
   by the Method of Minimum Contrast. If you want to fit the
   Thomas process, see \code{\link{thomas.estK}}.
   If you want to fit a log-Gaussian Cox process, see
-  \code{\link{lgcp.estK}}.  If you want to fit the Matern cluster
+  \code{\link{lgcp.estK}}.  If you want to fit the \Matern cluster
   process, see \code{\link{matclust.estK}}.
 
   The Method of Minimum Contrast (Diggle and Gratton, 1984)
@@ -133,7 +133,7 @@ mincontrast(observed, theoretical, startpar, \dots,
   \emph{Journal of the Royal Statistical Society, series B}
   \bold{46}, 193 -- 212.
 
-  \ifelse{latex}{\out{M\o ller}}{Moller}, J. and Waagepetersen, R. (2003).
+  \Moller, J. and Waagepetersen, R. (2003).
   Statistical Inference and Simulation for Spatial Point Processes.
   Chapman and Hall/CRC, Boca Raton.
 

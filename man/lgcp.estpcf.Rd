@@ -79,7 +79,7 @@ lgcp.estpcf(X,
   see \code{\link{mincontrast}}.
 
   The model fitted is a stationary, isotropic log-Gaussian Cox process
-  (\ifelse{latex}{\out{M\o ller}}{Moller} and Waagepetersen, 2003, pp. 72-76).
+  (\Moller and Waagepetersen, 2003, pp. 72-76).
   To define this process we start with
   a stationary Gaussian random field \eqn{Z} in the two-dimensional plane,
   with constant mean \eqn{\mu}{mu} and covariance function \eqn{C(r)}.
@@ -143,7 +143,7 @@ lgcp.estpcf(X,
   For a list of available models see 
   \code{\link[RandomFields]{RMmodel}} in the
   \pkg{RandomFields} package. For example the
-  Matern covariance with exponent \eqn{\nu=0.3}{nu = 0.3} is specified
+  \Matern covariance with exponent \eqn{\nu=0.3}{nu = 0.3} is specified
   by \code{covmodel=list(model="matern", nu=0.3)} corresponding
   to the function \code{RMmatern} in the \pkg{RandomFields} package.
   
@@ -178,12 +178,12 @@ lgcp.estpcf(X,
   }
 }
 \references{
-  \ifelse{latex}{\out{M\o ller}}{Moller}, J.,
+  \Moller, J.,
   Syversveen, A. and Waagepetersen, R. (1998)
   Log Gaussian Cox Processes.
   \emph{Scandinavian Journal of Statistics} \bold{25}, 451--482.
   
-  \ifelse{latex}{\out{M\o ller}}{Moller}, J. and Waagepetersen, R. (2003).
+  \Moller, J. and Waagepetersen, R. (2003).
   Statistical Inference and Simulation for Spatial Point Processes.
   Chapman and Hall/CRC, Boca Raton.
 

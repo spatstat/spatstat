@@ -3,7 +3,7 @@
 \title{Simulate Matern Cluster Process}
 \description{
   Generate a random point pattern, a simulated realisation of the
-  \ifelse{latex}{\out{Mat\'ern}}{Matern} Cluster Process.
+  \Matern Cluster Process.
 }
 \usage{
  rMatClust(kappa, scale, mu, win = owin(c(0,1),c(0,1)),
@@ -68,7 +68,7 @@
 }
 \details{
   This algorithm generates a realisation of
-  \ifelse{latex}{\out{Mat\'ern}}{Matern}'s cluster process,
+  \Matern's cluster process,
   a special case of the Neyman-Scott process, inside the window \code{win}.
 
   In the simplest case, where \code{kappa} and \code{mu}
@@ -82,12 +82,12 @@
   a disc of radius \code{scale} centred on the parent point.
   The resulting point pattern
   is a realisation of the classical
-  \dQuote{stationary Matern cluster process}
+  \dQuote{stationary \Matern cluster process}
   generated inside the window \code{win}.
   This point process has intensity \code{kappa * mu}.
 
   The algorithm can also generate spatially inhomogeneous versions of
-  the \ifelse{latex}{\out{Mat\'ern}}{Matern} cluster process:
+  the \Matern cluster process:
   \itemize{
     \item The parent points can be spatially inhomogeneous.
     If the argument \code{kappa} is a \code{function(x,y)}
@@ -124,17 +124,17 @@
   parent points on this larger window. If \code{kappa} is a pixel image,
   its domain must contain this larger window.
 
-  The intensity of the \ifelse{latex}{\out{Mat\'ern}}{Matern} cluster
+  The intensity of the \Matern cluster
   process is \code{kappa * mu}
   if either \code{kappa} or \code{mu} is a single number. In the general
   case the intensity is an integral involving \code{kappa}, \code{mu}
   and \code{scale}.
 
-  The \ifelse{latex}{\out{Mat\'ern}}{Matern} cluster process model
+  The \Matern cluster process model
   with homogeneous parents (i.e. where \code{kappa} is a single number)
   can be fitted to data using \code{\link{kppm}}.
   Currently it is not possible to fit the
-  \ifelse{latex}{\out{Mat\'ern}}{Matern} cluster process model
+  \Matern cluster process model
   with inhomogeneous parents.
 
   If the pair correlation function of the model is very close
@@ -165,13 +165,13 @@
  YY <- rMatClust(ff, 0.05, 3)
 }
 \references{
-  \ifelse{latex}{\out{Mat\'ern}}{Matern}, B. (1960)
+  \Matern, B. (1960)
   \emph{Spatial Variation}.
   Meddelanden \ifelse{latex}{\out{fr\r{a}n}}{fraan}
   Statens Skogsforskningsinstitut,
   volume 59, number 5.  Statens Skogsforskningsinstitut, Sweden.
 
-  \ifelse{latex}{\out{Mat\'ern}}{Matern}, B. (1986)
+  \Matern, B. (1986)
   \emph{Spatial Variation}.
   Lecture Notes in Statistics 36, Springer-Verlag, New York.
 

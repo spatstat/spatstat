@@ -1,7 +1,7 @@
 #
 #      distanxD.R
 #
-#      $Revision: 1.13 $     $Date: 2019/10/21 07:37:17 $
+#      $Revision: 1.14 $     $Date: 2019/12/04 09:08:47 $
 #
 #      Interpoint distances for multidimensional points
 #
@@ -261,7 +261,7 @@ nncross.ppx <- function(X, Y, iX=NULL, iY=NULL,
                m, "!=", mY),
          call.=FALSE)
   if(m == 0) {
-    warning("nndist.ppx: Zero-dimensional coordinates: returning NA")
+    warning("nncross.ppx: Zero-dimensional coordinates: returning NA")
     if(nk == 1L) {
       NND <- if(want.dist) rep.int(NA_real_,     nX) else 0
       NNW <- if(want.which) rep.int(NA_integer_, nX) else 0

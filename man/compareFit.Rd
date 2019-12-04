@@ -95,9 +95,7 @@ compareFit(object, Fun, r = NULL, breaks = NULL, ...,
 \author{
   \ege, 
   \adrian
-  
-  
-  and Jesper \ifelse{latex}{\out{M\o ller}}{Moller}.
+  and Jesper \Moller.
 }
 \seealso{
   \code{\link{ppm}},

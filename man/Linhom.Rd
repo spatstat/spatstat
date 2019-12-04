@@ -35,7 +35,7 @@
   of the inhomogeneous \eqn{K}-function, estimated by \code{\link{Kinhom}}.
   It is appropriate when the point pattern clearly does not have a
   homogeneous intensity of points. It was proposed by
-  Baddeley, \ifelse{latex}{\out{M\o ller}}{Moller} and Waagepetersen (2000).
+  Baddeley, \Moller and Waagepetersen (2000).
 
   The command \code{Linhom} first calls
   \code{\link{Kinhom}} to compute the estimate of the inhomogeneous K-function,
@@ -67,7 +67,7 @@
   named.
 }
 \references{
-  Baddeley, A., \ifelse{latex}{\out{M\o ller}}{Moller}, J. and Waagepetersen, R. (2000)
+  Baddeley, A., \Moller, J. and Waagepetersen, R. (2000)
   Non- and semiparametric estimation of interaction in
   inhomogeneous point patterns.
   \emph{Statistica Neerlandica} \bold{54}, 329--350.

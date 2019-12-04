@@ -25,8 +25,7 @@ repul(model, \dots)
 \details{
   The repulsiveness index \eqn{\mu}{mu} of a determinantal
   point process model was defined by
-  Lavancier, \ifelse{latex}{\out{M\o ller}}{Moller}
-  and Rubak (2015) as
+  Lavancier, \Moller and Rubak (2015) as
   \deqn{
     \mu = \lambda \int (1- g(x)) \, dx
   }{
@@ -50,8 +49,7 @@ repul(model, \dots)
   A numeric value or a pixel image.
 }
 \references{
-  Lavancier, F., \ifelse{latex}{\out{M\o ller}}{Moller}, J.
-  and Rubak, E. (2015),
+  Lavancier, F., \Moller, J.  and Rubak, E. (2015),
   Determinantal point process models and statistical inference.
   \emph{Journal of Royal Statistical Society:
     Series B (Statistical Methodology)},

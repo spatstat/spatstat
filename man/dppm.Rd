@@ -267,7 +267,7 @@
   See also \code{\link{ppm}}
 }
 \references{
-  Lavancier, F. \ifelse{latex}{\out{M\o ller}}{Moller}, J. and Rubak, E. (2015)
+  Lavancier, F. \Moller, J. and Rubak, E. (2015)
   Determinantal point process models and statistical inference
   \emph{Journal of the Royal Statistical Society, Series B}
   \bold{77}, 853--977.

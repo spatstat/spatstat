@@ -87,7 +87,7 @@
 
   This function executes a Metropolis-Hastings algorithm
   with birth, death and shift proposals as described in
-  Geyer and \ifelse{latex}{\out{M\o ller}}{Moller} (1994).
+  Geyer and \Moller (1994).
 
   The argument \code{model} specifies the point process model to be
   simulated. It is either a list, or an object of class
@@ -309,7 +309,7 @@
    A nonparametric estimator for pairwise-interaction point processes.
    Biometrika \bold{74}, 763 -- 770.
 
-   Geyer, C.J. and \ifelse{latex}{\out{M\o ller}}{Moller}, J. (1994)
+   Geyer, C.J. and \Moller, J. (1994)
    Simulation procedures and likelihood inference for spatial
    point processes.
    \emph{Scandinavian Journal of Statistics} \bold{21}, 359--373.

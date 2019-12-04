@@ -22,7 +22,7 @@
   \eqn{g(r)=1} for all \eqn{r\ge R}{r>=R}, where \eqn{g} is the pair
   correlation function. For many models the range is infinite, but one
   may instead use a value where the pair correlation function is
-  sufficiently close to 1. For example in the Matern model this defaults
+  sufficiently close to 1. For example in the \Matern model this defaults
   to finding \eqn{R} such that \eqn{g(R)=0.99}.
 }
 \value{Numeric}

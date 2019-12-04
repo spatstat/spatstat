@@ -1142,3 +1142,29 @@ Change log from 1.61-0 to 1.61-1
 ------------- passed R-3.6.1 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
+
+04 dec 2019
+
+   distanxD.R
+	Corrected an error message.
+
+   tests/nndist.R
+	More checks for nndist.ppx, nnwhich.pps, nncross.ppx
+	
+   Numerous Rd files
+	Minor corrections/improvements
+
+   DESCRIPTION
+   NEWS
+	Version 1.61-0.063
+
+------------- passed R-3.6.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+
+   
+
+
+
+   
+      

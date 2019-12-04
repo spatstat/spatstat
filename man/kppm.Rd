@@ -130,8 +130,8 @@
   }
   \item{algorithm}{
     Character string determining the mathematical optimisation algorithm
-    to be used by \code{\link[stats]{optim}}. See
-    the argument \code{method} of \code{\link[stats]{optim}}.
+    to be used by \code{\link[stats]{optim}}. This argument is
+    passed to  \code{\link[stats]{optim}} as the argument \code{method}.
   }
   \item{statistic}{
     Name of the summary statistic to be used
@@ -158,7 +158,7 @@
   The type of model is determined by the argument \code{clusters}.
   Currently the options 
   are \code{clusters="Thomas"} for the Thomas process,
-  \code{clusters="MatClust"} for the Matern cluster process,
+  \code{clusters="MatClust"} for the \Matern cluster process,
   \code{clusters="Cauchy"} for the Neyman-Scott cluster process
   with Cauchy kernel,
   \code{clusters="VarGamma"} for the Neyman-Scott cluster process
@@ -196,7 +196,7 @@
   \code{improve.args}.
   
   The clustering parameters of the model are then fitted
-  either by minimum contrast estimation, or by maximum
+  either by minimum contrast estimation, or by maximising a
   composite likelihood.
 
   \describe{
@@ -283,7 +283,7 @@
   In all three methods, the optimisation is performed by the generic
   optimisation algorithm \code{\link[stats]{optim}}.
   The behaviour of this algorithm can be modified using the
-  argument \code{control}.
+  arguments \code{control} and \code{algorithm}.
   Useful control arguments include
   \code{trace}, \code{maxit} and \code{abstol}
   (documented in the help for \code{\link[stats]{optim}}).
@@ -299,7 +299,7 @@
   be given individually in the call to \code{kppm}, or they can be
   collected together in a list called \code{covmodel}.
 
-  For example a Matern model with parameter \eqn{\nu=0.5} could be specified
+  For example a \Matern model with parameter \eqn{\nu=0.5} could be specified
   either by \code{kppm(X, clusters="LGCP", model="matern", nu=0.5)} or by
   \code{kppm(X, clusters="LGCP", covmodel=list(model="matern", nu=0.5))}.
 

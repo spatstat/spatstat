@@ -39,7 +39,7 @@ local({
 #
 # Also test nnorient()
 #
-#   $Revision: 1.25 $  $Date: 2019/10/21 12:40:52 $
+#   $Revision: 1.26 $  $Date: 2019/12/04 09:08:02 $
 #
 
 require(spatstat)
@@ -223,6 +223,20 @@ local({
   ncw <- nncross(X,Y, what="which", k=2)
   if(any(ncw != gg(DXY, 2)))
     stop("incorrect result from nncross.ppx(k=2, what='which')")
+
+  ## special cases
+  nndist(X[FALSE])
+  nndist(X[1])
+  nndist(X[1:3], k=4)
+  nndist(X[1:3], k=1:4)
+  nnwhich(X[FALSE])
+  nnwhich(X[1])
+  nnwhich(X[1:3], k=4)
+  nnwhich(X[1:3], k=1:4)
+  nncross(X[1:3], Y[FALSE])
+  nncross(X[1:3], Y[1])
+  nncross(X[1:3], Y[1:3], k=4)
+  nncross(X[1:3], Y[1:3], k=1:4)
 })
 
 local({

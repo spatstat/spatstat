@@ -59,7 +59,7 @@
   The simulation algorithm used to generate the point pattern
   is \sQuote{dominated coupling from the past}
   as implemented by
-  Berthelsen and \ifelse{latex}{\out{M\o ller}}{Moller} (2002, 2003).
+  Berthelsen and \Moller (2002, 2003).
   This is a \sQuote{perfect simulation} or \sQuote{exact simulation}
   algorithm, so called because the output of the algorithm is guaranteed
   to have the correct probability distribution exactly (unlike the
@@ -75,11 +75,11 @@
   If \code{nsim > 1}, a list of point patterns.
 }
 \references{
-  Berthelsen, K.K. and \ifelse{latex}{\out{M\o ller}}{Moller}, J. (2002)
+  Berthelsen, K.K. and \Moller, J. (2002)
   A primer on perfect simulation for spatial point processes.
   \emph{Bulletin of the Brazilian Mathematical Society} 33, 351-367.
 
-  Berthelsen, K.K. and \ifelse{latex}{\out{M\o ller}}{Moller}, J. (2003)
+  Berthelsen, K.K. and \Moller, J. (2003)
   Likelihood and non-parametric Bayesian MCMC inference 
   for spatial point processes based on perfect simulation and
   path sampling. 
@@ -91,7 +91,7 @@
   eds. R.M. Cormack and J.K. Ord, International Co-operative
   Publishing House, Fairland, MD, USA. 
 
-  \ifelse{latex}{\out{M\o ller}}{Moller}, J. and Waagepetersen, R. (2003).
+  \Moller, J. and Waagepetersen, R. (2003).
   \emph{Statistical Inference and Simulation for Spatial Point Processes.}
   Chapman and Hall/CRC.
 

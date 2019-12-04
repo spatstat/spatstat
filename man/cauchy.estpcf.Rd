@@ -62,9 +62,9 @@ cauchy.estpcf(X, startpar=c(kappa=1,scale=1), lambda=NULL,
 
   The algorithm fits the Neyman-Scott cluster point process
   with Cauchy kernel to \code{X},
-  by finding the parameters of the Matern Cluster model
+  by finding the parameters of the \Matern Cluster model
   which give the closest match between the
-  theoretical pair correlation function of the Matern Cluster process
+  theoretical pair correlation function of the \Matern Cluster process
   and the observed pair correlation function.
   For a more detailed explanation of the Method of Minimum Contrast,
   see \code{\link{mincontrast}}.

@@ -9,7 +9,7 @@
     parameters. See Details.} 
 }
 \details{
-  The Power Exponential Spectral DPP is defined in (Lavancier, \ifelse{latex}{\out{M\o ller}}{Moller} and Rubak, 2015)
+  The Power Exponential Spectral DPP is defined in (Lavancier, \Moller and Rubak, 2015)
   The possible parameters are:
   \itemize{
     \item the intensity \code{lambda} as a positive numeric
@@ -31,7 +31,7 @@
   
 }
 \references{
-  Lavancier, F. \ifelse{latex}{\out{M\o ller}}{Moller}, J. and Rubak, E. (2015)
+  Lavancier, F. \Moller, J. and Rubak, E. (2015)
   Determinantal point process models and statistical inference
   \emph{Journal of the Royal Statistical Society, Series B}
   \bold{77}, 853--977.

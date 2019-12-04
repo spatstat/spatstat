@@ -249,7 +249,7 @@ obtained by the edge corrections named.
   result of \code{Kmulti.inhom}.
 }
 \references{
-  Baddeley, A., \ifelse{latex}{\out{M\o ller}}{Moller}, J. and Waagepetersen, R. (2000)
+  Baddeley, A., \Moller, J. and Waagepetersen, R. (2000)
   Non- and semiparametric estimation of interaction in
   inhomogeneous point patterns.
   \emph{Statistica Neerlandica} \bold{54}, 329--350.

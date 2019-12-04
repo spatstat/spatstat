@@ -2,7 +2,7 @@
 \alias{matclust.estK}
 \title{Fit the Matern Cluster Point Process by Minimum Contrast}
 \description{
-  Fits the Matern Cluster point process to a point pattern dataset
+  Fits the \Matern Cluster point process to a point pattern dataset
   by the Method of Minimum Contrast.
 }
 \usage{
@@ -11,13 +11,13 @@ matclust.estK(X, startpar=c(kappa=1,scale=1), lambda=NULL,
 }
 \arguments{
   \item{X}{
-    Data to which the Matern Cluster model will be fitted.
+    Data to which the \Matern Cluster model will be fitted.
     Either a point pattern or a summary statistic.
     See Details.
   }
   \item{startpar}{
     Vector of starting values for the parameters of the
-    Matern Cluster process.
+    \Matern Cluster process.
   }
   \item{lambda}{
     Optional. An estimate of the intensity of the point process.
@@ -34,7 +34,7 @@ matclust.estK(X, startpar=c(kappa=1,scale=1), lambda=NULL,
   }
 }
 \details{
-  This algorithm fits the Matern Cluster point process model
+  This algorithm fits the \Matern Cluster point process model
   to a point pattern dataset
   by the Method of Minimum Contrast, using the \eqn{K} function.
 
@@ -54,15 +54,15 @@ matclust.estK(X, startpar=c(kappa=1,scale=1), lambda=NULL,
     }
   }
 
-  The algorithm fits the Matern Cluster point process to \code{X},
-  by finding the parameters of the Matern Cluster model
+  The algorithm fits the \Matern Cluster point process to \code{X},
+  by finding the parameters of the \Matern Cluster model
   which give the closest match between the
-  theoretical \eqn{K} function of the Matern Cluster process
+  theoretical \eqn{K} function of the \Matern Cluster process
   and the observed \eqn{K} function.
   For a more detailed explanation of the Method of Minimum Contrast,
   see \code{\link{mincontrast}}.
   
-  The Matern Cluster point process is described in \ifelse{latex}{\out{M\o ller}}{Moller} and Waagepetersen
+  The \Matern Cluster point process is described in \Moller and Waagepetersen
   (2003, p. 62). It is a cluster process formed by taking a 
   pattern of parent points, generated according to a Poisson process
   with intensity \eqn{\kappa}{kappa}, and around each parent point,
@@ -75,7 +75,7 @@ matclust.estK(X, startpar=c(kappa=1,scale=1), lambda=NULL,
   either \code{R} or \code{scale} as the name of the second component,
   but the latter is recommended for consistency with other cluster models.
 
-  The theoretical \eqn{K}-function of the Matern Cluster process is
+  The theoretical \eqn{K}-function of the \Matern Cluster process is
   \deqn{
     K(r) = \pi r^2 + \frac 1 \kappa h(\frac{r}{2R})
   }{
@@ -94,7 +94,7 @@ matclust.estK(X, startpar=c(kappa=1,scale=1), lambda=NULL,
   }
   for \eqn{z <= 1}, and \eqn{h(z) = 1} for \eqn{z > 1}.
   The theoretical intensity
-  of the Matern Cluster process
+  of the \Matern Cluster process
   is \eqn{\lambda = \kappa \mu}{lambda=kappa* mu}.
 
   In this algorithm, the Method of Minimum Contrast is first used to find
@@ -114,10 +114,10 @@ matclust.estK(X, startpar=c(kappa=1,scale=1), lambda=NULL,
   The remaining arguments \code{rmin,rmax,q,p} control the
   method of minimum contrast; see \code{\link{mincontrast}}.
 
-  The Matern Cluster process can be simulated, using
+  The \Matern Cluster process can be simulated, using
   \code{\link{rMatClust}}.
 
-  Homogeneous or inhomogeneous Matern Cluster models can also be
+  Homogeneous or inhomogeneous \Matern Cluster models can also be
   fitted using the function \code{\link{kppm}}.
 
   The optimisation algorithm can be controlled through the
@@ -140,7 +140,7 @@ matclust.estK(X, startpar=c(kappa=1,scale=1), lambda=NULL,
   }
 }
 \references{
-  \ifelse{latex}{\out{M\o ller}}{Moller}, J. and Waagepetersen, R. (2003).
+  \Moller, J. and Waagepetersen, R. (2003).
   Statistical Inference and Simulation for Spatial Point Processes.
   Chapman and Hall/CRC, Boca Raton.
 

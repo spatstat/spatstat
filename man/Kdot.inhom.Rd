@@ -247,7 +247,7 @@ Kdot.inhom(X, i, lambdaI=NULL, lambdadot=NULL, \dots, r=NULL, breaks=NULL,
   result of \code{Kcross.inhom}; see \code{\link{pcf}}.
 }
 \references{
-  \ifelse{latex}{\out{M\o ller}}{Moller}, J. and Waagepetersen, R.
+  \Moller, J. and Waagepetersen, R.
   Statistical Inference and Simulation for Spatial Point Processes
   Chapman and Hall/CRC
   Boca Raton, 2003.

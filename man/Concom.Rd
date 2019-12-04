@@ -29,7 +29,7 @@
   yielded by the function \code{Concom()}. See the examples below.
 
   In \bold{standard form}, the connected component process
-  (Baddeley and \ifelse{latex}{\out{M\o ller}}{Moller}, 1989) with disc radius \eqn{r},
+  (Baddeley and \Moller, 1989) with disc radius \eqn{r},
   intensity parameter \eqn{\kappa}{\kappa} and interaction parameter
   \eqn{\gamma}{\gamma} is a point process with probability density
   \deqn{
@@ -137,7 +137,7 @@
    }
 }
 \references{
-  Baddeley, A.J. and \ifelse{latex}{\out{M\o ller}}{Moller}, J. (1989)
+  Baddeley, A.J. and \Moller, J. (1989)
   Nearest-neighbour Markov point processes and random sets.
   \emph{International Statistical Review} \bold{57}, 89--121.
 }

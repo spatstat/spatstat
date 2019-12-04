@@ -172,7 +172,7 @@
   \emph{Spatial Point Patterns: Methodology and Applications with R}.
   London: Chapman and Hall/CRC Press. 
 
-  Baddeley, A., Turner, R., Moller, J. and Hazelton, M. (2005)
+  Baddeley, A., Turner, R., \Moller, J. and Hazelton, M. (2005)
   Residual analysis for spatial point processes.
   \emph{Journal of the Royal Statistical Society, Series B}
   \bold{67}, 617--666.

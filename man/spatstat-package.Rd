@@ -202,9 +202,9 @@
 	\code{\link{rjitter}} \tab
 	apply random displacements to points in a pattern\cr
 	\code{\link{rMaternI}}  \tab
-	simulate the \ifelse{latex}{\out{Mat\'ern}}{Matern} Model I inhibition process\cr
+	simulate the \Matern Model I inhibition process\cr
 	\code{\link{rMaternII}} \tab
-	simulate the \ifelse{latex}{\out{Mat\'ern}}{Matern} Model II inhibition process\cr
+	simulate the \Matern Model II inhibition process\cr
 	\code{\link{rSSI}} \tab
 	simulate Simple Sequential Inhibition process\cr
 	\code{\link{rStrauss}} \tab
@@ -224,7 +224,7 @@
 	\code{\link{rPoissonCluster}} \tab
 	simulate a general Poisson cluster process\cr
 	\code{\link{rMatClust}} \tab
-	simulate the \ifelse{latex}{\out{Mat\'ern}}{Matern} Cluster process\cr
+	simulate the \Matern Cluster process\cr
 	\code{\link{rThomas}} \tab
 	simulate the Thomas process  \cr
 	\code{\link{rGaussPoisson}}  \tab
@@ -1157,8 +1157,8 @@
     \code{\link{lgcp.estpcf}} \tab fit a log-Gaussian Cox process model\cr
     \code{\link{thomas.estK}} \tab fit the Thomas process model \cr
     \code{\link{thomas.estpcf}} \tab fit the Thomas process model \cr
-    \code{\link{matclust.estK}} \tab fit the Matern Cluster process model \cr
-    \code{\link{matclust.estpcf}} \tab fit the Matern Cluster process model \cr
+    \code{\link{matclust.estK}} \tab fit the \Matern Cluster process model \cr
+    \code{\link{matclust.estpcf}} \tab fit the \Matern Cluster process model \cr
     \code{\link{cauchy.estK}} \tab fit a Neyman-Scott Cauchy cluster process \cr
    \code{\link{cauchy.estpcf}} \tab fit a Neyman-Scott Cauchy cluster process\cr
    \code{\link{vargamma.estK}} \tab fit a Neyman-Scott Variance Gamma process\cr
@@ -1469,9 +1469,9 @@
     \code{\link{rsyst}} \tab
     systematic random sample (grid) of points \cr
     \code{\link{rMaternI}}  \tab
-    simulate the \ifelse{latex}{\out{Mat\'ern}}{Matern} Model I inhibition process\cr
+    simulate the \Matern Model I inhibition process\cr
     \code{\link{rMaternII}} \tab
-    simulate the \ifelse{latex}{\out{Mat\'ern}}{Matern} Model II inhibition process\cr
+    simulate the \Matern Model II inhibition process\cr
     \code{\link{rSSI}} \tab
     simulate Simple Sequential Inhibition process\cr
     \code{\link{rHardcore}} \tab
@@ -1489,7 +1489,7 @@
     \code{\link{rNeymanScott}} \tab
     simulate a general Neyman-Scott process\cr
     \code{\link{rMatClust}} \tab
-    simulate the \ifelse{latex}{\out{Mat\'ern}}{Matern} Cluster process\cr
+    simulate the \Matern Cluster process\cr
     \code{\link{rThomas}} \tab
     simulate the Thomas process  \cr
     \code{\link{rLGCP}} \tab
@@ -1629,7 +1629,7 @@
   
   Residuals for a fitted point process model, and diagnostic plots
   based on the residuals, were introduced in Baddeley et al (2005) and
-  Baddeley, Rubak and \ifelse{latex}{\out{M\o ller}}{Moller} (2011).
+  Baddeley, Rubak and \Moller (2011).
   
   Type \code{demo(diagnose)}
   for a demonstration of the diagnostics features.
@@ -1709,12 +1709,12 @@
   ISBN: 0-387-28311-0.
 
   Baddeley, A., Turner, R.,
-  \ifelse{latex}{\out{M\o ller}}{Moller}, J. and Hazelton, M. (2005)
+  \Moller, J. and Hazelton, M. (2005)
   Residual analysis for spatial point processes.
   \emph{Journal of the Royal Statistical Society, Series B}
   \bold{67}, 617--666.
 
-  Baddeley, A., Rubak, E. and \ifelse{latex}{\out{M\o ller}}{Moller}, J. (2011)
+  Baddeley, A., Rubak, E. and \Moller, J. (2011)
   Score, pseudo-score and residual
   diagnostics for spatial point process models.
   \emph{Statistical Science} \bold{26}, 613--646.
@@ -1888,7 +1888,7 @@
   Lore De Middeleer,
   Robin Milne,
   Enrique Miranda,
-  Jesper \ifelse{latex}{\out{M\o ller}}{Moller},
+  Jesper \Moller,
   Annie \ifelse{latex}{\out{Molli{\'e}}}{Mollie},
   Ines Moncada,
   Mehdi Moradi,

@@ -160,16 +160,14 @@ psstA(object, r = NULL, breaks = NULL, \dots,
   of points in the point pattern.
 }
 \references{
-  Baddeley, A., Rubak, E. and \ifelse{latex}{\out{M\o ller}}{Moller}, J. (2011)
+  Baddeley, A., Rubak, E. and \Moller, J. (2011)
   Score, pseudo-score and residual
   diagnostics for spatial point process models.
   \emph{Statistical Science} \bold{26}, 613--646.
 }
 \author{
-  \adrian
-  
-  
-  \ege and Jesper \ifelse{latex}{\out{M\o ller}}{Moller}.
+  \adrian,
+  \ege and Jesper \Moller.
 }
 \seealso{
   Alternative functions:
