@@ -937,7 +937,7 @@ reset.spatstat.options()
 #
 # Basic tests of mppm
 #
-# $Revision: 1.12 $ $Date: 2019/02/20 04:05:43 $
+# $Revision: 1.13 $ $Date: 2019/12/06 10:01:08 $
 # 
 
 require(spatstat)
@@ -950,17 +950,22 @@ local({
   fit2 <- mppm(Points ~ group, simba,
                hyperframe(po=Poisson(), str=Strauss(0.1)),
                iformula=~str/id)
+  fit2w <- mppm(Points ~ group, simba,
+                hyperframe(po=Poisson(), str=Strauss(0.1)),
+                iformula=~str/id, weights=runif(nrow(simba)))
 # currently invalid  
 #  fit3 <- mppm(Points ~ group, simba,
 #               hyperframe(po=Poisson(), pie=PairPiece(c(0.05,0.1))),
 #        iformula=~I((group=="control") * po) + I((group=="treatment") * pie))
   fit1
   fit2
+  fit2w
 #  fit3
 
   ## run summary.mppm which currently sits in spatstat-internal.Rd
   summary(fit1)
   summary(fit2)
+  summary(fit2w)
 #  summary(fit3)
 
   ## test vcov algorithm

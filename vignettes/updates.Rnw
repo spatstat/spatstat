@@ -186,6 +186,8 @@ the News and Release Notes for each update.
     
    \item More options for handling bad simulation outcomes in \texttt{envelope}.
 
+   \item \texttt{mppm} accepts case weights.
+     
    \item Bandwidth selectors warn about extreme values of bandwidth.
      
   \item Fast kernel estimation on a linear network using 2D kernels.
@@ -1968,6 +1970,8 @@ listed alphabetically.
    \item 
      New arguments \texttt{gcontrol} and \texttt{reltol.pql} control 
      the fitting algorithm. 
+   \item 
+     New argument \texttt{weights} specifies case weights for each row of data.
    \end{itemize}
 
  \item \texttt{msr}:

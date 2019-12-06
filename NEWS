@@ -1,12 +1,13 @@
 
-        CHANGES IN spatstat VERSION 1.61-0.064
+        CHANGES IN spatstat VERSION 1.61-0.065
 
 OVERVIEW
 
     o We thank Mohammad Ghorbani, Ute Hahn, Abdollah Jalilian, Nestor Luambua,
     Greg McSwiggan, Annie Mollie and Jakob Gulddahl Rasmussen for contributions.
 
-    o spatstat now requires 'goftest' version 1.2-2 or later.
+    o spatstat now requires spatstat.utils version 1.15-0
+    and goftest version 1.2-2.
     
     o Nearest Neighbour Index function can now return mark values.
 
@@ -26,7 +27,7 @@ OVERVIEW
 
     o More functions for manipulating tessellations on a linear network.
     
-    o spatstat now requires spatstat.utils version 1.15-0.
+    o mppm accepts case weights.
     
     o Bug fixes and minor improvements.
     
@@ -92,6 +93,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o tilenames, tilenames<-
     These functions are now generic, with methods for 'tess' and 'lintess'
 
+    o mppm
+    New argument 'weights' specifies case weights for each row of data.
+    
     o unstack.lintess
     Now handles marks.
     

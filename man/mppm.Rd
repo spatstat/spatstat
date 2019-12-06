@@ -9,6 +9,7 @@
    mppm(formula, data, interaction=Poisson(), ...,
         iformula=NULL, 
         random=NULL,
+        weights=NULL,
         use.gam = FALSE, 
         reltol.pql=1e-3,
         gcontrol=list())
@@ -46,6 +47,9 @@
     describing a random effect. Variable names in the formula
     may be any of the column names of \code{data} and \code{interaction}.
     The formula must be recognisable to \code{\link{lme}}. 
+  }
+  \item{weights}{
+    Optional. Numeric vector of case weights for each row of \code{data}.
   }
   \item{use.gam}{Logical flag indicating whether to fit the model
     using \code{\link[mgcv]{gam}} or \code{\link[stats]{glm}}.

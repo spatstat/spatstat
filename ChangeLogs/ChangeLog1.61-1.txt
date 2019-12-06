@@ -1192,6 +1192,25 @@ Change log from 1.61-0 to 1.61-1
 ------------- uploaded to github       ---------------
    
 
+   mppm.R
+   mppm.Rd
+	Added 'weights' argument for case weights.
+
+   tests/mppm.R
+	Test 'weights' argument.
+
+   updates.Rnw
+	updated to cover all the above.
+	
+   DESCRIPTION
+   NEWS
+	Version 1.61-0.065
+
+------------- passed R-3.6.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+   
+
 
    
       

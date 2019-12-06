@@ -1,7 +1,7 @@
 #
 # mppm.R
 #
-#  $Revision: 1.90 $   $Date: 2019/09/10 02:11:48 $
+#  $Revision: 1.92 $   $Date: 2019/12/06 10:18:58 $
 #
 
 mppm <- local({
@@ -11,6 +11,7 @@ mppm <- local({
 #%^!ifdef RANDOMEFFECTS                 
                    random=NULL,
 #%^!endif                 
+                   weights=NULL,
                    use.gam=FALSE,
 #%^!ifdef RANDOMEFFECTS                                    
                    reltol.pql=1e-3,
@@ -45,6 +46,13 @@ mppm <- local({
                  dQuote("interact"), 
                  "), or a hyperframe containing such objects", sep=""))
 
+    if(is.null(weights)) {
+      weights <- rep(1, npat)
+    } else {
+      check.nvector(weights, npat, things="rows of data", oneok=TRUE)
+      if(length(weights) == 1L) weights <- rep(weights, npat)
+    } 
+    
     backdoor <- list(...)$backdoor
     if(is.null(backdoor) || !is.logical(backdoor))
       backdoor <- FALSE
@@ -340,6 +348,9 @@ mppm <- local({
     }
     ## ---------------- E N D   o f    L O O P  --------------------------
     ##
+    ## add case weights
+    moadf$caseweight <- weights[moadf$id]
+    ##
     ## backdoor exit - Berman-Turner frame only - used by predict.mppm 
     if(backdoor)
       return(moadf)
@@ -412,13 +423,15 @@ mppm <- local({
     ## Satisfy package checker
     glmmsubset <- .mpl.SUBSET <- moadf$.mpl.SUBSET
     .mpl.W      <- moadf$.mpl.W
-  
+    caseweight  <- moadf$caseweight
+    
     ## ---------------- FIT THE MODEL ------------------------------------
     want.trend <- prep0$info$want.trend
     if(want.trend && use.gam) {
       fitter <- "gam"
       ctrl <- do.call(gam.control, resolve.defaults(gcontrol, list(maxit=50)))
-      FIT  <- gam(fmla, family=quasi(link=log, variance=mu), weights=.mpl.W,
+      FIT  <- gam(fmla, family=quasi(link=log, variance=mu),
+                  weights=.mpl.W * caseweight,
                   data=moadf, subset=(.mpl.SUBSET=="TRUE"),
                   control=ctrl)
       deviants <- deviance(FIT)
@@ -429,7 +442,8 @@ mppm <- local({
       attr(fmla, "ctrl") <- ctrl # very strange way to pass argument
       fixed <- 42 # to satisfy package checker
       FIT  <- hackglmmPQL(fmla, random=random,
-                          family=quasi(link=log, variance=mu), weights=.mpl.W,
+                          family=quasi(link=log, variance=mu),
+                          weights=.mpl.W * caseweight,
                           data=moadf, subset=glmmsubset,
                           control=attr(fixed, "ctrl"),
                           reltol=reltol.pql)
@@ -438,7 +452,8 @@ mppm <- local({
     } else {
       fitter <- "glm"
       ctrl <- do.call(glm.control, resolve.defaults(gcontrol, list(maxit=50)))
-      FIT  <- glm(fmla, family=quasi(link="log", variance="mu"), weights=.mpl.W,
+      FIT  <- glm(fmla, family=quasi(link="log", variance="mu"),
+                  weights=.mpl.W * caseweight,
                   data=moadf, subset=(.mpl.SUBSET=="TRUE"),
                   control=ctrl)
       deviants <- deviance(FIT)
@@ -446,7 +461,7 @@ mppm <- local({
     env <- list2env(moadf, parent=sys.frame(sys.nframe()))
     environment(FIT$terms) <- env
     ## maximised log-pseudolikelihood
-    W <- moadf$.mpl.W
+    W <- with(moadf, .mpl.W * caseweight)
     SUBSET <- moadf$.mpl.SUBSET
     Z <- (moadf$.mpl.Y != 0)
     maxlogpl <- -(deviants/2 + sum(log(W[Z & SUBSET])) + sum(Z & SUBSET))
