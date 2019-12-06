@@ -2,18 +2,21 @@
 #'
 #'  AUC and ROC code
 #'
-#'  $Revision: 1.1 $ $Date: 2018/05/13 23:56:20 $
+#'  $Revision: 1.3 $ $Date: 2019/12/06 06:32:06 $
 
 require(spatstat)
 local({
+  A <- roc(spiders, "x")
+  B <- auc(spiders, "y")
   fit <- kppm(redwood ~ I(y-x))
   a <- roc(fit)
   b <- auc(fit)
-  d <- roc(spiders, "x")
-  e <- auc(spiders, "y")
+  fet <- ppm(amacrine~x+y+marks)
+  d <- roc(fet)
+  e <- auc(fet)
   fut <- lppm(spiders ~ I(y-x))
   f <- roc(fut)
-  g <- roc(fut)
+  g <- auc(fut)
 })
 ## badwindowcheck.R
 ## $Revision: 1.2 $  $Date: 2014/01/27 07:18:41 $
@@ -86,7 +89,7 @@ local({
 #'
 #'    Circular data and periodic distributions
 #'
-#'    $Revision: 1.2 $  $Date: 2019/03/16 04:18:34 $
+#'    $Revision: 1.3 $  $Date: 2019/12/06 06:15:22 $
 
 require(spatstat)
 local({
@@ -99,6 +102,24 @@ local({
   set.seed(19171025)
   aa <- replicate(7, runif(1, 0, 2*pi) + c(0, runif(1, 0, pi)), simplify=FALSE)
   bb <- circunion(aa)
+
+  assertsingle <- function(x, a, id) {
+    y <- circunion(x)
+    if(length(y) != 1 || max(abs(y[[1]] - a)) > .Machine$double.eps)
+      stop(paste("Incorrect result from circunion in case", id),
+           call.=FALSE)
+    invisible(NULL)
+  }
+
+  assertsingle(list(c(pi/3, pi), c(pi/2, 3*pi/2)),
+               c(pi/3, 3*pi/2),
+               1)
+  assertsingle(list(c(0, pi/2), c(pi/4, pi)),
+               c(0,pi),
+               2)
+  assertsingle(list(c(-pi/4, pi/2), c(pi/4, pi)),
+               c((2-1/4)*pi, pi),
+               3)
 })
 
   
@@ -1080,21 +1101,22 @@ local({
 #'
 #'  Tests of duplicated/multiplicity code
 #'
-#' $Revision: 1.4 $ $Date: 2019/10/29 11:04:24 $
+#' $Revision: 1.7 $ $Date: 2019/12/06 02:41:32 $
 
 require(spatstat)
 local({
    X <- ppp(c(1,1,0.5,1), c(2,2,1,2), window=square(3), check=FALSE)
    Y <- X %mark% factor(letters[c(3,2,4,3)])
+   ZC <- X %mark% letters[c(3,2,4,3)]
    ZM <- Y %mark% matrix(c(3,2,4,3), 4, 2)
-   ZD <- ZM
-   marks(ZD) <- as.data.frame(marks(ZM))
+   ZD <- Y %mark% as.data.frame(marks(ZM))
 
    #' multiplicity
    m <- multiplicity(X)
    mf <- multiplicity(Y)
    mm <- multiplicity(ZM)
    mz <- multiplicity(ZD)
+   mc <- multiplicity(ZC)
    ## default method
    kk <- c(1,2,3,1,1,2)
    mk <- multiplicity(kk)
@@ -1117,19 +1139,43 @@ local({
                   "does not respect sequential ordering"))
      return(invisible(NULL))
    }
-   checkum(X, "<unmarked pattern>")
-   checkum(Y, "<multitype pattern>")
-   checkum(ZM, "<pattern with matrix of marks>")
-   checkum(ZD, "<pattern with several columns of marks>")
+   checkum(X, "<unmarked point pattern>")
+   checkum(Y, "<multitype point pattern>")
+   checkum(ZC, "<point pattern with character marks>")
+   checkum(ZM, "<point pattern with matrix of marks>")
+   checkum(ZD, "<point pattern with several columns of marks>")
 
    ## uniquemap.data.frame
    dfbase <- as.data.frame(replicate(3, sample(1:20, 10), simplify=FALSE))
    df <- dfbase[sample(1:10, 30, replace=TRUE), , drop=FALSE]
    #' faster algorithm for numeric values
+   checkum(df, "<numeric data frame>")
    a <- uniquemap(df)
    #' general algorithm using 'duplicated' and 'match'
    dfletters <- as.data.frame(matrix(letters[as.matrix(df)], nrow=nrow(df)))
+   checkum(dfletters, "<character data frame>")
    b <- uniquemap(dfletters)
    if(!isTRUE(all.equal(a,b)))
      stop("inconsistency between algorithms in uniquemap.data.frame")
+
+   ## uniquemap.matrix
+   M0 <- matrix(1:12, 3, 4)
+   ii <- sample(1:3, 5, replace=TRUE)
+   M4 <- M0[ii, , drop=FALSE]
+   checkum(M4, "<integer matrix>")
+   u4 <- uniquemap(M4)
+   C4 <- matrix(letters[M4], 5, 4)
+   uc4 <- uniquemap(C4)
+   checkum(C4, "<character matrix>")
+   if(!isTRUE(all.equal(u4, uc4)))
+     stop("Inconsistency between algorithms in uniquemap.matrix")
+   
+   ## uniquemap.default
+   a <- letters[c(1, 1:4, 3:2)]
+   checkum(a, "<character>")
+   checkum(as.list(a), "<list>")
+   u1 <- uniquemap(a)
+   u2 <- uniquemap(as.list(a))
+   if(!isTRUE(all.equal(u1, u2)))
+     stop("Inconsistency between algorithms in uniquemap.default")
 })

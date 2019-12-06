@@ -1,10 +1,12 @@
 
-        CHANGES IN spatstat VERSION 1.61-0.063
+        CHANGES IN spatstat VERSION 1.61-0.064
 
 OVERVIEW
 
     o We thank Mohammad Ghorbani, Ute Hahn, Abdollah Jalilian, Nestor Luambua,
     Greg McSwiggan, Annie Mollie and Jakob Gulddahl Rasmussen for contributions.
+
+    o spatstat now requires 'goftest' version 1.2-2 or later.
     
     o Nearest Neighbour Index function can now return mark values.
 

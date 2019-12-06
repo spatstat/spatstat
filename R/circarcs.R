@@ -8,7 +8,7 @@
 #'   Here 'left' and 'right' are angles in radians (mod 2*pi)
 #'   from the positive x-axis.
 #' 
-#'   $Revision: 1.4 $ $Date: 2019/03/16 04:18:16 $
+#'   $Revision: 1.5 $ $Date: 2019/12/06 06:15:29 $
 
 check.arc <- function(arc, fatal=TRUE) {
   if(is.numeric(arc) && length(arc) == 2)
@@ -40,10 +40,10 @@ circunion <- function(arcs) {
   lapply(arcs, check.arc)
   #' extract all endpoints
   allends <- unlist(arcs)
-  allends <- as.numeric(allends) %% (2*pi)
-  allends <- sortunique(allends)
-  #' compute midpoints between each successive pair of endpoints
-  midpts <- (allends[-1] + allends[-length(allends)])/2
+  allends <- sortunique(as.numeric(allends) %% (2*pi))
+  #' compute midpoints between each successive pair of endpoints (mod 2pi)
+  midpts <- allends + diff(c(allends, allends[1] + 2*pi))/2
+  #' determine which midpoints lie inside one of the arcs
   midinside <- Reduce("|", lapply(arcs, inside.arc, theta=midpts))
   zeroinside <- any(sapply(arcs, inside.arc, theta=0))
   if(!any(midinside) && !zeroinside)
@@ -52,20 +52,21 @@ circunion <- function(arcs) {
     return(everything)
   result <- nothing
   if(zeroinside) {
-    #' treat 0 (=2pi) as a midpoint, which lies inside the union
-    #' First scan clockwise for endpoint
-    ileft <- max(which(!midinside)) + 1L
+    #' First deal with the connected component containing 0
+    #' Scan clockwise from 2*pi for left endpoint of interval
+    n <- length(midinside)
+    ileft <- (max(which(!midinside)) %% n) + 1L
     aleft <- allends[ileft]
-    #' then anticlockwise
+    #' then anticlockwise for right endpoint
     iright <- min(which(!midinside))
     aright <- allends[iright]
     #' save this interval
     result <- append(result, list(c(aleft, aright)))
     #' remove data from consideration
-    n <- length(midinside)
-    n1 <- n+1L
-    midinside <- midinside[(1:n) > iright & (1:n) < (ileft-1L)]
-    allends   <- allends[(1:n1) > iright & (1:n1) < ileft]
+    seqn <- seq_len(n)
+    retain <- seqn > iright & seqn < (ileft-1L)
+    midinside <- midinside[retain]
+    allends   <- allends[retain]
   }
   #' Now scan anticlockwise for first midpoint that is inside the union
   while(any(midinside)) {

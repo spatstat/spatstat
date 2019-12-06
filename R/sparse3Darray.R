@@ -3,7 +3,7 @@
 #'
 #' Sparse 3D arrays represented as list(i,j,k,x)
 #' 
-#' $Revision: 1.37 $  $Date: 2019/11/28 03:58:51 $
+#' $Revision: 1.38 $  $Date: 2019/12/06 01:39:57 $
 #'
 
 sparse3Darray <- function(i=integer(0), j=integer(0), k=integer(0),
@@ -446,7 +446,7 @@ rbindCompatibleDataFrames <- function(x) {
     warning("indices exceed array bounds; extending the array dimensions",
             call.=FALSE)
     fullindices   <- lapply(IJK, fullIndexSequence)
-    strictindices <- lapply(IJK, strictIndexSequence)
+    ## strictindices <- lapply(IJK, strictIndexSequence)
     dnew <- pmax(dimx, sapply(fullindices, max))
     result <- array(data=RelevantZero(x$x), dim=dnew)
     result[cbind(x$i, x$j, x$k)] <- x$x

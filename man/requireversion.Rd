@@ -37,8 +37,6 @@ requireversion(pkg, ver)
   \adrian
 }
 \examples{
-   \dontrun{
-      requireversion(spatstat, "1.42-0")
-   }
+  requireversion(spatstat, "1.42-0")
 }
 \keyword{environment}

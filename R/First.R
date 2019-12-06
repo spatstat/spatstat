@@ -1,6 +1,6 @@
 #  First.R
 #
-#  $Revision: 1.47 $ $Date: 2019/11/29 03:29:47 $
+#  $Revision: 1.48 $ $Date: 2019/12/06 01:38:23 $
 #
 
 .onLoad <- function(...) reset.spatstat.options()
@@ -8,7 +8,7 @@
 .onAttach <- function(libname, pkgname) {
   store.versionstring.spatstat()
   ver <- versionstring.spatstat()
-  descfile <- system.file("DESCRIPTION", package="spatstat")
+  ## descfile <- system.file("DESCRIPTION", package="spatstat")
   nickfile <- system.file("doc", "Nickname.txt", package="spatstat")
   ni <- scan(file=nickfile, what=character(), n=1, quiet=TRUE)
   msg <- paste("\nspatstat", ver,

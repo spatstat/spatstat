@@ -3,7 +3,7 @@
 #
 #   computes simulation envelopes 
 #
-#   $Revision: 2.104 $  $Date: 2019/12/02 04:30:23 $
+#   $Revision: 2.105 $  $Date: 2019/12/06 01:37:22 $
 #
 
 envelope <- function(Y, fun, ...) {
@@ -1278,7 +1278,7 @@ envelope.matrix <- function(Y, ...,
         stop(paste(nsim, "+", nsim2, "=", nsim+nsim2, 
                    "simulations are not available; only",
                    Ncol, "columns provided"))
-      if(length(conflict <- intersect(jsim, jsim.mean)))
+      if(length(intersect(jsim, jsim.mean)))
         warning("Internal warning: Indices in jsim and jsim.mean overlap")
     }
       

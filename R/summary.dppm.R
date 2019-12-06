@@ -1,7 +1,7 @@
 #'
 #'  summary.dppm.R
 #'
-#'  $Revision: 1.3 $ $Date: 2019/10/18 03:51:56 $
+#'  $Revision: 1.4 $ $Date: 2019/12/06 01:35:46 $
 
 summary.dppm <- function(object, ..., quick=FALSE) {
   nama <- names(object)
@@ -72,7 +72,7 @@ print.summary.dppm <- function(x, ...) {
 
   parbreak()
   splat(if(x$stationary) "Strength" else "(Average) strength",
-        "of repulsion:", signif(x$repul, 4))
+        "of repulsion:", signif(x$repul, digits))
   
   return(invisible(NULL))
 }

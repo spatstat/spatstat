@@ -1162,8 +1162,35 @@ Change log from 1.61-0 to 1.61-1
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
 
-   
+06 dec 2019
 
+   circarcs.R
+	Bug fix in circunion for the case where 0 is an endpoint
+	
+   envelope.R
+   First.R
+   sparse3Darray.R
+   summary.dppm.R
+	Tweaks to satisfy codetools usage checker
+
+   requireversion.Rd
+   tests/aucroc.R
+   tests/circular.R
+   tests/duplicity.R
+   tests/fvproblems.R
+   tests/randoms.R
+   tests/package.R [New file]
+	More tests of code cases
+	
+   DESCRIPTION
+   NEWS
+	spatstat requires goftest 1.2-2 or later.
+	Version 1.61-0.064
+
+------------- passed R-3.6.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+   
 
 
    

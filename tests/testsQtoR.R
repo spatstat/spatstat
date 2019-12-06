@@ -59,7 +59,7 @@ local({
 })
 #'  tests/randoms.R
 #'   Further tests of random generation code
-#'  $Revision: 1.8 $ $Date: 2019/10/01 08:23:10 $
+#'  $Revision: 1.9 $ $Date: 2019/12/06 02:08:57 $
 
 require(spatstat)
 local({
@@ -94,7 +94,9 @@ local({
   Y <- rMaternInhibition(2, kappa=20, r=0.1, win=b4)
 
   X <- rSSI(0.05, 6)
-  Y <- rSSI(0.05, 6, x.init=X) # no extra points 
+  Y <- rSSI(0.05, 6, x.init=X) # no extra points
+
+  Z <- rlabel(finpines)
 })
 
 local({

@@ -501,16 +501,17 @@ local({
   d <- numeric.columns(cells)
   f <- numeric.columns(longleaf)
 })
-# 
-#    tests/fvproblems.R
-#
-#    $Revision: 1.9 $  $Date: 2019/11/01 05:18:11 $
-#
+## 
+##    tests/fvproblems.R
+##
+##    problems with fv and fasp code
+##
+##    $Revision: 1.10 $  $Date: 2019/12/06 02:51:36 $
 
 require(spatstat)
 
-# This appears in the workshop notes
-# Problem detected by Martin Bratschi
+#' This appears in the workshop notes
+#' Problem detected by Martin Bratschi
 
 local({
   Jdif <- function(X, ..., i) {
@@ -521,9 +522,9 @@ local({
   }
   Z <- Jdif(amacrine, i="on")
 })
-#
-#  Test mathlegend code
-#
+#'
+#'  Test mathlegend code
+#'
 local({
   K <- Kest(cells)
   plot(K)
@@ -552,8 +553,8 @@ local({
   plot(alltypes(amacrine, pcfcross))
 })
 
-#
-#  Test quirks related to 'alim' attribute
+#'
+#'  Test quirks related to 'alim' attribute
 
 local({
   K <- Kest(cells)
@@ -563,8 +564,8 @@ local({
   plot(tail(K))
 })
 
-#
-# Check that default 'r' vector passes the test for fine spacing
+#'
+#' Check that default 'r' vector passes the test for fine spacing
 
 local({
   a <- Fest(cells)
@@ -578,7 +579,7 @@ local({
   JX <- Jest(X)
 })
 
-## various functionality in fv.R
+##' various functionality in fv.R
 
 local({
   M <- cbind(1:20, matrix(runif(100), 20, 5))
@@ -612,4 +613,11 @@ local({
     return(dif)
   }
   E <- envelope(Y, Jdif, nsim=19, i="A", simulate=expression(rlabel(Y)))
+})
+
+local({
+  #' fasp axes and title
+  a <- alltypes(amacrine)
+  a$title <- NULL
+  plot(a, samex=TRUE, samey=TRUE)
 })

@@ -302,6 +302,15 @@ local({
 })
 
   
+#' spatstat/tests/package.R
+#' Package information
+#' $Revision$ $Date$
+
+require(spatstat)
+local({
+  a <- bugfixes("book", show=FALSE)
+  bugfixes(package="deldir")
+})
 ## 
 ##    tests/percy.R
 ##
