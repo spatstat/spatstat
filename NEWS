@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.61-0.065
+        CHANGES IN spatstat VERSION 1.61-0.066
 
 OVERVIEW
 
@@ -31,7 +31,7 @@ OVERVIEW
     
     o Bug fixes and minor improvements.
     
-    o Nickname: 'New improved formula'
+    o Nickname: 'An update which will live in infamy'
 
 NEW FUNCTIONS
 
@@ -280,6 +280,11 @@ BUG FIXES
     o rshift.psp
     Crashed if X had a data frame of marks.
     [Spotted by Ute Hahn.]
+    Fixed.
+
+    o Kscaled
+    Crashed if Ripley's isotropic edge correction was selected
+    but the translation edge correction was not.
     Fixed.
     
         CHANGES IN spatstat VERSION 1.61-0

@@ -427,7 +427,7 @@ of potential impact.
     Isotropic correction weights for polygonal windows were sometimes incorrect
     for small radius \texttt{r} if the polygon contained many small segments
     or if the polygon was very long and thin.
-    \bugger{1.60-0}{june 2019}{1.62-0}{november 2019}.
+    \bugger{1.60-0}{june 2019}{1.62-0}{december 2019}.
  
  \item \texttt{beachcolours}, \texttt{beachcolourmap}:
    The number of colours was not always equal to \texttt{ncolours}.

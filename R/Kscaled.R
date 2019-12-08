@@ -1,7 +1,7 @@
 #
 #	Kscaled.R	Estimation of K function for locally-scaled process
 #
-#	$Revision: 1.16 $	$Date: 2015/02/22 03:00:48 $
+#	$Revision: 1.17 $	$Date: 2019/12/08 04:29:28 $
 #
 
 "Lscaled" <- function(...) {
@@ -109,8 +109,8 @@
           fname=c("K", "scaled"))
         
   ## identify all relevant close pairs
-  what <- if(any(correction == "translate")) "all" else "ijd"
-  close <- closepairs(X, maxabsdist, what=what)
+  needXI <- any(correction %in% c("translate", "isotropic"))
+  close <- closepairs(X, maxabsdist, what=if(needXI) "all" else "ijd")
   I <- close$i
   J <- close$j
   ## locally-scaled distances
@@ -118,8 +118,8 @@
   lamIJ <- (sqrtLambda[I] + sqrtLambda[J])/2
   absDIJ <- close$d
   DIJ <- absDIJ * lamIJ
-
-  XI <- ppp(close$xi, close$yi, window=W, check=FALSE)
+  ## first point of each pair
+  XI <- if(needXI) ppp(close$xi, close$yi, window=W, check=FALSE) else NULL
   
   if(any(correction == "none")) {
     ## uncorrected! For demonstration purposes only!

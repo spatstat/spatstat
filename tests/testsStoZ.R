@@ -11,10 +11,11 @@ local({
   subspaceDistance(AN$B, AV$B)
   dimhat(AN$M)
 })
-#
-#  tests/segments.R
-#
-#  $Revision: 1.17 $  $Date: 2019/11/18 07:28:07 $
+##
+##  tests/segments.R
+##                      [SEE ALSO: tests/xysegment.R]
+##
+##  $Revision: 1.18 $  $Date: 2019/12/08 02:31:21 $
 
 require(spatstat)
 
@@ -155,13 +156,19 @@ density(Y, 0.2, at=Z, edge=TRUE, method="C")
 
   #' segment crossing code
   X <- psp(runif(30),runif(30),runif(30),runif(30), window=owin())
+  A <- selfcut.psp(X, eps=1e-11)
+  B <- selfcut.psp(X[1])
+  #' 
   Y <- psp(runif(30),runif(30),runif(30),runif(30), window=owin())
   Z <- edges(letterR)[c(FALSE,TRUE)]
-  spatstat.options(selfcrossing.psp.useCall=FALSE)
-  selfcrossing.psp(X)
-  selfcrossing.psp(Z)
-  crossing.psp(X,Y,details=TRUE)
-  spatstat.options(selfcrossing.psp.useCall=TRUE)
+  spatstat.options(selfcrossing.psp.useCall=FALSE, crossing.psp.useCall=FALSE)
+  A <- selfcrossing.psp(X)
+  B <- selfcrossing.psp(Z)
+  D <- crossing.psp(X,Y,details=TRUE)
+  spatstat.options(selfcrossing.psp.useCall=TRUE, crossing.psp.useCall=TRUE)
+  A <- selfcrossing.psp(X)
+  B <- selfcrossing.psp(Z)
+  D <- crossing.psp(X,Y,details=TRUE)
 })
 
 local({
@@ -1359,6 +1366,7 @@ local({
 reset.spatstat.options()
 ##
 ## tests/xysegment.R
+##                      [SEE ALSO tests/segments.R]
 ##
 ##    Test weird problems and boundary cases for line segment code
 ##

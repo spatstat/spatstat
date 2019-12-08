@@ -1,4 +1,4 @@
-Change log from 1.61-0 to 1.61-1
+Change log from 1.61-0 to 1.62-0
 ================================
 
 12 sep 2019
@@ -1210,7 +1210,30 @@ Change log from 1.61-0 to 1.61-1
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
    
+08 dec 2019
 
+   Kscaled.R
+	Bug fix
 
-   
-      
+   tests/Kfuns.R
+   tests/segments.R
+   tests/xysegment.R
+	More checks
+
+   updates.Rnw
+	minor correction
+	
+   DESCRIPTION
+   NEWS
+   Nickname.txt
+	Nickname: 'An update which will live in infamy'
+	Version 1.62-0
+
+------------- passed R-3.6.1 CMD check ---------------
+------------- installed on laptop      ---------------
+
+............. passed 'make bookcheck' ................
++++++++++++++ passed R-devel CMD check +++++++++++++++
+               (2019-12-04 r77519)
+............. built release version    ...............
+------------- uploaded to github       ---------------
