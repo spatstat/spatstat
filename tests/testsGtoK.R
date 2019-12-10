@@ -302,6 +302,24 @@ local({
 
   aa <- ppsubset(cells, square(0.1))
 })
+#'
+#'  tests/interact.R
+#'
+#'  Support for interaction objects
+#'
+#'  $Revision: 1.1 $ $Date: 2019/12/10 01:57:18 $
+
+require(spatstat)
+local({
+  #' print.intermaker
+  Strauss
+  Geyer
+  Ord
+  #' intermaker
+  BS <- get("BlankStrauss", envir=environment(Strauss))
+  BD <- function(r) { instantiate.interact(BS, list(r=r)) }
+  BlueDanube <- intermaker(BD, BS) 
+})
 #'   tests/ippm.R
 #'   Tests of 'ippm' class
 #'   $Revision: 1.3 $ $Date: 2019/02/15 10:08:26 $

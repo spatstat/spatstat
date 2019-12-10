@@ -38,4 +38,15 @@ Change log from 1.62-1 to 1.62-2
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
 
+   tests/interact.R [New file]
+   	Test support for 'interact' and 'intermaker'
 
+   DESCRIPTION
+   NEWS
+	Version 1.62-1.003
+
+------------- passed R-3.6.1 CMD check ---------------
+------------- installed on laptop      ---------------
++++++++++++++ passed 'make covercheck' +++++++++++++++
++++++++++++++ passed 'make bookcheck'  +++++++++++++++
+------------- uploaded to github       ---------------
