@@ -5,7 +5,7 @@
   Create a colour map (colour lookup table).
 }
 \usage{
-colourmap(col, ..., range=NULL, breaks=NULL, inputs=NULL, gamma=1)
+colourmap(col, \dots, range=NULL, breaks=NULL, inputs=NULL, gamma=1)
 }
 \arguments{
   \item{col}{Vector of values specifying colours}
@@ -52,27 +52,36 @@ colourmap(col, ..., range=NULL, breaks=NULL, inputs=NULL, gamma=1)
   Exactly one of the arguments \code{range}, \code{inputs} or \code{breaks}
   must be specified by name.
 
-  If \code{inputs} is given, then it should be a vector or factor,
-  of the same length as \code{col}. The entries of \code{inputs} can be
-  any atomic type (e.g. numeric, logical, character, complex) or factor
-  values. The resulting colour map associates the value \code{inputs[i]}
-  with the colour \code{col[i]}.
-
-  If \code{range} is given, then it determines the interval of the real
-  number line that will be mapped. It should be a numeric vector of
-  length 2. The interval will be divided evenly into bands, each of which is
-  assigned one of the colours in \code{col}. (If \code{gamma} is given,
-  then the bands are equally spaced on a scale where the original values
-  are raised to the power \code{gamma}.)
-
-  If \code{breaks} is given, then it determines the precise intervals
-  of the real number line
-  which are mapped to each colour. It should be a numeric vector,
-  of length at least 2, with entries that are in increasing order.
-  Infinite values are allowed. Any number in the range
-  between \code{breaks[i]} and \code{breaks[i+1]} will be mapped to the
-  colour \code{col[i]}. 
-
+  \itemize{
+    \item
+    If \code{inputs} is given, then it should be a vector or factor,
+    of the same length as \code{col}. The entries of \code{inputs} can be
+    any atomic type (e.g. numeric, logical, character, complex) or factor
+    values. The resulting colour map associates the value \code{inputs[i]}
+    with the colour \code{col[i]}.
+    The argument \code{col} should have the same length as \code{inputs}.
+    \item
+    If \code{range} is given, then it determines the interval of the real
+    number line that will be mapped. It should be a numeric vector of
+    length 2. The interval will be divided evenly into bands, each of which is
+    assigned one of the colours in \code{col}. (If \code{gamma} is given,
+    then the bands are equally spaced on a scale where the original values
+    are raised to the power \code{gamma}.)
+    \item
+    If \code{breaks} is given, then it determines the precise intervals
+    of the real number line
+    which are mapped to each colour. It should be a numeric vector,
+    of length at least 2, with entries that are in increasing order.
+    Infinite values are allowed. Any number in the range
+    between \code{breaks[i]} and \code{breaks[i+1]} will be mapped to the
+    colour \code{col[i]}. 
+    The argument \code{col} should have length equal to
+    \code{length(breaks) - 1}.
+  }
+  It is also permissible for \code{col} to be a single colour value,
+  representing a trivial colour map in which all data values are mapped to
+  the same colour.
+  
   The result is an object of class \code{"colourmap"}. 
   There are \code{print} and \code{plot} methods for this class.
   Some plot commands in the \pkg{spatstat} package accept an object

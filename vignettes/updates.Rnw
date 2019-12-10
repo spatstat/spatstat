@@ -1372,6 +1372,10 @@ listed alphabetically.
   \item New argument \texttt{verbose}.
   \end{itemize}
 
+\item \texttt{colourmap}: argument \texttt{col} have have length 1,
+  representing a trivial colour map in which all data values are
+  mapped to the same colour.
+  
 \item \texttt{collapse.fv}:
    This is now treated as a method for the \texttt{nlme} 
    generic \texttt{collapse}.
@@ -1951,6 +1955,11 @@ listed alphabetically.
    \end{itemize}
 
 \item \texttt{lurking.ppm}: accelerated.
+  
+\item \texttt{lut}: argument \texttt{outputs} may have length 1, 
+  representing a lookup table in which all data values are mapped
+  to the same output value.
+  
 %%M
    
  \item \texttt{markcorr}:

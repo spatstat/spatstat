@@ -50,3 +50,24 @@ Change log from 1.62-1 to 1.62-2
 +++++++++++++ passed 'make covercheck' +++++++++++++++
 +++++++++++++ passed 'make bookcheck'  +++++++++++++++
 ------------- uploaded to github       ---------------
++++++++++++++ passed R-devel CMD check +++++++++++++++
+                 (2019-12-04 r77519)
+
+   colourmap.Rd
+   lut.Rd
+	Added explanation of new options.
+
+   updates.Rnw
+	updated to cover all the above.
+	
+   DESCRIPTION
+   NEWS
+   Nickname.txt
+	Nickname changed to 'Shape-shifting lizard'
+	Version 1.62-2
+
+------------- passed R-3.6.1 CMD check ---------------
+------------- installed on laptop      ---------------
+-------------   uploaded to github     ---------------
++++++++++++++   rebuilt for CRAN       ++++++++++++++++
++++++++++++++   uploaded to CRAN       ++++++++++++++++
