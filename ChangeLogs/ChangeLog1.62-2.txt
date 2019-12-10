@@ -1,0 +1,41 @@
+Change log from 1.62-1 to 1.62-2
+================================
+
+08 dec 2019
+
+   DESCRIPTION
+   NEWS
+   Nickname.txt
+	Nickname changed to 'Pastiche'
+	Version 1.62-1.001
+
+------------- passed R-3.6.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+
+10 dec 2019
+
+   eval.fv.R
+	Bug fix in handling 'conserve' attribute
+
+   envelope.R
+	Trap misuse of 'conserve' attribute
+
+   colourtables.R
+	A discrete lut or colourtable may now have constant output value
+	to accommodate a common user error
+
+   tests/colour.R
+   tests/envelopes.R
+   tests/segments.R
+	Added tests of the fixes above.
+
+   DESCRIPTION
+   NEWS
+	Version 1.62-1.002
+
+------------- passed R-3.6.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+
+

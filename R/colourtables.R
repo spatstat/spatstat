@@ -3,7 +3,7 @@
 #
 # support for colour maps and other lookup tables
 #
-# $Revision: 1.44 $ $Date: 2019/08/03 06:40:10 $
+# $Revision: 1.46 $ $Date: 2019/12/10 01:08:19 $
 #
 
 colourmap <- function(col, ..., range=NULL, breaks=NULL, inputs=NULL, gamma=1) {
@@ -45,7 +45,11 @@ lut <- function(outputs, ..., range=NULL, breaks=NULL, inputs=NULL, gamma=1) {
   }
   if(!is.null(inputs)) {
     #' discrete set of input values mapped to output values
-    stopifnot(length(inputs) == length(outputs))
+    if(n == 1L) {
+      #' constant output
+      n <- length(inputs)
+      outputs <- rep(outputs, n)
+    } else stopifnot(length(inputs) == length(outputs))
     stuff <- list(n=n, discrete=TRUE, inputs=inputs, outputs=outputs)
     f <- function(x, what="value") {
       m <- match(x, stuff$inputs)
@@ -65,7 +69,10 @@ lut <- function(outputs, ..., range=NULL, breaks=NULL, inputs=NULL, gamma=1) {
       gamma.used <- gamma
     } else {
       stopifnot(length(breaks) >= 2)
-      stopifnot(length(breaks) == length(outputs) + 1L)
+      if(length(outputs) == 1L) {
+        n <- length(breaks) - 1L
+        outputs <- rep(outputs, n)
+      } else stopifnot(length(breaks) == length(outputs) + 1L)
       if(!all(diff(breaks) > 0))
         stop("breaks must be increasing")
       gamma.used <- NULL

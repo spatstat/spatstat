@@ -1,4 +1,30 @@
 
+        CHANGES IN spatstat VERSION 1.62-1.002
+
+OVERVIEW
+
+    o Bug fixes and minor improvements.
+
+    o Version nickname: "Pastiche"
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o colourmap
+    Argument 'col' is now permitted to have length 1, representing
+    a colour map in which all values are mapped to the same colour.
+
+    o lut
+    Argument 'outputs' is now permitted to have length 1, representing
+    a lookup table in which all inputs are mapped to the same output value.
+
+BUG FIXES
+
+    o envelope
+    Crashed sometimes, with a message about unrecognised arguments,
+    when applied to a summary function created by the user.
+    Fixed.
+    
+
         CHANGES IN spatstat VERSION 1.62-1
 
 OVERVIEW

@@ -229,6 +229,17 @@ local({
                 jsim=1:10, nsim2=10)
 })
 
+local({
+  #' quirk with handmade summary functions ('conserve' attribute)
+  Kdif <- function(X, r=NULL) { # note no ellipsis
+    Y <- split(X)
+    K1 <- Kest(Y[[1]], r=r)
+    K2 <- Kest(Y[[2]], r=r)
+    D <- eval.fv(K1-K2)
+    return(D)
+  }
+  envelope(amacrine, Kdif, nsim=3)
+})
 #'  tests/enveltest.R
 #'     Envelope tests (dclf.test, mad.test)
 #'     and two-stage tests (bits.test, dg.test, bits.envelope, dg.envelope)

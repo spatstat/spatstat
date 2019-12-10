@@ -13,9 +13,10 @@ local({
 })
 ##
 ##  tests/segments.R
+##   Tests of psp class and related code
 ##                      [SEE ALSO: tests/xysegment.R]
 ##
-##  $Revision: 1.18 $  $Date: 2019/12/08 02:31:21 $
+##  $Revision: 1.19 $  $Date: 2019/12/10 01:01:35 $
 
 require(spatstat)
 
@@ -140,18 +141,25 @@ density(Y, 0.2, at=Z, edge=TRUE, method="C")
   summary(M)
   subset(M, select=len)
 
-#' miscellaneous cases
-  marks(M) <- marks(M)[1,,drop=FALSE]
-
-#' plot method cases  
+  #' plot method cases  
   spatstat.options(monochrome=TRUE)
   plot(B)
   plot(G)
+  plot(M)
   spatstat.options(monochrome=FALSE)
   plot(B)
   plot(G)
+  plot(M)
+  #' misuse of 'col' argument - several cases
+  plot(G, col="grey") # discrete
+  plot(B, col="grey") 
+  plot(unmark(B), col="grey") 
+  plot(M, col="grey") 
   
-#' undocumented  
+  #' miscellaneous class support cases
+  marks(M) <- marks(M)[1,,drop=FALSE]
+
+  #' undocumented  
   as.ppp(B)
 
   #' segment crossing code

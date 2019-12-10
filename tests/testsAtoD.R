@@ -337,7 +337,7 @@ local({
 ##
 ##  Colour value manipulation and colour maps
 ##
-## $Revision: 1.5 $ $Date: 2019/08/03 06:50:40 $
+## $Revision: 1.6 $ $Date: 2019/12/10 01:09:02 $
 ##
 
 require(spatstat)
@@ -379,6 +379,15 @@ local({
    arr <- col.args.to.grey(argh)
    rrgh <- col.args.to.grey(argh, transparent=TRUE)
 
+   #' constant colour map
+   colourmap("grey", range=c(0.01, 0.1))
+   colourmap("grey", range=as.Date(c("2018-01-01", "2018-12-31")))
+   colourmap("grey",
+             breaks=as.Date(c("2018-01-01", "2018-04-01",
+                              "2018-07-01", "2018-10-01", "2018-12-31")))
+   colourmap("grey", inputs=month.name)
+
+   #' empty colour map
    niets <- lut()
    print(niets)
    summary(niets)

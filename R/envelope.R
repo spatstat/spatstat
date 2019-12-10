@@ -3,7 +3,7 @@
 #
 #   computes simulation envelopes 
 #
-#   $Revision: 2.105 $  $Date: 2019/12/06 01:37:22 $
+#   $Revision: 2.106 $  $Date: 2019/12/10 00:28:26 $
 #
 
 envelope <- function(Y, fun, ...) {
@@ -567,6 +567,9 @@ envelopeEngine <-
 
   ## catch 'conservation' parameters
   conserveargs <- attr(funX, "conserve")
+  if(!is.null(conserveargs) && !any(c("conserve", "...") %in% fargs))
+    stop(paste("In this usage, the function", fname,
+               "should have an argument named 'conserve' or '...'"))
 
   ## warn about 'dangerous' arguments
   if(!is.null(dang <- attr(funX, "dangerous")) &&
