@@ -1,0 +1,32 @@
+Change log from 1.62-2 to 1.62-3
+================================
+
+10 dec 2019
+
+   DESCRIPTION
+   NEWS
+   Nickname.txt
+	Nickname changed to 'Adult supervision recommended'
+	Version 1.62-2.001
+
+   fv.R
+	Buglet fix
+	
+   fvproblems.R
+	More tests
+
+11 dec 2019
+
+   smooth.ppp.R
+	Bug fixes.
+	
+   tests/density.R
+	Test these bugs.
+	
+   tests/lppstuff.R
+   tests/randoms.R
+	More tests.
+	
+------------- passed R-3.6.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------

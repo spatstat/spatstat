@@ -345,7 +345,7 @@ local({
 #
 # Tests for lpp code
 #
-#  $Revision: 1.38 $  $Date: 2019/10/29 04:14:33 $
+#  $Revision: 1.39 $  $Date: 2019/12/11 00:06:13 $
 
 
 require(spatstat)
@@ -477,7 +477,10 @@ local({
   A <- runiflpp(5, simplenet)
   B <- runiflpp(2, simplenet)
   aaa <- nncross(A,B,k=3:5) #' all undefined
+  aaa <- nncross(A,B,k=1:4) #' some undefined
   spatstat.options(Cnncrosslpp=FALSE)
+  aaa <- nncross(A,B,k=3:5)
+  aaa <- nncross(A,B,k=1:4)
   bbb <- nncross(B,A, iX=1:2, iY=1:5) # another code block
   spatstat.options(Cnncrosslpp=TRUE)
 

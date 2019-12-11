@@ -517,7 +517,7 @@ local({
 ##
 ##    problems with fv and fasp code
 ##
-##    $Revision: 1.10 $  $Date: 2019/12/06 02:51:36 $
+##    $Revision: 1.11 $  $Date: 2019/12/10 07:29:58 $
 
 require(spatstat)
 
@@ -600,6 +600,7 @@ local({
   A <- tweak.fv.entry(A, "V1", new.tag="r")
   A[,3] <- NULL
   A$hogwash <- runif(nrow(A))
+  fvnames(A, ".") <- NULL
   #' bind.fv with qualitatively different functions
   GK <- harmonise(G=Gest(cells), K=Kest(cells))
   G <- GK$G
@@ -609,6 +610,23 @@ local({
   #'
   H <- rebadge.as.crossfun(K, "H", "inhom", 1, 2)
   H <- rebadge.as.dotfun(K, "H", "inhom", 3)
+  #' text layout
+  op <- options(width=27)
+  print(K)
+  options(width=18)
+  print(K)
+  options(op)
+  #' collapse.fv
+  Kb <- Kest(cells, correction="border")
+  Ki <- Kest(cells, correction="isotropic")
+  collapse.fv(Kb, Ki, same="theo")
+  collapse.fv(anylist(B=Kb, I=Ki), same="theo")
+  collapse.fv(anylist(B=Kb), I=Ki, same="theo")
+  Xlist <- replicate(3, runifpoint(30), simplify=FALSE)
+  Klist <- anylapply(Xlist, Kest) 
+  collapse.fv(Klist, same="theo", different=c("iso", "border"))
+  names(Klist) <- LETTERS[24:26]
+  collapse.fv(Klist, same="theo", different=c("iso", "border"))
 })
 
 local({
@@ -632,3 +650,4 @@ local({
   a$title <- NULL
   plot(a, samex=TRUE, samey=TRUE)
 })
+

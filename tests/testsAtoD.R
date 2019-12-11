@@ -573,7 +573,7 @@ local({
 #'                    and inhomogeneous summary functions
 #'                    and idw, adaptive.density
 #'
-#'  $Revision: 1.43 $  $Date: 2019/11/01 09:03:42 $
+#'  $Revision: 1.46 $  $Date: 2019/12/11 01:07:11 $
 #'
 
 require(spatstat)
@@ -761,7 +761,8 @@ local({
   ## execute Smooth.ppp and Smoothfun.ppp in all cases
   stroke <- function(..., Y = longleaf) {
     Z <- Smooth(Y, ..., at="pixels")
-    Z <- Smooth(Y, ..., at="points")
+    Z <- Smooth(Y, ..., at="points", leaveoneout=TRUE)
+    Z <- Smooth(Y, ..., at="points", leaveoneout=FALSE)
     f <- Smoothfun(Y, ...)
     f(120, 80)
     f(Y[1:2])
@@ -770,6 +771,7 @@ local({
   }
   stroke()
   stroke(5, diggle=TRUE)
+  stroke(5, geometric=TRUE)
   stroke(1e-6) # generates warning about small bandwidth
   stroke(5, weights=runif(npoints(longleaf)))
   stroke(5, weights=expression(x))
@@ -778,21 +780,18 @@ local({
   stroke(varcov=diag(c(25, 36)), weights=runif(npoints(longleaf)))
   stroke(5, Y=longleaf %mark% 1)
   stroke(5, Y=cut(longleaf,breaks=3))
-  heavY <- longleaf %mark% cbind(a=1:npoints(longleaf), b=1)
-  stroke(5, Y=heavY)
-  stroke(5, Y=heavY[FALSE])
   Z <- as.im(function(x,y){abs(x)+1}, Window(longleaf))
   stroke(5, weights=Z)
   stroke(5, weights=Z, geometric=TRUE)
 
   stroke(sigma=Inf)
-  stroke(sigma=Inf, Y=heavY)
   
   markmean(longleaf, 9)
   
   strike <- function(..., Y=finpines) {
     Z <- Smooth(Y, ..., at="pixels")
-    Z <- Smooth(Y, ..., at="points")
+    Z <- Smooth(Y, ..., at="points", leaveoneout=TRUE)
+    Z <- Smooth(Y, ..., at="points", leaveoneout=FALSE)
     f <- Smoothfun(Y, ...)
     f(4, 1)
     f(Y[1:2])
@@ -800,12 +799,23 @@ local({
     return(invisible(NULL))
   }
   strike()
+  strike(sigma=1.5, kernel="epa")
   strike(varcov=diag(c(1.2, 2.1)))
+  strike(sigma=1e-6)
+  strike(sigma=1e-6, kernel="epa")
+  strike(sigma=Inf)
   strike(1.5, weights=runif(npoints(finpines)))
   strike(1.5, weights=expression(y))
-  strike(1e-6)
+  strike(1.5, geometric=TRUE)
+  strike(1.5, Y=finpines[FALSE])
+  flatfin <- finpines %mark% data.frame(a=rep(1, npoints(finpines)), b=2)
+  strike(1.5, Y=flatfin)
+  strike(1.5, Y=flatfin, geometric=TRUE)
 
-  strike(sigma=Inf)
+  opx <- spatstat.options(densityTransform=FALSE)
+  stroke(5, Y=longleaf[order(longleaf$x)], sorted=TRUE)
+  strike(1.5, Y=finpines[order(finpines$x)], sorted=TRUE)
+  spatstat.options(opx)
 
   ## detect special cases
   Smooth(longleaf[FALSE])

@@ -4,7 +4,7 @@
 ##
 ##    class "fv" of function value objects
 ##
-##    $Revision: 1.154 $   $Date: 2019/05/24 10:12:16 $
+##    $Revision: 1.155 $   $Date: 2019/12/10 07:18:00 $
 ##
 ##
 ##    An "fv" object represents one or more related functions
@@ -668,22 +668,26 @@ collapse.fv <- local({
     }
     dotnames <- same
     ## now merge the different values
-    for(i in seq_along(x)) {
-      ## extract values for i-th object
-      xi <- x[[i]]
-      wanted <- (names(xi) %in% different)
-      y <- as.data.frame(xi)[, wanted, drop=FALSE]
-      desc <- attr(xi, "desc")[wanted]
-      labl <- attr(xi, "labl")[wanted]
-      ## relabel
-      prefix <- shortnames[i]
-      preamble <- versionnames[i]
-      names(y) <- if(ncol(y) == 1) prefix else paste(prefix,names(y),sep="")
-      dotnames <- c(dotnames, names(y))
-      ## glue onto fv object
-      z <- bind.fv(z, y,
-                   labl=paste(prefix, labl, sep="~"),
-                   desc=paste(preamble, desc))
+    if(length(different)) {
+      for(i in seq_along(x)) {
+        ## extract values for i-th object
+        xi <- x[[i]]
+        wanted <- (names(xi) %in% different)
+        if(any(wanted)) {
+          y <- as.data.frame(xi)[, wanted, drop=FALSE]
+          desc <- attr(xi, "desc")[wanted]
+          labl <- attr(xi, "labl")[wanted]
+          ## relabel
+          prefix <- shortnames[i]
+          preamble <- versionnames[i]
+          names(y) <- if(ncol(y) == 1) prefix else paste(prefix,names(y),sep="")
+          dotnames <- c(dotnames, names(y))
+          ## glue onto fv object
+          z <- bind.fv(z, y,
+                       labl=paste(prefix, labl, sep="~"),
+                       desc=paste(preamble, desc))
+        }
+      }
     }
     if(length(same) == 0) {
       ## remove the second column which was retained earlier

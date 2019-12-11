@@ -3,7 +3,7 @@
 #
 #  Smooth the marks of a point pattern
 # 
-#  $Revision: 1.69 $  $Date: 2019/09/30 07:56:34 $
+#  $Revision: 1.71 $  $Date: 2019/12/11 01:32:09 $
 #
 
 # smooth.ppp <- function(X, ..., weights=rep(1, npoints(X)), at="pixels") {
@@ -275,8 +275,11 @@ Smooth.ppp <- function(X, sigma=NULL, ...,
              points={
                if(is.null(uhoh)) {
                  ## numerators is a matrix (or may have dropped to vector)
-                 if(!is.matrix(numerators))
-                   numerators <- matrix(numerators, ncol=1)
+                 if(is.data.frame(numerators)) {
+                   numerators <- as.matrix(numerators)
+                 } else if(!is.matrix(numerators)) {
+                   numerators <- matrix(unlist(numerators), nrow=npoints(X))
+                 }
                  ratio <- numerators/denominator
                  if(any(badpoints <- matrowany(!is.finite(ratio)))) {
                    whichnnX <- nnwhich(X)
@@ -817,6 +820,7 @@ smoothcrossEngine <- function(Xdata, Xquery, values, sigma, ...,
       numerator <- tapplysum(contribij, list(jfac))
       result <- numerator/denominator
     } else {
+      result <- matrix(, nrow=nquery, ncol=k)
       for(kk in 1:k) {
         contribij <- wkerij * values[i, kk]
         numeratorkk <- tapplysum(contribij, list(jfac))

@@ -59,7 +59,7 @@ local({
 })
 #'  tests/randoms.R
 #'   Further tests of random generation code
-#'  $Revision: 1.9 $ $Date: 2019/12/06 02:08:57 $
+#'  $Revision: 1.11 $ $Date: 2019/12/11 00:30:12 $
 
 require(spatstat)
 local({
@@ -73,7 +73,9 @@ local({
   A <- rsyst(nx=4, nsim=2)
   A <- rthin(cells, P=0.5, nsim=2)
   A <- rthin(cells, runif(42))
+  A <- rthin(cells[FALSE], P=0.5, nsim=2)
   A <- rjitter(cells, nsim=2, retry=FALSE)
+  A <- rjitter(cells[FALSE])
   A <- rcell(square(1), nx=5, nsim=2)
 
   f <- function(x,y) { 10*x }
@@ -90,8 +92,10 @@ local({
 
   b3 <- box3(c(0,1))
   b4 <- boxx(c(0,1), c(0,1), c(0,1), c(0,1))
+  b5 <- c(0, 2, 0, 2)
   X <- rMaternInhibition(2, kappa=20, r=0.1, win=b3)
   Y <- rMaternInhibition(2, kappa=20, r=0.1, win=b4)
+  Y <- rMaternInhibition(2, kappa=20, r=0.1, win=b5, nsim=2)
 
   X <- rSSI(0.05, 6)
   Y <- rSSI(0.05, 6, x.init=X) # no extra points
