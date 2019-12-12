@@ -3,7 +3,7 @@
 #
 #   Estimation of relative risk
 #
-#  $Revision: 1.42 $  $Date: 2019/09/30 07:41:52 $
+#  $Revision: 1.44 $  $Date: 2019/12/12 00:37:13 $
 #
 
 relrisk <- function(X, ...) UseMethod("relrisk")
@@ -392,6 +392,7 @@ bw.relrisk <- function(X, method="likelihood",
   ntypes <- length(Y)
   if(ntypes == 1)
     stop("Data contains only one type of points")
+  n <- npoints(X)
   marx <- marks(X)
   method <- pickoption("method", method,
                        c(likelihood="likelihood",
@@ -418,7 +419,6 @@ bw.relrisk <- function(X, method="likelihood",
   }
   ## cross-validated bandwidth selection
   ## determine a range of bandwidth values
-  n <- npoints(X)
   if(is.null(hmin) || is.null(hmax)) {
     W <- Window(X)
     a <- area(W)
@@ -462,6 +462,7 @@ bw.relrisk <- function(X, method="likelihood",
            for(i in seq_len(nh)) {
              phat <- Smooth(X01, sigma=h[i], at="points", leaveoneout=TRUE,
                             sorted=TRUE)
+             phat <- as.matrix(phat)
              cv[i] <- mean((y01 - phat)^2)
            }
          },
@@ -471,11 +472,13 @@ bw.relrisk <- function(X, method="likelihood",
            h0 <- bw.relrisk(X, "leastsquares", nh=ceiling(nh/4))
            phat0 <- Smooth(X01, sigma=h0, at="points", leaveoneout=TRUE,
                            sorted=TRUE)
+           phat0 <- as.matrix(phat0)
            var0 <- phat0 * (1-phat0)
            var0 <- pmax.int(var0, 1e-6)
            for(i in seq_len(nh)) {
              phat <- Smooth(X01, sigma=h[i], at="points", leaveoneout=TRUE,
                             sorted=TRUE)
+             phat <- as.matrix(phat)
              cv[i] <- mean((y01 - phat)^2/var0)
            }
          })

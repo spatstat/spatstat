@@ -1,11 +1,18 @@
 
-        CHANGES IN spatstat VERSION 1.62-2.001
+        CHANGES IN spatstat VERSION 1.62-2.002
 
 OVERVIEW
 
-    o Nothing yet.
+    o Bug fixes and minor improvements.
 
     o Version nickname: "Adult supervision recommended"
+    
+BUG FIXES
+
+    o relrisk.ppp
+    Crashed if there were more than 2 types of points
+    and method = "leastsquares" or "weightedleastsquares".
+    Fixed.
     
         CHANGES IN spatstat VERSION 1.62-2
 

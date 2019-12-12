@@ -108,7 +108,7 @@ local({
 #
 #  tests/imageops.R
 #
-#   $Revision: 1.20 $   $Date: 2019/12/03 07:29:10 $
+#   $Revision: 1.21 $   $Date: 2019/12/11 03:55:53 $
 #
 
 require(spatstat)
@@ -276,6 +276,11 @@ local({
   distcdf(W=cells[1:5], dW=1:5)
   distcdf(W=Window(cells), V=cells[1:5])
   distcdf(W=Window(cells), V=cells[1:5], dV=1:5)
+
+  #' im.apply
+  DA <- density(split(amacrine))
+  Z <- im.apply(DA, sd)
+  Z <- which.max.im(DA) # deprecated -> im.apply(DA, which.max)
 })
 #' indices.R
 #' Tests of code for understanding index vectors etc
@@ -407,18 +412,30 @@ local({
 #'
 #'   Various K and L functions and pcf
 #'
-#'   $Revision: 1.30 $  $Date: 2019/12/08 02:19:15 $
+#'   $Revision: 1.32 $  $Date: 2019/12/11 23:52:37 $
 #'
 
 require(spatstat)
 myfun <- function(x,y){(x+1) * y } # must be outside
 local({
   #' supporting code
+  rmax.rule("Kscaled", owin(), 42)
   implemented.for.K(c("border", "bord.modif", "translate", "good", "best"),
                     "polygonal", TRUE)
   implemented.for.K(c("border", "bord.modif", "translate", "good", "best"),
                     "mask", TRUE)
+  implemented.for.K(c("border", "isotropic"), "mask", TRUE)
   implemented.for.K(c("border", "isotropic"), "mask", FALSE)
+  #' shortcuts
+  D <- density(cells)
+  K <- Kborder.engine(cells, rmax=0.4, weights=D, ratio=TRUE)
+  K <- Knone.engine(cells, rmax=0.4, weights=D, ratio=TRUE)
+  allcor <- c("none", "border", "bord.modif","isotropic", "translate")
+  K <- Krect.engine(cells, rmax=0.4, ratio=TRUE, correction=allcor)
+  K <- Krect.engine(cells, rmax=0.4, ratio=TRUE, correction=allcor,
+                    weights=D)
+  K <- Krect.engine(cells, rmax=0.4, ratio=TRUE, correction=allcor,
+                    use.integers=FALSE)
   #' Kest special code blocks
   K <- Kest(cells, var.approx=TRUE, ratio=FALSE)
   Z <- distmap(cells) + 1

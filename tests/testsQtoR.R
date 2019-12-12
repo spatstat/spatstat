@@ -144,7 +144,7 @@ reset.spatstat.options()
 #'
 #'  Stuff related to residuals and residual diagnostics
 #'
-#'   $Revision: 1.2 $  $Date: 2018/06/11 07:07:31 $
+#'   $Revision: 1.4 $  $Date: 2019/12/11 10:15:33 $
 #'
 
 require(spatstat)
@@ -158,7 +158,7 @@ local({
   plot(b <- parres(fitoff, "y"))
   print(a)
   print(b)
-
+  
   d <- diagnose.ppm(fit, which="marks")
   plot(d, plot.neg="discrete")
   plot(d, plot.neg="imagecontour")
@@ -186,6 +186,15 @@ local({
   W <- as.mask(letterR)
   plot(Frame(W), main="")
   ploterodewin(W, erosion(W, 0.05), main="JeAnS")
+
+  #' entangled terms in model
+  U <- as.im(1, owin())
+  Z <- as.im(function(x,y) x, owin())
+  X <- runifpoint(40)
+  fut <- ppm(X ~ Z:U)
+  a <- parres(fut, "Z")
+  futoff <- ppm(X ~ offset(Z*U))
+  a <- parres(futoff, "Z")
 })
 
 

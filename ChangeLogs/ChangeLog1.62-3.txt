@@ -30,3 +30,27 @@ Change log from 1.62-2 to 1.62-3
 ------------- passed R-3.6.1 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
+
+12 dec 2019
+
+   relrisk.R
+	Bug fixes.
+
+   Kest.R
+   spatstat-internal.Rd
+	Modify Krect.engine to allow testing of code for very large patterns.
+	
+   tests/density.R
+   tests/diagnostique.R
+   tests/imageops.R
+   tests/Kfuns.R
+   tests/resid.R
+	Tests to cover bugs.
+
+   DESCRIPTION
+   NEWS
+	Version 1.62-2.002
+
+------------- passed R-3.6.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------

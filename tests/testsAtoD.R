@@ -573,7 +573,7 @@ local({
 #'                    and inhomogeneous summary functions
 #'                    and idw, adaptive.density
 #'
-#'  $Revision: 1.46 $  $Date: 2019/12/11 01:07:11 $
+#'  $Revision: 1.47 $  $Date: 2019/12/11 03:55:59 $
 #'
 
 require(spatstat)
@@ -705,8 +705,8 @@ local({
   KX <- Kinhom(redwood, lamX)
 
   ## test all code cases of new 'relrisk.ppp' algorithm
-  pants <- function(..., X=ants, sigma=100) {
-    a <- relrisk(X, sigma=sigma, se=TRUE, ...)
+  pants <- function(..., X=ants, sigma=100, se=TRUE) {
+    a <- relrisk(X, sigma=sigma, se=se, ...)
     return(TRUE)
   }
   pants()
@@ -723,14 +723,23 @@ local({
   pants(casecontrol=FALSE, relative=TRUE,at="points")
   pants(relative=TRUE, control="Cataglyphis", case="Messor")
   pants(relative=TRUE, control="Cataglyphis", case="Messor", at="points")
-
+  pants(casecontrol=FALSE, case="Messor", se=FALSE)
+  pants(case=2, at="pixels", relative=TRUE)
+  pants(case=2, at="points", relative=TRUE)
+  pants(case=2, at="pixels", relative=FALSE)
+  pants(case=2, at="points", relative=FALSE)
   pants(sigma=Inf)
+  pants(sigma=NULL, varcov=diag(c(100,100)^2))
   
   ## more than 2 types
   pants(X=sporophores)
-  pants(X=sporophores, at="points")
-  pants(X=sporophores, relative=TRUE, at="points")
-
+  pants(X=sporophores, sigma=20, at="points")
+  pants(X=sporophores, sigma=20, relative=TRUE, at="points")
+  pants(X=sporophores, sigma=20, at="pixels", se=FALSE)
+  pants(X=sporophores, sigma=20, relative=TRUE, at="pixels", se=FALSE)
+  bw.relrisk(sporophores, method="leastsquares")
+  bw.relrisk(sporophores, method="weightedleastsquares")
+  
   ## likewise 'relrisk.ppm'
   fit <- ppm(ants ~ x)
   rants <- function(..., model=fit) {
@@ -957,7 +966,7 @@ reset.spatstat.options()
 #'
 #'  Diagnostic tools such as diagnose.ppm, qqplot.ppm
 #'
-#'  $Revision: 1.2 $  $Date: 2019/10/02 10:36:42 $
+#'  $Revision: 1.3 $  $Date: 2019/12/12 00:21:42 $
 #'
 
 require(spatstat)
@@ -977,6 +986,22 @@ local({
   #' infinite reach, not border-corrected
   fut <- ppm(cells ~ x, Softcore(0.5), correction="isotropic")
   diagnose.ppm(fut)
+  
+  #' lurking.ppm
+  #' covariate is numeric vector
+  fitx <- ppm(cells ~ x)
+  yvals <- coords(as.ppp(quad.ppm(fitx)))[,"y"]
+  lurking(fitx, yvals)
+  #' covariate is stored but is not used in model
+  Z <- as.im(function(x,y){ x+y }, Window(cells))
+  fitxx <- ppm(cells ~ x, data=solist(Zed=Z), allcovar=TRUE)
+  lurking(fitxx, expression(Zed))
+  #' envelope is a ppplist; length < nsim; glmdata=NULL
+  Y <- rpoispp(40, nsim=5)
+  fit <- ppm(cells ~ 1)
+  stuff <- lurking(fit, expression(x), envelope=Y, plot.sd=FALSE)
+  #' plot.lurk
+  plot(stuff, shade=NULL)
 })
 #'
 #'  tests/discarea.R

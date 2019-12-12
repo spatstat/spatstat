@@ -1,7 +1,7 @@
 #
 #	Kest.R		Estimation of K function
 #
-#	$Revision: 5.124 $	$Date: 2019/10/16 03:05:20 $
+#	$Revision: 5.126 $	$Date: 2019/12/11 23:46:36 $
 #
 #
 # -------- functions ----------------------------------------
@@ -771,7 +771,7 @@ implemented.for.K <- function(correction, windowtype, explicit) {
       if(any(iso)) {
         whinge <- "Isotropic correction not implemented for binary masks"
         if(explicit) {
-          if(all(iso)) stop(whinge) else warning(whinge)
+        if(all(iso)) stop(whinge, call.=FALSE) else warning(whinge, call.=FALSE)
         }
         correction <- correction[!iso]
       }
@@ -792,8 +792,9 @@ good.correction.K <- function(X) {
 }
 
 Krect.engine <- function(X, rmax, nr=100,
-                           correction,
-                           weights=NULL, ratio=FALSE, fname="K") {
+                         correction,
+                         weights=NULL, ratio=FALSE, fname="K",
+                         use.integers=TRUE) {
   verifyclass(X, "ppp")
   npts <- npoints(X)
   W <- as.owin(X)
@@ -885,7 +886,7 @@ Krect.engine <- function(X, rmax, nr=100,
               bdenom=as.double(zbdenom),
               unco=as.double(zunco),
               PACKAGE = "spatstat")
-  } else if(npts < sqrt(.Machine$integer.max)) {
+  } else if(use.integers && npts < sqrt(.Machine$integer.max)) {
     ## unweighted
     ## numerator of border correction can be stored as an integer
     ## use faster integer arithmetic
