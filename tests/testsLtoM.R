@@ -345,7 +345,7 @@ local({
 #
 # Tests for lpp code
 #
-#  $Revision: 1.39 $  $Date: 2019/12/11 00:06:13 $
+#  $Revision: 1.41 $  $Date: 2019/12/12 04:02:44 $
 
 
 require(spatstat)
@@ -700,13 +700,21 @@ local({
 reset.spatstat.options()
 
 local({
-  #' densityVoronoi.lpp and related code
+  #' density.lpp 
   X <- runiflpp(5, simplenet)
+  D <- density(X, 0.05, old=TRUE, weights=runif(npoints(X))) # interpreted code
+  D <- density(X, 0.05, finespacing=TRUE) # }
+  D <- density(X, 0.05, eps=0.008)        # }  code blocks in PDEdensityLPP
+  D <- density(X, 0.05, dimyx=256)        # }
+  #' density.splitppx
+  Y <- split(chicago)[1:3]
+  D <- density(Y, 7)
+  #' densityVoronoi.lpp and related code
   densityVoronoi(X, f=0)
   densityVoronoi(X, f=1e-8)
   densityVoronoi(X, f=1)
   densityVoronoi(X[FALSE], f=0.5)
-  XX <- X[rep(1:5, 4)]
+  XX <- X[rep(1:npoints(X), 4)]
   densityVoronoi(XX, f=0.99999, nrep=5)
   #' bandwidth selection
   bw.voronoi(X, nrep=4, prob=c(0.2, 0.4, 0.6))
@@ -723,7 +731,7 @@ local({
   integral(h)
   integral(g)
 })
-  
+
 local({
   ## bug in 'lixellate' (Jakob Gulddahl Rasmussen)
   X <- ppp(c(0,1), c(0,0), owin())

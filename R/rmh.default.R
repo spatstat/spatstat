@@ -1,5 +1,5 @@
 #
-# $Id: rmh.default.R,v 1.112 2019/10/22 02:07:45 adrian Exp adrian $
+# $Id: rmh.default.R,v 1.114 2019/12/13 01:19:59 adrian Exp adrian $
 #
 rmh.default <- function(model,start=NULL,
                         control=default.rmhcontrol(model),
@@ -72,7 +72,8 @@ rmh.default <- function(model,start=NULL,
 
 # Warn about a silly value of fixall:
   if(control$fixall & ntypes==1) {
-    warning("control$fixall applies only to multitype processes. Ignored. \n")
+    warning("control$fixall applies only to multitype processes. Ignored.",
+            call.=FALSE)
     control$fixall <- FALSE
     if(control$fixing == "n.each.type")
       control$fixing <- "n.total"
@@ -123,7 +124,7 @@ rmh.default <- function(model,start=NULL,
     } else NULL
 
   if(!is.owin(w.clip))
-    stop("Unable to determine window for pattern")
+    stop("Unable to determine window for pattern", call.=FALSE)
 
   
 ##  Simulation window 
@@ -138,10 +139,12 @@ rmh.default <- function(model,start=NULL,
 
     if(control$fixing != "none")
       stop(paste("If we're conditioning on the number of points,",
-                 "we cannot clip the result to another window.\n"))
+                 "we cannot clip the result to another window."),
+           call.=FALSE)
 
     if(!is.subset.owin(w.clip, w.sim))
-      stop("Expanded simulation window does not contain model window")
+      stop("Expanded simulation window does not contain model window",
+           call.=FALSE)
   }
 
 
@@ -162,12 +165,13 @@ rmh.default <- function(model,start=NULL,
       if(nmisfit > 1) 
         stop(paste("Expanded simulation window is not contained in",
                    "several of the trend windows.\n",
-                   "Bailing out.\n"))
+                   "Bailing out."), call.=FALSE)
       else if(nmisfit == 1) {
         warning(paste("Expanded simulation window is not contained in",
                       if(nimages == 1) "the trend window.\n"
                       else "one of the trend windows.\n",
-                      "Expanding to this trend window (only).\n"))
+                      "Expanding to this trend window (only)."),
+                call.=FALSE)
         w.sim <- iwindows[[which(misfit)]]
       }
     }
@@ -215,7 +219,7 @@ rmh.default <- function(model,start=NULL,
              stop(paste("Conditional simulation is undefined;",
                         "the conditioning window",
                         sQuote("as.owin(control$x.cond)"),
-                        "covers the entire simulation window"))
+                        "covers the entire simulation window"), call.=FALSE)
          },
          Palm={
            # Palm conditioning
@@ -235,9 +239,9 @@ rmh.default <- function(model,start=NULL,
   if(!is.null(x.condpp)) {
     if(mtype) {
       if(!is.marked(x.condpp))
-        stop("Model is multitype, but x.cond is unmarked")
+        stop("Model is multitype, but x.cond is unmarked", call.=FALSE)
       if(!isTRUE(all.equal(types, levels(marks(x.condpp)))))
-        stop("Types of points in x.cond do not match types in model")
+        stop("Types of points in x.cond do not match types in model", call.=FALSE)
     }
   }
   
@@ -259,7 +263,7 @@ rmh.default <- function(model,start=NULL,
   if(start$given == "none") {
     # For conditional simulation, the starting state must be given
     if(condtype != "none")
-      stop("No starting state given")
+      stop("No starting state given", call.=FALSE)
     # Determine integral of beta * trend over data window.
     # This is the expected number of points in the reference Poisson process.
     area.w.clip <- area(w.clip)
@@ -279,7 +283,7 @@ rmh.default <- function(model,start=NULL,
 
   switch(start$given,
          none={
-           stop("No starting state given")
+           stop("No starting state given", call.=FALSE)
          },
          x = {
            # x.start was given
@@ -297,7 +301,8 @@ rmh.default <- function(model,start=NULL,
                              ngettext(nlost, "was", "were"),
                              "removed because",
                              ngettext(nlost, "it", "they"),
-                             "fell in the window of x.cond"))
+                             "fell in the window of x.cond"),
+                       call.=FALSE)
              x.start <- xs
            }
            npts.free <- x.start$n
@@ -315,7 +320,7 @@ rmh.default <- function(model,start=NULL,
            npts.free <- sum(n.start) # The ``sum()'' is redundant if n.start
                                 # is scalar; no harm, but.
          },
-         stop("Internal error: start$given unrecognized"))
+         stop("Internal error: start$given unrecognized"), call.=FALSE)
 
 #==+===+===+===+===+===+===+===+===+===+===+===+===+===+===+===+===+===+===
 #
@@ -332,7 +337,7 @@ rmh.default <- function(model,start=NULL,
     control$periodic <- periodic <- expanded && is.rectangle(w.state)
   } else if(periodic && !is.rectangle(w.state)) {
     # if periodic is TRUE we have to be simulating in a rectangular window.
-    stop("Need rectangular window for periodic simulation.\n")
+    stop("Need rectangular window for periodic simulation.", call.=FALSE)
   }
 
 # parameter passed to C:  
@@ -358,7 +363,7 @@ rmh.default <- function(model,start=NULL,
     } else {
       # Validate ptypes
       if(length(ptypes) != ntypes | sum(ptypes) != 1)
-        stop("Argument ptypes is mis-specified.\n")
+        stop("Argument ptypes is mis-specified.", call.=FALSE)
     }
   } 
 
@@ -377,7 +382,7 @@ rmh.default <- function(model,start=NULL,
     tsummaries <- summarise.trend(trend, w=w.sim, a=area.w.sim)
     mins  <- sapply(tsummaries, getElement, name="min")
     if(any(mins < 0))
-      stop("Trend has negative values")
+      stop("Trend has negative values", call.=FALSE)
     iota <- sapply(tsummaries, getElement, name="integral")
     tmax <- sapply(tsummaries, getElement, name="max")
   } else {
@@ -405,9 +410,9 @@ rmh.default <- function(model,start=NULL,
       mess <- paste("Initial pattern has 0 random points,",
                     "and simulation is conditional on the number of points -")
       if(condtype == "none")
-        warning(paste(mess, "returning an empty pattern\n"))
+        warning(paste(mess, "returning an empty pattern"), call.=FALSE)
       else
-        warning(paste(mess, "returning a pattern with no random points\n"))
+        warning(paste(mess, "returning a pattern with no random points"), call.=FALSE)
     }
   }
 
@@ -419,10 +424,10 @@ rmh.default <- function(model,start=NULL,
     if(control$fixing == "none" && condtype == "none") {
       # return empty pattern
       if(verbose)
-        warning("beta = 0 implies an empty pattern\n")
+        warning("beta = 0 implies an empty pattern", call.=FALSE)
       a.s.empty <- TRUE
     } else 
-      stop("beta = 0 implies an empty pattern, but we are simulating conditional on a nonzero number of points")
+      stop("beta = 0 implies an empty pattern, but we are simulating conditional on a nonzero number of points", call.=FALSE)
   }
 
 #
@@ -433,7 +438,7 @@ rmh.default <- function(model,start=NULL,
   if(condtype == "window" && is.subset.owin(w.clip, w.cond)) {
     a.s.empty <- TRUE
     warning(paste("Model window is a subset of conditioning window:",
-              "result is deterministic\n"))
+              "result is deterministic"), call.=FALSE)
   }    
 
 #
@@ -558,7 +563,7 @@ rmhEngine <- function(InfoList, ...,
 # This is the interface to the C code.
 
   if(!inherits(InfoList, "rmhInfoList"))
-    stop("data not in correct format for internal function rmhEngine")
+    stop("data not in correct format for internal function rmhEngine", call.=FALSE)
 
   
   if(preponly)
@@ -659,11 +664,11 @@ rmhEngine <- function(InfoList, ...,
                  switch(start$given,
                         n = n.start,
                         x = as.integer(table(marks(x.start, dfok=FALSE))),
-  stop("No starting state given; can't condition on fixed number of points"))
+  stop("No starting state given; can't condition on fixed number of points", call.=FALSE))
                rmpoint(npts.each, intensity, win=w.sim, types=types,
                        verbose=verbose)
              },
-             stop("Internal error: control$fixing unrecognised")
+             stop("Internal error: control$fixing unrecognised", call.=FALSE)
              )
     # if conditioning, add fixed points
     if(condtype != "none")
@@ -711,7 +716,7 @@ rmhEngine <- function(InfoList, ...,
                # x.start given
                as.integer(marks(x.start, dfok=FALSE))-1L
              },
-             stop("internal error: start$given unrecognised")
+             stop("internal error: start$given unrecognised", call.=FALSE)
              )
 #
 # Then the x, y coordinates
@@ -965,7 +970,7 @@ rmhEngine <- function(InfoList, ...,
                #' Generate the ``proposal points'' in the expanded window.
                xy <- if(trendy) {
                  rpoint.multi(nrepI,trend,tmax,
-                              factor(Cmprop, levels=Ctypes),
+                              factor(CmpropI, levels=Ctypes),
                               w.sim, ..., warn=FALSE)
                } else runifpoint(nrepI, w.sim, warn=FALSE)
                xpropI <- xy$x

@@ -2,7 +2,7 @@
 #
 #   rmhcontrol.R
 #
-#   $Revision: 1.33 $  $Date: 2019/10/22 01:41:10 $
+#   $Revision: 1.34 $  $Date: 2019/12/13 01:22:39 $
 #
 #
 
@@ -112,7 +112,7 @@ rmhcontrol.default <- function(..., p=0.9, q=0.5, nrep=5e5,
   if(condtype == "Palm" && n.cond == 0) {
     warning(paste("Ignored empty configuration x.cond;",
                   "conditional (Palm) simulation given an empty point pattern",
-                  "is equivalent to unconditional simulation"))
+                  "is equivalent to unconditional simulation"), call.=FALSE)
     condtype <- "none"
     x.cond <- NULL
     n.cond <- NULL
@@ -130,7 +130,7 @@ rmhcontrol.default <- function(..., p=0.9, q=0.5, nrep=5e5,
   
 # Warn about silly combination
   if(fixall && p < 1)
-	warning("fixall = TRUE conflicts with p < 1. Ignored.\n")
+	warning("fixall = TRUE conflicts with p < 1. Ignored.", call.=FALSE)
 
 ###############################################################  
 # `expand' determines expansion of the simulation window
@@ -143,7 +143,7 @@ rmhcontrol.default <- function(..., p=0.9, q=0.5, nrep=5e5,
   if(fixing != "none") {
     if(expand$force.exp)
       stop(paste("When conditioning on the number of points,",
-                 "no expansion may be done.\n"), call.=FALSE)
+                 "no expansion may be done."), call.=FALSE)
     # no expansion
     expand <- .no.expansion
   }

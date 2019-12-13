@@ -54,3 +54,29 @@ Change log from 1.62-2 to 1.62-3
 ------------- passed R-3.6.1 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
+
+   tests/lppstuff.R
+	More tests of density.lpp
+
+13 dec 2019
+
+   rmh.default.R
+	Bug fix
+	
+   tests/rmhBasic.R
+   tests/rmhMulti.R
+	Cover some bugs 
+
+   rmhcontrol.R
+   rmh.default.R
+	Tweaks to error messages
+
+   DESCRIPTION
+   NEWS
+	Version 1.62-2.003
+
+------------- passed R-3.6.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+
+

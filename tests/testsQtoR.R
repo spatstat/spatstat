@@ -297,7 +297,7 @@ local({
 ##
 ##   tests/rmhBasic.R
 ##
-##   $Revision: 1.18 $  $Date: 2019/10/23 01:26:01 $
+##   $Revision: 1.19 $  $Date: 2019/12/13 00:57:36 $
 #
 # Test examples for rmh.default
 # run to reasonable length
@@ -308,7 +308,7 @@ require(spatstat)
 
 local({
 if(!exists("nr"))
-   nr   <- 5e3
+   nr   <- 2e3
 
 spatstat.options(expand=1.1)
    
@@ -499,7 +499,19 @@ spatstat.options(expand=1.1)
    X1.strauss.trend <- rmh(model=mod17,start=list(n.start=90),
                            control=list(nrep=nr))
 
-   #' Test other code blocks
+   #' trend is an image
+   mod18 <- mod17
+   mod18$trend <- as.im(mod18$trend, square(10))
+   X1.strauss.trendim <- rmh(model=mod18,start=list(n.start=90),
+                             control=list(nrep=nr))
+
+
+   #'.....  Test other code blocks .................
+
+   #' argument passing to rmhcontrol
+   X1S <- rmh(model=mod01, control=NULL, nrep=nr)
+   X1f <- rmh(model=mod01, fixall=TRUE,  nrep=nr) # issues a warning
+
    #'  nsim > 1
    Xlist <- rmh(model=mod01,start=list(n.start=80),
              control=list(nrep=nr),
@@ -509,9 +521,13 @@ spatstat.options(expand=1.1)
    YY <- XX[square(2)]
    XXwindow <- rmh(model=mod01, start=list(n.start=80),
                    control=list(nrep=nr, x.cond=YY))
+   XXwindowTrend <- rmh(model=mod17, start=list(n.start=80),
+                        control=list(nrep=nr, x.cond=YY))
    #' Palm conditioning
    XXpalm <- rmh(model=mod01,start=list(n.start=80),
                  control=list(nrep=nr, x.cond=coords(YY)))
+   XXpalmTrend <- rmh(model=mod17,start=list(n.start=80),
+                      control=list(nrep=nr, x.cond=coords(YY)))
 
    #' nsave, nburn
    chq <- function(X) {
@@ -524,6 +540,9 @@ spatstat.options(expand=1.1)
    XXburn <- rmh(model=mod01,start=list(n.start=80), verbose=FALSE,
                  control=list(nrep=nr, nsave=500, nburn=100))
    chq(XXburn)
+   XXburnTrend <- rmh(model=mod17,start=list(n.start=80), verbose=FALSE,
+                      control=list(nrep=nr, nsave=500, nburn=100))
+   chq(XXburnTrend)
    XXburn0 <- rmh(model=mod01,start=list(n.start=80), verbose=FALSE,
                   control=list(nrep=nr, nsave=500, nburn=0))
    chq(XXburn0)
@@ -600,7 +619,7 @@ if(!identical(wsim, wcel))
 #
 #  tests of rmh, running multitype point processes
 #
-#   $Revision: 1.11 $  $Date: 2019/10/21 06:42:07 $
+#   $Revision: 1.12 $  $Date: 2019/12/13 00:57:28 $
 
 require(spatstat)
 
@@ -617,7 +636,13 @@ spatstat.options(expand=1.1)
    modp2 <- list(cif="poisson",
                  par=list(beta=2), types=letters[1:3], w = square(10))
    Xp2 <- rmh(modp2, start=list(n.start=0), control=list(p=1))
-    
+
+   # Multinomial 
+   Xp2fix <- rmh(modp2, start=list(n.start=c(10,20,30)),
+                 control=list(fixall=TRUE, p=1))
+   Xp2fixr <- rmh(modp2, start=list(x.start=Xp2fix),
+                 control=list(fixall=TRUE, p=1))
+  
    # Multitype Strauss:
    beta <- c(0.027,0.008)
    gmma <- matrix(c(0.43,0.98,0.98,0.36),2,2)
@@ -697,6 +722,24 @@ spatstat.options(expand=1.1)
    X2.straushm.trend <- rmh(model=mod11,start=list(n.start=350),
                             control=list(ptypes=c(0.75,0.25),expand=1,
                             nrep=nr,nverb=nv))
+
+
+   #' nsave, nburn
+   chq <- function(X) {
+     Xname <- deparse(substitute(X))
+     A <- attr(X, "saved")
+     if(length(A) == 0)
+       stop(paste(Xname, "did not include a saved list of patterns"))
+     return("ok")
+   }
+   XburnMS <- rmh(model=mod08,start=list(n.start=80), verbose=FALSE,
+                  control=list(ptypes=c(0.75,0.25),
+                               nrep=nr,nsave=500, nburn=100))
+   chq(XburnMS)
+   XburnMStrend <- rmh(model=mod10,start=list(n.start=350), verbose=FALSE,
+                        control=list(ptypes=c(0.75,0.25),
+                                     nrep=nr,nsave=500, nburn=100))
+   chq(XburnMStrend)
 
 
 #######################################################################
