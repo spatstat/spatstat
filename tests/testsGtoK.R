@@ -77,7 +77,7 @@ local({
 #'     tests/hypotests.R
 #'     Hypothesis tests
 #' 
-#'  $Revision: 1.4 $ $Date: 2019/10/16 02:38:39 $
+#'  $Revision: 1.5 $ $Date: 2019/12/14 03:11:05 $
 
 require(spatstat)
 local({
@@ -104,6 +104,18 @@ local({
   Y <- runifpoint(3000, nsim = 3)
   h <- hyperframe(ppp = c(X, Y), group = rep(1:2, 3))
   studpermu.test(h, ppp ~ group)
+
+  #' scan test
+  Z <- scanmeasure(cells, 0.1, method="fft")
+  rr <- c(0.05, 1)
+  scan.test(amacrine, rr, nsim=5,
+            method="binomial", alternative="less")
+  fit <- ppm(cells ~ x)
+  lam <- predict(fit)
+  scan.test(cells, rr, nsim=5,
+            method="poisson", baseline=fit, alternative="less")
+  scan.test(cells, rr, nsim=5,
+            method="poisson", baseline=lam, alternative="less")
 })
 #
 #  tests/imageops.R
@@ -412,7 +424,7 @@ local({
 #'
 #'   Various K and L functions and pcf
 #'
-#'   $Revision: 1.32 $  $Date: 2019/12/11 23:52:37 $
+#'   $Revision: 1.33 $  $Date: 2019/12/14 02:45:55 $
 #'
 
 require(spatstat)
@@ -480,6 +492,11 @@ local({
   Off <- split(amacrine)$off
   K4 <- Kcross.inhom(amacrine, lambdaI=ppm(On), lambdaJ=ppm(Off))
   K5 <- Kcross.inhom(amacrine, correction="bord.modif")
+  #' markconnect, markcorr
+  M <- markconnect(amacrine, "on", "off", normalise=TRUE)
+  M <- markcorr(longleaf, normalise=TRUE,
+                correction=c("isotropic", "translate", "border", "none"))
+  M <- markcorr(longleaf, normalise=TRUE, fargs=list())
   #' Kmark (=markcorrint)
   X <- runifpoint(100) %mark% runif(100)
   km <- Kmark(X, f=atan2)

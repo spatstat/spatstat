@@ -79,4 +79,29 @@ Change log from 1.62-2 to 1.62-3
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
 
+14 dec 2019
 
+   envelope.R
+	Changed handling of argument 'theory' in envelope.matrix
+	
+   tests/envelopes.R
+	Test of non-dual global envelope
+
+   tests/hypotests.R
+	Cover scan.test and supporting code
+
+   tests/Kfuns.R
+	Check normalised versions of markconnect, markcorr
+
+
+   DESCRIPTION
+   NEWS
+	Version 1.62-2.004
+
+------------- passed R-3.6.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+
+
+
+   

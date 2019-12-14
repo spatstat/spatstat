@@ -25,7 +25,7 @@ local({
 #
 #  Test validity of envelope data
 #
-#  $Revision: 1.20 $  $Date: 2019/12/02 06:29:20 $
+#  $Revision: 1.21 $  $Date: 2019/12/14 02:15:38 $
 #
 
 require(spatstat)
@@ -218,6 +218,8 @@ local({
                 type="global", use.theory=TRUE)
   E <- envelope(Y, rvals=rr, observed=oo, theory=zz,
                 type="global", use.theory=TRUE, nsim=10)
+  E <- envelope(Y, rvals=rr, observed=oo, theory=zz,
+                type="global", use.theory=FALSE, nsim=10)
   E <- envelope(Y, rvals=rr, observed=oo, type="global",
                 nsim=10, nsim2=10)
   E <- envelope(Y, rvals=rr, observed=oo, type="global",

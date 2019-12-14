@@ -3,7 +3,7 @@
 #
 #   computes simulation envelopes 
 #
-#   $Revision: 2.106 $  $Date: 2019/12/10 00:28:26 $
+#   $Revision: 2.107 $  $Date: 2019/12/14 01:58:20 $
 #
 
 envelope <- function(Y, fun, ...) {
@@ -1220,7 +1220,7 @@ envelope.matrix <- function(Y, ...,
     ## assume funX is summary function for observed data
     rvals <- with(funX, .x)
     observed <- with(funX, .y)
-    theory <- if(use.theory) funX[["theo"]] else NULL
+    theory <- if(use.theory) (theory %orifnull% funX[["theo"]]) else NULL
     if(check) stopifnot(nrow(funX) == nrow(Y)) 
   } else if(check) {
     ## validate vectors of data
