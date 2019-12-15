@@ -8,7 +8,7 @@
 }
 \usage{
   \method{split}{ppp}(x, f = marks(x), drop=FALSE, un=NULL, reduce=FALSE, \dots)
-  \method{split}{ppp}(x, f = marks(x), drop=FALSE, un=missing(f), \dots) <- value
+  \method{split}{ppp}(x, f = marks(x), drop=FALSE, un=NULL, \dots) <- value
 }
 \arguments{
   \item{x}{

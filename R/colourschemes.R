@@ -1,7 +1,7 @@
 #
 #  colourschemes.R
 #
-#  $Revision: 1.4 $  $Date: 2019/01/29 04:32:44 $
+#  $Revision: 1.5 $  $Date: 2019/12/15 05:25:53 $
 #
 
 beachcolourmap <- function(range, ...) {
@@ -16,7 +16,7 @@ beachcolours <- function(range, sealevel = 0, monochrome=FALSE,
   check.range(range)
   stopifnot(all(is.finite(range)))
   check.1.real(sealevel)
-  check.in.range(sealevel, range)
+  range <- range(c(sealevel,range))
   check.1.integer(ncolours)
   stopifnot(ncolours >= 3)
   check.1.integer(nbeach)

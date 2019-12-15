@@ -1,17 +1,32 @@
 
-        CHANGES IN spatstat VERSION 1.62-2.004
+        CHANGES IN spatstat VERSION 1.62-2.005
 
 OVERVIEW
 
     o Bug fixes and minor improvements.
 
     o Version nickname: "Adult supervision recommended"
-    
-BUG FIXES
 
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o beachcolours
+    If 'sealevel' lies outside 'srange', then 'srange' will be extended
+    to include it (without a warning).
+    
+    o split<-.ppp
+    The default for argument 'un' in 'split<-.ppp' 
+    now agrees with the default for the same argument in 'split.ppp'.
+    Fixed.
+
+BUG FIXES
+    
     o relrisk.ppp
     Crashed if there were more than 2 types of points
     and method = "leastsquares" or "weightedleastsquares".
+    Fixed.
+
+    o diagnose.ppm
+    Crashed for some models with an error message from 'beachcolours'.
     Fixed.
     
         CHANGES IN spatstat VERSION 1.62-2

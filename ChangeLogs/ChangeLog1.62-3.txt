@@ -93,7 +93,6 @@ Change log from 1.62-2 to 1.62-3
    tests/Kfuns.R
 	Check normalised versions of markconnect, markcorr
 
-
    DESCRIPTION
    NEWS
 	Version 1.62-2.004
@@ -102,6 +101,29 @@ Change log from 1.62-2 to 1.62-3
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
 
+15 dec 2019
 
+   split.ppp.R
+   split.ppp.Rd
+	Bug fix in split<-.ppp (inconsistency with defaults of split.ppp)
+
+   colourschemes.R
+	beachcolours now allows 'sealevel' to be outside 'srange'
+	
+   resid4plot.R
+	Bug fix in handling colours
+	
+   tests/diagnostique.R
+   tests/segments.R
+   tests/splitpea.R
+	Tests of bugs and related code
+
+   DESCRIPTION
+   NEWS
+	Version 1.62-2.005
+
+------------- passed R-3.6.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
 
    

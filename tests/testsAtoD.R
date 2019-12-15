@@ -966,7 +966,7 @@ reset.spatstat.options()
 #'
 #'  Diagnostic tools such as diagnose.ppm, qqplot.ppm
 #'
-#'  $Revision: 1.3 $  $Date: 2019/12/12 00:21:42 $
+#'  $Revision: 1.4 $  $Date: 2019/12/15 05:44:09 $
 #'
 
 require(spatstat)
@@ -978,15 +978,37 @@ local({
   plot(diagE, which="all")
   plot(diagI, which="smooth")
   plot(diagP, which="x")
-  #'
+  plot(diagP, which="marks", plot.neg="discrete")
+  plot(diagP, which="marks", plot.neg="contour")
+  plot(diagP, which="smooth", srange=c(-5,5))
+  plot(diagP, which="smooth", plot.smooth="contour")
+  plot(diagP, which="smooth", plot.smooth="image")
+
+  fitS <- ppm(cells ~ x, Strauss(0.08))
+  diagES <- diagnose.ppm(fitS, type="eem", clip=FALSE)
+  diagIS <- diagnose.ppm(fitS, type="inverse", clip=FALSE)
+  diagPS <- diagnose.ppm(fitS, type="Pearson", clip=FALSE)
+  plot(diagES, which="marks", plot.neg="imagecontour")
+  plot(diagPS, which="marks", plot.neg="discrete")
+  plot(diagPS, which="marks", plot.neg="contour")
+  plot(diagPS, which="smooth", plot.smooth="image")
+  plot(diagPS, which="smooth", plot.smooth="contour")
+  plot(diagPS, which="smooth", plot.smooth="persp")
+  
+  #' infinite reach, not border-corrected
+  fut <- ppm(cells ~ x, Softcore(0.5), correction="isotropic")
+  diagnose.ppm(fut)
+
+  #' 
+  diagPX <- diagnose.ppm(fit, type="Pearson", cumulative=FALSE)
+  plot(diagPX, which="y")
+
+  #' simulation based
   e <- envelope(cells, nsim=4, savepatterns=TRUE, savefuns=TRUE)
   qf <- qqplot.ppm(fit, nsim=4, expr=e, plot.it=FALSE)
   print(qf)
   qg <- qqplot.ppm(fit, nsim=5, style="classical", plot.it=FALSE)
-  #' infinite reach, not border-corrected
-  fut <- ppm(cells ~ x, Softcore(0.5), correction="isotropic")
-  diagnose.ppm(fut)
-  
+
   #' lurking.ppm
   #' covariate is numeric vector
   fitx <- ppm(cells ~ x)

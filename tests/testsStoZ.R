@@ -128,13 +128,17 @@ density(Y, 0.2, at=Z, edge=TRUE, method="C")
   colnames(df) <- c("xmid", "ymid", "length", "angle", "marks")
   E <- as.psp(df, window=square(c(-1,2)))
   G <- E %mark% factor(sample(letters[1:3], nsegments(E), replace=TRUE))
+  H <- E %mark% runif(nsegments(E))
   
 #' print and summary methods
   A
   B
   E
   G
+  H
   summary(B)
+  summary(G)
+  summary(H)
   M <- B
   marks(M) <- data.frame(id=marks(B), len=lengths.psp(B))
   M
@@ -194,6 +198,15 @@ local({
   Y <- rshift(X, radius = 0.1, group=g)
 })
 
+local({
+  #' geometry
+  m <- data.frame(A=1:10, B=letters[1:10])
+  X <- psp(runif(10), runif(10), runif(10), runif(10), window=owin(), marks=m)
+  Z <- rotate(X, angle=pi/3, centre=c(0.5, 0.5))
+  Y <- endpoints.psp(X, which="lower")
+  Y <- endpoints.psp(X, which="upper")
+  Y <- endpoints.psp(X, which="right")
+})
 reset.spatstat.options()
 #
 ## tests/sigtraceprogress.R
@@ -566,7 +579,7 @@ local({
 #
 #  Thanks to Marcelino de la Cruz
 #
-#  $Revision: 1.12 $  $Date: 2019/01/18 01:58:29 $
+#  $Revision: 1.13 $  $Date: 2019/12/15 04:46:57 $
 #
 
 require(spatstat)
@@ -594,6 +607,24 @@ split(X, Z, drop=TRUE) <- Ydrop
 Zbad <- quadrats(square(4), 2, 2)
 Ybdrop <- split(X, Zbad, drop=TRUE)
 Yball  <- split(X, Zbad, drop=FALSE)
+
+# other bugs/ code blocks in split.ppp, split<-.ppp, [<-.splitppp
+flog <- rep(c(TRUE,FALSE), 21)
+fimg <- as.im(dirichlet(runifpoint(5, Window(cells))))
+A <- split(cells, flog)
+B <- split(cells, square(0.5))
+D <- split(cells, fimg)
+E <- split(cells, logical(42), drop=TRUE)
+Cellules <- cells
+split(Cellules, flog) <- solapply(A, rjitter)
+split(Cellules, fimg) <- solapply(D, rjitter)
+D[[2]] <- rjitter(D[[2]])
+Funpines <- finpines
+marks(Funpines)[,"diameter"] <- factor(marks(Funpines)[,"diameter"])
+G <- split(Funpines)
+H <- split(Funpines, "diameter")
+split(Funpines) <- solapply(G, rjitter)
+split(Funpines, "diameter") <- solapply(H, rjitter)
 
 # From Marcelino
 set.seed(1)

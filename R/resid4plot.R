@@ -5,7 +5,7 @@
 #         resid1plot       one or more unrelated individual plots 
 #         resid1panel      one panel of resid1plot
 #
-#   $Revision: 1.35 $    $Date: 2018/04/29 11:18:30 $
+#   $Revision: 1.37 $    $Date: 2019/12/15 05:26:58 $
 #
 #
 
@@ -68,15 +68,13 @@ resid4plot <- local({
        c(0, height) + c(-outerspace, outerRspace),
        type="n", asp=1.0, axes=FALSE, xlab="", ylab="")
   # determine colour map for background
+  nullvalue <- if(type == "eem") 1 else 0
   if(is.null(srange)) {
     Yrange <- if(!is.null(Ydens)) summary(Ydens)$range else NULL
     Zrange <- if(!is.null(Z)) summary(Z)$range else NULL
-    srange <- range(c(0, Yrange, Zrange), na.rm=TRUE)
-  } else {
-    stopifnot(is.numeric(srange) && length(srange) == 2)
-    stopifnot(all(is.finite(srange)))
-  }
-  backcols <- beachcolours(srange, if(type=="eem") 1 else 0, monochrome)
+    srange <- range(c(Yrange, Zrange, nullvalue), na.rm=TRUE)
+  } else check.range(srange)
+  backcols <- beachcolours(srange, nullvalue, monochrome)
   if(is.null(col.neg)) col.neg <- backcols
   if(is.null(col.smooth)) col.smooth <- backcols
   
@@ -365,12 +363,13 @@ resid1plot <- local({
     Ymass <- RES$Ymass[Wclip]
     ## determine colour map
     if(opt$all || opt$marks || opt$smooth) {
+      nullvalue <- if(type == "eem") 1 else 0
       if(is.null(srange)) {
         Yrange <- if(!is.null(Ydens)) summary(Ydens)$range else NULL
         Zrange <- if(!is.null(Z)) summary(Z)$range else NULL
-        srange <- range(c(0, Yrange, Zrange), na.rm=TRUE)
-      }
-      backcols <- beachcolours(srange, if(type=="eem") 1 else 0, monochrome)
+        srange <- range(c(Yrange, Zrange, nullvalue), na.rm=TRUE)
+      } else check.range(srange)
+      backcols <- beachcolours(srange, nullvalue, monochrome)
       if(is.null(col.neg)) col.neg <- backcols
       if(is.null(col.smooth)) col.smooth <- backcols
     }
