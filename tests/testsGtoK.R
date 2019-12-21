@@ -40,7 +40,7 @@ local({
 #
 # test "[.hyperframe" etc
 #
-#  $Revision: 1.5 $  $Date: 2019/09/11 11:33:37 $
+#  $Revision: 1.6 $  $Date: 2019/12/21 05:16:27 $
 #
 
 require(spatstat)
@@ -71,6 +71,15 @@ local({
   dimnames(h) <- dn
   dimnames(h)[[2]][2] <- "copacetic"
   dimnames(h)[[1]][2] <- "second"
+
+  #' hyperframe with a hyperatom
+  H <- hyperframe(A=runif(3), B=1:3, D=runifpoint(10))
+  H[,3]
+  #' special cases of [<-
+  H$B <- H[,1]
+  H[2:3,1] <- H[2:3,2]
+  H[2:3,1] <- H[2,2]
+  H[2,1:2] <- H[3,1:2]
 })
 
 
@@ -120,7 +129,7 @@ local({
 #
 #  tests/imageops.R
 #
-#   $Revision: 1.21 $   $Date: 2019/12/11 03:55:53 $
+#   $Revision: 1.22 $   $Date: 2019/12/21 04:25:26 $
 #
 
 require(spatstat)
@@ -293,6 +302,9 @@ local({
   DA <- density(split(amacrine))
   Z <- im.apply(DA, sd)
   Z <- which.max.im(DA) # deprecated -> im.apply(DA, which.max)
+
+  #' rotmean
+  U <- rotmean(Z, origin="midpoint", result="im", padzero=FALSE)
 })
 #' indices.R
 #' Tests of code for understanding index vectors etc

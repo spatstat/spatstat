@@ -756,6 +756,10 @@ local({
   marks(U)[,2] <- factor(c(rep("A", 60), rep("B", npoints(U)-60)))
   UU <- U[1:3, drop=TRUE]
 
+  #' cut.ppp
+  CU <- cut(U, "height")
+  CU <- cut(U, breaks=3)
+
   #' cases of [<-.ppp
   set.seed(999)
   X <- cells

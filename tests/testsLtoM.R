@@ -383,10 +383,13 @@ local({
   plot(g)
   ## other code blocks
   K <- linearKinhom(X, lambda=fit, correction="none", ratio=TRUE)
-  K0 <- linearKcross(dendrite[1], "thin", "thin")
+  g <- linearpcf(X, correction="none", ratio=TRUE)
+  g1 <- linearpcf(X[1], ratio=TRUE)
+  K1 <- linearKcross(dendrite[1], "thin", "thin", ratio=TRUE)
   # check empty patterns OK
-  X <- runiflpp(0, simplenet)
-  print(X)
+  X0 <- runiflpp(0, simplenet)
+  print(X0)
+  g <- linearpcf(X0, ratio=TRUE)
   
   ## nearest neighbour distances
   eps <- sqrt(.Machine$double.eps)
@@ -905,7 +908,8 @@ local({
   envelopeTest(a3, Lest, exponent=3, nsim=9, alternative="less")
   
   fitx <- ppm(redwood~x)
-  envelopeTest(fitx, exponent=2, nsim=9, savefuns=TRUE)
+  ax <- envelopeTest(fitx, exponent=2, nsim=9, savefuns=TRUE)
+  print(ax)
 
   envelopeTest(redwood, Lest, exponent=1, nsim=19,
                rinterval=c(0, 0.1), alternative="greater", clamp=TRUE)

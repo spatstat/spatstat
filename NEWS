@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.62-2.005
+        CHANGES IN spatstat VERSION 1.62-2.006
 
 OVERVIEW
 
@@ -18,6 +18,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
     now agrees with the default for the same argument in 'split.ppp'.
     Fixed.
 
+    o lineardisc
+    New argument 'add'.
+    Default plotting behaviour has changed.
+
 BUG FIXES
     
     o relrisk.ppp
@@ -27,6 +31,14 @@ BUG FIXES
 
     o diagnose.ppm
     Crashed for some models with an error message from 'beachcolours'.
+    Fixed.
+
+    o lineardisc
+    Crashed in some graphics environments.
+    Fixed.
+
+    o lineardisc
+    Crashed if the network segments had marks.
     Fixed.
     
         CHANGES IN spatstat VERSION 1.62-2

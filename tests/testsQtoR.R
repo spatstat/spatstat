@@ -144,7 +144,7 @@ reset.spatstat.options()
 #'
 #'  Stuff related to residuals and residual diagnostics
 #'
-#'   $Revision: 1.4 $  $Date: 2019/12/11 10:15:33 $
+#'   $Revision: 1.5 $  $Date: 2019/12/21 04:59:50 $
 #'
 
 require(spatstat)
@@ -152,6 +152,7 @@ local({
   fit <- ppm(cells ~x, Strauss(r=0.15))
   diagnose.ppm(fit, cumulative=FALSE)
   diagnose.ppm(fit, cumulative=FALSE, type="pearson")
+  rr <- residuals(fit, quad=quadscheme(cells, nd=128))
 
   fitoff <- ppm(cells ~ sin(x) + offset(y))
   plot(a <- parres(fitoff, "x"))

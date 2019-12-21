@@ -126,4 +126,33 @@ Change log from 1.62-2 to 1.62-3
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
 
-   
+21 dec 2019
+
+   lineardisc.R
+	Bug fix in handling marked lines. 
+
+   lineardisc.R
+   lineardisc.Rd
+	New argument 'add'.
+	Change default graphics behaviour.
+
+   tests/cluck.R
+   tests/density.R
+   tests/hyperframe.R
+   tests/imageops.R
+   tests/lppstuff.R
+   tests/mctests.R
+   tests/ppp.R
+   tests/resid.R
+   tests/testparres.R
+   tests/windows.R
+	More tests
+
+   DESCRIPTION
+   NEWS
+	Version 1.62-2.006
+
+------------- passed R-3.6.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+

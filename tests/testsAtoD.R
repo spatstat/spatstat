@@ -298,7 +298,7 @@ reset.spatstat.options()
 #'   Tests of "click*" functions
 #'   using queueing feature of spatstatLocator
 #'
-#'   $Revision: 1.2 $ $Date: 2019/04/28 02:20:37 $
+#'   $Revision: 1.3 $ $Date: 2019/12/21 04:43:36 $
 
 require(spatstat)
 local({
@@ -332,6 +332,14 @@ local({
   Z <- ppp(c(2.86, 3.65, 3.15), c(1.69, 1.98, 2.56), window=Frame(letterR))
   spatstat.utils::queueSpatstatLocator(Z)
   identify(E)
+  #' lineardisc
+  plot(simplenet)
+  spatstat.utils::queueSpatstatLocator(as.ppp(runiflpp(1, simplenet)))
+  V <- lineardisc(simplenet, r=0.3)
+  #' transect.im
+  Z <- density(cells)
+  spatstat.utils::queueSpatstatLocator(runifpoint(2, Window(cells)))
+  TZ <- transect.im(Z, click=TRUE)
 })
 ## tests/colour.R
 ##
@@ -573,7 +581,7 @@ local({
 #'                    and inhomogeneous summary functions
 #'                    and idw, adaptive.density
 #'
-#'  $Revision: 1.47 $  $Date: 2019/12/11 03:55:59 $
+#'  $Revision: 1.49 $  $Date: 2019/12/21 05:09:03 $
 #'
 
 require(spatstat)
@@ -910,6 +918,8 @@ local({
 local({
   #' bandwidth selection
   op <- spatstat.options(n.bandwidth=8)
+  bw.diggle(cells) 
+  bw.diggle(cells, method="interpreted") # undocumented test
 #  bw.relrisk(urkiola, hmax=20) is tested in man/bw.relrisk.Rd
   bw.relrisk(urkiola, hmax=20, method="leastsquares")
   bw.relrisk(urkiola, hmax=20, method="weightedleastsquares")
@@ -957,6 +967,13 @@ local({
   BB <- densityAdaptiveKernel(nztrees, bw=d10, weights=uN)
   DD <- densityAdaptiveKernel(nztrees, bw=d10fun, weights=uN)
   EE <- densityAdaptiveKernel(nztrees, bw=d10im, weights=uN)
+})
+
+local({
+  ## unnormdensity
+  x <- rnorm(20) 
+  d0 <- unnormdensity(x, weights=rep(0, 20))
+  dneg <- unnormdensity(x, weights=c(-runif(19), 0))
 })
 
 reset.spatstat.options()

@@ -2,13 +2,14 @@
 #
 #   disc.R
 #
-#   $Revision: 1.30 $ $Date: 2019/11/15 07:13:04 $
+#   $Revision: 1.32 $ $Date: 2019/12/21 04:14:48 $
 #
 #   Compute the disc of radius r in a linear network
 #
 #   
-lineardisc <- function(L, x=locator(1), r, plotit=TRUE,
-                       cols=c("blue", "red", "green")) {
+lineardisc <- function(L, x=locator(1), r, plotit=TRUE, 
+                       cols=c("blue", "red", "green"),
+                       add=TRUE) {
   # L is the linear network (object of class "linnet")
   # x is the centre point of the disc
   # r is the radius of the disc
@@ -24,18 +25,28 @@ lineardisc <- function(L, x=locator(1), r, plotit=TRUE,
   vertices <- L$vertices
   lengths <- lengths.psp(lines)
   win <- L$window
-  #
-  # project x to nearest segment
-  if(missing(x))
+  marx <- marks(lines)
+  ##
+  if(missing(x) || is.null(x)) 
     x <- clickppp(1, win, add=TRUE)
-  else
+  if(is.lpp(x) && identical(L, domain(x))) {
+    ## extract local coordinates
+    stopifnot(npoints(x) == 1)
+    coo <- coords(x)
+    startsegment <- coo$seg
+    startfraction <- coo$tp
+  } else {
+    ## interpret x as 2D location
     x <- as.ppp(x, win)
-  pro <- project2segment(x, lines)
-  # which segment?
-  startsegment <- pro$mapXY
-  # parametric position of x along this segment
-  startfraction <- pro$tp
-  # vertices at each end of this segment
+    stopifnot(npoints(x) == 1)
+    ## project x to nearest segment
+    pro <- project2segment(x, lines)
+    ## which segment?
+    startsegment <- pro$mapXY
+    ## parametric position of x along this segment
+    startfraction <- pro$tp
+  }
+  ## vertices at each end of this segment
   A <- L$from[startsegment]
   B <- L$to[startsegment]
   # distances from x to  A and B
@@ -92,6 +103,7 @@ lineardisc <- function(L, x=locator(1), r, plotit=TRUE,
                  (1-tp)*v0$y + tp*v1$y,
                  window=win)
     extralinesfrom <- as.psp(from=v0, to=vfrom)
+    if(!is.null(marx)) marks(extralinesfrom) <- marx %msub% okfrom
   } else vfrom <- extralinesfrom <- NULL
   #
   okto <- (resid.to > 0)
@@ -104,6 +116,7 @@ lineardisc <- function(L, x=locator(1), r, plotit=TRUE,
                (1-tp)*v0$y + tp*v1$y,
                window=win)
     extralinesto <- as.psp(from=v0, to=vto)
+    if(!is.null(marx)) marks(extralinesto) <- marx %msub% okto
   } else vto <- extralinesto <- NULL
   #
   # deal with special case where start segment is not fully covered
@@ -120,6 +133,7 @@ lineardisc <- function(L, x=locator(1), r, plotit=TRUE,
                   (1-tright) * vA$y + tright * vB$y,
                   window=win)
     startline <- as.psp(from=vleft, to=vright)
+    if(!is.null(marx)) marks(startline) <- marx %msub% startsegment
     startends <- superimpose(if(!covered[A]) vleft else NULL,
                              if(!covered[B]) vright else NULL)
   } else startline <- startends <- NULL
@@ -133,11 +147,9 @@ lineardisc <- function(L, x=locator(1), r, plotit=TRUE,
                           W=win, check=FALSE)
   #
   if(plotit) {
-    if(dev.cur() == 1) {
-      # null device - initialise a plot
+    if(!add || dev.cur() == 1) 
       plot(L, main="")
-    }
-    points(x, col=cols[1L], pch=16)
+    plot(as.ppp(x), add=TRUE, cols=cols[1L], pch=16)
     plot(disclines, add=TRUE, col=cols[2L], lwd=2)
     plot(discends, add=TRUE, col=cols[3L], pch=16)
   }

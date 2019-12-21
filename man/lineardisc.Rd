@@ -10,7 +10,7 @@
 }
 \usage{
   lineardisc(L, x = locator(1), r, plotit = TRUE,
-             cols=c("blue", "red","green"))
+             cols=c("blue", "red","green"), add=TRUE)
 
   countends(L, x = locator(1), r, toler=NULL, internal=list())
 }
@@ -28,6 +28,13 @@
   }
   \item{plotit}{
     Logical. Whether to plot the disc.
+  }
+  \item{add}{
+    Logical. If \code{add=TRUE} (the default),
+    the disc will be plotted on the current plot frame.
+    If \code{add=FALSE}, a new plot frame will be started,
+    the entire network will be displayed, and then
+    the disc will be plotted over this.
   }
   \item{cols}{
     Colours for plotting the disc. A numeric or character vector of
@@ -104,6 +111,7 @@ ecology and criminology.
     edg <- cbind(1:4, 2:5)
     edg <- rbind(edg, c(2,4))
     letterA <- linnet(v, edges=edg)
+    plot(letterA)
 
    lineardisc(letterA, c(0,3), 1.6)
    # count the endpoints

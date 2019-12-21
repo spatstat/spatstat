@@ -891,6 +891,10 @@ parres(copfit, "dlin")
 #' covariate need not be specified if there is only one.
 parres(mod5)
 parres(copfit)
+
+#' infrastructure
+ltuae <- evalCovariate(42, cells)
+LTUAE <- evalCovariate(ltuae, cells)
 })
 #'
 #'     tests/threedee.R
@@ -1304,6 +1308,9 @@ local({
   R <- as.mask(square(1))
   stopifnot(area(bdry.mask(R)) > 0)
   stopifnot(area(convexhull(R)) > 0)
+
+  ##
+  RR <- convexify(as.mask(letterR))
 
   #' as.owin.data.frame
   V <- as.mask(letterR, eps=0.2)
