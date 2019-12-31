@@ -3,7 +3,7 @@
 #'
 #'  Utilities for sparse arrays
 #'
-#'  $Revision: 1.12 $  $Date: 2019/01/23 05:36:34 $
+#'  $Revision: 1.15 $  $Date: 2019/12/31 03:07:33 $
 #'
 
 #'  .............. completely generic ....................
@@ -99,13 +99,27 @@ expandSparse <- function(x, n, across) {
 }
 
 mapSparseEntries <- function(x, margin, values, conform=TRUE, across) {
-  # replace the NONZERO entries of sparse matrix or array
+  # replace the NONZERO entries of sparse vector, matrix or array
   # by values[l] where l is one of the slice indices
   dimx <- dim(x)
   if(is.null(dimx)) {
     if(inherits(x, "sparseVector")) dimx <- x@length else
     if(is.vector(x)) dimx <- length(x) else
     stop("Format of x is not understood", call.=FALSE)
+  }
+  if(length(dimx) == 1) {
+    x <- as(x, "sparseVector")
+    i <- x@i
+    if(length(i) == 0) {
+      # no entries
+      return(x)
+    }
+    if(!missing(margin) && !is.null(margin)) stopifnot(margin == 1)
+    check.anySparseVector(values, dimx, things="entries", oneok=TRUE)
+    nv <- if(inherits(values, "sparseVector")) values@length else length(values)
+    yvalues <- if(nv > 1) as.vector(values[i]) else rep(values[1], length(i))
+    y <- sparseVector(i=i, x=yvalues, length=dimx)
+    return(y)
   }
   if(inherits(x, "sparseMatrix")) {
     x <- as(x, Class="TsparseMatrix")
@@ -115,15 +129,16 @@ mapSparseEntries <- function(x, margin, values, conform=TRUE, across) {
     }
     check.1.integer(margin)
     stopifnot(margin %in% 1:2)
-    check.anySparseVector(values, dimx[margin], things=c("rows","columns")[margin],
+    check.anySparseVector(values, dimx[margin],
+                          things=c("rows","columns")[margin],
                           oneok=TRUE)
     nv <- if(inherits(values, "sparseVector")) values@length else length(values)
-    if(nv == 1) values <- rep(values[1], dimx[margin])
     i <- x@i + 1L
     j <- x@j + 1L
     yindex <- switch(margin, i, j)
-    y <- sparseMatrix(i=i, j=j, x=values[yindex],
-                      dims=dimx, dimnames=dimnames(x))
+    yvalues <- if(nv > 1) values[yindex] else rep(values[1], length(yindex))
+    y <- sparseMatrix(i=i, j=j, x=yvalues, dims=dimx, dimnames=dimnames(x))
+    y <- drop0(y)
     return(y)
   }
   if(inherits(x, "sparse3Darray")) {
@@ -156,12 +171,12 @@ mapSparseEntries <- function(x, margin, values, conform=TRUE, across) {
                             things=c("rows","columns","planes")[margin],
                             oneok=TRUE)
       nv <- if(inherits(values, "sparseVector")) values@length else length(values)
-      if(nv == 1) values <- rep(values[1], dimx[margin])
       yindex <- ijk[,margin]
+      yvalues <- if(nv > 1) values[yindex] else rep(values[1], length(yindex))
       y <- sparse3Darray(i=ijk[,1],
                          j=ijk[,2],
                          k=ijk[,3],
-                         x=values[yindex],
+                         x=yvalues,
                          dims=dimx, dimnames=dimnames(x))
       return(y)
     } else if(is.matrix(values) || inherits(values, "sparseMatrix")) {
@@ -198,7 +213,7 @@ applySparseEntries <- local({
     ## apply vectorised function 'f' only to the nonzero entries of 'x'
     if(inherits(x, "sparseMatrix")) {
       x <- applytoxslot(x, f, ...)
-    } else if(inherits(x, "sparse3Dmatrix")) {
+    } else if(inherits(x, "sparse3Darray")) {
       x <- applytoxentry(x, f, ...)
     } else {
       x <- f(x, ...)

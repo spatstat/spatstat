@@ -3,7 +3,7 @@
 #'
 #' Sparse 3D arrays represented as list(i,j,k,x)
 #' 
-#' $Revision: 1.38 $  $Date: 2019/12/06 01:39:57 $
+#' $Revision: 1.39 $  $Date: 2019/12/31 01:03:10 $
 #'
 
 sparse3Darray <- function(i=integer(0), j=integer(0), k=integer(0),
@@ -224,11 +224,15 @@ as.array.sparse3Darray <- function(x, ...) {
                              i=integer(0),
                              length=nrow(i))
       ## values outside array return NA
-      if(any(bad <- !inside3Darray(dim(x), i)))
+      if(anybad <- !all(good <- inside3Darray(dim(x), i))) {
+        bad <- !good
         answer[bad] <- NA
+      }
       ## if entire array is zero, there is nothing to match
       if(length(x$x) == 0)
         return(answer)
+      ## restrict attention to entries inside array
+      igood <- if(anybad) i[good, , drop=FALSE] else i
       ## match desired indices to sparse entries
       varies <- (dimx > 1)
       nvary <- sum(varies)
@@ -240,7 +244,7 @@ as.array.sparse3Darray <- function(x, ...) {
         ## icode <- paste(i[,1], i[,2], i[,3], sep=",")
         ## dcode <- paste(x$i, x$j, x$k, sep=",")
 	## ------------------
-	m <- matchIntegerDataFrames(i, cbind(x$i, x$j, x$k))
+	mgood <- matchIntegerDataFrames(igood, cbind(x$i, x$j, x$k))
       } else if(nvary == 2) {
         ## effectively a sparse matrix
         ## ---- older code -----
@@ -249,25 +253,26 @@ as.array.sparse3Darray <- function(x, ...) {
         ## dcode <- paste(ijk[,varying[1]], ijk[,varying[2]], sep=",")
 	## ------------------
 	ijk <- cbind(x$i, x$j, x$k)
-	m <- matchIntegerDataFrames(i[,varying,drop=FALSE],
-	                            ijk[,varying,drop=FALSE])
+	mgood <- matchIntegerDataFrames(igood[,varying,drop=FALSE],
+                                        ijk[,varying,drop=FALSE])
       } else if(nvary == 1) {
         ## effectively a sparse vector
         ## ---- older code -----
         ## icode <- i[,varying]
         ## dcode <- switch(varying, x$i, x$j, x$k)
 	## ------------------
-	m <- match(i[,varying], switch(varying, x$i, x$j, x$k))
+	mgood <- match(igood[,varying], switch(varying, x$i, x$j, x$k))
       } else {
         ## effectively a single value
         ## ---- older code -----
         ## icode <- rep(1, nrow(i))
         ## dcode <- 1  # since we know length(x$x) > 0
-	m <- 1
+	mgood <- 1
       }
       ## insert any found elements
-      found <- !is.na(m)
-      answer[found] <- x$x[m[found]]
+      found <- logical(nrow(i))
+      found[good] <- foundgood <- !is.na(mgood)
+      answer[found] <- x$x[mgood[foundgood]]
       return(answer)
     }
     if(!(missing(i) && missing(j) && missing(k))) {

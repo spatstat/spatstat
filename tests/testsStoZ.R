@@ -329,7 +329,7 @@ local({
 
 #'    tests/sparse3Darrays.R
 #'  Basic tests of code in sparse3Darray.R and sparsecommon.R
-#'  $Revision: 1.20 $ $Date: 2019/11/28 04:18:22 $
+#'  $Revision: 1.21 $ $Date: 2019/12/31 02:38:48 $
 
 require(spatstat)
 local({
@@ -516,7 +516,19 @@ local({
     V <- sparseVector(i=c(1,3,6),x=1:3, length=7)
     tenseur(V,V)
     tenseur(V,V,1,1)
+    A <- sparseMatrix(i=integer(0), j=integer(0), x=numeric(0), dims=c(7, 15))
+    A[1:4, 2:5] <- 3
+    tenseur(A, A, 1, 1)
+    tenseur(t(A), A, 2, 1)
+    tenseur(V, A, 1, 1)
+    tenseur(t(A), V, 2, 1)
+    tenseur(as.vector(V), A, 1, 1)
+    tenseur(t(A), as.vector(V), 2, 1)
 
+    v <- 0:3
+    tensor1x1(v, Mfix)
+    tensor1x1(as(v, "sparseVector"), Mfix)
+    
     ## test of anyNA method
     anyNA(M)
     
@@ -547,31 +559,63 @@ local({
     #' -----------  sparsecommon.R -----------------------
     B <- sparseMatrix(i=1:3, j=3:1, x= 10 * (1:3), dims=c(4,4))
     #' (and using sparse 3D array M and sparse vector V from above)
+    V2 <- sparseVector(i=c(2,3,6),x=4:6, length=7)  # different pattern
+    check.anySparseVector(V2, 10, fatal=FALSE)
 
     Bmap <- mapSparseEntries(B, 1, 4:1)
     Mmap1 <- mapSparseEntries(M, 1, 5:1, across=3)
     Mmap2 <- mapSparseEntries(M, 3, 2:1, conform=FALSE)
     Mmap3 <- mapSparseEntries(M, 1, matrix(1:10, 5, 2), across=3)
     
+    Vmap <- mapSparseEntries(V, 1, V2)
+    Vmap <- mapSparseEntries(V, 1, 8)
     Vthrice  <- expandSparse(V, 3)
     VthriceT <- expandSparse(V, 3, 1)
-
+    VF <- as.vector(V) # non-sparse
+    VFmap <- mapSparseEntries(VF, 1, V2)
+    VFmap <- mapSparseEntries(VF, 1, 8)
+    VFthrice  <- expandSparse(VF, 3)
+    VFthriceT <- expandSparse(VF, 3, 1)
+    VFthriceX <- expandSparse(VF, 3, 2)
+    
     VV <- sparseVectorCumul(rep(1:3,2), rep(c(3,1,2), 2), 5)
 
     Vsum <- applySparseEntries(V, sum)
     Bdouble <- applySparseEntries(B, function(x) { 2 * x })
     Mminus <- applySparseEntries(M, function(x) -x)
 
+    # empty sparse matrices/arrays
+    Bempty <- B
+    Bempty[] <- 0
+    mapSparseEntries(Bempty, 1, 42)
+    Mempty <- M
+    Mempty[] <- 0
+    Mmap1 <- mapSparseEntries(Mempty, 1, 5:1, across=3)
+    Mmap2 <- mapSparseEntries(Mempty, 3, 2:1, conform=FALSE)
+    Mmap3 <- mapSparseEntries(Mempty, 1, matrix(1:10, 5, 2), across=3)
+
     #'  -------------- sparselinalg.R -------------------------
     U <- aperm(M,c(3,1,2))  # 2 x 5 x 5
     w <- matrix(0, 5, 5)
     w[cbind(1:3,2:4)] <- 0.5
     w <- as(w, "sparseMatrix")
-    UU <- sumsymouterSparse(U, w)
+    UU <- sumsymouterSparse(U, w, dbg=TRUE)
+    Uempty <- sparse3Darray(dims=c(2,5,5))
+    UU <- sumsymouterSparse(Uempty, w, dbg=TRUE)
   }
 })
 
-
+local({
+  # 1 x 1 x 1 arrays
+  M1 <- sparse3Darray(i=1, j=1, k=1, x=42, dims=rep(1,3))
+  M0 <- sparse3Darray(                     dims=rep(1,3))
+  i1 <- matrix(1, 1, 3)
+  a1 <- M1[i1]
+  a0 <- M0[i1]
+  A <- array(runif(75) * (runif(75) < 0.7), dim=c(3,5,5))
+  M <- as.sparse3Darray(A)
+  M[rep(1,3), c(1,1,2), rep(2, 3)]
+})
 #
 #  tests/splitpea.R
 #

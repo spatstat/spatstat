@@ -156,3 +156,26 @@ Change log from 1.62-2 to 1.62-3
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
 
+31 dec 2019
+
+   sparsecommon.R
+	Bug fix in applySparseEntries
+
+   sparse3Darray.R
+	Bug fix in [.sparse3Darray
+
+   sparselinalg.R
+	Various bug fixes
+
+   tests/sparse3Darrays.R
+	Added more tests of sparse array code.
+
+   DESCRIPTION
+   NEWS
+	Version 1.62-2.007
+
+------------- passed R-3.6.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+
+   

@@ -4,7 +4,7 @@
 #'   Counterpart of linalg.R for sparse matrices/arrays
 #'
 #' 
-#'   $Revision: 1.10 $  $Date: 2017/06/05 10:31:58 $
+#'   $Revision: 1.11 $  $Date: 2019/12/31 02:19:08 $
 
 marginSums <- function(X, MARGIN) {
   #' equivalent to apply(X, MARGIN, sum)
@@ -40,6 +40,7 @@ tensor1x1 <- function(A, B) {
                            x=B$x * A[B$i], # values for same (i,j) are summed
                            dims=dim(B)[-1],
                            dimnames=dimnames(B)[2:3])
+    result <- drop0(result)
   } else stop("Format of B not understood", call.=FALSE)
   return(result)
 }

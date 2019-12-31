@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.62-2.006
+        CHANGES IN spatstat VERSION 1.62-2.007
 
 OVERVIEW
 
@@ -16,7 +16,6 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o split<-.ppp
     The default for argument 'un' in 'split<-.ppp' 
     now agrees with the default for the same argument in 'split.ppp'.
-    Fixed.
 
     o lineardisc
     New argument 'add'.
@@ -39,6 +38,10 @@ BUG FIXES
 
     o lineardisc
     Crashed if the network segments had marks.
+    Fixed.
+
+    o rmh
+    Crashed for multitype models if 'nsave' was specified.
     Fixed.
     
         CHANGES IN spatstat VERSION 1.62-2
