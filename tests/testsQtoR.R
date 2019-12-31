@@ -117,6 +117,7 @@ local({
   L <- edges(letterR)
   E <- runifpoisppOnLines(5, L)
   G <- rpoisppOnLines(ZZ, L)
+  G2 <- rpoisppOnLines(list(A=f1, B=f2), L, lmax=max(sapply(ZZ, max)))
 })
 
 local({
@@ -136,6 +137,9 @@ local({
   Y <- rCauchy(30, 0.01, Z, saveLambda=TRUE)
   Y <- rVarGamma(30, 2, 0.02, Z, saveLambda=TRUE)
 })
+
+#' perfect simulation code
+expandwinPerfect(letterR, 2, 3)
 
 reset.spatstat.options()
 
@@ -298,7 +302,7 @@ local({
 ##
 ##   tests/rmhBasic.R
 ##
-##   $Revision: 1.19 $  $Date: 2019/12/13 00:57:36 $
+##   $Revision: 1.20 $  $Date: 2019/12/31 05:01:21 $
 #
 # Test examples for rmh.default
 # run to reasonable length
@@ -564,6 +568,23 @@ spatstat.options(expand=1.1)
    Xbg2 <- rmh(model=mod18,start=list(n.start=20),
               control=list(nrep=1e4, periodic=FALSE))
 
+})
+
+local({
+  #' supporting classes
+  rs <- rmhstart()
+  print(rs)
+  rs <- rmhstart(x.start=cells)
+  print(rs)
+  
+  rc <- rmhcontrol(x.cond=as.list(as.data.frame(cells)))
+  print(rc)
+  rc <- rmhcontrol(x.cond=as.data.frame(cells)[FALSE, , drop=FALSE])
+  print(rc)
+  rc <- rmhcontrol(nsave=100, ptypes=c(0.7, 0.3), x.cond=amacrine)
+  print(rc)
+  rc <- rmhcontrol(ptypes=c(0.7, 0.3), x.cond=as.data.frame(amacrine))
+  print(rc)
 })
 
 reset.spatstat.options()

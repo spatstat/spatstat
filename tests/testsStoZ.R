@@ -759,6 +759,40 @@ local({
 })
 
 
+#'
+#'   tests/sumfun.R
+#'
+#'   Tests of code for summary functions
+#'
+#'   $Revision: 1.1 $ $Date: 2019/12/31 05:35:35 $
+
+require(spatstat)
+local({
+  W <- owin(c(0,1), c(-1/2, 0))
+  Gr <- Gest(redwood, correction="all",domain=W)
+  Fr <- Fest(redwood, correction="all",domain=W)
+  Jr <- Jest(redwood, correction="all",domain=W)
+  
+  F0 <- Fest(redwood[FALSE], correction="all")
+  Fh <- Fest(humberside, domain=erosion(Window(humberside), 100))
+
+  FIr <- Finhom(redwood, savelambda=TRUE)
+  JIr <- Jinhom(redwood, savelambda=TRUE)
+  
+  Ga <- Gcross(amacrine, correction="all")
+  Ia <- Iest(amacrine, correction="all")
+  lam <- intensity(amacrine)
+  lmin <- 0.9 * min(lam)
+  nJ <- sum(marks(amacrine) == "off")
+  FM <- FmultiInhom(amacrine, marks(amacrine) == "off",
+                    lambdaJ=rep(lam["off"], nJ),
+                    lambdamin = lmin)
+  GM <- GmultiInhom(amacrine, marks(amacrine) == "on",
+                    marks(amacrine) == "off",
+                    lambda=lam[marks(amacrine)],
+                    lambdamin=lmin,
+                    ReferenceMeasureMarkSetI=42)
+})
 ##
 ## tests/symbolmaps.R
 ##
@@ -769,14 +803,27 @@ local({
 local({
   require(spatstat)
   set.seed(100)
-  
-  ## spacing too large for tiles - upsets various pieces of code
-  V <- as.im(dirichlet(runifpoint(8)))
-  textureplot(V, spacing=2)
+  X <- runifpoint(8)
 
+  ## symbolmap 
   g1 <- symbolmap(range=c(0,100), size=function(x) x/50)
   invoke.symbolmap(g1, 50, x=numeric(0), y=numeric(0), add=TRUE)
+  
+  ## textureplot
+  V <- as.im(dirichlet(X))
+  tmap <- textureplot(V)
+  textureplot(V, textures=tmap, legend=TRUE, leg.side="left")
+  textureplot(V, leg.side="bottom")
+  textureplot(V, leg.side="top")
+  ## spacing too large for tiles - upsets various pieces of code
+  textureplot(V, spacing=2)
 
+  ## plot.texturemap
+  plot(tmap, vertical=TRUE)
+  plot(tmap, vertical=TRUE, xlim=c(0,1))
+  plot(tmap, vertical=TRUE, ylim=c(0,1))
+  plot(tmap, vertical=FALSE, xlim=c(0,1))
+  plot(tmap, vertical=FALSE, ylim=c(0,1))
 })
 #'   tests/tessera.R
 #'   Tessellation code, not elsewhere tested
@@ -814,16 +861,25 @@ local({
   flay(affine, mat=matrix(c(1,2,0,1), 2, 2), vec=c(1,2))
   flay(affine, mat=diag(c(1,2)))
   flay(as.data.frame)
-  ## 
+  ##
+  unitname(A) <- "km"
   unitname(B) <- c("metre", "metres")
   unitname(B)
   print(B)
   Bsub <- B[c(3,5,7)]
   print(Bsub)
   tilenames(H) <- letters[seq_along(tilenames(H))]
+  G <- tess(xgrid=(0:3)/3, ygrid=(0:3)/3)
+  tilenames(G) <- letters[1:9]
+  h <- tilenames(G)
+  GG <- as.tess(tiles(G))
   #'
   Pe <- intersect.tess(A, Wsub, keepmarks=TRUE)
   Pm <- intersect.tess(A, as.mask(Wsub), keepmarks=TRUE)
+  H <- dirichlet(runifpoint(4, W))
+  AxH <- intersect.tess(A, H, keepmarks=TRUE) # A is marked, H is not
+  HxA <- intersect.tess(H, A, keepmarks=TRUE) # A is marked, H is not
+  
   b <- bdist.tiles(D)
   b <- bdist.tiles(A[c(3,5,7)])
   #'
@@ -945,7 +1001,7 @@ LTUAE <- evalCovariate(ltuae, cells)
 #'
 #'     Tests of 3D code 
 #'
-#'      $Revision: 1.5 $ $Date: 2019/02/21 01:35:06 $
+#'      $Revision: 1.6 $ $Date: 2019/12/31 03:26:31 $
 #'
 
 require(spatstat)
@@ -965,6 +1021,10 @@ local({
   g <- G3est(X, rmax=rmax, correction="rs")
   g <- G3est(X, rmax=rmax, correction="km")
   g <- G3est(X, rmax=rmax, correction="Hanisch")
+  g <- G3est(X, rmax=rmax, sphere="ideal")
+  g <- G3est(X, rmax=rmax, sphere="digital")
+  v <- sphere.volume()
+  v <- digital.volume()
   #' older code
   co <- coords(X)
   xx <- co$x
@@ -1327,7 +1387,7 @@ local({
 #
 # Tests of owin geometry code
 #
-#  $Revision: 1.10 $  $Date: 2019/10/02 10:16:09 $
+#  $Revision: 1.12 $  $Date: 2019/12/31 03:58:49 $
 
 require(spatstat)
 local({
@@ -1355,7 +1415,8 @@ local({
 
   ##
   RR <- convexify(as.mask(letterR))
-
+  CC <- covering(letterR, 0.05, eps=0.1)
+  
   #' as.owin.data.frame
   V <- as.mask(letterR, eps=0.2)
   Vdf <- as.data.frame(V)
@@ -1391,6 +1452,7 @@ local({
   is.convex(letterR)
   volume(letterR)
   perimeter(as.mask(letterR))
+  boundingradius(cells)
   
   spatstat.options(Cbdrymask=FALSE)
   bb <- bdry.mask(letterR)
@@ -1426,6 +1488,12 @@ local({
   thrash(meanY.owin)
   thrash(intX.owin)
   thrash(intY.owin)
+
+  interpretAsOrigin("right", letterR)
+  interpretAsOrigin("bottom", letterR)
+  interpretAsOrigin("bottomright", letterR)
+  interpretAsOrigin("topleft", letterR)
+  interpretAsOrigin("topright", letterR)
 })
 
 

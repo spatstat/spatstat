@@ -98,9 +98,8 @@
   Penttinen, A. (1984) 
   \emph{Modelling Interaction in Spatial Point Patterns:
   Parameter Estimation by the Maximum Likelihood Method.}
-  \ifelse{latex}{\out{Jyv\"askyl\"a}}{Jyvaskyla}
-  Studies in Computer Science, Economics and Statistics \bold{7},
-  University of \ifelse{latex}{\out{Jyv\"askyl\"a}}{Jyvaskyla}, Finland.
+  \Jyvaskyla Studies in Computer Science, Economics and Statistics \bold{7},
+  University of \Jyvaskyla, Finland.
 }
 \author{
   \adrian,
@@ -109,6 +108,7 @@
 }
 \examples{
    X <- rPenttinen(50, 0.5, 0.02)
+   Z <- rPenttinen(50, 0.5, 0.01, nsim=2)
 }
 \seealso{
   \code{\link{rmh}},

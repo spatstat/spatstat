@@ -1,7 +1,7 @@
 #'
 #'   covering.R
 #'
-#'  $Revision: 1.3 $  $Date: 2016/03/26 10:27:20 $
+#'  $Revision: 1.4 $  $Date: 2019/12/31 03:57:05 $
 #'
 
 covering <- function(W, r, ..., giveup=1000) {
@@ -16,7 +16,7 @@ covering <- function(W, r, ..., giveup=1000) {
     warning("r is smaller than the pixel resolution: returning pixel centres",
             call.=FALSE)
     xy <- rasterxy.mask(M, drop=TRUE)
-    return(ppp(xy[,1L], xy[,2L], window=W, check=FALSE))
+    return(ppp(xy$x, xy$y, window=W, check=FALSE))
   }
   ## find the point of W farthest from the boundary
   X <- where.max(D)

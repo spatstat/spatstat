@@ -96,6 +96,7 @@
 }
 \examples{
    Z <- rStraussHard(100,0.7,0.05,0.02)
+   Y <- rStraussHard(100,0.7,0.05,0.01, nsim=2)
 }
 \seealso{
   \code{\link{rmh}},

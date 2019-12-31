@@ -824,6 +824,7 @@ local({
   duplicated(X)
   anyDuplicated(X)
   multiplicity(X)
+  uniquemap(X)
   print(X)
   summary(X)
   plot(X)
@@ -880,7 +881,7 @@ local({
 #
 # Things that might go wrong with predict()
 #
-#  $Revision: 1.14 $ $Date: 2019/10/17 03:44:24 $
+#  $Revision: 1.16 $ $Date: 2019/12/31 10:26:44 $
 #
 
 require(spatstat)
@@ -934,6 +935,10 @@ local({
   b <- predict(fit, type="count", window=quadrats(cells, 3), se=TRUE)
   d <- predict(fit, type="count", interval="prediction", se=TRUE)
   d <- predict(fit, type="count", interval="confidence", se=TRUE)
+  ## 
+  foot <- ppm(cells ~ x, StraussHard(0.12))
+  d <- predict(foot, ignore.hardcore=TRUE)
+  
   ## superseded usages
   b <- predict(fit, type="se", getoutofjail=TRUE)
   b <- predict(fit, total=TRUE)
@@ -985,6 +990,10 @@ local({
   effectfun(modXM, "x", marks="on")
   modXYM <- ppm(amacrine ~ marks*polynom(x,y,2))
   effectfun(modXYM, "x", y=0, marks="on")
+  
+  df <- as.data.frame(simulate(modXM, drop=TRUE))
+  df$marks <- as.character(df$marks)
+  dfpr <- predict(modXM, locations=df)
 })
 
 #

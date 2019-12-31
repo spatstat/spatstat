@@ -117,6 +117,7 @@
 }
 \examples{
    X <- rDiggleGratton(50, 0.02, 0.07)
+   Z <- rDiggleGratton(50, 0.02, 0.07, 2, nsim=2)
 }
 \seealso{
   \code{\link{rmh}},

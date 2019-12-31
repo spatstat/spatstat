@@ -1,7 +1,7 @@
 #
 #  cdftest.R
 #
-#  $Revision: 2.19 $  $Date: 2018/04/19 02:00:41 $
+#  $Revision: 2.21 $  $Date: 2019/12/31 05:16:01 $
 #
 #
 
@@ -86,14 +86,14 @@ cdf.test.lpp <-
       } else {
         warning("Ignoring marks, because some mark values have zero frequency")
         X <- unmark(X)
-        model <- ppm(X)
+        model <- lppm(X)
         modelname <- "CSR"
       } 
     } else {
       # marked - general case
       X <- unmark(X)
       warning("marks ignored")
-      model <- ppm(X)
+      model <- lppm(X)
       modelname <- "CSR"
     }
     do.call(spatialCDFtest,

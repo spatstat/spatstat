@@ -104,8 +104,7 @@
     b <- bw.lppl(spiders)
     plot(b, main="Likelihood cross validation for spiders")
     plot(density(spiders, b, distance="e"))
-  }
-  \testonly{
+  } else {
     b1 <- bw.lppl(spiders, ns=2)
     b2 <- bw.lppl(spiders, ns=2, shortcut=TRUE)
   }

@@ -178,4 +178,45 @@ Change log from 1.62-2 to 1.62-3
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
 
-   
+   covering.R
+   cdftest.R
+	Bug fixes.
+
+   Kcom.R
+   Gcom.R
+	More argument checks.
+	
+   tests/density.R
+   tests/diagnostique.R
+   tests/imageops.R
+   tests/lppstuff.R
+   tests/Kfuns.R
+   tests/ppx.R
+   tests/prediction.R
+   tests/randoms.R
+   tests/rmhBasic.R
+   tests/sumfun.R [New file]
+   tests/symbolmaps.R
+   tests/tessera.R
+   tests/threedee.R
+   tests/windows.R
+	More tests
+
+   bw.lppl.Rd
+   exactMPLEstrauss.Rd
+   rDGS.Rd
+   rDiggleGratton.Rd
+   rHardcore.Rd
+   rPenttinen.Rd
+   rStrauss.Rd
+   rStraussHard.Rd
+	More examples.
+
+   DESCRIPTION
+   NEWS
+	Version 1.62-2.008
+
+------------- passed R-3.6.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+

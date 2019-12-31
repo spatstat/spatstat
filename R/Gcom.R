@@ -34,6 +34,12 @@ Gcom <- function(object, r=NULL, breaks=NULL, ...,
   if(missing(conditional) || is.null(conditional))
     conditional <- !is.poisson(fit)
   
+  restrict <- isTRUE(restrict)
+  if(restrict && !conditional) {
+    warning("restrict=TRUE ignored because conditional=FALSE", call.=FALSE)
+    restrict <- FALSE
+  }
+  
 #  rfixed <- !is.null(r) || !is.null(breaks)
   
   # selection of edge corrections

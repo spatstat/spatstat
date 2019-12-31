@@ -242,6 +242,8 @@ local({
   ZS <- shift(Z, origin="centroid")
   ZS <- shift(Z, origin="bottomleft")
 
+  ZA <- affine(Z, mat=diag(c(-1,-2)))
+               
   #' hist.im
   h <- hist(Z)
   h <- hist(Z, plot=FALSE)
@@ -302,6 +304,13 @@ local({
   DA <- density(split(amacrine))
   Z <- im.apply(DA, sd)
   Z <- which.max.im(DA) # deprecated -> im.apply(DA, which.max)
+
+  #' Math.imlist, Ops.imlist, Complex.imlist
+  U <- Z+2i
+  V <- solist(A=U, B=U*(2+1i))
+  negV <- -V
+  E <- Re(V)
+  negE <- -E
 
   #' rotmean
   U <- rotmean(Z, origin="midpoint", result="im", padzero=FALSE)
@@ -436,7 +445,7 @@ local({
 #'
 #'   Various K and L functions and pcf
 #'
-#'   $Revision: 1.33 $  $Date: 2019/12/14 02:45:55 $
+#'   $Revision: 1.35 $  $Date: 2019/12/31 07:22:43 $
 #'
 
 require(spatstat)
@@ -485,6 +494,13 @@ local({
   pcr <- pcf(cells, domain=square(0.5), ratio=TRUE)
   pw <- pcf(redwood, correction="none")
   pwr <- pcf(redwood, correction="none", ratio=TRUE)
+  pv <- pcf(redwood, kernel="rectangular")
+  p1 <- pcf(redwood[1])
+  #' pcf.fv
+  K <- Kest(redwood)
+  g <- pcf(K, method="a")
+  g <- pcf(K, method="c")
+  g <- pcf(K, method="d")
   #' Kinhom code blocks
   X <- rpoispp(function(x,y) { 100 * x }, 100, square(1))
   lambda <- 100 * X$x
@@ -632,6 +648,11 @@ local({
   rco <- compareFit(cells, Kcom,
                     interaction=anylist(P=Poisson(), S=Strauss(0.08)),
                     same="trans", different="tcom")
+  fit <- ppm(cells ~ x, Strauss(0.07))
+  K <- Kcom(cells, model=fit, restrict=TRUE)
+
+  ##  Kscaled
+  A <- Lscaled(japanesepines, renormalise=TRUE, correction="all")
 })
   
 local({

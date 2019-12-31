@@ -97,6 +97,7 @@
 }
 \examples{
    X <- rDGS(50, 0.05)
+   Z <- rDGS(50, 0.03, nsim=2)
 }
 \seealso{
   \code{\link{rmh}},

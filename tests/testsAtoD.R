@@ -66,12 +66,14 @@ local({
   X <- runiflpp(20, simplenet)
   cdf.test(X, "x")
   cdf.test(X, "x", "cvm")
+  cdf.test(X %mark% runif(20), "x")
   fit <- lppm(X ~1)
   cdf.test(fit, "y")
   cdf.test(fit, "y", "cvm")
   cdf.test(fit, "y", "ad")
   ## marked
   cdf.test(chicago, "y")
+  cdf.test(subset(chicago, marks != "assault"), "y")
 
   ## (3) Monte Carlo test for Gibbs model
   fit <- ppm(cells ~ 1, Strauss(0.07))
@@ -581,7 +583,7 @@ local({
 #'                    and inhomogeneous summary functions
 #'                    and idw, adaptive.density
 #'
-#'  $Revision: 1.49 $  $Date: 2019/12/21 05:09:03 $
+#'  $Revision: 1.50 $  $Date: 2019/12/31 04:09:18 $
 #'
 
 require(spatstat)
@@ -705,6 +707,14 @@ local({
   leavein("quartic",      0.010)
   leavein("disc",         0.100) 
 
+  ## bandwidth selection code blocks
+  sigvec <- 0.01 * 2:15
+  sigran <- range(sigvec)
+  bw.ppl(redwood, sigma=sigvec)
+  bw.ppl(redwood, srange=sigran, ns=5)
+  bw.CvL(redwood, sigma=sigvec)
+  bw.CvL(redwood, srange=sigran, ns=5)
+  
   ## Kinhom 
   lam <- density(redwood)
   K <- Kinhom(redwood, lam)
@@ -983,7 +993,7 @@ reset.spatstat.options()
 #'
 #'  Diagnostic tools such as diagnose.ppm, qqplot.ppm
 #'
-#'  $Revision: 1.4 $  $Date: 2019/12/15 05:44:09 $
+#'  $Revision: 1.5 $  $Date: 2019/12/31 03:32:54 $
 #'
 
 require(spatstat)
@@ -1022,10 +1032,17 @@ local({
 
   #' simulation based
   e <- envelope(cells, nsim=4, savepatterns=TRUE, savefuns=TRUE)
+  Plist <- rpoispp(40, nsim=5)
+
   qf <- qqplot.ppm(fit, nsim=4, expr=e, plot.it=FALSE)
   print(qf)
+  qp <- qqplot.ppm(fit, nsim=5, expr=Plist, fast=FALSE)
+  print(qp)
+  qp <- qqplot.ppm(fit, nsim=5, expr=expression(rpoispp(40)), plot.it=FALSE)
+  print(qp)
   qg <- qqplot.ppm(fit, nsim=5, style="classical", plot.it=FALSE)
-
+  print(qg)
+  
   #' lurking.ppm
   #' covariate is numeric vector
   fitx <- ppm(cells ~ x)
@@ -1036,9 +1053,8 @@ local({
   fitxx <- ppm(cells ~ x, data=solist(Zed=Z), allcovar=TRUE)
   lurking(fitxx, expression(Zed))
   #' envelope is a ppplist; length < nsim; glmdata=NULL
-  Y <- rpoispp(40, nsim=5)
   fit <- ppm(cells ~ 1)
-  stuff <- lurking(fit, expression(x), envelope=Y, plot.sd=FALSE)
+  stuff <- lurking(fit, expression(x), envelope=Plist, plot.sd=FALSE)
   #' plot.lurk
   plot(stuff, shade=NULL)
 })

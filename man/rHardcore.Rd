@@ -90,7 +90,7 @@
 }
 \examples{
    X <- rHardcore(0.05,1.5,square(141.4))
-   Z <- rHardcore(100,0.05)
+   Z <- rHardcore(100,0.05, nsim=2)
 }
 \seealso{
   \code{\link{rmh}},

@@ -2,7 +2,7 @@
 #
 #   rmhcontrol.R
 #
-#   $Revision: 1.34 $  $Date: 2019/12/13 01:22:39 $
+#   $Revision: 1.35 $  $Date: 2019/12/31 04:56:58 $
 #
 #
 
@@ -208,7 +208,7 @@ print.rmhcontrol <- function(x, ...) {
          start = splat(hdr, "at start of simulations."),
          block = splat(hdr,
                        "before each block of",
-                       if(length(x$nsave) == 1L) x$nsave else " ",
+                       if(length(x$nsave) == 1L) x$nsave else "",
                        "iterations."))
   cat(paste("Track proposal type and acceptance/rejection?",
             if(x$track) "yes" else "no", "\n"))

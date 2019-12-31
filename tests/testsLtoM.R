@@ -561,6 +561,17 @@ local({
   unitname(Simon) <- list("metre", "metres", 0.5)
   b <- rescale(Simon)
   ds <- density(simplenet, 0.05)
+  ## invoke dist2dpath
+  LS <- as.linnet(simplenet, sparse=TRUE)
+  LF <- as.linnet(LS, sparse=FALSE)
+  ## direct call dist2dpath
+  d <- simplenet$dpath
+  d[!simplenet$m] <- Inf
+  diag(d) <- 0
+  dd <- dist2dpath(d, method="interpreted")
+  ra <- range(dd - simplenet$dpath)
+  if(max(abs(ra)) > sqrt(.Machine$double.eps))
+    stop("dist2dpath gives different answers in C and R code")
 
   ## integral.linim with missing entries
   xcoord <- linfun(function(x,y,seg,tp) { x }, domain(chicago))
@@ -709,6 +720,7 @@ local({
   D <- density(X, 0.05, finespacing=TRUE) # }
   D <- density(X, 0.05, eps=0.008)        # }  code blocks in PDEdensityLPP
   D <- density(X, 0.05, dimyx=256)        # }
+  D <- density(X[FALSE], 0.05)            # }
   #' density.splitppx
   Y <- split(chicago)[1:3]
   D <- density(Y, 7)
