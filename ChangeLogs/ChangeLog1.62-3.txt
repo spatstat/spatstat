@@ -237,4 +237,45 @@ Change log from 1.62-2 to 1.62-3
 ------------- passed R-3.6.2 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
-   
+
+   updates.Rnw
+	Mention spatstat.Knet
+
+   tests/testsAtoD.R [Deleted]
+   tests/testsGtoK.R [Deleted]
+   tests/testsLtoM.R [Deleted]
+   tests/testsNtoP.R [Deleted]
+   tests/testsQtoR.R [Deleted]
+   tests/testsStoZ.R [Deleted]
+
+   tests/testsAtoC.R [New file]
+   testsD.R 	     [New file]
+   testsGtoJ.R 	     [New file]
+   testsK.R 	     [New file]
+   testsL.R 	     [New file]
+   testsM.R 	     [New file]
+   testsNtoO.R 	     [New file]
+   testsP1.R 	     [New file]
+   testsP2.R 	     [New file]
+   testsQ.R 	     [New file]
+   testsR1.R 	     [New file]
+   testsR2.R 	     [New file]
+   testsS.R 	     [New file]
+   testsT.R 	     [New file]
+   testsUtoZ.R 	     [New file]
+
+       Test code files rearranged to reduce chances of timeout
+
+   DESCRIPTION
+   NEWS
+	Version 1.62-2.010
+
+------------- passed R-3.6.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+
+
+
+
+
+

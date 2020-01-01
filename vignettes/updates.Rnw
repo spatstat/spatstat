@@ -96,7 +96,7 @@ Plot <- function(fmla, ..., dat=z) {
 }
 @ 
 \SweaveOpts{eps=TRUE}
-\setkeys{Gin}{width=0.45\textwidth}
+\setkeys{Gin}{width=0.4\textwidth}
 
 \centerline{
 <<fig=TRUE,echo=FALSE,results=hide>>=
@@ -150,11 +150,13 @@ text(as.Date("2015-01-01"), 60, "R code")
     
     There are also extension packages which provide additional capabilities
     and must be loaded explicitly when you need them. 
-    Currently there are two extension packages:
+    Currently there are three extension packages:
     
     \begin{itemize}
     \item \pkg{spatstat.local} for local model-fitting, 
-    \item \pkg{spatstat.sphere} for analysing point patterns on a sphere.
+    \item \pkg{spatstat.sphere} for analysing point patterns on a sphere,
+    \item \pkg{spatstat.Knet} for analysing point patterns
+      on a network.
     \end{itemize}
 
 \pagebreak
