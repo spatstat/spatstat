@@ -220,3 +220,21 @@ Change log from 1.62-2 to 1.62-3
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
 
+++++++++++++  installed R 3.6.2        +++++++++++++++
+
+01 jan 2020
+
+   idw.c
+	Bug fix
+
+   idw.R
+	Tweak output format
+
+   DESCRIPTION
+   NEWS
+	Version 1.62-2.009
+
+------------- passed R-3.6.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+   

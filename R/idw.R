@@ -3,7 +3,7 @@
 #
 #  Inverse-distance weighted smoothing
 #
-#  $Revision: 1.11 $ $Date: 2018/12/16 03:49:58 $
+#  $Revision: 1.12 $ $Date: 2020/01/01 01:30:57 $
 
 idw <- function(X, power=2, at=c("pixels", "points"), ..., se=FALSE) {
   stopifnot(is.ppp(X) && is.marked(X))
@@ -99,7 +99,7 @@ idw <- function(X, power=2, at=c("pixels", "points"), ..., se=FALSE) {
              SE <- sqrt(m2/varden)
              SE <- as.im(matrix(SE, dim[1L], dim[2L]), W=W)
              SE <- SE[W, drop=FALSE]
-             out <- list(estimate=est, SE=SE)
+             out <- solist(estimate=est, SE=SE)
            }
          },
          points={

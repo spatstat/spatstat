@@ -3,7 +3,7 @@
 
   Inverse-distance weighted smoothing
 
-  $Revision: 1.11 $ $Date: 2018/12/18 02:43:11 $
+  $Revision: 1.12 $ $Date: 2020/01/01 01:27:35 $
 
   Cidw    inverse distance smoothing from data points onto pixel grid
   idwloo  leave-one-out estimate at data points
@@ -228,6 +228,7 @@ void Cidw2(x, y, v, n, xstart, xstep, nx, ystart, ystep, ny, power,
 	sumwv = sumw = sumw2 = m2 = runmean = 0.0;
 	/* loop over data points, accumulating numerator and denominator */
 	for(i = 0; i < N; i++) {
+	  vi = v[i];
 	  d2 = (xg - x[i]) * (xg - x[i]) + (yg - y[i]) * (yg - y[i]);
 	  w = 1.0/pow(d2, pon2);
 	  sumw  += w;

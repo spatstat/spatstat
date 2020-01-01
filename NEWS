@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.62-2.008
+        CHANGES IN spatstat VERSION 1.62-2.009
 
 OVERVIEW
 
@@ -22,6 +22,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
     Default plotting behaviour has changed.
 
 BUG FIXES
+
+    o idw
+    Estimates were zero if 'se=TRUE' and 'power != 2' and 'at="pixels"'.
+    Fixed.
     
     o relrisk.ppp
     Crashed if there were more than 2 types of points
