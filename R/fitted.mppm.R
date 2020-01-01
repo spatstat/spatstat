@@ -3,7 +3,7 @@
 #
 # method for 'fitted' for mppm objects
 #
-#   $Revision: 1.2 $   $Date: 2014/11/10 07:42:09 $
+#   $Revision: 1.3 $   $Date: 2020/01/01 04:43:21 $
 # 
 
 fitted.mppm <- function(object, ...,
@@ -19,6 +19,8 @@ fitted.mppm <- function(object, ...,
   # interaction names
   Vnames <- unlist(object$Fit$Vnamelist)
   interacting <- (length(Vnames) > 0)
+  # row identifier
+  id <- glmdata$id
     
   # Modification of `glmdata' may be required
   if(interacting) 
@@ -51,7 +53,6 @@ fitted.mppm <- function(object, ...,
 
   names(values) <- NULL
   
-  id <- glmdata$id
   if(dataonly) {
     # extract only data values
     isdata <- (glmdata$.mpl.Y != 0)

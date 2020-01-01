@@ -127,7 +127,7 @@ reset.spatstat.options()
 #
 # Basic tests of mppm
 #
-# $Revision: 1.13 $ $Date: 2019/12/06 10:01:08 $
+# $Revision: 1.14 $ $Date: 2020/01/01 05:45:26 $
 # 
 
 require(spatstat)
@@ -309,6 +309,7 @@ local({
   fit <- mppm(pattern ~ 1, data=foo, interaction=msh0)
   print(fit)
   print(summary(fit))
+  v <- vcov(fit) 
 })
 #'
 #'     tests/msr.R

@@ -394,6 +394,13 @@ of potential impact.
     coefficients were exactly zero).
    \bugger{1.28-1}{june 2012}{1.47-0}{october 2016}
    
+ \item \texttt{idw}: 
+   Results were incorrect if 
+   \texttt{se=TRUE} and \verb!at="pixels"! and 
+   \texttt{power} was not equal to 2.
+   The pixel values of \verb!$estimate! were all equal to zero.
+   \bugger{1.58-0}{january 2019}{1.62-3}{january 2020}
+   
  \item \texttt{funxy}: 
    Did not correctly handle one-line functions. 
    The resulting objects evaluated the wrong function in some cases.
@@ -691,6 +698,13 @@ of potential impact.
   \item \verb!"[<-.hyperframe"!:
     Some classes of objects were not handled correctly.
     \bugger{1.37-0}{may 2014}{1.61-0}{september 2019}
+
+  \item \texttt{relrisk.ppp}:
+    Crashed if there were more than 2 types of points
+    and \texttt{method = "leastsquares"} or 
+    \texttt{method = "weightedleastsquares"}.
+    \bugger{1.23-4}{september 2011}{1.62-3}{january 2020}
+    
 \end{itemize}
 
 \begin{thebibliography}{1}

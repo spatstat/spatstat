@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.62-2.010
+        CHANGES IN spatstat VERSION 1.62-2.011
 
 OVERVIEW
 
@@ -27,6 +27,10 @@ BUG FIXES
     Estimates were zero if 'se=TRUE' and 'power != 2' and 'at="pixels"'.
     Fixed.
     
+    o model.matrix.mppm
+    Sometimes returned a matrix with the wrong number of rows.
+    Fixed.
+    
     o relrisk.ppp
     Crashed if there were more than 2 types of points
     and method = "leastsquares" or "weightedleastsquares".
@@ -46,6 +50,10 @@ BUG FIXES
 
     o rmh
     Crashed for multitype models if 'nsave' was specified.
+    Fixed.
+
+    o vcov.mppm, simulate.mppm
+    Crashed for multitype models with a hardcore interaction component.
     Fixed.
     
         CHANGES IN spatstat VERSION 1.62-2

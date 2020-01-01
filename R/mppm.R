@@ -1,7 +1,7 @@
 #
 # mppm.R
 #
-#  $Revision: 1.92 $   $Date: 2019/12/06 10:18:58 $
+#  $Revision: 1.93 $   $Date: 2020/01/01 05:33:32 $
 #
 
 mppm <- local({
@@ -687,16 +687,16 @@ model.matrix.mppm <- function(object, ..., keepNA=TRUE, separate=FALSE) {
   FIT <- object$Fit$FIT
   df <- object$Fit$moadf
   environment(FIT) <- list2env(df)
-  mm <- model.matrix(FIT, ...)
   if(keepNA) {
-    comp <- complete.cases(df)
-    if(!all(comp)) {
-      if(sum(comp) != nrow(mm))
-        stop("Internal error in patching NA's")
-      mmplus <- matrix(NA, nrow(df), ncol(mm))
-      mmplus[comp, ] <- mm
-      mm <- mmplus
-    }
+    mm <- model.matrix(FIT, ..., subset=NULL, na.action=NULL)
+    if(nrow(mm) != nrow(df))
+      stop("Internal error: model matrix has wrong number of rows", call.=FALSE)
+  } else {
+    mm <- model.matrix(FIT, ...)
+    ok <- complete.cases(df) & df$.mpl.SUBSET
+    if(nrow(mm) != sum(ok))
+      stop("Internal error: model matrix has wrong number of rows", call.=FALSE)
+    df <- df[ok, , drop=FALSE]
   }
   if(separate) {
     id <- df$id

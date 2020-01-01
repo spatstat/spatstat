@@ -274,8 +274,26 @@ Change log from 1.62-2 to 1.62-3
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
 
+   bugfixes.Rnw
+   updates.Rnw   
+	Updated to cover all the above.
 
+   fitted.mppm.R
+	Bug fix.
 
+   mppm.R
+	Bug fix in model.matrix.mppm
+
+   tests/mppm.R
+	Added tests of these bugs.
+	
+   DESCRIPTION
+   NEWS
+	Version 1.62-2.011
+
+------------- passed R-3.6.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
 
 
 

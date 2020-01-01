@@ -1258,7 +1258,15 @@ listed alphabetically.
  \item \texttt{bdist.points}:
    Accelerated for polygonal windows. 
 
- \item \texttt{beachcolours}, \texttt{beachcolourmap}:
+ \item \texttt{beachcolours}:
+   \begin{itemize}
+   \item  Improved positioning of the yellow colour band.
+   \item  If \texttt{sealevel} lies outside \texttt{srange}, 
+     then \texttt{srange} will be extended
+     to include it (without a warning).
+   \end{itemize}
+   
+ \item \texttt{beachcolourmap}:
    Improved positioning of the yellow colour band.
    
  \item \texttt{bind.fv}:
@@ -1840,6 +1848,11 @@ listed alphabetically.
     using a ``brute force'' algorithm. This can be slow in some cases.
    \end{itemize}
 
+ \item \texttt{lineardisc}:
+   \begin{itemize}
+   \item New argument \texttt{add}.
+   \item Default plotting behaviour has changed.
+   \end{itemize}
 
  \item \texttt{linearK}, \texttt{linearpcf} and relatives: \\ 
    \begin{itemize}
