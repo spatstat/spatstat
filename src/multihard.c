@@ -55,7 +55,7 @@ Cdata *multihardinit(state, model, algo)
       h2 = h * h;
       MAT(multihard->hc,  i, j, ntypes) = h; 
       MAT(multihard->hc2, i, j, ntypes) = h2;
-      if(range2 > h2) range2 = h2;
+      if(range2 < h2) range2 = h2;
     }
   }
   multihard->range2 = range2;

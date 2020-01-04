@@ -1,9 +1,11 @@
 
-        CHANGES IN spatstat VERSION 1.62-2.011
+        CHANGES IN spatstat VERSION 1.62-2.012
 
 OVERVIEW
 
     o Bug fixes and minor improvements.
+
+    o Important bug fix in simulations of the multitype hard core process.
 
     o Version nickname: "Adult supervision recommended"
 
@@ -23,6 +25,12 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
 BUG FIXES
 
+    o rmh, simulate.ppm
+    Simulated realisations of the multitype hard core model
+    were completely incorrect (the interaction was effectively removed,
+    changing the model into a Poisson process).
+    Fixed.
+    
     o idw
     Estimates were zero if 'se=TRUE' and 'power != 2' and 'at="pixels"'.
     Fixed.

@@ -295,5 +295,15 @@ Change log from 1.62-2 to 1.62-3
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
 
+04 jan 2020
 
+   multihard.c
+	Bug fix.
 
+   DESCRIPTION
+   NEWS
+	Version 1.62-2.012
+
+------------- passed R-3.6.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
