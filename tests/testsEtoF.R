@@ -456,7 +456,7 @@ local({
 ##     tests/funnymarks.R
 ##
 ## tests involving strange mark values
-## $Revision: 1.5 $ $Date: 2018/06/14 01:50:19 $
+## $Revision: 1.6 $ $Date: 2020/01/05 02:32:34 $
 
 require(spatstat)
 local({
@@ -506,6 +506,9 @@ local({
   marks(Z)[12] <- NA
   mz <- is.multitype(Z)
   cZ <- coerce.marks.numeric(Z)
+  marks(Z) <- data.frame(n=1:npoints(Z),
+                         a=factor(sample(letters, npoints(Z), replace=TRUE)))
+  cZ <- coerce.marks.numeric(Z)
   stopifnot(is.multitype(cells %mark% data.frame(a=factor(1:npoints(cells)))))
 
   a <- numeric.columns(finpines)
@@ -513,6 +516,18 @@ local({
   b2 <- coerce.marks.numeric(amacrine)
   d <- numeric.columns(cells)
   f <- numeric.columns(longleaf)
+  ff <- data.frame(a=factor(letters[1:10]), y=factor(sample(letters, 10)))
+  numeric.columns(ff)
+
+  ## mark operations
+  df <- data.frame(x=1:2, y=sample(letters, 2))
+  h <- hyperframe(z=1:2, p=solist(cells, cells))
+  a <- NULL %mrep% 3
+  a <- 1:4 %mrep% 3
+  a <- df %mrep% 3
+  a <- h %mrep% 3
+  b <- markcbind(df, h)
+  b <- markcbind(h, df)
 })
 ## 
 ##    tests/fvproblems.R

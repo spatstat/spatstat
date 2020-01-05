@@ -41,7 +41,7 @@ local({
 #'  Test behaviour of density() methods,
 #'                    relrisk(), Smooth()
 #'                    and inhomogeneous summary functions
-#'                    and idw, adaptive.density
+#'                    and idw, adaptive.density, intensity
 #'
 #'  $Revision: 1.50 $  $Date: 2019/12/31 04:09:18 $
 #'
@@ -446,6 +446,13 @@ local({
   dneg <- unnormdensity(x, weights=c(-runif(19), 0))
 })
 
+local({
+  ## cases of 'intensity' etc
+  a <- intensity(amacrine, weights=expression(x))
+  a <- intensity(split(amacrine), weights=expression(x))
+  a <- intensity(split(amacrine), weights=amacrine$x)
+  a <- intensity(ppm(amacrine ~ 1))
+})
 reset.spatstat.options()
 
 #'

@@ -763,8 +763,9 @@ local({
 #'   tests/sumfun.R
 #'
 #'   Tests of code for summary functions
+#'       including score residual functions etc
 #'
-#'   $Revision: 1.1 $ $Date: 2019/12/31 05:35:35 $
+#'   $Revision: 1.3 $ $Date: 2020/01/05 01:55:10 $
 
 require(spatstat)
 local({
@@ -792,6 +793,12 @@ local({
                     lambda=lam[marks(amacrine)],
                     lambdamin=lmin,
                     ReferenceMeasureMarkSetI=42)
+
+  pt <- psst(cells, interaction=Strauss(0.1), fun=nndcumfun)
+
+  a <- compileCDF(D=nndist(redwood),
+                  B=bdist.points(redwood),
+                  r=seq(0, 1, length=256))
 })
 ##
 ## tests/symbolmaps.R

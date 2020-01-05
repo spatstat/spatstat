@@ -289,7 +289,7 @@ reset.spatstat.options()
 ##
 ## checks validity of linear algebra code
 ##
-##  $Revision: 1.4 $ $Date: 2019/02/21 02:21:43 $
+##  $Revision: 1.5 $ $Date: 2020/01/05 02:34:17 $
 ##
 require(spatstat)
 local({
@@ -326,6 +326,12 @@ local({
   z <- sumsymouter(x, w)
   if(!identical(y,z))
     stop("sumsymouter gives incorrect result")
+
+  #' power of complex matrix
+  M <- diag(c(1,-1))
+  V <- matrixsqrt(M)
+  V <- matrixinvsqrt(M)
+  V <- matrixpower(M, 1/2)
 })
 ## 
 ## tests/localpcf.R
@@ -768,6 +774,16 @@ local({
   X$domain$from <- X$domain$from[c(1:ns, sx1)]
   X$domain$to   <- X$domain$to[c(1:ns, sx1)]
   Y <- repairNetwork(X)
+})
+
+local({
+  #' random generation bugs and code blocks
+  A <- runiflpp(5, simplenet, nsim=2)
+  D <- density(A[[1]], 0.3)
+  B <- rpoislpp(D, nsim=2)
+  stopifnot(is.multitype(rlpp(c(10,5), list(a=D,b=D))))
+  stopifnot(is.multitype(rlpp(5,       list(a=D,b=D))))
+  stopifnot(is.multitype(rlpp(c(10,5), D)))
 })
 #'
 #'   lppmodels.R

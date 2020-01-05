@@ -3,7 +3,7 @@
 #'
 #'   Various K and L functions and pcf
 #'
-#'   $Revision: 1.35 $  $Date: 2019/12/31 07:22:43 $
+#'   $Revision: 1.37 $  $Date: 2020/01/05 03:11:59 $
 #'
 
 require(spatstat)
@@ -137,6 +137,7 @@ local({
   a <- localLinhom(swedishpines, lambda=Z, correction="none")
   a <- localLinhom(swedishpines, lambda=Z, correction="translate")
   a <- localLcross(amacrine)
+  a <- localLcross(amacrine, from="off", to="off")
   a <- localKdot(amacrine)
   a <- localLdot(amacrine)
   a <- localKcross.inhom(amacrine)
@@ -171,6 +172,14 @@ local({
   h <- resolve.lambda.cross(amacrine, moff, !moff,
                             lambdaI=fat, lambdaJ=fat,
                             update=FALSE)
+  d <- densityfun(unmark(amacrine), sigma=0.1)
+  dm <- lapply(split(amacrine), densityfun, sigma=0.1)
+  h <- resolve.lambda.cross(amacrine, moff, !moff, lambdaX=d)
+  h <- resolve.lambda.cross(amacrine, moff, !moff,
+                            lambdaI=dm[["off"]], lambdaJ=dm[["on"]])
+  h <- resolve.lambda.cross(amacrine, moff, !moff,
+                            lambdaX=function(x,y,m){ d(x,y) })
+  
   #'
   #'   lohboot code blocks
   #'

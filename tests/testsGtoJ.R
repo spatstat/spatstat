@@ -243,7 +243,7 @@ local({
   ZS <- shift(Z, origin="bottomleft")
 
   ZA <- affine(Z, mat=diag(c(-1,-2)))
-               
+
   #' hist.im
   h <- hist(Z)
   h <- hist(Z, plot=FALSE)
@@ -271,6 +271,8 @@ local({
                       stringsAsFactors=FALSE)
   plot(Afactor)
   plot(Acharacter, valuesAreColours=TRUE)
+  print(summary(Afactor))
+  print(summary(Acharacter))
 
   #' safelookup (including extrapolation case)
   Z <- as.im(function(x,y) { x - y }, letterR)
@@ -307,7 +309,9 @@ local({
 
   #' Math.imlist, Ops.imlist, Complex.imlist
   U <- Z+2i
-  V <- solist(A=U, B=U*(2+1i))
+  B <- U * (2+1i)
+  print(summary(B))
+  V <- solist(A=U, B=B)
   negV <- -V
   E <- Re(V)
   negE <- -E

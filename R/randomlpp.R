@@ -3,7 +3,7 @@
 #
 #  Random point pattern generators for a linear network
 #
-#  $Revision: 1.11 $   $Date: 2018/05/07 04:29:19 $
+#  $Revision: 1.12 $   $Date: 2020/01/05 02:46:04 $
 #
 
 rpoislpp <- function(lambda, L, ..., nsim=1, drop=TRUE) {
@@ -43,13 +43,23 @@ runiflpp <- function(n, L, nsim=1, drop=TRUE) {
 rlpp <- function(n, f, ..., nsim=1, drop=TRUE) {
   if(inherits(f, "linfun")) 
     f <- as.linim(f, ...)
-  if(!inherits(f, "linim") && is.list(f) &&
-     all(sapply(f, inherits, what=c("linim", "linfun")))) {
+  ismulti <- FALSE
+  if(length(n) > 1 && inherits(f, "linim")) {
+    f <- rep(list(f), length(n))
+    ismulti <- TRUE
+  } else if(!inherits(f, "linim") && is.list(f) &&
+            all(sapply(f, inherits, what=c("linim", "linfun")))) {
     #' f is a list of densities for each type of point
-    stopifnot(length(n) == length(f))
+    if(length(n) == 1) {
+      n <- rep(n, length(f))
+    } else stopifnot(length(n) == length(f))
+    ismulti <- TRUE
+  }
+  if(ismulti) {
     Y <- mapply(rlpp, n=as.list(n), f=f,
                 MoreArgs=list(nsim=nsim, drop=FALSE, ...),
                 SIMPLIFY=FALSE)
+    names(Y) <- names(f) %orifnull% as.character(seq(along=f))
     Z <- do.call(mapply, c(list(superimpose), Y, list(SIMPLIFY=FALSE)))
     result <- simulationresult(Z, nsim, drop)
     return(result)

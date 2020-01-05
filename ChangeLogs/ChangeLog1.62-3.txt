@@ -331,3 +331,29 @@ Change log from 1.62-2 to 1.62-3
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
 
+   randomlpp.R
+	Bug fix in rlpp, multitype 
+	
+   tests/density.R
+   tests/imageops.R
+   tests/Kfuns.R
+   tests/linalgeb.R
+   tests/lppstuff.R
+   tests/nndist.R
+   tests/perspim.R
+   tests/rmhExpand.R
+   tests/rmhmodel.ppm.R
+   tests/sumfun.R
+	More tests of code blocks.
+
+   exactMPLE.Rd
+	More examples
+	
+   DESCRIPTION
+   NEWS
+	Version 1.62-2.014
+
+------------- passed R-3.6.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+

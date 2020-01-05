@@ -39,7 +39,7 @@ local({
 #
 # Also test nnorient()
 #
-#   $Revision: 1.26 $  $Date: 2019/12/04 09:08:02 $
+#   $Revision: 1.27 $  $Date: 2020/01/05 08:12:42 $
 #
 
 require(spatstat)
@@ -299,6 +299,9 @@ local({
   Y <- unmark(humberside)[40:100] # contains duplicated points
   stienen(Y)
   Z <- stienenSet(Y)
+  #' other cases
+  U <- stienen(cells[1])
+  V <- stienenSet(cells, edge=FALSE)
 })
 
   

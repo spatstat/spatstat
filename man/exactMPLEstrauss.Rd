@@ -108,7 +108,7 @@
 \examples{
  if(interactive()) {
    rc <- 0.09
-   exactMPLEstrauss(cells, rc)
+   exactMPLEstrauss(cells, rc, plotit=TRUE)
    coef(ppm(cells ~1, Strauss(rc)))
    coef(ppm(cells ~1, Strauss(rc), nd=128))
    rr <- 0.04
@@ -117,7 +117,7 @@
    coef(ppm(redwood ~1, Strauss(rr)))
  } else {
    rc <- 0.09
-   exactMPLEstrauss(cells, rc, ngrid=64)
+   exactMPLEstrauss(cells, rc, ngrid=64, plotit=TRUE)
    exactMPLEstrauss(cells, rc, ngrid=64, project=FALSE)
  }
 }

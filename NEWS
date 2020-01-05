@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.62-2.013
+        CHANGES IN spatstat VERSION 1.62-2.014
 
 OVERVIEW
 
@@ -36,6 +36,10 @@ BUG FIXES
     changing the model into a Poisson process).
     Fixed.
 
+    o rlpp
+    The resulting pattern was unmarked even when it should have been multitype.
+    Fixed.
+    
     o idw
     Estimates were zero if 'se=TRUE' and 'power != 2' and 'at="pixels"'.
     Fixed.
