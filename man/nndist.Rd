@@ -140,7 +140,8 @@
 
   To find the minimum distance from \emph{any} point of type \code{i}
   to the nearest point of type \code{j}, for all combinations of \code{i} and
-  \code{j}, use the \R function \code{\link[stats]{aggregate}} as
+  \code{j}, use \code{\link{minnndist}},
+  or the \R function \code{\link[stats]{aggregate}} as
   suggested in the Examples.
 }
 \section{Warnings}{
@@ -156,7 +157,8 @@
   \code{\link{pairdist}},
   \code{\link{Gest}},
   \code{\link{nnwhich}},
-  \code{\link{nncross}}.
+  \code{\link{nncross}},
+  \code{\link{minnndist}}, \code{\link{maxnndist}}.
 }
 \examples{
    data(cells)
@@ -181,12 +183,13 @@
    head(nnda)
    # For nest number 1, the nearest Cataglyphis nest is 87.32125 units away
 
-   # Use of 'aggregate':
    # minimum distance between each pair of types
-   aggregate(nnda, by=list(from=marks(ants)), min)
-   # Always a symmetric matrix
+   minnndist(ants, by=marks(ants))
 
-   # mean nearest neighbour distances
+   # Use of 'aggregate':
+   # _minimum_ distance between each pair of types
+   aggregate(nnda, by=list(from=marks(ants)), min)
+   # _mean_ nearest neighbour distances
    aggregate(nnda, by=list(from=marks(ants)), mean)
    # The mean distance from a Messor nest to
    # the nearest Cataglyphis nest is 59.02549 units

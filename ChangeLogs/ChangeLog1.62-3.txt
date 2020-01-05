@@ -307,3 +307,27 @@ Change log from 1.62-2 to 1.62-3
 ------------- passed R-3.6.2 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
+
+05 jan 2020
+
+   nncross.R
+	Bug fix in format of result when one pattern is empty.
+	
+   minnndist.R 
+   maxnndist.Rd
+	New argument 'by'
+	
+   nndist.Rd
+	Added cross-reference
+
+   tests/rmhMulti.R
+	Added test of multitype hard core constraint.
+
+   DESCRIPTION
+   NEWS
+	Version 1.62-2.013
+
+------------- passed R-3.6.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+

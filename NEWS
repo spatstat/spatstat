@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.62-2.012
+        CHANGES IN spatstat VERSION 1.62-2.013
 
 OVERVIEW
 
@@ -11,6 +11,11 @@ OVERVIEW
 
 SIGNIFICANT USER-VISIBLE CHANGES
 
+    o minnndist, maxnndist
+    New argument 'by' makes it possible to find the minimum or maximum
+    nearest neighbour distance between each pair of possible types
+    in a multitype pattern.
+    
     o beachcolours
     If 'sealevel' lies outside 'srange', then 'srange' will be extended
     to include it (without a warning).
@@ -30,13 +35,17 @@ BUG FIXES
     were completely incorrect (the interaction was effectively removed,
     changing the model into a Poisson process).
     Fixed.
-    
+
     o idw
     Estimates were zero if 'se=TRUE' and 'power != 2' and 'at="pixels"'.
     Fixed.
     
     o model.matrix.mppm
     Sometimes returned a matrix with the wrong number of rows.
+    Fixed.
+
+    o nncross.ppp
+    Format of output was incorrect if X was an empty pattern.
     Fixed.
     
     o relrisk.ppp

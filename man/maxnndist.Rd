@@ -9,8 +9,8 @@
   nearest-neighbour distance in a point pattern.
 }
 \usage{
-minnndist(X, positive=FALSE)
-maxnndist(X, positive=FALSE)
+minnndist(X, positive=FALSE, by=NULL)
+maxnndist(X, positive=FALSE, by=NULL)
 }
 \arguments{
   \item{X}{
@@ -21,6 +21,11 @@ maxnndist(X, positive=FALSE)
     nearest-neighbour distance.
     If \code{TRUE}, ignore coincident points, so that the
     nearest neighbour distance for each point is greater than zero.
+  }
+  \item{by}{
+    Optional. A factor, which separates \code{X} into groups.
+    The algorithm will compute the distance to
+    the nearest point in each group. 
   }
 }
 \details{
@@ -34,6 +39,10 @@ maxnndist(X, positive=FALSE)
 }
 \value{
   A single numeric value (possibly \code{NA}).
+
+  If \code{by} is given, the result is a numeric matrix
+  giving the minimum or maximum nearest neighbour distance
+  between each subset of \code{X}.
 }
 \seealso{
   \code{\link{nndist}}
@@ -52,12 +61,12 @@ maxnndist(X, positive=FALSE)
      system.time(min(nndist(X)))
      system.time(minnndist(X))
   }
+
+  minnndist(amacrine, by=marks(amacrine))
+  maxnndist(amacrine, by=marks(amacrine))
 }
 \author{
-  \adrian
-  
-  ,
-  \rolf and \ege.
+  \spatstatAuthors.
 }
 \keyword{spatial}
 \keyword{math}

@@ -2,7 +2,7 @@
 #   nncross.R
 #
 #
-#    $Revision: 1.30 $  $Date: 2018/09/24 10:25:57 $
+#    $Revision: 1.31 $  $Date: 2020/01/05 00:46:13 $
 #
 #  Copyright (C) Adrian Baddeley, Jens Oehlschlaegel and Rolf Turner 2000-2012
 #  Licence: GNU Public Licence >= 2
@@ -47,16 +47,17 @@ nncross.ppp <- function(X, Y, iX=NULL, iY=NULL,
   kmax <- max(k)
   nk <- length(k)
 
-  # trivial cases
   nX <- npoints(X)
   nY <- nobjects(Y)
-  # deal with null cases
-  if(nX == 0) 
-    return(as.data.frame(list(dist=matrix(0, nrow=0, ncol=nk),
-                              which=matrix(0L, nrow=0, ncol=nk)))[,what])
-  if(nY == 0)
-    return(as.data.frame(list(dist=matrix(Inf, nrow=nX, ncol=nk),
-                             which=matrix(NA_integer_, nrow=nX, ncol=nk))[what]))
+  ## trivial cases
+  if(nX == 0 || nY == 0) {
+    result <- list(dist=matrix(Inf, nrow=nX, ncol=nk),
+                   which=matrix(NA_integer_, nrow=nX, ncol=nk))[what]
+    result <- as.data.frame(result)
+    if(ncol(result) == 1)
+      result <- result[, , drop=TRUE]
+    return(result)
+  }
   
   # Y is a line segment pattern 
   if(is.psp(Y)) {
