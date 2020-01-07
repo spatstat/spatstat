@@ -1,5 +1,5 @@
 #
-# $Id: rmh.default.R,v 1.114 2019/12/13 01:19:59 adrian Exp adrian $
+# $Id: rmh.default.R,v 1.115 2020/01/07 05:53:17 adrian Exp adrian $
 #
 rmh.default <- function(model,start=NULL,
                         control=default.rmhcontrol(model),
@@ -756,8 +756,8 @@ rmhEngine <- function(InfoList, ...,
 # decide whether to activate visual debugger
   if(snoop) {
     Xinit <- ppp(x, y, window=w.sim)
-    if(mtype)
-      marks(Xinit) <- Cmarks + 1L
+    if(mtype) 
+      marks(Xinit) <- factor(Cmarks, levels=Ctypes, labels=types)
     if(verbose) cat("\nCreating debugger environment..")
     snoopenv <- rmhSnoopEnv(Xinit=Xinit, Wclip=w.clip, R=reach(model))
     if(verbose) cat("Done.\n")
@@ -880,12 +880,9 @@ rmhEngine <- function(InfoList, ...,
     # Extract the point pattern returned from C
     X <- ppp(x=out[[1L]], y=out[[2L]], window=w.state, check=FALSE)
     if(mtype) {
-      # convert integer marks from C to R
-      marx <- factor(out[[3L]], levels=0:(ntypes-1))
-      # then restore original type levels
-      levels(marx) <- types
-      # glue to points
-      marks(X) <- marx
+      #' convert integer marks from C to R
+      #' then restore original type levels
+      marks(X) <- factor(out[[3L]], levels=Ctypes, labels=types)
     }
 
     # Now clip the pattern to the ``clipping'' window:
@@ -925,11 +922,8 @@ rmhEngine <- function(InfoList, ...,
     Xinit <- ppp(x=x, y=y, window=w.state, check=FALSE)
     if(mtype) {
       ## convert integer marks from C to R
-      marx <- factor(Cmarks, levels=0:(ntypes-1))
       ## then restore original type levels
-      levels(marx) <- types
-      ## glue to points
-      marks(Xinit) <- marx
+      marks(Xinit) <- factor(Cmarks, levels=Ctypes, labels=types)
     }
     Xlist[[1L]] <- Xinit
     # Call the Metropolis-Hastings C code repeatedly:
@@ -1008,11 +1002,8 @@ rmhEngine <- function(InfoList, ...,
       X <- ppp(x=out[[1L]], y=out[[2L]], window=w.state, check=FALSE)
       if(mtype) {
         # convert integer marks from C to R
-        marx <- factor(out[[3L]], levels=0:(ntypes-1))
         # then restore original type levels
-        levels(marx) <- types
-        # glue to points
-        marks(X) <- marx
+        marks(X) <- factor(out[[3L]], levels=Ctypes, labels=types)
       }
       
       # Now clip the pattern to the ``clipping'' window:

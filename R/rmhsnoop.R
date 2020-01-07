@@ -3,7 +3,7 @@
 #
 #   visual debug mechanism for rmh
 #
-#   $Revision: 1.27 $  $Date: 2019/11/04 07:53:46 $
+#   $Revision: 1.32 $  $Date: 2020/01/07 07:39:04 $
 #
 #   When rmh is called in visual debug mode (snooping = TRUE),
 #   it calls e <- rmhSnoopEnv(...) to create an R environment 'e'
@@ -27,7 +27,7 @@
 #   locator(). 
 #  
 #   When rmhsnoop() exits, it returns an integer giving the
-#   (user-specified) next stoppping time. This is read back into
+#   (user-specified) next stopping time. This is read back into
 #   the C code. Then xmethas resumes simulations.
 #
 #   I said it was simple! %^]
@@ -108,14 +108,14 @@ rmhsnoop <- local({
 
   rmhsnoop <- function(..., Wsim, Wclip, R,
                        xcoords, ycoords,
-                       mlevels, mcodes,
+                       mlevels=NULL, mcodes,
                        irep, itype, 
                        proptype, proplocn, propmark, propindx,
                        numerator, denominator, panel.only=FALSE) {
     trap.extra.arguments(..., .Context="In rmhsnoop")
     X <- ppp(xcoords, ycoords, window=Wsim)
-    if(!missing(mlevels) && length(mlevels) > 0)
-      marks(X) <- factor(mlevels[mcodes+1], levels=mlevels)
+    if(ismarked <- (length(mlevels) > 0))
+      marks(X) <- factor(mlevels[mcodes+1L], levels=mlevels)
     Wclip.orig <- Wclip
     # determine plot arguments
     if(is.mask(Wclip)) {
@@ -124,8 +124,8 @@ rmhsnoop <- local({
       Wclip <- edges(Wclip) 
       parg.Wclip <- list(lty=3, lwd=2, col="grey")
     }
-    parg.birth <- list(pch=16, cols="green")
-    parg.death <- list(pch=4, cols="red", lwd=2)
+    parg.birth <- list(cols="green", lwd=3)
+    parg.death <- list(cols="red", lwd=3)
     parg.birthcircle <- list(col="green", lty=3)
     parg.deathcircle <- list(col="red", lty=3)
 
@@ -152,7 +152,9 @@ rmhsnoop <- local({
              Birth = 
              {
                propname <- "birth proposal"
-               U <- ppp(proplocn[1], proplocn[2], window=Wsim)
+               U <- ppp(proplocn[1L], proplocn[2L], window=Wsim)
+               if(ismarked)
+                 marks(U) <- factor(mlevels[propmark+1L], levels=mlevels)
                D <- if(is.finite(R) && R > 0) {
                  edges(disc(R, proplocn))[Wsim]
                } else NULL
@@ -187,11 +189,13 @@ rmhsnoop <- local({
              {
                propname <- "shift proposal"
                # convert from C to R indexing
-               propindx <- propindx + 1
+               propindx <- propindx + 1L
                # make objects
                XminI <- X[-propindx]
                XI <- X[propindx]
-               U <- ppp(proplocn[1], proplocn[2], window=Wsim)
+               U <- ppp(proplocn[1L], proplocn[2L], window=Wsim)
+               if(ismarked)
+                 marks(U) <- factor(mlevels[propmark+1L], levels=mlevels)
                if(is.finite(R) && R > 0) {
                  DU <- edges(disc(R, proplocn))[Wsim]
                  DXI <- edges(disc(R, c(XI$x, XI$y)))[Wsim]
@@ -226,6 +230,7 @@ rmhsnoop <- local({
                  proplocn=proplocn,
                  propindx=propindx,
                  propmark=propmark,
+                 mlevels=mlevels,
                  accepted=accepted,
                  numerator=numerator,
                  denominator=denominator)
@@ -277,7 +282,7 @@ rmhsnoop <- local({
                      en)
     # Add pan buttons
     margin <- max(sidelengths(BX))/4
-    panelwidth <- sidelengths(BX)[1]/2
+    panelwidth <- sidelengths(BX)[1L]/2
     P <- grow.simplepanel(P, "top", margin, navfuns["Up"], aspect=1)
     P <- grow.simplepanel(P, "bottom", margin, navfuns["Down"], aspect=1)
     P <- grow.simplepanel(P, "left", margin, navfuns["Left"], aspect=1)
@@ -332,7 +337,7 @@ rmhsnoop <- local({
            zoom <- get("zoomfactor", envir=env)
            ce <- get("zoomcentre", envir=env)
            BX <- get("BX", envir=env)
-           width <- sidelengths(BX)[1]
+           width <- sidelengths(BX)[1L]
            stepsize <- (width/4)/zoom
            ce <- ce - c(stepsize, 0)
            assign("zoomcentre", ce, envir=env)
@@ -342,7 +347,7 @@ rmhsnoop <- local({
            zoom <- get("zoomfactor", envir=env)
            ce <- get("zoomcentre", envir=env)
            BX <- get("BX", envir=env)
-           width <- sidelengths(BX)[1]
+           width <- sidelengths(BX)[1L]
            stepsize <- (width/4)/zoom
            ce <- ce + c(stepsize, 0)
            assign("zoomcentre", ce, envir=env)
@@ -500,56 +505,63 @@ rmhsnoop <- local({
                      fname <- paste(xname, ".rda", sep="")
                      eval(substitute(save(x, file=y, compress=TRUE), 
                                      list(x=xname, y=fname)))
-                     cat(paste("Saved to", sQuote(fname), "\n"))
+                     splat("Saved to", sQuote(fname))
                      return(TRUE)
                    },
                    "Print Info"=function(env, xy) {
                      info <- get("info", envir=env)
                      will.accept <- get("accepted", envir=env)
                      with(info, {
-                       cat(paste("Iteration", irep, "\n"))
-                       cat("Simulation window:\n")
+                       splat("Iteration", irep)
+                       splat("Simulation window:")
                        print(Wsim)
-                       cat("Clipping window:\n")
+                       splat("Clipping window:")
                        print(Wclip)
-                       cat("Current state:\n")
+                       splat("Current state:")
                        print(X)
                        propname <- decode.proptype(proptype)
-                       cat(paste("Proposal type:", propname, "\n"))
-                       prxy <- function(z) paren(paste(z, collapse=", "))
+                       splat("Proposal type:", propname)
                        switch(propname,
                               Reject = { },
                               Birth = {
-                                cat(paste("Birth of new point at location",
-                                          prxy(proplocn), "\n"))
+                                splat("Birth of new point at location",
+                                      pastepoint(proplocn, propmark, mlevels))
                               },
                               Death = {
                                 Xi <- X[propindx]
-                                cat(paste("Death of data point", propindx,
-                                          "located at",  
-                                          prxy(as.numeric(coords(Xi))),
-                                          "\n"))
+                                splat("Death of data point", propindx,
+                                      "located at",
+                                      pastepoint(Xi))
                               },
                               Shift = {
                                 Xi <- X[propindx]
-                                cat(paste("Shift data point",
-                                          propindx,
-                                          "from current location",
-                                          prxy(as.numeric(coords(Xi))),
-                                          "to new location",
-                                          prxy(proplocn),
-                                          "\n"))
+                                splat("Shift data point",
+                                      propindx,
+                                      "from current location",
+                                      pastepoint(Xi),
+                                      "to new location",
+                                      pastepoint(proplocn, propmark, mlevels))
                               })
-                       cat(paste("Hastings ratio = ",
-                                 numerator, "/", denominator,
-                                 "=", numerator/denominator, "\n"))
-                       cat(paste("Fate of proposal:",
-                                 if(will.accept) "Accepted" else "Rejected",
-                                 "\n"))
+                       splat("Hastings ratio = ",
+                             numerator, "/", denominator,
+                             "=", numerator/denominator)
+                       splat("Fate of proposal:",
+                             if(will.accept) "Accepted" else "Rejected")
                        return(TRUE)
                      })
                    })
-  
+
+  pastepoint <- function(X, markcode, marklevels) {
+    if(is.ppp(X)) {
+      xy <- paste(as.numeric(coords(X)))
+      m <- if(is.marked(X)) dQuote(marks(X)) else NULL
+    } else {
+      xy <- paste(as.numeric(X))
+      m <- if(length(marklevels)) dQuote(marklevels[markcode+1L]) else NULL
+    }
+    paren(paste(c(xy, m), collapse=", "))
+  }
+      
 # function to determine return value
                              
   snoopexit <- function(env) {
@@ -560,17 +572,18 @@ rmhsnoop <- local({
     return(ans)
   }
                              
-  testit <- function() {
-    rmhsnoop(Wsim=owin(), Wclip=square(0.7), R=0.1,
-             xcoords=runif(40),
-             ycoords=runif(40),
-             mlevels=NULL, mcodes=NULL,
-             irep=3, itype=1,
-             proptype=1, proplocn=c(0.5, 0.5), propmark=0, propindx=0,
-             numerator=42, denominator=24)
-  }
-                             
   rmhsnoop
 })
 
+
+#  testit <- function() {
+#    rmhsnoop(Wsim=owin(), Wclip=square(0.7), R=0.1,
+#             xcoords=runif(40),
+#             ycoords=runif(40),
+#             mlevels=NULL, mcodes=NULL,
+#             irep=3, itype=1,
+#             proptype=1, proplocn=c(0.5, 0.5), propmark=0, propindx=0,
+#             numerator=42, denominator=24)
+#  }
+                             
 

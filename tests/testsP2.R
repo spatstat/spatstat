@@ -64,11 +64,15 @@ local({
 #'
 #'   Class support for ppm
 #'
-#'   $Revision: 1.2 $ $Date: 2020/01/07 01:52:48 $
+#'   $Revision: 1.3 $ $Date: 2020/01/07 05:22:15 $
 
 require(spatstat)
 local({
-  #' print.ppm, summary.ppm, print.summary.ppm
+  #' (1) print.ppm, summary.ppm, print.summary.ppm
+  Z <- as.im(function(x,y){x}, Window(cells))
+  fitZ <- ppm(cells ~ Z)
+  print(fitZ)
+  print(summary(fitZ))
   #' logistic
   fitl <- ppm(swedishpines ~ x+y, method="logi")
   print(fitl)
@@ -82,10 +86,40 @@ local({
   fitN <- ppm(redwood ~ 1, Strauss(0.1))
   print(fitN)
   print(summary(fitN))
+  #' standard errors in output
+  fat <- ppm(cells ~ x, Strauss(0.12))
+  op <- spatstat.options(print.ppm.SE='always')
+  print(fat)
+  spatstat.options(print.ppm.SE='never')
+  print(fat)
+  print(fitZ)
+  spatstat.options(op)
 
-  #' methods for other generics
+  ## (2) emend.ppm
+  fitZe <- emend(fitZ, trace=TRUE)
+  ZZ <- Z
+  fitZZ <- ppm(cells ~ Z + ZZ)
+  fitZZe <- emend(fitZZ, trace=TRUE)
+  fitOK  <- ppm(redwood ~1, Strauss(0.1), emend=TRUE)
+  print(fitOK)
+  fitNot <- ppm(redwood ~1, Strauss(0.1))
+  fitSlow <- emend(fitNot, trace=TRUE)
+  print(fitSlow)
+  op <- spatstat.options(project.fast=TRUE)
+  fitFast <- emend(fitNot, trace=TRUE)
+  print(fitFast)
+  fitZZe <- emend(fitZZ, trace=TRUE)
+  spatstat.options(op)
+  
+  #' (3) methods for other generics
+  logLik(fitZ, absolute=TRUE)
+  unitname(fitZ)
+  unitname(fitZ) <- c("metre", "metres")
   is.expandable(fitf)
+
 })
+
+reset.spatstat.options()
 #
 #   tests/ppmgam.R
 #
@@ -232,18 +266,14 @@ local({
 grep#
 #   tests/ppmtricks.R
 #
-#   Test backdoor exits and hidden options in ppm
-#        and summary.ppm, print.summary.ppm
+#   Test backdoor exits, hidden options, internals and tricks in ppm
 #
-#   Plus assorted tricks
-#
-#   $Revision: 1.15 $  $Date: 2019/11/24 03:26:44 $
+#   $Revision: 1.17 $  $Date: 2020/01/07 05:22:07 $
 #
 require(spatstat)
 local({
 
   ## (1) skip.border
-  
   fit <- ppm(cells, ~1, Strauss(0.1), skip.border=TRUE)
 
   ## (2) subset arguments of different kinds
@@ -252,6 +282,9 @@ local({
   W <- owin(c(0.4, 0.8), c(0.2, 0.7))
   fut <- ppm(cells ~ x, subset=W)
   fot <- ppm(cells ~ x, subset=W, method="logi")
+  V <- as.im(inside.owin, Window(cells), w=W)
+  fet <- ppm(cells ~ x, subset=V)
+  fet <- ppm(cells ~ x, subset=V, method="logi")
 
   ## (3) profilepl -> ppm
   ##     uses 'skip.border' and 'precomputed'
@@ -284,41 +317,13 @@ local({
   fit0 <- killinteraction(fit)
   suffstat.poisson(fit0, cells)
 
-  ## (7) support for class ppm
+  ## (7) various support for class ppm
+  fut <- kppm(redwood ~ x)
+  A <- quad.ppm(fut)
   Z <- as.im(function(x,y){x}, Window(cells))
   fitZ <- ppm(cells ~ Z)
   U <- getppmOriginalCovariates(fitZ)
-  logLik(fitZ, absolute=TRUE)
-  unitname(fitZ)
-  unitname(fitZ) <- c("metre", "metres")
-
-  ## (7a) emend.ppm
-  fitZe <- emend(fitZ, trace=TRUE)
-  ZZ <- Z
-  fitZZ <- ppm(cells ~ Z + ZZ)
-  fitZZe <- emend(fitZZ, trace=TRUE)
-  fitOK  <- ppm(redwood ~1, Strauss(0.1), emend=TRUE)
-  print(fitOK)
-  fitNot <- ppm(redwood ~1, Strauss(0.1))
-  fitSlow <- emend(fitNot, trace=TRUE)
-  print(fitSlow)
-  op <- spatstat.options(project.fast=TRUE)
-  fitFast <- emend(fitNot, trace=TRUE)
-  print(fitFast)
-  fitZZe <- emend(fitZZ, trace=TRUE)
-  spatstat.options(op)
   
-  fut <- kppm(redwood ~ x)
-  A <- quad.ppm(fut)
-
-  fat <- ppm(cells ~ x, Strauss(0.12))
-  op <- spatstat.options(print.ppm.SE='always')
-  print(fat)
-  spatstat.options(print.ppm.SE='never')
-  print(fat)
-  print(fitZ)
-  spatstat.options(op)
-
   ## (8) support for class profilepl
   rr <- data.frame(r=seq(0.05, 0.15, by=0.02))
   ps <- profilepl(rr, Strauss, cells)
@@ -344,6 +349,11 @@ local({
   fit <- ppm(cells ~ x, GLM=glm)
   fit <- ppm(cells ~ x, famille=quasi(link='log', variance='mu'))
   fit <- ppm(cells ~ x, Hardcore(0.07), skip.border=TRUE, splitInf=TRUE)
+  
+  ## (11) unidentifiable model (triggers an error in ppm)
+  Q <- quadscheme(cells)
+  M <- mpl.prepare(Q, cells, as.ppp(Q), trend=~1, covariates=NULL,
+                   interaction=Hardcore(0.3), correction="none")
 })
 
 reset.spatstat.options()

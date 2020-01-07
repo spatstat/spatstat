@@ -378,3 +378,23 @@ Change log from 1.62-2 to 1.62-3
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
 
+   tests/ppmclass.R
+   tests/ppmtricks.R
+	More tests of internals
+
+   rmh.default.R
+	Bug fixes in 'snoop' code for multitype models
+
+   tests/rmhsnoopy.R
+	Tests a multitype example.
+   
+   DESCRIPTION
+   NEWS
+	Version 1.62-2.016
+
+------------- passed R-3.6.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+
+	
+	
