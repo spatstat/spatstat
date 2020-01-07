@@ -60,6 +60,32 @@ local({
   fit <- ppm(cells ~x, covariates = xx)
   st <- summary(fit) 
 })
+#'   tests/ppmclass.R
+#'
+#'   Class support for ppm
+#'
+#'   $Revision: 1.2 $ $Date: 2020/01/07 01:52:48 $
+
+require(spatstat)
+local({
+  #' print.ppm, summary.ppm, print.summary.ppm
+  #' logistic
+  fitl <- ppm(swedishpines ~ x+y, method="logi")
+  print(fitl)
+  print(summary(fitl))
+  #' Model with covariate arguments
+  f <- function(x,y,b) { x+b }
+  fitf <- ppm(cells ~ f, covfunargs=list(b=1))
+  print(fitf)
+  print(summary(fitf))
+  #' Invalid model
+  fitN <- ppm(redwood ~ 1, Strauss(0.1))
+  print(fitN)
+  print(summary(fitN))
+
+  #' methods for other generics
+  is.expandable(fitf)
+})
 #
 #   tests/ppmgam.R
 #
@@ -83,7 +109,7 @@ local({
 #' Tests of ppm(method='logi')
 #'    and related code (predict, leverage etc)
 #'
-#' $Revision: 1.11 $  $Date: 2019/04/12 03:35:12 $
+#' $Revision: 1.12 $  $Date: 2020/01/07 01:02:51 $
 #'
 
 require(spatstat)
@@ -96,6 +122,7 @@ local({
   fS <- fitted(fitS)
   pS <- predict(fitS)
   uS <- summary(fitS)
+  print(uS)
 
   plot(leverage(fit))
   plot(influence(fit))
@@ -108,9 +135,11 @@ local({
 local({
   #' same with hard core - A1 is singular
   fitH <- ppm(cells ~x, Strauss(0.08), method="logi")
+  print(fitH)
   fH <- fitted(fitH)
   pH <- predict(fitH)
   uH <- summary(fitH)
+  print(uH)
   plot(leverage(fitH))
   plot(influence(fitH))
   plot(dfbetas(fitH))
@@ -124,6 +153,7 @@ local({
   Y <- quadscheme.logi(runifpoint(5), runifpoint(5))
   fut <- ppm(Y ~ A+B, data=df, method="logi")
   sf <- summary(fut)
+  print(sf)
 })
 
 local({

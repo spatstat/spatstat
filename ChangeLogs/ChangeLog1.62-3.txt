@@ -357,3 +357,24 @@ Change log from 1.62-2 to 1.62-3
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
 
+07 jan 2020
+
+   tests/rmhExpand.R
+	tweak to overcome puzzling omission in codecov
+
+   tests/ppmlogi.R
+   tests/ppmclass.R [New file]
+   	more tests
+
+   bugfixes.Rnw
+   updates.Rnw
+	Updated to cover all the above.
+	
+   DESCRIPTION
+   NEWS
+	Version 1.62-2.015
+
+------------- passed R-3.6.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+

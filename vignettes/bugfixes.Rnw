@@ -198,7 +198,14 @@ of potential impact.
    The output was equal to \texttt{sqrt(sigma)} times the correct answer.
    \bugger{1.41-1}{february 2015}{1.57-0}{october 2018}   
    
- \item \texttt{rthin}:
+  
+ \item \texttt{rmh}, \texttt{simulate.ppm}, \texttt{MultiHard}:
+    Simulated realisations of the multitype hard core model
+    were completely incorrect (the interaction was effectively removed,
+    changing the model into a Poisson process).
+   \bugger{1.31-0}{january 2013}{1.63-0}{january 2020}   
+
+  \item \texttt{rthin}:
    If \texttt{P} was close to 1, the result was sometimes an empty point pattern
    when it should have been identical to \texttt{X}.
    \bugger{1.43-0}{october 2015}{1.57-0}{october 2018}   
@@ -309,7 +316,12 @@ of potential impact.
     Sometimes produced a network with duplicated segments.
     [Such objects can be repaired using \texttt{repairNetwork}.]
      \bugger{1.41-1}{february 2015}{1.62-0}{december 2019}
-     
+    
+     \item \texttt{rlpp}:
+       The resulting pattern was unmarked 
+       even when it should have been multitype.
+       \bugger{1.48-0}{december 2016}{1.63-0}{january 2020}
+       
  \item \texttt{spatialcdf}:
    Argument \texttt{weights} was ignored, unless it was a fitted model.
    {\small (Bug was present since about 2010.  
@@ -399,7 +411,7 @@ of potential impact.
    \texttt{se=TRUE} and \verb!at="pixels"! and 
    \texttt{power} was not equal to 2.
    The pixel values of \verb!$estimate! were all equal to zero.
-   \bugger{1.58-0}{january 2019}{1.62-3}{january 2020}
+   \bugger{1.58-0}{january 2019}{1.63-0}{january 2020}
    
  \item \texttt{funxy}: 
    Did not correctly handle one-line functions. 
@@ -479,6 +491,10 @@ of potential impact.
  \item \texttt{model.matrix.ppm}:
    The attribute \texttt{assign} was omitted in some cases.
    \bugger{1.45-1}{may 2016}{1.55-0}{january 2018}   
+
+ \item \texttt{model.matrix.mppm}:
+   Sometimes returned a matrix with the wrong number of rows.
+   \bugger{1.55-0}{january 2018}{1.63-0}{january 2020}   
 
 \item \texttt{density.ppp}:
   If the smoothing bandwidth \texttt{sigma} was very small 
@@ -703,7 +719,11 @@ of potential impact.
     Crashed if there were more than 2 types of points
     and \texttt{method = "leastsquares"} or 
     \texttt{method = "weightedleastsquares"}.
-    \bugger{1.23-4}{september 2011}{1.62-3}{january 2020}
+    \bugger{1.23-4}{september 2011}{1.63-0}{january 2020}
+    
+  \item \texttt{nncross.ppp}:
+    Format of output was incorrect if \texttt{X} was an empty pattern.
+    \bugger{1.56-0}{june 2018}{1.63-0}{january 2020}
     
 \end{itemize}
 

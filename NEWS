@@ -1,11 +1,14 @@
 
-        CHANGES IN spatstat VERSION 1.62-2.014
+        CHANGES IN spatstat VERSION 1.62-2.015
 
 OVERVIEW
 
-    o Bug fixes and minor improvements.
-
+    o Compute minimum or maximum nearest-neighbour distance between
+    each pair of types in a multitype point pattern.
+    
     o Important bug fix in simulations of the multitype hard core process.
+
+    o Minor improvements and bug fixes.
 
     o Version nickname: "Adult supervision recommended"
 
@@ -30,7 +33,7 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
 BUG FIXES
 
-    o rmh, simulate.ppm
+    o rmh, simulate.ppm, MultiHard
     Simulated realisations of the multitype hard core model
     were completely incorrect (the interaction was effectively removed,
     changing the model into a Poisson process).

@@ -1981,6 +1981,12 @@ listed alphabetically.
    New argument \texttt{weights} allows computation of the weighted version
    of the mark correlation function.
 
+   
+ \item \texttt{minnndist}, \texttt{maxnndist}:
+   New  argument \texttt{by} makes it possible to find the minimum or maximum
+   nearest neighbour distance between each pair of possible types
+   in a multitype pattern.
+    
  \item \texttt{mppm}:
    \begin{itemize}
    \item 
@@ -2651,6 +2657,10 @@ listed alphabetically.
 
    \item \texttt{split.ppp}, \texttt{split.ppx}:
    The splitting variable \texttt{f} can now be a logical vector.
+
+   \item \verb!split<-.ppp!:
+     The default for argument \texttt{un} in \verb!split<-.ppp!
+     now agrees with the default for the same argument in \texttt{split.ppp}.
 
    \item \texttt{square}: 
      Handles a common error in the format of the arguments.
