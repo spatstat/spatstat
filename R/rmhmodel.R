@@ -2,7 +2,7 @@
 #
 #   rmhmodel.R
 #
-#   $Revision: 1.76 $  $Date: 2019/04/25 05:16:27 $
+#   $Revision: 1.77 $  $Date: 2020/01/08 01:21:59 $
 #
 #
 
@@ -363,11 +363,18 @@ as.owin.rmhmodel <- function(W, ..., fatal=FALSE) {
 
 domain.rmhmodel <- Window.rmhmodel <- function(X, ...) { as.owin(X) }
 
-is.expandable.rmhmodel <- function(x) {
-  tren <- x$tren
+is.expandable.rmhmodel <- local({
+
   ok <- function(z) { is.null(z) || is.numeric(z) || is.function(z) }
-  return(if(!is.list(tren)) ok(tren) else all(unlist(lapply(tren, ok))))
-}
+
+  is.expandable.rmhmodel <- function(x) {
+    tren <- x$tren
+    ans <- if(!is.list(tren)) ok(tren) else all(sapply(tren, ok))
+    return(ans)
+  }
+
+  is.expandable.rmhmodel
+})
 
   
 #####  Table of rules for handling rmh models ##################

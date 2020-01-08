@@ -64,7 +64,7 @@ local({
 #'
 #'   Class support for ppm
 #'
-#'   $Revision: 1.3 $ $Date: 2020/01/07 05:22:15 $
+#'   $Revision: 1.4 $ $Date: 2020/01/08 03:46:53 $
 
 require(spatstat)
 local({
@@ -114,8 +114,10 @@ local({
   #' (3) methods for other generics
   logLik(fitZ, absolute=TRUE)
   unitname(fitZ)
-  unitname(fitZ) <- c("metre", "metres")
+  unitname(fat) <- c("metre", "metres")
   is.expandable(fitf)
+  fit0 <- update(fitZ, . ~ 1)
+  anova(fit0, fitZ, override=TRUE)
 
 })
 

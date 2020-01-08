@@ -63,8 +63,10 @@ local({
 
   ## experimental interactions
   pot <- function(d, par) { d <= 0.1 }
-  Saturated(pot)
-  ppm(amacrine ~ x, Saturated(pot), rbord=0.1)
+  A <- Saturated(pot)
+  print(A)
+  A <- update(A, name="something")
+  ppm(amacrine ~ x, A, rbord=0.1)
 
   ## infrastructure of iplot, istat
   fakepanel <- list(x=redwood,

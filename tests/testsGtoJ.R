@@ -364,7 +364,7 @@ local({
 })
 #'   tests/ippm.R
 #'   Tests of 'ippm' class
-#'   $Revision: 1.3 $ $Date: 2019/02/15 10:08:26 $
+#'   $Revision: 1.4 $ $Date: 2020/01/07 09:36:42 $
 
 require(spatstat)
 
@@ -442,5 +442,9 @@ local({
   oldfitlo0 <- update(oldfitlo,
                       . ~ . - Z,
                       start=list(gamma=2, delta=4))
-
+  ## anova.ppm including ippm objects
+  fit0 <- update(fit, . ~ Z)
+  fit0lo <- update(fitlo, . ~ Z)
+  A <- anova(fit0, fit)
+  Alo <- anova(fit0lo, fitlo)
 })

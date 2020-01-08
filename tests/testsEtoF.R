@@ -379,7 +379,7 @@ local({
 #'
 #'  Test machinery for manipulating formulae
 #' 
-#' $Revision: 1.5 $  $Date: 2019/10/05 11:03:26 $
+#' $Revision: 1.6 $  $Date: 2020/01/08 01:38:24 $
 
 require(spatstat)
 local({
@@ -404,6 +404,11 @@ local({
 
   ff(y ~ poly(x,2) + poly(z,3), "x", y ~poly(z,3))
 
+  ff(y ~ x + z, "g", y ~ x + z)
+
+  reduceformula(y ~ x+z, "g", verbose=TRUE)
+  reduceformula(y ~ sin(x-z), "z", verbose=TRUE)
+  
   illegal.iformula(~str*g, itags="str", dfvarnames=c("marks", "g", "x", "y"))
 })
 
@@ -534,7 +539,7 @@ local({
 ##
 ##    problems with fv and fasp code
 ##
-##    $Revision: 1.11 $  $Date: 2019/12/10 07:29:58 $
+##    $Revision: 1.13 $  $Date: 2020/01/08 01:56:47 $
 
 require(spatstat)
 
@@ -662,9 +667,18 @@ local({
 })
 
 local({
-  #' fasp axes and title
+  #' fasp axes, title, dimnames
   a <- alltypes(amacrine)
   a$title <- NULL
   plot(a, samex=TRUE, samey=TRUE)
+  dimnames(a) <- lapply(dimnames(a), toupper)
+
+  b <- as.fv(a)
 })
 
+local({
+  ## plot.anylist (fv)
+  b <- anylist(A=Kcross(amacrine), B=Kest(amacrine))
+  plot(b, equal.scales=TRUE, main=expression(sqrt(pi)))
+  plot(b, arrange=FALSE)
+})

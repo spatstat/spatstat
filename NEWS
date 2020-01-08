@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.62-2.016
+        CHANGES IN spatstat VERSION 1.62-2.017
 
 OVERVIEW
 
@@ -31,6 +31,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
     New argument 'add'.
     Default plotting behaviour has changed.
 
+    o rmh, rmh.default
+    The printed output of the debugger (invoked by snoop=TRUE)
+    has been improved.
+    
 BUG FIXES
 
     o rmh, simulate.ppm, MultiHard
@@ -53,6 +57,11 @@ BUG FIXES
 
     o nncross.ppp
     Format of output was incorrect if X was an empty pattern.
+    Fixed.
+
+    o rmh, rmh.default
+    For a marked point process, the debugger did not display the marks.
+    (The rmh debugger is invoked by calling rmh with snoop=TRUE).
     Fixed.
     
     o relrisk.ppp

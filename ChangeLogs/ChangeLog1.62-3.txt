@@ -396,5 +396,30 @@ Change log from 1.62-2 to 1.62-3
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
 
-	
-	
+   rmhsnoop.R
+	Improved printed output.
+
+   tests/fvproblems.R
+   tests/ppmclass.R
+   tests/ippm.R
+	More tests.
+
+8 jan 2020
+
+   tests/rmhExpand.R
+	still tweaking to overcome puzzling omission in codecov
+
+   tests/formuli.R
+   tests/fvproblems.R
+   tests/kppm.R
+   tests/nndist.R
+   tests/undoc.R
+	More tests
+
+   DESCRIPTION
+   NEWS
+	Version 1.62-2.017
+
+------------- passed R-3.6.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------

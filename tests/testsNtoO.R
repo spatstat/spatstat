@@ -39,7 +39,7 @@ local({
 #
 # Also test nnorient()
 #
-#   $Revision: 1.27 $  $Date: 2020/01/05 08:12:42 $
+#   $Revision: 1.29 $  $Date: 2020/01/08 01:59:58 $
 #
 
 require(spatstat)
@@ -247,17 +247,26 @@ local({
   if(any(a != b))
     stop("algorithms in nngrid.h and knngrid.h disagree")
     
-  ## minnndist
+  ## minnndist correctness
   X <- redwood3
   eps <- sqrt(.Machine$double.eps)
   mfast <- minnndist(X)
   mslow <- min(nndist(X))
   if(abs(mfast-mslow) > eps)
     stop("minnndist(X) disagrees with min(nndist(X))")
+
+  ## maxnndist correctness
   mfast <- maxnndist(X)
   mslow <- max(nndist(X))
   if(abs(mfast-mslow) > eps)
     stop("maxnndist(X) disagrees with max(nndist(X))")
+
+  ## minnndist, maxnndist code blocks
+  Y <- superimpose(amacrine, amacrine[10:20])
+  a <- maxnndist(Y, positive=TRUE)
+  u <- maxnndist(Y, positive=TRUE, by=marks(Y))
+  b <- minnndist(Y, positive=TRUE)
+  v <- minnndist(Y, positive=TRUE, by=marks(Y))
 })
 
 local({
@@ -283,6 +292,7 @@ local({
 
 local({
   b <- bdist.pixels(letterR, style="coords")
+  d <- bdist.pixels(letterR, dimyx=64, method="interpreted")
 })
 
 local({

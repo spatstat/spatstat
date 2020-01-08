@@ -3,7 +3,7 @@
 #
 #   visual debug mechanism for rmh
 #
-#   $Revision: 1.32 $  $Date: 2020/01/07 07:39:04 $
+#   $Revision: 1.33 $  $Date: 2020/01/07 09:14:59 $
 #
 #   When rmh is called in visual debug mode (snooping = TRUE),
 #   it calls e <- rmhSnoopEnv(...) to create an R environment 'e'
@@ -511,6 +511,7 @@ rmhsnoop <- local({
                    "Print Info"=function(env, xy) {
                      info <- get("info", envir=env)
                      will.accept <- get("accepted", envir=env)
+                     cat("\n\n------------------- \n")
                      with(info, {
                        splat("Iteration", irep)
                        splat("Simulation window:")
@@ -553,12 +554,13 @@ rmhsnoop <- local({
 
   pastepoint <- function(X, markcode, marklevels) {
     if(is.ppp(X)) {
-      xy <- paste(as.numeric(coords(X)))
+      xy <- coords(X)
       m <- if(is.marked(X)) dQuote(marks(X)) else NULL
     } else {
-      xy <- paste(as.numeric(X))
+      xy <- X
       m <- if(length(marklevels)) dQuote(marklevels[markcode+1L]) else NULL
     }
+    xy <- signif(as.numeric(xy), 6)
     paren(paste(c(xy, m), collapse=", "))
   }
       

@@ -265,7 +265,7 @@ local({
 #
 # tests/kppm.R
 #
-# $Revision: 1.31 $ $Date: 2019/11/28 21:43:33 $
+# $Revision: 1.32 $ $Date: 2020/01/08 01:28:46 $
 #
 # Test functionality of kppm that depends on RandomFields
 # Test update.kppm for old style kppm objects
@@ -371,6 +371,9 @@ local({
    Y2 <- simulate(fit2, saveLambda=TRUE)[[1]]
    stopifnot(is.ppp(Y2))
 
+   # check package mechanism
+   kraever("RandomFields")
+   
  }
 
 })
