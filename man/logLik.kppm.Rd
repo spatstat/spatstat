@@ -5,7 +5,7 @@
 \alias{nobs.kppm}
 \title{Log Likelihood and AIC for Fitted Cox or Cluster Point Process Model}
 \description{
-  Extracts the log Palm likelihood, deviance, and AIC
+  Extracts the log composite likelihood, deviance, and AIC
   of a fitted Cox or cluster point process model.
 }
 \usage{
@@ -36,23 +36,27 @@
   It is obtained from the model-fitting function \code{\link{kppm}}.
 
   These methods apply only when the model was fitted
-  by maximising the Palm likelihood (Tanaka et al, 2008)
-  by calling \code{\link{kppm}} with the argument \code{method="palm"}.
+  by maximising a composite likelihood:
+  either the Palm likelihood (Tanaka et al, 2008)
+  or the second order composite likelihood (Guan, 2006),
+  by calling \code{\link{kppm}} with the argument \code{method="palm"}
+  or \code{method="clik2"} respectively. 
   
   The method \code{logLik.kppm} computes the 
-  maximised value of the log Palm likelihood for the fitted model \code{object}.
+  maximised value of the log composite likelihood
+  for the fitted model \code{object}.
 
   The methods \code{AIC.kppm} and \code{extractAIC.kppm} compute the
   Akaike Information Criterion AIC for the fitted model
-  based on the Palm likelihood (Tanaka et al, 2008)
+  based on the composite likelihood
   \deqn{
-    AIC = -2 \log(PL) + k \times \mbox{edf}
+    AIC = -2 \log(CL) + k \times \mbox{edf}
   }{
-    AIC = -2 * log(PL) + k * edf
+    AIC = -2 * log(CL) + k * edf
   }
-  where \eqn{PL} is the maximised Palm likelihood of the fitted model,
+  where \eqn{CL} is the maximised composite likelihood of the fitted model,
   and \eqn{\mbox{edf}}{edf} is the effective degrees of freedom
-  of the model.
+  of the model. 
 
   The method \code{nobs.kppm} returns the number of points
   in the original data point pattern to which the model was fitted.
@@ -61,13 +65,18 @@
 }
 \section{Model comparison}{
   The values of log-likelihood and AIC returned by these functions
-  are based on the \emph{Palm likelihood} of the cluster process or Cox
+  are based on the \emph{composite likelihood} of the cluster process or Cox
   process model. They are available only when the model was fitted
-  using \code{method="palm"}. For model comparison and model selection,
+  using \code{method="palm"} or \code{method="clik2"}.
+
+  For model comparison and model selection,
   it is valid to compare the \code{logLik} values,
   or to compare the \code{AIC} values, but only when
   all the models are of class \code{"kppm"}
-  and were fitted using \code{method="palm"}.
+  and were fitted using the same \code{method}.
+
+  For \code{method="palm"} some theoretical justification was provided by
+  Tanaka et al (2008).
 }
 \value{
   \code{logLik} returns a numerical value, belonging to the class
@@ -82,6 +91,12 @@
   \code{nobs} returns an integer value.
 }
 \references{
+  Guan, Y. (2006) 
+  A composite likelihood approach in fitting spatial point process
+  models.
+  \emph{Journal of the American Statistical Association}
+  \bold{101}, 1502--1512.
+
   Tanaka, U. and Ogata, Y. and Stoyan, D. (2008) 
   Parameter estimation and model selection for
   Neyman-Scott point processes.

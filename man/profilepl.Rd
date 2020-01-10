@@ -173,6 +173,9 @@ profilepl(s, f, \dots, aic=FALSE, rbord=NULL, verbose = TRUE, fast=TRUE)
 
   To extract the best fitting model you can also use \code{\link{as.ppm}}.
 }
+\seealso{
+  \code{\link{plot.profilepl}}
+}
 \examples{
     # one irregular parameter
     rr <- data.frame(r=seq(0.05,0.15, by=0.01))
@@ -181,7 +184,7 @@ profilepl(s, f, \dots, aic=FALSE, rbord=NULL, verbose = TRUE, fast=TRUE)
     }
     ps <- profilepl(rr, Strauss, cells)
     ps
-    if(interactive()) plot(ps)
+    plot(ps)
 
     # two irregular parameters
     rs <- expand.grid(r=seq(0.05,0.15, by=0.01),sat=1:3)
@@ -190,10 +193,7 @@ profilepl(s, f, \dots, aic=FALSE, rbord=NULL, verbose = TRUE, fast=TRUE)
     }
     pg <- profilepl(rs, Geyer, cells)
     pg
-    if(interactive()) {
-      plot(pg)
-      as.ppm(pg)
-    }
+    as.ppm(pg)
 
     # multitype pattern with a common interaction radius
     \dontrun{
@@ -203,6 +203,12 @@ profilepl(s, f, \dots, aic=FALSE, rbord=NULL, verbose = TRUE, fast=TRUE)
     }
     ## more information 
     summary(pg)
+}
+\references{
+  Baddeley, A. and Turner, R. (2000)
+  Practical maximum pseudolikelihood for spatial point patterns.
+  \emph{Australian and New Zealand Journal of Statistics}
+  \bold{42}, 283--322.
 }
 \author{
   \spatstatAuthors

@@ -423,3 +423,43 @@ Change log from 1.62-2 to 1.62-3
 ------------- passed R-3.6.2 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
+
+   logLik.kppm.Rd
+	Modified explanation to include method='clik2'
+
+   kppm.R
+	Modified logLik, AIC methods
+	Modified objective function for clik2
+
+   rat.R
+	Bug fix
+
+   profilepl.R
+	Bug fix in plot.profilepl
+
+   plot.profilepl.Rd [New file]
+   	Documented this plot method.
+
+   profilepl.Rd
+	Tweaks and cross-references
+
+   effectfun.R
+	Bug fix
+	
+   tests/deepeepee.R
+   tests/fvproblems.R
+   tests/prediction.R
+	More tests of code blocks.
+
+   morphology.R
+   spatstat-internal.Rd
+	Deleted the deprecated functions erode.owin, dilate.owin
+
+   DESCRIPTION
+   NEWS
+	Version 1.62-2.018
+
+------------- passed R-3.6.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+

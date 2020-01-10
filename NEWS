@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.62-2.017
+        CHANGES IN spatstat VERSION 1.62-2.018
 
 OVERVIEW
 
@@ -10,6 +10,8 @@ OVERVIEW
 
     o Minor improvements and bug fixes.
 
+    o Deprecated functions have been removed.
+
     o Version nickname: "Adult supervision recommended"
 
 SIGNIFICANT USER-VISIBLE CHANGES
@@ -18,7 +20,7 @@ SIGNIFICANT USER-VISIBLE CHANGES
     New argument 'by' makes it possible to find the minimum or maximum
     nearest neighbour distance between each pair of possible types
     in a multitype pattern.
-    
+
     o beachcolours
     If 'sealevel' lies outside 'srange', then 'srange' will be extended
     to include it (without a warning).
@@ -34,6 +36,13 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o rmh, rmh.default
     The printed output of the debugger (invoked by snoop=TRUE)
     has been improved.
+
+    o plot.profilepl
+    This function has now been documented, and the graphics improved.
+    
+    o erode.owin, dilate.owin
+    These deprecated functions have now been deleted
+    (replaced by erosion.owin and dilation.owin)
     
 BUG FIXES
 
@@ -43,6 +52,12 @@ BUG FIXES
     changing the model into a Poisson process).
     Fixed.
 
+    o kppm, AIC
+    For kppm models fitted with method='clik2', the resulting value of logLik()
+    was equal to 1/2 of the correct value. This would have affected
+    model comparison using AIC.
+    Fixed.
+    
     o rlpp
     The resulting pattern was unmarked even when it should have been multitype.
     Fixed.
@@ -87,6 +102,11 @@ BUG FIXES
 
     o vcov.mppm, simulate.mppm
     Crashed for multitype models with a hardcore interaction component.
+    Fixed.
+
+    o effectfun
+    Did not accept a covariate if it was not used in the original model
+    and was not one of the reserved names 'x', 'y', 'marks'.
     Fixed.
     
         CHANGES IN spatstat VERSION 1.62-2

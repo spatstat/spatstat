@@ -537,9 +537,9 @@ local({
 ## 
 ##    tests/fvproblems.R
 ##
-##    problems with fv and fasp code
+##    problems with fv, ratfv and fasp code
 ##
-##    $Revision: 1.13 $  $Date: 2020/01/08 01:56:47 $
+##    $Revision: 1.14 $  $Date: 2020/01/10 03:11:49 $
 
 require(spatstat)
 
@@ -650,6 +650,17 @@ local({
   names(Klist) <- LETTERS[24:26]
   collapse.fv(Klist, same="theo", different=c("iso", "border"))
 })
+
+local({
+  ## rat
+  K <- Kest(cells, ratio=TRUE)
+  G <- Gest(cells, ratio=TRUE)
+  print(K)
+  compatible(K, K)
+  compatible(K, G)
+  H <- rat(K, attr(K, "numerator"), attr(K, "denominator"), check=TRUE)
+})
+
 
 local({
   ## bug in Jmulti.R colliding with breakpts.R

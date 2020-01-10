@@ -270,7 +270,7 @@ grep#
 #
 #   Test backdoor exits, hidden options, internals and tricks in ppm
 #
-#   $Revision: 1.17 $  $Date: 2020/01/07 05:22:07 $
+#   $Revision: 1.18 $  $Date: 2020/01/10 04:10:34 $
 #
 require(spatstat)
 local({
@@ -329,12 +329,12 @@ local({
   ## (8) support for class profilepl
   rr <- data.frame(r=seq(0.05, 0.15, by=0.02))
   ps <- profilepl(rr, Strauss, cells)
-  plot(ps)
+  ##  plot(ps) ## covered in plot.profilepl.Rd
   simulate(ps, nrep=1e4)
   parameters(ps)
   fitin(ps)
   predict(ps, type="cif")
-
+                    
   ## (9) class 'plotppm'
   fut <- ppm(amacrine ~ marks + polynom(x,y,2), Strauss(0.07))
   p <- plot(fut, plot.it=FALSE)
@@ -531,7 +531,7 @@ local({
 #
 # Things that might go wrong with predict()
 #
-#  $Revision: 1.16 $ $Date: 2019/12/31 10:26:44 $
+#  $Revision: 1.17 $ $Date: 2020/01/10 04:35:31 $
 #
 
 require(spatstat)
@@ -612,17 +612,27 @@ local({
   #' implicit covariate when there is only one
   effectfun(fut)
   effectfun(fut, se.fit=TRUE)
-  #' 
+  #' given covariate
   dlin <- distfun(copper$SouthLines)
   copfit <- ppm(copper$SouthPoints ~ dlin, Geyer(1,1))
   effectfun(copfit, "dlin")
   effectfun(copfit)
-  # external covariate
+  #' covariate that is not used in model
   effectfun(fut, "y", x=0)
   futS <- ppm(cells ~ 1, Strauss(0.1))
   effectfun(futS, "x")
   effectfun(futS, "y")
-
+  #' factor covariate
+  fot <- ppm(amacrine~x+marks)
+  effectfun(fot, "marks", x=0.5, se.fit=TRUE)
+  #' covariate retained but not used
+  W <- Window(swedishpines)
+  a <- solist(A=funxy(function(x,y){x < 20}, W),
+              B=funxy(function(x,y){factor(x < 20)}, W))
+  fvt <- ppm(swedishpines ~ A, data=a, allcovar=TRUE)
+  effectfun(fvt, "A",         se.fit=TRUE)
+  effectfun(fvt, "B", A=TRUE, se.fit=TRUE)
+              
   ## ppm with covariate values in data frame
   X <- rpoispp(42)
   Q <- quadscheme(X)

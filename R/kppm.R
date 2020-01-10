@@ -3,7 +3,7 @@
 #
 # kluster/kox point process models
 #
-# $Revision: 1.143 $ $Date: 2019/03/19 07:59:00 $
+# $Revision: 1.145 $ $Date: 2020/01/10 05:22:06 $
 #
 
 kppm <- function(X, ...) {
@@ -187,7 +187,8 @@ kppmMinCon <- function(X, Xname, po, clusters, control, statistic, statargs,
               StatName  = fitinfo$StatName,
               FitFun    = fitinfo$FitFun,
               statargs  = statargs,
-              mcfit     = mcfit)
+              mcfit     = mcfit,
+              maxlogcl  = NULL)
   # results
   if(!is.null(DPP)){
     clusters <- update(clusters, as.list(mcfit$par))
@@ -580,13 +581,12 @@ kppmComLik <- function(X, Xname, po, clusters, control, weightfun, rmax,
     objargs <- list(dIJ=dIJ, sumweight=sumweight, g=g, gscale=gscale, 
                     envir=environment(paco))
     # define objective function (with 'paco' in its environment)
-    # Note that this is 1/2 of the log composite likelihood,
-    # minus the constant term 
+    # This is the log composite likelihood minus the constant term 
     #       sum(log(lambdaIJ)) - npairs * log(gscale)
     obj <- function(par, objargs) {
       with(objargs,
-           sum(log(paco(dIJ, par)))
-           - sumweight * log(unlist(stieltjes(paco, g, par=par))),
+           2*(sum(log(paco(dIJ, par)))
+             - sumweight * log(unlist(stieltjes(paco, g, par=par)))),
            enclos=objargs$envir)
     }
   } else {
@@ -602,13 +602,12 @@ kppmComLik <- function(X, Xname, po, clusters, control, weightfun, rmax,
     objargs <- list(dIJ=dIJ, wIJ=wIJ, sumweight=sumweight, g=g, gscale=gscale, 
                     envir=environment(wpaco))
     # define objective function (with 'paco', 'wpaco' in its environment)
-    # Note that this is 1/2 of the log composite likelihood,
-    # minus the constant term 
+    # This is the log composite likelihood minus the constant term 
     #       sum(wIJ * log(lambdaIJ)) - sumweight * log(gscale)
     obj <- function(par, objargs) {
       with(objargs,
-           sum(wIJ * log(paco(dIJ, par)))
-           - sumweight * log(unlist(stieltjes(wpaco, g, par=par))),
+           2*(sum(wIJ * log(paco(dIJ, par)))
+             - sumweight * log(unlist(stieltjes(wpaco, g, par=par)))),
            enclos=objargs$envir)
     }
   }
@@ -651,7 +650,8 @@ kppmComLik <- function(X, Xname, po, clusters, control, weightfun, rmax,
                 weightfun = weightfun,
                 rmax      = rmax,
                 objfun    = obj,
-                objargs   = objargs)
+                objargs   = objargs,
+                maxlogcl  = opt$value)
     # pack up
     clusters <- update(clusters, as.list(opt$par))
     result <- list(Xname      = Xname,
@@ -685,7 +685,8 @@ kppmComLik <- function(X, Xname, po, clusters, control, weightfun, rmax,
               weightfun = weightfun,
               rmax      = rmax,
               objfun    = obj,
-              objargs   = objargs)
+              objargs   = objargs,
+              maxlogcl  = opt$value)
   # pack up
   result <- list(Xname      = Xname,
                  X          = X,
@@ -887,7 +888,8 @@ kppmPalmLik <- function(X, Xname, po, clusters, control, weightfun, rmax,
                 weightfun = weightfun,
                 rmax      = rmax,
                 objfun    = obj,
-                objargs   = objargs)
+                objargs   = objargs,
+                maxlogcl  = opt$value)
     # pack up
     clusters <- update(clusters, as.list(optpar.human))
     result <- list(Xname      = Xname,
@@ -919,7 +921,10 @@ kppmPalmLik <- function(X, Xname, po, clusters, control, weightfun, rmax,
   Fit <- list(method    = "palm",
               clfit     = opt,
               weightfun = weightfun,
-              rmax      = rmax)
+              rmax      = rmax,
+              objfun    = obj,
+              objargs   = objargs,
+              maxlogcl  = opt$value)
   # pack up
   result <- list(Xname      = Xname,
                  X          = X,
@@ -1732,30 +1737,27 @@ model.frame.kppm <- model.frame.dppm <- function(formula, ...) {
 }
 
 logLik.kppm <- logLik.dppm <- function(object, ...) {
-  pl <- object$Fit$clfit$value
-  if(is.null(pl))
-    stop("logLik is only available for kppm objects fitted with method='palm'",
+  cl <- object$Fit$maxlogcl
+  if(is.null(cl))
+    stop(paste("logLik is only available for kppm objects fitted with",
+               "method='palm' or method='clik2'"),
          call.=FALSE)
   ll <- logLik(as.ppm(object)) # to inherit class and d.f.
-  ll[] <- pl
+  ll[] <- cl
   return(ll)
 }
  
 AIC.kppm <- AIC.dppm <- function(object, ..., k=2) {
-  # extract Palm loglikelihood
-  pl <- object$Fit$clfit$value
-  if(is.null(pl))
-    stop("AIC is only available for kppm objects fitted with method='palm'",
-         call.=FALSE)
-  df <- length(coef(object))
-  return(- 2 * as.numeric(pl) + k * df)
+  cl <- logLik(object)
+  df <- attr(cl, "df")
+  return(- 2 * as.numeric(cl) + k * df)
 }
 
-extractAIC.kppm <- extractAIC.dppm <- function (fit, scale = 0, k = 2, ...)
-{
-  edf <- length(coef(fit))
-  aic <- AIC(fit, k=k)
-  c(edf, aic)
+extractAIC.kppm <- extractAIC.dppm <- function (fit, scale = 0, k = 2, ...) {
+  cl <- logLik(fit)
+  edf <- attr(cl, "df")
+  aic <- - 2 * as.numeric(cl) + k * edf
+  return(c(edf, aic))
 }
 
 nobs.kppm <- nobs.dppm <- function(object, ...) { nobs(as.ppm(object)) }

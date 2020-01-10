@@ -1,7 +1,7 @@
 #
 # profilepl.R
 #
-#  $Revision: 1.45 $  $Date: 2017/11/02 06:53:56 $
+#  $Revision: 1.46 $  $Date: 2020/01/10 03:27:35 $
 #
 #  computes profile log pseudolikelihood
 #
@@ -261,8 +261,14 @@ plot.profilepl <- local({
       lty <- px$lty
     }
     ## strip any column that is entirely na
-    nacol <- sapply(para, none.finite)
-    para <- para[, !nacol, drop=FALSE]
+    if(any(nacol <- sapply(para, none.finite))) {
+      warning(paste("Deleted the irregular",
+                    ngettext(sum(nacol), "parameter", "parameters"),
+                    commasep(sQuote(names(para)[nacol])),
+                    "because all values were NA"),
+              call.=FALSE)
+      para <- para[, !nacol, drop=FALSE]
+    }
     ## 
     npara <- ncol(para)
     ## main header
@@ -270,8 +276,8 @@ plot.profilepl <- local({
       main <- short.deparse(x$pseudocall)
     ## x variable for plot
     if(is.null(xvariable)) {
-      xvalues <- para[,1]
-      xname <- names(para)[1]
+      xvalues <- para[,1L]
+      xname <- names(para)[1L]
     } else {
       stopifnot(is.character(xvariable))
       if(!(xvariable %in% names(para)))
@@ -311,7 +317,8 @@ plot.profilepl <- local({
                       extrargs=linepars)
     } else {
       ## multiple curves
-      other <- para[, -1, drop=FALSE]
+      xvarindex <- match(xname, names(para))
+      other <- para[, -xvarindex, drop=FALSE]
       tapply(1:nrow(para),
              as.list(other),
              plotslice, 

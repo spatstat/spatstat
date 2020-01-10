@@ -638,7 +638,7 @@ local({
 #'
 #'    Tests for determinantal point process models
 #' 
-#'    $Revision: 1.5 $ $Date: 2019/07/01 08:27:12 $
+#'    $Revision: 1.6 $ $Date: 2020/01/10 03:10:21 $
 
 require(spatstat)
 local({
@@ -650,11 +650,14 @@ local({
   #' simulate.detpointprocfamily - code blocks
   model <- dppGauss(lambda=100, alpha=.05, d=2)
   simulate(model, seed=1999, correction="border")
+  u <- is.stationary(model)
   #' other methods for dppm
   kay <- Kmodel(fit)
   gee <- pcfmodel(fit)
   lam <- intensity(fit)
   arr <- reach(fit)
+  pah <- parameters(fit)
+  
   #' dppeigen code blocks
   mod <- dppMatern(lambda=2, alpha=0.01, nu=1, d=2)
   uT <- dppeigen(mod, trunc=1.1,  Wscale=c(1,1), stationary=TRUE)

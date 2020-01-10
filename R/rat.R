@@ -5,7 +5,7 @@
 #
 #   Numerator and denominator are stored as attributes
 #
-#   $Revision: 1.11 $   $Date: 2017/07/13 08:02:16 $
+#   $Revision: 1.12 $   $Date: 2020/01/10 03:10:03 $
 #
 
 rat <- function(ratio, numerator, denominator, check=TRUE) {
@@ -15,7 +15,7 @@ rat <- function(ratio, numerator, denominator, check=TRUE) {
   }
   attr(ratio, "numerator") <- numerator
   attr(ratio, "denominator") <- denominator
-  class(ratio) <- c("rat", class(ratio))
+  class(ratio) <- unique(c("rat", class(ratio)))
   return(ratio)
 }
 
@@ -160,7 +160,7 @@ tweak.ratfv.entry <- function(x, ...) {
    num <- num[...]
    attr(x, "numerator") <- num
    attr(x, "denominator") <- den
-   class(x) <- c("rat", class(x))
+   class(x) <- unique(c("rat", class(x)))
    return(x)
 }
   

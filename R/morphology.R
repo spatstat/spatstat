@@ -6,7 +6,7 @@
 #  generic functions
 #  and methods for owin, psp, ppp
 #
-#  $Revision: 1.31 $   $Date: 2018/05/13 03:58:54 $
+#  $Revision: 1.32 $   $Date: 2020/01/10 04:42:31 $
 #
 
 # ............ generic  ............................
@@ -22,10 +22,11 @@ opening  <- function(w, r, ...) { UseMethod("opening") }
 # ............ methods for class 'owin' ............................
 
 
-erode.owin <- function(...) {
-  .Deprecated("erosion.owin", package="spatstat")
-  erosion.owin(...)
-}
+# DELETED
+# erode.owin <- function(...) {
+#   .Deprecated("erosion.owin", package="spatstat")
+#   erosion.owin(...)
+# }
 
 erosion.owin <- 
   function(w, r, shrink.frame=TRUE, ..., strict=FALSE, polygonal=NULL) {
@@ -108,10 +109,11 @@ erosion.owin <-
   return(wnew)
 }	
 
-dilate.owin <- function(...) {
-  .Deprecated("dilation.owin", package="spatstat")
-  dilation.owin(...)
-}
+# DELETED
+# dilate.owin <- function(...) {
+#   .Deprecated("dilation.owin", package="spatstat")
+#   dilation.owin(...)
+# }
 
 dilation.owin <- 
   function(w, r, ..., polygonal=NULL, tight=TRUE) {

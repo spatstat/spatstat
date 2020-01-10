@@ -121,7 +121,6 @@
 \alias{diagramobj}
 \alias{digestCovariates}
 \alias{digital.volume}
-\alias{dilate.owin}
 \alias{dim.fasp}               
 \alias{dim.hyperframe}               
 \alias{dim.im}               
@@ -150,7 +149,6 @@
 \alias{equals.quad}          
 \alias{equalsfun.quad}          
 \alias{erodemask}
-\alias{erode.owin}
 \alias{evalCovar}
 \alias{evalCovar.ppm}
 \alias{evalCovar.lppm}
@@ -429,7 +427,6 @@
 \alias{plot.minconfit}
 \alias{plot.parres}
 \alias{plot.plotpairsim}
-\alias{plot.profilepl}
 \alias{plot.qqppm}
 \alias{plot.spatialcdf}
 \alias{ppllengine}
@@ -934,7 +931,6 @@ diagnose.ppm.engine(object, \dots, type, typename, opt,
 diagramobj(X, \dots)
 digestCovariates(\dots, W)
 digital.volume(range, nval, vside)
-dilate.owin(\dots)
 \method{dim}{fasp}(x)
 \method{dim}{hyperframe}(x)
 \method{dim}{im}(x)
@@ -985,7 +981,6 @@ equalpairs.quad(Q)
 equals.quad(Q)          
 equalsfun.quad(Q)
 erodemask(w,r,strict)
-erode.owin(\dots)
 evalCovar(model, covariate, \dots)
 \method{evalCovar}{ppm}(model, covariate, \dots, lambdatype,
           dimyx, eps, interpolate, jitter, modelname, covname, dataname,
@@ -1324,8 +1319,6 @@ plotPolygonBdry(x, \dots)
 \method{plot}{minconfit}(x, \dots)
 \method{plot}{parres}(x, \dots)
 \method{plot}{plotpairsim}(x, \dots)
-\method{plot}{profilepl}(x, \dots, add, main, tag, coeff, xvariable,
-                         col, lty, lwd, col.opt, lty.opt, lwd.opt)
 \method{plot}{qqppm}(x, \dots, limits=TRUE,
            monochrome=spatstat.options('monochrome'),
            limcol=if(monochrome) "black" else "red")

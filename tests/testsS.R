@@ -312,7 +312,7 @@ local({
 #
 # tests/slrm.R
 #
-# $Revision: 1.1 $ $Date: 2013/04/19 10:14:52 $
+# $Revision: 1.2 $ $Date: 2020/01/10 04:54:49 $
 #
 # Test slrm fitting and prediction when there are NA's
 #
@@ -324,6 +324,16 @@ local({
   Y <- X[W]
   fit <- slrm(Y ~ x+y)
   pred <- predict(fit)
+  extractAIC(fit)
+  fitx <- update(fit, . ~ x)
+  simulate(fitx, seed=42)
+  unitname(fitx)
+  unitname(fitx) <- "km"
+
+  mur <- solapply(murchison,rescale, 1000, "km")
+  mur$dfault <- distfun(mur$faults)
+  fut <- slrm(gold ~ dfault, data=mur, splitby="greenstone")
+  A <- model.images(fut)
 })
 
 
