@@ -463,3 +463,27 @@ Change log from 1.62-2 to 1.62-3
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
 
+   nndist.R
+	Added secret option: method ="test"
+
+   deldir.R
+   weights.R
+   spatstat-deprecated.Rd
+	Deleted the deprecated functions
+	delaunay.distance, delaunay.network, dirichlet.edges,
+	dirichlet.network, dirichlet.vertices, dirichlet.weights
+	
+   tests/enveltest.R
+   tests/Kfuns.R
+   tests/nndist.R
+   tests/ppmlogi.R
+   tests/tessera.R
+	More tests of code blocks
+
+   DESCRIPTION
+   NEWS
+	Version 1.62-2.019
+
+------------- passed R-3.6.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------

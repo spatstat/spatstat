@@ -72,6 +72,18 @@ local({
   if(any(nw5 != nw5P))
     stop("nnwhich.ppp(k=5) does not agree with pairdist")
 
+  a <- nndist(X, method="test")
+  b <- nnwhich(X, method="test")
+  a <- nndist(X, method="test", k=1:2)
+  b <- nnwhich(X, method="test", k=1:2)
+  a2 <- nndist(cells[1:3], k=1:3)
+  b2 <- nnwhich(cells[1:3], k=1:3)
+  a3 <- nndist(cells[1])
+  b3 <- nnwhich(cells[1])
+  m <- factor((1:npoints(X)) %% 2 == 0)
+  a4 <- nndist.default(X, by=m, k=2)
+  b4 <- nnwhich.default(X, by=m, k=2)
+  
   ## nncross.ppp without options
   Y <- runifpoint(30)
   Y <- Y[nndist(Y) > 0.02]
@@ -134,7 +146,7 @@ local({
   Ndw <- nncross(X,Y, iX, iY, k=3)
   Nw  <- nncross(X,Y, iX, iY, k=3, what="which")
   Nd  <- nncross(X,Y, iX, iY, k=3, what="dist")
-  
+
   ## .......  Three dimensions ................
 
   X <- runifpoint3(42)
@@ -184,7 +196,16 @@ local({
   b2 <- nncross(X, Z, iX=iX, iY=iZ, k=2)
   b2 <- nncross(X, Z, iX=iX, iY=iZ, what="which", k=2)
   b2 <- nncross(X, Z, iX=iX, iY=iZ, what="dist", k=2)
-
+  e1 <- nncross(X, Y[1:3], k=2:4)
+  c1 <- nncross(X, Y, sortby="var")
+  c2 <- nncross(X, Y, sortby="x")
+  c3 <- nncross(X, Y, sortby="y")
+  c4 <- nncross(X, Y, sortby="z")
+  Xsort <- X[order(coords(X)$x)]
+  c5 <- nncross(Xsort, Y, is.sorted.X=TRUE, sortby="x")
+  Ysort <- Y[order(coords(Y)$x)]
+  c6 <- nncross(Xsort, Ysort, is.sorted.X=TRUE, is.sorted.Y=TRUE, sortby="x")
+  
   ## .......  m dimensions ................
 
   B <- boxx(c(0,1),c(0,1),c(0,1),c(0,1))

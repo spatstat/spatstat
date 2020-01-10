@@ -3,7 +3,7 @@
 #'
 #' Interface to deldir package
 #'
-#'  $Revision: 1.31 $ $Date: 2019/02/04 07:13:02 $
+#'  $Revision: 1.32 $ $Date: 2020/01/10 06:54:35 $
 #'
 
 #' ..............................................
@@ -356,27 +356,27 @@ dirichletNetwork <- function(X, ...) as.linnet(dirichletEdges(X), ...)
 
 ## deprecated older names
 
-delaunay.distance <- function(...) {
-  .Deprecated("delaunayDistance", package="spatstat")
-  delaunayDistance(...)
-}
+# delaunay.distance <- function(...) {
+#   .Deprecated("delaunayDistance", package="spatstat")
+#   delaunayDistance(...)
+# }
 
-delaunay.network <- function(...) {
-  .Deprecated("delaunayNetwork", package="spatstat")
-  delaunayNetwork(...)
-}
+# delaunay.network <- function(...) {
+#   .Deprecated("delaunayNetwork", package="spatstat")
+#   delaunayNetwork(...)
+# }
 
-dirichlet.edges <- function(...) {
-  .Deprecated("dirichletEdges", package="spatstat")
-  dirichletEdges(...)
-}
+# dirichlet.edges <- function(...) {
+#   .Deprecated("dirichletEdges", package="spatstat")
+#   dirichletEdges(...)
+# }
 
-dirichlet.network <- function(...) {
-  .Deprecated("dirichletNetwork", package="spatstat")
-  dirichletNetwork(...)
-}
+# dirichlet.network <- function(...) {
+#   .Deprecated("dirichletNetwork", package="spatstat")
+#   dirichletNetwork(...)
+# }
 
-dirichlet.vertices <- function(...) {
-  .Deprecated("dirichletVertices", package="spatstat")
-  dirichletVertices(...)
-}
+# dirichlet.vertices <- function(...) {
+#   .Deprecated("dirichletVertices", package="spatstat")
+#   dirichletVertices(...)
+# }

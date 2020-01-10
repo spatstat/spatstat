@@ -104,6 +104,9 @@ local({
   tes <- quantess(X, "x", 4)
   if(anyDuplicated(tilenames(tes)))
     stop("quantess produced non-unique tilenames")
+  ## 
+  ## 
+  da <- dirichletAreas(discretise(runifpoint(15, letterR)))
 })
 #
 #   tests/testaddvar.R

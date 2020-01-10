@@ -1,12 +1,6 @@
 \name{spatstat-deprecated}
 \alias{as.psp.owin}
 \alias{which.max.im}
-\alias{delaunay.distance}
-\alias{delaunay.network}
-\alias{dirichlet.edges}
-\alias{dirichlet.network}
-\alias{dirichlet.vertices}
-\alias{dirichlet.weights}
 \alias{circumradius}
 \alias{circumradius.owin}
 \alias{circumradius.ppp}
@@ -19,12 +13,6 @@
 \method{as.psp}{owin}(x, \dots, window=NULL, 
        check=spatstat.options("checksegments"), fatal=TRUE)
 which.max.im(x)
-delaunay.distance(\dots)
-delaunay.network(\dots)
-dirichlet.edges(\dots)
-dirichlet.network(\dots)
-dirichlet.vertices(\dots)
-dirichlet.weights(\dots)
 circumradius(x, \dots)
 \method{circumradius}{owin}(x, \dots)
 \method{circumradius}{ppp}(x, \dots)
@@ -39,18 +27,6 @@ circumradius(x, \dots)
   
   \code{which.max.im(x)} is replaced by
   \code{\link{im.apply}(x, which.max)}.
-
-  \code{delaunay.distance}   is replaced by \code{delaunayDistance}.
-  
-  \code{delaunay.network} is replaced by \code{delaunayNetwork}.
-  
-  \code{dirichlet.edges} is replaced by \code{dirichletEdges}.
-  
-  \code{dirichlet.network} is replaced by \code{dirichletNetwork}.
-  
-  \code{dirichlet.vertices} is replaced by \code{dirichletVertices}.
-  
-  \code{dirichlet.weights} is replaced by \code{dirichletWeights}.
 
   \code{circumradius} is replaced by the more appropriately named
   \code{boundingradius}.

@@ -145,7 +145,7 @@ local({
 #' Tests of ppm(method='logi')
 #'    and related code (predict, leverage etc)
 #'
-#' $Revision: 1.12 $  $Date: 2020/01/07 01:02:51 $
+#' $Revision: 1.13 $  $Date: 2020/01/10 06:14:44 $
 #'
 
 require(spatstat)
@@ -199,6 +199,7 @@ local({
   summary(fee)
   Z <- predict(fee)
   summary(Z)
+  print(fee$internal$glmfit) # print.vblogit
 })
 #
 #   tests/ppmmarkorder.R

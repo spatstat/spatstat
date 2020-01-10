@@ -69,30 +69,8 @@ local({
   fut <- ppm(X ~ x)
   Kio <- Kinhom(X, fut, update=FALSE)
   Kiu <- Kinhom(X, fut, update=TRUE, diagonal=FALSE)
-  #' inhomogeneous multitype
-  fit <- ppm(amacrine ~ marks)
-  K1 <- Kcross.inhom(amacrine, lambdaX=fit)
-  K2 <- Kcross.inhom(amacrine, lambdaX=densityfun(amacrine))
-  K3 <- Kcross.inhom(amacrine, lambdaX=density(amacrine, at="points"))
-  On <- split(amacrine)$on
-  Off <- split(amacrine)$off
-  K4 <- Kcross.inhom(amacrine, lambdaI=ppm(On), lambdaJ=ppm(Off))
-  K5 <- Kcross.inhom(amacrine, correction="bord.modif")
-  #' markconnect, markcorr
-  M <- markconnect(amacrine, "on", "off", normalise=TRUE)
-  M <- markcorr(longleaf, normalise=TRUE,
-                correction=c("isotropic", "translate", "border", "none"))
-  M <- markcorr(longleaf, normalise=TRUE, fargs=list())
-  #' Kmark (=markcorrint)
-  X <- runifpoint(100) %mark% runif(100)
-  km <- Kmark(X, f=atan2)
-  km <- Kmark(X, f1=sin)
-  km <- Kmark(X, f="myfun")
-  aa <- Kmark(X, normalise=FALSE, returnL=FALSE)
-  aa <- Kmark(X, normalise=FALSE, returnL=TRUE)
-  aa <- Kmark(X, normalise=TRUE,  returnL=FALSE)
-  aa <- Kmark(X, normalise=TRUE,  returnL=TRUE)
-  #'
+
+  #' edge corrections
   rr <- rep(0.1, npoints(cells))
   eC <- edge.Ripley(cells, rr)
   eI <- edge.Ripley(cells, rr, method="interpreted")
@@ -116,15 +94,47 @@ local({
     stop(paste("Exact and approximate algorithms for edge.Trans disagree by",
                paste0(round(100*maxrelerr), "%")),
          call.=FALSE)
+})
+
+local({
+  #' ----  multitype ------
+  K <- Kcross(amacrine, correction=c("none", "bord.modif"))
+  #' inhomogeneous multitype
+  fit <- ppm(amacrine ~ marks)
+  K1 <- Kcross.inhom(amacrine, lambdaX=fit)
+  K2 <- Kcross.inhom(amacrine, lambdaX=densityfun(amacrine))
+  K3 <- Kcross.inhom(amacrine, lambdaX=density(amacrine, at="points"))
+  On <- split(amacrine)$on
+  Off <- split(amacrine)$off
+  K4 <- Kcross.inhom(amacrine, lambdaI=ppm(On), lambdaJ=ppm(Off))
+  K5 <- Kcross.inhom(amacrine, correction="bord.modif")
+  #' markconnect, markcorr
+  M <- markconnect(amacrine, "on", "off", normalise=TRUE)
+  M <- markcorr(longleaf, normalise=TRUE,
+                correction=c("isotropic", "translate", "border", "none"))
+  M <- markcorr(longleaf, normalise=TRUE, fargs=list())
+  #' Kmark (=markcorrint)
+  X <- runifpoint(100) %mark% runif(100)
+  km <- Kmark(X, f=atan2)
+  km <- Kmark(X, f1=sin)
+  km <- Kmark(X, f="myfun")
+  aa <- Kmark(X, normalise=FALSE, returnL=FALSE)
+  aa <- Kmark(X, normalise=FALSE, returnL=TRUE)
+  aa <- Kmark(X, normalise=TRUE,  returnL=FALSE)
+  aa <- Kmark(X, normalise=TRUE,  returnL=TRUE)
+})
+
+local({
+  #'    various modified K functions
   #'
   #'   directional K functions
   #'
     a <- Ksector(swedishpines,
                  -pi/2, pi/2, units="radians",
-                 correction=c("none", "border", "bord.modif", "Ripley", "translate"),
+                 correction=c("none", "border", "bord.modif",
+                              "Ripley", "translate"),
                  ratio=TRUE)
     plot(a)
-                 
   #'
   #'   local K functions
   #'
@@ -179,7 +189,11 @@ local({
                             lambdaI=dm[["off"]], lambdaJ=dm[["on"]])
   h <- resolve.lambda.cross(amacrine, moff, !moff,
                             lambdaX=function(x,y,m){ d(x,y) })
-  
+
+  #' multitype inhomogeneous pcf
+  g <- pcfcross.inhom(amacrine, 
+                      lambdaI=dm[["off"]], lambdaJ=dm[["on"]])
+
   #'
   #'   lohboot code blocks
   #'

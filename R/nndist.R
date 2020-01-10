@@ -3,7 +3,7 @@
 #
 #   nearest neighbour distances (nndist) and identifiers (nnwhich)
 #
-#   $Revision: 1.10 $ $Date: 2019/03/01 10:15:04 $
+#   $Revision: 1.12 $ $Date: 2020/01/10 06:37:05 $
 #
 
 nndist <- function(X, ...) {
@@ -50,7 +50,8 @@ nndist.default <-
   n <- length(x)
   if(length(y) != n)
     stop("lengths of x and y do not match")
-  
+
+  method <- match.arg(method, c("C", "interpreted", "test"))
   # other arguments ignored
   trap.extra.arguments(..., .Context="In nndist.default")
 
@@ -91,6 +92,7 @@ nndist.default <-
   if(kmaxcalc == 1) {
     # calculate nearest neighbour distance only
     switch(method,
+         test = ,
          interpreted={
            #  matrix of squared distances between all pairs of points
            sq <- function(a, b) { (a-b)^2 }
@@ -116,8 +118,9 @@ nndist.default <-
   } else {
     # case kmaxcalc > 1
     switch(method,
+           test = ,
            interpreted={
-             if(n <= 1000) {
+             if(n <= 1000 && method == "interpreted") {
                # form n x n matrix of squared distances
                D2 <- pairdist.default(x, y, method=method, squared=TRUE)
                # find k'th smallest squared distance
@@ -231,6 +234,7 @@ nnwhich.default <-
   if(length(y) != n)
     stop("lengths of x and y do not match")
   
+  method <- match.arg(method, c("C", "interpreted", "test"))
   # other arguments ignored
   trap.extra.arguments(..., .Context="In nnwhich.default")
 
@@ -271,6 +275,7 @@ nnwhich.default <-
   if(kmaxcalc == 1) {
     # identify nearest neighbour only
     switch(method,
+           test = ,
            interpreted={
              #  matrix of squared distances between all pairs of points
              sq <- function(a, b) { (a-b)^2 }
@@ -303,8 +308,9 @@ nnwhich.default <-
   } else {
     # case kmaxcalc > 1
     switch(method,
+           test = ,
            interpreted={
-             if(n <= 1000) {
+             if(n <= 1000 && method == "interpreted") {
                # form n x n matrix of squared distances
                D2 <- pairdist.default(x, y, method=method, squared=TRUE)
                # find k'th smallest squared distance

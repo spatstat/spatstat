@@ -3,7 +3,7 @@
 #
 #	Utilities for computing quadrature weights
 #
-#	$Revision: 4.39 $	$Date: 2017/01/18 06:28:17 $
+#	$Revision: 4.40 $	$Date: 2020/01/10 06:54:23 $
 #
 #
 # Main functions:
@@ -230,10 +230,10 @@ gridweights <- function(X, ntile=NULL, ..., window=NULL, verbose=FALSE,
 }
 
 
-dirichlet.weights <- function(...) {
-  .Deprecated("dirichletWeights", package="spatstat")
-  dirichletWeights(...)
-}
+# dirichlet.weights <- function(...) {
+#   .Deprecated("dirichletWeights", package="spatstat")
+#   dirichletWeights(...)
+# }
 
 dirichletWeights <- function(X, window = NULL, exact=TRUE, ...) {
   #'

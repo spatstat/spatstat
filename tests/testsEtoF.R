@@ -246,7 +246,7 @@ local({
 #'     Envelope tests (dclf.test, mad.test)
 #'     and two-stage tests (bits.test, dg.test, bits.envelope, dg.envelope)
 #' 
-#'     $Revision: 1.1 $  $Date: 2019/10/09 06:28:21 $ 
+#'     $Revision: 1.2 $  $Date: 2020/01/10 06:41:04 $ 
 #'
 require(spatstat)
 local({
@@ -258,6 +258,9 @@ local({
   dclf.test(fit)
   set.seed(909)
   dg.test(fit, nsim=9)
+  #' other code blocks
+  dclf.test(fit, rinterval=c(0, 3), nsim=9)
+  envelopeTest(X, exponent=3, clamp=TRUE, nsim=9)
 })
 #
 #    tests/factorbugs.R

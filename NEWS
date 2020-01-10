@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.62-2.018
+        CHANGES IN spatstat VERSION 1.62-2.019
 
 OVERVIEW
 
@@ -43,7 +43,16 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o erode.owin, dilate.owin
     These deprecated functions have now been deleted
     (replaced by erosion.owin and dilation.owin)
-    
+
+    o delaunay.distance, delaunay.network
+    These deprecated functions have now been deleted
+    (replaced by delaunayDistance, delaunayNetwork)
+
+    o dirichlet.edges, dirichlet.network, dirichlet.vertices, dirichlet.weights
+    These deprecated functions have now been deleted
+    (replaced by dirichletEdges, dirichletNetwork,
+    dirichletVertices, dirichletWeights)
+
 BUG FIXES
 
     o rmh, simulate.ppm, MultiHard
