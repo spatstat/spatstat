@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.62-2.019
+        CHANGES IN spatstat VERSION 1.62-2.020
 
 OVERVIEW
 
@@ -114,8 +114,8 @@ BUG FIXES
     Fixed.
 
     o effectfun
-    Did not accept a covariate if it was not used in the original model
-    and was not one of the reserved names 'x', 'y', 'marks'.
+    Crashed if 'covname' was not the name of a covariate appearing in
+    the model and was not one of the reserved names 'x', 'y', 'marks'.
     Fixed.
     
         CHANGES IN spatstat VERSION 1.62-2

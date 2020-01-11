@@ -347,7 +347,7 @@ local({
 ##
 ##  Colour value manipulation and colour maps
 ##
-## $Revision: 1.6 $ $Date: 2019/12/10 01:09:02 $
+## $Revision: 1.7 $ $Date: 2020/01/11 05:01:45 $
 ##
 
 require(spatstat)
@@ -405,6 +405,12 @@ local({
    print(niets)
    summary(niets)
    plot(niets)
+
+   #' interpolation - of transparent colours
+   co <- colourmap(inputs=c(0, 0.5, 1),
+                   rgb(red=c(1,0,0), green=c(0,1,0), blue=c(0,0,1),
+                       alpha=c(0.3, 0.6, 0.9)))
+   plot(interp.colourmap(co))
 })
 #'
 #'     contact.R

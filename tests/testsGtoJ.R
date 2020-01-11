@@ -40,7 +40,7 @@ local({
 #
 # test "[.hyperframe" etc
 #
-#  $Revision: 1.6 $  $Date: 2019/12/21 05:16:27 $
+#  $Revision: 1.7 $  $Date: 2020/01/11 04:55:17 $
 #
 
 require(spatstat)
@@ -75,11 +75,18 @@ local({
   #' hyperframe with a hyperatom
   H <- hyperframe(A=runif(3), B=1:3, D=runifpoint(10))
   H[,3]
+  H[,3,drop=TRUE]
   #' special cases of [<-
   H$B <- H[,1]
   H[2:3,1] <- H[2:3,2]
   H[2:3,1] <- H[2,2]
   H[2,1:2] <- H[3,1:2]
+
+  #' split
+  f <- factor(c("a", "a", "b"))
+  G <- split(H, f)
+  G[["a"]]$B <- 42
+  split(H, f) <- G
 })
 
 

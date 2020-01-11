@@ -1,7 +1,7 @@
 #
 # linearKmulti
 #
-# $Revision: 1.17 $ $Date: 2019/03/21 02:53:35 $
+# $Revision: 1.18 $ $Date: 2020/01/11 04:35:04 $
 #
 # K functions for multitype point pattern on linear network
 #
@@ -82,6 +82,7 @@ linearKmulti <- function(X, I, J, r=NULL, ..., correction="Ang") {
   correction <- attr(K, "correction")
   type <- if(correction == "Ang") "L" else "net"
   K <- rebadge.as.crossfun(K, "K", type, "I", "J")
+  attr(K, "correction") <- correction
   return(K)
 }
 
@@ -105,6 +106,7 @@ linearKdot.inhom <- function(X, i, lambdaI, lambdadot,
   correction <- attr(result, "correction")
   type <- if(correction == "Ang") "L, inhom" else "net, inhom"
   result <- rebadge.as.dotfun(result, "K", type, i)
+  attr(result, "correction") <- correction
   return(result)
 }
 
@@ -135,6 +137,7 @@ linearKcross.inhom <- function(X, i, j, lambdaI, lambdaJ,
   correction <- attr(result, "correction")
   type <- if(correction == "Ang") "L, inhom" else "net, inhom"
   result <- rebadge.as.crossfun(result, "K", type, i, j)
+  attr(result, "correction") <- correction
   return(result)
 }
 
@@ -178,6 +181,7 @@ linearKmulti.inhom <- function(X, I, J, lambdaI, lambdaJ,
   # set markers for 'envelope'
   attr(K, "dangerous") <- union(attr(lambdaI, "dangerous"),
                                 attr(lambdaJ, "dangerous"))
+  attr(K, "correction") <- correction
   return(K)
 }
 
@@ -215,6 +219,7 @@ linearKmultiEngine <- function(X, I, J, ..., r=NULL, reweight=NULL, denom=1,
             c("r", makefvlabel(NULL, "hat", fname)),
             c("distance argument r", "estimated %s"),
             fname = fname)
+    attr(K, "correction") <- correction
     return(K)
   }
   #

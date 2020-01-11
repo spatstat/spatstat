@@ -4,9 +4,9 @@
   Plot Profile Likelihood
 }
 \description{
-  Plot the profile likelihood or profile composite likelihood
+  Plot the profile (pseudo) likelihood 
   against the irregular parameters, for a model that was fitted by
-  maximum profile likelihood.
+  maximum profile (pseudo)likelihood.
 }
 \usage{
 \method{plot}{profilepl}(x, \dots, add = FALSE, main = NULL, tag = TRUE,
@@ -16,8 +16,7 @@
 }
 \arguments{
   \item{x}{
-    A point process model fitted by maximum profile likelihood
-    or maximum profile composite likelihood.
+    A point process model fitted by maximum profile (pseudo)likelihood.
     Object of class \code{"profilepl"}, obtained from \code{\link{profilepl}}.
   }
   \item{\dots}{
@@ -82,6 +81,10 @@
   Practical maximum pseudolikelihood for spatial point patterns.
   \emph{Australian and New Zealand Journal of Statistics}
   \bold{42}, 283--322.
+
+  Baddeley, A., Rubak, E. and Turner, R. (2015)
+  \emph{Spatial Point Patterns: Methodology and Applications with R}.
+  Chapman and Hall/CRC Press.
 }
 \author{
   \spatstatAuthors.
@@ -90,22 +93,20 @@
   \code{\link{profilepl}}
 }
 \examples{
-  # one irregular parameter
-  rr <- data.frame(r=seq(0.05,0.15, by=0.01))
-  \testonly{
-    rr <- data.frame(r=c(0.05,0.1,0.15))
-  }
-  ps <- profilepl(rr, Strauss, cells)
-  plot(ps)
+  rstep <- if(interactive()) 0.005 else 0.02
 
-  rs <- expand.grid(r=seq(0.05,0.15, by=0.01),sat=1:3)
-  \testonly{
-    rs <- expand.grid(r=c(0.07,0.12),sat=1:2)
-  }
+  # one irregular parameter
+  rr <- data.frame(r=seq(0.05,0.15, by=rstep))
+  ps <- profilepl(rr, Strauss, cells)
+  plot(ps)                      # profile pseudolikelihood 
+  plot(ps, coeff="Interaction") # fitted interaction coefficient log(gamma)
+
+  # two irregular parameters
+  rs <- expand.grid(r=seq(0.05,0.15, by=rstep),sat=1:3)
   pg <- profilepl(rs, Geyer, cells)
-  plot(pg)
-  plot(pg, xvariable="sat", col=ifelse(r < 0.1, "red", "green"))
+  plot(pg) # profile pseudolikelihood against r for each value of 'sat'
   plot(pg, coeff="Interaction")
+  plot(pg, xvariable="sat", col=ifelse(r < 0.1, "red", "green"))
 }
 \keyword{spatial}
 \keyword{hplot}

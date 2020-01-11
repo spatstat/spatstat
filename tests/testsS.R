@@ -825,7 +825,15 @@ local({
   ## symbolmap 
   g1 <- symbolmap(range=c(0,100), size=function(x) x/50)
   invoke.symbolmap(g1, 50, x=numeric(0), y=numeric(0), add=TRUE)
-  
+  plot(g1, labelmap=100)
+  ## constant/trivial
+  a <- symbolmap(pch=16)
+  print(a)
+  plot(a)
+  symbolmapdomain(a)
+  b <- symbolmap()
+  print(b)
+
   ## textureplot
   V <- as.im(dirichlet(X))
   tmap <- textureplot(V)
@@ -841,4 +849,7 @@ local({
   plot(tmap, vertical=TRUE, ylim=c(0,1))
   plot(tmap, vertical=FALSE, xlim=c(0,1))
   plot(tmap, vertical=FALSE, ylim=c(0,1))
+
+  ## infrastructure
+  plan.legend.layout(owin(), side="top", started=TRUE)
 })

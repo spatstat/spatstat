@@ -1,7 +1,7 @@
 ##
 ## symbolmap.R
 ##
-##   $Revision: 1.36 $  $Date: 2018/03/22 00:46:09 $
+##   $Revision: 1.37 $  $Date: 2020/01/11 04:45:05 $
 ##
 
 symbolmap <- local({
@@ -609,13 +609,14 @@ plan.legend.layout <- function(B,
     stopifnot(sep > 0)
   }
   if(is.null(map) || !inherits(map, "symbolmap")) {
+    vv <- NULL
     textlength <- 8
   } else {
     vv <- with(attr(map, "stuff"),
                if(type == "discrete") inputs else prettyinside(range))
     textlength <- max(nchar(paste(vv)))
   }
-  if(started) {
+  if(started && !is.null(vv)) {
     textwidth <- max(strwidth(vv))
     textheight <- max(strheight(vv))
   } else {

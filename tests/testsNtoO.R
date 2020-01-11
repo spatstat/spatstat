@@ -288,6 +288,15 @@ local({
   u <- maxnndist(Y, positive=TRUE, by=marks(Y))
   b <- minnndist(Y, positive=TRUE)
   v <- minnndist(Y, positive=TRUE, by=marks(Y))
+
+  ## nnmap code blocks
+  A <- nnmap(cells[FALSE])
+  A <- nnmap(cells, sortby="var")
+  A <- nnmap(cells, sortby="x")
+  A <- nnmap(cells, sortby="y")
+  B <- nnmap(cells[1:3], k=4)
+  B <- nnmap(cells[1:3], k=2:4)
+  D <- nnmap(cells, outputarray=TRUE)
 })
 
 local({

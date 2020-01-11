@@ -332,6 +332,13 @@ local({
   V <- matrixsqrt(M)
   V <- matrixinvsqrt(M)
   V <- matrixpower(M, 1/2)
+
+  #' infrastructure
+  A <- matrix(1:12, 3, 4)
+  B <- matrix(1:8, 4, 2)
+  check.mat.mul(A, B)
+  check.mat.mul(A, B[,1])
+  check.mat.mul(A, A, fatal=FALSE)
 })
 ## 
 ## tests/localpcf.R
@@ -739,6 +746,18 @@ local({
   densityVoronoi(XX, f=0.99999, nrep=5)
   #' bandwidth selection
   bw.voronoi(X, nrep=4, prob=c(0.2, 0.4, 0.6))
+  #' inhomogeneous K and g
+  SD <- split(dendrite)
+  DT <- density(SD[["thin"]], 100, distance="euclidean")
+  DS <- density(SD[["stubby"]], 100, distance="euclidean")
+  Kii <- linearKcross.inhom(dendrite, "thin", "thin", DT, DT)
+  Kij <- linearKcross.inhom(dendrite, "thin", "stubby", DT, DS,
+                            correction="none", ratio=TRUE)
+  Kx <- linearKcross.inhom(dendrite[1], "thin", "stubby", DT, DS)
+  gii <- linearpcfcross.inhom(dendrite, "thin", "thin", DT, DT)
+  gij <- linearpcfcross.inhom(dendrite, "thin", "stubby", DT, DS,
+                            correction="none", ratio=TRUE)
+  gx <- linearpcfcross.inhom(dendrite[1], "thin", "stubby", DT, DS)
 })
 
 local({

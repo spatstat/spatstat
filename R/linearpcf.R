@@ -1,7 +1,7 @@
 #
 # linearpcf.R
 #
-# $Revision: 1.28 $ $Date: 2019/03/04 06:04:01 $
+# $Revision: 1.29 $ $Date: 2020/01/11 04:23:16 $
 #
 # pair correlation function for point pattern on linear network
 #
@@ -22,7 +22,8 @@ linearpcf <- function(X, r=NULL, ..., correction="Ang", ratio=FALSE) {
                        denom=denom, correction=correction, ratio=ratio)
   # extract bandwidth
   bw <- attr(g, "bw")
-   # set appropriate y axis label
+  correction <- attr(g, "correction") 
+  # set appropriate y axis label
   switch(correction,
          Ang  = {
            ylab <- quote(g[L](r))
@@ -35,6 +36,7 @@ linearpcf <- function(X, r=NULL, ..., correction="Ang", ratio=FALSE) {
   g <- rebadge.fv(g, new.ylab=ylab, new.fname=fname)
   # reattach bandwidth
   attr(g, "bw") <- bw
+  attr(g, "correction") <- correction
   return(g)
 }
 
@@ -72,6 +74,7 @@ linearpcfinhom <- function(X, lambda=NULL, r=NULL,  ...,
 		       correction=correction, ratio=ratio)
   # extract bandwidth
   bw <- attr(g, "bw")
+  correction <- attr(g, "correction") 
   # set appropriate y axis label
   switch(correction,
          Ang  = {
@@ -85,6 +88,7 @@ linearpcfinhom <- function(X, lambda=NULL, r=NULL,  ...,
   g <- rebadge.fv(g, new.fname=fname, new.ylab=ylab)
   # reattach bandwidth
   attr(g, "bw") <- bw
+  attr(g, "correction") <- correction
   attr(g, "dangerous") <- attr(lambdaX, "dangerous")
   return(g)
 }
@@ -130,6 +134,7 @@ linearpcfengine <- function(X, ..., r=NULL,
                       desc = "theoretical Poisson %s",
    		      ratio=ratio)
     }
+    attr(g, "correction") <- correction
     return(g)
   }
   # compute pairwise distances  

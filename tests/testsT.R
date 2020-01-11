@@ -115,13 +115,18 @@ local({
 #
 #   $Revision: 1.2 $  $Date: 2015/12/29 08:54:49 $
 
-X <-  rpoispp(function(x,y){exp(3+3*x)})
-model <- ppm(X ~y)
-addvar(model, "x", crosscheck=TRUE)
-addvar(model, "x", bw.input="quad")
-w <- square(0.5)
-addvar(model, "x", subregion=w)
-addvar(model, "x", subregion=w, bw.input="points")
+require(spatstat)
+local({
+  X <-  rpoispp(function(x,y){exp(3+3*x)})
+  model <- ppm(X ~y)
+  addvar(model, "x", crosscheck=TRUE)
+  addvar(model, "x", bw.input="quad")
+  w <- square(0.5)
+  addvar(model, "x", subregion=w)
+  addvar(model, "x", subregion=w, bw.input="points")
+  Z <- as.im(function(x,y) { x }, Window(X))
+  addvar(model, Z)
+})
 #
 #   tests/testparres.R
 #
@@ -187,6 +192,7 @@ local({
   d <- pairdist(X, periodic=TRUE, squared=TRUE)
   d <- crossdist(X, Y, squared=TRUE)
   d <- crossdist(X, Y, squared=TRUE, periodic=TRUE)
+  Z <- ppsubset(X, 2:4)
   #' 
   h <- has.close(X, 0.2)
   h <- has.close(X, 0.2, periodic=TRUE)

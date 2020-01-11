@@ -1,7 +1,7 @@
 #
 # linearpcfmulti.R
 #
-# $Revision: 1.14 $ $Date: 2019/03/21 02:55:10 $
+# $Revision: 1.15 $ $Date: 2020/01/11 04:36:59 $
 #
 # pair correlation functions for multitype point pattern on linear network
 #
@@ -21,6 +21,7 @@ linearpcfdot <- function(X, i, r=NULL, ..., correction="Ang") {
   correction <- attr(result, "correction")
   type <- if(correction == "Ang") "L" else "net"
   result <- rebadge.as.dotfun(result, "g", type, i)
+  attr(result, "correction") <- correction
   return(result)
 }
 
@@ -45,6 +46,7 @@ linearpcfcross <- function(X, i, j, r=NULL, ..., correction="Ang") {
   correction <- attr(result, "correction")
   type <- if(correction == "Ang") "L" else "net"
   result <- rebadge.as.crossfun(result, "g", type, i, j)
+  attr(result, "correction") <- correction
   return(result)
 }
 
@@ -104,6 +106,7 @@ linearpcfdot.inhom <- function(X, i, lambdaI, lambdadot,
   correction <- attr(result, "correction")
   type <- if(correction == "Ang") "L, inhom" else "net, inhom"
   result <- rebadge.as.dotfun(result, "g", type, i)
+  attr(result, "correction") <- correction
   return(result)
 }
 
@@ -134,6 +137,7 @@ linearpcfcross.inhom <- function(X, i, j, lambdaI, lambdaJ,
   correction <- attr(result, "correction")
   type <- if(correction == "Ang") "L, inhom" else "net, inhom"
   result <- rebadge.as.crossfun(result, "g", type, i, j)
+  attr(result, "correction") <- correction
   return(result)
 }
 

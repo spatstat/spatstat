@@ -1,7 +1,7 @@
 #
 # linearK
 #
-# $Revision: 1.55 $ $Date: 2019/03/04 07:55:50 $
+# $Revision: 1.56 $ $Date: 2020/01/11 04:23:26 $
 #
 # K function for point pattern on linear network
 #
@@ -18,6 +18,7 @@ linearK <- function(X, r=NULL, ..., correction="Ang", ratio=FALSE) {
   denom <- np * (np - 1)/lengthL
   K <- linearKengine(X, r=r, ..., 
  		     denom=denom, correction=correction, ratio=ratio)
+  correction <- attr(K, "correction")
   # set appropriate y axis label
   switch(correction,
          Ang  = {
@@ -29,6 +30,7 @@ linearK <- function(X, r=NULL, ..., correction="Ang", ratio=FALSE) {
            fname <- c("K", "net")
          })
   K <- rebadge.fv(K, new.ylab=ylab, new.fname=fname)
+  attr(K, "correction") <- correction
   return(K)
 }
 
@@ -64,8 +66,9 @@ linearKinhom <- function(X, lambda=NULL, r=NULL,  ...,
                      reweight=invlam2, denom=denom, 
   	             r=r, correction=correction, 
 	 	     ratio=ratio, ...)
-  
+
   # set appropriate y axis label
+  correction <- attr(K, "correction")
   switch(correction,
          Ang  = {
            ylab <- quote(K[L, inhom](r))
@@ -78,6 +81,7 @@ linearKinhom <- function(X, lambda=NULL, r=NULL,  ...,
            fname <- c("K", "list(net, inhom)")
          })
   K <- rebadge.fv(K, new.fname=fname, new.ylab=ylab, new.yexp=yexp)
+  attr(K, "correction") <- correction
   attr(K, "dangerous") <- attr(lambdaX, "dangerous")
   return(K)
 }

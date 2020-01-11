@@ -487,3 +487,38 @@ Change log from 1.62-2 to 1.62-3
 ------------- passed R-3.6.2 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
+
+   plot.profilepl.Rd
+	Improved examples
+
+11 jan 2020
+
+   tests/colour.R
+   tests/hyperframe.R
+   tests/linalgeb.R
+   tests/lppstuff.R
+   tests/nndist.R
+   tests/symbolmaps.R
+   tests/testaddvar.R
+   tests/threedee.R
+	More tests of code blocks
+
+   symbolmap.R
+	Bug fix.
+
+   linearKmulti.R
+   linearpcfmulti.R
+	Bug fixes
+	
+   linearK.R
+   linearpcf.R
+	Return value has attribute 'correction'
+
+   DESCRIPTION
+   NEWS
+	Version 1.62-2.020
+
+------------- passed R-3.6.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+   
