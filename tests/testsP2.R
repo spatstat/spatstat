@@ -145,7 +145,7 @@ local({
 #' Tests of ppm(method='logi')
 #'    and related code (predict, leverage etc)
 #'
-#' $Revision: 1.13 $  $Date: 2020/01/10 06:14:44 $
+#' $Revision: 1.14 $  $Date: 2020/01/11 09:55:34 $
 #'
 
 require(spatstat)
@@ -197,6 +197,9 @@ local({
   fee <- ppm(cells ~ x, method="VBlogi", nd=21)
   print(fee)
   summary(fee)
+  logLik(fee)
+  AIC(fee)
+  extractAIC(fee)
   Z <- predict(fee)
   summary(Z)
   print(fee$internal$glmfit) # print.vblogit
@@ -532,7 +535,7 @@ local({
 #
 # Things that might go wrong with predict()
 #
-#  $Revision: 1.17 $ $Date: 2020/01/10 04:35:31 $
+#  $Revision: 1.18 $ $Date: 2020/01/11 09:57:54 $
 #
 
 require(spatstat)
@@ -601,8 +604,10 @@ local({
   u <- model.se.image(fit, square(0.5), what="cv")
   u <- model.se.image(fit, square(0.5), what="ce")
 
-  ##
+  ## model matrix etc
+  v <- model.frame(ppm(cells))
   fut <- ppm(cells ~ x, Strauss(0.1))
+  v <- model.matrix(fut, subset=(x<0.5), keepNA=FALSE)
   df <- data.frame(x=runif(10), y=runif(10),
                    Interaction=sample(0:1, 10, TRUE))
   m10 <- PPMmodelmatrix(fut, data=df)

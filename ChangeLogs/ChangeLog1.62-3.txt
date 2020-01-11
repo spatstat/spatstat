@@ -521,4 +521,35 @@ Change log from 1.62-2 to 1.62-3
 ------------- passed R-3.6.2 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
-   
+
+   measures.R
+	Bug fix in scalardilate method.
+
+   measures.R
+   spatstat-internal.Rd
+	Methods for unitname, unitname<-, rescale,
+	affine, rotate, flipxy
+
+   pairs.im.R
+   linim.R
+	Bug fixes in handling names of variables in 'pairs' methods
+	
+   repairNetwork.Rd
+	Improved explanation.
+
+   tests/imageops.R
+   tests/lppstuff.R
+   tests/msr.R
+   tests/ppmlogi.R
+   tests/prediction.R
+   tests/segments.R
+   tests/vcovppm.R
+	More better tests.
+
+   DESCRIPTION
+   NEWS
+	Version 1.62-2.021
+
+------------- passed R-3.6.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------

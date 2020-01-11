@@ -1,12 +1,13 @@
 #
 #   pairs.im.R
 #
-#   $Revision: 1.11 $   $Date: 2016/11/15 03:47:29 $
+#   $Revision: 1.16 $   $Date: 2020/01/11 12:15:24 $
 #
 
 pairs.listof <- pairs.solist <- function(..., plot=TRUE) {
   argh <- expandSpecialLists(list(...), special=c("solist", "listof"))
   haslines <- any(sapply(argh, inherits, what="linim"))
+  names(argh) <- good.names(names(argh), "V", seq_along(argh))
   if(haslines) {
     do.call(pairs.linim, append(argh, list(plot=plot)))
   } else {
@@ -32,18 +33,23 @@ pairs.im <- function(..., plot=TRUE) {
   imlist <- argh[isim]
   rest   <- argh[!isim]
   ## determine image names for plotting
-  imnames <- names(imlist)
-  backupnames <- paste(cl)[c(FALSE, isim, FALSE)]
-  if(length(backupnames) != nim)
-    backupnames <- paste("V", seq_len(nim), sep="")
-  if(length(imnames) != nim)
-    imnames <- backupnames
-  else if(any(needname <- !nzchar(imnames)))
-    imnames[needname] <- backupnames[needname]
+  imnames <- argh$labels %orifnull% names(imlist)
+  if(length(imnames) != nim || !all(nzchar(imnames))) {
+    #' names not given explicitly
+    callednames <- paste(cl)[c(FALSE, isim, FALSE)]
+    backupnames <- paste0("V", seq_len(nim))
+    if(length(callednames) != nim) {
+      callednames <- backupnames
+    } else if(any(toolong <- (nchar(callednames) > 15))) {
+      callednames[toolong] <- backupnames[toolong]
+    }
+    imnames <- good.names(imnames, good.names(callednames, backupnames))
+  }
   ## 
   if(nim == 1) {
     ## one image: plot histogram
-    hist(..., plot=plot)
+    do.call(hist, append(list(imlist[[1L]], xname=imnames[1L], plot=plot),
+                         rest))
     ## save pixel values
     Z <- imlist[[1]]
     pixvals <- list(Z[])

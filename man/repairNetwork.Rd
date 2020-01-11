@@ -19,10 +19,11 @@ repairNetwork(X)
 }
 \details{
   This function detects and repairs inconsistencies
-  in the internal data of \code{X}. Currently it detects and removes
+  in the internal data of \code{X}. Currently it does the following:
   \itemize{
-    \item duplication of edges of the network (the presence of two
-    edges between the same pair of vertices).
+    \item removes any duplicated edges of the network
+    \item ensures that each edge is recorded as a pair of vertex indices
+    \code{(from, to)} with \code{from < to}.
   }
 }
 \value{

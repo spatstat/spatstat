@@ -250,7 +250,7 @@ local({
   ZS <- shift(Z, origin="bottomleft")
 
   ZA <- affine(Z, mat=diag(c(-1,-2)))
-
+  
   #' hist.im
   h <- hist(Z)
   h <- hist(Z, plot=FALSE)
@@ -272,6 +272,10 @@ local({
   plot(CX, valuesAreColours=TRUE)
   plot(CX, valuesAreColours=FALSE)
 
+  #' pairs.im 
+  pairs(solist(Z))
+  pairs(solist(A=Z))
+  
   #' handling and plotting of character and factor images
   Afactor    <- as.im(col2hex("green"), letterR, na.replace=col2hex("blue"))
   Acharacter <- as.im(col2hex("green"), letterR, na.replace=col2hex("blue"),

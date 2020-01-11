@@ -1,7 +1,7 @@
 #
 # linim.R
 #
-#  $Revision: 1.63 $   $Date: 2019/11/12 07:13:55 $
+#  $Revision: 1.65 $   $Date: 2020/01/11 11:37:11 $
 #
 #  Image/function on a linear network
 #
@@ -780,6 +780,7 @@ as.data.frame.linim <- function(x, ...) {
 
 pairs.linim <- function(..., plot=TRUE, eps=NULL) {
   argh <- list(...)
+  cl <- match.call()
   ## unpack single argument which is a list of images
   if(length(argh) == 1) {
     arg1 <- argh[[1L]]
@@ -798,10 +799,19 @@ pairs.linim <- function(..., plot=TRUE, eps=NULL) {
   islinim <- sapply(imlist, inherits, what="linim")
   if(!any(islinim)) # shouldn't be here
     return(pairs.im(argh, plot=plot))
-  ## adjust names
-  imnames <- names(imlist) %orifnull% rep("", length(imlist))
-  if(any(needsname <- !nzchar(imnames))) 
-    imnames[needsname] <- paste0("V", seq_len(nim)[needsname])
+  ## determine image names for plotting
+  imnames <- argh$labels %orifnull% names(imlist)
+  if(length(imnames) != nim || !all(nzchar(imnames))) {
+    #' names not given explicitly
+    callednames <- paste(cl)[c(FALSE, isim, FALSE)]
+    backupnames <- paste0("V", seq_len(nim))
+    if(length(callednames) != nim) {
+      callednames <- backupnames
+    } else if(any(toolong <- (nchar(callednames) > 15))) {
+      callednames[toolong] <- backupnames[toolong]
+    }
+    imnames <- good.names(imnames, good.names(callednames, backupnames))
+  }
   names(imlist) <- imnames
   ## choose resolution
   if(is.null(eps)) {
@@ -829,7 +839,7 @@ pairs.linim <- function(..., plot=TRUE, eps=NULL) {
       do.call(hist.default,
               resolve.defaults(list(x=pixdf[,1L]),
                                rest,
-                               list(main=paste("Histogram of", imnames[1L]),
+                               list(xname=imnames[1L],
                                     xlab=imnames[1L])))
     }
   }

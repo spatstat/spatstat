@@ -198,7 +198,7 @@ local({
 #
 #  Thanks to Ege Rubak
 #
-#  $Revision: 1.10 $  $Date: 2019/02/10 07:12:06 $
+#  $Revision: 1.11 $  $Date: 2020/01/11 09:38:40 $
 #
 
 require(spatstat)
@@ -255,7 +255,6 @@ local({
   if(disagree(v, vc))
     stop("Disagreement between vcov.ppm algorithms 'vector' and 'vectorclip' for Geyer model")
 
-
   ## tests of 'deltasuffstat' code
   ##     Handling of offset terms
   modelH <- ppm(cells ~x, Hardcore(0.05))
@@ -279,6 +278,8 @@ local({
   model <- ppm(X ~ 1, Strauss(.05))
   cG <- vcov(model, what="corr")
   cP <- vcov(update(model, Poisson()), what="corr")
+  ## outdated usage
+  cX <- vcov(model, A1dummy=TRUE)
 
   ## Model with zero-length coefficient vector
   lam <- intensity(X)
@@ -287,6 +288,11 @@ local({
   dd <- vcov(model0)
   cc <- vcov(model0, what="corr")
 
+  ## Model with NA coefficients
+  fit <- ppm(X ~ log(f))
+  vcov(fit)
+  fitE <- emend(fit, trace=TRUE)
+  
   ## Other weird stuff
   su <- suffloc(ppm(X ~ x))
 })

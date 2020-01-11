@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.62-2.020
+        CHANGES IN spatstat VERSION 1.62-2.021
 
 OVERVIEW
 
@@ -39,7 +39,7 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o plot.profilepl
     This function has now been documented, and the graphics improved.
-    
+
     o erode.owin, dilate.owin
     These deprecated functions have now been deleted
     (replaced by erosion.owin and dilation.owin)
@@ -86,6 +86,10 @@ BUG FIXES
     o rmh, rmh.default
     For a marked point process, the debugger did not display the marks.
     (The rmh debugger is invoked by calling rmh with snoop=TRUE).
+    Fixed.
+    
+    o pairs.im, pairs.linim
+    The argument 'labels' was sometimes ignored.
     Fixed.
     
     o relrisk.ppp

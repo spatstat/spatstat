@@ -314,7 +314,7 @@ local({
 #'
 #'     tests/msr.R
 #'
-#'     $Revision: 1.1 $ $Date: 2019/02/15 01:37:55 $
+#'     $Revision: 1.2 $ $Date: 2020/01/11 10:42:58 $
 #'
 #'     Tests of code for measures
 #'
@@ -322,6 +322,21 @@ local({
 require(spatstat)
 
 local({
+  ## cases of 'msr'
+  Q <- quadscheme(cells)
+  nQ <- n.quad(Q)
+  nX <- npoints(cells)
+  A <- matrix(nX * 3, nX, 3)
+  B <- matrix(nQ * 3, nQ, 3)
+  M <- msr(Q, A, B)
+  M <- msr(Q, A, 1)
+  M <- msr(Q, 1, B)
+  M <- msr(Q, A, B[,1])
+  M <- msr(Q, A[,1], B)
+  M <- msr(Q, A, B[,1,drop=FALSE])
+  M <- msr(Q, A[,1,drop=FALSE], B)
+
+  ## methods
   rr <- residuals(ppm(cells ~ x))
 
   a <- summary(rr)
@@ -329,12 +344,17 @@ local({
   w <- as.owin(rr)
   z <- domain(rr)
   ss <- scalardilate(rr, 2)
-
+  tt <- rescale(rr, 2)
+  ee <- rotate(rr, pi/4)
+  aa <- affine(rr, mat=diag(c(1,2)), vec=c(0,1))
+  ff <- flipxy(rr)
+  
   rrr <- augment.msr(rr, sigma=0.08)
   uuu <- update(rrr)
 
   mm <- residuals(ppm(amacrine ~ x))
   ss <- residuals(ppm(amacrine ~ x), type="score")
+  gg <- rescale(ss, 1/662, c("micron", "microns"))
 
   plot(mm)
   plot(mm, multiplot=FALSE)

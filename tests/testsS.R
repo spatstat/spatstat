@@ -16,7 +16,7 @@ local({
 ##   Tests of psp class and related code
 ##                      [SEE ALSO: tests/xysegment.R]
 ##
-##  $Revision: 1.19 $  $Date: 2019/12/10 01:01:35 $
+##  $Revision: 1.20 $  $Date: 2020/01/11 09:40:01 $
 
 require(spatstat)
 
@@ -206,6 +206,7 @@ local({
   Y <- endpoints.psp(X, which="lower")
   Y <- endpoints.psp(X, which="upper")
   Y <- endpoints.psp(X, which="right")
+  U <- flipxy(X)
 })
 reset.spatstat.options()
 #

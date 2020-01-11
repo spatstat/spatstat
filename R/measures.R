@@ -3,7 +3,7 @@
 #
 #  signed/vector valued measures with atomic and diffuse components
 #
-#  $Revision: 1.87 $  $Date: 2019/02/15 02:09:02 $
+#  $Revision: 1.90 $  $Date: 2020/01/11 10:41:21 $
 #
 msr <- function(qscheme, discrete, density, check=TRUE) {
   if(!is.quad(qscheme))
@@ -549,11 +549,45 @@ as.layered.msr <- local({
   as.layered.msr
 })
 
+unitname.msr <- function(x) unitname(x$loc)
+
+"unitname<-.msr" <- function(x, value) {
+  unitname(x$loc) <- value
+  return(x)
+}
 
 scalardilate.msr <- function(X, f, ...) {
   X$loc <- scalardilate(X$loc, f, ...)
   X$density <- X$density/f^2
-  X$val <- X$discrete + X$wt * X$density
+  X$wt      <- X$wt * f^2
+  return(X)
+}
+
+rotate.msr <- function(X, angle=pi/2, ..., centre=NULL) {
+  X$loc <- rotate(X$loc, angle=angle, ..., centre=centre)
+  return(X)
+}
+
+flipxy.msr <- function(X) {
+  X$loc <- flipxy(X$loc)
+  return(X)
+}
+
+rescale.msr <- function(X, s, unitname) {
+  if(missing(unitname)) 
+    unitname <- NULL
+  if(missing(s) || is.null(s)) 
+    s <- 1/unitname(X)$multiplier
+  Y <- scalardilate(X, 1/s)
+  unitname(Y) <- rescale(unitname(X), s, unitname)
+  return(Y)
+}
+
+affine.msr <- function(X, mat = diag(c(1, 1)), vec = c(0, 0), ...) {
+  X$loc <- affine(X$loc, mat=mat, vec=vec, ...)
+  detmat <- abs(det(mat))
+  X$density <- X$density/detmat
+  X$wt      <- X$wt * detmat
   return(X)
 }
 

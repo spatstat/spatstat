@@ -358,7 +358,7 @@ local({
 #
 # Tests for lpp code
 #
-#  $Revision: 1.41 $  $Date: 2019/12/12 04:02:44 $
+#  $Revision: 1.45 $  $Date: 2020/01/11 14:37:23 $
 
 
 require(spatstat)
@@ -511,11 +511,13 @@ local({
   Z <- as.linnet(Y) # can crash if marks don't match segments
   
   ## Test linnet surgery code
+  SL <- joinVertices(simplenet, matrix(c(2,3), ncol=2))
   set.seed(42)
   X <- runiflpp(30, simplenet)
   V <- runiflpp(30, simplenet)
   XV <- insertVertices(X, V)
   validate.lpp.coords(XV, context="calculated by insertVertices")
+  X0 <- insertVertices(X, x=numeric(0), y=numeric(0))
 
   ## Test [.lpp internal data
   B <- owin(c(0.1,0.7),c(0.19,0.6))
@@ -761,6 +763,17 @@ local({
 })
 
 local({
+  #' pairs.linim
+  X <- runiflpp(6, simplenet)
+  Z <- density(X, 0.5, distance="euclidean")
+  pairs(solist(Z))
+  pairs(solist(A=Z))
+  U <- density(as.ppp(X), 0.5)
+  pairs(solist(U, Z))
+  pairs(solist(Z, U))
+})
+
+local({
   #' complex-valued functions and images
   f <- function(x,y,seg,tp) { x + y * 1i }
   g <- linfun(f, simplenet)
@@ -787,12 +800,22 @@ local({
 
 local({
   ## make some bad data and repair it
-  X <- runiflpp(4, simplenet)
-  sx1 <- coords(X)$seg[1]
-  ns <- nsegments(X)
-  X$domain$from <- X$domain$from[c(1:ns, sx1)]
-  X$domain$to   <- X$domain$to[c(1:ns, sx1)]
-  Y <- repairNetwork(X)
+  L <- simplenet
+  ## reverse edges
+  a <- L$from[c(FALSE,TRUE)]
+  L$from[c(FALSE,TRUE)] <- L$to[c(FALSE,TRUE)]  
+  L$to[c(FALSE,TRUE)] <- a
+  ## duplicate edges
+  ns <- nsegments(L)
+  ii <- c(seq_len(ns), 2)
+  L$from <- L$from[ii]
+  L$to   <- L$to[ii]
+  L$lines <- L$lines[ii]
+  ##
+  Y <- repairNetwork(L)
+  ## add points
+  X <- runiflpp(4, L)
+  Z <- repairNetwork(X)
 })
 
 local({
