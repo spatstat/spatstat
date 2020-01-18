@@ -553,3 +553,23 @@ Change log from 1.62-2 to 1.62-3
 ------------- passed R-3.6.2 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
+
+18 jan 2020
+
+   nnfun.R
+	Bug fix
+	
+   tests/nndist.R
+   tests/ppmclass.R
+   tests/ppp.R
+   tests/rmhmodel.ppm.R
+   tests/segments.R
+	More tests.
+
+   DESCRIPTION
+   NEWS
+	Version 1.62-2.022
+
+------------- passed R-3.6.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------

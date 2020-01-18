@@ -39,7 +39,7 @@ local({
 #
 # Also test nnorient()
 #
-#   $Revision: 1.29 $  $Date: 2020/01/08 01:59:58 $
+#   $Revision: 1.30 $  $Date: 2020/01/18 02:02:40 $
 #
 
 require(spatstat)
@@ -344,4 +344,15 @@ local({
   V <- stienenSet(cells, edge=FALSE)
 })
 
-  
+local({
+  ## nnfun.ppp
+  f <- nnfun(cells)
+  Z <- as.im(f)
+  d <- domain(f)
+  f <- nnfun(amacrine, value="mark")
+  d <- domain(f)
+  Z <- as.im(f)
+  f <- nnfun(longleaf, value="mark")
+  d <- domain(f)
+  Z <- as.im(f)
+})

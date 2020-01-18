@@ -16,7 +16,7 @@ local({
 ##   Tests of psp class and related code
 ##                      [SEE ALSO: tests/xysegment.R]
 ##
-##  $Revision: 1.20 $  $Date: 2020/01/11 09:40:01 $
+##  $Revision: 1.22 $  $Date: 2020/01/18 02:29:37 $
 
 require(spatstat)
 
@@ -208,6 +208,17 @@ local({
   Y <- endpoints.psp(X, which="right")
   U <- flipxy(X)
 })
+
+local({
+  ## nnfun.psp
+  P <- psp(runif(10), runif(10), runif(10), runif(10),
+           window=square(1), marks=runif(10))
+  f <- nnfun(P)
+  f <- nnfun(P, value="mark")
+  d <- domain(f)
+  Z <- as.im(f)
+})
+
 reset.spatstat.options()
 #
 ## tests/sigtraceprogress.R

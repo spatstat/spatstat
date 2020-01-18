@@ -64,7 +64,7 @@ local({
 #'
 #'   Class support for ppm
 #'
-#'   $Revision: 1.4 $ $Date: 2020/01/08 03:46:53 $
+#'   $Revision: 1.5 $ $Date: 2020/01/18 01:57:17 $
 
 require(spatstat)
 local({
@@ -95,7 +95,11 @@ local({
   print(fitZ)
   spatstat.options(op)
 
-  ## (2) emend.ppm
+  ## (2) plot.ppm
+  plot(fitZ)
+  plot(fat, trend=FALSE, cif=FALSE, se=FALSE)
+
+  ## (3) emend.ppm
   fitZe <- emend(fitZ, trace=TRUE)
   ZZ <- Z
   fitZZ <- ppm(cells ~ Z + ZZ)
@@ -111,7 +115,7 @@ local({
   fitZZe <- emend(fitZZ, trace=TRUE)
   spatstat.options(op)
   
-  #' (3) methods for other generics
+  #' (4) methods for other generics
   logLik(fitZ, absolute=TRUE)
   unitname(fitZ)
   unitname(fat) <- c("metre", "metres")
@@ -419,6 +423,9 @@ local({
   X <- cells
   B <- square(0.2)
   X[B] <- runifpoint(3, B)
+  #' checking 'value'
+  Y <- flipxy(X)
+  X[B] <- Y[square(0.3)]
   # deprecated use of second argument
   X[,1:4] <- runifpoint(3)  # deprecated
   X[,B] <- runifpoint(3, B) # deprecated 
