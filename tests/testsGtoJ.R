@@ -136,7 +136,7 @@ local({
 #
 #  tests/imageops.R
 #
-#   $Revision: 1.22 $   $Date: 2019/12/21 04:25:26 $
+#   $Revision: 1.23 $   $Date: 2020/01/21 04:52:56 $
 #
 
 require(spatstat)
@@ -151,6 +151,10 @@ local({
   b <- im(mat)
   b <- update(b)
 
+  D <- as.im(mat, letterR)
+  df <- as.data.frame(D)
+  DD <- as.im(df, step=c(D$xstep, D$ystep))
+  
   #' various manipulations
   AA <- A <- as.im(owin())
   BB <- B <- as.im(owin(c(1.1, 1.9), c(0,1)))

@@ -1,7 +1,7 @@
 #
 #  hyperframe.R
 #
-# $Revision: 1.71 $  $Date: 2019/11/08 12:54:36 $
+# $Revision: 1.72 $  $Date: 2020/01/21 04:15:26 $
 #
 
 hyperframe <- local({
@@ -117,8 +117,13 @@ hyperframe <- local({
     return(result)
   }
 
+  dateclasses <- 
+  
   is.dfcolumn <- function(x) {
-    is.atomic(x) && (is.vector(x) || is.factor(x))
+    is.atomic(x) &&
+      (is.vector(x) ||
+       is.factor(x) ||
+       inherits(x, c("POSIXlt", "POSIXct", "Date")))
   }
   
   is.hypercolumn <- function(x) {

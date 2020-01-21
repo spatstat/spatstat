@@ -55,7 +55,7 @@ local({
 #'
 #'   leverage and influence for Gibbs models
 #' 
-#'   $Revision: 1.24 $ $Date: 2019/02/11 09:40:50 $
+#'   $Revision: 1.25 $ $Date: 2020/01/19 12:27:18 $
 #' 
 
 require(spatstat)
@@ -248,35 +248,41 @@ local({
   iScor <- list(alpha=function(x,y,alpha) { alpha * y^(alpha-1) } )
   iHess <- list(alpha=function(x,y,alpha) { alpha * (alpha-1) * y^(alpha-2) } )
   gogo <- function(tag, ..., iS=iScor, iH=iHess) {
-    #' compute full set of results
     cat(tag, fill=TRUE)
+    #' compute all leverage+influence terms
     ppmInfluence(..., what="all", iScore=iS, iHessian=iH)
   }
-  cat("Offset model...", fill=TRUE)
-  fut <- ippm(X ~ offset(ytoa), start=list(alpha=1))
-  d <- gogo("a", fut)
-  d <- gogo("b", fut, method="interpreted") 
-  d <- gogo("c", fut, method="interpreted", entrywise=FALSE)
-  d <- gogo("d", fut,                       entrywise=FALSE) 
-  cat("Offset+x model...", fill=TRUE)
-  futx <- ippm(X ~ x + offset(ytoa), start=list(alpha=1))
-  d <- gogo("a", futx) 
-  d <- gogo("b", futx, method="interpreted") 
-  d <- gogo("c", futx, method="interpreted", entrywise=FALSE)
-  d <- gogo("d", futx,                       entrywise=FALSE)
-  cat("Offset model Strauss ...", fill=TRUE)
-  futS <- ippm(X ~ offset(ytoa), Strauss(0.07), start=list(alpha=1))
-  d <- gogo("a", futS)
-  d <- gogo("b", futS, method="interpreted") 
-  d <- gogo("c", futS, method="interpreted", entrywise=FALSE)
-  d <- gogo("d", futS,                       entrywise=FALSE) 
-  cat("Offset+x model Strauss ...", fill=TRUE)
-  futxS <- ippm(X ~ x + offset(ytoa), Strauss(0.07), start=list(alpha=1))
-  d <- gogo("a", futxS) 
-  d <- gogo("b", futxS, method="interpreted") 
-  d <- gogo("c", futxS, method="interpreted", entrywise=FALSE)
-  d <- gogo("d", futxS,                       entrywise=FALSE)
-
+  gogogo <- function(hdr, fit) {
+    cat(hdr, fill=TRUE)
+    force(fit)
+    #' try all code options
+    d <- gogo("a", fit)
+    d <- gogo("b", fit, method="interpreted") 
+    d <- gogo("c", fit, method="interpreted", entrywise=FALSE)
+    d <- gogo("d", fit,                       entrywise=FALSE) 
+    invisible(NULL)
+  }
+  gogogo("Offset model...",
+         ippm(X ~ offset(ytoa), start=list(alpha=1), iterlim=40))
+  gogogo("Offset model (logistic) ...", 
+         ippm(X ~ offset(ytoa), start=list(alpha=1),
+              method="logi", iterlim=40))
+  gogogo("Offset+x model...", 
+         ippm(X ~ x + offset(ytoa), start=list(alpha=1), iterlim=40))
+  gogogo("Offset+x model (logistic) ...", 
+         ippm(X ~ x + offset(ytoa), start=list(alpha=1),
+              method="logi", iterlim=40))
+  gogogo("Offset model Strauss ...", 
+         ippm(X ~ offset(ytoa), Strauss(0.07), start=list(alpha=1), iterlim=40))
+  gogogo("Offset model Strauss (logistic) ...", 
+         ippm(X ~ offset(ytoa), Strauss(0.07), start=list(alpha=1),
+              method="logi", iterlim=40))
+  gogogo("Offset+x model Strauss ...", 
+         ippm(X ~ x + offset(ytoa), Strauss(0.07), start=list(alpha=1),
+              iterlim=40))
+  gogogo("Offset+x model Strauss (logistic)...", 
+         ippm(X ~ x + offset(ytoa), Strauss(0.07), start=list(alpha=1),
+              method="logi", iterlim=40))
   #'
   set.seed(452)
   foo <- ppm(cells ~ 1, Strauss(0.15), method="ho", nsim=5)

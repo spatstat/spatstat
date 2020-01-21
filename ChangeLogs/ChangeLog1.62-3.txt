@@ -573,3 +573,33 @@ Change log from 1.62-2 to 1.62-3
 ------------- passed R-3.6.2 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
+
+19 jan 2020
+
+   tests/leverinf.R
+	Test leverage code for ippm object fitted using logistic likelihood
+
+21 jan 2020
+
+   hyperframe.R
+	Bug fix in handling 'Date' vectors.
+
+   as.im.R
+	Bug fix in handling factor values in as.im.data.frame
+
+   rho2hat.R
+	Bug fix in predict.rho2hat
+
+   tests/nndist.R
+   tests/threedee.R
+   tests/rhohat.R
+	Test bug fixes
+
+   DESCRIPTION
+   NEWS
+	Version 1.62-2.023
+
+------------- passed R-3.6.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+

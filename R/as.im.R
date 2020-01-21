@@ -3,7 +3,7 @@
 #
 #    conversion to class "im"
 #
-#    $Revision: 1.57 $   $Date: 2019/08/06 08:40:02 $
+#    $Revision: 1.58 $   $Date: 2020/01/21 04:50:04 $
 #
 #    as.im()
 #
@@ -288,10 +288,12 @@ as.im.data.frame <- function(X, ..., step, fatal=TRUE, drop=TRUE) {
   names(result) <- colnames(z)
   for(k in seq_len(nz)) {
     zk <- z[,k]
+    mm[] <- RNA <- RelevantNA(zk)
     mm[iijj] <- zk
+    m[] <- RNA 
     m[iii,jjj] <- mm
     lev <- levels(zk)
-    mo <- if(is.null(lev)) m else factor(as.vector(m), levels=lev)
+    mo <- if(is.null(lev)) m else factor(m, levels=seq_along(lev), labels=lev)
     result[[k]] <- im(mat=mo, xcol=xcol, yrow=yrow) 
   }
   if(nz == 1 && drop) result <- result[[1L]]

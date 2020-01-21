@@ -39,7 +39,7 @@ local({
 #
 # Also test nnorient()
 #
-#   $Revision: 1.30 $  $Date: 2020/01/18 02:02:40 $
+#   $Revision: 1.31 $  $Date: 2020/01/21 03:56:32 $
 #
 
 require(spatstat)
@@ -206,6 +206,20 @@ local({
   Ysort <- Y[order(coords(Y)$x)]
   c6 <- nncross(Xsort, Ysort, is.sorted.X=TRUE, is.sorted.Y=TRUE, sortby="x")
   
+  ## special cases
+  nndist(X[FALSE])
+  nndist(X[1])
+  nndist(X[1:3], k=4)
+  nndist(X[1:3], k=1:4)
+  nnwhich(X[FALSE])
+  nnwhich(X[1])
+  nnwhich(X[1:3], k=4)
+  nnwhich(X[1:3], k=1:4)
+  nncross(X[1:3], Y[FALSE])
+  nncross(X[1:3], Y[1])
+  nncross(X[1:3], Y[1:3], k=4)
+  nncross(X[1:3], Y[1:3], k=1:4)
+
   ## .......  m dimensions ................
 
   B <- boxx(c(0,1),c(0,1),c(0,1),c(0,1))

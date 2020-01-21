@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.62-2.022
+        CHANGES IN spatstat VERSION 1.62-2.023
 
 OVERVIEW
 
@@ -66,6 +66,10 @@ BUG FIXES
     was equal to 1/2 of the correct value. This would have affected
     model comparison using AIC.
     Fixed.
+
+    o hyperframe
+    Did not correctly handle date-time values (columns of class 'Date', etc).
+    Fixed
     
     o rlpp
     The resulting pattern was unmarked even when it should have been multitype.
@@ -103,6 +107,15 @@ BUG FIXES
     
     o diagnose.ppm
     Crashed for some models with an error message from 'beachcolours'.
+    Fixed.
+
+    o predict.rho2hat
+    Crashed if one of the original covariates was a function
+    rather than an image.
+    Fixed.
+
+    o as.im.data.frame
+    Results were incorrect for factor-valued data.
     Fixed.
 
     o lineardisc

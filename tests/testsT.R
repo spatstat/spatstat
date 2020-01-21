@@ -182,11 +182,13 @@ LTUAE <- evalCovariate(ltuae, cells)
 #'
 #'     Tests of 3D code 
 #'
-#'      $Revision: 1.6 $ $Date: 2019/12/31 03:26:31 $
+#'      $Revision: 1.7 $ $Date: 2020/01/21 04:16:32 $
 #'
 
 require(spatstat)
 local({
+  A <- runifpoint3(10, nsim=2)
+  ##
   X <- runifpoint3(30)
   Y <- runifpoint3(20)
   d <- pairdist(X, periodic=TRUE, squared=TRUE)
@@ -216,6 +218,15 @@ local({
   gg2 <- g3engine(xx, yy, zz, correction="minus sampling")
   ff1 <- f3engine(xx, yy, zz, correction="no")
   ff2 <- f3engine(xx, yy, zz, correction="minus sampling")
+  ##
+  X <- runifpoint3(10)
+  print(X)
+  print(X %mark% runif(10))
+  print(X %mark% factor(letters[c(1:5,5:1)]))
+  print(X %mark% data.frame(a=1:10, b=runif(10)))
+  da <- as.Date(paste0("2020-01-0", c(1:5,5:1)))
+  print(X %mark% da)
+  print(X %mark% data.frame(a=1:10, b=da))
 })
 #'    tests/trigraph.R
 #'

@@ -248,9 +248,14 @@ predict.rho2hat <- function(object, ..., relative=FALSE) {
   # extract info
   s <- attr(object, "stuff")
   reference <- s$reference
-  # extract images of covariate, scaled to [0,1]
-  Z1 <- scaletointerval(s$cov1, xrange=s$r1)
-  Z2 <- scaletointerval(s$cov2, xrange=s$r2)
+  #' extract images of covariate
+  Z1 <- s$cov1
+  Z2 <- s$cov2
+  if(!is.im(Z1)) Z1 <- as.im(Z1, Window(object))
+  if(!is.im(Z2)) Z2 <- as.im(Z2, Window(object))
+  #' rescale to [0,1]
+  Z1 <- scaletointerval(Z1, xrange=s$r1)
+  Z2 <- scaletointerval(Z2, xrange=s$r2)
   # extract pairs of covariate values
   ZZ <- pairs(Z1, Z2, plot=FALSE)
   # apply rho to Z
