@@ -603,3 +603,23 @@ Change log from 1.62-2 to 1.62-3
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
 
+   predictmppm.R
+	Bug fix in predict.mppm
+	
+   tests/mppm.R
+	Test the bug fix and other cases.
+	
+   updates.Rnw
+   bugfixes.Rnw
+	updated to cover all the above.
+
+   DESCRIPTION
+   NEWS
+   Nickname.txt
+	Nickname changed to 'Space camouflage'
+	Version 1.62-2.024
+
+------------- passed R-3.6.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+

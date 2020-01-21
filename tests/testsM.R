@@ -190,6 +190,12 @@ local({
   df <- data.frame(id=sample(1:3, nrow(locn), replace=TRUE),
                    D=runif(nrow(locn)))
   p4 <- predict(fit, locations=locn, newdata=df)
+
+  fitG <- mppm(Bugs ~ D, data=H, use.gam=TRUE)
+  p1G <- predict(fitG)
+  p2G <- predict(fitG, locations=Fakes)
+  p3G <- predict(fitG, locations=solapply(W, erosion, r=4))
+  p4G <- predict(fitG, locations=locn, newdata=df)
 })
 
 local({

@@ -2233,6 +2233,9 @@ listed alphabetically.
      Graphical parameters, specified when the object was created,
      are now taken as the defaults for graphical parameters to the plot.
 
+  \item \texttt{plot.profilepl}:
+        This function has now been documented, and the graphics improved.
+        
   \item \texttt{plot.psp}:
     \begin{itemize}
     \item Segments can be plotted with widths proportional to their mark values.
@@ -2502,8 +2505,15 @@ listed alphabetically.
     \texttt{win} is of class \texttt{box3} or \texttt{boxx}.
 
   \item \texttt{rmh}:
-    Accelerated, in the case where multiple patterns are saved 
-    using \texttt{nsave}.
+    \begin{itemize}
+    \item 
+      Accelerated, in the case where multiple patterns are saved 
+      using \texttt{nsave}.
+    \item 
+      The printed output of the debugger (invoked by \texttt{snoop=TRUE})
+      has been improved.
+    \end{itemize}
+
   
   \item \texttt{rmh.ppm, rmhmodel.ppm, simulate.ppm}:
    A model fitted using the \texttt{Penttinen} interaction can now be simulated.
@@ -2515,6 +2525,9 @@ listed alphabetically.
      for the Penttinen interaction.
    \item 
      New arguments \texttt{nsim}, \texttt{saveinfo}.
+    \item 
+      The printed output of the debugger (invoked by \texttt{snoop=TRUE})
+      has been improved.
    \end{itemize}
 
   \item \texttt{rmhcontrol}:

@@ -426,7 +426,12 @@ of potential impact.
  \item \verb![.msr!:
    Format was mangled if the subset contained exactly one quadrature point.
    \bugger{1.21-3}{january 2011}{1.56-0}{june 2018}   
-   
+
+\item \texttt{hyperframe}:
+  Did not correctly handle date-time values (columns of class \texttt{"Date"}, 
+  etc).
+     \bugger{1.19-1}{may 2010}{1.63-0}{january 2020}   
+  
  \item \texttt{tess}:
     If a list of tiles was given, and the tiles were pixel images or masks,
     their pixel resolutions were ignored, and reset to the default 
@@ -436,12 +441,23 @@ of potential impact.
  \item \texttt{nnorient}:
    crashed if the point pattern was empty.
    \bugger{1.40-0}{december 2015}{1.57-0}{october 2018}   
+
+   \item \verb!as.im.data.frame!:
+     Results were incorrect for factor-valued data.
+    \bugger{1.45-2}{may 2016}{1.63-0}{january 2020}
  \end{itemize}   
 
  %% LEVEL 4: 
  \subsection{Partially Incorrect}
  \begin{itemize}
-   
+
+ \item \texttt{kppm}, \texttt{AIC}:
+    For kppm models fitted with \verb!method='clik2'!, 
+    the resulting value of \texttt{logLik()}
+    was equal to $1/2$ of the correct value. This would have affected
+    model comparison using AIC, and model selection using \texttt{step}.
+    \bugger{1.42-0}{may 2015}{1.63-0}{january 2020}.
+    
  \item \texttt{edge.Ripley}, \texttt{Kest}, \texttt{Kinhom}:
     Isotropic correction weights for polygonal windows were sometimes incorrect
     for small radius \texttt{r} if the polygon contained many small segments
@@ -724,7 +740,13 @@ of potential impact.
   \item \texttt{nncross.ppp}:
     Format of output was incorrect if \texttt{X} was an empty pattern.
     \bugger{1.56-0}{june 2018}{1.63-0}{january 2020}
-    
+  
+  \item \texttt{rmh}, \texttt{rmh.default}:
+    For a marked point process, the debugger did not display the marks.
+    (The \texttt{rmh} debugger is invoked by calling \texttt{rmh}
+    with \texttt{snoop=TRUE}).
+    \bugger{1.31-1}{march 2013}{1.63-0}{january 2020}
+  
 \end{itemize}
 
 \begin{thebibliography}{1}

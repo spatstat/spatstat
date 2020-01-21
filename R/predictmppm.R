@@ -1,7 +1,7 @@
 #
 #    predictmppm.R
 #
-#	$Revision: 1.12 $	$Date: 2019/02/20 04:05:24 $
+#	$Revision: 1.13 $	$Date: 2020/01/21 09:56:47 $
 #
 #
 # -------------------------------------------------------------------
@@ -381,7 +381,7 @@ predict.mppm <- local({
     } else {
       pred <- predict(object, newdata=newdata, type=type)
     }
-    return(pred)
+    return(as.numeric(pred))
   }
   
   predict.mppm

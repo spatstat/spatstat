@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.62-2.023
+        CHANGES IN spatstat VERSION 1.62-2.024
 
 OVERVIEW
 
@@ -8,11 +8,11 @@ OVERVIEW
     
     o Important bug fix in simulations of the multitype hard core process.
 
-    o Minor improvements and bug fixes.
+    o Numerous improvements and bug fixes.
 
     o Deprecated functions have been removed.
 
-    o Version nickname: "Adult supervision recommended"
+    o Version nickname: "Space camouflage"
 
 SIGNIFICANT USER-VISIBLE CHANGES
 
@@ -64,7 +64,7 @@ BUG FIXES
     o kppm, AIC
     For kppm models fitted with method='clik2', the resulting value of logLik()
     was equal to 1/2 of the correct value. This would have affected
-    model comparison using AIC.
+    model comparison using AIC, and model selection using step().
     Fixed.
 
     o hyperframe
@@ -96,6 +96,10 @@ BUG FIXES
     The argument 'labels' was sometimes ignored.
     Fixed.
 
+    o as.im.data.frame
+    Results were incorrect for factor-valued data.
+    Fixed.
+
     o relrisk.ppp
     Crashed if there were more than 2 types of points
     and method = "leastsquares" or "weightedleastsquares".
@@ -112,10 +116,6 @@ BUG FIXES
     o predict.rho2hat
     Crashed if one of the original covariates was a function
     rather than an image.
-    Fixed.
-
-    o as.im.data.frame
-    Results were incorrect for factor-valued data.
     Fixed.
 
     o lineardisc
