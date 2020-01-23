@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.62-2.025
+        CHANGES IN spatstat VERSION 1.63-0
 
 OVERVIEW
 
@@ -12,7 +12,7 @@ OVERVIEW
 
     o Deprecated functions have been removed.
 
-    o Version nickname: "Space camouflage"
+    o Version nickname: "Trees in space"
 
 SIGNIFICANT USER-VISIBLE CHANGES
 

@@ -1,7 +1,7 @@
 #
 #  effectfun.R
 #
-#   $Revision: 1.24 $ $Date: 2020/01/10 04:31:41 $
+#   $Revision: 1.25 $ $Date: 2020/01/23 05:36:51 $
 #
 
 effectfun <- local({
@@ -20,7 +20,6 @@ effectfun <-  function(model, covname, ..., se.fit=FALSE, nvalues=256) {
   intern.names <-
     if(is.marked.ppm(model)) c("x", "y", "marks") else c("x", "y")
   needed.names <- variablesinformula(rhs.of.formula(formula(model)))
-  data.names <- names(model$covariates)
   #' check for clashes/quirks
   if("lambda" %in% needed.names) {
     if(is.dppm(orig.model) && (

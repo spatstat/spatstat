@@ -1,4 +1,4 @@
-Change log from 1.62-2 to 1.62-3
+Change log from 1.62-2 to 1.63-0
 ================================
 
 10 dec 2019
@@ -649,9 +649,18 @@ Change log from 1.62-2 to 1.62-3
 
    DESCRIPTION
    NEWS
-	Version 1.62-2.026
+   Nickname.txt
+	Nickname changed to 'Trees in space'
+	Version 1.63-0
 
 ------------- passed R-3.6.2 CMD check ---------------
 ------------- installed on laptop      ---------------
+
+............. passed 'make bookcheck'  ...............
+............. passed R-devel CMD check ...............
+	        (2020-01-21 r77688)
++++++++++++++ made release             +++++++++++++++		
++++++++++++++ submitted to CRAN        +++++++++++++++		
 ------------- uploaded to github       ---------------
+
 
