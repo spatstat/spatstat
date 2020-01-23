@@ -39,7 +39,7 @@ local({
 #
 # Also test nnorient()
 #
-#   $Revision: 1.31 $  $Date: 2020/01/21 03:56:32 $
+#   $Revision: 1.32 $  $Date: 2020/01/23 03:50:14 $
 #
 
 require(spatstat)
@@ -147,6 +147,20 @@ local({
   Nw  <- nncross(X,Y, iX, iY, k=3, what="which")
   Nd  <- nncross(X,Y, iX, iY, k=3, what="dist")
 
+  ## special cases
+  nndist(X[FALSE])
+  nndist(X[1])
+  nndist(X[1:3], k=4)
+  nndist(X[1:3], k=1:4)
+  nnwhich(X[FALSE])
+  nnwhich(X[1])
+  nnwhich(X[1:3], k=4)
+  nnwhich(X[1:3], k=1:4)
+  nncross(X[1:3], Y[FALSE])
+  nncross(X[1:3], Y[1])
+  nncross(X[1:3], Y[1:3], k=4)
+  nncross(X[1:3], Y[1:3], k=1:4)
+  
   ## .......  Three dimensions ................
 
   X <- runifpoint3(42)

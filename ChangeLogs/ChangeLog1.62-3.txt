@@ -623,3 +623,23 @@ Change log from 1.62-2 to 1.62-3
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
 
+23 jan 2020
+
+   plot.owin.R
+   plot.owin.Rd
+	New argument 'use.polypath'
+
+   tests/nndist.R
+   tests/windows.R
+	More tests of marginal cases
+
+   updates.Rnw
+	Updated to cover all the above.
+
+   DESCRIPTION
+   NEWS
+	Version 1.62-2.025
+
+------------- passed R-3.6.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------

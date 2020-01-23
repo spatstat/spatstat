@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.62-2.024
+        CHANGES IN spatstat VERSION 1.62-2.025
 
 OVERVIEW
 
@@ -37,6 +37,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
     The printed output of the debugger (invoked by snoop=TRUE)
     has been improved.
 
+    o plot.owin
+    New argument 'use.polypath' controls how to plot
+    a filled polygon when it has holes.
+    
     o plot.profilepl
     This function has now been documented, and the graphics improved.
 

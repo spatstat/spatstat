@@ -2233,6 +2233,10 @@ listed alphabetically.
      Graphical parameters, specified when the object was created,
      are now taken as the defaults for graphical parameters to the plot.
 
+   \item \texttt{plot.owin:} 
+     New argument \texttt{use.polypath} controls how to plot
+     a filled polygon when it has holes.
+     
   \item \texttt{plot.profilepl}:
         This function has now been documented, and the graphics improved.
         

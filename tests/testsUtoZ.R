@@ -301,7 +301,7 @@ local({
 #
 # Tests of owin geometry code
 #
-#  $Revision: 1.12 $  $Date: 2019/12/31 03:58:49 $
+#  $Revision: 1.14 $  $Date: 2020/01/23 04:02:20 $
 
 require(spatstat)
 local({
@@ -368,6 +368,11 @@ local({
   perimeter(as.mask(letterR))
   boundingradius(cells)
   
+  boundingbox(letterR)
+  boundingbox(letterR, NULL)
+  boundingbox(cells, ppm(cells ~ 1))
+  boundingbox(solist(letterR))
+
   spatstat.options(Cbdrymask=FALSE)
   bb <- bdry.mask(letterR)
   spatstat.options(Cbdrymask=TRUE)
@@ -408,6 +413,10 @@ local({
   interpretAsOrigin("bottomright", letterR)
   interpretAsOrigin("topleft", letterR)
   interpretAsOrigin("topright", letterR)
+
+  A <- break.holes(letterR)
+  B <- break.holes(letterR, splitby="y")
+  plot(letterR, col="blue", use.polypath=FALSE)
 })
 
 

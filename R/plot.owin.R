@@ -3,7 +3,7 @@
 #
 #	The 'plot' method for observation windows (class "owin")
 #
-#	$Revision: 1.58 $	$Date: 2016/07/16 06:11:47 $
+#	$Revision: 1.59 $	$Date: 2020/01/23 03:41:41 $
 #
 #
 #
@@ -13,7 +13,7 @@ plot.owin <- function(x, main, add=FALSE, ..., box, edge=0.04,
                       hatch=FALSE,
                       hatchargs=list(), 
                       invert=FALSE, do.plot=TRUE,
-                      claim.title.space=FALSE) 
+                      claim.title.space=FALSE, use.polypath=TRUE) 
 {
 #
 # Function plot.owin.  A method for plot.
@@ -150,8 +150,8 @@ plot.owin <- function(x, main, add=FALSE, ..., box, edge=0.04,
                                extrargs="lwd")
            } else {
               # Try using polypath():
-             lucy <- names(dev.cur())
-             if(!(lucy %in% c("xfig","pictex","X11"))) {
+             if(use.polypath &&
+                !(names(dev.cur()) %in% c("xfig","pictex","X11"))) {
                ppa <- owin2polypath(W)
                do.call.plotfun(polypath,
                                resolve.defaults(ppa,

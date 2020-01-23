@@ -10,7 +10,7 @@
                       hatch=FALSE,
                       hatchargs=list(), 
                       invert=FALSE, do.plot=TRUE,
-                      claim.title.space=FALSE)
+                      claim.title.space=FALSE, use.polypath=TRUE)
 }
 \arguments{
   \item{x}{
@@ -72,6 +72,15 @@
     Logical value indicating whether extra space for the main title
     should be allocated when declaring the plot dimensions.
     Should be set to \code{FALSE} under normal conditions.
+  }
+  \item{use.polypath}{
+    Logical value indicating what graphics capabilities should be used
+    to draw a polygon filled with colour when the polygon has holes.
+    If \code{TRUE} (the default), then the polygon will be filled using
+    \code{\link[graphics]{polypath}}, provided the graphics device
+    supports this function. If \code{FALSE}, the polygon will be
+    decomposed into simple closed polygons, which will be colour filled
+    using \code{\link[graphics]{polygon}}.
   }
 }
 \value{
