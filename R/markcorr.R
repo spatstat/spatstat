@@ -2,7 +2,7 @@
 ##
 ##     markcorr.R
 ##
-##     $Revision: 1.78 $ $Date: 2019/05/27 12:55:16 $
+##     $Revision: 1.81 $ $Date: 2020/01/26 05:51:03 $
 ##
 ##    Estimate the mark correlation function
 ##    and related functions 
@@ -23,6 +23,9 @@ markvario <- local({
         stop("Marks are not numeric")
       if(missing(correction))
         correction <- NULL
+      ## compute reference value Ef
+      weights <- getpointweights(X, ..., parent=parent.frame())
+      Ef <- if(is.null(weights)) var(m) else weighted.var(m, weights)
       ## Compute estimates
       v <- markcorr(X, f=halfsquarediff, 
                     r=r, correction=correction, method=method,
@@ -49,20 +52,27 @@ markconnect <- local({
   
   markconnect <- function(X, i, j, r=NULL, 
                           correction=c("isotropic", "Ripley", "translate"),
-                          method="density", ..., normalise=FALSE) {
+                          method="density", ...,
+                          normalise=FALSE) {
     stopifnot(is.ppp(X) && is.multitype(X))
     if(missing(correction))
       correction <- NULL
+    nX <- npoints(X)
     marx <- marks(X)
     lev  <- levels(marx)
     if(missing(i)) i <- lev[1]
     if(missing(j)) j <- lev[2]
+    ## compute reference value Ef
+    weights <- getpointweights(X, ..., parent=parent.frame())
+    Ef <- if(is.null(weights)) mean(marx == i) * mean(marx == j) else 
+          mean(weights * (marx == i)) * mean(weights * (marx == j))
     ## compute estimates
     p <- markcorr(X, f=indicateij, r=r,
                   correction=correction, method=method,
                   ...,
                   fargs=list(i=i, j=j),
-                  normalise=normalise)
+                  normalise=normalise,
+                  internal=list(Ef=Ef))
     ## alter theoretical value and fix labels
     if(!normalise) {
       pipj <- mean(marx==i) * mean(marx==j) 
@@ -266,7 +276,8 @@ markcorr <-
   function(X, f = function(m1, m2) { m1 * m2}, r=NULL, 
            correction=c("isotropic", "Ripley", "translate"),
            method="density", ...,
-           weights=NULL, f1=NULL, normalise=TRUE, fargs=NULL)
+           weights=NULL, f1=NULL, normalise=TRUE, fargs=NULL,
+           internal=NULL)
 {
   ## mark correlation function with test function f
   stopifnot(is.ppp(X) && is.marked(X))
@@ -297,10 +308,7 @@ markcorr <-
   if(unweighted <- is.null(weights)) {
     weights <- rep(1, nX)
   } else {
-    stopifnot(is.numeric(weights))
-    if(length(weights) == 1) {
-      weights <- rep(weights, nX)
-    } else check.nvector(weights, nX)
+    weights <- getpointweights(X, weights=weights, parent=parent.frame())
     stopifnot(all(weights > 0))
   }
   
@@ -345,39 +353,43 @@ markcorr <-
 
   ## Denominator
   ## Ef = Ef(M,M') when M, M' are independent
-  ## Apply f to every possible pair of marks, and average
-  Ef <- switch(ftype,
-               mul = {
-                 mean(marx * weights)^2
-               },
-               equ = {
-                 if(unweighted) {
-                   mtable <- table(marx)
-                 } else {
-                   mtable <- tapply(weights, marx, sum)
-                   mtable[is.na(mtable)] <- 0
-                 }
-                 sum(mtable^2)/nX^2
-             },
-               product={
-                 f1m <- do.call(f1, append(list(marx), fargs))
-                 mean(f1m * weights)^2
-               },
-               general = {
-                 mcross <- if(is.null(fargs)) {
-                   outer(marx, marx, f)
-                 } else {
-                   do.call(outer, append(list(marx,marx,f),fargs))
-                 }
-                 if(unweighted) {
-                   mean(mcross)
-                 } else {
-                   wcross <- outer(weights, weights, "*")
-                   mean(mcross * wcross)
-                 }
-               },
-               stop("Internal error: invalid ftype"))
-
+  ## Optionally provided by other code
+  Ef <- internal$Ef
+  if(is.null(Ef)) {
+    ## Apply f to every possible pair of marks, and average
+    Ef <- switch(ftype,
+                 mul = {
+                   mean(marx * weights)^2
+                 },
+                 equ = {
+                   if(unweighted) {
+                     mtable <- table(marx)
+                   } else {
+                     mtable <- tapply(weights, marx, sum)
+                     mtable[is.na(mtable)] <- 0
+                   }
+                   sum(mtable^2)/nX^2
+                 },
+                 product={
+                   f1m <- do.call(f1, append(list(marx), fargs))
+                   mean(f1m * weights)^2
+                 },
+                 general = {
+                   mcross <- if(is.null(fargs)) {
+                               outer(marx, marx, f)
+                             } else {
+                               do.call(outer, append(list(marx,marx,f),fargs))
+                             }
+                   if(unweighted) {
+                     mean(mcross)
+                   } else {
+                     wcross <- outer(weights, weights, "*")
+                     mean(mcross * wcross)
+                   }
+                 },
+                 stop("Internal error: invalid ftype"))
+  }
+  
   if(normalise) {
     theory <- 1
     Efdenom <- Ef

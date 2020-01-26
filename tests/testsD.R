@@ -174,6 +174,11 @@ local({
   bw.ppl(redwood, srange=sigran, ns=5)
   bw.CvL(redwood, sigma=sigvec)
   bw.CvL(redwood, srange=sigran, ns=5)
+
+  ## adaptive bandwidth
+  a <- bw.abram(redwood)
+  a <- bw.abram(redwood, pilot=density(redwood, 0.2))
+  a <- bw.abram(redwood, smoother="densityVoronoi", at="pixels")
   
   ## Kinhom 
   lam <- density(redwood)

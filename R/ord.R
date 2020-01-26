@@ -2,7 +2,7 @@
 #
 #    ord.S
 #
-#    $Revision: 1.8 $	$Date: 2018/03/15 07:37:41 $
+#    $Revision: 1.9 $	$Date: 2020/01/26 04:32:04 $
 #
 #    Ord process with user-supplied potential
 #
@@ -44,6 +44,7 @@ Ord <- local({
     out <- instantiate.interact(BlankOrd)
     out$pot <- pot
     if(!missing(name)) out$name <- name
+    return(out)
   }
 
   Ord <- intermaker(Ord, BlankOrd)

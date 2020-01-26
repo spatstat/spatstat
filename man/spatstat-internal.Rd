@@ -205,6 +205,7 @@
 \alias{getglmsubset}
 \alias{getlambda.lpp}
 \alias{getlastshift}
+\alias{getpointweights}
 \alias{getppmdatasubset}
 \alias{getppmOriginalCovariates}
 \alias{getRandomFieldsModelGen}
@@ -1050,6 +1051,7 @@ getglmsubset(object)
 getlambda.lpp(lambda, X, subset, \dots,
               update, leaveoneout, loo.given, lambdaname)
 getlastshift(X)
+getpointweights(X, \dots, weights, parent)
 getppmdatasubset(object)
 getppmOriginalCovariates(object)
 getRandomFieldsModelGen(model)

@@ -3,7 +3,7 @@
 #
 # code to plot transformation diagnostic
 #
-#   $Revision: 1.12 $  $Date: 2019/04/27 09:08:21 $
+#   $Revision: 1.13 $  $Date: 2020/01/26 09:06:34 $
 #
 
 parres <- function(model, covariate, ...,
@@ -370,16 +370,22 @@ parres <- function(model, covariate, ...,
   
   nbg <- nbg.cov | nbg.eff
   ok <- !nbg & operative
-  
-  Q           <- Q[ok]
-  covvalues   <- covvalues[ok]
-  quadpoints  <- quadpoints[ok]
-  resid       <- resid[ok]
-  lam         <- lam[ok]
-  effect      <- effect[ok]
-  insubregion <- insubregion[ok]
-  Z           <- Z[ok]
-  wts         <- wts[ok]
+
+  if(sum(ok) < 2) {
+    warning("Not enough data; returning NULL")
+    return(NULL)
+  }
+  if(!all(ok)) {
+    Q           <- Q[ok]
+    covvalues   <- covvalues[ok]
+    quadpoints  <- quadpoints[ok]
+    resid       <- resid[ok]
+    lam         <- lam[ok]
+    effect      <- effect[ok]
+    insubregion <- insubregion[ok]
+    Z           <- Z[ok]
+    wts         <- wts[ok]
+  }
 
   ####################################################
   # assemble data for smoothing 
@@ -423,6 +429,10 @@ parres <- function(model, covariate, ...,
   if(!is.null(subregion) && !bw.restrict) {
     # Bandwidth was computed on all data
     # Restrict to subregion and recompute numerator
+    if(sum(insubregion) < 2) {
+      warning("Not enough useable data in subregion; returning NULL")
+      return(NULL)
+    }
     x   <- x[insubregion]
     y   <- y[insubregion]
     w   <- w[insubregion]
@@ -445,10 +455,13 @@ parres <- function(model, covariate, ...,
   
   ####################################################
   # Determine recommended plot range
-
-  xr <- range(as.vector(x[Z]), finite=TRUE)
-  alim <- xr + 0.1 * diff(xr) * c(-1,1)
-  alim <- intersect.ranges(alim, c(from, to))
+  alim <- c(from, to)
+  nZ <- sum(Z)
+  if(nZ > 5) {
+    xr <- range(as.vector(x[Z]), finite=TRUE)
+    alimx <- xr + 0.1 * diff(xr) * c(-1,1)
+    alim <- intersect.ranges(alim, alimx)
+  } 
   
   ####################################################
   # Compute terms 
@@ -473,12 +486,14 @@ parres <- function(model, covariate, ...,
   varestxxx <- varnumfun(xxx)/(2 * sigma * sqrt(pi) * denfun(xxx)^2)
   sd <- sqrt(varestxxx)
   # alternative estimate of variance using data points only
-  varXnumer <- unnormdensity(x[Z], weights=1/lam[Z]^2,
-                             bw=tau, adjust=1,
-                             n=n,from=from,to=to, ...)
-  varXnumfun <- interpolate(varXnumer)
-  varXestxxx <- varXnumfun(xxx)/(2 * sigma * sqrt(pi) * denfun(xxx)^2)
-  sdX <- sqrt(varXestxxx)
+  if(nZ > 1) {
+    varXnumer <- unnormdensity(x[Z], weights=1/lam[Z]^2,
+                               bw=tau, adjust=1,
+                               n=n,from=from,to=to, ...)
+    varXnumfun <- interpolate(varXnumer)
+    varXestxxx <- varXnumfun(xxx)/(2 * sigma * sqrt(pi) * denfun(xxx)^2)
+    sdX <- sqrt(varXestxxx)
+  } else sdX <- rep(NA, length(xxx))
   # fitted effect
   effxxx <- effectFun(xxx)
   

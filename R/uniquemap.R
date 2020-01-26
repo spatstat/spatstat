@@ -4,7 +4,7 @@
 #'   Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2019
 #'   Licence: GNU Public Licence >= 2
 #'
-#'   $Revision: 1.15 $  $Date: 2019/10/30 09:33:01 $
+#'   $Revision: 1.16 $  $Date: 2020/01/26 03:50:10 $
 
 uniquemap <- function(x) { UseMethod("uniquemap") }
 
@@ -41,7 +41,8 @@ uniquemap.matrix <- function(x) {
       xx <- x[oo, , drop=FALSE]
       isfirst <- c(TRUE, (diff(xx[,1]) != 0) | (diff(xx[,2]) != 0))
     } else {
-      y <- asplit(x, 2)
+      ## y <- asplit(x, 2) would require R 3.6.0
+      y <- split(as.vector(x), factor(as.vector(col(x)), levels=1:nc))
       oo <- do.call(order, append(unname(y), list(seqn)))
       xx <- x[oo, , drop=FALSE]
       isfirst <- c(TRUE, matrowany(apply(xx, 2, diff) != 0))

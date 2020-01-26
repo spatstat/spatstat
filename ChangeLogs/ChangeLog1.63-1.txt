@@ -1,0 +1,60 @@
+Change log from 1.63-0 to 1.63-1
+================================
+
+24 jan 2020
+
+   DESCRIPTION
+   NEWS
+   Nickname.txt
+        Require spatstat.data 1.4-2
+	Nickname changed to 'Deuterocanonical'
+	Version 1.63-0.001
+
+   as.owin.Rd
+	Modified 'require(spatstat)' call to satisfy package checker.
+	
+------------- passed R-3.6.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+
+26 jan 2020
+
+   uniquemap.R
+	Modified code to remove dependence on R 3.6.0
+
+   markcorr.R
+	Accelerated markconnect and markvario
+	by avoiding O(n^2) calculation of the reference value.
+
+   intensity.R
+   markcorr.R
+   spatstat-internal.Rd
+	New internal function 'getpointweights'
+	(gives more flexible options for argument 'weights')
+
+   parres.R
+	Fix rare bug arising when the number of useable values is very small.
+	
+   interact.R
+   ord.R
+	Minor tweaks to accommodate Ord(f)
+	
+   tests/density.R
+   tests/NAinCov.R
+   tests/lppstuff.R
+   tests/rmhBasic.R
+   tests/rmhMulti.R
+   tests/segments.R
+   tests/triplets.R
+   tests/undoc.R
+	More tests of code blocks
+
+   DESCRIPTION
+   NEWS
+   Nickname.txt
+	Nickname changed to 'Happy Invasion Day'
+	Version 1.63-0.002
+
+------------- passed R-3.6.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------

@@ -3,7 +3,7 @@
 #
 # Code related to intensity and intensity approximations
 #
-#  $Revision: 1.20 $ $Date: 2017/06/05 10:31:58 $
+#  $Revision: 1.21 $ $Date: 2020/01/26 05:43:01 $
 #
 
 intensity <- function(X, ...) {
@@ -22,21 +22,8 @@ intensity.ppp <- function(X, ..., weights=NULL) {
     } else answer <- n/a
     return(answer)
   }
-  ## weighted case 
-  if(is.numeric(weights)) {
-    check.nvector(weights, n)
-  } else if(is.expression(weights)) {
-    # evaluate expression in data frame of coordinates and marks
-    df <- as.data.frame(X)
-    pf <- parent.frame()
-    eval.weights <- try(eval(weights, envir=df, enclos=pf))
-    if(inherits(eval.weights, "try-error"))
-      stop("Unable to evaluate expression for weights", call.=FALSE)
-    if(!check.nvector(eval.weights, n, fatal=FALSE, warn=TRUE))
-      stop("Result of evaluating the expression for weights has wrong format")
-    weights <- eval.weights
-  } else stop("Unrecognised format for argument 'weights'")
-  ##
+  ## weighted case
+  weights <- getpointweights(X, weights=weights, parent=parent.frame())
   if(is.multitype(X)) {
     mks <- marks(X)
     answer <- as.vector(tapply(weights, mks, sum))/a
@@ -46,6 +33,27 @@ intensity.ppp <- function(X, ..., weights=NULL) {
     answer <- sum(weights)/a
   }
   return(answer)
+}
+
+## get a valid vector of weights for a point pattern
+getpointweights <- function(X, ..., weights=NULL, parent=NULL) {
+  if(is.null(weights)) return(NULL)
+  nX <- npoints(X)
+  if(is.numeric(weights)) {
+    if(length(weights) == 1) {
+      weights <- rep(weights, nX)
+    } else check.nvector(weights, nX)
+  } else if(is.expression(weights)) {
+    # evaluate expression in data frame of coordinates and marks
+    df <- as.data.frame(X)
+    eval.weights <- try(eval(weights, envir=df, enclos=parent))
+    if(inherits(eval.weights, "try-error"))
+      stop("Unable to evaluate expression for weights", call.=FALSE)
+    if(!check.nvector(eval.weights, nX, fatal=FALSE, warn=TRUE))
+      stop("Result of evaluating the expression for weights has wrong format")
+    weights <- eval.weights
+  } else stop("Unrecognised format for argument 'weights'")
+  return(weights)
 }
 
 intensity.splitppp <- function(X, ..., weights=NULL) {

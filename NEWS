@@ -1,4 +1,32 @@
 
+        CHANGES IN spatstat VERSION 1.63-0.002
+
+OVERVIEW
+
+    o Minor changes to satisfy the package checker.
+
+    o Minor improvements and bug fixes.
+
+    o Version nickname: 'Happy Invasion Day'
+    
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o markconnect
+    Runs faster and handles much larger datasets.
+
+    o markvario
+    Runs faster and handles much larger datasets.
+
+    o markcorr, markconnect, markvario
+    The 'weights' can now be an expression to be evaluated.
+
+BUG FIXES
+
+    o parres
+    Crashed in rare circumstances, when the data did not contain
+    enough useable values to perform smoothing.
+    Fixed.
+    
         CHANGES IN spatstat VERSION 1.63-0
 
 OVERVIEW
@@ -13,7 +41,7 @@ OVERVIEW
     o Deprecated functions have been removed.
 
     o Version nickname: "Trees in space"
-
+ 
 SIGNIFICANT USER-VISIBLE CHANGES
 
     o minnndist, maxnndist

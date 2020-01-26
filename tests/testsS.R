@@ -16,7 +16,7 @@ local({
 ##   Tests of psp class and related code
 ##                      [SEE ALSO: tests/xysegment.R]
 ##
-##  $Revision: 1.22 $  $Date: 2020/01/18 02:29:37 $
+##  $Revision: 1.23 $  $Date: 2020/01/26 04:16:38 $
 
 require(spatstat)
 
@@ -31,6 +31,13 @@ X[W]
 X <- psp(runif(10),runif(10),runif(10),runif(10), window=owin())
 Z <- as.mask.psp(X)
 Z <- pixellate(X)
+
+# add short segment
+df <- as.data.frame(X)
+df[3,] <- c(0.5, 0.6, 0.5001, 0.6001)
+XX <- as.psp(df, window=Window(X))
+ZZ <- as.mask.psp(XX)
+ZZ <- pixellate(XX)
 
 #' misc
 PX <- periodify(X, 2)

@@ -1,7 +1,7 @@
 #
 #  tests/undoc.R
 #
-#   $Revision: 1.11 $   $Date: 2019/11/29 03:41:54 $
+#   $Revision: 1.12 $   $Date: 2020/01/26 04:38:19 $
 #
 #  Test undocumented hacks, experimental code, etc
 
@@ -93,6 +93,14 @@ local({
   versioncurrency.spatstat(now + 140, FALSE)
   versioncurrency.spatstat(now + 400, FALSE)
   versioncurrency.spatstat(now + 1000)
+
+  #' general Ord interaction
+  gradual <- function(d, pars) {
+    y <- pmax(0, 0.005 - d)/0.005
+    if(is.matrix(d)) y <- matrix(y, nrow(d), ncol(d))
+    return(y)
+  }
+  B <- Ord(gradual, "gradual Ord process")
 })
 
 ##

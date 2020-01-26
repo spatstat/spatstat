@@ -21,6 +21,9 @@ local({
   #' quantile.ewcdf
   f <- ewcdf(runif(100), runif(100))
   qf <- quantile(f, probs=c(0.1, NA, 0.8))
+  #' quantile.density
+  f <- density(runif(100))
+  qf <- quantile(f, probs=c(0.1, NA, 0.8))
 })
 
 

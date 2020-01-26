@@ -244,10 +244,13 @@ in any of several formats, into an object of class \code{"owin"}.
  w <- as.owin(Z)
 
  # Venables & Ripley 'spatial' package
- require(spatial)
- towns <- ppinit("towns.dat")
- w <- as.owin(towns)
- detach(package:spatial)
+ spatialpath <- system.file(package="spatial")
+ if(nchar(spatialpath) > 0) {
+   require(spatial)
+   towns <- ppinit("towns.dat")
+   w <- as.owin(towns)
+   detach(package:spatial)
+ }
 }
 \author{
   \spatstatAuthors.

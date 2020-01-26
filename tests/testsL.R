@@ -364,7 +364,7 @@ local({
 #
 # Tests for lpp code
 #
-#  $Revision: 1.45 $  $Date: 2020/01/11 14:37:23 $
+#  $Revision: 1.46 $  $Date: 2020/01/26 04:08:33 $
 
 
 require(spatstat)
@@ -710,6 +710,15 @@ local({
   iA <- as.linfun(tes)(X)
   if(!identical(iI, iA))
     stop("disagreement between as.linfun.lintess and lineartileindex")
+
+  ## intersection of lintess
+  X <- divide.linnet(runiflpp(4, simplenet))
+  Y <- divide.linnet(runiflpp(3, simplenet))
+  marks(X) <- factor(letters[c(1,2,1,2)])
+  marks(Y) <- runif(3)
+  Zmm <- intersect.lintess(X,Y)
+  Zum <- intersect.lintess(unmark(X),Y)
+  Zmu <- intersect.lintess(X,unmark(Y))
 })
 
 reset.spatstat.options()
