@@ -16,7 +16,7 @@ local({
 ##   Tests of psp class and related code
 ##                      [SEE ALSO: tests/xysegment.R]
 ##
-##  $Revision: 1.23 $  $Date: 2020/01/26 04:16:38 $
+##  $Revision: 1.24 $  $Date: 2020/01/27 09:29:59 $
 
 require(spatstat)
 
@@ -33,9 +33,8 @@ Z <- as.mask.psp(X)
 Z <- pixellate(X)
 
 # add short segment
-df <- as.data.frame(X)
-df[3,] <- c(0.5, 0.6, 0.5001, 0.6001)
-XX <- as.psp(df, window=Window(X))
+Shorty <- psp(0.5, 0.6, 0.5001, 0.6001, window=Window(X))
+XX <- superimpose(X[1:5], Shorty, X[6:10])
 ZZ <- as.mask.psp(XX)
 ZZ <- pixellate(XX)
 

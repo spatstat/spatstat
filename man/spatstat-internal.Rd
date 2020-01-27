@@ -205,7 +205,6 @@
 \alias{getglmsubset}
 \alias{getlambda.lpp}
 \alias{getlastshift}
-\alias{getpointweights}
 \alias{getppmdatasubset}
 \alias{getppmOriginalCovariates}
 \alias{getRandomFieldsModelGen}
@@ -332,6 +331,7 @@
 \alias{PDEdensityLPP}
 \alias{plan.legend.layout}
 \alias{plotWidthMap}
+\alias{pointweights}
 \alias{PoisSaddle}
 \alias{PoisSaddleArea}
 \alias{PoisSaddleGeyer}
@@ -1051,7 +1051,6 @@ getglmsubset(object)
 getlambda.lpp(lambda, X, subset, \dots,
               update, leaveoneout, loo.given, lambdaname)
 getlastshift(X)
-getpointweights(X, \dots, weights, parent)
 getppmdatasubset(object)
 getppmOriginalCovariates(object)
 getRandomFieldsModelGen(model)
@@ -1200,6 +1199,7 @@ PairPotentialType(pairpot)
 PDEdensityLPP(x, sigma, \dots, weights, dx, dt, iterMax,
               fun, finespacing, finedata)
 plotWidthMap(bb.leg, zlim, phys.scale, leg.scale, leg.side, leg.args, grafpar)
+pointweights(X, \dots, weights, parent)
 PoisSaddle(beta, fi)
 PoisSaddleArea(beta, fi)
 PoisSaddleGeyer(beta, fi)

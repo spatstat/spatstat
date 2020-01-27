@@ -3,7 +3,7 @@
 #'
 #'   evaluate covariate values at data points and at pixels
 #'
-#' $Revision: 1.27 $ $Date: 2018/09/28 05:11:03 $
+#' $Revision: 1.32 $ $Date: 2020/01/27 12:01:34 $
 #'
 
 evalCovar <- function(model, covariate, ...) {
@@ -121,7 +121,7 @@ evalCovar.ppm <- local({
         names(covariate) <- as.character(possmarks)
       }
       #'
-      if(is.list(covariate) && all(unlist(lapply(covariate, is.im)))) {
+      if(is.list(covariate) && all(sapply(covariate, is.im))) {
         #' list of images
         type <- "im"
         if(length(covariate) != length(possmarks))
@@ -144,7 +144,7 @@ evalCovar.ppm <- local({
           ZX[ii] <- values
         }
         #' restrict covariate images to window 
-        Z <- lapply(covariate, "[", i=W, drop=FALSE)
+        Z <- solapply(covariate, "[", i=W, drop=FALSE)
         #' extract pixel locations and pixel values
         Zframes <- lapply(Z, as.data.frame)
         #' covariate values at each pixel inside window
@@ -206,15 +206,19 @@ evalCovar.ppm <- local({
 
     #' lambda values at data points
     lambdaX <- predict(model, locations=X, type=lambdatype)
+
+    #' lambda image(s)
+    lambdaimage <- predict(model, locations=W, type=lambdatype)
     
     #' wrap up 
-    values <- list(Zimage    = Z,
-                   Zvalues   = Zvalues,
-                   lambda    = lambda,
-                   lambdaX   = lambdaX,
-                   weights   = pixelarea,
-                   ZX        = ZX,
-                   type      = type)
+    values <- list(Zimage      = Z,
+                   lambdaimage = lambdaimage,
+                   Zvalues     = Zvalues,
+                   lambda      = lambda,
+                   lambdaX     = lambdaX,
+                   weights     = pixelarea,
+                   ZX          = ZX,
+                   type        = type)
     return(list(values=values, info=info))
   }
 
@@ -294,10 +298,10 @@ evalCovar.lppm <- local({
     wt <- w.quad(Q)
   
     #' evaluate covariate
-    if(!is.marked(model)) {
+    if(ismark <- !is.marked(model)) {
       #' ...................  unmarked .......................
       if(is.im(covariate)) {
-        if(inherits(covariate, "linim")) {
+        if(is.linim(covariate)) {
           type <- "linim"
           Zimage <- covariate
         } else {
@@ -348,14 +352,14 @@ evalCovar.lppm <- local({
         names(covariate) <- possmarks
       }
       #'
-      if(is.list(covariate) && all(unlist(lapply(covariate, is.im)))) {
+      if(is.list(covariate) && all(sapply(covariate, is.im))) {
         #' list of images
         if(length(covariate) != length(possmarks))
           stop("Number of images does not match number of possible marks")
         #' determine type of data
-        islinim <- unlist(lapply(covariate, inherits, what="linim"))
+        islinim <- sapply(covariate, is.linim)
         type <- if(all(islinim)) "linim" else "im"
-        Zimage <- covariate
+        Zimage <- as.solist(covariate)
         Zimage[!islinim] <- lapply(Zimage[!islinim], as.linim, L=L)
         #' evaluate covariate at each data point by interpolation
         Zvalues <- numeric(npoints(U))
@@ -422,21 +426,27 @@ evalCovar.lppm <- local({
     check.finite(lambda, xname=lambdaname, usergiven=FALSE)
     check.finite(Zvalues, xname="the covariate", usergiven=TRUE)
 
-    #' restrict image to subset 
-    if(!is.null(subset))
-      Zimage <- Zimage[subset, drop=FALSE]
-
     #' lambda values at data points
     lambdaX <- predict(model, locations=X, type=lambdatype)
+
+    #' lambda image(s)
+    lambdaimage <- predict(model, type=lambdatype)
     
+    #' restrict image to subset 
+    if(!is.null(subset)) {
+      Zimage      <- applySubset(Zimage, subset)
+      lambdaimage <- applySubset(lambdaimage, subset)
+    }
+
     #' wrap up 
-    values <- list(Zimage    = Zimage,
-                   Zvalues   = Zvalues,
-                   lambda    = lambda,
-                   lambdaX   = lambdaX,
-                   weights   = wt,
-                   ZX        = ZX,
-                   type      = type)
+    values <- list(Zimage      = Zimage,
+                   lambdaimage = lambdaimage,
+                   Zvalues     = Zvalues,
+                   lambda      = lambda,
+                   lambdaX     = lambdaX,
+                   weights     = wt,
+                   ZX          = ZX,
+                   type        = type)
     return(list(values=values, info=info))
   }
 
@@ -449,6 +459,11 @@ evalCovar.lppm <- local({
     value <- if(nf == 2) f(x,y) else if(nf == 3) f(x,y,m) else f(x,y,m,...)
     return(value)
   }
-            
+
+  applySubset <- function(X, subset) {
+    if(is.im(X)) return(X[subset, drop=FALSE])
+    if(is.imlist(X)) return(solapply(X, "[", i=subset, drop=FALSE))
+    return(NULL)
+  }
   evalCovar.lppm
 })

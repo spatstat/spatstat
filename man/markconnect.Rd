@@ -40,7 +40,8 @@ markconnect(X, i, j, r=NULL,
     \code{"sm"} and \code{"smrep"}.
   }
   \item{\dots}{
-    Arguments passed to the density estimation routine
+    Arguments passed to \code{\link{markcorr}},
+    or passed to the density estimation routine
     (\code{\link{density}}, \code{\link{loess}} or \code{sm.density})
     selected by \code{method}.
   }

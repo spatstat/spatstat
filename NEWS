@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.63-0.002
+        CHANGES IN spatstat VERSION 1.63-0.003
 
 OVERVIEW
 
@@ -8,6 +8,11 @@ OVERVIEW
     o Minor improvements and bug fixes.
 
     o Version nickname: 'Happy Invasion Day'
+
+NEW FUNCTIONS
+
+    o is.linim
+    Tests whether an object belongs to class 'linim'.
     
 SIGNIFICANT USER-VISIBLE CHANGES
 
@@ -17,16 +22,36 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o markvario
     Runs faster and handles much larger datasets.
 
-    o markcorr, markconnect, markvario
-    The 'weights' can now be an expression to be evaluated.
+    o markcorr, markconnect, markvario 
+    The 'weights' can now be an expression to be evaluated,
+    or a function, or a pixel image, as well as a numeric vector.
+
+    o Smooth.ppp
+    The 'weights' can now be an expression to be evaluated,
+    or a function, or a pixel image, as well as a numeric vector.
+
+    o rpoislpp
+    If 'lambda' is a list of 'linim' or 'linfun' objects, then
+    the argument L can be omitted.
 
 BUG FIXES
+
+    o predict.rhohat, simulate.rhohat
+    When applied to a 'rhohat' object computed from
+    linear network data (lpp or lppm), there was a warning
+    about the lengths of vectors, and the results were incorrect.
+    Fixed.
+
+    o predict.rhohat, simulate.rhohat
+    Crashed when applied to a 'rhohat' object computed from *multitype* 
+    linear network data (multitype lpp or lppm).
+    Fixed.
 
     o parres
     Crashed in rare circumstances, when the data did not contain
     enough useable values to perform smoothing.
     Fixed.
-    
+
         CHANGES IN spatstat VERSION 1.63-0
 
 OVERVIEW

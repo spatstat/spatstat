@@ -93,7 +93,7 @@ predict.lppm <- function(object, ...,
   L <- as.linnet(X)
 
   if(!is.null(locations)) {
-    #' locations given; return a vector of predicted values
+    #' locations given; return a vector/matrix of predicted values
     if(is.lpp(locations)) locations <- as.ppp(locations)
     values <- predict(fit, locations=locations, type=type, new.coef=new.coef)
     return(values)

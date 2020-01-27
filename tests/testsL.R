@@ -364,7 +364,7 @@ local({
 #
 # Tests for lpp code
 #
-#  $Revision: 1.46 $  $Date: 2020/01/26 04:08:33 $
+#  $Revision: 1.49 $  $Date: 2020/01/27 12:02:58 $
 
 
 require(spatstat)
@@ -382,6 +382,7 @@ local({
   #' geometry etc
   rotate(X, pi/3, centre=c(0.2,0.3))
   superimpose.lpp(L=simplenet)
+  W <- Window(X)
   #' cut.lpp
   tes <- lineardirichlet(runiflpp(4, simplenet))
   f <- as.linfun(tes)
@@ -602,6 +603,7 @@ local({
   ## options to plot.linim
   plot(xcoord, legend=FALSE)
   plot(xcoord, leg.side="top")
+  plot(xcoord, style="width", leg.side="bottom")
   
   ## as.linim.linim
   xxcc <- as.linim(xcoord)
@@ -841,6 +843,22 @@ local({
   stopifnot(is.multitype(rlpp(c(10,5), list(a=D,b=D))))
   stopifnot(is.multitype(rlpp(5,       list(a=D,b=D))))
   stopifnot(is.multitype(rlpp(c(10,5), D)))
+})
+
+local({
+  ## rhohat.lppm
+  fut <- lppm(spiders ~ 1)
+  rx <- rhohat(fut, "x")
+  Z <- linfun(function(x,y,seg,tp) { x }, domain(spiders))
+  rZ <- rhohat(fut, Z)
+  U <- predict(rx)
+  U <- predict(rZ)
+  Y <- simulate(rx)
+  Y <- simulate(rZ)
+  futm <- lppm(chicago ~ x + marks)
+  ry <- rhohat(futm, "y")
+  U <- predict(ry)
+  Y <- simulate(ry)
 })
 #'
 #'   lppmodels.R

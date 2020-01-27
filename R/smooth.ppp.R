@@ -3,7 +3,7 @@
 #
 #  Smooth the marks of a point pattern
 # 
-#  $Revision: 1.71 $  $Date: 2019/12/11 01:32:09 $
+#  $Revision: 1.72 $  $Date: 2020/01/27 09:11:57 $
 #
 
 # smooth.ppp <- function(X, ..., weights=rep(1, npoints(X)), at="pixels") {
@@ -56,18 +56,10 @@ Smooth.ppp <- function(X, sigma=NULL, ...,
   }
 
   ## ensure weights are numeric
-  weightsgiven <- !missing(weights) && !is.null(weights) 
-  if(weightsgiven) {
-    # convert to numeric
-    if(is.im(weights)) {
-      weights <- safelookup(weights, X) # includes warning if NA
-    } else if(is.expression(weights)) 
-      weights <- eval(weights, envir=as.data.frame(X), enclos=parent.frame())
-    if(length(weights) == 0)
-      weightsgiven <- FALSE
-  }
-  if(weightsgiven) {
-    check.nvector(weights, npoints(X))
+  if(weightsgiven <- !missing(weights) && !is.null(weights)) {
+    pa <- parent.frame()
+    weights <- pointweights(X, weights=weights, parent=pa)
+    weightsgiven <- !is.null(weights)
   } else weights <- NULL
 
   ## geometric mean smoothing

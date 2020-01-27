@@ -8,9 +8,14 @@
 
 rpoislpp <- function(lambda, L, ..., nsim=1, drop=TRUE) {
   if(missing(L) || is.null(L)) {
-    if(!inherits(lambda, c("linim", "linfun")))
-      stop("L is missing", call.=FALSE)
-    L <- as.linnet(lambda)
+    if(inherits(lambda, c("linim", "linfun"))) {
+      L <- as.linnet(lambda)
+    } else if(all(sapply(lambda, inherits, what=c("linim", "linfun")))) {
+      L <- unique(lapply(lambda, as.linnet))
+      if(length(L) > 1)
+        stop("All entries of lambda must be defined on the same network")
+      L <- L[[1L]]
+    } else stop("L is missing", call.=FALSE)
   } else verifyclass(L, "linnet")
   result <- vector(mode="list", length=nsim)
   S <- as.psp(L)

@@ -58,3 +58,49 @@ Change log from 1.63-0 to 1.63-1
 ------------- passed R-3.6.2 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
+
+27 jan 2020
+
+   intensity.R
+   pointweights.R [New file]
+   markcorr.R
+   spatstat-internal.Rd
+       Moved 'getpointweights' to new file and renamed 'pointweights'.
+       Extended its functionality.
+
+   smooth.ppp.R
+	Use 'pointweights'
+
+   Smooth.ppp.Rd
+   markcorr.Rd
+   markvario.Rd
+   markconnect.Rd
+	weights can be a function, pixel image, etc.
+
+   evalcovar.R
+	Now computes more internal data.
+	
+   linim.R
+   is.linim.Rd [New file]
+        New function.
+
+   rhohat.R
+	Numerous bug fixes in rhohat, predict.rhohat, simulate.rhohat
+	for the case of a linear network.
+	
+   randomlpp.R
+	Now handles lambda=<list of linim> when L is missing.
+	
+   tests/density.R
+   tests/segments.R
+   tests/lppstuff.R
+	More better tests
+
+   DESCRIPTION
+   NEWS
+   Nickname.txt
+	Version 1.63-0.003
+
+------------- passed R-3.6.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------

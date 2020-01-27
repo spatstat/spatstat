@@ -32,7 +32,8 @@ r = NULL, method = "density", ..., normalise=FALSE)
     \code{"sm"} and \code{"smrep"}.
   }
   \item{\dots}{
-    Arguments passed to the density estimation routine
+    Other arguments passed to \code{\link{markcorr}},
+    or passed to the density estimation routine
     (\code{\link{density}}, \code{\link{loess}} or \code{sm.density})
     selected by \code{method}.
   }

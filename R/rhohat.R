@@ -1,7 +1,7 @@
 #'
 #'  rhohat.R
 #'
-#'  $Revision: 1.84 $  $Date: 2019/09/09 10:07:59 $
+#'  $Revision: 1.85 $  $Date: 2020/01/27 10:22:38 $
 #'
 #'  Non-parametric estimation of a transformation rho(z) determining
 #'  the intensity function lambda(u) of a point process in terms of a
@@ -228,16 +228,17 @@ rhohatEngine <- function(model, covariate,
                                subset=subset),
                           resolution))
   # unpack
-#  info   <- stuff$info
   values <- stuff$values
   # values at each data point
   ZX      <- values$ZX
   lambdaX <- values$lambdaX
   # values at each pixel
-  Zimage  <- values$Zimage
+  Zimage      <- values$Zimage
+  lambdaimage <- values$lambdaimage # could be multiple images
+  # values at each pixel (for .ppp, .ppm) or quadrature point (for .lpp, .lppm)
   Zvalues <- values$Zvalues
   lambda  <- values$lambda
-  ## weights
+    ## weights
   if(!is.null(weights)) {
     X <- data.ppm(model)
     if(is.im(weights)) 
@@ -252,9 +253,10 @@ rhohatEngine <- function(model, covariate,
   # normalising constants
   denom <- volume * (if(reference == "Lebesgue" || horvitz) 1 else mean(lambda))
   # info 
-  savestuff <- list(reference  = reference,
-                    horvitz    = horvitz,
-                    Zimage     = Zimage)
+  savestuff <- list(reference   = reference,
+                    horvitz     = horvitz,
+                    Zimage      = Zimage,
+                    lambdaimage = lambdaimage)
   # calculate rho-hat
   result <- rhohatCalc(ZX, Zvalues, lambda, denom,
                        ...,
@@ -704,32 +706,44 @@ plot.rhohat <- function(x, ..., do.rug=TRUE) {
   invisible(NULL)
 }
 
-predict.rhohat <- function(object, ..., relative=FALSE,
-                    what=c("rho", "lo", "hi", "se")) {
-  trap.extra.arguments(..., .Context="in predict.rhohat")
-  what <- match.arg(what)
-  # extract info
-  s <- attr(object, "stuff")
-  reference <- s$reference
-  #' check availability
-  if((what %in% c("lo", "hi", "se")) && !("hi" %in% names(object)))
-    stop("Standard error and confidence bands are not available in this object",
-         call.=FALSE)
-  # convert to (linearly interpolated) function 
-  x <- with(object, .x)
-  y <- if(what == "se") sqrt(object[["var"]]) else object[[what]]
-  fun <- approxfun(x, y, rule=2)
-  # extract image of covariate
-  Z <- s$Zimage
-  # apply fun to Z
-  Y <- if(inherits(Z, "linim")) eval.linim(fun(Z)) else eval.im(fun(Z))
-  # adjust to reference baseline
-  if(reference != "Lebesgue" && !relative) {
-    lambda <- s$lambda
-    Y[] <- Y[] * lambda
+predict.rhohat <- local({
+
+  predict.rhohat <- function(object, ..., relative=FALSE,
+                             what=c("rho", "lo", "hi", "se")) {
+    trap.extra.arguments(..., .Context="in predict.rhohat")
+    what <- match.arg(what)
+    #' extract info
+    s <- attr(object, "stuff")
+    reference <- s$reference
+    #' check availability
+    if((what %in% c("lo", "hi", "se")) && !("hi" %in% names(object)))
+      stop("Standard error and confidence bands are not available in this object",
+           call.=FALSE)
+    #' convert to (linearly interpolated) function 
+    x <- with(object, .x)
+    y <- if(what == "se") sqrt(object[["var"]]) else object[[what]]
+    fun <- approxfun(x, y, rule=2)
+    #' extract image(s) of covariate
+    Z <- s$Zimage
+    #' apply fun to Z
+    Y <- if(is.im(Z)) evalfun(Z, fun) else solapply(Z, evalfun, f=fun)
+    #' adjust to reference baseline
+    if(reference != "Lebesgue" && !relative) {
+      Lam <- s$lambdaimage # could be 'im' or 'imlist'
+      Y <- Lam * Y 
+    }
+    return(Y)
   }
-  return(Y)
-}
+
+  evalfun <- function(X, f) {
+    force(f)
+    force(X)
+    if(is.linim(X)) eval.linim(f(X)) else 
+    if(is.im(X)) eval.im(f(X)) else NULL
+  }
+  
+  predict.rhohat
+})
 
 as.function.rhohat <- function(x, ..., value=".y", extrapolate=TRUE) {
   NextMethod("as.function")
@@ -738,7 +752,7 @@ as.function.rhohat <- function(x, ..., value=".y", extrapolate=TRUE) {
 simulate.rhohat <- function(object, nsim=1, ..., drop=TRUE) {
   trap.extra.arguments(..., .Context="in simulate.rhohat")
   lambda <- predict(object)
-  if(inherits(lambda, "linim")) {
+  if(is.linim(lambda) || (is.solist(lambda) && all(sapply(lambda, is.linim)))) {
     result <- rpoislpp(lambda, nsim=nsim, drop=drop)
   } else {
     result <- rpoispp(lambda, nsim=nsim, drop=drop)

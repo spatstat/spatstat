@@ -1,7 +1,7 @@
 #
 # linim.R
 #
-#  $Revision: 1.65 $   $Date: 2020/01/11 11:37:11 $
+#  $Revision: 1.66 $   $Date: 2020/01/27 11:22:43 $
 #
 #  Image/function on a linear network
 #
@@ -67,6 +67,8 @@ linim <- function(L, Z, ..., restrict=TRUE, df=NULL) {
   class(out) <- c("linim", class(out))
   return(out)
 }
+
+is.linim <- function(x) { inherits(x, "linim") }
 
 print.linim <- function(x, ...) {
   splat("Image on linear network")

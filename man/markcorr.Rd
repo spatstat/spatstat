@@ -48,8 +48,9 @@ markcorr(X, f = function(m1, m2) { m1 * m2}, r=NULL,
     selected by \code{method}.
   }
   \item{weights}{
-    Optional numeric vector of weights for each data point in \code{X}.
-    Alternatively, this may be an expression to be evaluated to yield the
+    Optional. Numeric weights for each data point in \code{X}.
+    A numeric vector, a pixel image, or a \code{function(x,y)}.
+    Alternatively, an \code{expression} to be evaluated to yield the
     weights; the expression may involve the variables
     \code{x,y,marks} representing the coordinates and marks of\code{X}. 
   }

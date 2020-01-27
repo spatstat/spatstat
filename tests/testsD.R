@@ -43,7 +43,7 @@ local({
 #'                    and inhomogeneous summary functions
 #'                    and idw, adaptive.density, intensity
 #'
-#'  $Revision: 1.50 $  $Date: 2019/12/31 04:09:18 $
+#'  $Revision: 1.51 $  $Date: 2020/01/27 09:32:18 $
 #'
 
 require(spatstat)
@@ -259,6 +259,7 @@ local({
     f(120, 80)
     f(Y[1:2])
     f(Y[FALSE])
+    U <- as.im(f)
     return(invisible(NULL))
   }
   stroke()
@@ -288,6 +289,7 @@ local({
     f(4, 1)
     f(Y[1:2])
     f(Y[FALSE])
+    U <- as.im(f)
     return(invisible(NULL))
   }
   strike()

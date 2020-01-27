@@ -2,7 +2,7 @@
 ##
 ##     markcorr.R
 ##
-##     $Revision: 1.81 $ $Date: 2020/01/26 05:51:03 $
+##     $Revision: 1.83 $ $Date: 2020/01/27 09:14:53 $
 ##
 ##    Estimate the mark correlation function
 ##    and related functions 
@@ -24,12 +24,12 @@ markvario <- local({
       if(missing(correction))
         correction <- NULL
       ## compute reference value Ef
-      weights <- getpointweights(X, ..., parent=parent.frame())
+      weights <- pointweights(X, ..., parent=parent.frame())
       Ef <- if(is.null(weights)) var(m) else weighted.var(m, weights)
       ## Compute estimates
       v <- markcorr(X, f=halfsquarediff, 
                     r=r, correction=correction, method=method,
-                    normalise=normalise, ...)
+                    normalise=normalise, ..., internal=list(Ef=Ef))
       if(is.fv(v)) v <- anylist(v)
       ## adjust theoretical value and fix labels
       theoval <- if(normalise) 1 else var(m)
@@ -63,7 +63,7 @@ markconnect <- local({
     if(missing(i)) i <- lev[1]
     if(missing(j)) j <- lev[2]
     ## compute reference value Ef
-    weights <- getpointweights(X, ..., parent=parent.frame())
+    weights <- pointweights(X, ..., parent=parent.frame())
     Ef <- if(is.null(weights)) mean(marx == i) * mean(marx == j) else 
           mean(weights * (marx == i)) * mean(weights * (marx == j))
     ## compute estimates
@@ -308,7 +308,7 @@ markcorr <-
   if(unweighted <- is.null(weights)) {
     weights <- rep(1, nX)
   } else {
-    weights <- getpointweights(X, weights=weights, parent=parent.frame())
+    weights <- pointweights(X, weights=weights, parent=parent.frame())
     stopifnot(all(weights > 0))
   }
   
