@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.63-0.003
+        CHANGES IN spatstat VERSION 1.63-0.004
 
 OVERVIEW
 
@@ -7,7 +7,7 @@ OVERVIEW
 
     o Minor improvements and bug fixes.
 
-    o Version nickname: 'Happy Invasion Day'
+    o Version nickname: 'Unforced error'
 
 NEW FUNCTIONS
 

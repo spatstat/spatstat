@@ -1,7 +1,7 @@
 #
 # nndistlpp.R
 #
-#  $Revision: 1.24 $ $Date: 2019/04/06 14:06:45 $
+#  $Revision: 1.25 $ $Date: 2020/01/28 01:01:57 $
 #
 # Methods for nndist, nnwhich, nncross for linear networks
 #
@@ -382,7 +382,16 @@ nncross.lpp <- local({
   koriginal <- k <- as.integer(k)
   stopifnot(all(k > 0))
   kmax <- max(k)
-  if(exclude) {
+
+  #' decide which algorithm to use
+  #' fast C algorithm 
+  fast <- (method == "C") && (spatstat.options("Cnncrosslpp") || (kmax > 1))
+  #' slower C algorithm for exclusion case for k=1
+  excludeinC <- exclude && (method == "C") && !fast && (k == 1)
+  excludeinR <- exclude && !excludeinC
+
+  if(excludeinR) {
+    #' compute k+1 neighbours in C, then filter in R
     kmax <- kmax+1
     k <- 1:kmax
   }
@@ -409,11 +418,9 @@ nncross.lpp <- local({
     return(shapedresult(dist=nnd, which=nnw, what=what, format=format))
   }
   
-  need.dist <- ("dist" %in% what) || exclude
-  need.which <- ("which" %in% what) || exclude
+  need.dist <- ("dist" %in% what) || excludeinR
+  need.which <- ("which" %in% what) || excludeinR
   
-  fast <- (method == "C") && (spatstat.options("Cnncrosslpp") || (kmax > 1))
-
   if(!fast) {
     ## require dpath matrix
     Xsparse <- identical(domain(X)$sparse, TRUE)
@@ -566,59 +573,63 @@ nncross.lpp <- local({
         nnd[ooX] <- zznd
         nnw[ooX] <- ooY[zznw]
       }
-    } else if(!exclude) {
-      zz <- .C("linndcross",
-               np = as.integer(nX),
-               xp = as.double(P$x),
-               yp = as.double(P$y),
-               nq = as.integer(nY),
-               xq = as.double(Q$x),
-               yq = as.double(Q$y),
-               nv = as.integer(Lvert$n),
-               xv = as.double(Lvert$x),
-               yv = as.double(Lvert$y),
-               ns = as.integer(nseg),
-               from = as.integer(from0),
-               to = as.integer(to0),
-               dpath = as.double(dpath),
-               psegmap = as.integer(Xsegmap),
-               qsegmap = as.integer(Ysegmap),
-               huge = as.double(huge),
-               nndist = as.double(nnd),
-               nnwhich = as.integer(nnw),
-               PACKAGE = "spatstat")
-      nnd <- zz$nndist
-      nnw <- zz$nnwhich + 1L
     } else {
-      ## excluding certain pairs
-      zz <- .C("linndxcross",
-               np = as.integer(nX),
-               xp = as.double(P$x),
-               yp = as.double(P$y),
-               nq = as.integer(nY),
-               xq = as.double(Q$x),
-               yq = as.double(Q$y),
-               nv = as.integer(Lvert$n),
-               xv = as.double(Lvert$x),
-               yv = as.double(Lvert$y),
-               ns = as.integer(nseg),
-               from = as.integer(from0),
-               to = as.integer(to0),
-               dpath = as.double(dpath),
-               psegmap = as.integer(Xsegmap),
-               qsegmap = as.integer(Ysegmap),
-               idP = as.integer(iX),
-               idQ = as.integer(iY),
-               huge = as.double(huge),
-               nndist = as.double(nnd),
-               nnwhich = as.integer(nnw),
-               PACKAGE = "spatstat")
-      nnd <- zz$nndist
-      nnw <- zz$nnwhich + 1L
+      ## slower code requiring dpath matrix
+      if(!excludeinC) {
+        zz <- .C("linndcross",
+                 np = as.integer(nX),
+                 xp = as.double(P$x),
+                 yp = as.double(P$y),
+                 nq = as.integer(nY),
+                 xq = as.double(Q$x),
+                 yq = as.double(Q$y),
+                 nv = as.integer(Lvert$n),
+                 xv = as.double(Lvert$x),
+                 yv = as.double(Lvert$y),
+                 ns = as.integer(nseg),
+                 from = as.integer(from0),
+                 to = as.integer(to0),
+                 dpath = as.double(dpath),
+                 psegmap = as.integer(Xsegmap),
+                 qsegmap = as.integer(Ysegmap),
+                 huge = as.double(huge),
+                 nndist = as.double(nnd),
+                 nnwhich = as.integer(nnw),
+                 PACKAGE = "spatstat")
+        nnd <- zz$nndist
+        nnw <- zz$nnwhich + 1L
+      } else {
+        ## excluding certain pairs (k=1)
+        zz <- .C("linndxcross",
+                 np = as.integer(nX),
+                 xp = as.double(P$x),
+                 yp = as.double(P$y),
+                 nq = as.integer(nY),
+                 xq = as.double(Q$x),
+                 yq = as.double(Q$y),
+                 nv = as.integer(Lvert$n),
+                 xv = as.double(Lvert$x),
+                 yv = as.double(Lvert$y),
+                 ns = as.integer(nseg),
+                 from = as.integer(from0),
+                 to = as.integer(to0),
+                 dpath = as.double(dpath),
+                 psegmap = as.integer(Xsegmap),
+                 qsegmap = as.integer(Ysegmap),
+                 idP = as.integer(iX),
+                 idQ = as.integer(iY),
+                 huge = as.double(huge),
+                 nndist = as.double(nnd),
+                 nnwhich = as.integer(nnw),
+                 PACKAGE = "spatstat")
+        nnd <- zz$nndist
+        nnw <- zz$nnwhich + 1L
+      }
+      ## any zeroes occur if points have no neighbours.
+      nnw[nnw == 0] <- NA
     }
-    # any zeroes occur if points have no neighbours.
-    nnw[nnw == 0] <- NA
   }
+  
   if(toomany) {
     ## Nearest neighbours were undefined for some large values of k.
     ## Insert results obtained for valid 'k' back into matrix of NA/Inf
@@ -631,7 +642,7 @@ nncross.lpp <- local({
       nnw <- padwhich
     }
   }
-  if(exclude) {
+  if(excludeinR) {
     ## now find neighbours that don't have the same id number
     if(!is.matrix(nnw)) nnw <- as.matrix(nnw, ncol=1)
     if(!is.matrix(nnd)) nnd <- as.matrix(nnd, ncol=1)

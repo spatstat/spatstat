@@ -104,3 +104,20 @@ Change log from 1.63-0 to 1.63-1
 ------------- passed R-3.6.2 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
+
+28 jan 2020
+
+   nndistlpp.R
+	Modified logical flow so that unreachable code
+	(alternative algorithm) is now reachable.
+
+   DESCRIPTION
+   NEWS
+   Nickname.txt
+	Nickname changed to 'Unforced error'
+	Version 1.63-0.004
+
+------------- passed R-3.6.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+
