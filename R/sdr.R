@@ -9,7 +9,7 @@
 #'
 #'  GNU Public Licence 2.0 || 3.0
 #'
-#'    $Revision: 1.14 $  $Date: 2019/01/08 07:46:46 $
+#'    $Revision: 1.15 $  $Date: 2020/01/30 05:10:49 $
 #'
 
 sdr <- function(X, covariates, ...) {
@@ -110,7 +110,8 @@ calc.DR <- function(COV, z, Dim){
   ##   M - the kernel matrix
   ss <- nrow(z)
   ncov <- ncol(z)
-  M1 <- (t(z) %*% z)/ss - diag(1,ncov)
+  ##  M1 <- (t(z) %*% z)/ss - diag(1,ncov)
+  M1 <- crossprod(z)/ss - diag(1,ncov)
   M1 <- M1 %*% M1                             # the SAVE kernel
   covMean <- matrix(colMeans(z),ncol=1)
   M2 <- covMean %*% t(covMean)
@@ -210,7 +211,8 @@ calc.TSE <- function(COV, z, pos, Dim1, Dim2) {
   if(Dim1 > 0) {
     U <- svd(M1)$u
     B1 <- U[ , 1:Dim1, drop=FALSE]  # get S1 estimate
-    Q  <- diag(1, ncov) - B1 %*% solve(t(B1) %*% B1) %*% t(B1)
+    ##    Q  <- diag(1, ncov) - B1 %*% solve(t(B1) %*% B1) %*% t(B1)
+    Q  <- diag(1, ncov) - B1 %*% solve(crossprod(B1)) %*% t(B1)
                      # contract orthogonal basis
     M2 <- Q %*% M2 %*% Q  # do constrained NNIR
   } else {
@@ -236,7 +238,8 @@ subspaceDistance <- function(B0,B1) {
   ## ======================================================== #
   stopifnot(is.matrix(B0))
   stopifnot(is.matrix(B1))
-  Proj0 <- B0 %*% solve((t(B0) %*% B0)) %*% t(B0)  # Proj matrix on S(B0)
+  ## Proj0 <- B0 %*% solve((t(B0) %*% B0)) %*% t(B0)  # Proj matrix on S(B0)
+  Proj0 <- B0 %*% solve(crossprod(B0)) %*% t(B0)  # Proj matrix on S(B0)
   lam <- svd(B1) # check whether B1 is singular
   U <- lam$u
   D <- lam$d

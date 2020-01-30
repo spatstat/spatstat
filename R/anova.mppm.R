@@ -1,7 +1,7 @@
 #
 # anova.mppm.R
 #
-# $Revision: 1.15 $ $Date: 2019/01/22 01:18:32 $
+# $Revision: 1.16 $ $Date: 2020/01/30 05:06:54 $
 #
 
 anova.mppm <- local({
@@ -217,8 +217,11 @@ anova.mppm <- local({
                 Ginv <- solve(G)
                 Hoo <- Hinv[-injection,-injection, drop=FALSE]
                 Goo <- Ginv[-injection,-injection, drop=FALSE]
-                ScoreStat <- t(Uo) %*% Hoo %*% solve(Goo) %*% Hoo %*% Uo
-                cfac[i] <- ScoreStat/(t(Uo) %*% Hoo %*% Uo)
+                ## ScoreStat <- t(Uo) %*% Hoo %*% solve(Goo) %*% Hoo %*% Uo
+                HooUo <- Hoo %*% Uo
+                ScoreStat <- t(HooUo) %*% solve(Goo) %*% HooUo
+                ## cfac[i] <- ScoreStat/(t(Uo) %*% Hoo %*% Uo)
+                cfac[i] <- ScoreStat/(t(HooUo) %*% Uo)
               }
             }
           }

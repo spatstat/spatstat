@@ -3,7 +3,7 @@
 ## and Fisher information matrix
 ## for ppm objects
 ##
-##  $Revision: 1.132 $  $Date: 2019/10/11 06:51:24 $
+##  $Revision: 1.133 $  $Date: 2020/01/30 05:13:43 $
 ##
 
 vcov.ppm <- local({
@@ -1041,7 +1041,8 @@ vcalcGibbsGeneral <- function(model,
            ## finally calculation of Sigma2
            wlam <- mdum * rho*lamdum/(lamdum+rho)
            wlam2 <- mdum2 * rho*lamdum2/(lamdum2+rho)
-           Sigma2log <- t(wlam-wlam2)%*%(wlam-wlam2)/(2*rho*rho)
+           ## Sigma2log <- t(wlam-wlam2)%*%(wlam-wlam2)/(2*rho*rho)
+           Sigma2log <- crossprod(wlam-wlam2)/(2*rho*rho)
          },
          stop("sorry - unrecognized dummy process in logistic fit")
          )
@@ -1416,7 +1417,8 @@ vcalcGibbsSpecial <- function(fit, ...,
            # finally calculation of Sigma2
            wlam <- mdum * rho*lamdum/(lamdum+rho)
            wlam2 <- mdum2 * rho*lamdum2/(lamdum2+rho)
-           Sigma2log <- t(wlam-wlam2)%*%(wlam-wlam2)/(2*rho*rho)
+           ## Sigma2log <- t(wlam-wlam2)%*%(wlam-wlam2)/(2*rho*rho)
+           Sigma2log <- crossprod(wlam-wlam2)/(2*rho*rho)
          },
          stop("sorry - unrecognized dummy process in logistic fit")
          )

@@ -121,3 +121,22 @@ Change log from 1.63-0 to 1.63-1
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
 
+30 jan 2020
+
+   blur.R
+	Fixed rarely-occurring bug in safelookup()
+
+   anova.ppm.R
+   anova.mppm.R
+   sdr.R
+   vcov.ppm.R
+	Slightly accelerated.
+	
+   DESCRIPTION
+   NEWS
+   Nickname.txt
+	Version 1.63-0.005
+
+------------- passed R-3.6.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
