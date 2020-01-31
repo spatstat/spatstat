@@ -136,7 +136,7 @@ local({
 #
 #  tests/imageops.R
 #
-#   $Revision: 1.23 $   $Date: 2020/01/21 04:52:56 $
+#   $Revision: 1.26 $   $Date: 2020/01/31 02:51:44 $
 #
 
 require(spatstat)
@@ -294,9 +294,14 @@ local({
   B <- grow.rectangle(Frame(letterR), 1)
   X <- superimpose(runifpoint(10,letterR),
                    runifpoint(20, setminus.owin(B, letterR)),
+                   vertices(Frame(B)),
                    W=B)
   a <- safelookup(Z, X)
+  b <- safelookup(cut(Z, breaks=4), X)
 
+  #' Smooth.im -> blur.im with sigma=NULL
+  ZS <- Smooth(Z)
+  
   #' check nearest.valid.pixel
   W <- Window(demopat)
   set.seed(911911)

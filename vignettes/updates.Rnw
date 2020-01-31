@@ -468,7 +468,10 @@ Following is a list of all the functions that have been added.
 
 \begin{itemize}
   
-    \item \texttt{rcelllpp}:
+  \item \texttt{is.linim}: test whether an object is 
+      a pixel image on a linear network (class \verb!"linim"!).
+  
+  \item \texttt{rcelllpp}:
     Simulate the cell point process on a linear network.
     
     \item \texttt{rSwitzerlpp}:
@@ -1977,10 +1980,18 @@ listed alphabetically.
   
 %%M
    
+ \item \texttt{markconnect}:
+   Accepts the argument \texttt{weights} which is passed to \texttt{markcorr}.
+
  \item \texttt{markcorr}:
    New argument \texttt{weights} allows computation of the weighted version
    of the mark correlation function.
+   Weights 
+   can be an expression
+   to be evaluated, or a function, or a pixel image, or a numeric vector.
 
+ \item \texttt{markvario}:
+   Accepts the argument \texttt{weights} which is passed to \texttt{markcorr}.
    
  \item \texttt{minnndist}, \texttt{maxnndist}:
    New  argument \texttt{by} makes it possible to find the minimum or maximum
@@ -2565,6 +2576,10 @@ listed alphabetically.
    \item \texttt{rpoisline}:
      Also returns information about the original infinite random lines.
 
+   \item \texttt{rpoislpp}:
+     If \texttt{lambda} is a list of \texttt{"linim"} or \texttt{"linfun"}
+     objects, then the argument \texttt{L} can be omitted.
+
  \item \texttt{rStrauss, rHardcore, rStraussHard, rDiggleGratton, rDGS, rPenttinen:}
    New argument \texttt{drop}.
 
@@ -2641,7 +2656,8 @@ listed alphabetically.
    \begin{itemize}
    \item A non-Gaussian kernel can now be specified
    using the argument \texttt{kernel}.
-   \item Argument \texttt{weights} can now be a pixel image.
+   \item Argument \texttt{weights} can now be a pixel image, a function,
+     a numeric vector or an expression to be evaluated.
    \item Infinite bandwidth \texttt{sigma=Inf} is supported.
    \item Accelerated by about 30\% in the case where \texttt{at="pixels"}.
    \item Accelerated by about 15\% in the case where \texttt{at="points"}

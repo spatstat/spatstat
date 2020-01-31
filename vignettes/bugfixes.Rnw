@@ -235,6 +235,11 @@ of potential impact.
     corresponding to the design covariates. 
     \bugger{1.45-1}{may 2016}{1.55-0}{january 2018}   
    
+ \item \texttt{predict.rhohat}, \texttt{simulate.rhohat}:
+   Results were incorrect for a \texttt{rhohat} object computed
+   from linear network data (class \texttt{"lpp"} or \texttt{"lppm"}).
+   \bugger{1.31-0}{march 2013}{1.63-1}{january 2020}   
+
  \item \texttt{predict.rho2hat}:
    Results were incorrect for a \texttt{rho2hat} object computed
    from a point pattern.
