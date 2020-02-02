@@ -364,7 +364,7 @@ local({
 #
 # Tests for lpp code
 #
-#  $Revision: 1.49 $  $Date: 2020/01/27 12:02:58 $
+#  $Revision: 1.50 $  $Date: 2020/02/02 03:25:57 $
 
 
 require(spatstat)
@@ -803,6 +803,11 @@ local({
 })
 
 local({
+  ## 'lixellate'
+  ## Cases where no subdivision occurs
+  P <- runiflpp(4, simplenet)
+  A <- lixellate(P, nsplit=1)
+  B <- lixellate(P, eps=2)
   ## bug in 'lixellate' (Jakob Gulddahl Rasmussen)
   X <- ppp(c(0,1), c(0,0), owin())
   L <- linnet(X, edges = matrix(1:2, ncol=2))

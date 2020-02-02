@@ -128,7 +128,7 @@ local({
 ##  tests/closeshave.R
 ## check 'closepairs/crosspairs' code
 ## validity and memory allocation
-## $Revision: 1.20 $ $Date: 2019/10/28 08:52:46 $
+## $Revision: 1.21 $ $Date: 2020/02/02 03:30:52 $
 
 local({
   r <- 0.12
@@ -141,6 +141,7 @@ local({
 
   #' test memory overflow code
   close.cigar <- closepairs(redwood, r, what="ijd", nsize=2)
+  close.cigar <- closepairs(redwood, r, what="ijd", nsize=2, periodic=TRUE)
   
   Y <- split(amacrine)
   on <- Y$on
@@ -183,6 +184,8 @@ local({
   old.close.once <- closepairs(redwood, r, what="all", twice=FALSE)
   #' test memory overflow code
   old.close.cigar <- closepairs(redwood, r, what="ijd", nsize=2)
+  old.close.cigar <- closepairs(redwood, r, what="ijd", nsize=2, periodic=TRUE)
+  
   ## ...............................................
   spatstat.options(op)
   ## ...............................................
@@ -196,6 +199,7 @@ local({
   alt.close.all <- closepairs(redwood, r, what="all")
   #' test memory overflow code
   alt.close.cigar <- closepairs(redwood, r, what="ijd", nsize=2)
+  alt.close.cigar <- closepairs(redwood, r, what="ijd", nsize=2, periodic=TRUE)
   spatstat.options(op)
   ## ...............................................
   

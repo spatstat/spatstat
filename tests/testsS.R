@@ -793,7 +793,7 @@ local({
 #'   Tests of code for summary functions
 #'       including score residual functions etc
 #'
-#'   $Revision: 1.3 $ $Date: 2020/01/05 01:55:10 $
+#'   $Revision: 1.4 $ $Date: 2020/02/02 03:25:45 $
 
 require(spatstat)
 local({
@@ -827,6 +827,10 @@ local({
   a <- compileCDF(D=nndist(redwood),
                   B=bdist.points(redwood),
                   r=seq(0, 1, length=256))
+
+  e <- check.finespacing(c(0,1,2), eps=0.1, action="silent")
+  b <- as.breakpts(pi, 20)
+  b <- as.breakpts(42, max=pi, npos=20)
 })
 ##
 ## tests/symbolmaps.R

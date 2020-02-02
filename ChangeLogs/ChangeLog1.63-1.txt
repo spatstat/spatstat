@@ -153,9 +153,33 @@ Change log from 1.63-0 to 1.63-1
 	
    DESCRIPTION
    NEWS
-   Nickname.txt
 	Version 1.63-0.006
 
 ------------- passed R-3.6.2 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
+
+02 feb 2020
+
+   lixellate.R
+	Hardened against erroneous arguments.
+
+   tests/closeshave.R
+	Test handling of memory overflow.
+	
+   tests/lppstuff.R
+   tests/sumfun.R
+	Tests of special cases.
+
+   rmh.default.Rd
+	Improved example of saving the intermediate states.
+	
+   DESCRIPTION
+   NEWS
+	Version 1.63-0.007
+
+------------- passed R-3.6.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+	
+   

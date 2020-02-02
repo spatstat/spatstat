@@ -111,10 +111,11 @@ double lookupcif(prop, state, cdata)
 
   ixp1 = ix+1;
   /* If ix = NONE = -1, then ixp1 = 0 is correct */
-
+  
   if(lookup->equisp) {
     /* equispaced r values */
     if(lookup->per) { /* periodic distance */
+      /* Rprintf("Lookup equispaced table, periodic distance\n"); */
       if(ix > 0) {
 	for(j=0; j < ix; j++) {
 	  d = sqrt(dist2(u,v,x[j],y[j],lookup->period));
@@ -136,6 +137,7 @@ double lookupcif(prop, state, cdata)
 	}
       }
     } else { /* Euclidean distance */
+      /* Rprintf("Lookup equispaced table, Euclidean distance\n"); */
       if(ix > 0) {
 	for(j=0; j < ix; j++) {
 	  d = hypot(u - x[j], v-y[j]);
@@ -160,6 +162,7 @@ double lookupcif(prop, state, cdata)
   } else {
     /* non-equispaced r values */
     if(lookup->per) { /* periodic distance */
+      /* Rprintf("Lookup non-equispaced table, periodic distance\n"); */
       if(ix > 0) {
 	for(j=0; j < ix; j++) {
 	  d2 = dist2(u,v,x[j],y[j],lookup->period);
@@ -183,6 +186,7 @@ double lookupcif(prop, state, cdata)
 	}
       }
     } else { /* Euclidean distance */
+      /* Rprintf("Lookup non-equispaced table, Euclidean distance\n"); */
       if(ix > 0) {
 	for(j=0; j < ix; j++) {
 	  ux = u - x[j];

@@ -423,12 +423,17 @@ trend corresponding to a particular type, there is still a component
                      control=list(p=1,nrep=nr,nverb=nv))
 
    # Tracking algorithm progress:
+   # (a) saving intermediate states:
    X <- rmh(model=mod01,start=list(n.start=ns),
-            control=list(nrep=nr, nsave=nr/5, nburn=nr/2, track=TRUE))
-   History <- attr(X, "history")
+            control=list(nrep=nr, nsave=nr/5, nburn=nr/2))
    Saved <- attr(X, "saved")
-   head(History)
    plot(Saved)
+
+   # (b) inspecting transition history:
+   X <- rmh(model=mod01,start=list(n.start=ns),
+            control=list(nrep=nr, track=TRUE))
+   History <- attr(X, "history")
+   head(History)
 
    # Hard core process:
    mod02 <- list(cif="hardcore",par=list(beta=2,hc=0.7),w=c(0,10,0,10))
