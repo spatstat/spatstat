@@ -3,7 +3,7 @@
 #
 #  leverage and influence
 #
-#  $Revision: 1.116 $ $Date: 2019/02/15 01:31:36 $
+#  $Revision: 1.117 $ $Date: 2020/02/03 10:06:52 $
 #
 
 leverage <- function(model, ...) {
@@ -248,7 +248,15 @@ ppmInfluenceEngine <- function(fit,
     if(gotHess <- !is.null(ihessmat)) {
       ## recompute negative Hessian of log PL and its mean
       fgrad <- hessextra <- matrix(0, ncol(mom), ncol(mom))
-    }  
+    } else if(needHess && length(iArgs)) {
+      nami <- names(iArgs)
+      stop(paste("Unable to compute iHess, the",
+                 ngettext(length(nami), "component", "components"),
+                 "of the Hessian matrix for the irregular",
+                 ngettext(length(nami), "parameter", "parameters"),
+                 commasep(sQuote(names(iArgs)))),
+           call.=FALSE)
+    }
     if(pseudo) {
       ## ..............  likelihood or pseudolikelihood ....................
       switch(method,
@@ -750,6 +758,9 @@ ppmInfluenceEngine <- function(fit,
     return(result)
 
   # ............ compute leverage, influence, dfbetas ..............
+
+  if(!is.matrix(invhess))
+    stop("Internal error: inverse Hessian not available", call.=FALSE)
   
   # compute basic contribution from each quadrature point
   nloc <- npoints(loc)

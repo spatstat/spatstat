@@ -1,7 +1,7 @@
 #
 #    util.R    miscellaneous utilities
 #
-#    $Revision: 1.241 $    $Date: 2019/10/07 01:12:09 $
+#    $Revision: 1.242 $    $Date: 2020/02/03 11:14:58 $
 #
 
 # common invocation of matrixsample
@@ -330,20 +330,21 @@ prepareTitle <- function(main) {
               blank=rep('  ', nlines)))
 }
 
-requireversion <- function(pkg, ver) {
+requireversion <- function(pkg, ver, fatal=TRUE) {
   pkgname <- deparse(substitute(pkg))
   pkgname <- gsub("\"", "", pkgname)
   pkgname <- gsub("'", "", pkgname)
   v <- read.dcf(file=system.file("DESCRIPTION", package=pkgname), 
                 fields="Version")
-  if(package_version(v) < ver)
+  ok <- (package_version(v) >= ver)
+  if(!ok && fatal) 
     stop(paste("Package",
                sQuote(pkgname),
                "is out of date: version >=",
                ver,
                "is needed"),
          call.=FALSE)
-  invisible(NULL)
+  return(if(ok) invisible(TRUE) else FALSE)
 }
 
 spatstatDiagnostic <- function(msg) {

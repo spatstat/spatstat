@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.63-0.007
+        CHANGES IN spatstat VERSION 1.63-0.008
 
 OVERVIEW
 
@@ -34,6 +34,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
     If 'lambda' is a list of 'linim' or 'linfun' objects, then
     the argument L can be omitted.
 
+    o requireversion
+    New argument 'fatal'
+    
 BUG FIXES
 
     o predict.rhohat, simulate.rhohat
@@ -47,6 +50,12 @@ BUG FIXES
     linear network data (multitype lpp or lppm).
     Fixed.
 
+    o leverage, influence, dfbetas
+    Crashed when applied to an 'ippm' object in which
+    the irregular components of the score, but not the Hessian,
+    were provided by symbolic differentiation.
+    Fixed.
+    
     o parres
     Crashed in rare circumstances, when the data did not contain
     enough useable values to perform smoothing.

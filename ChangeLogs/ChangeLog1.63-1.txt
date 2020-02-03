@@ -182,4 +182,28 @@ Change log from 1.63-0 to 1.63-1
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
 	
+03 feb 2020
+
+   utilmatrix.R 
+	Bug fix in spatstat.utils::blockdiagarray [=> spatstat.utils 1.16-0]
+
+   leverage.R
+	Bug fix in handling (absence of) Hessian of irregular parameters
+
+   tests/leverinf.R
+	Test whether irregular score and Hessian computed by
+	symbolic differentiation can be safely extracted
+	(provided spatstat.utils >= 1.16-0)
+
+   util.R
+   requireversion.Rd
+	requireversion has new argument 'fatal'
+   
+   DESCRIPTION
+   NEWS
+	Version 1.63-0.008
+
+------------- passed R-3.6.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
    
