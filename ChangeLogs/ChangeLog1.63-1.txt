@@ -11,7 +11,7 @@ Change log from 1.63-0 to 1.63-1
 	Version 1.63-0.001
 
    as.owin.Rd
-	Modified 'require(spatstat)' call to satisfy package checker.
+	Modified 'require(spatial)' call to satisfy package checker.
 	
 ------------- passed R-3.6.2 CMD check ---------------
 ------------- installed on laptop      ---------------
