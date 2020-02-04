@@ -169,9 +169,10 @@
   X <- linfun(function(x,y,seg,tp){y^2+x}, simplenet)
   X <- as.linim(X)
   
-  plot(X)
+  plot(X, main="Colour represents function value")
+  plot(X, fatten=0.02, main="fattened")
+
   plot(X, style="width", main="Width proportional to function value")
-  plot(X, style="width", fatten=0.02)
 
   # signed values
   f <- linfun(function(x,y,seg,tp){y-x}, simplenet)
