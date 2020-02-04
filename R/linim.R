@@ -1,7 +1,7 @@
 #
 # linim.R
 #
-#  $Revision: 1.67 $   $Date: 2020/02/04 07:19:48 $
+#  $Revision: 1.68 $   $Date: 2020/02/04 09:31:56 $
 #
 #  Image/function on a linear network
 #
@@ -185,11 +185,12 @@ plot.linim <- local({
     
     if(style == "colour" || !do.plot) {
       #' colour style: plot as pixel image
-      if(fatten > 0 && fatten > min(x$xstep, x$ystep)) {
-        #' first fatten the lines
+      if(fatten > 0 && fatten > 2 * min(x$xstep, x$ystep)) {
+        #' first fatten the lines accurately
         L <- attr(x, "L")
-        fatwin <- dilation(as.psp(L), fatten)
+        fatwin <- dilation(as.psp(L), fatten/2)
         fatwin <- intersect.owin(fatwin, Frame(x))
+        fatwin <- as.mask(fatwin, xy=x)
         x <- nearestValue(x)[fatwin, drop=FALSE]
       }
       return(do.call(plot.im,

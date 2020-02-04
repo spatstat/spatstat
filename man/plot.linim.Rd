@@ -44,7 +44,7 @@
     pixel value to line width, when \code{style="width"}.
   }
   \item{fatten}{
-    Distance by which the line segments should be thickened on each side,
+    Distance by which the line segments should be thickened,
     when \code{style="colour"}. 
   }
   \item{negative.args}{
@@ -132,10 +132,12 @@
   drawn too thin. This occurs because \code{x} is a pixel image,
   in which the only pixels that have a defined value are those which lie
   directly over the network. To make the lines appear thicker in the
-  plot, use the argument \code{fatten}. This will artificially expand
-  the domain of the image by a distance equal to \code{fatten}
-  in every direction, and extrapolate the pixel values, for
-  improved visual effect.
+  plot, use the argument \code{fatten}. The domain of the image will be
+  expanded by a distance equal to \code{fatten/2} in every direction
+  using \code{\link{dilation.owin}}; the pixel values will
+  be extrapolated to this expanded domain using
+  \code{\link{nearestValue}}. This may improve the visual appearance
+  of the plot.
 }
 \value{
   If \code{style="colour"}, the result is
