@@ -105,3 +105,4 @@ blur(x, sigma = NULL, \dots,
 }
 \keyword{spatial}
 \keyword{nonparametric}
+\keyword{manip}

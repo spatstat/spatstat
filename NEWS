@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.63-0.010
+        CHANGES IN spatstat VERSION 1.63-0.011
 
 OVERVIEW
 
@@ -13,6 +13,11 @@ NEW FUNCTIONS
 
     o is.linim
     Tests whether an object belongs to class 'linim'.
+
+    o nearestValue
+    Given a pixel image on a subset of a rectangle,
+    extend the image to the entire rectangle,
+    using the nearest well-defined pixel value.
     
 SIGNIFICANT USER-VISIBLE CHANGES
 
@@ -34,6 +39,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
     If 'lambda' is a list of 'linim' or 'linfun' objects, then
     the argument L can be omitted.
 
+    o plot.linim
+    New argument 'fatten' improves visual appearance when style="colour".
+    
     o requireversion
     New argument 'fatal'
     

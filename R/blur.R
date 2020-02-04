@@ -3,7 +3,7 @@
 #
 # apply Gaussian blur to an image
 #
-#    $Revision: 1.22 $   $Date: 2020/01/30 05:32:41 $
+#    $Revision: 1.23 $   $Date: 2020/02/04 07:05:28 $
 #
 fillNA <- function(x, value=0) {
   stopifnot(is.im(x))
@@ -140,3 +140,18 @@ safelookup <- function(Z, x, factor=2, warn=TRUE) {
          call.=FALSE)
   return(Zvals)
 }
+
+nearestValue <- function(X) {
+  #' for each raster location, look up the nearest defined pixel value
+  X <- as.im(X)
+  if(!anyNA(X)) return(X)
+  Y <- X ## copy dimensions, value type, units etc etc
+  W <- as.mask(X)
+  eW <- exactPdt(W)
+  iclosest <- as.vector(eW$row)
+  jclosest <- as.vector(eW$col)
+  ## look up values of Z
+  Y$v[] <- X$v[cbind(iclosest, jclosest)]
+  return(Y)
+}
+

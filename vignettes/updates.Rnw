@@ -2202,6 +2202,8 @@ listed alphabetically.
  \item \texttt{plot.linim}:
    \begin{itemize}
    \item  The return value has a different format.
+   \item New argument \texttt{fatten} improves visual appearance
+     when \texttt{style="colour"}.
    \item A scale bar is now plotted when \texttt{style="width"}.
    \item When \texttt{style="width"}, negative values are plotted in
      red (by default). New argument \texttt{negative.args} controls this.

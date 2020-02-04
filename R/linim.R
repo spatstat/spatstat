@@ -1,7 +1,7 @@
 #
 # linim.R
 #
-#  $Revision: 1.66 $   $Date: 2020/01/27 11:22:43 $
+#  $Revision: 1.67 $   $Date: 2020/02/04 07:19:48 $
 #
 #  Image/function on a linear network
 #
@@ -144,7 +144,7 @@ print.summary.linim <- function(x, ...) {
 plot.linim <- local({
 
   plot.linim <- function(x, ..., style=c("colour", "width"),
-                         scale, adjust=1,
+                         scale, adjust=1, fatten=0, 
                          negative.args=list(col=2),
                          legend=TRUE,
                          leg.side=c("right", "left", "bottom", "top"),
@@ -160,6 +160,13 @@ plot.linim <- local({
     leg.side <- match.arg(leg.side)
     check.1.real(leg.scale)
 
+    if(!missing(fatten)) {
+      check.1.real(fatten)
+      if(fatten != 0 && style == "width")
+        warning("Argument 'fatten' is ignored when style='width'", call.=FALSE)
+      stopifnot(fatten >= 0)
+    }
+    
     if(missing(zlim) || is.null(zlim)) {
       zlim <- NULL
       zliminfo <- list()
@@ -175,8 +182,16 @@ plot.linim <- local({
                      ribwid   = leg.wid,
                      ribargs  = leg.args,
                      ribscale = leg.scale)
-    #' colour style: plot as pixel image
-    if(style == "colour" || !do.plot)
+    
+    if(style == "colour" || !do.plot) {
+      #' colour style: plot as pixel image
+      if(fatten > 0 && fatten > min(x$xstep, x$ystep)) {
+        #' first fatten the lines
+        L <- attr(x, "L")
+        fatwin <- dilation(as.psp(L), fatten)
+        fatwin <- intersect.owin(fatwin, Frame(x))
+        x <- nearestValue(x)[fatwin, drop=FALSE]
+      }
       return(do.call(plot.im,
                      resolve.defaults(list(x),
                                       list(...),
@@ -186,6 +201,7 @@ plot.linim <- local({
                                            legend=legend,
                                            do.plot=do.plot,
                                            box=box))))
+    }
     #' width style
     L <- attr(x, "L")
     df <- attr(x, "df")
