@@ -206,4 +206,23 @@ Change log from 1.63-0 to 1.63-1
 ------------- passed R-3.6.2 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
-   
+
+04 feb 2020
+
+   smooth.ppp.R
+	Numerical underflow is now handled in a similar way
+	whether the marks are a data frame or a vector.
+
+   tests/density.R
+	Test handling of numerical underflow
+
+   DESCRIPTION
+   NEWS
+	Version 1.63-0.009
+
+------------- passed R-3.6.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+
+
+

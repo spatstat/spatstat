@@ -3,7 +3,7 @@
 #
 #  Smooth the marks of a point pattern
 # 
-#  $Revision: 1.72 $  $Date: 2020/01/27 09:11:57 $
+#  $Revision: 1.74 $  $Date: 2020/02/04 01:55:03 $
 #
 
 # smooth.ppp <- function(X, ..., weights=rep(1, npoints(X)), at="pixels") {
@@ -140,7 +140,8 @@ Smooth.ppp <- function(X, sigma=NULL, ...,
 
   if(diggle) {
     ## absorb Diggle edge correction into weights vector
-    edg <- second.moment.calc(X, sigma, what="edge", ...,                                                     varcov=varcov, adjust=adjust,
+    edg <- second.moment.calc(X, sigma, what="edge", ...,
+                              varcov=varcov, adjust=adjust,
                               kernel=kernel, scalekernel=scalekernel)
     ei <- safelookup(edg, X, warn=FALSE)
     weights <- if(weightsgiven) weights/ei else 1/ei
@@ -153,13 +154,13 @@ Smooth.ppp <- function(X, sigma=NULL, ...,
 
   ## calculate...
   marx <- marks(X)
+  uhoh <- NULL
   if(!is.data.frame(marx)) {
     # ........ vector of marks ...................
     values <- marx
-    if(is.factor(values)) {
-      warning("Factor valued marks were converted to integers")
-      values <- as.numeric(values)
-    }
+    if(is.factor(values)) 
+      warning("Factor valued marks were converted to integers", call.=FALSE)
+    values <- as.numeric(values)
     ## detect constant values
     ra <- range(values, na.rm=TRUE)
     if(diff(ra) == 0) {
@@ -216,18 +217,24 @@ Smooth.ppp <- function(X, sigma=NULL, ...,
                               | (denominator < eps))
                if(any(as.matrix(nbg), na.rm=TRUE)) {
                  warning(paste("Numerical underflow detected:",
-                               "sigma is probably too small"))
+                               "sigma is probably too small"),
+                         call.=FALSE)
+                 uhoh <- unique(c(uhoh, "underflow"))
                  ## l'Hopital's rule
                  distX <- distmap(X, xy=numerator)
                  whichnn <- attr(distX, "index")
                  nnvalues <- eval.im(values[whichnn])
                  result[nbg] <- nnvalues[nbg]
                }
-               attr(result, "warnings") <- attr(numerator, "warnings")
+               uhoh <- attr(numerator, "warnings")
              })
     }
   } else {
     ## ......... data frame of marks ..................
+    ## convert to numerical values
+    if(any(sapply(as.list(marx), is.factor)))
+      warning("Factor columns of marks were converted to integers", call.=FALSE)
+    marx <- asNumericMatrix(marx)
     ## detect constant columns
     ra <- apply(marx, 2, range, na.rm=TRUE)
     isconst <- (apply(ra, 2, diff) == 0)
@@ -289,21 +296,29 @@ Smooth.ppp <- function(X, sigma=NULL, ...,
                ## numerators is a list of images (or may have dropped to 'im')
                if(is.im(numerators))
                  numerators <- list(numerators)
-               ratio <- lapply(numerators, "/", e2=denominator)
-               if(!is.null(uhoh)) {
+               result <- solapply(numerators, "/", e2=denominator)
+               eps <- .Machine$double.eps
+               denOK <- eval.im(denominator >= eps)
+               if(!is.null(uhoh) || !all(denOK)) {
                  ## compute nearest neighbour map on same raster
                  distX <- distmap(X, xy=denominator)
                  whichnnX <- attr(distX, "index")
                  ## fix images
-                 for(j in 1:length(ratio)) {
-                   ratj <- ratio[[j]]
+                 allgood <- TRUE
+                 for(j in 1:length(result)) {
+                   ratj <- result[[j]]
                    valj <- marx[,j]
-                   ratio[[j]] <-
-                     eval.im(ifelseXY(is.finite(ratj), ratj, valj[whichnnX]))
+                   goodj <- eval.im(is.finite(ratj) & denOK)
+                   result[[j]] <- eval.im(goodj, ratj, valj[whichnnX])
+                   allgood <- allgood && all(goodj)
                  }
-                 attr(ratio, "warnings") <- uhoh
+                 if(!allgood) {
+                   warning(paste("Numerical underflow detected:",
+                                 "sigma is probably too small"),
+                           call.=FALSE)
+                   uhoh <- unique(c(uhoh, "underflow"))
+                 }
                }
-               result <- as.solist(ratio)
                names(result) <- colnames(marx)
              })
     } else result <- NULL 
@@ -333,10 +348,9 @@ Smooth.ppp <- function(X, sigma=NULL, ...,
     }
   }
   ## wrap up
-  attr(result, "warnings") <-
-    unlist(lapply(result, attr, which="warnings"))
   attr(result, "sigma") <- sigma
   attr(result, "varcov") <- varcov
+  attr(result, "warnings") <- uhoh
   return(result)
 }
 
