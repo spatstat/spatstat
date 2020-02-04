@@ -1,7 +1,7 @@
 #
 # Determine which 'canonical variables' depend on a supplied covariate
 #
-#   $Revision: 1.8 $  $Date: 2013/04/25 06:37:43 $
+#   $Revision: 1.9 $  $Date: 2020/02/04 03:26:37 $
 #
 
 model.depends <- function(object) {
@@ -83,4 +83,32 @@ has.offset <- function(object) {
   has.offset.term(object) || !is.null(model.offset(model.frame(object)))
 }
 
-
+check.separable <- function(dmat, covname, isconstant, fatal=TRUE) {
+  #' Determine whether the effect of 'covname' is separable from other terms.
+  #' dmat = model.depends(model)
+  #' Find covariates entangled with 'covname' in the model
+  relevant <- dmat[, covname]
+  othercov <- (colnames(dmat) != covname)
+  conflict <- dmat[relevant, othercov, drop=FALSE]
+  if(!any(conflict)) return(TRUE)
+  #' names of entangled covariates
+  entangled <- colnames(conflict)[matcolany(conflict)]
+  #' not problematic if constant
+  if(is.null(names(isconstant))) names(isconstant) <- colnames(dmat)
+  ok <- unlist(isconstant[entangled])
+  conflict[ , ok] <- FALSE
+  if(!any(conflict)) return(TRUE)
+  #' there are conflicts
+  conflictterms <- matrowany(conflict)
+  conflictcovs  <- matcolany(conflict)
+  whinge <- paste("The covariate", sQuote(covname),
+                  "cannot be separated from the",
+                  ngettext(sum(conflictcovs), "covariate", "covariates"),
+                  commasep(sQuote(colnames(conflict)[conflictcovs])),
+                  "in the model",
+                  ngettext(sum(conflictterms), "term", "terms"),
+                  commasep(sQuote(rownames(conflict)[conflictterms])))
+  if(fatal) stop(whinge, call.=FALSE)
+  warning(whinge, call.=FALSE)
+  return(FALSE)
+}

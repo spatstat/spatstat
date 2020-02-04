@@ -3,7 +3,7 @@
 #
 # code to plot transformation diagnostic
 #
-#   $Revision: 1.13 $  $Date: 2020/01/26 09:06:34 $
+#   $Revision: 1.14 $  $Date: 2020/02/04 03:26:50 $
 #
 
 parres <- function(model, covariate, ...,
@@ -169,49 +169,30 @@ parres <- function(model, covariate, ...,
     if(any(relevant)) {
       # original covariate determines one or more canonical covariates
       mediator <- "canonical"
-      # check whether covariate is separable
-      if(any(conflict <- dmat[relevant, othercov, drop=FALSE])) {
-        ## identify entangled covariates
-        entangled <- colnames(conflict)[matcolany(conflict)]
-        ## not problematic if constant
-        ok <- unlist(isconstant[entangled])
-        conflict[ , ok] <- FALSE
-        ## re-test
-        if(any(conflict)) {
-          conflictterms <- matrowany(conflict)
-          conflictcovs  <- matcolany(conflict)
-          stop(paste("The covariate", sQuote(covname),
-                     "cannot be separated from the",
-                     ngettext(sum(conflictcovs), "covariate", "covariates"),
-                     commasep(sQuote(colnames(conflict)[conflictcovs])),
-                     "in the model",
-                     ngettext(sum(conflictterms), "term", "terms"),
-                     commasep(sQuote(rownames(conflict)[conflictterms]))
-                     ))
-        }
-      }
-      # 
+      ## check whether covariate is separable
+      check.separable(dmat, covname, isconstant)
+      ## Extract information about relevant model terms
       termnames <- rownames(dmat)[relevant]
       isoffset <- rep.int(FALSE, length(termnames))
       names(isoffset) <- termnames
-      # Extract relevant canonical covariates
+      ## Extract relevant canonical covariates
       mm <-  model.matrix(model)
       termvalues <- mm[, relevant, drop=FALSE]
-      # extract corresponding coefficients
+      ## extract corresponding coefficients
       termbetas <- coef(model)[relevant]
-      # evaluate model effect
+      ## evaluate model effect
       effect <- as.numeric(termvalues %*% termbetas)
-      # check length
+      ## check length
       if(length(effect) != npoints(quadpoints))
         stop(paste("Internal error: number of values of fitted effect =",
                    length(effect), "!=", npoints(quadpoints),
                    "= number of quadrature points"))
-      # Trap loglinear case
+      ## Trap loglinear case
       if(length(termnames) == 1 && identical(termnames, covname)) {
         covtype <- "canonical"
         beta <- termbetas
       }
-      # construct the corresponding function
+      ## construct the corresponding function
       gd <- getglmdata(model)
       goodrow <- min(which(complete.cases(gd)))
       defaultdata <- gd[goodrow, , drop=FALSE]
@@ -243,37 +224,18 @@ parres <- function(model, covariate, ...,
     }
     if(!is.null(offmat <- attr(dmat, "offset")) &&
        any(relevant <- offmat[, covname])) {
-      # covariate appears in a model offset term
+      ## covariate appears in a model offset term
       mediator <- c(mediator, "offset")
-      # check whether covariate is separable
-      if(any(conflict<- offmat[relevant, othercov, drop=FALSE])) {
-        ## identify entangled covariates
-        entangled <- colnames(conflict)[matcolany(conflict)]
-        ## not problematic if constant
-        ok <- unlist(isconstant[entangled])
-        conflict[ , ok] <- FALSE
-        ## re-test
-        if(any(conflict)) {
-          conflictterms <- matrowany(conflict)
-          conflictcovs  <- matcolany(conflict)
-          stop(paste("The covariate", sQuote(covname),
-                     "cannot be separated from the",
-                     ngettext(sum(conflictcovs), "covariate", "covariates"),
-                     commasep(sQuote(colnames(conflict)[conflictcovs])),
-                     "in the model",
-                     ngettext(sum(conflictterms), "term", "terms"),
-                     commasep(sQuote(rownames(conflict)[conflictterms]))
-                     ))
-        }
-      }
-      # collect information about relevant offset 
+      ## check whether covariate is separable
+      check.separable(offmat, covname, isconstant)
+      ## collect information about relevant offset 
       offnames <- rownames(offmat)[relevant]
       termnames <- c(termnames, offnames)
       noff <- length(offnames)
       termbetas <- c(termbetas, rep.int(1, noff))
       isoffset  <- c(isoffset, rep.int(TRUE, noff))
       names(termbetas) <- names(isoffset) <- termnames
-      # extract values of relevant offset 
+      ## extract values of relevant offset 
       mf <- model.frame(model, subset=rep.int(TRUE, n.quad(Q)))
       if(any(nbg <- !(offnames %in% colnames(mf))))
         stop(paste("Internal error:",

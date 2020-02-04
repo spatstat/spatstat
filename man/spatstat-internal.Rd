@@ -72,6 +72,7 @@
 \alias{check.finespacing}
 \alias{check.hist.lengths}
 \alias{check.mat.mul}
+\alias{check.separable}
 \alias{check.testfun}
 \alias{circticks}
 \alias{circunion}
@@ -878,6 +879,7 @@ check.anySparseVector(v, npoints, fatal, things,
 check.finespacing(r, eps, win, rmaxdefault, context, action, rname)
 check.hist.lengths(hist,breaks)
 check.mat.mul(A, B, Acols, Brows, fatal)
+check.separable(dmat, covname, isconstant, fatal)
 check.testfun(f, f1, X)
 circticks(R, at, unit, start, clockwise, labels)
 circunion(arcs)

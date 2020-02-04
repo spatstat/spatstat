@@ -132,7 +132,7 @@ local({
 #
 # additional test of parres
 #
-#  $Revision: 1.5 $  $Date: 2019/12/03 07:10:07 $
+#  $Revision: 1.6 $  $Date: 2020/02/04 03:23:38 $
 #
 require(spatstat)
 local({
@@ -176,6 +176,12 @@ parres(copfit)
 #' infrastructure
 ltuae <- evalCovariate(42, cells)
 LTUAE <- evalCovariate(ltuae, cells)
+
+fit <- ppm(amacrine ~ x * marks, nd=16)
+dmat <- model.depends(fit)
+check.separable(dmat, "x", c(x=FALSE, marks=FALSE), FALSE)
+check.separable(dmat, "x", c(FALSE, FALSE), FALSE)
+check.separable(dmat, "x", c(x=FALSE, marks=TRUE), FALSE)
 })
 #'
 #'     tests/threedee.R
