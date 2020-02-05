@@ -1,7 +1,7 @@
 #
 # linim.R
 #
-#  $Revision: 1.69 $   $Date: 2020/02/04 13:11:48 $
+#  $Revision: 1.71 $   $Date: 2020/02/05 01:22:28 $
 #
 #  Image/function on a linear network
 #
@@ -188,7 +188,8 @@ plot.linim <- local({
       if(fatten > 0) {
         #' first fatten the lines 
         L <- attr(x, "L")
-        D <- distmap(as.psp(L), xy=x)
+        S <- as.psp(L)
+        D <- distmap(as.mask.psp(S, xy=x))
         fatwin <- levelset(D, fatten)
         x <- nearestValue(x)[fatwin, drop=FALSE]
       }

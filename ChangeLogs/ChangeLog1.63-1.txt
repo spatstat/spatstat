@@ -288,3 +288,15 @@ Change log from 1.63-0 to 1.63-1
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
 
+05 feb 2020
+
+   linim.R
+	Accelerated
+
+   DESCRIPTION
+   NEWS
+	Version 1.63-0.014
+
+------------- passed R-3.6.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
