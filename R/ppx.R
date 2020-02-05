@@ -547,3 +547,58 @@ spatdim <- function(X, intrinsic=FALSE) {
   if(inherits(X, "boxx")) length(X$ranges) else 
   if(is.ppx(X)) as.integer(sum(X$ctype == "spatial")) else NA_integer_
 }
+
+shift.boxx <- function(X, vec = 0, ...){
+  ra <- X$ranges
+  if(length(vec)==1){
+    vec <- rep(vec, ncol(ra))
+  }
+  stopifnot(length(vec)==ncol(ra))
+  X$ranges <- ra + matrix(vec, 2L, ncol(ra), byrow = TRUE)
+  attr(X, "lastshift") <- vec
+  return(X)
+}
+
+shift.ppx <- function(X, vec = 0,  ..., spatial = TRUE, temporal = TRUE, local = TRUE){
+  ctype <- X$ctype
+  chosen <- (ctype == "spatial" & spatial) | 
+    (ctype == "temporal" & temporal) | 
+    (ctype == "local" & local)
+  dat <- as.data.frame(X$data[, chosen, drop=FALSE])
+  if(length(vec)==1){
+    vec <- rep(vec, ncol(dat))
+  }
+  stopifnot(length(vec)==ncol(dat))
+  X$data[,chosen] <- dat + matrix(vec, nrow(dat), ncol(dat), byrow = TRUE)
+  X$domain <- shift(X$domain, vec = vec)
+  attr(X, "lastshift") <- vec
+  return(X)
+}
+
+# Scale a boxx and ppx like base::scale()
+scale.boxx <- function(x, center, scale){
+  x$ranges <- as.data.frame(scale(x$ranges, center, scale))
+  return(x)
+}
+
+scale.ppx <- function(x, center, scale){
+  coords(x) <- scale(coords(x), center, scale)
+  if(!is.null(domain(x))){
+    x$domain <- scale(domain(x), center, scale)
+  }
+  return(x)
+}
+
+# Clip ppx X to intersection of domain(X) and B. Returns NULL if non-intersecting.
+subsetclip <- function(X, B){
+  coX <- as.matrix(coords(X))
+  rX <- as.boxx(domain(X))$ranges
+  rB <- B$ranges
+  r1 <- pmax(rX[1,], rB[1,])
+  r2 <- pmin(rX[2,], rB[2,])
+  if(any(r1>=r2)){
+    return(NULL)
+  }
+  insideB <- apply(coX, 1, function(x) all(x>r1 & x<r2))
+  return(ppx(coX[insideB,,drop=FALSE], boxx(rbind(r1,r2))))
+}
