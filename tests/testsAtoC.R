@@ -128,7 +128,7 @@ local({
 ##  tests/closeshave.R
 ## check 'closepairs/crosspairs' code
 ## validity and memory allocation
-## $Revision: 1.21 $ $Date: 2020/02/02 03:30:52 $
+## $Revision: 1.22 $ $Date: 2020/02/06 05:53:13 $
 
 local({
   r <- 0.12
@@ -272,6 +272,8 @@ local({
   Y <- runifpoint3(100)
   cr <- crosspairs(X, Y, 0.2, what="indices")
   cr <- crosspairs(X, Y, 0.2, what="ijd")
+  #' Test memory overflow code
+  cr <- crosspairs(X, Y, 0.2, what="ijd", nsize=2)
   #' markmarkscatter uses closepairs.pp3
   marks(X) <- runif(npoints(X))
   markmarkscatter(X, 0.2)

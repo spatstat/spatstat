@@ -300,3 +300,28 @@ Change log from 1.63-0 to 1.63-1
 ------------- passed R-3.6.2 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
+
+06 feb 2020
+
+   wingeom.R
+	Buglet fixes
+	
+   close3Dpairs.R
+	new secret option crosspairs.pp3(nsize=)
+	to test the memory overflow code.
+
+   tests/closeshave.R
+	Test of memory overflow case.
+	
+   tests/prediction.R
+   tests/sumfun.R
+   tests/windows.R
+	More tests of code blocks in fundamental code
+
+   DESCRIPTION
+   NEWS
+	Version 1.63-0.015
+
+------------- passed R-3.6.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------

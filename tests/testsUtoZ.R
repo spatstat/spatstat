@@ -309,7 +309,7 @@ local({
 #
 # Tests of owin geometry code
 #
-#  $Revision: 1.14 $  $Date: 2020/01/23 04:02:20 $
+#  $Revision: 1.15 $  $Date: 2020/02/06 05:48:33 $
 
 require(spatstat)
 local({
@@ -387,6 +387,7 @@ local({
   
   X <- longleaf[square(50)]
   marks(X) <- marks(X)/8
+  D <- discs(X)
   D <- discs(X, delta=5, separate=TRUE)
 
   AD <- dilated.areas(cells,
@@ -450,6 +451,27 @@ local({
   xxyy <- split(xy[,1:2], xy$id)
   spatstat.options(checkpolygons=TRUE)
   H <- owin(poly=xxyy, check=TRUE)
+})
+
+local({
+  #' Code for/using intersection and union of windows
+  Empty <- emptywindow(Frame(letterR))
+  a <- intersect.owin()
+  a <- intersect.owin(Empty)
+  a <- intersect.owin(Empty, letterR)
+  a <- intersect.owin(letterR, Empty)
+  b <- intersect.owin()
+  b <- intersect.owin(Empty)
+  b <- intersect.owin(Empty, letterR)
+  b <- intersect.owin(letterR, Empty)
+  d <- union.owin(as.mask(square(1)), as.mask(square(2)))
+  #' [.owin
+  A <- erosion(letterR, 0.2)
+  Alogi <- as.im(TRUE, W=A)
+  B <- letterR[A]
+  B <- letterR[Alogi]
+  #' miscellaneous
+  D <- convexhull(Alogi)
 })
 
 reset.spatstat.options()

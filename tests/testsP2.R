@@ -542,7 +542,7 @@ local({
 #
 # Things that might go wrong with predict()
 #
-#  $Revision: 1.18 $ $Date: 2020/01/11 09:57:54 $
+#  $Revision: 1.19 $ $Date: 2020/02/06 05:38:29 $
 #
 
 require(spatstat)
@@ -591,17 +591,21 @@ local({
   a <- predict(fit0, interval="confidence")
   a <- predict(fit0, interval="confidence", type="count")
   fit  <- ppm(cells ~ x)
+  b <- predict(fit, se=TRUE, locations=cells)
+  b <- predict(fit, se=TRUE, interval="confidence")
   b <- predict(fit, type="count",                            se=TRUE)
   b <- predict(fit, type="count", window=square(0.5),        se=TRUE)
   b <- predict(fit, type="count", window=quadrats(cells, 3), se=TRUE)
   d <- predict(fit, type="count", interval="prediction", se=TRUE)
   d <- predict(fit, type="count", interval="confidence", se=TRUE)
-  ## 
+  d <- predict(fit,               interval="confidence", se=TRUE)
   foot <- ppm(cells ~ x, StraussHard(0.12))
   d <- predict(foot, ignore.hardcore=TRUE)
+  dX <- predict(foot, ignore.hardcore=TRUE, locations=cells)
   
   ## superseded usages
   b <- predict(fit, type="se", getoutofjail=TRUE)
+  b <- predict(fit, type="se", locations=cells) # warning
   b <- predict(fit, total=TRUE)
   b <- predict(fit, total=square(0.5))
   b <- predict(fit, total=quadrats(cells, 3))
@@ -610,7 +614,11 @@ local({
   u <- model.se.image(fit, square(0.5))
   u <- model.se.image(fit, square(0.5), what="cv")
   u <- model.se.image(fit, square(0.5), what="ce")
-
+  co <- c(Intercept=5, slope=3, kink=2)
+  re <- c("Intercept", "slope")
+  a <- fill.coefs(co, re) # warning
+  b <- fill.coefs(co, rev(names(co)))
+  d <- fill.coefs(co, letters[1:3])
   ## model matrix etc
   v <- model.frame(ppm(cells))
   fut <- ppm(cells ~ x, Strauss(0.1))

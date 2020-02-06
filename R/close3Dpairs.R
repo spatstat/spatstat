@@ -1,7 +1,7 @@
 #
 # close3Dpairs.R
 #
-#   $Revision: 1.13 $   $Date: 2019/10/28 08:46:09 $
+#   $Revision: 1.14 $   $Date: 2020/02/06 05:53:02 $
 #
 #  extract the r-close pairs from a 3D dataset
 # 
@@ -188,8 +188,14 @@ crosspairs.pp3 <- local({
     ooY <- fave.order(coords(Y)$x)
     Ysort <- Y[ooY]
     ## First (over)estimate the number of pairs
-    nsize <- ceiling(3 * pi * (rmax^3) * nX * nY/volume(as.box3(Y)))
-    nsize <- max(1024, nsize)
+    nsize <- list(...)$nsize # secret option to test overflow code
+    if(!is.null(nsize)) {
+      splat("Using nsize =", nsize)
+    } else {
+      #' normal usage
+      nsize <- ceiling(3 * pi * (rmax^3) * nX * nY/volume(as.box3(Y)))
+      nsize <- max(1024, nsize)
+    }
     if(nsize > .Machine$integer.max) {
       warning(
         "Estimated number of close pairs exceeds maximum possible integer",

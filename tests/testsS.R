@@ -793,7 +793,7 @@ local({
 #'   Tests of code for summary functions
 #'       including score residual functions etc
 #'
-#'   $Revision: 1.4 $ $Date: 2020/02/02 03:25:45 $
+#'   $Revision: 1.5 $ $Date: 2020/02/06 05:38:15 $
 
 require(spatstat)
 local({
@@ -828,9 +828,11 @@ local({
                   B=bdist.points(redwood),
                   r=seq(0, 1, length=256))
 
+  ## distance argument spacing and breakpoints
   e <- check.finespacing(c(0,1,2), eps=0.1, action="silent")
   b <- as.breakpts(pi, 20)
   b <- as.breakpts(42, max=pi, npos=20)
+  b <- even.breaks.owin(letterR)
 })
 ##
 ## tests/symbolmaps.R

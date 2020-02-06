@@ -1,7 +1,7 @@
 #
 #	wingeom.R	Various geometrical computations in windows
 #
-#	$Revision: 4.134 $	$Date: 2019/11/04 04:31:55 $
+#	$Revision: 4.135 $	$Date: 2020/02/06 06:39:51 $
 #
 
 volume.owin <- function(x) { area.owin(x) }
@@ -279,7 +279,7 @@ intersect.owin <- function(..., fatal=FALSE, p) {
     }
   }
   ## look for window arguments
-  isowin <- sapply(argh, is.owin)
+  isowin <- as.logical(sapply(argh, is.owin))
   if(any(!isowin))
     warning("Some arguments were not windows")
   argh <- argh[isowin]
@@ -469,7 +469,7 @@ union.owin <- function(..., p) {
     }
   }
   ## look for window arguments
-  isowin <- sapply(argh, is.owin)
+  isowin <- as.logical(sapply(argh, is.owin))
   if(any(!isowin))
     warning("Some arguments were not windows")
   argh <- argh[isowin]
