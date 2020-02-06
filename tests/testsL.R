@@ -55,7 +55,7 @@ local({
 #'
 #'   leverage and influence for Gibbs models
 #' 
-#'   $Revision: 1.27 $ $Date: 2020/02/03 11:17:36 $
+#'   $Revision: 1.28 $ $Date: 2020/02/06 08:03:59 $
 #' 
 
 require(spatstat)
@@ -288,15 +288,13 @@ local({
   foo <- ppm(cells ~ 1, Strauss(0.15), method="ho", nsim=5)
   aa <- Everything(foo)
 
-  if(requireversion("spatstat.utils", "1.17-0", fatal=FALSE)) {
-    #' Gradient and Hessian obtained by symbolic differentiation
-    f <- deriv(expression((1+x)^a),
-               "a", function.arg=c("x", "y", "a"),
-               hessian=TRUE)
-    #' check they can be extracted
-    fit <- ippm(cells ~offset(f), start=list(a=0.7))
-    Everything(fit)
-  }
+  #' Gradient and Hessian obtained by symbolic differentiation
+  f <- deriv(expression((1+x)^a),
+             "a", function.arg=c("x", "y", "a"),
+             hessian=TRUE)
+  #' check they can be extracted
+  fit <- ippm(cells ~offset(f), start=list(a=0.7))
+  Everything(fit)
 })
 
 reset.spatstat.options()

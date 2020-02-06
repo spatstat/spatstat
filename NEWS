@@ -1,12 +1,18 @@
 
-        CHANGES IN spatstat VERSION 1.63-0.015
+        CHANGES IN spatstat VERSION 1.63-0.016
 
 OVERVIEW
 
-    o Minor changes to satisfy the package checker.
+    o Changes to satisfy the package checker.
 
+    o Improvement to plot.linim
+
+    o Fill missing pixel values by taking the nearest defined pixel value.
+    
     o Minor improvements and bug fixes.
 
+    o spatstat now requires spatstat.utils version 1.17-0.
+    
     o Version nickname: 'Unforced error'
 
 NEW FUNCTIONS
