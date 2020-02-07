@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.63-0.016
+        CHANGES IN spatstat VERSION 1.63-0.017
 
 OVERVIEW
 
@@ -36,6 +36,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o markcorr, markconnect, markvario 
     The 'weights' can now be an expression to be evaluated,
     or a function, or a pixel image, as well as a numeric vector.
+
+    o markcorr, markconnect, markvario 
+    Default range of 'r' values has been reduced.
 
     o Smooth.ppp
     The 'weights' can now be an expression to be evaluated,

@@ -114,13 +114,17 @@ markconnect(X, i, j, r=NULL,
     \item{isotropic/Ripley}{Ripley's isotropic correction
       (see Ripley, 1988; Ohser, 1983).
       This is implemented only for rectangular and polygonal windows
-      (not for binary masks).
+      (not for binary masks) and is slow for complicated polygons.
     }
     \item{translate}{Translation correction (Ohser, 1983).
-      Implemented for all window geometries, but slow for
-      complex windows. 
+      Implemented for all window geometries.
     }
+    \item{none}{No edge correction.}
   }
+  The option \code{correction="none"} should only be used if the
+  number of data points is extremely large (otherwise an edge correction
+  is needed to correct bias).
+
   Note that the estimator assumes the process is stationary (spatially
   homogeneous). 
 
