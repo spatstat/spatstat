@@ -4,7 +4,7 @@
 \title{Apply Vector Translation To Box Or Point Pattern In Arbitrary Dimension}
 \description{
   Applies a vector shift to a box or point pattern in arbitrary dimension
-  (object of class \code{"boxx""} or \code{"ppx"}).
+  (object of class \code{"boxx"} or \code{"ppx"}).
 }
 \usage{
  \method{shift}{boxx}(X, vec= 0, \dots)
