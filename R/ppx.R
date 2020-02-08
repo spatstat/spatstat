@@ -160,13 +160,90 @@ plot.ppx <- function(x, ...) {
   return(invisible(NULL))
 }
 
-"[.ppx" <- function (x, i, drop=FALSE, ...) {
+is.boxx <- function(x){
+  inherits(x, "boxx")
+}
+
+intersect.boxx <- function(..., fatal = FALSE){
+  argh <- list(...)
+  ## look for NULL arguments (empty boxx) and return NULL
+  if(any(sapply(argh, is.null))){
+    if(fatal) stop("There is a NULL boxx in the intersection.")
+    return(NULL)
+  }
+  ## look for boxx arguments
+  isboxx <- sapply(argh, is.boxx)
+  if(any(!isboxx))
+    warning("Some arguments were not boxx objects")
+  argh <- argh[isboxx]
+  nboxx <- length(argh)
+
+  if(nboxx == 0) {
+    warning("No non-NULL boxx objects were given")
+    if(fatal) stop("The intersection of boxx objects is NULL.")
+    return(NULL)
+  }
+
+  ## at least one boxx
+  A <- argh[[1L]]
+  if(nboxx == 1) return(A)
+
+  ## at least two non-empty boxx objects
+  B <- argh[[2L]]
+
+  if(nboxx > 2) {
+    ## handle union of more than two windows
+    windows <- argh[-c(1,2)]
+    ## absorb all windows into B
+    for(i in seq_along(windows)) {
+      B <- do.call(intersect.boxx, list(B, windows[[i]], fatal=fatal))
+      if(is.null(B)){
+        if(fatal) stop("The intersection of boxx objects is NULL.")
+        return(NULL)
+      }
+    }
+  }
+
+  ## There are now only two windows, which are not empty.
+  if(identical(A, B)){
+    return(A)
+  }
+
+  # check dim and units
+  if(spatdim(A)!=spatdim(B)){
+    stop("Not all boxx objects have same spatial dimension.")
+  }
+  if(!compatible(unitname(A), unitname(B)))
+    warning("The two windows have incompatible units of length")
+  uname <- harmonise(unitname(A), unitname(B), single=TRUE)
+
+  # determine intersection of ranges
+  rA <- A$ranges
+  rB <- B$ranges
+  r1 <- pmax(rA[1,], rB[1,])
+  r2 <- pmin(rA[2,], rB[2,])
+  if(any(r1>=r2)){
+    if(fatal) stop("The intersection of boxx objects is NULL.")
+    return(NULL)
+  }
+  return(boxx(rbind(r1,r2)))
+}
+
+"[.ppx" <- function (x, i, drop=FALSE, clip=FALSE, ...) {
   da <- x$data
   dom <- x$domain
   if(!missing(i)) {
     if(inherits(i, c("boxx", "box3"))) {
-      dom <- i
-      i <- inside.boxx(da, w=i)
+      if(clip){
+        dom <- intersect.boxx(dom, i)
+      } else{
+        dom <- i
+      }
+      if(is.null(dom)){
+        i <- rep(FALSE, nrow(da))
+      } else{
+        i <- inside.boxx(da, w=i)
+      }
     }
     da <- da[i, , drop=FALSE]
   }
@@ -587,18 +664,4 @@ scale.ppx <- function(x, center, scale){
     x$domain <- scale(domain(x), center, scale)
   }
   return(x)
-}
-
-# Clip ppx X to intersection of domain(X) and B. Returns NULL if non-intersecting.
-subsetclip <- function(X, B){
-  coX <- as.matrix(coords(X))
-  rX <- as.boxx(domain(X))$ranges
-  rB <- B$ranges
-  r1 <- pmax(rX[1,], rB[1,])
-  r2 <- pmin(rX[2,], rB[2,])
-  if(any(r1>=r2)){
-    return(NULL)
-  }
-  insideB <- apply(coX, 1, function(x) all(x>r1 & x<r2))
-  return(ppx(coX[insideB,,drop=FALSE], boxx(rbind(r1,r2))))
 }
