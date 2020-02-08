@@ -2,13 +2,14 @@ require(spatstat)
 
 ## Tests for shift:
 # Check ppp and ppx shift are the same
-Xppp <- cells
-Xppx <- ppx(coords(cells), domain = boxx(0:1,0:1))
-Xppx2 <- shift(Xppx, vec = c(1,1))
-stopifnot(all.equal(coords(Xppp2), coords(Xppx2), check.attributes = FALSE))
-stopifnot(all.equal(domain(Xppp2), as.owin(domain(Xppx2)), check.attributes = FALSE))
+X <- cells
+Y <- ppx(coords(cells), domain = boxx(0:1,0:1))
+Xs <- shift(X, vec = c(1,1))
+Ys <- shift(Y, vec = c(1,1))
+stopifnot(all.equal(coords(Xs), coords(Ys), check.attributes = FALSE))
+stopifnot(all.equal(domain(Xs), as.owin(domain(Ys)), check.attributes = FALSE))
 # Check a single numeric for vec in shift.ppx
-stopifnot(identical(Xppx2, shift(Xppx, vec = 1)))
+stopifnot(identical(Ys, shift(Y, vec = 1)))
 
 
 ## Tests for scale:
