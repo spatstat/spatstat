@@ -1,7 +1,7 @@
 #
 #	Kest.R		Estimation of K function
 #
-#	$Revision: 5.127 $	$Date: 2020/02/07 09:50:11 $
+#	$Revision: 5.129 $	$Date: 2020/02/10 09:44:52 $
 #
 #
 # -------- functions ----------------------------------------
@@ -737,9 +737,7 @@ rmax.rule <- function(fun="K", W, lambda) {
            ripley <- if(gotW) shortside(Frame(W))/4 else Inf
            ## Count at most 1000 neighbours per point
            rlarge <- if(gotL) sqrt(1000 /(pi * lambda)) else Inf
-           ## Count at most 1e6 pairs of points
-           rhuge <- if(gotall) 1e3/(lambda*sqrt(pi*area(Frame(W)))) else Inf
-           rmax <- min(rhuge, rlarge, ripley)
+           rmax <- min(rlarge, ripley)
          },
          Kscaled = {
            ## rule of thumb for Kscaled
