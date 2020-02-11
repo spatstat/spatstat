@@ -14,7 +14,8 @@
     One vector for each dimension (all of same length).
     (Alternatively, a single point pattern object
     of class \code{"\link{ppx}"}
-    or its coordinates as a \code{"\link{hyperframe}"})
+    or its coordinates as a \code{matrix}, \code{data.frame}, or 
+    \code{"\link{hyperframe}"})
   }
   \item{w}{A window.
     This should be an object of class \code{\link{boxx}},
@@ -26,8 +27,7 @@
   \code{TRUE} if the corresponding point is inside \code{w}. 
 }
 \details{
-  This function tests whether each of the points 
-  \code{(x[i],y[i])} lies inside or outside
+  This function tests whether each of the provided points lies inside or outside
   the window \code{w} and returns \code{TRUE} if it is inside.
   
   The boundary of the window is treated as being inside.
@@ -37,13 +37,15 @@
   of points.
   Alternatively a single point pattern (object of class \code{"ppx"})
   can be given; then the coordinates of the point pattern are extracted.
+  A single \code{matrix}, \code{data.frame}, or \code{"\link{hyperframe}"})
+  with the coordinates is also accepted.
 }
 \seealso{
   \code{\link{boxx}},
   \code{\link{as.boxx}}
 }
 \examples{
-  # Random points in box with side [0,2]
+  # 3D box with side [0,2]
   w <- boxx(c(0,2), c(0,2), c(0,2))
 
   # Random points in box with side [-1,3]
@@ -57,6 +59,15 @@
   # Same using a point pattern as argument:
   X <- ppx(data = cbind(x, y, z), domain = boxx(c(0,3), c(0,3), c(0,3)))
   ok2 <- inside.boxx(X, w=w)
+
+  # Same using the coordinates given as data.frame/matrix/hyperframe
+  coords_mat <- cbind(x,y,z)
+  ok_mat <- inside.boxx(coords_mat, w=w)
+  coords_df <- data.frame(x,y,z)
+  ok_df <- inside.boxx(coords_mat, w=w)
+  coords_hyper <- hyperframe(x,y,z)
+  ok_hyper <- inside.boxx(coords_mat, w=w)
+  
 }
 \author{
   \adrian

@@ -596,7 +596,7 @@ inside.boxx <- function(..., w = NULL){
     dat1 <- dat[[1]]
     if(inherits(dat1, "ppx"))
       dat <- coords(dat1)
-    if(inherits(dat1, "hyperframe"))
+    if(inherits(dat1, c("hyperframe", "data.frame", "matrix")))
       dat <- as.data.frame(dat1)
   }
   ra <- w$ranges
