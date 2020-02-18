@@ -32,7 +32,9 @@
     if \code{x} is a
     polygonal or rectangular window, or passed to
     \code{\link[graphics]{image.default}}
-    if \code{x} is a binary mask. See Details.
+    if \code{x} is a binary mask.
+    Some arguments are passed to \code{\link[graphics]{plot.default}}.
+    See Details.
   }
   \item{box}{
     logical flag; if \code{TRUE}, plot the enclosing rectangular box
@@ -101,6 +103,19 @@
   colours) may be passed directly via the \code{...} arguments,
   or indirectly reset using 
   \code{\link{spatstat.options}}.
+
+  If \code{add=FALSE} (the default), the plot is initialised
+  by calling the base graphics function
+  \code{\link[graphics]{plot.default}}
+  to create the plot area. By default, coordinate axes
+  and axis labels are not plotted. To plot coordinate axes,
+  use the argument \code{axes=TRUE}; 
+  to plot axis labels, use the argument \code{ann=TRUE}
+  and then specify the labels with \code{xlab} and \code{ylab};
+  see the help file for \code{\link[graphics]{plot.default}} for
+  information on these arguments, and for additional
+  arguments controlling the appearance of the axes.
+  See the Examples also.
 
   When \code{x} is of type \code{"rectangle"} or \code{"polygonal"}, it
   is plotted by the \R function \code{\link[graphics]{polygon}}. To control the
@@ -209,12 +224,13 @@
   op <- spatstat.options(par.binary=list(col=grey(c(0.5,1))))
   plot(we)
   spatstat.options(op)
+
+  ## axis annotation
+  plot(letterR, axes=TRUE, ann=TRUE, xlab="Easting", ylab="Northing")
+  plot(letterR,            ann=TRUE, xlab="Declination", ylab="Right Ascension")
 }
-\author{\adrian
-  
-  
-  and \rolf
-  
+\author{
+  \spatstatAuthors.
 }
 \keyword{spatial}
 \keyword{hplot}

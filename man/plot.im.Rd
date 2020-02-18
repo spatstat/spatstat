@@ -298,9 +298,11 @@
   \itemize{
     \item a formal argument of \code{\link[graphics]{image.default}}
     that is operative when \code{add=TRUE}.
-    \item one of the
-    parameters \code{"main", "asp", "sub", "axes", "ann",
-      "cex", "font", "cex.axis", "cex.lab", "cex.main", "cex.sub",
+    \item one of the parameters
+    \code{"main", "asp", "sub", "axes", "xlab", "ylab"}
+    described in \code{\link[graphics]{plot.default}}.
+    \item one of the parameters
+    \code{"ann", "cex", "font", "cex.axis", "cex.lab", "cex.main", "cex.sub",
       "col.axis", "col.lab", "col.main", "col.sub",
       "font.axis", "font.lab", "font.main", "font.sub"}
     described in \code{\link[graphics]{par}}.
@@ -431,6 +433,8 @@
    plot(Z, main="La vie en bleu", col.main="blue", cex.main=1.5,
         box=FALSE,
         ribargs=list(col.axis="blue", col.ticks="blue", cex.axis=0.75))
+   # add axes and axis labels
+   plot(Z, axes=TRUE, ann=TRUE, xlab="Easting", ylab="Northing")
    # log scale
    V <- eval.im(exp(exp(Z+2))/1e4)
    plot(V, log=TRUE, main="Log scale")

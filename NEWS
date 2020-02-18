@@ -1,11 +1,11 @@
 
-        CHANGES IN spatstat VERSION 1.63-0.018
+        CHANGES IN spatstat VERSION 1.63-0.019
 
 OVERVIEW
 
     o Changes to satisfy the package checker.
 
-    o Improvement to plot.linim
+    o Enhancement to plot.linim
 
     o Fill missing pixel values by taking the nearest defined pixel value.
     
@@ -50,6 +50,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
     
     o requireversion
     New argument 'fatal'
+
+    o plot.im, plot.owin
+    The coordinate axes will be plotted if axes=TRUE.
+    Axis labels xlab, ylab will be plotted if ann=TRUE.
     
 BUG FIXES
 

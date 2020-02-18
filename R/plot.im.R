@@ -1,7 +1,7 @@
 #
 #   plot.im.R
 #
-#  $Revision: 1.133 $   $Date: 2019/11/27 03:32:04 $
+#  $Revision: 1.136 $   $Date: 2020/02/18 06:56:48 $
 #
 #  Plotting code for pixel images
 #
@@ -23,6 +23,7 @@ plot.im <- local({
     show.all <- resolve.1.default(list(show.all=!add), aarg)
     addcontour <- resolve.1.default(list(addcontour=FALSE), aarg)
     args.contour <- resolve.1.default(list(args.contour=list()), aarg)
+    ##
     if(add && show.all) {
       ## set up the window space *with* the main title
       ## using the same code as plot.owin, for consistency
@@ -88,10 +89,12 @@ plot.im <- local({
                     list(x=x, y=y, z=z, ..., drawlabels=drawlabels))
   }
                  
-  do.box.etc <- function(bb, add, argh)
+  do.box.etc <- function(bb, add, argh) {
     do.call(box.etc, append(list(bb=bb, add=add), argh))
+  }
   
-  box.etc <- function(bb, ..., add=FALSE, axes=FALSE, box=!add) {
+  box.etc <- function(bb, ..., add=FALSE, box=!add,
+                      axes=FALSE, ann=FALSE, xlab="", ylab="") {
     # axes for image
     xr <- bb$xrange
     yr <- bb$yrange
@@ -112,6 +115,19 @@ plot.im <- local({
                                        list(...),
                                        list(pos=xr[1])),
                       extrargs=graphicsPars("axis"))
+    }
+    ## axis labels xlab, ylab
+    if(ann) {
+      dox <- any(nzchar(xlab))
+      doy <- any(nzchar(ylab))
+      line0 <- if(axes) 1 else 0
+      if(dox || doy) {
+        mtargs <- resolve.defaults(list(...), list(line=line0))
+        if(dox)
+          do.call.matched(mtext, append(list(text=xlab, side=1), mtargs))
+        if(doy)
+          do.call.matched(mtext, append(list(text=ylab, side=2), mtargs))
+      }
     }
   }
   
@@ -547,12 +563,13 @@ plot.im <- local({
                                 z=t(x$v)),
                  W=xbox,
                  workaround=workaround,
+                 ##
+                 list(axes=FALSE, xlab="",ylab=""), 
                  dotargs,
                  list(useRaster=useRaster, add=add, show.all=show.all),
                  colourinfo,
                  list(zlim=vrange),
-                 list(xlab = "", ylab = ""),
-                 list(asp = 1, main = main, axes=FALSE))
+                 list(asp = 1, main = main))
 ##      if(add && show.all)
 ##        fakemaintitle(x, main, dotargs)
 
@@ -600,6 +617,7 @@ plot.im <- local({
       return(output.colmap)
 
     pt <- prepareTitle(main)
+    done.axis <- FALSE
     
     if(!add) {
       ## establish coordinate system
@@ -629,11 +647,11 @@ plot.im <- local({
                W=xbox,
                workaround=workaround,
                list(add=TRUE, show.all=show.all),
+               list(axes=FALSE, xlab="", ylab=""),
                dotargs,
                list(useRaster=useRaster),
                colourinfo,
                list(zlim=vrange),
-               list(xlab = "", ylab = ""),
                list(asp = 1, main = main))
 
 ##    if(add && show.all)
@@ -675,7 +693,7 @@ plot.im <- local({
                     show.all=show.all),
                ribargs,
                list(useRaster=rib.useRaster),
-               list(main="", sub=""),
+               list(main="", sub="", xlab="", ylab=""),
                dotargs,
                colourinfo)
     # box around ribbon?

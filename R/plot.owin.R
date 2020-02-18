@@ -3,7 +3,7 @@
 #
 #	The 'plot' method for observation windows (class "owin")
 #
-#	$Revision: 1.59 $	$Date: 2020/01/23 03:41:41 $
+#	$Revision: 1.60 $	$Date: 2020/02/18 03:33:02 $
 #
 #
 #
@@ -69,7 +69,8 @@ plot.owin <- function(x, main, add=FALSE, ..., box, edge=0.04,
                                      list(xlim=xlim, ylim=ylim,
                                           ann=FALSE, axes=FALSE,
                                           asp=1.0,
-                                          xaxs="i", yaxs="i"),
+                                          xaxs="i", yaxs="i",
+                                          xlab="", ylab=""),
                                      .MatchNull=FALSE))
   }
   if(show.all && nlines > 0) {
