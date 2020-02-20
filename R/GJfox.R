@@ -3,7 +3,7 @@
 #
 #  Foxall G-function and J-function
 #
-#  $Revision: 1.10 $   $Date: 2019/08/12 10:10:00 $
+#  $Revision: 1.11 $   $Date: 2020/02/20 02:32:21 $
 #
 Gfox <- function(X, Y, r=NULL, breaks=NULL,
                  correction=c("km", "rs", "han"),
@@ -59,9 +59,9 @@ Gfox <- function(X, Y, r=NULL, breaks=NULL,
 }
 
 Jfox <- function(X, Y, r=NULL, breaks=NULL,
-                 correction=c("km", "rs", "han"), W=NULL, ...) {
+                 correction=c("km", "rs", "han"), W=NULL, ..., warn.trim=TRUE) {
   ## validate and resolve windows
-  a <- resolve.foxall.window(X, Y, W)
+  a <- resolve.foxall.window(X, Y, W, isTRUE(warn.trim))
   X <- a$X
   Y <- a$Y
   W <- a$W
@@ -83,10 +83,11 @@ Jfox <- function(X, Y, r=NULL, breaks=NULL,
   funs <- c("km", "han", "rs", "raw", "theo")
   fvnames(J, ".") <- funs[funs %in% names(J)]
   unitname(J) <- unitname(Y)
+  attr(J, "conserve") <- attr(H, "conserve")
   return(J)
 }
 
-resolve.foxall.window <- function(X, Y, W=NULL) {
+resolve.foxall.window <- function(X, Y, W=NULL, warn.trim=TRUE) {
   if(!(is.ppp(Y) || is.psp(Y) || is.owin(Y) || is.im(Y)))
     stop("Y should be an object of class ppp, psp, owin or im")
   if(is.im(Y) && !is.logical(ZeroValue(Y)))
@@ -118,7 +119,8 @@ resolve.foxall.window <- function(X, Y, W=NULL) {
   ## ensure compatible windows
   WX <- Window(X)
   if(!is.subset.owin(WX, W)) {
-    warning(paste("Trimming the window of X to be a subset of", Wdescribe))
+    if(warn.trim)
+      warning(paste("Trimming the window of X to be a subset of", Wdescribe))
     WX <- intersect.owin(WX, W)
     if(area.owin(WX) == 0) stop("Trimmed window has zero area")
     X <- X[WX]

@@ -10,7 +10,7 @@
 }
 \usage{
 Gfox(X, Y, r = NULL, breaks = NULL, correction = c("km", "rs", "han"), W, \dots)
-Jfox(X, Y, r = NULL, breaks = NULL, correction = c("km", "rs", "han"), W, \dots)
+Jfox(X, Y, r = NULL, breaks = NULL, correction = c("km", "rs", "han"), W, \dots, warn.trim=TRUE)
 }
 \arguments{
   \item{X}{
@@ -52,6 +52,11 @@ Jfox(X, Y, r = NULL, breaks = NULL, correction = c("km", "rs", "han"), W, \dots)
     These arguments are ignored by \code{Gfox}, but
     \code{Jfox} passes them to \code{\link{Hest}} to determine
     the discretisation of the spatial domain.
+  }
+  \item{warn.trim}{
+    Logical value indicating whether a warning should be issued
+    by \code{Jfox} when the window of \code{X} had to be trimmed
+    in order to be a subset of the frame of \code{Y}.
   }
 }
 \details{

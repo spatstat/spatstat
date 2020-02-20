@@ -5,14 +5,23 @@
 #
 #
 Hest <- local({
+
   Hest <- function(X, r=NULL, breaks=NULL,
                    ...,
                    W,
                    correction=c("km", "rs", "han"),
                    conditional=TRUE) {
+    if(missing(W)) W <- NULL
+    HestEngine(X, r=r, breaks=breaks, ..., W=W,
+               correction=correction, conditional=conditional)
+  }
+
+  HestEngine <- function(X, r=NULL, breaks=NULL,
+                   ...,
+                   W,
+                   correction=c("km", "rs", "han"),
+                   conditional=TRUE, checkspacing=TRUE, testme=FALSE) {
     rorbgiven <- !is.null(r) || !is.null(breaks)
-    checkspacing <- !isFALSE(list(...)$checkspacing)
-    testme       <- isTRUE(list(...)$testme)
     if(is.ppp(X) || is.psp(X)) {
       XX <- X
       W0 <- Window(X)

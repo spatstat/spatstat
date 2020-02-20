@@ -1466,7 +1466,7 @@ replacementIndex(ii, stuff)
 representativeRows(x)
 \method{rescale}{msr}(X, s, unitname)
 resolveEinfo(x, what, fallback, warn, atomic)
-resolve.foxall.window(X, Y, W)
+resolve.foxall.window(X, Y, W, warn.trim)
 resolve.vargamma.shape(\dots, nu.ker, nu.pcf, default)
 resolve.lambda(X, lambda, \dots, sigma, varcov, leaveoneout, update)
 resolve.lambda.cross(X, I, J, lambdaI, lambdaJ, \dots, lambdaX,
