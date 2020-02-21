@@ -1,7 +1,7 @@
 #
 #   plot.im.R
 #
-#  $Revision: 1.136 $   $Date: 2020/02/18 06:56:48 $
+#  $Revision: 1.137 $   $Date: 2020/02/21 08:45:54 $
 #
 #  Plotting code for pixel images
 #
@@ -617,7 +617,6 @@ plot.im <- local({
       return(output.colmap)
 
     pt <- prepareTitle(main)
-    done.axis <- FALSE
     
     if(!add) {
       ## establish coordinate system

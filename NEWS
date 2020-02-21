@@ -1,9 +1,7 @@
 
-        CHANGES IN spatstat VERSION 1.63-0.020
+        CHANGES IN spatstat VERSION 1.63-1
 
 OVERVIEW
-
-    o Changes to satisfy the package checker.
 
     o Enhancement to plot.linim
 
@@ -13,7 +11,7 @@ OVERVIEW
 
     o spatstat now requires spatstat.utils version 1.17-0.
     
-    o Version nickname: 'Unforced error'
+    o Version nickname: 'Made from recycled electrons'
 
 NEW FUNCTIONS
 
@@ -52,6 +50,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
     The coordinate axes will be plotted if axes=TRUE.
     Axis labels xlab, ylab will be plotted if ann=TRUE.
 
+    o bugfixes
+    If sincedate="all" or sinceversion="all", then all bugs will be listed.
+    
     o Jfox
     New argument 'warn.trim' makes it possible to suppress repeated warnings.
     
@@ -71,17 +72,17 @@ BUG FIXES
     linear network data (multitype lpp or lppm).
     Fixed.
 
+    o Jfox
+    envelope() commands using the summary function 'Jfox'
+    crashed sometimes with a message about illegal spacing of 'r' values.
+    Fixed.
+
     o leverage, influence, dfbetas
     Crashed when applied to an 'ippm' object in which
     the irregular components of the score, but not the Hessian,
     were provided by symbolic differentiation.
     Fixed.
     
-    o Jfox
-    envelope() commands using Jfox crashed sometimes
-    with a message about illegal spacing of 'r' values.
-    Fixed.
-
     o parres
     Crashed in rare circumstances, when the data did not contain
     enough useable values to perform smoothing.

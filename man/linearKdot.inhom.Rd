@@ -89,7 +89,7 @@ linearKdot.inhom(X, i, lambdaI, lambdadot, r=NULL, \dots,
   Multitype point process analysis of spines on the
   dendrite network of a neuron.
   \emph{Applied Statistics} (Journal of the Royal Statistical
-   Society, Series C), In press.
+   Society, Series C), \bold{63}, 673--694.
 }
 \section{Warnings}{
   The argument \code{i} is interpreted as a

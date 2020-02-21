@@ -46,11 +46,11 @@ linearmarkequal(X, r=NULL, \dots)
   largest disc contained in the window.
 }
 \references{
-  Baddeley, A, Jammalamadaka, A. and Nair, G. (to appear)
+  Baddeley, A, Jammalamadaka, A. and Nair, G. (2014)
   Multitype point process analysis of spines on the
   dendrite network of a neuron.
   \emph{Applied Statistics} (Journal of the Royal Statistical
-   Society, Series C), In press.
+   Society, Series C), \bold{63}, 673--694. 
 }
 \seealso{
  \code{\link{linearpcfcross}},
@@ -59,19 +59,15 @@ linearmarkequal(X, r=NULL, \dots)
  \code{\link{markconnect}}.
 }
 \examples{
-   
    if(interactive()) {
      X <- chicago
    } else {
-     X <- runiflpp(20, simplenet) \%mark\% sample(c("A","B"), 20,
-     replace=TRUE)
+     m <- sample(factor(c("A","B")), 20, replace=TRUE)
+     X <- runiflpp(20, simplenet) \%mark\% m
    }
    p <- linearmarkequal(X)
 }
-\author{\adrian
-  
-  
-}
+\author{\adrian}
 \keyword{spatial}
 \keyword{nonparametric}
 

@@ -32,7 +32,8 @@ options(useFancyQuotes=FALSE)
 \thispagestyle{empty}
 
 This vignette lists all \emph{important} bugs detected and fixed in the
-\spst\ package since 2010.
+\spst\ package since 2010. It also explains how to search the list of
+all recorded bugs in \spst.
 
 <<echo=FALSE,results=hide>>=
 nbugs <- nrow(news(grepl("^BUG", Category), 
@@ -43,6 +44,7 @@ nbugssince <- nrow(news(Version > "1.42-0" & grepl("^BUG", Category),
 
 \tableofcontents
 
+\pagebreak
 \section{Bug history}
 
 Thousands of bugs have been detected and fixed in \spst\ during its
@@ -52,28 +54,37 @@ Bugs that may have affected the user are listed in the
 package \texttt{NEWS} file, and can be searched
 using the \R\ command \texttt{news} or the \spst\ command \texttt{bugfixes}. 
 
-To see all bugs in the recorded history of \spst\ 
-that may have affected the user, type
+To see the bugs which have just been fixed in the latest version of \spst, type 
 <<eval=FALSE>>=
 bugfixes
 @ 
-which currently produces a list of \Sexpr{nbugs} bugs,
-of which \Sexpr{nbugssince} were detected after publication of the
-book \cite{baddrubaturn15}.
-To see all bugs in \spst\ that were fixed after 30 June 2017, type
+To see all bugs which were fixed after a particular version of \spst,
+for example, bugs that were fixed in version \texttt{1.50-0} or later, type
+<<eval=FALSE>>=
+bugfixes(sinceversion="1.50-0")
+@ 
+To see all bugs in \spst\ that were fixed after a particular date,
+for example 30 June 2017, type
 <<eval=FALSE>>=
 bugfixes(sincedate="2017-06-30")
 @ 
 To see all bugs fixed after the book \cite{baddrubaturn15} was written, type
 <<eval=FALSE>>=
-bugfixes(sinceversion="1.42-0")
+bugfixes("book")
 @ 
+To see all bugs in the entire recorded history of \spst, type
+<<eval=FALSE>>=
+bugfixes("all")
+@ 
+which currently produces a list of \Sexpr{nbugs} bugs,
+of which \Sexpr{nbugssince} were detected after publication of the
+book \cite{baddrubaturn15}.
 
 \pagebreak
 \section{Serious bugs}
 
-Following is a list of the {\bf most serious bugs} only, in order
-of potential impact.
+Following is a list of the {\bf most serious bugs}, 
+in decreasing order of potential impact.
 
 \newcommand\bugger[4]{%
   \\  {} %
@@ -121,17 +132,22 @@ of potential impact.
      Simulation of the Strauss-Hard Core process was partially incorrect,
      giving point patterns with a slightly lower intensity.
      \bugger{1.31-0}{january 2013}{1.37-0}{may 2014}
+   \item 
+     Simulation of the \emph{multitype} hard core model
+     was completely incorrect (the interaction was effectively removed,
+     changing the model into a Poisson process).
+     \bugger{1.31-0}{january 2013}{1.63-0}{january 2020}   
    \item
-   The result of simulating a model with a hard core
-   did not necessarily respect the hard core constraint,
-   and simulation of a model with strong inhibition
-   did not necessarily converge. 
-   This only happened if the first order trend was large,
-   the starting state (\texttt{n.start} or \texttt{x.start}) was not given,
-   and the number of iterations \texttt{nrep} was not very large.
-   It occurred because of a poor choice for the default starting state.
-   {\small (Bug was present since about 2010.  
-     Fixed in \texttt{spatstat 1.40-0}, december 2014)}
+     The result of simulating a model with a hard core
+     did not necessarily respect the hard core constraint,
+     and simulation of a model with strong inhibition
+     did not necessarily converge. 
+     This only happened if the first order trend was large,
+     the starting state (\texttt{n.start} or \texttt{x.start}) was not given,
+     and the number of iterations \texttt{nrep} was not very large.
+     It occurred because of a poor choice for the default starting state.
+     {\small (Bug was present since about 2010.  
+       Fixed in \texttt{spatstat 1.40-0}, december 2014)}
    \item 
      Simulation was incorrect in the case of an inhomogeneous multitype model
      with \texttt{fixall=TRUE} (i.e.\ with a fixed number of points 
@@ -199,12 +215,6 @@ of potential impact.
    \bugger{1.41-1}{february 2015}{1.57-0}{october 2018}   
    
   
- \item \texttt{rmh}, \texttt{simulate.ppm}, \texttt{MultiHard}:
-    Simulated realisations of the multitype hard core model
-    were completely incorrect (the interaction was effectively removed,
-    changing the model into a Poisson process).
-   \bugger{1.31-0}{january 2013}{1.63-0}{january 2020}   
-
   \item \texttt{rthin}:
    If \texttt{P} was close to 1, the result was sometimes an empty point pattern
    when it should have been identical to \texttt{X}.
@@ -238,7 +248,7 @@ of potential impact.
  \item \texttt{predict.rhohat}, \texttt{simulate.rhohat}:
    Results were incorrect for a \texttt{rhohat} object computed
    from linear network data (class \texttt{"lpp"} or \texttt{"lppm"}).
-   \bugger{1.31-0}{march 2013}{1.63-1}{january 2020}   
+   \bugger{1.31-0}{march 2013}{1.63-1}{february 2020}   
 
  \item \texttt{predict.rho2hat}:
    Results were incorrect for a \texttt{rho2hat} object computed

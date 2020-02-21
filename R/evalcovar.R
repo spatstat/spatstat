@@ -3,7 +3,7 @@
 #'
 #'   evaluate covariate values at data points and at pixels
 #'
-#' $Revision: 1.32 $ $Date: 2020/01/27 12:01:34 $
+#' $Revision: 1.33 $ $Date: 2020/02/21 08:45:16 $
 #'
 
 evalCovar <- function(model, covariate, ...) {
@@ -298,7 +298,7 @@ evalCovar.lppm <- local({
     wt <- w.quad(Q)
   
     #' evaluate covariate
-    if(ismark <- !is.marked(model)) {
+    if(!is.marked(model)) {
       #' ...................  unmarked .......................
       if(is.im(covariate)) {
         if(is.linim(covariate)) {

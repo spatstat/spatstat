@@ -3,7 +3,7 @@
 #
 # code to plot transformation diagnostic
 #
-#   $Revision: 1.14 $  $Date: 2020/02/04 03:26:50 $
+#   $Revision: 1.15 $  $Date: 2020/02/21 08:47:50 $
 #
 
 parres <- function(model, covariate, ...,
@@ -164,7 +164,6 @@ parres <- function(model, covariate, ...,
     dmat <- model.depends(model)
     if(!(covname %in% colnames(dmat)))
       stop("Internal error: cannot match covariate names")
-    othercov <- (colnames(dmat) != covname)
     relevant <- dmat[, covname]
     if(any(relevant)) {
       # original covariate determines one or more canonical covariates

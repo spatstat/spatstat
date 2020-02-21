@@ -43,17 +43,22 @@
   
   The argument \code{sinceversion} should be a character string
   like \code{"1.2-3"}. The default is the current installed version of the
-  package. The argument \code{sincedate} should be a 
+  package.
+
+  The argument \code{sincedate} should be a 
   character string like \code{"2015-05-27"}, or a date-time object.
 
+  If \code{sinceversion="all"} or \code{sincedate="all"}
+  then all recorded bugs will be listed.
+  
   If \code{package="spatstat"} (the default) then
   \code{sinceversion="book"} and \code{sincedate="book"}
-  are interpreted to mean \code{sinceversion="1.42-0"},
+  are interpreted to mean \code{sinceversion="1.42-1"},
   which gives all bugs reported after publication of
   the book by Baddeley, Rubak and Turner (2015).
 
   Typing \code{bugfixes} without parentheses will display a table of
-  all bug fixes in the current installed version of \pkg{spatstat}.
+  all bugs that were fixed in the current installed version of \pkg{spatstat}.
 }
 \value{
   A data frame, belonging to the class \code{"bugtable"},
@@ -74,7 +79,7 @@
 \examples{
    bugfixes
    ## show all bugs reported after publication of the spatstat book
-   if(interactive()) bugfixes(sinceversion="1.42-0")
+   if(interactive()) bugfixes(sinceversion="1.42-1")
    ## equivalent to bugfixes(sinceversion="book")
 }
 \keyword{documentation}

@@ -2,7 +2,7 @@
 ##
 ##     markcorr.R
 ##
-##     $Revision: 1.83 $ $Date: 2020/01/27 09:14:53 $
+##     $Revision: 1.84 $ $Date: 2020/02/21 08:46:31 $
 ##
 ##    Estimate the mark correlation function
 ##    and related functions 
@@ -57,7 +57,6 @@ markconnect <- local({
     stopifnot(is.ppp(X) && is.multitype(X))
     if(missing(correction))
       correction <- NULL
-    nX <- npoints(X)
     marx <- marks(X)
     lev  <- levels(marx)
     if(missing(i)) i <- lev[1]
