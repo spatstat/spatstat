@@ -9,8 +9,9 @@
   compute estimates of Foxall's  \eqn{G} and \eqn{J} functions.
 }
 \usage{
-Gfox(X, Y, r = NULL, breaks = NULL, correction = c("km", "rs", "han"), W, \dots)
-Jfox(X, Y, r = NULL, breaks = NULL, correction = c("km", "rs", "han"), W, \dots, warn.trim=TRUE)
+Gfox(X, Y, r=NULL, breaks=NULL, correction=c("km", "rs", "han"), W, \dots)
+Jfox(X, Y, r=NULL, breaks=NULL, correction=c("km", "rs", "han"), W, \dots,
+     warn.trim=TRUE)
 }
 \arguments{
   \item{X}{

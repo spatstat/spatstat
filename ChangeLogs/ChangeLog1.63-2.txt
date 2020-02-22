@@ -1,0 +1,25 @@
+Change log from 1.63-1 to 1.63-2
+================================
+
+21 feb 2020
+
+   DESCRIPTION
+   NEWS
+   Nickname.txt
+	Nickname changed to 'I'm sorry Dave, I'm afraid I can't do that'
+	Version 1.63-1.001
+
+22 feb 2020
+
+   Gfox.Rd
+	Split a line, to satisfy the package checker.
+
+   DESCRIPTION
+   NEWS
+	Version 1.63-2
+
+------------- passed R-3.6.2 CMD check ---------------
+------------- installed on laptop      ---------------
+^^^^^^^^^^^^  passed R-devel CMD check ^^^^^^^^^^^^^^^
+             (2020-02-20 r77838)
+
