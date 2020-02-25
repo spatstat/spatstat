@@ -1,0 +1,26 @@
+Change log from 1.63-2 to 1.63-3
+================================
+
+22 feb 2020
+
+   DESCRIPTION
+   NEWS
+   Nickname.txt
+	Nickname changed to 'Wet paint'
+	Version 1.63-2.001
+
+
+25 feb 2020
+
+   plot.ppp.R
+   plot.ppp.Rd
+	Now handles 'axes', 'ann', 'xlab', 'ylab'.
+	
+   DESCRIPTION
+   NEWS
+	updated
+
+------------- passed R-3.6.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+

@@ -30,7 +30,7 @@
   \item{\dots}{
     extra arguments that will be passed to the plotting functions
     \code{\link{plot.default}}, \code{\link{points}} and/or
-    \code{\link{symbols}}.
+    \code{\link{symbols}}. Not all arguments will be recognised.
   }
   \item{clipwin}{
     Optional. A window (object of class \code{"owin"}).
@@ -282,6 +282,16 @@
   parameter \code{mar}. Typically, \code{par(mar=rep(0.5, 4))} is
   adequate, if there are no annotations or titles outside the window.
 }
+\section{Drawing coordinate axes and axis labels}{
+  Coordinate axes and axis labels are not drawn, by default.
+  To draw coordinate axes, set \code{axes=TRUE}.
+  To draw axis labels, set \code{ann=TRUE} and give values to the
+  arguments \code{xlab} and \code{ylab}. See the Examples.
+  Only the default style of axis is supported;
+  for more control over the placement and style of axes,
+  use the graphics commands
+  \code{\link[graphics]{axis}} and \code{\link[graphics]{mtext}}.
+}
 \seealso{
   \code{\link{iplot}},
   \code{\link{ppp.object}},
@@ -378,6 +388,11 @@
    B <- owin(c(4810, 5190), c(4180, 4430))
    plot(B, add=TRUE, border="red")
    plot(humberside, clipwin=B, main="Humberside (clipped)")
+
+   ## coordinate axes and labels
+   plot(humberside, axes=TRUE)
+   plot(humberside,            ann=TRUE, xlab="Easting", ylab="Northing")
+   plot(humberside, axes=TRUE, ann=TRUE, xlab="Easting", ylab="Northing")
 }
 
 \author{

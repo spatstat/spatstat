@@ -1,7 +1,7 @@
 #
 #	plot.ppp.R
 #
-#	$Revision: 1.95 $	$Date: 2018/03/22 00:46:59 $
+#	$Revision: 1.96 $	$Date: 2020/02/25 05:33:46 $
 #
 #
 #--------------------------------------------------------------------------
@@ -357,13 +357,13 @@ plot.ppp <- local({
   main <- pt$main
   nlines <- pt$nlines
   blankmain <- if(nlines == 0) "" else rep("  ", nlines)
-  rez <- resolve.defaults(list(...),
-                          list(cex.main=1,
-                               xlim=NULL,
-                               ylim=NULL))
-  plot(BB, type="n", add=add, main=blankmain, show.all=show.all,
-       cex.main=rez$cex.main, xlim=rez$xlim, ylim=rez$ylim)
-
+  dflt <- list(cex.main=1, xlim=NULL, ylim=NULL,
+               ann=FALSE, axes=FALSE, xlab="", ylab="")
+  rez <- resolve.defaults(list(...), dflt)[names(dflt)]
+  do.call(plot.owin,
+          append(list(x=BB, type="n", add=add,
+                      main=blankmain, show.all=show.all),
+                 rez))
   if(sick) {
     if(show.window) {
       ## plot windows
