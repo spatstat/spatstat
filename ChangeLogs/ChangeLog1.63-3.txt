@@ -24,3 +24,15 @@ Change log from 1.63-2 to 1.63-3
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
 
+28 feb 2020
+
+   split.ppx.Rd
+	Tweaked example to cope with new defaults in data.frame()
+
+   DESCRIPTION
+   NEWS
+	version 1.63-2.002
+
+------------- passed R-3.6.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
