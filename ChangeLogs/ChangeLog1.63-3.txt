@@ -36,3 +36,24 @@ Change log from 1.63-2 to 1.63-3
 ------------- passed R-3.6.2 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
+
+01 mar 2020
+
+++++++++++++    installed R-3.6.3      +++++++++++++++
+
+   DESCRIPTION
+   NEWS
+	version 1.63-3
+
+------------  built with R-3.6.3       ---------------
+------------- passed R-3.6.3 CMD check ---------------
+------------- installed on laptop      ---------------
+
+--------  passed codetools coverage check ------------
+
+!!!!!!!!!!!!! passed R-devel CMD check !!!!!!!!!!!!!!!
+                (2020-02-29 r77878)
+!!!!!!! passed 'make bookcheck' with R-devel !!!!!!!!!
+                (2020-02-29 r77878)
+
+------------- uploaded to github       ---------------
