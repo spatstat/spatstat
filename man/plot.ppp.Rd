@@ -293,14 +293,15 @@
   \code{\link[graphics]{axis}} and \code{\link[graphics]{mtext}}.
 }
 \seealso{
-  \code{\link{iplot}},
   \code{\link{ppp.object}},
   \code{\link{plot}},
   \code{\link{par}},
   \code{\link{points}},
   \code{\link{text.ppp}},
   \code{\link{plot.owin}},
-  \code{\link{symbols}}
+  \code{\link{symbols}}.
+
+  See also the command \code{iplot} in the \pkg{spatstat.gui} package.
 }
 \examples{
    plot(cells)

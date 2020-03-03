@@ -1,4 +1,24 @@
 
+        CHANGES IN spatstat VERSION 1.63-3.001
+
+OVERVIEW
+
+    o Interactive graphics functions removed to a separate package.
+
+    o spatstat no longer 'Suggests' the packages 'tcltk' and 'rpanel'
+    
+    o Version nickname: 'How can?'
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o iplot, iplot.ppp, iplot.layered, iplot.linnet, iplot.default
+    These interactive plotting functions have been removed from spatstat
+    into a new package 'spatstat.gui'
+
+    o istat
+    This interactive analysis function has been removed from spatstat
+    into a new package 'spatstat.gui'
+    
         CHANGES IN spatstat VERSION 1.63-3
 
 OVERVIEW

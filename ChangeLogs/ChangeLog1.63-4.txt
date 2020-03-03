@@ -1,0 +1,47 @@
+Change log from 1.63-3 to 1.63-4
+================================
+
+01 mar 2020
+
+   DESCRIPTION
+   NEWS
+   Nickname.txt
+	Nickname changed to 'How can?'
+	Version 1.63-3.001
+
+03 mar 2020
+
+   iplot.R		[REMOVED]
+   iplotlayered.R	[REMOVED]
+   istat.R		[REMOVED]
+   iplot.Rd		[REMOVED]
+   istat.Rd 		[REMOVED]
+   	These functions are now part of package 'spatstat.gui'
+
+   linnet.R
+	Moved 'iplot.linnet' to package 'spatstat.gui'
+	
+   lpp.R
+	Moved 'iplot.lpp' to package 'spatstat.gui'
+	
+   plot.ppp.Rd
+   spatstat-package.Rd
+   spatstat-internal.Rd
+   tests/undoc.R
+	Consequential adjustments
+
+   updates.Rnw
+	Now includes package size information from 'spatstat.gui'
+	
+   DESCRIPTION
+   NEWS
+	Version 1.63-3.001
+
+------------- passed R-3.6.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+
+
+
+
+

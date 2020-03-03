@@ -135,7 +135,6 @@
 \alias{dist2dpath}
 \alias{do.as.im}
 \alias{do.call.plotfun}
-\alias{do.istat}
 \alias{doMultiStraussHard}
 \alias{dppmFixAlgorithm}
 \alias{dppmFixIntensity}
@@ -953,7 +952,6 @@ distributecbind(x)
 dist2dpath(dist, method="C")
 do.as.im(x, action, \dots, W, eps, dimyx, xy, na.replace)
 do.call.plotfun(fun, arglist, \dots)
-do.istat(panel)
 doMultiStraussHard(iradii, hradii, types)
 dppmFixIntensity(DPP, lambda, po)
 dppmFixAlgorithm(algorithm, changealgorithm, clusters, startpar)

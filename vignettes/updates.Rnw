@@ -60,9 +60,11 @@ z <- getSizeTable()
 zutils <- getSizeTable("spatstat.utils")
 zdata <- getSizeTable("spatstat.data")
 zlocal <- getSizeTable("spatstat", "spatstatlocalsize.txt")
+zgui <- getSizeTable("spatstat", "spatstatguisize.txt")
 z <- mergeSizeTables(z, zutils)
 z <- mergeSizeTables(z, zdata)
 z <- mergeSizeTables(z, zlocal)
+z <- mergeSizeTables(z, zgui)
 #
 currentcount <- z[nrow(z), counts]
 bookcount    <- z[z$version == "1.42-0", counts]

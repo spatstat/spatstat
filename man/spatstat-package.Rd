@@ -325,7 +325,7 @@
       \tabular{ll}{
 	\code{\link{plot.ppp}} \tab
 	plot a point pattern (e.g. \code{plot(X)}) \cr
-	\code{\link{iplot}} \tab
+	\code{spatstat.gui::iplot} \tab
 	plot a point pattern interactively \cr
 	\code{\link{edit.ppp}} \tab interactive text editor \cr
 	\code{\link{[.ppp}} \tab
@@ -719,7 +719,7 @@
     \tabular{ll}{
       \code{\link{linnet}} \tab create a linear network \cr
       \code{\link{clickjoin}} \tab interactively join vertices in network \cr
-      \code{\link{iplot.linnet}} \tab interactively plot network \cr
+      \code{spatstat.gui::iplot.linnet} \tab interactively plot network \cr
       \code{\link[spatstat.data]{simplenet}} \tab simple example of network \cr
       \code{\link{lineardisc}} \tab disc in a linear network \cr
       \code{\link{delaunayNetwork}} \tab network of Delaunay triangulation \cr
@@ -803,7 +803,7 @@
     print basic description of point pattern \code{X}  \cr
     \code{any(duplicated(X))} \tab
     check for duplicated points in pattern \code{X} \cr
-    \code{\link{istat}(X)} \tab Interactive exploratory analysis \cr
+    \code{spatstat.gui::istat(X)} \tab Interactive exploratory analysis \cr
     \code{\link{View}(X)} \tab spreadsheet-style viewer
   }
 
