@@ -62,7 +62,7 @@ the user. To access these utility functions directly, you need to type
 
 There are also *extension packages* which provide additional capabilities
 and must be loaded explicitly when you need them. 
-Currently there are three extension packages:
+Currently there are four extension packages:
 
    . [spatstat.local](https://github.com/baddstats/spatstat.local)
    for local model-fitting, 
@@ -72,6 +72,10 @@ Currently there are three extension packages:
 
    . [spatstat.Knet](https://github.com/spatstat/spatstat.Knet)
    for analysing point patterns on a network of lines.
+
+   . [spatstat.gui](https://github.com/spatstat/spatstat.gui)
+   for interactive graphics (containing the functions `iplot` and `istat` that
+   were previously part of `spatstat`).
 
 ## Installation
 
