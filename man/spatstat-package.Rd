@@ -1781,6 +1781,7 @@
   Ang Qi Wei,
   Ryan Arellano,
   Jens \ifelse{latex}{\out{{\AA}str{\" o}m}}{Astrom},
+  Robert Aue,
   Marcel Austenfeld,
   Sandro Azaele,
   Malissa Baddeley,

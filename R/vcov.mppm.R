@@ -1,6 +1,6 @@
 #  Variance-covariance matrix for mppm objects
 #
-# $Revision: 1.20 $ $Date: 2019/10/11 07:09:16 $
+# $Revision: 1.21 $ $Date: 2020/03/04 05:25:20 $
 #
 #
 
@@ -140,12 +140,13 @@ vcov.mppm <- local({
     activeinter <- active.interactions(object)
     #' interaction names (in glmdata)
     Vnamelist <- object$Fit$Vnamelist
+    Isoffsetlist <- object$Fit$Isoffsetlist
     #' Each a2[[i]] and a3[[i]] refer to this interaction (eg 'str')
     #' but may contribute to several coefficients of the full model
     #' e.g.  'str' -> str:id -> 'str', 'str:id2'
     #' Determine which canonical variables of full model are active in each row
     mats <- split.data.frame(mom, glmdata$id)
-    activevars <- t(sapply(mats, notallzero))
+    activevars <- matrix(sapply(mats, notallzero), nrow=length(mats))
     #' dependence map of canonical variables of full model
     #'     on the original variables/interactions
     md <- model.depends(object$Fit$FIT)
@@ -162,38 +163,43 @@ vcov.mppm <- local({
         tagi <- colnames(activeinter)[activeinter[i,]]
         #' the corresponding variable name(s) in glmdata and coef(subi)
         vni <- Vnamelist[[tagi]]
-        #' retain only the interaction rows & columns (the rest are zero anyway)
-        e <- cnames.i %in% vni
-        a2i <- a2i[e, e, drop=FALSE]
-        a3i <- a3i[e, e, drop=FALSE]
-        cnames.ie <- cnames.i[e]
-        #' which coefficients of the full model are active in this row
-        acti <- activevars[i,]
-        #' for each interaction variable name in the submodel,
-        #' find the coefficient(s) in the main model to which it contributes
-        nie <- length(cnames.ie)
-        cmap <- vector(mode="list", length=nie)
-        names(cmap) <- cnames.ie
-        for(j in seq_len(nie)) {
-          cj <- cnames.ie[j]
-          cmap[[j]] <- cnames[ md[,cj] & acti ]
-        }
-        #' all possible mappings 
-        maps <- do.call(expand.grid,
-                        append(cmap, list(stringsAsFactors=FALSE)))
-        nmaps <- nrow(maps)
-        if(nmaps == 0) {
-          warning("Internal error: Unable to map submodel to full model")
-        } else {
-          for(irow in 1:nmaps) {
-            for(jcol in 1:nmaps) {
-              cmi <- as.character(maps[irow,])
-              cmj <- as.character(maps[jcol,])
-              if(anyDuplicated(cmi) || anyDuplicated(cmj)) {
-                warning("Internal error: duplicated labels in submodel map")
-              } else if(!is.null(a2i)) {
-                A2[cmi,cmj] <- A2[cmi,cmj] + a2i
-                A3[cmi,cmj] <- A3[cmi,cmj] + a2i
+        iso <- Isoffsetlist[[tagi]]
+        #' ignore offset variables
+        vni <- vni[!iso]
+        if(length(vni)) {
+          #' retain only interaction rows & columns (the rest are zero anyway)
+          e <- cnames.i %in% vni
+          a2i <- a2i[e, e, drop=FALSE]
+          a3i <- a3i[e, e, drop=FALSE]
+          cnames.ie <- cnames.i[e]
+          #' which coefficients of the full model are active in this row
+          acti <- activevars[i,]
+          #' for each interaction variable name in the submodel,
+          #' find the coefficient(s) in the main model to which it contributes
+          nie <- length(cnames.ie)
+          cmap <- vector(mode="list", length=nie)
+          names(cmap) <- cnames.ie
+          for(j in seq_len(nie)) {
+            cj <- cnames.ie[j]
+            cmap[[j]] <- cnames[ md[,cj] & acti ]
+          }
+          #' all possible mappings 
+          maps <- do.call(expand.grid,
+                          append(cmap, list(stringsAsFactors=FALSE)))
+          nmaps <- nrow(maps)
+          if(nmaps == 0) {
+            warning("Internal error: Unable to map submodel to full model")
+          } else {
+            for(irow in 1:nmaps) {
+              for(jcol in 1:nmaps) {
+                cmi <- as.character(maps[irow,])
+                cmj <- as.character(maps[jcol,])
+                if(anyDuplicated(cmi) || anyDuplicated(cmj)) {
+                  warning("Internal error: duplicated labels in submodel map")
+                } else if(!is.null(a2i)) {
+                  A2[cmi,cmj] <- A2[cmi,cmj] + a2i
+                  A3[cmi,cmj] <- A3[cmi,cmj] + a2i
+                }
               }
             }
           }

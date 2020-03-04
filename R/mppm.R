@@ -1,7 +1,7 @@
 #
 # mppm.R
 #
-#  $Revision: 1.93 $   $Date: 2020/01/01 05:33:32 $
+#  $Revision: 1.94 $   $Date: 2020/03/04 02:24:04 $
 #
 
 mppm <- local({
@@ -492,7 +492,8 @@ mppm <- local({
                      fmla=fmla,
                      FIT=FIT,
                      moadf=moadf,
-                     Vnamelist=Vnamelist
+                     Vnamelist=Vnamelist,
+                     Isoffsetlist=Isoffsetlist
                      ),
                    Inter =
                    list(

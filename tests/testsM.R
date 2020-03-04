@@ -127,7 +127,7 @@ reset.spatstat.options()
 #
 # Basic tests of mppm
 #
-# $Revision: 1.14 $ $Date: 2020/01/01 05:45:26 $
+# $Revision: 1.15 $ $Date: 2020/03/04 05:30:51 $
 # 
 
 require(spatstat)
@@ -246,8 +246,12 @@ local({
 local({
   ## test handling of offsets and zero cif values in mppm
   H <- hyperframe(Y = waterstriders)
-  mppm(Y ~ 1,  data=H, Hardcore(1.5))
-  mppm(Y ~ 1,  data=H, StraussHard(7, 1.5))
+  (fit1 <- mppm(Y ~ 1,  data=H, Hardcore(1.5)))
+  (fit2 <- mppm(Y ~ 1,  data=H, StraussHard(7, 1.5)))
+  (fit3 <- mppm(Y ~ 1,  data=H, Hybrid(S=Strauss(7), H=Hardcore(1.5))))
+  s1 <- subfits(fit1)
+  s2 <- subfits(fit2)
+  s3 <- subfits(fit3)
 
   ## prediction, in training/testing context
   ##    (example from Markus Herrmann and Ege Rubak)
@@ -259,6 +263,11 @@ local({
   test <- hyperframe(pattern = X[i], dist = dist[i])
   fit <- mppm(pattern ~ dist, data = train)
   pred <- predict(fit, type="cif", newdata=test, verbose=TRUE)
+
+  ## example from Robert Aue
+  GH <- Hybrid(G=Geyer(r=0.1, sat=3), H=Hardcore(0.01))
+  res <- mppm(Points ~ 1, interaction = GH, data=demohyper)
+  sub <- subfits(res, verbose=TRUE)
 })
 
 local({
@@ -317,6 +326,7 @@ local({
   print(summary(fit))
   v <- vcov(fit) 
 })
+
 #'
 #'     tests/msr.R
 #'

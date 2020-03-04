@@ -1,11 +1,15 @@
 
-        CHANGES IN spatstat VERSION 1.63-3.001
+        CHANGES IN spatstat VERSION 1.63-3.002
 
 OVERVIEW
 
+    o We thank Robert Aue and Rasmus Plenge Waagepetersen for contributions.
+    
     o Interactive graphics functions removed to a separate package.
 
     o spatstat no longer 'Suggests' the packages 'tcltk' and 'rpanel'
+
+    o Bug fixes related to mppm.
     
     o Version nickname: 'How can?'
 
@@ -18,6 +22,18 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o istat
     This interactive analysis function has been removed from spatstat
     into a new package 'spatstat.gui'
+
+BUG FIXES
+
+    o mppm
+    Internal data were malformed if the interaction was Hardcore()
+    or MultiHard() or a hybrid involving these interactions.
+    This caused various errors when the fitted model was used.
+    Fixed.
+    
+    o valid.ppm
+    Crashed sometimes when applied to the result of subfits().
+    Fixed.
     
         CHANGES IN spatstat VERSION 1.63-3
 

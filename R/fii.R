@@ -5,7 +5,7 @@
 #
 #
 fii <- function(interaction=NULL, coefs=numeric(0),
-                Vnames=character(0), IsOffset=NULL) {
+                Vnames=character(0), IsOffset=NULL, vnameprefix="") {
   if(is.null(interaction)) 
     interaction <- Poisson()
   stopifnot(is.interact(interaction))
@@ -24,7 +24,8 @@ fii <- function(interaction=NULL, coefs=numeric(0),
               coefs=coefs,
               Vnames=Vnames,
               IsOffset=IsOffset,
-              hasInf=hasInf)
+              hasInf=hasInf,
+              vnameprefix=vnameprefix)
   class(out) <- c("fii", class(out))
   return(out)
 }
@@ -35,18 +36,21 @@ summary.fii <- function(object, ...) {
   coefs    <- object$coefs
   Vnames   <- object$Vnames
   IsOffset <- object$IsOffset
+  vnprefix <- object$vnameprefix
   y$poisson <- is.poisson.interact(INTERACT)
   thumbnail <- NULL
   if(y$poisson) {
     thumbnail <- "Poisson()"
   } else {
-    if(!is.null(INTERACT$interpret)) {
-      # invoke auto-interpretation feature
-      sensible <-  
-        if(newstyle.coeff.handling(INTERACT))
-          (INTERACT$interpret)(coefs[Vnames[!IsOffset]], INTERACT)
-        else 
-          (INTERACT$interpret)(coefs, INTERACT)
+    if(!is.null(interpret <- INTERACT$interpret)) {
+      ## invoke auto-interpretation feature
+      newstyle <- newstyle.coeff.handling(INTERACT)
+      Icoefs <- if(newstyle) coefs[Vnames[!IsOffset]] else coefs
+      ## strip off vname prefix used by mppm
+      if(npre <- sum(nchar(vnprefix)))
+        names(Icoefs) <- substring(names(Icoefs), npre+1L)
+      ## auto-interpret
+      sensible <- interpret(Icoefs, INTERACT)
       if(!is.null(sensible)) {
         header <- paste("Fitted", sensible$inames)
         printable <- sensible$printable
@@ -218,14 +222,16 @@ fitin.ppm <- function(object) {
   f <- object$fitin
   if(!is.null(f))
     return(f)
-  # For compatibility with older versions
+  ## For compatibility with older versions
   inte <- object$interaction
-  if(is.null(inte)) 
+  if(is.null(inte)) {
     f <- fii() # Poisson
-  else {
+  } else {
     coefs <- coef(object)
     Vnames <- object$internal$Vnames
     IsOffset <- object$internal$IsOffset
+    if(npre <- sum(nchar(object$internal$vnameprefix)))
+      names(coefs) <- substring(names(coefs), npre+1L)
     # Internal names of regressor variables 
     f <- fii(inte, coefs, Vnames, IsOffset)
   }

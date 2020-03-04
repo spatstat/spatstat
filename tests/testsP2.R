@@ -64,7 +64,7 @@ local({
 #'
 #'   Class support for ppm
 #'
-#'   $Revision: 1.5 $ $Date: 2020/01/18 01:57:17 $
+#'   $Revision: 1.6 $ $Date: 2020/03/04 05:30:41 $
 
 require(spatstat)
 local({
@@ -123,6 +123,11 @@ local({
   fit0 <- update(fitZ, . ~ 1)
   anova(fit0, fitZ, override=TRUE)
 
+  ## example from Robert Aue - handling offsets
+  X <- demohyper$Points[[1]]
+  GH <- Hybrid(G=Geyer(r=0.1, sat=3), H=Hardcore(0.01))
+  fit <- ppm(X ~ 1, GH)
+  valid.ppm(fit)
 })
 
 reset.spatstat.options()

@@ -1,6 +1,6 @@
 #    mpl.R
 #
-#	$Revision: 5.232 $	$Date: 2019/02/20 03:34:50 $
+#	$Revision: 5.233 $	$Date: 2020/03/04 04:25:13 $
 #
 #    mpl.engine()
 #          Fit a point process model to a two-dimensional point pattern
@@ -115,7 +115,7 @@ mpl.engine <-
     the.version <- list(major=spv$major,
                         minor=spv$minor,
                         release=spv$patchlevel,
-                        date="$Date: 2019/02/20 03:34:50 $")
+                        date="$Date: 2020/03/04 04:25:13 $")
 
     if(want.inter) {
       ## ensure we're using the latest version of the interaction object
@@ -286,6 +286,7 @@ mpl.engine <-
     SUBSET <- glmdata$.mpl.SUBSET        
     Z <- is.data(Q)
     Vnames <- prep$Vnames
+    vnameprefix <- prep$vnameprefix
 
     ## saturated log pseudolikelihood
     satlogpl <- - (sum(log(W[Z & SUBSET])) + sum(Z & SUBSET))
@@ -293,7 +294,9 @@ mpl.engine <-
     maxlogpl <- if(likelihood.is.zero) -Inf else (satlogpl - deviance(FIT)/2)
 
     ## fitted interaction object
-    fitin <- if(want.inter) fii(interaction, co, Vnames, IsOffset) else fii()
+    fitin <- if(want.inter) {
+               fii(interaction, co, Vnames, IsOffset, vnameprefix)
+             } else fii()
     unitname(fitin) <- unitname(X)
     ######################################################################
     ## Clean up & return 

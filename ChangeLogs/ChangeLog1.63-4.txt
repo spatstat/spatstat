@@ -41,7 +41,41 @@ Change log from 1.63-3 to 1.63-4
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
 
+04 mar 2020
 
+   mppm.R
+	saves the list of 'IsOffset' vectors
+
+   subfits.R
+	handles the list of 'IsOffset' vectors
+
+   ppmclass.R
+	Bug fix in valid.ppm when handling the results of subfits()
+
+   fii.R
+   spatstat-internal.Rd
+	fii() now has argument 'vnameprefix'
+
+   mpl.R
+	$fitin now handles vnameprefix
+
+   vcov.mppm
+	Handles offsets
+
+   tests/ppmclass.R
+   tests/mppm.R
+	Added examples from Robert Aue of handling 'offset' interactions
+	(eg Hardcore) and hybrids of them.
+	
+   DESCRIPTION
+   NEWS
+   spatstat-package.Rd
+	Acknowledged Robert Aue.
+	Version 1.63-3.002
+
+------------- passed R-3.6.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
 
 
 

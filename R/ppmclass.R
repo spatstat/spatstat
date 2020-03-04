@@ -4,7 +4,7 @@
 #	Class 'ppm' representing fitted point process models.
 #
 #
-#	$Revision: 2.145 $	$Date: 2018/06/27 04:12:06 $
+#	$Revision: 2.147 $	$Date: 2020/03/04 04:25:22 $
 #
 #       An object of class 'ppm' contains the following:
 #
@@ -351,6 +351,9 @@ valid.ppm <- function(object, warn=TRUE, ...) {
     if(warn) warning("Internal error: unable to check validity of model")
     return(NA)
   }
+  #' remove prefix to obtain coefficient names expected by interaction
+  if(npre <- sum(nchar(object$internal$vnameprefix)))
+    names(Icoeffs) <- substring(names(Icoeffs), npre+1L)
   answer <- checker(Icoeffs, inte)
   return(answer)
 }

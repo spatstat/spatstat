@@ -1,6 +1,6 @@
 #
 #
-#  $Revision: 1.52 $   $Date: 2017/12/10 06:11:16 $
+#  $Revision: 1.53 $   $Date: 2020/03/04 02:47:31 $
 #
 #
 
@@ -30,6 +30,7 @@ subfits.new <- local({
     interaction <- Inter$interaction
     itags    <- Inter$itags
     Vnamelist <- object$Fit$Vnamelist
+    Isoffsetlist <- object$Fit$Isoffsetlist
     has.design <- info$has.design
 #    has.random <- info$has.random
     announce("done.\n")
@@ -118,7 +119,8 @@ subfits.new <- local({
       }
       ## create fitted interaction with these coefficients
       vni <- if(nactive > 0) Vnamelist[[tagi]] else character(0)
-      interactions[[i]] <- fii(interi, coefs.avail, vni)
+      iso <- if(nactive > 0) Isoffsetlist[[tagi]] else logical(0)
+      interactions[[i]] <- fii(interi, coefs.avail, vni, iso)
     }
     announce("Done!\n")
     names(interactions) <- rownames
@@ -151,7 +153,7 @@ subfits.new <- local({
     fake.version <- list(major=spv$major,
                          minor=spv$minor,
                          release=spv$patchlevel,
-                         date="$Date: 2017/12/10 06:11:16 $")
+                         date="$Date: 2020/03/04 02:47:31 $")
     fake.call <- call("cannot.update", Q=NULL, trend=trend,
                       interaction=NULL, covariates=NULL,
                       correction=object$Info$correction,
@@ -168,6 +170,7 @@ subfits.new <- local({
                     internal     = list(glmfit = FIT,
                                         glmdata  = NULL,
                                         Vnames   = NULL,
+                                        IsOffset  = NULL,
                                         fmla     = fmla,
                                         computed = list()),
                     covariates   = NULL,
@@ -202,7 +205,9 @@ subfits.new <- local({
       if(is.poisson.interact(inte)) inte <- NULL
       Vnames <- finte$Vnames
       if(length(Vnames) == 0) Vnames <- NULL
-    
+      IsOffset <- finte$IsOffset
+      if(length(IsOffset) == 0) IsOffset <- NULL
+      
       ## Construct fake ppm object
       fakemodel$interaction <- inte
       fakemodel$fitin       <- finte
@@ -210,6 +215,7 @@ subfits.new <- local({
       fakemodel$covariates  <- covariates
       fakemodel$internal$glmdata <- moadf[moadf$id == i, ]
       fakemodel$internal$Vnames  <- Vnames
+      fakemodel$internal$IsOffset <- IsOffset
 
       fake.call$Q <- Yi
       fake.call$covariates <- covariates
@@ -255,6 +261,7 @@ subfits.old <- local({
     interaction <- Inter$interaction
     itags    <- Inter$itags
     Vnamelist <- object$Fit$Vnamelist
+    Isoffsetlist <- object$Fit$Isoffsetlist
     has.design <- info$has.design
     has.random <- info$has.random
     moadf    <- object$Fit$moadf
@@ -360,7 +367,8 @@ subfits.old <- local({
         }
         ## create fitted interaction with these coefficients
         vni <- if(nactive > 0) Vnamelist[[tagi]] else character(0)
-        results[[i]] <- fii(interi, coefs.avail, vni)
+        iso <- if(nactive > 0) Isoffsetlist[[tagi]] else logical(0)
+        results[[i]] <- fii(interi, coefs.avail, vni, iso)
       }
       announce("Done!\n")
       names(results) <- rownames
