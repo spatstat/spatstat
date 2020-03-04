@@ -390,7 +390,7 @@ local({
 })
 #'   tests/ippm.R
 #'   Tests of 'ippm' class
-#'   $Revision: 1.4 $ $Date: 2020/01/07 09:36:42 $
+#'   $Revision: 1.5 $ $Date: 2020/03/04 08:57:19 $
 
 require(spatstat)
 
@@ -436,6 +436,9 @@ local({
   ## ............. test ippm class support ......................
   Ar <- model.matrix(fit)
   Ai <- model.matrix(fit, irregular=TRUE)
+  An <- model.matrix(fit, irregular=TRUE, keepNA=FALSE)
+  AS <- model.matrix(fit, irregular=TRUE, subset=(abs(Z) < 0.5))
+
   Zr <- model.images(fit)
   Zi <- model.images(fit, irregular=TRUE)
   ## update.ippm

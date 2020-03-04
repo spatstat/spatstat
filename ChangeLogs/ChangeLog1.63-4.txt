@@ -77,5 +77,18 @@ Change log from 1.63-3 to 1.63-4
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
 
+   tests/ippm.R
+	Test more cases of model.matrix
+
+   updates.Rnw
+	Now mentions spatstat.gui
+	
+   DESCRIPTION
+   NEWS
+	Version 1.63-3.003
+
+------------- passed R-3.6.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
 
 

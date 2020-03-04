@@ -152,13 +152,15 @@ text(as.Date("2015-01-01"), 60, "R code")
     
     There are also extension packages which provide additional capabilities
     and must be loaded explicitly when you need them. 
-    Currently there are three extension packages:
+    Currently there are four extension packages:
     
     \begin{itemize}
     \item \pkg{spatstat.local} for local model-fitting, 
     \item \pkg{spatstat.sphere} for analysing point patterns on a sphere,
     \item \pkg{spatstat.Knet} for analysing point patterns
       on a network.
+    \item \pkg{spatstat.gui} containing interactive graphics
+      functions.
     \end{itemize}
 
 \pagebreak
@@ -170,6 +172,9 @@ the News and Release Notes for each update.
 
 \begin{itemize}
 
+  \item The interactive graphics functions \texttt{iplot} and \texttt{istat}
+    have been removed from \spst\ into a new package \pkg{spatstat.gui}.
+    
   \item \spst\ now Imports the package \pkg{spatstat.utils}.
 
   \item \spst\ now requires the package \pkg{spatstat.data} which contains the datasets.
