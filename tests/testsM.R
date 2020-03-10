@@ -127,7 +127,7 @@ reset.spatstat.options()
 #
 # Basic tests of mppm
 #
-# $Revision: 1.15 $ $Date: 2020/03/04 05:30:51 $
+# $Revision: 1.16 $ $Date: 2020/03/10 09:09:01 $
 # 
 
 require(spatstat)
@@ -264,10 +264,12 @@ local({
   fit <- mppm(pattern ~ dist, data = train)
   pred <- predict(fit, type="cif", newdata=test, verbose=TRUE)
 
-  ## example from Robert Aue
+  ## examples from Robert Aue
   GH <- Hybrid(G=Geyer(r=0.1, sat=3), H=Hardcore(0.01))
   res <- mppm(Points ~ 1, interaction = GH, data=demohyper)
+  print(summary(res))
   sub <- subfits(res, verbose=TRUE)
+  print(sub)
 })
 
 local({

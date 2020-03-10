@@ -91,4 +91,21 @@ Change log from 1.63-3 to 1.63-4
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
 
+10 mar 2020
+
+   fii.R
+   summary.mppm.R
+	Bug fix in handling Hardcore()
+
+   tests/mppm.R
+	Tests of these bugs.
+	
+   DESCRIPTION
+   NEWS
+	Version 1.63-3.004
+
+------------- passed R-3.6.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+
 

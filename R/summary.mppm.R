@@ -1,7 +1,7 @@
 #
 # summary.mppm.R
 #
-# $Revision: 1.15 $  $Date: 2016/04/25 02:34:40 $
+# $Revision: 1.16 $  $Date: 2020/03/10 09:05:00 $
 #
 
 
@@ -19,7 +19,8 @@ summary.mppm <- function(object, ..., brief=FALSE) {
   FIT   <- object$Fit$FIT
   moadf <- object$Fit$moadf
 
-  y$Fit <- object$Fit[c("fitter", "use.gam", "fmla", "Vnamelist")]
+  y$Fit <- object$Fit[c("fitter", "use.gam", "fmla",
+                        "Vnamelist", "Isoffsetlist")]
   y$Fit$FIT <- summary(FIT)
   y$Fit$moadf <- list(nrow=nrow(moadf), colnames=colnames(moadf))
   
@@ -38,6 +39,7 @@ summary.mppm <- function(object, ..., brief=FALSE) {
 #%^!endif  
   Vnamelist <- y$Fit$Vnamelist
   allVnames <- unlist(Vnamelist)
+  Isoffsetlist <- y$Fit$Isoffsetlist
   poistags  <- itags[trivial]
 
 #  rownames  <- y$Info$rownames
@@ -97,8 +99,8 @@ summary.mppm <- function(object, ..., brief=FALSE) {
 #%^!endif  
   if(fixedinteraction) {    
     # exactly the same interaction for all patterns
-    interaction <- interaction[1,1,drop=TRUE]
-    fi.all <- fii(interaction, co, Vnamelist[[1]]) 
+    interaction <- interaction[1L,1L,drop=TRUE]
+    fi.all <- fii(interaction, co, Vnamelist[[1L]], Isoffsetlist[[1L]]) 
     iprint <- list("Interaction for all patterns"=fi.all)
     printeachrow <- FALSE
     toohard      <- FALSE
@@ -114,9 +116,10 @@ summary.mppm <- function(object, ..., brief=FALSE) {
                    "Interactions defined for each pattern"=NULL)
     for(j in (1:ninteract)[iused]) {
       name.j <- paste("Interaction", sQuote(itags[j]))
-      int.j <- Inter$interaction[1,j,drop=TRUE]
+      int.j <- Inter$interaction[1L,j,drop=TRUE]
       Vnames.j <- Vnamelist[[j]]
-      fii.j <- fii(int.j, co, Vnames.j)
+      Isoffset.j <- Isoffsetlist[[j]]
+      fii.j <- fii(int.j, co, Vnames.j, Isoffset.j)
       extra.j <- list(fii.j)
       names(extra.j) <- name.j
       iprint <- append(iprint, extra.j)

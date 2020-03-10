@@ -51,7 +51,7 @@ summary.fii <- function(object, ...) {
         names(Icoefs) <- substring(names(Icoefs), npre+1L)
       ## auto-interpret
       sensible <- interpret(Icoefs, INTERACT)
-      if(!is.null(sensible)) {
+      if(!is.null(sensible) && sum(lengths(sensible))) {
         header <- paste("Fitted", sensible$inames)
         printable <- sensible$printable
         # Try to make a thumbnail description
