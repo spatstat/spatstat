@@ -109,3 +109,14 @@ Change log from 1.63-3 to 1.63-4
 ------------- uploaded to github       ---------------
 
 
+   mppm.R
+	Bug fix in handling arguments 'nd', 'eps'
+
+   DESCRIPTION
+   NEWS
+	Version 1.63-3.005
+
+------------- passed R-3.6.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+   

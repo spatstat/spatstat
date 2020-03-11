@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.63-3.004
+        CHANGES IN spatstat VERSION 1.63-3.005
 
 OVERVIEW
 
@@ -29,6 +29,10 @@ BUG FIXES
     Internal data were malformed if the interaction was Hardcore()
     or MultiHard() or a hybrid involving these interactions.
     This caused various errors when the fitted model was used.
+    Fixed.
+
+    o mppm
+    Ignored the arguments 'nd' and 'eps' controlling the quadrature scheme.
     Fixed.
     
     o valid.ppm
