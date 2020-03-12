@@ -1,7 +1,7 @@
 #
 # pairdistlpp.R
 #
-#  $Revision: 1.12 $ $Date: 2017/06/05 10:31:58 $
+#  $Revision: 1.15 $ $Date: 2020/03/12 03:20:43 $
 #
 #
 #  pairdist.lpp
@@ -16,8 +16,20 @@ pairdist.lpp <- function(X, ..., method="C") {
   n <- npoints(X)
   pairdistmat <- matrix(Inf,n,n)
   diag(pairdistmat) <- 0
+  if(n <= 1) return(pairdistmat)
   #
-  L <- as.linnet(X, sparse=FALSE)
+  L <- try(as.linnet(X, sparse=FALSE), silent=TRUE)
+  #
+  if(inherits(L, "try-error")) {
+    ## dpath matrix is not available due to size limitations
+    message("Very large network - using fallback algorithm")
+    for(i in 2:n) {
+      fi <- distfun(X[i])
+      jj <- 1:i
+      pairdistmat[i, jj] <- pairdistmat[jj, i] <- fi(X[jj])
+    }
+    return(pairdistmat)
+  }
   #
   if(any(is.infinite(L$dpath))) {
     #' disconnected network

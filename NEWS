@@ -1,20 +1,29 @@
 
-        CHANGES IN spatstat VERSION 1.63-3.005
+        CHANGES IN spatstat VERSION 1.63-3.006
 
 OVERVIEW
 
-    o We thank Robert Aue and Rasmus Plenge Waagepetersen for contributions.
+    o We thank Robert Aue, Tyler Rudolph and Rasmus Plenge Waagepetersen
+    for contributions.
     
     o Interactive graphics functions removed to a separate package.
 
     o spatstat no longer 'Suggests' the packages 'tcltk' and 'rpanel'
 
     o Bug fixes related to mppm.
+
+    o Improvements to linear networks code.
     
     o Version nickname: 'How can?'
 
 SIGNIFICANT USER-VISIBLE CHANGES
 
+    o pairdist.lpp
+    Now handles larger networks.
+    
+    o as.linnet.linnet
+    New argument 'maxsize'.
+    
     o iplot, iplot.ppp, iplot.layered, iplot.linnet, iplot.default
     These interactive plotting functions have been removed from spatstat
     into a new package 'spatstat.gui'
@@ -37,6 +46,12 @@ BUG FIXES
     
     o valid.ppm
     Crashed sometimes when applied to the result of subfits().
+    Fixed.
+
+    o as.linnet.linnet
+    The R session crashed when sparse=FALSE, if there was
+    insufficient memory available to create the matrix of distances
+    between all pairs of network vertices.
     Fixed.
     
         CHANGES IN spatstat VERSION 1.63-3

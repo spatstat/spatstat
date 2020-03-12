@@ -3,7 +3,7 @@
 #    
 #    Linear networks
 #
-#    $Revision: 1.72 $    $Date: 2020/03/03 07:26:56 $
+#    $Revision: 1.76 $    $Date: 2020/03/12 02:07:25 $
 #
 # An object of class 'linnet' defines a linear network.
 # It includes the following components
@@ -250,7 +250,7 @@ as.linnet <- function(X, ...) {
   UseMethod("as.linnet")
 }
 
-as.linnet.linnet <- function(X, ..., sparse) {
+as.linnet.linnet <- function(X, ..., sparse, maxsize=30000) {
   if(missing(sparse)) return(X)
   if(is.null(X$sparse)) X$sparse <- is.null(X$dpath)
   if(sparse && !(X$sparse)) {
@@ -260,7 +260,13 @@ as.linnet.linnet <- function(X, ..., sparse) {
     X$m <- as(X$m, "sparseMatrix")
     X$sparse <- TRUE
   } else if(!sparse && X$sparse) {
-    # convert adjacency to matrix
+    # convert adjacency matrix to path-distance matrix
+    nv <- nvertices(X)
+    if(nv > maxsize) {
+      stop(paste("Unable to create a matrix of size", nv, "x", nv,
+                 paren(paste("max permitted size", maxsize, "x", maxsize))),
+           call.=FALSE)
+    }
     X$m <- m <- as.matrix(X$m)
     edges <- which(m, arr.ind=TRUE)
     from <- edges[,1L]

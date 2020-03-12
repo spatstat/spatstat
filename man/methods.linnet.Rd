@@ -25,7 +25,7 @@
 \usage{
 as.linnet(X, \dots)
 
-\method{as.linnet}{linnet}(X, \dots, sparse)
+\method{as.linnet}{linnet}(X, \dots, sparse, maxsize=30000)
 
 \method{as.owin}{linnet}(W, \dots)
 
@@ -75,6 +75,11 @@ vertexdegree(x)
     representation, as explained in \code{\link{linnet}}.
     Default is to keep the same representation as in \code{X}.
   }
+  \item{maxsize}{
+    Maximum permitted number of network vertices
+    (to prevent a system crash due to lack of memory)
+    when creating a network with \code{sparse=FALSE}.
+  }
 }
 \details{
   The function \code{as.linnet} is generic.
@@ -82,7 +87,9 @@ vertexdegree(x)
   into an object of class \code{"linnet"}.
   The method \code{as.linnet.lpp} extracts the linear network
   information from an \code{lpp} object.
-
+  The method \code{as.linnet.linnet} converts a linear network
+  into another linear network with the required format.
+  
   The other functions are methods for the generic commands
   \code{\link{as.owin}},
   \code{\link{as.psp}},

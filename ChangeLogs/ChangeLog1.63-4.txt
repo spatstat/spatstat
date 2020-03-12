@@ -108,6 +108,7 @@ Change log from 1.63-3 to 1.63-4
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
 
+11 mar 2020
 
    mppm.R
 	Bug fix in handling arguments 'nd', 'eps'
@@ -119,4 +120,26 @@ Change log from 1.63-3 to 1.63-4
 ------------- passed R-3.6.3 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
-   
+
+12 mar 2020
+
+   linnet.R
+   methods.linnet.Rd
+	as.linnet.linnet is hardened against out-of-memory crashes
+	and has new argument 'maxsize'
+
+   pairdistlpp.R
+	Added fallback algorithm for large networks.
+	
+   DESCRIPTION
+   NEWS
+   spatstat-package.Rd
+	Acknowledged Tyler Rudolph
+
+   DESCRIPTION
+   NEWS
+	Version 1.63-3.006
+
+------------- passed R-3.6.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
