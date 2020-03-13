@@ -1,7 +1,7 @@
 #
 #  psp.R
 #
-#  $Revision: 1.101 $ $Date: 2019/11/18 07:05:03 $
+#  $Revision: 1.102 $ $Date: 2020/03/13 02:41:17 $
 #
 # Class "psp" of planar line segment patterns
 #
@@ -585,7 +585,7 @@ midpoints.psp <- function(x) {
   ppp(x=xm, y=ym, window=win, check=FALSE)
 }
 
-lengths.psp <- function(x, squared=FALSE) {
+lengths_psp <- lengths.psp <- function(x, squared=FALSE) {
   verifyclass(x, "psp")
   lengths2 <- eval(expression((x1-x0)^2 + (y1-y0)^2), envir=x$ends)
   return(if(squared) lengths2 else sqrt(lengths2))

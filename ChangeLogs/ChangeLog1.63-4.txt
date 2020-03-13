@@ -143,3 +143,21 @@ Change log from 1.63-3 to 1.63-4
 ------------- passed R-3.6.3 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
+
+13 mar 2020
+
+   pairdistlpp.R
+	Tweak
+
+   psp.R
+   lengths.psp.Rd
+	New function lengths_psp will ultimately replace lengths.psp
+
+   DESCRIPTION
+   NEWS
+	Version 1.63-3.007
+
+------------- passed R-3.6.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+

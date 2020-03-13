@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.63-3.006
+        CHANGES IN spatstat VERSION 1.63-3.007
 
 OVERVIEW
 
@@ -13,9 +13,17 @@ OVERVIEW
     o Bug fixes related to mppm.
 
     o Improvements to linear networks code.
+
+    o Functions renamed.
     
     o Version nickname: 'How can?'
 
+NEW FUNCTIONS
+
+    o lengths_psp
+    This is the new name of the function 'lengths.psp',
+    which had to be changed because of a conflict with the generic 'lengths'.
+    
 SIGNIFICANT USER-VISIBLE CHANGES
 
     o pairdist.lpp
@@ -32,6 +40,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
     This interactive analysis function has been removed from spatstat
     into a new package 'spatstat.gui'
 
+    o lengths.psp
+    This function will soon be Deprecated,
+    in favour of the new name 'lengths_psp'
+    
 BUG FIXES
 
     o mppm

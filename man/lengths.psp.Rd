@@ -1,5 +1,6 @@
 \name{lengths.psp}
 \alias{lengths.psp}
+\alias{lengths_psp}
 \title{Lengths of Line Segments}
 \description{
   Computes the length of each line segment
@@ -7,6 +8,7 @@
 }
 \usage{
   lengths.psp(x, squared=FALSE)
+  lengths_psp(x, squared=FALSE)
 }
 \arguments{
   \item{x}{
@@ -29,6 +31,21 @@
   for example, to find the length of the shortest segment,
   \code{sqrt(min(lengths.psp(x, squared=TRUE)))}
   is faster than \code{min(lengths.psp(x))}.
+
+  The functions \code{lengths.psp} and \code{lengths_psp} are
+  identical. We recommend using the newer name \code{lengths_psp}.
+}
+\section{Change of name}{
+  The name of this function has changed from \code{lengths.psp}
+  to \code{lengths_psp}, because the old name \code{lengths.psp}
+  could be misinterpreted as a method for \code{\link[base]{lengths}}.
+  
+  The older function name \code{lengths.psp} is retained temporarily,
+  for consistency with older code and documentation.
+  
+  In future versions of \pkg{spatstat}, the 
+  function name \code{lengths.psp} will be removed.
+  The newer function name \code{lengths_psp} should be used.
 }
 \seealso{
   \code{\link{marks.psp}},

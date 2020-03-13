@@ -1,7 +1,7 @@
 #
 # pairdistlpp.R
 #
-#  $Revision: 1.15 $ $Date: 2020/03/12 03:20:43 $
+#  $Revision: 1.16 $ $Date: 2020/03/13 01:23:20 $
 #
 #
 #  pairdist.lpp
@@ -25,7 +25,7 @@ pairdist.lpp <- function(X, ..., method="C") {
     message("Very large network - using fallback algorithm")
     for(i in 2:n) {
       fi <- distfun(X[i])
-      jj <- 1:i
+      jj <- 1:(i-1)
       pairdistmat[i, jj] <- pairdistmat[jj, i] <- fi(X[jj])
     }
     return(pairdistmat)
