@@ -3,7 +3,7 @@
 #'
 #'   Divide each segment of a linear network into several pieces
 #' 
-#'     $Revision: 1.7 $  $Date: 2020/02/02 03:18:11 $
+#'     $Revision: 1.8 $  $Date: 2020/03/16 10:28:51 $
 #'
 
 lixellate <- function(X, ..., nsplit, eps, sparse=TRUE) {
@@ -43,7 +43,7 @@ lixellate <- function(X, ..., nsplit, eps, sparse=TRUE) {
   ns <- length(from)
 
   if(missn) {
-    lenfs <- lengths.psp(as.psp(L))
+    lenfs <- lengths_psp(as.psp(L))
     nsplit <- ceiling(lenfs/eps)
   } else {
     if(length(nsplit) == 1) {

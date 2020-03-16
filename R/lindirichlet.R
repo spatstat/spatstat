@@ -2,7 +2,7 @@
 #'
 #'   Dirichlet tessellation on a linear network
 #'
-#'   $Revision: 1.9 $  $Date: 2017/11/04 03:49:18 $
+#'   $Revision: 1.10 $  $Date: 2020/03/16 10:28:51 $
 
 lineardirichlet <- function(X) {
   stopifnot(is.lpp(X))
@@ -22,7 +22,7 @@ lineardirichlet <- function(X) {
   L <- domain(X)
   nv <- nvertices(L)
   ns <- nsegments(L)
-  seglen <- lengths.psp(as.psp(L))
+  seglen <- lengths_psp(as.psp(L))
   from <- L$from
   to   <- L$to
   #' upper bound on interpoint distance

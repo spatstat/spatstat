@@ -76,7 +76,7 @@
   X <- psp(runif(10),runif(10), runif(10), runif(10), window=owin())
   plot(pixellate(X))
   plot(X, add=TRUE)
-  sum(lengths.psp(X))
+  sum(lengths_psp(X))
   sum(pixellate(X))
   plot(pixellate(X, what="n"))
 }

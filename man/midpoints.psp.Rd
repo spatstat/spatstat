@@ -22,7 +22,7 @@
 \seealso{
   \code{\link{marks.psp}},
   \code{\link{summary.psp}},
-  \code{\link{lengths.psp}}
+  \code{\link{lengths_psp}}
   \code{\link{angles.psp}},
   \code{\link{endpoints.psp}},
   \code{\link{extrapolate.psp}}.

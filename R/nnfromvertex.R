@@ -2,7 +2,7 @@
 #'
 #'  Nearest data point to each vertex of a network
 #'
-#'  $Revision: 1.2 $  $Date: 2017/09/23 04:56:45 $
+#'  $Revision: 1.3 $  $Date: 2020/03/16 10:28:51 $
 #'
 
 nnfromvertex <- function(X, what=c("dist", "which"), k=1) {
@@ -48,7 +48,7 @@ nnfromvertex <- function(X, what=c("dist", "which"), k=1) {
     L <- domain(X)
     nv <- nvertices(L)
     ns <- nsegments(L)
-    seglen <- lengths.psp(as.psp(L))
+    seglen <- lengths_psp(as.psp(L))
     from <- L$from
     to   <- L$to
     #' upper bound on interpoint distance

@@ -42,7 +42,7 @@ extrapolate.psp(x, \dots)
   \code{\link{infline}}
 
   \code{\link{midpoints.psp}},
-  \code{\link{lengths.psp}}
+  \code{\link{lengths_psp}}
   \code{\link{angles.psp}},
   \code{\link{endpoints.psp}}.
 }

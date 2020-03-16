@@ -3,7 +3,7 @@
 #    
 #    Linear networks
 #
-#    $Revision: 1.76 $    $Date: 2020/03/12 02:07:25 $
+#    $Revision: 1.77 $    $Date: 2020/03/16 10:28:51 $
 #
 # An object of class 'linnet' defines a linear network.
 # It includes the following components
@@ -138,7 +138,7 @@ summary.linnet <- function(object, ...) {
                  nline = object$lines$n,
                  nedge = sum(deg)/2,
                  unitinfo = summary(unitname(object)),
-                 totlength = sum(lengths.psp(object$lines)),
+                 totlength = sum(lengths_psp(object$lines)),
                  maxdegree = max(deg),
 		 ncomponents = length(levels(connected(object, what="labels"))),
                  win = as.owin(object),
@@ -347,7 +347,7 @@ diameter.linnet <- function(x) {
 }
 
 volume.linnet <- function(x) {
-  sum(lengths.psp(x$lines))
+  sum(lengths_psp(x$lines))
 }
 
 vertexdegree <- function(x) {
@@ -374,7 +374,7 @@ boundingradius.linnet <- function(x, ...) {
   to    <- x$to
   lines <- x$lines
   nseg  <- lines$n
-  leng  <- lengths.psp(lines)
+  leng  <- lengths_psp(lines)
   if(spatstat.options("Clinearradius")) {
     fromC <- from - 1L
     toC   <- to - 1L

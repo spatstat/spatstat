@@ -1,7 +1,7 @@
 #
 # lpp.R
 #
-#  $Revision: 1.67 $   $Date: 2020/03/03 08:14:13 $
+#  $Revision: 1.68 $   $Date: 2020/03/16 10:28:51 $
 #
 # Class "lpp" of point patterns on linear networks
 
@@ -244,7 +244,7 @@ print.summary.lpp <- function(x, ...) {
 }
 
 intensity.lpp <- function(X, ...) {
-  len <- sum(lengths.psp(as.psp(as.linnet(X))))
+  len <- sum(lengths_psp(as.psp(as.linnet(X))))
   if(is.multitype(X)) table(marks(X))/len else npoints(X)/len
 }
 

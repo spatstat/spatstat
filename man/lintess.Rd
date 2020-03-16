@@ -93,7 +93,7 @@ lintess(L, df, marks=NULL)
    u
    plot(u)
    S <- as.psp(simplenet)
-   marks(u) <- data.frame(len=lengths.psp(S), ang=angles.psp(S))
+   marks(u) <- data.frame(len=lengths_psp(S), ang=angles.psp(S))
    u
    plot(u)
 }

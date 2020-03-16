@@ -1,7 +1,7 @@
 #
 #  psp.R
 #
-#  $Revision: 1.102 $ $Date: 2020/03/13 02:41:17 $
+#  $Revision: 1.103 $ $Date: 2020/03/16 10:28:51 $
 #
 # Class "psp" of planar line segment patterns
 #
@@ -601,7 +601,7 @@ angles.psp <- function(x, directed=FALSE) {
 
 summary.psp <- function(object, ...) {
   verifyclass(object, "psp")
-  len <- lengths.psp(object)
+  len <- lengths_psp(object)
   out <- list(n = object$n,
               len = summary(len),
               totlen = sum(len),
@@ -810,7 +810,7 @@ text.psp <- function(x, ...) {
 }
 
 intensity.psp <- function(X, ..., weights=NULL) {
-  len <- lengths.psp(X)
+  len <- lengths_psp(X)
   a <- area(Window(X))
   if(is.null(weights)) {
     ## unweighted case - for efficiency

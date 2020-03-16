@@ -3,7 +3,7 @@
 #'
 #'    densityVoronoi.lpp
 #'
-#'    $Revision: 1.12 $  $Date: 2019/08/12 08:34:19 $
+#'    $Revision: 1.13 $  $Date: 2020/03/16 10:28:51 $
 #' 
 
 densityVoronoi.lpp <- function(X, f = 1, ..., nrep = 1, verbose = TRUE){
@@ -187,7 +187,7 @@ looVoronoiLPP <- function(X) {
   L <- domain(X)
   nv <- nvertices(L)
   ns <- nsegments(L)
-  seglen <- lengths.psp(as.psp(L))
+  seglen <- lengths_psp(as.psp(L))
   from <- L$from
   to   <- L$to
   #' upper bound on interpoint distance

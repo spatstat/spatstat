@@ -1,4 +1,4 @@
-\name{lengths.psp}
+\name{lengths_psp}
 \alias{lengths.psp}
 \alias{lengths_psp}
 \title{Lengths of Line Segments}
@@ -57,14 +57,10 @@
 }
 \examples{
   a <- psp(runif(10), runif(10), runif(10), runif(10), window=owin())
-  b <- lengths.psp(a)   
+  b <- lengths_psp(a)   
 }
 \author{
-  \adrian
-  
-  
-  and \rolf
-  
+  \spatstatAuthors.
 }
 \keyword{spatial}
 \keyword{math}

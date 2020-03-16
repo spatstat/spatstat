@@ -1,7 +1,7 @@
 ##
 ## convexify.R
 ##
-## $Revision: 1.1 $ $Date: 2015/10/23 12:34:17 $
+## $Revision: 1.2 $ $Date: 2020/03/16 10:28:51 $
 
 convexify <- function(W, eps) {
   if(!is.polygonal(W)) {
@@ -9,7 +9,7 @@ convexify <- function(W, eps) {
     W <- simplify.owin(W, eps)
   }
   e <- edges(W)
-  len <- lengths.psp(e)
+  len <- lengths_psp(e)
   ang <- angles.psp(e, directed=TRUE)
   df <- data.frame(ang=ang, len=len)
   df <- df[order(df$ang), ]

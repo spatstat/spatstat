@@ -2,7 +2,7 @@
 #
 #  density.psp.R
 #
-#  $Revision: 1.15 $    $Date: 2018/08/11 14:27:16 $
+#  $Revision: 1.16 $    $Date: 2020/03/16 10:28:51 $
 #
 #
 
@@ -13,7 +13,7 @@ density.psp <- function(x, sigma, ..., edge=TRUE,
   method <- match.arg(method)
   w <- x$window
   n <- x$n
-  len <- lengths.psp(x)
+  len <- lengths_psp(x)
   ang <- angles.psp(x, directed=TRUE)
   ux <- unitname(x)
   if(missing(sigma))

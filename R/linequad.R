@@ -1,7 +1,7 @@
 #
 # linequad.R
 #
-#  $Revision: 1.14 $ $Date: 2017/06/05 10:31:58 $
+#  $Revision: 1.15 $ $Date: 2020/03/16 10:28:51 $
 #
 # create quadscheme for a pattern of points lying *on* line segments
 
@@ -35,7 +35,7 @@ linequad <- function(X, Y, ..., eps=NULL, nd=1000, random=FALSE) {
   }
   #
   win <- as.owin(Y)
-  len <- lengths.psp(Y)
+  len <- lengths_psp(Y)
   nseg <- length(len)
   if(is.null(eps)) {
     stopifnot(is.numeric(nd) && length(nd) == 1L & is.finite(nd) && nd > 0)

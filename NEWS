@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.63-3.007
+        CHANGES IN spatstat VERSION 1.63-3.008
 
 OVERVIEW
 
@@ -14,7 +14,7 @@ OVERVIEW
 
     o Improvements to linear networks code.
 
-    o Functions renamed.
+    o Function lengths.psp has been renamed lengths_psp.
     
     o Version nickname: 'How can?'
 
@@ -61,7 +61,7 @@ BUG FIXES
     Fixed.
 
     o as.linnet.linnet
-    The R session crashed when sparse=FALSE, if there was
+    This code could crash the R session, when sparse=FALSE, if there was
     insufficient memory available to create the matrix of distances
     between all pairs of network vertices.
     Fixed.

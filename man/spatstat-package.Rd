@@ -590,7 +590,7 @@
       \code{\link{midpoints.psp}} \tab
       compute the midpoints of line segments \cr
       \code{\link{endpoints.psp}} \tab extract the endpoints of line segments \cr
-      \code{\link{lengths.psp}} \tab compute the lengths of line segments \cr
+      \code{\link{lengths_psp}} \tab compute the lengths of line segments \cr
       \code{\link{angles.psp}} \tab compute the orientation angles of line segments \cr
       \code{\link{superimpose}} \tab combine several line segment patterns  \cr
       \code{\link{flipxy}} \tab swap \eqn{x} and \eqn{y} coordinates \cr      

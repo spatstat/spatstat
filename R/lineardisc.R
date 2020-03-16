@@ -2,7 +2,7 @@
 #
 #   disc.R
 #
-#   $Revision: 1.32 $ $Date: 2019/12/21 04:14:48 $
+#   $Revision: 1.33 $ $Date: 2020/03/16 10:28:51 $
 #
 #   Compute the disc of radius r in a linear network
 #
@@ -23,7 +23,7 @@ lineardisc <- function(L, x=locator(1), r, plotit=TRUE,
   }
   lines <- L$lines
   vertices <- L$vertices
-  lengths <- lengths.psp(lines)
+  lengths <- lengths_psp(lines)
   win <- L$window
   marx <- marks(lines)
   ##
@@ -198,7 +198,7 @@ countends <- function(L, x=locator(1), r, toler=NULL, internal=list()) {
   }
   lines <- L$lines
   vertices <- L$vertices
-  lengths <- lengths.psp(lines)
+  lengths <- lengths_psp(lines)
   dpath <- L$dpath
   nv <- vertices$n
   ns <- lines$n
@@ -249,7 +249,7 @@ countends <- function(L, x=locator(1), r, toler=NULL, internal=list()) {
 default.linnet.tolerance <- function(L) {
   # L could be a linnet or psp
   if(!is.null(toler <- L$toler)) return(toler)
-  len2 <- lengths.psp(as.psp(L), squared=TRUE)
+  len2 <- lengths_psp(as.psp(L), squared=TRUE)
   len2pos <- len2[len2 > 0]
   toler <- if(length(len2pos) == 0) 0 else (0.001 * sqrt(min(len2pos)))
   toler <- makeLinnetTolerance(toler)

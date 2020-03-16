@@ -6,7 +6,7 @@
 #  generic functions
 #  and methods for owin, psp, ppp
 #
-#  $Revision: 1.32 $   $Date: 2020/01/10 04:42:31 $
+#  $Revision: 1.33 $   $Date: 2020/03/16 10:28:51 $
 #
 
 # ............ generic  ............................
@@ -235,7 +235,7 @@ dilation.psp <- function(w, r, ..., polygonal=TRUE, tight=TRUE) {
     # old code for polygonal case
     ends   <- x$ends
     angles <- angles.psp(x, directed=TRUE)
-#    lengths <- lengths.psp(x)
+#    lengths <- lengths_psp(x)
     out <- NULL
     # dilate individual segments
     halfcircle <- seq(from=0, to=pi, length.out=128)[-c(1,128)]

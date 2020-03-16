@@ -3,7 +3,7 @@
 #'
 #'   Tessellations on a Linear Network
 #'
-#'   $Revision: 1.41 $   $Date: 2019/09/17 07:23:27 $
+#'   $Revision: 1.42 $   $Date: 2020/03/16 10:28:51 $
 #'
 
 lintess <- function(L, df, marks=NULL) {
@@ -108,7 +108,7 @@ tile.lengths <- function(x) {
   if(!inherits(x, "lintess"))
     stop("x should be a tessellation on a linear network (class 'lintess')",
          call.=FALSE)
-  seglen <- lengths.psp(as.psp(x$L))
+  seglen <- lengths_psp(as.psp(x$L))
   df <- x$df
   df$fraglen <- with(df, seglen[seg] * (t1-t0))
   tilelen <- with(df, tapplysum(fraglen, list(tile)))
@@ -151,7 +151,7 @@ summary.lintess <- function(object, ...) {
   lev <- levels(df$tile)
   nt <- length(lev)
   nr <- nrow(df)
-  seglen <- lengths.psp(as.psp(object$L))
+  seglen <- lengths_psp(as.psp(object$L))
   df$fraglen <- with(df, seglen[seg] * (t1-t0))
   tilelen <- with(df, tapplysum(fraglen, list(tile)))
   hasna <- anyNA(df$tile)

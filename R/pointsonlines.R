@@ -3,12 +3,12 @@
 #
 # place points at regular intervals along line segments
 #
-#   $Revision: 1.8 $  $Date: 2018/07/11 05:51:05 $
+#   $Revision: 1.9 $  $Date: 2020/03/16 10:28:51 $
 #
 
 pointsOnLines <- function(X, eps=NULL, np=1000, shortok=TRUE) {
   stopifnot(is.psp(X))
-  len <- lengths.psp(X)
+  len <- lengths_psp(X)
   nseg <- length(len)
   if(is.null(eps)) {
     stopifnot(is.numeric(np) && length(np) == 1)

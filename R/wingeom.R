@@ -1,7 +1,7 @@
 #
 #	wingeom.R	Various geometrical computations in windows
 #
-#	$Revision: 4.135 $	$Date: 2020/02/06 06:39:51 $
+#	$Revision: 4.136 $	$Date: 2020/03/16 10:28:51 $
 #
 
 volume.owin <- function(x) { area.owin(x) }
@@ -38,14 +38,14 @@ perimeter <- function(w) {
            return(2*(diff(w$xrange)+diff(w$yrange)))
          },
          polygonal={
-           return(sum(lengths.psp(edges(w))))
+           return(sum(lengths_psp(edges(w))))
          },
          mask={
            p <- as.polygonal(w)
            if(is.null(p)) return(NA)
            delta <- sqrt(w$xstep^2 + w$ystep^2)
            p <- simplify.owin(p, delta * 1.15)
-           return(sum(lengths.psp(edges(p))))
+           return(sum(lengths_psp(edges(p))))
          })
   return(NA)
 }

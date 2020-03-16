@@ -3,7 +3,7 @@
 #' Adapted by Adrian Baddeley
 #' Copyright (C) 2016 Kassel Hingee and Adrian Baddeley
 
-# $Revision: 1.8 $  $Date: 2017/02/07 08:12:05 $
+# $Revision: 1.9 $  $Date: 2020/03/16 10:28:51 $
 
 laslett <- function(X, ...,
                     verbose=FALSE, plotit=TRUE,
@@ -238,16 +238,16 @@ polyLaslett <- function(X, ..., oldX=X, verbose=FALSE, plotit=TRUE) {
   if(verbose) cat("Done.\n")
   # calculate lengths of clipped segments, and group by vertex.
   # marks indicate which hztal segment was the parent of each piece.
-  lenleft <- tapply(lengths.psp(clipleft),
+  lenleft <- tapply(lengths_psp(clipleft),
                     factor(marks(clipleft), levels=1:nv),
                     sum)
-  lenright <- tapply(lengths.psp(clipright),
+  lenright <- tapply(lengths_psp(clipright),
                      factor(marks(clipright), levels=1:nv),
                      sum)
   lenleft[is.na(lenleft)] <- 0
   lenright[is.na(lenright)] <- 0
-  emptylenleft <- lengths.psp(left) - lenleft
-  emptylenright <- lengths.psp(right) - lenright
+  emptylenleft <- lengths_psp(left) - lenleft
+  emptylenright <- lengths_psp(right) - lenright
   # The transformed polygon 
   isrightmost <- (lenright == 0)
   yright <- v$y[isrightmost]

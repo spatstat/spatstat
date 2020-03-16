@@ -3,7 +3,7 @@
 #
 #  Random point pattern generators for a linear network
 #
-#  $Revision: 1.12 $   $Date: 2020/01/05 02:46:04 $
+#  $Revision: 1.13 $   $Date: 2020/03/16 10:28:51 $
 #
 
 rpoislpp <- function(lambda, L, ..., nsim=1, drop=TRUE) {
@@ -80,7 +80,7 @@ rlpp <- function(n, f, ..., nsim=1, drop=TRUE) {
   #' extract data
   L <- as.linnet(f)
   df <- attr(f, "df")
-  seglen <- lengths.psp(as.psp(L))
+  seglen <- lengths_psp(as.psp(L))
   #' sort into segments, left-to-right within segments
   df <- df[order(df$mapXY, df$tp), , drop=FALSE]
   nr <- nrow(df)

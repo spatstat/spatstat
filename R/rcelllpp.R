@@ -4,7 +4,7 @@
 #'
 #'  (plus analogue of Switzer's process)
 #' 
-#'  $Revision: 1.2 $  $Date: 2019/11/01 10:13:02 $
+#'  $Revision: 1.3 $  $Date: 2020/03/16 10:28:51 $
 
 rcelllpp <- local({
 
@@ -21,7 +21,7 @@ rcelllpp <- local({
     #' extract list of tiles
     df <- LT$df
     #' add required data
-    df$len <- lengths.psp(as.psp(L))[df$seg]
+    df$len <- lengths_psp(as.psp(L))[df$seg]
     #' generate random points
     st <- by(df, df$tile, addpoints, lambda=lambda, rnumgen=rnumgen, ...)
     st <- Reduce(rbind, st)

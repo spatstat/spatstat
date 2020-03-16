@@ -161,3 +161,54 @@ Change log from 1.63-3 to 1.63-4
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
 
+16 mar 2020
+
+   convexify.R
+   density.lpp.R
+   densitylppVoronoi.R
+   density.psp.R
+   laslett.R
+   lindirichlet.R
+   lineardisc.R
+   linequad.R
+   linim.R
+   linnet.R
+   lintess.R
+   lixellate.R
+   lpp.R
+   morphology.R
+   nndistlpp.R
+   nnfromvertex.R
+   pointsonlines.R
+   pspcross.R
+   psp.R
+   randomlpp.R
+   randomonlines.R
+   rcelllpp.R
+   rhohat.R
+   wingeom.R
+	Replaced calls to lengths.psp by lengths_psp
+
+   lengths.psp.Rd -> lengths_psp.Rd [RENAMED]
+   	Renamed file
+	Tidied.
+
+   angles.psp.Rd
+   endpoints.psp.Rd
+   extrapolate.psp.Rd
+   lintess.Rd
+   midpoints.psp.Rd
+   pixellate.psp.Rd
+   psp.object.Rd
+   psp.Rd
+   spatstat-package.Rd
+	Adjusted cross-references.
+	
+   DESCRIPTION
+   NEWS
+	Version 1.63-3.008
+
+------------- passed R-3.6.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+	

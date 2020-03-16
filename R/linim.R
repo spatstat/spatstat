@@ -1,7 +1,7 @@
 #
 # linim.R
 #
-#  $Revision: 1.71 $   $Date: 2020/02/05 01:22:28 $
+#  $Revision: 1.72 $   $Date: 2020/03/16 10:28:51 $
 #
 #  Image/function on a linear network
 #
@@ -476,7 +476,7 @@ pointsAlongNetwork <- local({
     stopifnot(inherits(L, "linnet"))
     S <- as.psp(L)
     ns <- nsegments(S)
-    seglen <- lengths.psp(S)
+    seglen <- lengths_psp(S)
     ends <- as.data.frame(S)
     nsample <- pmax(1, ceiling(seglen/delta))
     df <- NULL
@@ -717,7 +717,7 @@ integral.linim <- function(f, domain=NULL, ...){
   num <- tapplysum(as.numeric(vals), list(seg), na.rm=TRUE)
   mu <- num/nper
   #' weighted sum
-  len <- lengths.psp(as.psp(L))
+  len <- lengths_psp(as.psp(L))
   if(anyNA(vals)) {
     ##    p <- as.numeric(by(!is.na(vals), seg, mean, ..., na.rm=TRUE))
     ##    p[is.na(p)] <- 0
@@ -731,7 +731,7 @@ integral.linim <- function(f, domain=NULL, ...){
 
 mean.linim <- function(x, ...) {
   trap.extra.arguments(...)
-  integral(x)/sum(lengths.psp(as.psp(as.linnet(x))))
+  integral(x)/sum(lengths_psp(as.psp(as.linnet(x))))
 }
 
 quantile.linim <- function(x, probs = seq(0,1,0.25), ...) {
@@ -744,7 +744,7 @@ quantile.linim <- function(x, probs = seq(0,1,0.25), ...) {
   seg <- factor(df$mapXY, levels=1:nsegments(L))
   nvals <- table(seg)
   #' calculate weights
-  len <- lengths.psp(as.psp(L))
+  len <- lengths_psp(as.psp(L))
   iseg <- as.integer(seg)
   wts <- len[iseg]/nvals[iseg]
   return(weighted.quantile(vals, wts, probs))

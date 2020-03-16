@@ -59,7 +59,7 @@ density.lpp <- function(x, sigma=NULL, ...,
   seg <- coo$seg
   tp  <- coo$tp
   # lengths of network segments
-  Llengths <- lengths.psp(Llines)
+  Llengths <- lengths_psp(Llines)
   # initialise stack
   stack <- data.frame(seg=integer(0), from=logical(0), 
                       distance=numeric(0), weight=numeric(0),
@@ -201,7 +201,7 @@ PDEdensityLPP <- function(x, sigma, ..., weights=NULL,
     check.nvector(weights, npoints(x))
   if(is.null(dx)) {
     #' default rule for spacing of sample points
-    lenths <- lengths.psp(as.psp(L))
+    lenths <- lengths_psp(as.psp(L))
     lbar <- mean(lenths)
     nseg <- length(lenths)
     ltot <- lbar * nseg
@@ -265,7 +265,7 @@ FDMKERNEL <- function(lppobj, sigma, dtt, weights=NULL, iterMax=5000,
                       stepnames=list(time="dtt", space="dtx")) {
   net2 <- as.linnet(lppobj)
 #  ends1 <- net2$lines$ends
-  lenfs <- lengths.psp(as.psp(net2))
+  lenfs <- lengths_psp(as.psp(net2))
   seg_in_lengths <- pmax(1, round(lenfs/dtx))
   new_lpp <- lixellate(lppobj, nsplit=seg_in_lengths)
   net_nodes <- as.linnet(new_lpp)

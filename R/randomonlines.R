@@ -1,7 +1,7 @@
 #
 # randomOnLines.R
 #
-# $Revision: 1.9 $  $Date: 2018/05/06 17:49:44 $
+# $Revision: 1.10 $  $Date: 2020/03/16 10:28:51 $
 #
 # Generate random points on specified lines
 #
@@ -32,7 +32,7 @@ datagen.runifpointOnLines <- function(n, L) {
                       seg=integer(0),
                       tp=numeric(0)))
   # extract segment information
-  len <- lengths.psp(L)
+  len <- lengths_psp(L)
   sumlen <- sum(len)
   cumlen <- cumsum(len)
   cum0len <- c(0, cumlen)
@@ -95,7 +95,7 @@ runifpoisppOnLines <- function(lambda, L, nsim=1, drop=TRUE) {
 
 datagen.runifpoisppOnLines <- function(lambda, L) {
   stopifnot(is.psp(L))
-  mu <- lambda * sum(lengths.psp(L))
+  mu <- lambda * sum(lengths_psp(L))
   n <- rpois(rep.int(1, length(mu)), mu)
   if(length(n) > 1)
     names(n) <- names(lambda)

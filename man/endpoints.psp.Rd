@@ -74,7 +74,7 @@
   \code{\link{marks.psp}},
   \code{\link{summary.psp}},
   \code{\link{midpoints.psp}},
-  \code{\link{lengths.psp}},
+  \code{\link{lengths_psp}},
   \code{\link{angles.psp}},
   \code{\link{extrapolate.psp}}.
 }

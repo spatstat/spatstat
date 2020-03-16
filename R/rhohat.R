@@ -1,7 +1,7 @@
 #'
 #'  rhohat.R
 #'
-#'  $Revision: 1.85 $  $Date: 2020/01/27 10:22:38 $
+#'  $Revision: 1.86 $  $Date: 2020/03/16 10:28:51 $
 #'
 #'  Non-parametric estimation of a transformation rho(z) determining
 #'  the intensity function lambda(u) of a point process in terms of a
@@ -192,7 +192,7 @@ rhohat.lpp <- rhohat.lppm <-
 
   S <- as.psp(as.linnet(X))
   if(!is.null(subset)) S <- S[subset]
-  totlen <- sum(lengths.psp(S))
+  totlen <- sum(lengths_psp(S))
   
   rhohatEngine(model, covariate, reference, totlen, ...,
                subset=subset,
