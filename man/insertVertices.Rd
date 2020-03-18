@@ -50,6 +50,9 @@ insertVertices(L, \dots)
   Adrian Baddeley
 }
 \seealso{
+  \code{\link{addVertices}} to create new vertices at locations which
+  are not yet on the network.
+  
   \code{\link{as.lpp}},
   \code{\link{linnet}},
   \code{\link{methods.linnet}},

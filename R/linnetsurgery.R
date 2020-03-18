@@ -3,7 +3,7 @@
 #'
 #' Surgery on linear networks and related objects
 #'
-#' $Revision: 1.22 $  $Date: 2019/10/29 07:00:02 $
+#' $Revision: 1.23 $  $Date: 2020/03/18 06:19:03 $
 #'
 
 insertVertices <- function(L, ...) {
@@ -94,8 +94,10 @@ insertVertices <- function(L, ...) {
   newfrom <- c(L$from[-splitsegments], fromadd)
   newto   <- c(L$to[-splitsegments], toadd)
   newv <- superimpose(v, vadd, check=FALSE)
-  Lnew <- linnet(newv, edges=cbind(newfrom, newto),
-                 sparse=identical(L$sparse, TRUE))
+  Lnew <- linnet(newv,
+                 edges=cbind(newfrom, newto),
+                 sparse=identical(L$sparse, TRUE),
+                 warn=FALSE)
   newid <- integer(nadd)
   newid[id] <- n + 1:nadd
   attr(Lnew, "id") <- newid
@@ -126,7 +128,7 @@ joinVertices <- function(L, from, to) {
   newfrom <- as.integer(from)
   newto <- as.integer(to)
   edges <- cbind(c(L$from, newfrom), c(L$to, newto))
-  Lnew <- linnet(vertices(L), edges=edges, sparse=L$sparse)
+  Lnew <- linnet(vertices(L), edges=edges, sparse=L$sparse, warn=FALSE)
   if(!is.null(L$toler)) Lnew$toler <- L$toler
   if(!haspoints) return(Lnew)
   X <- lpp(Xdf, Lnew)
@@ -224,7 +226,7 @@ thinNetwork <- function(X, retainvertices, retainedges) {
   edgepairs <- edgepairs[nontrivial,,drop=FALSE]
   reverse <- reverse[nontrivial]
   ## extract relevant subset of network
-  Lsub <- linnet(Vsub, edges=edgepairs, sparse=sparse)
+  Lsub <- linnet(Vsub, edges=edgepairs, sparse=sparse, warn=FALSE)
   ## tack on information about subset
   attr(Lsub, "retainvertices") <- retainvertices
   attr(Lsub, "retainedges") <- retainedges
@@ -274,4 +276,68 @@ validate.lpp.coords <- function(X, fatal=TRUE, context="") {
     return(FALSE)
   }
   return(TRUE)
+}
+
+addVertices <- function(L, X, join=NULL) {
+  if(!inherits(L, c("lpp", "linnet")))
+    stop("L should be a linear network (linnet) or point pattern (lpp)",
+         call.=FALSE)
+  if(haspoints <- is.lpp(L)) {
+    Y <- L
+    L <- as.linnet(L)
+  }
+  sparse <- L$sparse || is.null(L$dpath)
+  V <- vertices(L)
+  nV <- npoints(V)
+  nX <- npoints(X)
+  Vplus <- superimpose(V, X)
+  nplus <- npoints(Vplus)
+  iold <- seq_len(nV)
+  inew <- nV + seq_len(nX)
+  Lplus <- L
+  Lplus$vertices <- Vplus
+  Lplus$window   <- Window(Vplus)
+  Lplus$sparse   <- sparse
+  Lplus$m <- matrix(FALSE, nplus, nplus)
+  Lplus$m[iold,iold] <- L$m
+  if(!sparse) {
+    dold <- L$dpath
+    dnew <- matrix(Inf, nplus, nplus)
+    diag(dnew) <- 0
+    dnew[iold, iold] <- dold
+    Lplus$dpath <- dnew
+  }
+  if(haspoints)
+    domain(Y) <- Lplus
+  out <- if(haspoints) Y else Lplus
+  if(!is.null(join)) {
+    if(is.numeric(join)) {
+      check.nvector(join, nX, things="points of X")
+      out <- joinVertices(out, inew, join)
+    } else if(is.character(join)) {
+      join <- match.arg(join, c("vertices", "nearest"))
+      switch(join,
+             vertices={
+               join <- nncross(X, V, what="which")
+               out <- joinVertices(out, inew, join)
+             },
+             nearest ={
+               #' find nearest points on L
+               p <- project2segment(X, as.psp(Lplus))
+               locX <- data.frame(seg=p$mapXY, tp=p$tp)
+               #' make them vertices
+               out <- insertVertices(out, locX)
+               #' join X to these new vertices
+               joinid <- attr(out, "id")
+               out <- joinVertices(out, inew, joinid)
+             })
+    } else if(is.lpp(join)) {
+      stopifnot(npoints(join) == npoints(X))
+      out <- insertVertices(out, join)
+      joinid <- attr(out, "id")
+      out <- joinVertices(out, inew, joinid)
+    } else stop("Format of 'join' is not understood", call.=FALSE)
+  }
+  attr(out, "id") <- inew
+  return(out)  
 }

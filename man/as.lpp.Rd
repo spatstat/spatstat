@@ -70,6 +70,17 @@
     \code{seg,tp} are \code{NULL}, and \code{x,y} are data in a format
     acceptable to \code{\link[grDevices]{xy.coords}} specifying the
     Cartesian coordinates.
+    \item
+    Only the arguments \code{x} and \code{L} are given,
+    and \code{x} is a data frame with one of the following types:
+    \itemize{
+      \item two columns labelled \code{seg,tp} interpreted as local
+      coordinates on the network.
+      \item two columns labelled \code{x,y} interpreted as Cartesian
+      coordinates.
+      \item four columns labelled \code{x,y,seg,tp}
+      interpreted as Cartesian coordinates and local coordinates.
+    }
   }
 }
 \value{

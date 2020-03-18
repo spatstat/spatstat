@@ -725,7 +725,13 @@
       \code{\link{delaunayNetwork}} \tab network of Delaunay triangulation \cr
       \code{\link{dirichletNetwork}} \tab network of Dirichlet edges \cr
       \code{\link{methods.linnet}} \tab methods for \code{linnet} objects\cr
-      \code{\link{vertices.linnet}} \tab nodes of network \cr 
+      \code{\link{vertices.linnet}} \tab nodes of network \cr
+      \code{\link{joinVertices}} \tab join existing vertices in a network \cr
+      \code{\link{insertVertices}} \tab insert new vertices at positions
+      along a network \cr
+      \code{\link{addVertices}} \tab add new vertices, extending a network \cr
+      \code{\link{thinNetwork}} \tab remove vertices or lines from a network \cr
+      \code{\link{repairNetwork}} \tab repair internal format \cr
       \code{\link{pixellate.linnet}} \tab approximate by pixel image
     }
     

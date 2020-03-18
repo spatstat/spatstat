@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.63-3.008
+        CHANGES IN spatstat VERSION 1.63-3.009
 
 OVERVIEW
 
@@ -20,6 +20,9 @@ OVERVIEW
 
 NEW FUNCTIONS
 
+    o addVertices
+    Add new vertices to a network, at locations outside the existing network.
+    
     o lengths_psp
     This is the new name of the function 'lengths.psp',
     which had to be changed because of a conflict with the generic 'lengths'.
@@ -28,7 +31,7 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o pairdist.lpp
     Now handles larger networks.
-    
+
     o as.linnet.linnet
     New argument 'maxsize'.
     
@@ -40,6 +43,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
     This interactive analysis function has been removed from spatstat
     into a new package 'spatstat.gui'
 
+    o as.lpp
+    Accepts more data formats.
+    
     o lengths.psp
     This function will soon be Deprecated,
     in favour of the new name 'lengths_psp'
