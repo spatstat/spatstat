@@ -465,7 +465,18 @@ in decreasing order of potential impact.
  %% LEVEL 4: 
  \subsection{Partially Incorrect}
  \begin{itemize}
+   
+ \item \texttt{mppm}:
+   Internal data were malformed if the interaction was \texttt{Hardcore}
+    or \texttt{MultiHard} or a hybrid involving these interactions.
+    This caused various errors when the fitted model was used.
+    \bugger{1.61-0}{september 2019}{1.64-0}{march 2020}.
 
+ \item \texttt{mppm}:
+   Ignored the arguments \texttt{nd} and \texttt{eps} controlling the 
+   quadrature scheme. 
+    \bugger{1.35-0}{december 2013}{1.64-0}{march 2020}.
+    
  \item \texttt{kppm}, \texttt{AIC}:
     For kppm models fitted with \verb!method='clik2'!, 
     the resulting value of \texttt{logLik()}

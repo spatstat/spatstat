@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.63-3.009
+        CHANGES IN spatstat VERSION 1.63-3.010
 
 OVERVIEW
 
@@ -10,12 +10,16 @@ OVERVIEW
 
     o spatstat no longer 'Suggests' the packages 'tcltk' and 'rpanel'
 
-    o Bug fixes related to mppm.
-
+    o Add new vertices to a linear network.
+    
     o Improvements to linear networks code.
 
     o Function lengths.psp has been renamed lengths_psp.
-    
+
+    o Bug fixes related to mppm.
+
+    o Stability improvements.
+
     o Version nickname: 'How can?'
 
 NEW FUNCTIONS

@@ -181,6 +181,10 @@ the News and Release Notes for each update.
 
   \item \spst\ now suggests the package \pkg{fftwtools}.
 
+  \item Add new vertices to a linear network.
+    
+   \item Function \texttt{lengths.psp} has been renamed \verb!lengths_psp!.
+
    \item Tessellations on a linear network can now have marks.
 
    \item More functions for manipulating tessellations on a linear network.
@@ -474,6 +478,14 @@ The following datasets have been added to the package.
 Following is a list of all the functions that have been added.
 
 \begin{itemize}
+
+  \item \texttt{addVertices}:
+    Add new vertices to a network, at locations outside the
+    existing network.
+
+  \item \verb!lengths_psp!: this is the new name of the 
+    function \texttt{lengths.psp}, which had to be changed because of
+    a conflict with the generic \texttt{lengths}.
   
   \item \texttt{is.linim}: test whether an object is 
       a pixel image on a linear network (class \verb!"linim"!).
@@ -1225,6 +1237,9 @@ listed alphabetically.
    New argument \texttt{delta} controls spacing of sample points
    in internal data.
 
+ \item \texttt{as.linnet.linnet}:
+   New argument \texttt{maxsize}.
+   
   \item \texttt{as.linnet.psp}:
     \begin{itemize}
     \item 
@@ -1233,6 +1248,17 @@ listed alphabetically.
     \item Computation accelerated.
     \end{itemize}
 
+    
+  \item \texttt{as.lpp}: accepts more data formats:
+    \begin{itemize}
+    \item 
+      Now handles the case where coordinates
+      \texttt{seg} and \texttt{tp} are given
+      but \texttt{x} and \texttt{y} are missing.
+    \item Now handles the case where \texttt{x} is a data frame
+      with columns named \texttt{x,y,seg,tp} or 
+      \texttt{x,y} or \texttt{seg,tp}.
+    \end{itemize}
 
 \item \texttt{as.owin.default}:
   \begin{itemize}
@@ -1727,6 +1753,13 @@ listed alphabetically.
 \item \texttt{interp.im}:
   New argument \texttt{bilinear}.
 
+
+ 
+\item \texttt{iplot}, \texttt{iplot.ppp}, 
+  \texttt{iplot.layered}, \texttt{iplot.linnet}, \texttt{iplot.default}:
+    These interactive plotting functions have been removed from 
+    \pkg{spatstat} into a new package \pkg{spatstat.gui}.
+
  \item \texttt{ippm}:
    \begin{itemize}
    \item Accelerated.
@@ -1734,8 +1767,12 @@ listed alphabetically.
    The internal format of the result has been extended slightly.
    \item Improved defaults for numerical algorithm parameters.
    \end{itemize}
-
    
+   
+ \item \texttt{istat}:
+    This interactive analysis function has been removed from \pkg{spatstat}
+    into a new package \pkg{spatstat.gui}.
+    
 %%J
 
  \item \texttt{Jfox}: new argument \texttt{warn.trim}.
@@ -1775,11 +1812,11 @@ listed alphabetically.
     has changed slightly. Results are believed to be more accurate.
     Computation has been accelerated by about 20 percent in typical cases.
    \end{itemize}
-    
- \item \texttt{Kest.fft}:
+
+\item \texttt{Kest.fft}:
    Now has \verb!...! arguments allowing control of spatial resolution.
 
- \item \texttt{Kinhom}:
+\item \texttt{Kinhom}:
    \begin{itemize}
    \item 
    New argument \texttt{ratio}.
@@ -1831,7 +1868,12 @@ listed alphabetically.
     a fitted point process model.
     New arguments \texttt{update}, \texttt{leaveoneout}, \texttt{lambdaX}.
 
- \item \texttt{lengths.psp}: New argument \texttt{squared}.
+ \item \texttt{lengths.psp}: 
+   \begin{itemize}
+   \item    New argument \texttt{squared}.
+   \item This function will soon be Deprecated in favour of the
+     new name \verb!lengths_psp!.
+   \end{itemize}
 
    \item \texttt{Lest}, \texttt{Linhom}, \texttt{Ldot},
      \texttt{Lcross}, \texttt{Ldot.inhom}, \texttt{Lcross.inhom}:
@@ -1968,12 +2010,11 @@ listed alphabetically.
    \item
      \texttt{X} can be missing or \texttt{NULL}, 
      resulting in an empty point pattern.
+   \item 
+     Now handles the case where coordinates
+     \texttt{seg} and \texttt{tp} are given
+     but \texttt{x} and \texttt{y} are missing.
    \end{itemize}
-
-  \item \texttt{lpp}, \texttt{as.lpp}: 
-   These functions now handle the case where coordinates
-   \texttt{seg} and \texttt{tp} are given
-    but \texttt{x} and \texttt{y} are missing.
 
  \item \texttt{lppm}:
    \begin{itemize}
@@ -2074,6 +2115,8 @@ listed alphabetically.
  \item \texttt{padimage}:
    New argument \texttt{W} allows an image to be padded out to fill any window.
 
+   
+ \item \texttt{pairdist.lpp}: now handles larger networks.
    
  \item \texttt{pairorient}: Default edge corrections now include 
    \texttt{"bord.modif"}.

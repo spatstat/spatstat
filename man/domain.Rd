@@ -106,7 +106,7 @@
   defined.
 
   For a two-dimensional object \code{X}, typically \code{domain(X)}
-  is the same as \code{domain(X)}.
+  is the same as \code{Window(X)}.
 
   The exception is that, if \code{X} is a point pattern on a linear network
   (class \code{"lpp"}) or a point process model on a linear network

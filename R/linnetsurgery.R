@@ -3,7 +3,7 @@
 #'
 #' Surgery on linear networks and related objects
 #'
-#' $Revision: 1.23 $  $Date: 2020/03/18 06:19:03 $
+#' $Revision: 1.24 $  $Date: 2020/03/19 02:12:34 $
 #'
 
 insertVertices <- function(L, ...) {
@@ -308,7 +308,7 @@ addVertices <- function(L, X, join=NULL) {
     Lplus$dpath <- dnew
   }
   if(haspoints)
-    domain(Y) <- Lplus
+    Y$domain <- Lplus
   out <- if(haspoints) Y else Lplus
   if(!is.null(join)) {
     if(is.numeric(join)) {

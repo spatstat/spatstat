@@ -234,6 +234,21 @@ Change log from 1.63-3 to 1.63-4
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
 	
-   
-   
+   updates.Rnw
+   bugfixes.Rnw
+	Updated to cover all the above.
 
+   linnetsurgery.R
+	'bug' fix in addVertices
+
+   domain.Rd
+	typo.
+	
+   DESCRIPTION
+   NEWS
+	Version 1.63-3.010
+
+------------- passed R-3.6.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+	
