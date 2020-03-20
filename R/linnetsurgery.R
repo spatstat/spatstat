@@ -3,7 +3,7 @@
 #'
 #' Surgery on linear networks and related objects
 #'
-#' $Revision: 1.24 $  $Date: 2020/03/19 02:12:34 $
+#' $Revision: 1.28 $  $Date: 2020/03/20 06:14:35 $
 #'
 
 insertVertices <- function(L, ...) {
@@ -51,8 +51,6 @@ insertVertices <- function(L, ...) {
   ## split segments containing new vertices
   for(theseg in splitsegments) {
     ## find new vertices lying on segment 'theseg'
-    i <- L$from[theseg]
-    j <- L$to[theseg]
     those <- (seg == theseg)
     idthose <- which(those)
     ## order the new vertices along this segment
@@ -61,15 +59,17 @@ insertVertices <- function(L, ...) {
     tt <- tt[oo]
     idadd <- idthose[oo]
     ## make new vertices
-    nnew <- length(tt)
+    i <- L$from[theseg]
+    j <- L$to[theseg]
     xnew <- with(v, x[i] + tt * diff(x[c(i,j)]))
     ynew <- with(v, y[i] + tt * diff(y[c(i,j)]))
     vnew <- list(x=xnew, y=ynew)
-    ## make new edges
-    kk <- n + nadd + (1:nnew)
+    nnew <- length(tt)
+    ## make new edges i ~ k ~ j replacing i ~ j
+    kk <- n + nadd + seq_len(nnew)
     fromnew <- c(i, kk)
     tonew   <- c(kk, j)
-    nnewseg <- nnew + 1
+    nnewseg <- nnew + 1L
     ## add new vertices and edges to running total
     nadd <- nadd + nnew
     vadd <- concatxy(vadd, vnew)
@@ -93,9 +93,13 @@ insertVertices <- function(L, ...) {
   }
   newfrom <- c(L$from[-splitsegments], fromadd)
   newto   <- c(L$to[-splitsegments], toadd)
+  edges <- cbind(newfrom, newto)
+  reverse <- (newfrom > newto)
+  if(anyrev <- any(reverse)) 
+    edges[reverse, ] <- edges[reverse, c(2,1)]
   newv <- superimpose(v, vadd, check=FALSE)
   Lnew <- linnet(newv,
-                 edges=cbind(newfrom, newto),
+                 edges=edges,
                  sparse=identical(L$sparse, TRUE),
                  warn=FALSE)
   newid <- integer(nadd)
@@ -106,6 +110,11 @@ insertVertices <- function(L, ...) {
   ## adjust segment id for data points on segments that were not split
   Xnotsplit <- notsplit[segXold]
   cooXnew$seg[Xnotsplit] <- segmap[segXold[Xnotsplit]]
+  ## adjust local coordinates if segment was reversed
+  if(anyrev) {
+    reversing <- reverse[cooXnew$seg]
+    cooXnew$tp[reversing] <- 1 - cooXnew$tp[reversing]
+  }
   Xnew <- lpp(cooXnew, Lnew)
   marks(Xnew) <- marks(X)
   attr(Xnew, "id") <- newid
@@ -139,8 +148,51 @@ repairNetwork <- function(X) {
   if(!inherits(X, c("linnet", "lpp")))
     stop("X should be a linnet or lpp object", call.=FALSE)
   L <- as.linnet(X)
+  V <- vertices(L)
+  S    <- L$lines
   from <- L$from
   to   <- L$to
+  ## check consistency between 'from,to' and 'lines'
+  Sfrom <- endpoints.psp(S, "first")
+  Sto   <- endpoints.psp(S, "second")
+  fromV <- nncross(Sfrom, V, what="which")
+  toV   <- nncross(Sto,   V, what="which")
+  problem <- NULL
+  if(length(from) != nsegments(S)) {
+    problem <- "Network data implied different numbers of edges"
+  } else if(any(to != toV) || any(from != fromV)) {
+    #' find genuinely different vertices
+    tol <- L$toler %orifnull% default.linnet.tolerance(S)
+    clash <- (from != fromV)
+    ss <- Sfrom[clash]
+    vv <- V[from[clash]]
+    d <- sqrt((ss$x - vv$x)^2 + (ss$y - vv$y)^2)
+    bad <- (max(d) > tol)
+    if(!bad) {
+      clash <- (to != toV)
+      ss <- Sto[clash]
+      vv <- V[to[clash]]
+      d <- sqrt((ss$x - vv$x)^2 + (ss$y - vv$y)^2)
+      bad <- (max(d) > tol)
+    }
+    if(bad) 
+      problem <- "Edge indices did not agree with segment endpoints"
+  }
+  if(!is.null(problem)) {
+    if(is.marked(S)) {
+      solution <- "edge indices were recomputed from line geometry"
+      from <- L$from <- fromV
+      to   <- L$to   <- toV
+    } else {
+      solution <- "lines were rebuilt from edge indices"
+      xx <- V$x
+      yy <- V$y
+      L$lines <- psp(xx[from], yy[from], xx[to], yy[to], window=Window(V),
+                     check=FALSE)
+    }
+    warning(paste0(problem, "; ", solution), call.=FALSE)
+  } 
+
   reverse <- (from > to)
   if(any(reverse)) {
     newfrom <- ifelse(reverse, to, from)
@@ -282,6 +334,7 @@ addVertices <- function(L, X, join=NULL) {
   if(!inherits(L, c("lpp", "linnet")))
     stop("L should be a linear network (linnet) or point pattern (lpp)",
          call.=FALSE)
+  X <- as.ppp(X)
   if(haspoints <- is.lpp(L)) {
     Y <- L
     L <- as.linnet(L)
@@ -289,17 +342,24 @@ addVertices <- function(L, X, join=NULL) {
   sparse <- L$sparse || is.null(L$dpath)
   V <- vertices(L)
   nV <- npoints(V)
+  from <- L$from
+  to   <- L$to
+  ## new vertices
   nX <- npoints(X)
-  Vplus <- superimpose(V, X)
+  Vplus <- superimpose(V, X, check=FALSE)
   nplus <- npoints(Vplus)
   iold <- seq_len(nV)
   inew <- nV + seq_len(nX)
+  ## make new network
   Lplus <- L
   Lplus$vertices <- Vplus
   Lplus$window   <- Window(Vplus)
   Lplus$sparse   <- sparse
-  Lplus$m <- matrix(FALSE, nplus, nplus)
-  Lplus$m[iold,iold] <- L$m
+  ## 'lines', 'from', 'to', 'toler' are unchanged
+  mplus <- sparseMatrix(i=c(from, to), j=c(to,from), x=TRUE,
+                        dims=c(nplus, nplus))
+  if(!sparse) mplus <- as.matrix(mplus)
+  Lplus$m <- mplus
   if(!sparse) {
     dold <- L$dpath
     dnew <- matrix(Inf, nplus, nplus)
@@ -307,9 +367,11 @@ addVertices <- function(L, X, join=NULL) {
     dnew[iold, iold] <- dold
     Lplus$dpath <- dnew
   }
-  if(haspoints)
-    Y$domain <- Lplus
+  if(haspoints) {
+    Y$domain <- Lplus # sufficient; point coordinates are still valid
+  }
   out <- if(haspoints) Y else Lplus
+  ## optionally join new vertices to existing network
   if(!is.null(join)) {
     if(is.numeric(join)) {
       check.nvector(join, nX, things="points of X")

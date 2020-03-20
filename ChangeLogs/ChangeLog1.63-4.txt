@@ -251,4 +251,17 @@ Change log from 1.63-3 to 1.63-4
 ------------- passed R-3.6.3 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
-	
+
+20 mar 2020
+
+   linnetsurgery.R
+	Bug fix in addVertices
+        More functionality in repairNetwork
+
+   DESCRIPTION
+   NEWS
+	Version 1.63-3.011
+
+------------- passed R-3.6.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------

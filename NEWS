@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.63-3.010
+        CHANGES IN spatstat VERSION 1.63-3.011
 
 OVERVIEW
 
@@ -38,7 +38,7 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o as.linnet.linnet
     New argument 'maxsize'.
-    
+
     o iplot, iplot.ppp, iplot.layered, iplot.linnet, iplot.default
     These interactive plotting functions have been removed from spatstat
     into a new package 'spatstat.gui'
@@ -53,6 +53,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o lengths.psp
     This function will soon be Deprecated,
     in favour of the new name 'lengths_psp'
+    
+    o repairNetwork
+    Increased capability of detecting and repairing inconsistencies.
     
 BUG FIXES
 

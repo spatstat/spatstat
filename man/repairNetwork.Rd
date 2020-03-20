@@ -21,6 +21,8 @@ repairNetwork(X)
   This function detects and repairs inconsistencies
   in the internal data of \code{X}. Currently it does the following:
   \itemize{
+    \item checks that different ways of calculating the number of
+    edges give the same answer
     \item removes any duplicated edges of the network
     \item ensures that each edge is recorded as a pair of vertex indices
     \code{(from, to)} with \code{from < to}.
