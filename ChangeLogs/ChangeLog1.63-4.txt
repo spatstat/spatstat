@@ -283,3 +283,19 @@ Change log from 1.63-3 to 1.63-4
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
 
+   linnetsurgery.R
+	insertVertices retains any marks attached to the line segments.
+	joinVertices has new argument 'marks'.
+	addVertices has new argument 'joinmarks'.
+
+   tests/lppstuff.R
+	More tests of handling marks attached to lines.
+	
+   DESCRIPTION
+   NEWS
+	Version 1.63-3.013
+
+------------- passed R-3.6.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+

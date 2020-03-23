@@ -8,7 +8,7 @@
   at specified locations outside the network.
 }
 \usage{
-addVertices(L, X, join=NULL)
+addVertices(L, X, join=NULL, joinmarks=NULL)
 }
 \arguments{
   \item{L}{
@@ -25,6 +25,10 @@ addVertices(L, X, join=NULL)
     If \code{join=NULL} (the default),
     the new vertices are simply added to the list of network vertices
     without being joined to the rest of the network.
+  }
+  \item{joinmarks}{
+    Optional vector or data frame of marks associated with the
+    new edges specified by \code{join}.
   }
 }
 \details{
@@ -49,14 +53,17 @@ addVertices(L, X, join=NULL)
     indices of existing vertices of \code{L} in the order given
     in \code{V = vertices(L)}. Then each new vertex \code{X[i]} will be
     joined to an existing vertex \code{V[j]} where \code{j = join[i]}.
+    Each new vertex is joined to exactly one existing vertex.
     \item
     If \code{join="vertices"} then each new vertex \code{X[i]} is joined
     to the nearest existing vertex \code{V[j]}.
+    Each new vertex is joined to exactly one existing vertex.
     \item
     If \code{join="nearest"} then each new vertex is projected to the
     nearest location along on the network; these locations are inserted
     as new vertices of \code{L}; and then each vertex \code{X[i]}
     is joined to the corresponding projected point.
+    Each new vertex is joined to exactly one newly-inserted vertex.
     \item
     If \code{join} is a point pattern on a network (class \code{"lpp"}),
     it must be defined on the same network as \code{L} and it must
@@ -64,6 +71,7 @@ addVertices(L, X, join=NULL)
     \code{join} will be inserted as new vertices of \code{L},
     and then each vertex \code{X[i]} is joined to the corresponding
     point \code{join[i]}.
+    Each new vertex is joined to exactly one newly-inserted vertex.
   }
   The result is the modified object, with an attribute \code{"id"} such that
   the \code{i}th added vertex has become the

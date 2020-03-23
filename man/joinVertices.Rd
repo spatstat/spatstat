@@ -7,7 +7,7 @@
   Join the specified vertices in a linear network, creating a new network.
 }
 \usage{
-joinVertices(L, from, to)
+joinVertices(L, from, to, marks=NULL)
 }
 \arguments{
   \item{L}{
@@ -19,6 +19,9 @@ joinVertices(L, from, to)
     specifying the vertices which should be joined.
     Alternatively \code{from} can be a 2-column matrix of integers
     and \code{to} is missing or \code{NULL}.
+  }
+  \item{marks}{
+    Optional vector or data frame of values associated with the new edges.
   }
 }
 \details{

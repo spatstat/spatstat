@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.63-3.012
+        CHANGES IN spatstat VERSION 1.63-3.013
 
 OVERVIEW
 
@@ -45,6 +45,12 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o repairNetwork
     Increased capability of detecting and repairing inconsistencies.
+
+    o joinVertices
+    New argument 'marks'.
+
+    o insertVertices
+    Marks attached to the lines of the network are now retained.
     
     o as.lpp
     Accepts more data formats.

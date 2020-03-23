@@ -372,7 +372,7 @@ local({
 #
 # Tests for lpp code
 #
-#  $Revision: 1.50 $  $Date: 2020/02/02 03:25:57 $
+#  $Revision: 1.51 $  $Date: 2020/03/23 07:29:09 $
 
 
 require(spatstat)
@@ -526,7 +526,9 @@ local({
   Z <- as.linnet(Y) # can crash if marks don't match segments
   
   ## Test linnet surgery code
-  SL <- joinVertices(simplenet, matrix(c(2,3), ncol=2))
+  RL <- joinVertices(simplenet, matrix(c(2,3), ncol=2)) # redundant edge
+  RZ <- joinVertices(Z, matrix(c(2,3), ncol=2), marks=6) # redundant edge
+  JZ <- joinVertices(Z, matrix(c(2,7), ncol=2), marks=6) # new edge
   set.seed(42)
   X <- runiflpp(30, simplenet)
   V <- runiflpp(30, simplenet)

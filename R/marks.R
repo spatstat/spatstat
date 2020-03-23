@@ -1,7 +1,7 @@
 #
 # marks.R
 #
-#   $Revision: 1.46 $   $Date: 2019/09/13 04:48:17 $
+#   $Revision: 1.47 $   $Date: 2020/03/23 07:18:53 $
 #
 # stuff for handling marks
 #
@@ -236,17 +236,27 @@ marksubset <- function(x, index, format=NULL) {
 "%mapp%" <- markappendop <- function(x,y) { 
   fx <- markformat(x)
   fy <- markformat(y)
-  agree <- (fx == fy)
-  if(all(c(fx,fy) %in% c("dataframe", "hyperframe")))
-    agree <- agree && identical(names(x),names(y)) 
-  if(!agree)
-    stop("Attempted to concatenate marks that are not compatible")
+  if(fx != fy) {
+    ## vectors can be appended to single-column arrays
+    xvec  <- (fx == "vector")
+    yvec  <- (fy == "vector")
+    xdf <- (fx %in% c("dataframe", "hyperframe")) && (ncol(x) == 1L)
+    ydf <- (fy %in% c("dataframe", "hyperframe")) && (ncol(y) == 1L)
+    if(xvec && ydf) {
+      x <- as.data.frame(x)
+      names(x) <- names(y)
+      fx <- "dataframe"
+    } else if(xdf && yvec) {
+      y <- as.data.frame(y)
+      names(y) <- names(x)
+      fy <- "dataframe"
+    } else stop("Attempted to concatenate marks that are not compatible")
+  }
   switch(fx,
          none   = { return(NULL) },
          vector = {
-           if(is.factor(x) || is.factor(y))
-             return(cat.factor(x,y))
-           else return(c(x,y))
+           if(is.factor(x) || is.factor(y)) return(cat.factor(x,y))
+           return(c(x,y))
          },
          hyperframe=,
          dataframe = { return(rbind(x,y)) },

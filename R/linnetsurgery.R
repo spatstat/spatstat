@@ -3,7 +3,7 @@
 #'
 #' Surgery on linear networks and related objects
 #'
-#' $Revision: 1.28 $  $Date: 2020/03/20 06:14:35 $
+#' $Revision: 1.30 $  $Date: 2020/03/23 07:39:37 $
 #'
 
 insertVertices <- function(L, ...) {
@@ -34,20 +34,24 @@ insertVertices <- function(L, ...) {
   co <- coords(V)
   seg <- co$seg
   tp <- co$tp
-  ## determine which segments will be split,
-  ## and compute new serial numbers for the un-split segments
+  ## determine which segments will be split
   splitsegments <- sortunique(seg)
   notsplit <- rep(TRUE, nsegments(L))
   notsplit[splitsegments] <- FALSE
-  segmap <- cumsum(notsplit)
+  ## un-split segments will be retained and listed first,
+  ## followed by the new pieces.
+  ## Compute new serial numbers for the un-split segments.
+  segmap <- cumsum(notsplit) 
   nunsplit <- sum(notsplit)
   ## existing vertices
   v <- L$vertices
   n <- npoints(v)
-  ## initialise
+  ## initialise lists of new vertices and edges 
   nadd <- 0
   vadd <- list(x=numeric(0), y=numeric(0))
   fromadd <- toadd <- id <- integer(0)
+  ## initialise mapping from output segments to input segments
+  comefrom <- which(notsplit) 
   ## split segments containing new vertices
   for(theseg in splitsegments) {
     ## find new vertices lying on segment 'theseg'
@@ -65,7 +69,7 @@ insertVertices <- function(L, ...) {
     ynew <- with(v, y[i] + tt * diff(y[c(i,j)]))
     vnew <- list(x=xnew, y=ynew)
     nnew <- length(tt)
-    ## make new edges i ~ k ~ j replacing i ~ j
+    ## replace edge i ~ j with edges i ~ k and k ~ j 
     kk <- n + nadd + seq_len(nnew)
     fromnew <- c(i, kk)
     tonew   <- c(kk, j)
@@ -76,6 +80,7 @@ insertVertices <- function(L, ...) {
     fromadd <- c(fromadd, fromnew)
     toadd <- c(toadd, tonew)
     id <- c(id, idadd)
+    comefrom <- c(comefrom, rep(theseg, nnew))
     ## handle data points if any
     if(haspoints && any(relevant <- (segXold == theseg))) {
       tx <- tpXold[relevant]
@@ -102,6 +107,14 @@ insertVertices <- function(L, ...) {
                  edges=edges,
                  sparse=identical(L$sparse, TRUE),
                  warn=FALSE)
+  #' save information on provenance of line segments
+  S <- Lnew$lines
+  attr(S, "comefrom") <- comefrom
+  #' copy marks
+  if(!is.null(marx <- marks(L$lines))) 
+    marks(S) <- as.data.frame(marx)[comefrom, , drop=FALSE]
+  Lnew$lines <- S
+  #' save information identifying the new vertices in the new network
   newid <- integer(nadd)
   newid[id] <- n + 1:nadd
   attr(Lnew, "id") <- newid
@@ -121,7 +134,7 @@ insertVertices <- function(L, ...) {
   return(Xnew)
 }
 
-joinVertices <- function(L, from, to) {
+joinVertices <- function(L, from, to, marks=NULL) {
   if(!inherits(L, c("lpp", "linnet")))
     stop("L should be a linear network (linnet) or point pattern (lpp)",
          call.=FALSE)
@@ -138,6 +151,12 @@ joinVertices <- function(L, from, to) {
   newto <- as.integer(to)
   edges <- cbind(c(L$from, newfrom), c(L$to, newto))
   Lnew <- linnet(vertices(L), edges=edges, sparse=L$sparse, warn=FALSE)
+  #' assign marks only if provided
+  if(!is.null(marks)) {
+    marxnew <- (marks(L$lines) %mapp% marks) %msub% !duplicated(edges)
+    if(!is.null(marxnew))
+      marks(Lnew$lines) <- marxnew
+  }
   if(!is.null(L$toler)) Lnew$toler <- L$toler
   if(!haspoints) return(Lnew)
   X <- lpp(Xdf, Lnew)
@@ -330,7 +349,7 @@ validate.lpp.coords <- function(X, fatal=TRUE, context="") {
   return(TRUE)
 }
 
-addVertices <- function(L, X, join=NULL) {
+addVertices <- function(L, X, join=NULL, joinmarks=NULL) {
   if(!inherits(L, c("lpp", "linnet")))
     stop("L should be a linear network (linnet) or point pattern (lpp)",
          call.=FALSE)
@@ -375,13 +394,13 @@ addVertices <- function(L, X, join=NULL) {
   if(!is.null(join)) {
     if(is.numeric(join)) {
       check.nvector(join, nX, things="points of X")
-      out <- joinVertices(out, inew, join)
+      out <- joinVertices(out, inew, join, marks=joinmarks)
     } else if(is.character(join)) {
       join <- match.arg(join, c("vertices", "nearest"))
       switch(join,
              vertices={
                join <- nncross(X, V, what="which")
-               out <- joinVertices(out, inew, join)
+               out <- joinVertices(out, inew, join, marks=joinmarks)
              },
              nearest ={
                #' find nearest points on L
@@ -391,13 +410,13 @@ addVertices <- function(L, X, join=NULL) {
                out <- insertVertices(out, locX)
                #' join X to these new vertices
                joinid <- attr(out, "id")
-               out <- joinVertices(out, inew, joinid)
+               out <- joinVertices(out, inew, joinid, marks=joinmarks)
              })
     } else if(is.lpp(join)) {
       stopifnot(npoints(join) == npoints(X))
       out <- insertVertices(out, join)
       joinid <- attr(out, "id")
-      out <- joinVertices(out, inew, joinid)
+      out <- joinVertices(out, inew, joinid, marks=joinmarks)
     } else stop("Format of 'join' is not understood", call.=FALSE)
   }
   attr(out, "id") <- inew
