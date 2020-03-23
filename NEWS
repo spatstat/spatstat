@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.63-3.011
+        CHANGES IN spatstat VERSION 1.63-3.012
 
 OVERVIEW
 
@@ -8,7 +8,7 @@ OVERVIEW
     
     o Interactive graphics functions removed to a separate package.
 
-    o spatstat no longer 'Suggests' the packages 'tcltk' and 'rpanel'
+    o spatstat no longer 'Suggests' the packages 'tcltk' and 'rpanel'.
 
     o Add new vertices to a linear network.
     
@@ -36,9 +36,19 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o pairdist.lpp
     Now handles larger networks.
 
+    o as.linnet.psp
+    The resulting network now has an attribute 'camefrom'
+    indicating the provenance of each line segment in the network.
+    
     o as.linnet.linnet
     New argument 'maxsize'.
 
+    o repairNetwork
+    Increased capability of detecting and repairing inconsistencies.
+    
+    o as.lpp
+    Accepts more data formats.
+    
     o iplot, iplot.ppp, iplot.layered, iplot.linnet, iplot.default
     These interactive plotting functions have been removed from spatstat
     into a new package 'spatstat.gui'
@@ -47,15 +57,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
     This interactive analysis function has been removed from spatstat
     into a new package 'spatstat.gui'
 
-    o as.lpp
-    Accepts more data formats.
-    
     o lengths.psp
     This function will soon be Deprecated,
     in favour of the new name 'lengths_psp'
-    
-    o repairNetwork
-    Increased capability of detecting and repairing inconsistencies.
     
 BUG FIXES
 

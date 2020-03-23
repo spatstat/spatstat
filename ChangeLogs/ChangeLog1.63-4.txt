@@ -265,3 +265,21 @@ Change log from 1.63-3 to 1.63-4
 ------------- passed R-3.6.3 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
+
+23 mar 2020
+
+   pspcross.R
+	selfcut.psp no longer checks for validity of the resulting segments.
+
+   linnet.R
+   as.linnet.psp.Rd
+	Result of as.linnet.psp now has attribute 'camefrom'.
+   
+   DESCRIPTION
+   NEWS
+	Version 1.63-3.012
+
+------------- passed R-3.6.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+

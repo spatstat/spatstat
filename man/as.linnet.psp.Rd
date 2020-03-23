@@ -48,15 +48,14 @@
 }
 \value{
 A linear network (object of class \code{"linnet"}).
+
+The result also has an attribute \code{"camefrom"} indicating
+the provenance of each line in the resulting network.
+For example \code{camefrom[3]=2} means that the third line segment
+in the result is a piece of the second segment of \code{X}.
 }
 \author{
-\adrian
-
-
-\rolf
-
-and \ege
-
+  \spatstatAuthors.
 }
 \seealso{
   \code{\link{linnet}}, \code{\link{selfcut.psp}},
@@ -68,12 +67,18 @@ and \ege
   B <- superimpose(A, as.psp(simplenet))
 
   # convert to a linear network
-  D <- as.linnet(B)
+  L <- as.linnet(B)
 
   # check validity
-  D
-  plot(D)
-  text(vertices(D), labels=vertexdegree(D))
+  L
+  plot(L)
+  text(vertices(L), labels=vertexdegree(L))
+
+  # show the pieces that came from original segment number 1
+  S <- as.psp(L)
+  (camefrom <- attr(L, "camefrom"))
+  parts <- which(camefrom == 1)
+  plot(S[parts], add=TRUE, col="green", lwd=2)
 }
 \keyword{spatial}
 \keyword{manip}

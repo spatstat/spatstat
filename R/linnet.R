@@ -294,6 +294,7 @@ as.linnet.linnet <- function(X, ..., sparse, maxsize=30000) {
 
 as.linnet.psp <- function(X, ..., eps, sparse=FALSE) {
   X <- selfcut.psp(X)
+  camefrom <- attr(X, "camefrom")
   V <- unique(endpoints.psp(X))
   if(missing(eps) || is.null(eps)) {
     eps <- sqrt(.Machine$double.eps) * diameter(Frame(X))
@@ -322,6 +323,7 @@ as.linnet.psp <- function(X, ..., eps, sparse=FALSE) {
   join <- fromto[nontrivial, , drop=FALSE]
   result <- linnet(V, edges=join, sparse=sparse)
   if(is.marked(X)) marks(result$lines) <- marks(X[nontrivial])
+  attr(result, "camefrom") <- camefrom[nontrivial]
   return(result)
 }
 
