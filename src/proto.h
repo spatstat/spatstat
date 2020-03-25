@@ -27,7 +27,8 @@ void crosscount(int *, double *, double *, int *, double *, double *, double *, 
 void Fcrosspairs(int *, double *, double *, int *, double *, double *, double *, int *, int *, int *, int *, double *, double *, double *, double *, double *, double *, double *, int *);
 void cocoImage(int *, int *, int *); 
 void cocoGraph(int *, int *, int *, int *, int *, int *);
-void lincrossdist(int *, double *, double *, int *, double *, double *, int *, double *, double *, double *, int *, int *, double *, int *, int *, double *);
+void linScrossdist(int *, int *, double *, int *, int *, double *, int *, int *, int *, int *, double *, double *, double *, double *); 
+void lincrossdist(int *, double *, double *, int *, double *, double *, int *, double *, double *, int *, int *, int *, double *, int *, int *, double *);
 void trigrafS(int *, int *, int *, int *, int *, int *, int *, int *, int *, int *); 
 void trigraf(int *, int *, int *, int *, int *, int *, int *, int *, int *, int *); 
 void Idist2dpath(int *, int *, int *, int *, int *, int *, int *);

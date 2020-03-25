@@ -299,3 +299,19 @@ Change log from 1.63-3 to 1.63-4
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
 
+25 mar 2020
+
+   linScrossdist.c [New file]
+   crossdistlpp.c
+	Experimental sparse algorithm for crossdist.lpp
+
+   tests/lppstuff.R
+	Test the new sparse algorithm for crossdist.lpp
+	
+   DESCRIPTION
+   NEWS
+	Version 1.63-3.014
+
+------------- passed R-3.6.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------

@@ -372,7 +372,7 @@ local({
 #
 # Tests for lpp code
 #
-#  $Revision: 1.51 $  $Date: 2020/03/23 07:29:09 $
+#  $Revision: 1.52 $  $Date: 2020/03/25 15:32:29 $
 
 
 require(spatstat)
@@ -874,6 +874,20 @@ local({
   ry <- rhohat(futm, "y")
   U <- predict(ry)
   Y <- simulate(ry)
+})
+
+local({
+  #' new code for crossdist.lpp
+   v <- split(chicago)
+   X <- v$cartheft
+   Y <- v$burglary
+   dC <- crossdist(X, Y, method="C")
+   dI <- crossdist(X, Y, method="interpreted")
+   dF <- crossdist(X, Y, method="C", newcode=TRUE)
+   if(max(abs(dC - dI)) > 0.01)
+     stop("crossdist.lpp: disagreement between C code and interpreted code")
+   if(max(abs(dF - dC)) > 0.01)
+     stop("crossdist.lpp: disagreement between sparse and non-sparse C code")
 })
 #'
 #'   lppmodels.R
