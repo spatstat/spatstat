@@ -285,16 +285,23 @@ Baddeley, A.J. Spatial sampling and censoring.
   John Wiley and Sons.
 } 
 \section{Warnings}{
-  The estimator of \eqn{K(r)} is approximately unbiased for each fixed \eqn{r}.
+  The estimator of \eqn{K(r)} is approximately unbiased for each fixed
+  \eqn{r}, for point processes which do not have very strong
+  interaction. (For point processes with a strong clustering interaction,
+  the estimator is negatively biased; for point processes with a strong
+  inhibitive interaction, the estimator is positively biased.)
+
   Bias increases with \eqn{r} and depends on the window geometry.
   For a rectangular window it is prudent to restrict the \eqn{r} values to
-  a maximum of \eqn{1/4} of the smaller side length of the rectangle.
+  a maximum of \eqn{1/4} of the smaller side length of the rectangle
+  (Ripley, 1977, 1988; Diggle, 1983).
   Bias may become appreciable for point patterns consisting of 
   fewer than 15 points.
  
   While \eqn{K(r)} is always a non-decreasing function, the estimator 
   of \eqn{K} is not guaranteed to be non-decreasing. This is rarely 
-  a problem in practice.
+  a problem in practice, except for the border correction estimators
+  when the number of points is small.
 }
 \seealso{
   \code{\link{localK}} to extract individual summands in the \eqn{K}

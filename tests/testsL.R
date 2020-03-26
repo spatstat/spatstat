@@ -372,7 +372,7 @@ local({
 #
 # Tests for lpp code
 #
-#  $Revision: 1.52 $  $Date: 2020/03/25 15:32:29 $
+#  $Revision: 1.54 $  $Date: 2020/03/26 04:11:32 $
 
 
 require(spatstat)
@@ -878,16 +878,27 @@ local({
 
 local({
   #' new code for crossdist.lpp
-   v <- split(chicago)
-   X <- v$cartheft
-   Y <- v$burglary
-   dC <- crossdist(X, Y, method="C")
-   dI <- crossdist(X, Y, method="interpreted")
-   dF <- crossdist(X, Y, method="C", newcode=TRUE)
-   if(max(abs(dC - dI)) > 0.01)
-     stop("crossdist.lpp: disagreement between C code and interpreted code")
-   if(max(abs(dF - dC)) > 0.01)
-     stop("crossdist.lpp: disagreement between sparse and non-sparse C code")
+  #' non-sparse
+  v <- split(chicago) 
+  X <- v$cartheft
+  Y <- v$burglary
+  dC <- crossdist(X, Y, method="C")
+  dI <- crossdist(X, Y, method="interpreted")
+  if(max(abs(dC - dI)) > 0.01)
+    stop("crossdist.lpp (non-sparse): disagreement between C and R")
+  #' convert to sparse
+  Chuck <- as.lpp(chicago, sparse=TRUE)
+  V <- split(Chuck)
+  X <- V$cartheft
+  Y <- V$burglary
+  dS <- crossdist(X, Y)
+  if(max(abs(dS - dC)) > 0.01)
+    stop("crossdist.lpp: disagreement between sparse and non-sparse")
+  #' disconnected 
+  L <- thinNetwork(simplenet, retainedges = -c(3,8))
+  X <- runiflpp(20, L)
+  Y <- runiflpp(15, L)
+  d <- crossdist(X,Y)
 })
 #'
 #'   lppmodels.R

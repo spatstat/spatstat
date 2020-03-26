@@ -302,7 +302,7 @@ Change log from 1.63-3 to 1.63-4
 25 mar 2020
 
    linScrossdist.c [New file]
-   crossdistlpp.c
+   crossdistlpp.R
 	Experimental sparse algorithm for crossdist.lpp
 
    tests/lppstuff.R
@@ -315,3 +315,29 @@ Change log from 1.63-3 to 1.63-4
 ------------- passed R-3.6.3 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
+
+   crossdistlpp.R
+   crossdist.lpp.Rd
+        Handles sparse networks using the new sparse algorithm linScrossdist.
+	New argument 'check'
+	
+   tests/lppstuff.R
+	Test the sparse algorithm and its agreement with the non-sparse one.
+
+   spatstat.options.Rd
+   Kest.Rd
+	Tweaks to the help files.
+
+   updates.Rnw
+	updated to cover all the above.
+	
+   DESCRIPTION
+   NEWS
+	Version 1.63-3.015
+
+------------- passed R-3.6.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+
+
+   

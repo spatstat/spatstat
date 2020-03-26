@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.63-3.014
+        CHANGES IN spatstat VERSION 1.63-3.015
 
 OVERVIEW
 
@@ -36,6 +36,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o pairdist.lpp
     Now handles larger networks.
 
+    o crossdist.lpp
+    Now handles larger networks, using the sparse representation.
+    New argument 'check'.
+    
     o as.linnet.psp
     The resulting network now has an attribute 'camefrom'
     indicating the provenance of each line segment in the network.

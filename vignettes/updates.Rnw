@@ -1441,6 +1441,15 @@ listed alphabetically.
 
   \item \texttt{convolve.im}: the name of the unit of length is preserved.
    
+  \item \texttt{crossdist.lpp}:
+    \begin{itemize}
+    \item 
+      Now handles much larger networks, using the sparse representation
+      of the network.
+    \item 
+      New argument \texttt{check}.
+    \end{itemize}
+
  \item \texttt{crossing.psp}:
     New argument \texttt{details} gives more information about the intersections
     between the segments.
@@ -2672,6 +2681,7 @@ listed alphabetically.
         \item Computation accelerated.
         \item The result now has an attribute \texttt{"camefrom"}
           indicating the provenance of each segment in the result.
+        \item No longer checks for validity of the resulting segments.
         \end{itemize}
         
   \item \texttt{setcov}: the name of the unit of length is preserved.
