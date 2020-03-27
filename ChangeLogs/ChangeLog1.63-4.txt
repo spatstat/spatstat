@@ -339,5 +339,24 @@ Change log from 1.63-3 to 1.63-4
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
 
+   linSpairdist.h [New file]
+   linSpairdist.c [New file]
+   pairdistlpp.R
+   	New sparse algorithm for pairdist.lpp
 
+   crossdist.lpp.Rd
+   pairdist.lpp.Rd
+	Improved explanation.
+
+   tests/lppstuff.R
+	Test the new sparse algorithm for pairdist.lpp
+	
+   DESCRIPTION
+   NEWS
+	Version 1.63-3.016
+
+------------- passed R-3.6.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+	
    

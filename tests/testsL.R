@@ -372,7 +372,7 @@ local({
 #
 # Tests for lpp code
 #
-#  $Revision: 1.54 $  $Date: 2020/03/26 04:11:32 $
+#  $Revision: 1.56 $  $Date: 2020/03/27 04:44:05 $
 
 
 require(spatstat)
@@ -877,6 +877,20 @@ local({
 })
 
 local({
+  #' new code for pairdist.lpp
+  X  <- runiflpp(15, simplenet)
+  dC <- pairdist(X, method="C")
+  dI <- pairdist(X, method="interpreted")
+  if(max(abs(dC - dI)) > 0.01)
+    stop("pairdist.lpp: disagreement between C and R")
+  XS <- as.lpp(X, sparse=TRUE)
+  dS <- pairdist(XS)
+  if(max(abs(dC - dS)) > 0.01)
+    stop("pairdist.lpp: disagreement between sparse and non-sparse C")
+  dU <- pairdist(XS, method="testsymm") # secret option
+  if(max(abs(dS - dU)) > 0.01)
+    stop("pairdist.lpp: disagreement between symmetric and asymmetric")
+  
   #' new code for crossdist.lpp
   #' non-sparse
   v <- split(chicago) 

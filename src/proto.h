@@ -163,6 +163,8 @@ void Clinvwhichdist(int *, int *, double *, int *, int *, int *, int *, double *
 void linvknndist(int *, int *, int *, double *, int *, int *, int *, int *, double *, double *, double *, double *, int *);
 void nnGinterface(int *, double *, double *, int *, double *, double *, int *, double *, double *, int *, int *, double *, int *, double *); 
 void knnGinterface(int *, double *, double *, int *, double *, double *, int *, double *, double *, int *, int *, int *, double *, int *, double *);
+void linSpairUdist(int *, int *, double *, int *, int *, int *, int *, double *, double *, double *, double *); 
+void linSpairdist(int *, int *, double *, int *, int *, int *, int *, double *, double *, double *, double *); 
 void linpairdist(int *, double *, double *, int *, double *, double *, double *, int *, int *, double *, int *, double *);
 void poly2imA(int *, int *, double *, double *, int *, double *, int *);
 void xypsi(int *, double *, double *, double *, double *, double *, double *, double *, int *, int *); 

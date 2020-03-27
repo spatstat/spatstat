@@ -132,6 +132,8 @@ static const R_CMethodDef CEntries[] = {
     {"linpairdist",       (DL_FUNC) &linpairdist,       12},
     {"linScrossdist",     (DL_FUNC) &linScrossdist,     14},
     {"linSnndwhich",      (DL_FUNC) &linSnndwhich,      15},
+    {"linSpairdist",      (DL_FUNC) &linSpairdist,      11},
+    {"linSpairUdist",     (DL_FUNC) &linSpairUdist,     11},
     {"lintileindex",      (DL_FUNC) &lintileindex,       9},
     {"linvknndist",       (DL_FUNC) &linvknndist,       13},
     {"locpcfx",           (DL_FUNC) &locpcfx,           12},

@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.63-3.015
+        CHANGES IN spatstat VERSION 1.63-3.016
 
 OVERVIEW
 
@@ -33,13 +33,10 @@ NEW FUNCTIONS
     
 SIGNIFICANT USER-VISIBLE CHANGES
 
-    o pairdist.lpp
-    Now handles larger networks.
+    o pairdist.lpp, crossdist.lpp
+    These functions can now handle large networks,
+    using the sparse representation.
 
-    o crossdist.lpp
-    Now handles larger networks, using the sparse representation.
-    New argument 'check'.
-    
     o as.linnet.psp
     The resulting network now has an attribute 'camefrom'
     indicating the provenance of each line segment in the network.
@@ -67,6 +64,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
     This interactive analysis function has been removed from spatstat
     into a new package 'spatstat.gui'
 
+    o crossdist.lpp
+    New argument 'check'.
+    
     o lengths.psp
     This function will soon be Deprecated,
     in favour of the new name 'lengths_psp'

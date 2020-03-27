@@ -55,15 +55,22 @@
   the distance between them is infinite (\code{Inf}).
 
   The argument \code{method} is not normally used. It is
-  retained only for checking the validity of the software.
-  It applies only when the network data are stored in the non-sparse
-  representation described in \code{\link{linnet}}.
-  If \code{method = "interpreted"} then the distances are
-  computed using interpreted R code. If \code{method="C"}
-  (the default) then the distances are computed using C code.
+  retained only for developers to check the validity of the software.
+}
+\section{Algorithms and accuracy}{
+  Distances are accurate within the numerical tolerance of the
+  network, \code{summary(X)$toler}.
+
+  For network data stored in the non-sparse
+  representation described in \code{\link{linnet}},
+  then pairwise distances are computed using the matrix of path distances
+  between vertices of the network, using \R code if
+  \code{method = "interpreted"}, or using \proglang{C} code if 
+  \code{method="C"} (the default).
+  
   For networks stored in the sparse representation,
   the argument \code{method} has no effect, and the distances are
-  computed using an efficient C algorithm.
+  computed using an efficient \proglang{C} algorithm.
 }
 \seealso{
   \code{\link{crossdist}},
@@ -76,6 +83,7 @@
    X <- v$cartheft
    Y <- v$burglary
    d <- crossdist(X, Y)
+   d[1:3,1:4]
 }
 \author{
   \adrian.
