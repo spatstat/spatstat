@@ -41,15 +41,14 @@ FNAME(np, sp, tp,  /* data points (ordered by sp) */
   double *seglen; 
   double *dist; 
 {
-  int Np, Nv, Npairs, i, j, k, ivleft, ivright, spi, spj, maxchunk;
-  double dleft, dright, deuclid, dij, hugevalue, slen, tpi, tpj;
+  int Np, Nv, i, j, ivleft, ivright, spi, spj;
+  double dleft, dright, dij, hugevalue, slen, tpi, tpj;
   double *dminvert;  /* min dist from each vertex */
   int one;
 
   Np = *np;
   Nv = *nv;
   hugevalue = *huge;
-  Npairs = Np * Np;
 
   if(Np <= 1) return;
   
@@ -114,8 +113,8 @@ FNAME(np, sp, tp,  /* data points (ordered by sp) */
 	dright = slen * (1.0 - tpi) + dminvert[ivright];
 	dij = (dleft < dright) ? dleft : dright;
 #ifdef VERBOSE
-	Rprintf("\tDistance to left endpoint %d is %lf\n", ivleft, dleft);
-	Rprintf("\tDistance to right endpoint %d is %lf\n", ivright, dright);
+	Rprintf("\tDistance via left endpoint %d is %lf\n", ivleft, dleft);
+	Rprintf("\tDistance via right endpoint %d is %lf\n", ivright, dright);
 #endif
       }
 #ifdef VERBOSE

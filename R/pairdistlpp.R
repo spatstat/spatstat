@@ -1,7 +1,7 @@
 #
 # pairdistlpp.R
 #
-#  $Revision: 1.18 $ $Date: 2020/03/27 02:18:34 $
+#  $Revision: 1.20 $ $Date: 2020/03/29 09:08:05 $
 #
 #
 #  pairdist.lpp
@@ -54,12 +54,12 @@ pairdist.lpp <- function(X, ..., method="C") {
     to0   <- to - 1L
     Xseg0 <- Xseg - 1L
     ## sort points by increasing segment index
-    ordX <- fave.order(Xseg0)
+    ordX <- order(Xseg0, tX)
     Xseg0 <- Xseg0[ordX]
     tX    <- tX[ordX]
     ## network info
     seglen <- lengths_psp(L$lines)
-    huge <- diameter(Frame(L))
+    huge <- 2 * sum(seglen)
     tol <- L$toler %orifnull% default.linnet.tolerance(L)
     ##
     if(method == "testsymm") {

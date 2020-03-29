@@ -358,5 +358,22 @@ Change log from 1.63-3 to 1.63-4
 ------------- passed R-3.6.3 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
+
+   pairdistlpp.R
+   crossdistlpp.R
+   linSpairdist.h
+	Tweaks/ bug fixes 
+
+   tests/lppstuff.R
+	Test bug fixes.
 	
+   DESCRIPTION
+   NEWS
+	Version 1.63-3.017
+
+------------- passed R-3.6.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+
+
    

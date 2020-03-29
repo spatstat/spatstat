@@ -1,7 +1,7 @@
 #
 # crossdistlpp.R
 #
-#  $Revision: 1.9 $ $Date: 2020/03/26 02:49:05 $
+#  $Revision: 1.11 $ $Date: 2020/03/29 09:08:10 $
 #
 #  crossdist.lpp
 #        Calculates the shortest-path distance from each point of X
@@ -64,15 +64,15 @@ crossdist.lpp <- function(X, Y, ..., method="C", check=TRUE) {
     Xseg0 <- Xseg - 1L
     Yseg0 <- Yseg - 1L
     ## sort each set of points by increasing segment index
-    ordX <- fave.order(Xseg0)
+    ordX <- order(Xseg0, tX)
     Xseg0 <- Xseg0[ordX]
     tX    <- tX[ordX]
-    ordY <- fave.order(Yseg0)
+    ordY <- order(Yseg0, tY)
     Yseg0 <- Yseg0[ordY]
     tY    <- tY[ordY]
     ## network info
     seglen <- lengths_psp(L$lines)
-    huge <- diameter(Frame(L))
+    huge <- 2 * sum(seglen)
     tol <- L$toler %orifnull% default.linnet.tolerance(L)
     ## 
     zz <- .C("linScrossdist",

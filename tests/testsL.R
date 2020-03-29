@@ -372,7 +372,7 @@ local({
 #
 # Tests for lpp code
 #
-#  $Revision: 1.56 $  $Date: 2020/03/27 04:44:05 $
+#  $Revision: 1.57 $  $Date: 2020/03/29 10:21:23 $
 
 
 require(spatstat)
@@ -876,6 +876,8 @@ local({
   Y <- simulate(ry)
 })
 
+reset.spatstat.options()
+
 local({
   #' new code for pairdist.lpp
   X  <- runiflpp(15, simplenet)
@@ -913,7 +915,18 @@ local({
   X <- runiflpp(20, L)
   Y <- runiflpp(15, L)
   d <- crossdist(X,Y)
+
+  ## example where the path is very long (covers a previous bug)
+  X <- dendrite[c(349,563)]
+  a <- pairdist(X, method="testsymm")
+  if(max(abs(a-t(a))) > 0.01)
+    stop("pairdist.lpp: asymmetry for long distances")
+  b <- pairdist(as.lpp(X, sparse=FALSE))
+  if(max(abs(a-b)) > 0.01)
+    stop("pairdist.lpp: disagreement sparse vs non-sparse for long distance")
 })
+
+reset.spatstat.options()
 #'
 #'   lppmodels.R
 #'
