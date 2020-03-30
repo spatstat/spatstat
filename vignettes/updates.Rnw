@@ -2125,8 +2125,10 @@ listed alphabetically.
    New argument \texttt{W} allows an image to be padded out to fill any window.
 
    
- \item \texttt{pairdist.lpp}: now handles larger networks.
-   
+ \item \texttt{pairdist.lpp}: 
+   Now handles much larger networks, using the sparse representation
+   of the network.
+
  \item \texttt{pairorient}: Default edge corrections now include 
    \texttt{"bord.modif"}.
    

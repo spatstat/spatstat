@@ -552,9 +552,10 @@
 \alias{rescale.msr}
 \alias{resolveEinfo}
 \alias{resolve.foxall.window}
-\alias{resolve.vargamma.shape}
+\alias{resolve.heat.steps}
 \alias{resolve.lambda}
 \alias{resolve.lambda.cross}
+\alias{resolve.vargamma.shape}
 \alias{rgbNA}
 \alias{rhohatEngine}
 \alias{rhohatCalc}
@@ -1465,12 +1466,17 @@ representativeRows(x)
 \method{rescale}{msr}(X, s, unitname)
 resolveEinfo(x, what, fallback, warn, atomic)
 resolve.foxall.window(X, Y, W, warn.trim)
-resolve.vargamma.shape(\dots, nu.ker, nu.pcf, default)
+resolve.heat.steps(sigma, \dots, dx, dt,
+                   nsplit, nlixels, niter, iterMax,
+                   seglengths, maxdegree, AMbound, L,
+                   W, eps, dimyx, xy, finespacing,
+                   allow.adjust, warn.adjust, verbose)
 resolve.lambda(X, lambda, \dots, sigma, varcov, leaveoneout, update)
 resolve.lambda.cross(X, I, J, lambdaI, lambdaJ, \dots, lambdaX,
                      sigma, varcov, leaveoneout, update, lambdaIJ,
                      Iexplain, Jexplain, miss.update, miss.leave,
                      caller)
+resolve.vargamma.shape(\dots, nu.ker, nu.pcf, default)
 rgbNA(red, green, blue, alpha, maxColorValue)
 rhohatEngine(model, covariate, reference, volume, \dots,
                subset, weights, method, horvitz, smoother, resolution, 

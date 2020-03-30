@@ -340,3 +340,218 @@ FDMKERNEL <- function(lppobj, sigma, dtt, weights=NULL, iterMax=5000,
               deltat     = dtt)
   return(out)
 }
+
+
+resolve.heat.steps <-
+  function(sigma, ...,
+           dx=NULL, # spacing of sample points
+           dt=NULL, # time step
+           nsplit=30, # default rule average number of pieces per edge
+           nlixels=100, # default rule total number of pieces
+           niter=NULL,  # number of iterations
+           iterMax=100000, # maximum number of iterations (can be Inf)
+           seglengths=NULL, # lengths of network edges
+           maxdegree=NULL, # maximum vertex degree
+           AMbound=NULL, # Anderson-Morley bound
+           L=NULL, # optional linear network from which to extract data
+           W=NULL, eps=NULL, dimyx=NULL, xy=NULL, # pixel resolution
+           finespacing=TRUE, # choice of default rule
+           allow.adjust=TRUE, # 'niter' can be changed
+           warn.adjust=verbose, verbose=TRUE)
+{
+  check.1.real(sigma)  # infinite sigma is allowed
+  dx.given    <- !is.null(dx) && check.1.real(dx)
+  dt.given    <- !is.null(dt) && check.1.real(dt)
+  niter.given <- !is.null(niter) && check.1.integer(niter)
+  one <- 1 + .Machine$double.eps
+  
+  ## ---------- CHARACTERISTICS OF NETWORK ------------------
+  if(is.null(L)) {
+    check.nvector(seglengths, nsegments(L), things="edges of the network")
+    check.1.integer(maxdegree)
+    check.1.integer(AMbound)
+  } else {
+    L <- as.linnet(L)
+    if(is.null(seglengths)) seglengths <- lengths_psp(as.psp(L))
+    if(is.null(maxdegree) || is.null(AMbound)) {
+      verdeg <- vertexdegree(L)
+      maxdegree <- max(verdeg)
+      AMbound <- max(verdeg[L$from] + verdeg[L$to])
+    }
+    if(is.null(W)) W <- Frame(L)
+  }
+  ## segment lengths
+  nseg <- length(seglengths)
+  lmin <- min(seglengths)
+  lbar <- mean(seglengths)
+  ltot <- lbar * nseg
+  if(verbose) {
+    splat(" Network:")
+    splat("    total length =", ltot)
+    splat("    number of edges =", nseg)
+    splat("    average edge length = ", lbar)
+    splat("    shortest edge length = ", lmin)
+  }
+
+  ## ----------- TIME STEP dt ------  (if given) -----------------------
+  if(niter.given) {
+    if(verbose) splat(" Given: niter =", niter)
+    stopifnot(niter >= 10)
+    stopifnot(niter <= iterMax)
+    dtOLD <- dt
+    dt <- sigma^2/(2  * niter)
+    if(dt.given) {
+      if(!allow.adjust)
+        stop("Only one of the arguments dt and niter should be given", call.=FALSE)
+      quibble <- paste("Time step dt was adjusted from", dtOLD,
+                      "to sigma^2/(2 * niter) =",
+                      sigma^2, "/", 2 * niter, "=", dt)
+      if(warn.adjust) warning(quibble, call.=FALSE)
+      if(verbose) splat(quibble)
+    } else if(verbose) splat(" dt =", dt)
+  } else if(dt.given) {
+    if(verbose) splat(" Given: dt =", dt)
+    niter <- round(sigma^2/(2*dt))
+    if(niter > iterMax) {
+      problem <- paste("Time step dt =", dt,
+                       "implies number of iterations =", niter,
+                       "exceeds maximum iterMax =", iterMax)
+      if(!allow.adjust)
+        stop(paste0(problem, "; increase dt or increase iterMax"),
+             call.=FALSE)
+      niter <- iterMax
+      dt <- sigma^2/(2 * niter)
+      if(warn.adjust || verbose) {
+        comment <- paste0(problem,
+                          "; niter reduced to iterMax and dt increased to ", dt)
+        if(warn.adjust) warning(comment, call.=FALSE)
+        if(verbose) splat(comment)
+      }
+    } else if(verbose) splat(" niter =", niter)
+  }
+
+  ## check dt satisfies basic constraint
+  if((dt.known <- dt.given || niter.given)) {
+    dxmax <- lmin/3
+    dtmax <- min(0.95 * (dxmax^2)/AMbound, sigma^2/(2 * 10), sigma * dxmax/6)
+    niterMin <- round(sigma^2/(2 * dtmax))
+    if(niterMin > iterMax) 
+      stop(paste("Minimum number of iterations required is", niterMin,
+                 "which exceeds iterMax =", iterMax,
+                 "; increase iterMax or reduce sigma"),
+           call.=FALSE)
+    if(dt > dtmax) {
+      #' allow rounding error
+      really <- (dt > dtmax * one)
+      dtOLD <- dt
+      dt <- dtmax
+      if(really) {
+        gripe <- paste("Time step dt =", dtOLD,
+                       if(allow.adjust) "reduced to" else "exceeds",
+                       "maximum permitted value =", dtmax)
+        if(!allow.adjust) stop(gripe, call.=FALSE)
+        if(warn.adjust) warning(gripe, call.=FALSE)
+        if(verbose) splat(gripe)
+        if(niter.given) {
+          niter <- round(sigma^2/(2 * dt))
+          comment <- paste("niter adjusted to", niter)
+          if(warn.adjust) warning(comment, call.=FALSE)
+          if(verbose) splat(comment)
+        }
+      }
+    }
+  }
+  
+  #' ------------- SPACING OF SAMPLE POINTS, dx ---------------
+  if(dx.given) {
+    if(verbose) splat(" Given: dx =", dx)
+    check.finite(dx)
+    stopifnot(dx > 0)
+    if(dx > lmin/3)
+      stop(paste("dx must not exceed (shortest edge length)/3 =", lmin/3),
+           call.=FALSE)
+  } else if(dt.known) {
+    ## determine dx from dt
+    dx <- max(6 * dt/sigma^2, sqrt(dt * AMbound/0.95))
+  } else {
+    #' default rule
+    dx <- min(lbar/nsplit, ltot/nlixels, lmin/3)
+    if(verbose) {
+      splat(" Mean Edge Length/", nsplit, "=", lbar/nsplit)
+      splat(" Total Network Length/", nlixels, "=", ltot/nlixels)
+      splat(" Min Edge Length/3 = ", lmin/3)
+      splat(" dx = minimum of the above =", dx)
+    }
+    if(!finespacing && is.owin(W)) {
+      W <- Frame(W)
+      #' allow coarser spacing, determined by pixel size
+      eps <- if(!is.null(eps)) min(eps)
+             else if(!is.null(dimyx)) min(sidelengths(W)/rev(dimyx))
+             else if(!is.null(xy)) with(as.mask(W, xy=xy), min(xstep, ystep))
+             else min(sidelengths(W)/spatstat.options("npixel"))
+      dx <- max(dx, eps/1.4)
+      if(verbose) {
+        splat(" Pixel size/1.4 =", eps/1.4)
+        splat(" Coarse spacing rule: dx = ", dx)
+      }
+    }
+    nlixels <- ceiling(ltot/dx)
+    nlixels <- min(nlixels, .Machine$integer.max)
+    dx <- ltot/nlixels
+    if(verbose) {
+      splat(" Rounded total number of lixels =", nlixels)
+      splat(" dx =", dx)
+    }
+  }
+
+  #' ------------- TIME STEP dt ----------------------------------
+  dtmax <- min(0.95 * (dx^2)/AMbound, sigma^2/(2 * 10), sigma * dx/6)
+  if(!dt.known) {
+    dt <- dtmax
+    if(verbose) 
+      splat(" dt (determined by constraints) = ", dt)
+  } else if(dt > dtmax) {
+    really <- (dt > dtmax * one)
+    dtOLD <- dt
+    dt <- dtmax
+    if(really) {
+      gripe <- paste("Time step dt =", dtOLD,
+                     if(allow.adjust) "reduced to" else "exceeds",
+                     "maximum permitted value =", dtmax)
+      if(!allow.adjust) stop(gripe, call.=FALSE)
+      if(warn.adjust) warning(gripe, call.=FALSE)
+      if(verbose) splat(gripe)
+      if(niter.given) {
+        niter <- round(sigma^2/(2 * dt))
+        comment <- paste("niter adjusted to", niter)
+        if(warn.adjust) warning(comment, call.=FALSE)
+        if(verbose) splat(comment)
+      }
+    }
+  }
+
+  #' finally determine the number of iterations, if not already done.
+
+  if(is.null(niter)) {
+    niter <- round(sigma^2/(2 * dt))
+    dt <- sigma^2/(2 * niter)
+    if(verbose) {
+      splat(" Number of iterations (determined from dt) =", niter)
+      splat(" Updated dt =", dt)
+    }
+  }
+
+  if(niter > iterMax)
+    stop(paste("Required number of iterations =", niter,
+               "exceeds iterMax =", iterMax,
+               "; either increase iterMax, dx, dt or reduce sigma"),
+         call.=FALSE)
+
+  if(verbose) {
+    splat(" Final values:")
+    splat("   Time step dt = ", dt)
+    splat("   Sample spacing dx = ", dx)
+    splat("   Number of iterations niter = ", niter)
+  }
+  return(list(dt=dt, dx=dx, niter=niter))
+}
