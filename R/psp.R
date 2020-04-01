@@ -1,7 +1,7 @@
 #
 #  psp.R
 #
-#  $Revision: 1.103 $ $Date: 2020/03/16 10:28:51 $
+#  $Revision: 1.104 $ $Date: 2020/04/01 04:36:39 $
 #
 # Class "psp" of planar line segment patterns
 #
@@ -278,51 +278,40 @@ marks.psp <- function(x, ..., dfok = TRUE) {
 
 "marks<-.psp" <- function(x, ..., value) {
   stopifnot(is.psp(x))
-  if(is.null(value)) {
-    return(unmark(x))
-  }
+  if(is.null(value)) return(unmark(x))
   m <- value
+  if(is.hyperframe(m)) 
+    stop("Hyperframes of marks are not supported in psp objects.\n")
   if(!(is.vector(m) || is.factor(m) || is.data.frame(m) || is.matrix(m)))
     stop("Incorrect format for marks")
 
-    if (is.hyperframe(m)) 
-        stop("Hyperframes of marks are not supported in psp objects.\n")
-    nseg <- nsegments(x)
-    if (!is.data.frame(m) && !is.matrix(m)) {
-        if (length(m) == 1) 
-            m <- rep.int(m, nseg)
-        else if (nseg == 0) 
-            m <- rep.int(m, 0)
-        else if (length(m) != nseg) 
-            stop("Number of marks != number of line segments.\n")
-        marx <- m
-    }
-    else {
-        m <- as.data.frame(m)
-        if (ncol(m) == 0) {
-            marx <- NULL
-        }
-        else {
-            if (nrow(m) == nseg) {
-                marx <- m
-            }
-            else {
-                if (nrow(m) == 1 || nseg == 0) {
-                  marx <- as.data.frame(lapply(as.list(m), rep.int, times=nseg))
-                }
-                else stop("Number of rows of data frame != number of points.\n")
-            }
-        }
-    }
-    Y <- as.psp(x$ends, window = x$window, marks = marx, check = FALSE)
-    return(Y)
+  nseg <- nsegments(x)
+  if (!is.data.frame(m) && !is.matrix(m)) {
+    ## vector/factor
+    if (length(m) == 1) 
+      m <- rep.int(m, nseg)
+    else if (nseg == 0) 
+      m <- rep.int(m, 0)
+    else if (length(m) != nseg) 
+      stop("Number of marks != number of line segments.\n")
+    marx <- m
+  } else {
+    ## multiple columns
+    m <- as.data.frame(m)
+    if (ncol(m) == 0) {
+      marx <- NULL
+    } else if (nrow(m) == nseg) {
+      marx <- m
+    } else if (nrow(m) == 1 || nseg == 0) {
+      marx <- as.data.frame(lapply(as.list(m), rep.int, times=nseg))
+    } else stop("Number of rows of data frame != number of line segments")
+  }
+  Y <- as.psp(x$ends, window = x$window, marks = marx, check = FALSE)
+  return(Y)
 }
 
 markformat.psp <- function(x) {
-    mf <- x$markformat
-    if(is.null(mf)) 
-      mf <- markformat(marks(x))
-    return(mf)
+  x$markformat %orifnull% markformat(marks(x))
 }
 
 unmark.psp <- function(X) {

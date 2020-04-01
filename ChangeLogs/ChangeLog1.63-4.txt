@@ -402,3 +402,21 @@ Change log from 1.63-3 to 1.63-4
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
 
+01 april 2020
+
+   linnetsurgery.R
+	Bug fix.
+	Internal error checks.
+
+   psp.R
+	Improved an error message.
+
+   DESCRIPTION
+   NEWS
+   Nickname.txt
+	Nickname changed to "Poisson d'Avril"
+	Version 1.63-3.019
+
+------------- passed R-3.6.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------

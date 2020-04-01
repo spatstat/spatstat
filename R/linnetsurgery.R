@@ -3,7 +3,7 @@
 #'
 #' Surgery on linear networks and related objects
 #'
-#' $Revision: 1.30 $  $Date: 2020/03/23 07:39:37 $
+#' $Revision: 1.31 $  $Date: 2020/04/01 04:44:15 $
 #'
 
 insertVertices <- function(L, ...) {
@@ -80,7 +80,7 @@ insertVertices <- function(L, ...) {
     fromadd <- c(fromadd, fromnew)
     toadd <- c(toadd, tonew)
     id <- c(id, idadd)
-    comefrom <- c(comefrom, rep(theseg, nnew))
+    comefrom <- c(comefrom, rep(theseg, nnewseg))
     ## handle data points if any
     if(haspoints && any(relevant <- (segXold == theseg))) {
       tx <- tpXold[relevant]
@@ -110,6 +110,10 @@ insertVertices <- function(L, ...) {
   #' save information on provenance of line segments
   S <- Lnew$lines
   attr(S, "comefrom") <- comefrom
+  if(length(comefrom) != nsegments(S))
+    stop(paste("Internal error: length of provenance vector =",
+               length(comefrom), "!=", nsegments(S), "= number of segments"),
+         call.=FALSE)
   #' copy marks
   if(!is.null(marx <- marks(L$lines))) 
     marks(S) <- as.data.frame(marx)[comefrom, , drop=FALSE]
