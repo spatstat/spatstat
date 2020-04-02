@@ -328,7 +328,6 @@
 \alias{packupNNdata}
 \alias{parbreak}
 \alias{PairPotentialType}
-\alias{PDEdensityLPP}
 \alias{plan.legend.layout}
 \alias{plotWidthMap}
 \alias{pointweights}
@@ -1197,8 +1196,6 @@ parbreak(terse)
 plan.legend.layout(B, \dots, side, sep, size, sep.frac, size.frac,
                    started, map)
 PairPotentialType(pairpot)
-PDEdensityLPP(x, sigma, \dots, weights, dx, dt, iterMax,
-              fun, finespacing, finedata)
 plotWidthMap(bb.leg, zlim, phys.scale, leg.scale, leg.side, leg.args, grafpar)
 pointweights(X, \dots, weights, parent)
 PoisSaddle(beta, fi)

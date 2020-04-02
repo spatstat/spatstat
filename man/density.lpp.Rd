@@ -12,11 +12,8 @@
 \method{density}{lpp}(x, sigma=NULL, \dots,
         weights=NULL,
         distance=c("path", "euclidean"),
-        kernel="gaussian",
         continuous=TRUE,
-        epsilon = 1e-06, verbose = TRUE,
-        debug = FALSE, savehistory = TRUE,
-        old=FALSE)
+        kernel="gaussian")
 
 \method{density}{splitppx}(x, sigma=NULL, \dots)
 }
@@ -30,8 +27,11 @@
     in the same units as the spatial coordinates of \code{x}.
   }
   \item{\dots}{
-    Arguments passed to \code{\link{as.mask}} determining the
-    resolution of the result.
+    Additional arguments controlling the algorithm
+    and the spatial resolution of the result.
+    These arguments are passed either to
+    \code{\link{densityQuick.lpp}}, \code{\link{densityHeat}}
+    or \code{\link{densityEqualSplit}} depending on the algorithm chosen.
   }
   \item{weights}{
     Optional. Numeric vector of weights associated with the
@@ -51,24 +51,6 @@
     \dQuote{equal-split continuous} smoother (\code{continuous=TRUE}, the
     default) or the \dQuote{equal-split discontinuous} smoother
     (\code{continuous=FALSE}). Applies only when \code{distance="path"}.
-  }
-  \item{epsilon}{
-    Tolerance value. A tail of the kernel with total mass
-    less than \code{epsilon} may be deleted.
-  }
-  \item{verbose}{
-    Logical value indicating whether to print progress reports.
-  }
-  \item{debug}{
-    Logical value indicating whether to print debugging information.
-  }
-  \item{savehistory}{
-    Logical value indicating whether to save the entire history of the
-    algorithm, for the purposes of evaluating performance.
-  }
-  \item{old}{
-    Logical value indicating whether to use the old, very slow algorithm
-    for the equal-split continuous estimator.
   }
 }
 \details{
@@ -93,26 +75,29 @@
       If \code{continuous=FALSE}, smoothing is performed
       using the \dQuote{equal-split discontinuous} rule described in
       Section 9.2.2 of Okabe and Sugihara (2012). The
-      resulting function is not continuous.
+      resulting function is continuous except at the network vertices.
       \item
       In the default case
       (where \code{distance="path"} and
-      \code{continuous=TRUE} and \code{kernel="gaussian"}
-      and \code{old=FALSE}),
+      \code{continuous=TRUE} and \code{kernel="gaussian"},
       computation is performed rapidly by solving the classical heat equation
       on the network, as described in McSwiggan et al (2016).
+      The arguments are passed to \code{\link{densityHeat}} which performs
+      the computation.
       Computational time is short, but increases quadratically
       with \code{sigma}.
-      The arguments \code{epsilon,debug,verbose,savehistory} are ignored.
       \item
       In all other cases, computation is performed by path-tracing
       as described in Okabe and Sugihara (2012);
-      computation can be extremely slow, and time
+      the arguments are passed to \code{\link{densityEqualSplit}}
+      which performs the computation.
+      Computation time can be extremely long, and
       increases exponentially with \code{sigma}.
     }
     \item If \code{distance="euclidean"}, the smoothing is performed
     using a two-dimensional kernel. The arguments are passed to
     \code{\link{densityQuick.lpp}} to perform the computation.
+    Computation time is very short.
     See the help for \code{\link{densityQuick.lpp}} for further details.
   }
   There is also a method for split point patterns on a linear network
@@ -142,6 +127,8 @@ Okabe, A. and Sugihara, K. (2012)
   X <- runiflpp(3, simplenet)
   D <- density(X, 0.2, verbose=FALSE)
   plot(D, style="w", main="", adjust=2)
+  Dq <- density(X, 0.2, distance="euclidean")
+  plot(Dq, style="w", main="", adjust=2)
   Dw <- density(X, 0.2, weights=c(1,2,-1), verbose=FALSE)
   De <- density(X, 0.2, kernel="epanechnikov", verbose=FALSE)
   Ded <- density(X, 0.2, kernel="epanechnikov", continuous=FALSE, verbose=FALSE)

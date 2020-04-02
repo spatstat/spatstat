@@ -9,21 +9,39 @@
 density.lpp <- function(x, sigma=NULL, ...,
                         weights=NULL,
                         distance=c("path", "euclidean"),
-                        kernel="gaussian", 
                         continuous=TRUE,
-                        epsilon=1e-6,
-                        verbose=TRUE, debug=FALSE, savehistory=TRUE,
-                        old=FALSE) {
+                        kernel="gaussian") {
   stopifnot(inherits(x, "lpp"))
   distance <- match.arg(distance)
 
-  if(distance == "euclidean") 
+  if(distance == "euclidean") {
+    #' Euclidean 2D kernel
     return(densityQuick.lpp(x, sigma, ..., kernel=kernel, weights=weights))
-  
-  kernel <- match.kernel(kernel)
-  if(continuous && (kernel == "gaussian") && !old)
-     return(PDEdensityLPP(x, sigma, ..., weights=weights))
+  }
 
+  #' kernel is 1-D
+  kernel <- match.kernel(kernel)
+  if(continuous && (kernel == "gaussian")) {
+    #' equal-split continuous with Gaussian kernel: use heat equation
+    return(densityHeat(x, sigma, ..., weights=weights))
+  }
+
+  ##' Okabe-Sugihara equal-split method
+  return(densityEqualSplit(x, sigma, ..., kernel=kernel, weights=weights))
+}
+
+density.splitppx <- function(x, sigma=NULL, ...) {
+  if(!all(sapply(x, is.lpp)))
+    stop("Only implemented for patterns on a linear network")
+  solapply(x, density.lpp, sigma=sigma, ...)
+}
+
+densityEqualSplit <- function(x, sigma=NULL, ...,
+                              weights=NULL,
+                              kernel="epanechnikov",
+                              continuous=TRUE,
+                              epsilon=1e-6,
+                              verbose=TRUE, debug=FALSE, savehistory=TRUE) {
   L <- as.linnet(x)
   # weights
   np <- npoints(x)
@@ -182,21 +200,17 @@ density.lpp <- function(x, sigma=NULL, ...,
   return(out)
 }
 
-density.splitppx <- function(x, sigma=NULL, ...) {
-  if(!all(sapply(x, is.lpp)))
-    stop("Only implemented for patterns on a linear network")
-  solapply(x, density.lpp, sigma=sigma, ...)
-}
 
-PDEdensityLPP <- function(x, sigma, ..., weights=NULL, 
-                          dx=NULL, dt=NULL, 
-                          iterMax=1e6,
-                          fun=FALSE, 
-                          finespacing=FALSE, finedata=finespacing) {
+densityHeat <- function(x, sigma, ..., weights=NULL, 
+                        dx=NULL, dt=NULL, iterMax=1e6) {
   stopifnot(is.lpp(x))
   L <- as.linnet(x)
   check.1.real(sigma)
   check.finite(sigma)
+  ## secret arguments
+  fun         <- resolve.1.default(list(fun=FALSE), list(...))
+  finespacing <- resolve.1.default(list(finespacing=FALSE), list(...))
+  ## 
   if(!is.null(weights)) 
     check.nvector(weights, npoints(x))
   if(is.null(dx)) {
@@ -345,10 +359,10 @@ FDMKERNEL <- function(lppobj, sigma, dtt, weights=NULL, iterMax=5000,
 resolve.heat.steps <-
   function(sigma, ...,
            ## main parameters (all are optional)
-           ## A=adjustable by code, F=fixed, F*=adjustable only if allow.adjust=TRUE
+           ##  A=adjustable by code, F=fixed, A*=adjustable only if allow.adjust=TRUE
            dx=NULL, # spacing of sample points (A)
-           dt=NULL, # time step (A)
-           niter=NULL,  # number of iterations (F*)
+           dt=NULL, # time step                (A)
+           niter=NULL,  # number of iterations (A*)
            iterMax=100000, # maximum number of iterations (can be Inf) (F)
            nsave=1, # number of time points for which data should be saved (F)
            ## network information

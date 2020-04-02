@@ -439,3 +439,24 @@ Change log from 1.63-3 to 1.63-4
 ------------- passed R-3.6.3 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
+
+   density.lpp.R
+   spatstat-internal.Rd
+   density.lpp.Rd
+   densityHeat.Rd [New file]
+   densityEqualSplit.Rd [New file]
+   	Reorganised density.lpp as a wrapper for three functions
+	densityQuick.lpp, densityHeat and densityEqualSplit
+	which are all visible and separately documented.
+
+   DESCRIPTION
+   NEWS
+   Nickname.txt
+	Version 1.63-3.021
+
+------------- passed R-3.6.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+
+
+	 

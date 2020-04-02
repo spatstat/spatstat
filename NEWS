@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.63-3.020
+        CHANGES IN spatstat VERSION 1.63-3.021
 
 OVERVIEW
 
@@ -30,6 +30,14 @@ NEW FUNCTIONS
     o lengths_psp
     This is the new name of the function 'lengths.psp',
     which had to be changed because of a conflict with the generic 'lengths'.
+
+    o densityHeat
+    The heat-equation algorithm for kernel density estimation on a network
+    is now visible as a separate function.
+
+    o densityEqualSplit
+    The equal-split algorithm for kernel density estimation on a network
+    is now visible as a separate function.
     
 SIGNIFICANT USER-VISIBLE CHANGES
 
@@ -52,7 +60,7 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o insertVertices
     Marks attached to the lines of the network are now retained.
-    
+
     o as.lpp
     Accepts more data formats.
     
@@ -70,6 +78,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o lengths.psp
     This function will soon be Deprecated,
     in favour of the new name 'lengths_psp'
+
+    o density.lpp
+    Formal arguments changed. No effect on usage.
     
 BUG FIXES
 
