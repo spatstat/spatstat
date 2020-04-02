@@ -420,3 +420,22 @@ Change log from 1.63-3 to 1.63-4
 ------------- passed R-3.6.3 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
+
+02 april 2020
+
+   density.lpp.R
+   spatstat-internal.Rd
+	Extended resolve.heat.steps
+
+   tests/lppstuff.R
+	More tests of resolve.heat.steps
+
+   DESCRIPTION
+   NEWS
+   Nickname.txt
+	Nickname changed to "Correct at time of publication"
+	Version 1.63-3.020
+
+------------- passed R-3.6.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------

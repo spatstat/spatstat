@@ -344,27 +344,46 @@ FDMKERNEL <- function(lppobj, sigma, dtt, weights=NULL, iterMax=5000,
 
 resolve.heat.steps <-
   function(sigma, ...,
-           dx=NULL, # spacing of sample points
-           dt=NULL, # time step
-           nsplit=30, # default rule average number of pieces per edge
-           nlixels=100, # default rule total number of pieces
-           niter=NULL,  # number of iterations
-           iterMax=100000, # maximum number of iterations (can be Inf)
+           ## main parameters (all are optional)
+           ## A=adjustable by code, F=fixed, F*=adjustable only if allow.adjust=TRUE
+           dx=NULL, # spacing of sample points (A)
+           dt=NULL, # time step (A)
+           niter=NULL,  # number of iterations (F*)
+           iterMax=100000, # maximum number of iterations (can be Inf) (F)
+           nsave=1, # number of time points for which data should be saved (F)
+           ## network information
            seglengths=NULL, # lengths of network edges
            maxdegree=NULL, # maximum vertex degree
            AMbound=NULL, # Anderson-Morley bound
            L=NULL, # optional linear network from which to extract data
+           ## rules 
+           finespacing=TRUE, # if FALSE, use spacing implied by pixel resolution
+                             # if TRUE,  use finer spacing 
+           fineNsplit=30, # finespacing rule average number of pieces per edge
+           fineNlixels=100, # finespacing rule total number of pieces
            W=NULL, eps=NULL, dimyx=NULL, xy=NULL, # pixel resolution
-           finespacing=TRUE, # choice of default rule
            allow.adjust=TRUE, # 'niter' can be changed
-           warn.adjust=verbose, verbose=TRUE)
+           warn.adjust=verbose,
+           verbose=TRUE,
+           stepnames=list(time="dt", space="dx"))
 {
   check.1.real(sigma)  # infinite sigma is allowed
+  check.1.integer(nsave)
+  stopifnot(nsave >= 1)
   dx.given    <- !is.null(dx) && check.1.real(dx)
   dt.given    <- !is.null(dt) && check.1.real(dt)
   niter.given <- !is.null(niter) && check.1.integer(niter)
-  one <- 1 + .Machine$double.eps
+  nsave.given <- (nsave > 1)
   
+  one <- 1 + .Machine$double.eps # tolerance for comparisons
+
+  if(verbose) {
+    if(dx.given) splat("Given: dx =", dx)
+    if(dt.given) splat("Given: dt =", dx)
+    if(niter.given) splat("Given: niter =", niter)
+    if(nsave.given) splat("Given: nsave =", nsave)
+  }
+
   ## ---------- CHARACTERISTICS OF NETWORK ------------------
   if(is.null(L)) {
     check.nvector(seglengths, nsegments(L), things="edges of the network")
@@ -393,25 +412,46 @@ resolve.heat.steps <-
     splat("    shortest edge length = ", lmin)
   }
 
-  ## ----------- TIME STEP dt ------  (if given) -----------------------
+  ## ----------- NUMBER OF ITERATIONS ---------------------------------
   if(niter.given) {
-    if(verbose) splat(" Given: niter =", niter)
+    if(verbose) splat(" Validating niter =", niter)
     stopifnot(niter >= 10)
     stopifnot(niter <= iterMax)
+    if(nsave.given && ((niter < nsave) || (niter %% nsave != 0))) {
+      if(!allow.adjust)
+        stop(paste("niter =", niter, "is not a multiple of nsave =", nsave),
+             call.=FALSE)
+      niterOLD <- niter
+      niter <- nsave * max(1L, floor(as.double(niter)/nsave))
+      if(warn.adjust || verbose) {
+        comment <- paste("niter was adjusted from", niterOLD, "to", niter,
+                         "to ensure it is a multiple of nsave =", nsave)
+        if(warn.adjust) warning(comment)
+        if(verbose) splat(comment)
+      }
+    }
+  }
+
+  ## ----------- TIME STEP dt ------  (if given) -----------------------
+  if(niter.given) {
+    if(verbose) splat(" Determining dt from niter")
     dtOLD <- dt
     dt <- sigma^2/(2  * niter)
     if(dt.given) {
       if(!allow.adjust)
         stop("Only one of the arguments dt and niter should be given", call.=FALSE)
-      quibble <- paste("Time step dt was adjusted from", dtOLD,
-                      "to sigma^2/(2 * niter) =",
-                      sigma^2, "/", 2 * niter, "=", dt)
-      if(warn.adjust) warning(quibble, call.=FALSE)
-      if(verbose) splat(quibble)
+      if(warn.adjust || verbose) {
+        quibble <- paste("Time step dt was adjusted from", dtOLD,
+                         "to sigma^2/(2 * niter) =",
+                         sigma^2, "/", 2 * niter, "=", dt)
+        if(warn.adjust) warning(quibble, call.=FALSE)
+        if(verbose) splat(quibble)
+      }
     } else if(verbose) splat(" dt =", dt)
   } else if(dt.given) {
-    if(verbose) splat(" Given: dt =", dt)
-    niter <- round(sigma^2/(2*dt))
+    if(verbose) splat(" Determining niter from dt",
+                      if(nsave.given) "and nsave" else NULL)
+    niter <- nsave * round(sigma^2/(nsave*2*dt))
     if(niter > iterMax) {
       problem <- paste("Time step dt =", dt,
                        "implies number of iterations =", niter,
@@ -420,6 +460,8 @@ resolve.heat.steps <-
         stop(paste0(problem, "; increase dt or increase iterMax"),
              call.=FALSE)
       niter <- iterMax
+      if(nsave.given)
+        niter <- nsave * floor(as.double(niter)/nsave)
       dt <- sigma^2/(2 * niter)
       if(warn.adjust || verbose) {
         comment <- paste0(problem,
@@ -427,11 +469,13 @@ resolve.heat.steps <-
         if(warn.adjust) warning(comment, call.=FALSE)
         if(verbose) splat(comment)
       }
-    } else if(verbose) splat(" niter =", niter)
+    } 
+    if(verbose) splat(" niter =", niter)
   }
 
   ## check dt satisfies basic constraint
   if((dt.known <- dt.given || niter.given)) {
+    if(verbose) splat(" Validating dt")
     dxmax <- lmin/3
     dtmax <- min(0.95 * (dxmax^2)/AMbound, sigma^2/(2 * 10), sigma * dxmax/6)
     niterMin <- round(sigma^2/(2 * dtmax))
@@ -454,6 +498,8 @@ resolve.heat.steps <-
         if(verbose) splat(gripe)
         if(niter.given) {
           niter <- round(sigma^2/(2 * dt))
+          if(nsave.given)
+            niter <- nsave * floor(as.double(niter)/nsave)
           comment <- paste("niter adjusted to", niter)
           if(warn.adjust) warning(comment, call.=FALSE)
           if(verbose) splat(comment)
@@ -464,7 +510,7 @@ resolve.heat.steps <-
   
   #' ------------- SPACING OF SAMPLE POINTS, dx ---------------
   if(dx.given) {
-    if(verbose) splat(" Given: dx =", dx)
+    if(verbose) splat(" Validating dx =", dx)
     check.finite(dx)
     stopifnot(dx > 0)
     if(dx > lmin/3)
@@ -472,13 +518,16 @@ resolve.heat.steps <-
            call.=FALSE)
   } else if(dt.known) {
     ## determine dx from dt
+    if(verbose) splat(" Determine dx from dt")
     dx <- max(6 * dt/sigma^2, sqrt(dt * AMbound/0.95))
+    if(verbose) splat(" dx =", dx)
   } else {
     #' default rule
-    dx <- min(lbar/nsplit, ltot/nlixels, lmin/3)
+    if(verbose) splat(" Determine dx by default rule")    
+    dx <- min(lbar/fineNsplit, ltot/fineNlixels, lmin/3)
     if(verbose) {
-      splat(" Mean Edge Length/", nsplit, "=", lbar/nsplit)
-      splat(" Total Network Length/", nlixels, "=", ltot/nlixels)
+      splat(" Mean Edge Length/", fineNsplit, "=", lbar/fineNsplit)
+      splat(" Total Network Length/", fineNlixels, "=", ltot/fineNlixels)
       splat(" Min Edge Length/3 = ", lmin/3)
       splat(" dx = minimum of the above =", dx)
     }
@@ -491,10 +540,11 @@ resolve.heat.steps <-
              else min(sidelengths(W)/spatstat.options("npixel"))
       dx <- max(dx, eps/1.4)
       if(verbose) {
+        splat(" Coarse spacing rule")
         splat(" Pixel size/1.4 =", eps/1.4)
-        splat(" Coarse spacing rule: dx = ", dx)
       }
-    }
+    } else splat("Fine spacing rule") 
+    splat(" dx = ", dx)
     nlixels <- ceiling(ltot/dx)
     nlixels <- min(nlixels, .Machine$integer.max)
     dx <- ltot/nlixels
@@ -506,6 +556,7 @@ resolve.heat.steps <-
 
   #' ------------- TIME STEP dt ----------------------------------
   dtmax <- min(0.95 * (dx^2)/AMbound, sigma^2/(2 * 10), sigma * dx/6)
+  if(verbose) splat(" Applying full set of constraints")
   if(!dt.known) {
     dt <- dtmax
     if(verbose) 
@@ -523,6 +574,8 @@ resolve.heat.steps <-
       if(verbose) splat(gripe)
       if(niter.given) {
         niter <- round(sigma^2/(2 * dt))
+        if(nsave.given)
+          niter <- nsave * floor(as.double(niter)/nsave)
         comment <- paste("niter adjusted to", niter)
         if(warn.adjust) warning(comment, call.=FALSE)
         if(verbose) splat(comment)
@@ -533,7 +586,7 @@ resolve.heat.steps <-
   #' finally determine the number of iterations, if not already done.
 
   if(is.null(niter)) {
-    niter <- round(sigma^2/(2 * dt))
+    niter <- nsave * round(sigma^2/(nsave * 2 * dt))
     dt <- sigma^2/(2 * niter)
     if(verbose) {
       splat(" Number of iterations (determined from dt) =", niter)
@@ -547,11 +600,24 @@ resolve.heat.steps <-
                "; either increase iterMax, dx, dt or reduce sigma"),
          call.=FALSE)
 
+  alpha <- dt/dx^2
+  if(verbose) splat(" alpha =", alpha)
+  
+  if(1 - maxdegree * alpha < 0)
+    stop(paste0("Algorithm is unstable: alpha = ",
+                stepnames[["time"]], "/", stepnames[["space"]], "^2 = ", alpha,
+                " does not satisfy (maxdegree * alpha <= 1)",
+                " where maxdegree = highest vertex degree = ", maxdegree,
+                "; decrease time step ", stepnames[["time"]],
+                ", or increase spacing ", stepnames[["space"]]),
+         call.=FALSE)
+
   if(verbose) {
     splat(" Final values:")
-    splat("   Time step dt = ", dt)
-    splat("   Sample spacing dx = ", dx)
-    splat("   Number of iterations niter = ", niter)
+    splat("   Time step                    dt = ", dt)
+    splat("   Sample spacing               dx = ", dx)
+    splat("   Number of iterations      niter = ", niter)
+    splat("   Number of states saved    nsave = ", nsave)
   }
-  return(list(dt=dt, dx=dx, niter=niter))
+  return(list(dt=dt, dx=dx, niter=niter, nsave=nsave))
 }

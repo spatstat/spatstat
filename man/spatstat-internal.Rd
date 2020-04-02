@@ -1467,10 +1467,12 @@ representativeRows(x)
 resolveEinfo(x, what, fallback, warn, atomic)
 resolve.foxall.window(X, Y, W, warn.trim)
 resolve.heat.steps(sigma, \dots, dx, dt,
-                   nsplit, nlixels, niter, iterMax,
+                   niter, iterMax, nsave,
                    seglengths, maxdegree, AMbound, L,
-                   W, eps, dimyx, xy, finespacing,
-                   allow.adjust, warn.adjust, verbose)
+                   finespacing, fineNsplit, fineNlixels,
+                   W, eps, dimyx, xy, 
+                   allow.adjust, warn.adjust,
+                   verbose, stepnames)
 resolve.lambda(X, lambda, \dots, sigma, varcov, leaveoneout, update)
 resolve.lambda.cross(X, I, J, lambdaI, lambdaJ, \dots, lambdaX,
                      sigma, varcov, leaveoneout, update, lambdaIJ,

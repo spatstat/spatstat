@@ -372,7 +372,7 @@ local({
 #
 # Tests for lpp code
 #
-#  $Revision: 1.59 $  $Date: 2020/03/30 09:23:16 $
+#  $Revision: 1.60 $  $Date: 2020/04/02 02:03:29 $
 
 
 require(spatstat)
@@ -795,6 +795,7 @@ local({
   A <- resolve.heat.steps(100, L=L, dx=1)
   B <- resolve.heat.steps(100, L=L, dt=0.2)
   C <- resolve.heat.steps(100, L=L, niter=1e5)
+  C <- resolve.heat.steps(100, L=L, niter=1e5, nsave=3)
   D <- resolve.heat.steps(100, L=L, dx=1, dt=0.2)
   E <- resolve.heat.steps(500, L=L, dt=0.5, iterMax=2e5) 
 })

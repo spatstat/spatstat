@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.63-3.019
+        CHANGES IN spatstat VERSION 1.63-3.020
 
 OVERVIEW
 
@@ -20,7 +20,7 @@ OVERVIEW
 
     o Stability improvements.
 
-    o Version nickname: 'Poisson d'Avril'
+    o Version nickname: 'Correct at time of publication'
 
 NEW FUNCTIONS
 
