@@ -43,7 +43,7 @@ local({
 #'                    and inhomogeneous summary functions
 #'                    and idw, adaptive.density, intensity
 #'
-#'  $Revision: 1.52 $  $Date: 2020/02/04 01:54:56 $
+#'  $Revision: 1.53 $  $Date: 2020/04/03 03:18:58 $
 #'
 
 require(spatstat)
@@ -458,14 +458,17 @@ local({
   x <- rnorm(20) 
   d0 <- unnormdensity(x, weights=rep(0, 20))
   dneg <- unnormdensity(x, weights=c(-runif(19), 0))
-})
 
-local({
   ## cases of 'intensity' etc
   a <- intensity(amacrine, weights=expression(x))
   a <- intensity(split(amacrine), weights=expression(x))
   a <- intensity(split(amacrine), weights=amacrine$x)
   a <- intensity(ppm(amacrine ~ 1))
+
+  ## check infrastructure for 'densityfun'
+  f <- densityfun(cells, 0.05)
+  Z <- as.im(f)
+  Z <- as.im(f, W=square(0.5))
 })
 reset.spatstat.options()
 

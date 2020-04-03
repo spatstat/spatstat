@@ -3,7 +3,7 @@
 ##
 ## Exact 'funxy' counterpart of density.ppp
 ##
-##  $Revision: 1.8 $ $Date: 2018/09/02 07:47:31 $
+##  $Revision: 1.10 $ $Date: 2020/04/03 03:18:27 $
 
 
 densityfun <- function(X, ...) {
@@ -63,9 +63,11 @@ as.im.densityfun <- function(X, W=Window(X), ..., approx=TRUE) {
   } else {
     #' faster, approximate evaluation using FFT
     stuff <- get("stuff", envir=environment(X))
-    if(!missing(W)) stuff$X <- stuff$X[W]
-    names(stuff)[names(stuff) == "X"] <- "x"
-    result <- do.call(density, resolve.defaults(list(...), stuff))
+    Xdata <- stuff[["Xdata"]]
+    otherstuff <- stuff[names(stuff) != "Xdata"]
+    if(!missing(W)) Xdata <- Xdata[W]
+    result <- do.call(density,
+                      resolve.defaults(list(x=Xdata), list(...), otherstuff))
   }
   return(result)
 }

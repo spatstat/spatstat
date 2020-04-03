@@ -67,7 +67,7 @@
    Y <- runiflpp(5, simplenet)
 
    # image on network
-   D <- density(Y, 0.1, verbose=FALSE)
+   D <- density(Y, 0.1)
 
    f <- as.linfun(D)
    f

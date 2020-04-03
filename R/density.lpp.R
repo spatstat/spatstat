@@ -203,7 +203,7 @@ densityEqualSplit <- function(x, sigma=NULL, ...,
 
 
 densityHeat <- function(x, sigma, ..., weights=NULL, 
-                        dx=NULL, dt=NULL, iterMax=1e6) {
+                        dx=NULL, dt=NULL, iterMax=1e6, verbose=FALSE) {
   stopifnot(is.lpp(x))
   L <- as.linnet(x)
   check.1.real(sigma)
@@ -215,10 +215,12 @@ densityHeat <- function(x, sigma, ..., weights=NULL,
   if(!is.null(weights)) 
     check.nvector(weights, npoints(x))
   ## determine algorithm parameters
-  p <- resolve.heat.steps(sigma, dx=dx, dt=dt, iterMax=iterMax, L=L, ...)
+  p <- resolve.heat.steps(sigma, dx=dx, dt=dt, iterMax=iterMax, L=L, ...,
+                          verbose=verbose)
   ## go
   a <- FDMKERNEL(lppobj=x, dtx=p$dx, dtt=p$dt, M=p$niter,
-                 weights=weights, stepnames=list(time="dt", space="dx"))
+                 weights=weights, stepnames=list(time="dt", space="dx"),
+                 verbose=verbose)
   f <- a$kernel_fun
   if(fun) {
     result <- f
@@ -242,23 +244,33 @@ densityHeat <- function(x, sigma, ..., weights=NULL,
 
 FDMKERNEL <- function(lppobj, dtt, dtx, M, nsave=1,
                       weights=NULL, stepnames=list(time="dtt", space="dtx"),
-                      setuponly=FALSE) {
+                      setuponly=FALSE, verbose=FALSE) {
   ## Copyright (c) Greg McSwiggan and Adrian Baddeley 2016-2020
   ## Based on original code by Greg McSwiggan 2015-2016
   ## Internal code: parameters are now assumed to be valid.
   ## Validation code is now in 'resolve.heat.steps()'
   net2 <- as.linnet(lppobj)
   npts <- npoints(lppobj)
+  if(verbose) cat("Subdividing network ...")
   lenfs <- lengths_psp(as.psp(net2))
   seg_in_lengths <- pmax(1, round(lenfs/dtx))
   new_lpp <- lixellate(lppobj, nsplit=seg_in_lengths)
   net_nodes <- as.linnet(new_lpp)
   nvert <- nvertices(net_nodes)
-  
+  if(verbose) {
+    cat("Done.", fill=TRUE)
+    splat("New network:")
+    print(net_nodes)
+    cat("Constructing update matrix A ..")
+  }
   alpha <- dtt/(dtx^2)
   A <- net_nodes$m * alpha
   diag(A) <- 1 - colSums(A)
-
+  if(verbose) {
+    cat("Done.", fill=TRUE)
+    splat("alpha = ", alpha)
+    cat("Building initial state ..")
+  }
   if(npts == 0) {
     ff <- factor(integer(0), levels=seq_len(nvert))
     ww <- numeric(0)
@@ -275,7 +287,7 @@ FDMKERNEL <- function(lppobj, dtt, dtx, M, nsave=1,
     U0 <- tapply(ww, ff, sum)
     U0[is.na(U0)] <- 0
   }
-
+  if(verbose) cat("Done.", fill=TRUE)
   if(setuponly) {
     out <- list(linnet_obj   = net_nodes,
                 lixelmap     = ff,   
@@ -301,6 +313,8 @@ FDMKERNEL <- function(lppobj, dtt, dtx, M, nsave=1,
 
   U <- cbind(U0, matrix(0, nvert, nsave))
 
+  if(verbose) cat("Running iterative solver ..")
+  
   if(npts > 0) {
     for(i in 1:nsave) {
       v <- U[,i]
@@ -310,9 +324,13 @@ FDMKERNEL <- function(lppobj, dtt, dtx, M, nsave=1,
       U[,i+1L] <- as.numeric(v)
     }
   }
-  
+
   finalU <- U[,ncol(U)]
-  
+
+  if(verbose) {
+    cat("Done.", fill=TRUE)
+    cat("Mapping results to spatial location ..")
+  }
   vert_new <- as.data.frame(vertices(net_nodes))[,c("x","y","segcoarse","tpcoarse")]
   colnames(vert_new) <- c("x", "y", "seg", "tp")
   Nodes <- lpp(vert_new, net2, check=FALSE)
@@ -331,6 +349,8 @@ FDMKERNEL <- function(lppobj, dtt, dtx, M, nsave=1,
     interpUK <- linfun(interpUxystK, net2)
   } else interpUK <- NULL
 
+  if(verbose)
+    cat("Done.", fill=TRUE)
   
   out <- list(kernel_fun  = interpU,
               elapsedtime = elapsedtime,

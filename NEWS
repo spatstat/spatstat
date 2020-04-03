@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.63-3.022
+        CHANGES IN spatstat VERSION 1.63-3.023
 
 OVERVIEW
 
@@ -98,12 +98,16 @@ BUG FIXES
     Crashed sometimes when applied to the result of subfits().
     Fixed.
 
+    o as.im.densityfun
+    Crashed if argument W was missing.
+    Fixed.
+    
     o as.linnet.linnet
     This code could crash the R session, when sparse=FALSE, if there was
     insufficient memory available to create the matrix of distances
     between all pairs of network vertices.
     Fixed.
-    
+
         CHANGES IN spatstat VERSION 1.63-3
 
 OVERVIEW

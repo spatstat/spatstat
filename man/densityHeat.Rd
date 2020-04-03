@@ -9,7 +9,7 @@
 }
 \usage{
   densityHeat(x, sigma, \dots, weights = NULL,
-              dx = NULL, dt = NULL, iterMax = 1e+06)
+              dx = NULL, dt = NULL, iterMax = 1e+06, verbose=FALSE)
 }
 \arguments{
   \item{x}{
@@ -38,6 +38,9 @@
   }
   \item{iterMax}{
     Maximum number of iterations.
+  }
+  \item{verbose}{
+    Logical value specifying whether to print progress reports.
   }
 }
 \details{

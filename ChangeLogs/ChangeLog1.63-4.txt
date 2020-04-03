@@ -479,5 +479,24 @@ Change log from 1.63-3 to 1.63-4
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
 
+   density.lpp.R
+   densityHeat.Rd
+   spatstat-internal.Rd
+	densityHeat has new argument 'verbose=FALSE'
+
+   densityfun.R
+	bug fix in as.im.densityfun
+
+   as.linfun.Rd
+	Consequential tweak.
 	
-	 
+   DESCRIPTION
+   NEWS
+   Nickname.txt
+	Version 1.63-3.023
+
+------------- passed R-3.6.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+
+   
