@@ -42,6 +42,7 @@ densityEqualSplit <- function(x, sigma=NULL, ...,
                               continuous=TRUE,
                               epsilon=1e-6,
                               verbose=TRUE, debug=FALSE, savehistory=TRUE) {
+  ## Based on original code by Adrian Baddeley and Greg McSwiggan 2014-2016
   L <- as.linnet(x)
   # weights
   np <- npoints(x)
@@ -207,51 +208,17 @@ densityHeat <- function(x, sigma, ..., weights=NULL,
   L <- as.linnet(x)
   check.1.real(sigma)
   check.finite(sigma)
-  ## secret arguments
+  ## internal arguments
   fun         <- resolve.1.default(list(fun=FALSE), list(...))
   finespacing <- resolve.1.default(list(finespacing=FALSE), list(...))
   ## 
   if(!is.null(weights)) 
     check.nvector(weights, npoints(x))
-  if(is.null(dx)) {
-    #' default rule for spacing of sample points
-    lenths <- lengths_psp(as.psp(L))
-    lbar <- mean(lenths)
-    nseg <- length(lenths)
-    ltot <- lbar * nseg
-    if(finespacing) {
-      #' specify 30 steps per segment, on average
-      dx <- lbar/30
-    } else {
-      #' use pixel size
-      argh <- list(...)
-      W <- Frame(x)
-      eps <- if(!is.null(argh$eps)) {
-               min(argh$eps)
-             } else if(!is.null(argh$dimyx)) {
-               min(sidelengths(W)/argh$dimyx)
-             } else if(!is.null(argh$xy)) {
-               with(as.mask(W, xy=argh$xy), min(xstep, ystep))
-             } else min(sidelengths(W)/spatstat.options("npixel"))
-      dx <- max(eps/1.4, lbar/30)
-    }
-    D <- ceiling(ltot/dx)
-    D <- min(D, .Machine$integer.max)
-    dx <- ltot/D
-  }
-  verdeg <- vertexdegree(L)
-  amb <- max(verdeg[L$from] + verdeg[L$to])
-  dtmax <- min(0.95 * (dx^2)/amb, sigma^2/(2 * 10), sigma * dx/6)
-  if(is.null(dt)) {
-    dt <- dtmax
-  } else if(dt > dtmax) {
-    stop(paste("dt is too large: maximum value", dtmax),
-         call.=FALSE)
-  }
-  a <- FDMKERNEL(lppobj=x, sigma=sigma, dtx=dx, dtt=dt,
-                 weights=weights,
-                 iterMax=iterMax, sparse=TRUE,
-                 stepnames=list(time="dt", space="dx"))
+  ## determine algorithm parameters
+  p <- resolve.heat.steps(sigma, dx=dx, dt=dt, iterMax=iterMax, L=L, ...)
+  ## go
+  a <- FDMKERNEL(lppobj=x, dtx=p$dx, dtt=p$dt, M=p$niter,
+                 weights=weights, stepnames=list(time="dt", space="dx"))
   f <- a$kernel_fun
   if(fun) {
     result <- f
@@ -273,73 +240,80 @@ densityHeat <- function(x, sigma, ..., weights=NULL,
   return(result)
 }
 
-# Greg's code 
-FDMKERNEL <- function(lppobj, sigma, dtt, weights=NULL, iterMax=5000, 
-	              sparse=FALSE, dtx,
-                      stepnames=list(time="dtt", space="dtx")) {
+FDMKERNEL <- function(lppobj, dtt, dtx, M, nsave=1,
+                      weights=NULL, stepnames=list(time="dtt", space="dtx"),
+                      setuponly=FALSE) {
+  ## Copyright (c) Greg McSwiggan and Adrian Baddeley 2016-2020
+  ## Based on original code by Greg McSwiggan 2015-2016
+  ## Internal code: parameters are now assumed to be valid.
+  ## Validation code is now in 'resolve.heat.steps()'
   net2 <- as.linnet(lppobj)
-#  ends1 <- net2$lines$ends
+  npts <- npoints(lppobj)
   lenfs <- lengths_psp(as.psp(net2))
   seg_in_lengths <- pmax(1, round(lenfs/dtx))
   new_lpp <- lixellate(lppobj, nsplit=seg_in_lengths)
   net_nodes <- as.linnet(new_lpp)
-  vvv <- as.data.frame(vertices(net_nodes)) 
-  vertco_new <- vvv[, c("x", "y")]
-  vertseg_new <- vvv$segcoarse # marks
-  verttp_new <- vvv$tpcoarse   # marks
-  if(npoints(lppobj) == 0) {
-    U0 <- numeric(npoints(net_nodes$vertices))
+  nvert <- nvertices(net_nodes)
+  
+  alpha <- dtt/(dtx^2)
+  A <- net_nodes$m * alpha
+  diag(A) <- 1 - colSums(A)
+
+  if(npts == 0) {
+    ff <- factor(integer(0), levels=seq_len(nvert))
+    ww <- numeric(0)
+    U0 <- numeric(nvert)
   } else {
     tp1 <- as.numeric(new_lpp$data$tp)
     tp2 <- as.vector(rbind(1 - tp1, tp1))
     newseg <- as.integer(new_lpp$data$seg)
     vert_init_events1 <- as.vector(rbind(net_nodes$from[newseg],
                                          net_nodes$to[newseg]))
-    highest_vert <- npoints(net_nodes$vertices)
-    vert_numbers <- seq_len(highest_vert)
-    ff <- factor(vert_init_events1, levels=vert_numbers)
+    ff <- factor(vert_init_events1, levels=seq_len(nvert))
     ww <- if(is.null(weights)) tp2 else (rep(weights, each=2) * tp2)
     ww <- ww/dtx
     U0 <- tapply(ww, ff, sum)
     U0[is.na(U0)] <- 0
-  } 
-  M <- round((sigma^2)/(2*dtt))
-  if(M < 10)
-    stop(paste("No of time iterations must be > 10; decrease time step",
-               stepnames[["time"]]))
-  if(M > iterMax)
-    stop(paste0("No of time iterations = ", M,
-                " exceeds maximum number iterMax = ", iterMax, 
-                "; increase time step ", stepnames[["time"]],
-                ", or increase iterMax"))
+  }
 
-  alpha <- dtt/(dtx^2)
+  if(setuponly) {
+    out <- list(linnet_obj   = net_nodes,
+                lixelmap     = ff,   
+                lixelweight  = ww,   
+                Amatrix      = A,
+                U0           = U0,
+                deltax       = dtx,
+                deltat       = dtt)
+    return(out)
+  }
 
-  A1 <- net_nodes$m *1
-#  ml <- nrow(net_nodes$m)
-
-  degree <- colSums(A1)
-  dmax <- max(degree)
-
-  A2 <- A1 * alpha
-  diag(A2) <- 1 - alpha * degree
+  if(nsave == 1) {
+    blockstart <- 1
+    blockend <- M
+  } else {
+    blocksize <- ceiling(M/nsave)
+    blockend <- pmin(blocksize * seq_len(nsave), M)
+    blockstart <- c(1L, blockend[-nsave])
+  }
   
-  if(1 - dmax*alpha < 0)
-    stop(paste0("Algorithm is unstable: alpha = ",
-                stepnames[["time"]], "/", stepnames[["space"]], "^2 = ", alpha,
-                " does not satisfy (dmax * alpha <= 1)",
-                " where DMAX = highest vertex degree = ", dmax,
-                "; decrease time step ", stepnames[["time"]],
-                ", or increase spacing ", stepnames[["space"]]))
+  blocklength <- blockend - blockstart + 1L
+  elapsedtime <- c(0,blockend) * dtt
 
-  if(npoints(lppobj) > 0) {
-    v <- as.numeric(U0)
-    for(j in 1:M)
-      v <- A2 %*% v
-    finalU <- as.numeric(v)
-  } else finalU <- U0
+  U <- cbind(U0, matrix(0, nvert, nsave))
 
-  vert_new <- cbind(vertco_new, vertseg_new, verttp_new)
+  if(npts > 0) {
+    for(i in 1:nsave) {
+      v <- U[,i]
+      nit <- blocklength[i]
+      for(j in 1:nit)
+        v <- A %*% v
+      U[,i+1L] <- as.numeric(v)
+    }
+  }
+  
+  finalU <- U[,ncol(U)]
+  
+  vert_new <- as.data.frame(vertices(net_nodes))[,c("x","y","segcoarse","tpcoarse")]
   colnames(vert_new) <- c("x", "y", "seg", "tp")
   Nodes <- lpp(vert_new, net2, check=FALSE)
   nodemap <- nnfun(Nodes)
@@ -348,10 +322,24 @@ FDMKERNEL <- function(lppobj, sigma, dtt, weights=NULL, iterMax=5000,
   }
   interpU <- linfun(interpUxyst, net2)
   df <- cbind(vert_new, data.frame(values=finalU))
-  out <- list(kernel_fun = interpU,
-              df         = df, 
-              deltax     = dtx,
-              deltat     = dtt)
+
+  if(nsave > 1) {
+    interpUxystK <- function(x, y, seg, tp, k) {
+      nono <- nodemap(x,y,seg,tp)
+      if(missing(k)) U[nono, ] else U[nono, k+1L]
+    }
+    interpUK <- linfun(interpUxystK, net2)
+  } else interpUK <- NULL
+
+  
+  out <- list(kernel_fun  = interpU,
+              elapsedtime = elapsedtime,
+              tau         = sqrt(2 * elapsedtime),
+              df          = df, 
+              deltax      = dtx,
+              deltat      = dtt,
+              progressfun = interpUK)
+
   return(out)
 }
 
@@ -381,6 +369,8 @@ resolve.heat.steps <-
            verbose=TRUE,
            stepnames=list(time="dt", space="dx"))
 {
+  ## Based on original code by Greg McSwiggan 2015-2016
+
   check.1.real(sigma)  # infinite sigma is allowed
   check.1.integer(nsave)
   stopifnot(nsave >= 1)
