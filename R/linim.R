@@ -1,7 +1,7 @@
 #
 # linim.R
 #
-#  $Revision: 1.72 $   $Date: 2020/03/16 10:28:51 $
+#  $Revision: 1.74 $   $Date: 2020/04/04 04:33:27 $
 #
 #  Image/function on a linear network
 #
@@ -712,9 +712,8 @@ integral.linim <- function(f, domain=NULL, ...){
     nper <- table(seg)
   }
   #' take average of data on each segment
-  ##  mu <- as.numeric(by(vals, seg, mean, ..., na.rm=TRUE))
-  ## mu[is.na(mu)] <- 0
-  num <- tapplysum(as.numeric(vals), list(seg), na.rm=TRUE)
+  if(!is.complex(vals)) vals <- as.numeric(vals)
+  num <- tapplysum(vals, list(seg), na.rm=TRUE)
   mu <- num/nper
   #' weighted sum
   len <- lengths_psp(as.psp(L))
@@ -855,11 +854,12 @@ pairs.linim <- function(..., plot=TRUE, eps=NULL) {
       labels <- resolve.defaults(rest, list(labels=imnames))$labels
       colnames(pixdf) <- labels
     } else {
+      xname <- imnames[1L]
       do.call(hist.default,
               resolve.defaults(list(x=pixdf[,1L]),
                                rest,
-                               list(xname=imnames[1L],
-                                    xlab=imnames[1L])))
+                               list(main=paste("Histogram of", xname),
+                                    xlab=xname)))
     }
   }
   class(pixdf) <- unique(c("plotpairsim", class(pixdf)))

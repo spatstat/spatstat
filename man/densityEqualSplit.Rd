@@ -85,6 +85,13 @@
 
   Faster algorithms are available through \code{\link{density.lpp}}.
 }
+\section{Infinite bandwidth}{
+  If \code{sigma=Inf}, the resulting density estimate is 
+  constant over all locations,
+  and is equal to the average density of points per unit length.
+  (If the network is not connected, then this rule
+  is applied separately to each connected component of the network).
+}
 \value{
   A pixel image on the linear network (object of class \code{"linim"}).
 }

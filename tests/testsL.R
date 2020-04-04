@@ -372,7 +372,7 @@ local({
 #
 # Tests for lpp code
 #
-#  $Revision: 1.60 $  $Date: 2020/04/02 02:03:29 $
+#  $Revision: 1.61 $  $Date: 2020/04/04 04:00:41 $
 
 
 require(spatstat)
@@ -756,16 +756,36 @@ local({
 reset.spatstat.options()
 
 local({
-  #' density.lpp 
+  #' kernel density estimation
   X <- runiflpp(5, simplenet)
-  D <- density(X, 0.05, old=TRUE, weights=runif(npoints(X))) # interpreted code
+  w <- runif(5)
+  #' density.lpp -> densityHeat
+  D <- density(X, 0.05)
+  D <- density(X, 0.05, weights=w)
+  D <- density(X[FALSE], 0.05)
+  D <- density(X, Inf)
   D <- density(X, 0.05, finespacing=TRUE) # }
-  D <- density(X, 0.05, eps=0.008)        # }  code blocks in PDEdensityLPP
+  D <- density(X, 0.05, eps=0.008)        # }  code blocks in resolve.heat.steps
   D <- density(X, 0.05, dimyx=256)        # }
-  D <- density(X[FALSE], 0.05)            # }
+  #' disconnected network
+  L <- thinNetwork(simplenet, retainedges=-c(3,5))
+  Y <- runiflpp(5, L)
+  D <- density(Y, 0.05)
+  D <- density(Y, 0.05, weights=w)
+  D <- density(Y, Inf)
   #' density.splitppx
-  Y <- split(chicago)[1:3]
-  D <- density(Y, 7)
+  Z <- split(chicago)[1:3]
+  D <- density(Z, 7)
+  #' density.lpp -> densityEqualSplit
+  D <- density(X, 0.05, kernel="e", weights=w)
+  D <- density(X, Inf, kernel="e")
+  D <- density(Y, 0.05, kernel="e", weights=w)
+  D <- density(Y, Inf, kernel="e")
+  #' density.lpp -> densityQuick.lpp
+  D <- density(X, 0.05, distance="e", weights=runif(5)) 
+  D <- density(X, Inf, distance="e")
+  D <- density(Y, 0.05, distance="e", weights=runif(5)) 
+  D <- density(Y, Inf, distance="e")
   #' densityVoronoi.lpp and related code
   densityVoronoi(X, f=0)
   densityVoronoi(X, f=1e-8)
@@ -773,6 +793,10 @@ local({
   densityVoronoi(X[FALSE], f=0.5)
   XX <- X[rep(1:npoints(X), 4)]
   densityVoronoi(XX, f=0.99999, nrep=5)
+  densityVoronoi(Y, f=0)
+  densityVoronoi(Y, f=1e-8)
+  densityVoronoi(Y, f=1)
+  densityVoronoi(Y[FALSE], f=0.5)
   #' bandwidth selection
   bw.voronoi(X, nrep=4, prob=c(0.2, 0.4, 0.6))
   #' inhomogeneous K and g

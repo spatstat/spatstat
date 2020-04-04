@@ -3,7 +3,7 @@
 #'
 #'   Copyright (C) 2019 Adrian Baddeley, Suman Rakshit and Tilman Davies
 #'
-#'   $Revision: 1.4 $ $Date: 2019/07/15 14:58:34 $
+#'   $Revision: 1.5 $ $Date: 2020/04/04 02:55:54 $
 
 densityQuick.lpp <- function(X, sigma=NULL, ...,
                              kernel="gaussian",
@@ -48,6 +48,22 @@ qkdeEngine <- function(X, sigma=NULL, ...,
   stuff <- resolve.2D.kernel(x=XX, sigma=sigma, varcov=varcov, ...)
   sigma <- stuff$sigma
   varcov <- stuff$varcov
+
+  if(is.infinite(stuff$cutoff)) {
+    #' infinite bandwidth
+    result <-
+      switch(at,
+             pixels = {
+               as.linim(flatdensityfunlpp(X, weights=weights, what=what))
+             },
+             points = {
+               flatdensityatpointslpp(X, weights=weights, what=what)
+             })
+    attr(result, "sigma") <- sigma
+    attr(result, "varcov") <- varcov
+    return(result)
+  }
+                     
   switch(what,
          estimate = {
            if(shortcut) {

@@ -43,6 +43,12 @@ densityEqualSplit <- function(x, sigma=NULL, ...,
                               epsilon=1e-6,
                               verbose=TRUE, debug=FALSE, savehistory=TRUE) {
   ## Based on original code by Adrian Baddeley and Greg McSwiggan 2014-2016
+  check.1.real(sigma)
+  if(bandwidth.is.infinite(sigma)) {
+    out <- as.linim(flatdensityfunlpp(x, weights=weights))
+    attr(out, "sigma") <- sigma
+    return(out)
+  }
   L <- as.linnet(x)
   # weights
   np <- npoints(x)
@@ -196,6 +202,7 @@ densityEqualSplit <- function(x, sigma=NULL, ...,
   # attach exact line position data
   df <- cbind(projdata, values)
   out <- linim(L, Z, df=df)
+  attr(out, "sigma") <- sigma
   if(savehistory)
     attr(out, "history") <- history
   return(out)
@@ -207,7 +214,11 @@ densityHeat <- function(x, sigma, ..., weights=NULL,
   stopifnot(is.lpp(x))
   L <- as.linnet(x)
   check.1.real(sigma)
-  check.finite(sigma)
+  if(bandwidth.is.infinite(sigma)) {
+    out <- as.linim(flatdensityfunlpp(x, weights=weights))
+    attr(out, "sigma") <- sigma
+    return(out)
+  }
   ## internal arguments
   fun         <- resolve.1.default(list(fun=FALSE), list(...))
   finespacing <- resolve.1.default(list(finespacing=FALSE), list(...))
@@ -450,7 +461,7 @@ resolve.heat.steps <-
       if(warn.adjust || verbose) {
         comment <- paste("niter was adjusted from", niterOLD, "to", niter,
                          "to ensure it is a multiple of nsave =", nsave)
-        if(warn.adjust) warning(comment)
+        if(warn.adjust) warning(comment, call.=FALSE)
         if(verbose) splat(comment)
       }
     }
@@ -644,4 +655,93 @@ resolve.heat.steps <-
     splat("   Number of states saved    nsave = ", nsave)
   }
   return(list(dt=dt, dx=dx, niter=niter, nsave=nsave))
+}
+
+flatdensityfunlpp <- function(X, ..., disconnect=TRUE, weights=NULL,
+                              what=c("estimate", "var", "se")) {
+  stopifnot(is.lpp(X))
+  trap.extra.arguments(...)
+  what <- match.arg(what)
+  L <- domain(X)
+  nX <- npoints(X)
+  if(is.null(weights)) { weights <- rep(1, nX) } else check.nvector(weights, nX)
+  if(!disconnect) {
+    #' constant intensity across entire network
+    num <- sum(weights)
+    vol <- volume(L)
+    value <- switch(what,
+                    estimate = num/vol,
+                    var      = num/vol^2,
+                    se       = sqrt(num)/vol)
+    fff <- function(x, y, seg, tp) { rep(value, length(x)) }
+  } else {
+    #' divide L into connected components and assign each vertex to a component
+    vlab <- connected(L, what="labels")
+    vlab <- factor(vlab)
+    #' assign each segment to a component
+    slab <- vlab[L$from]
+    #' total length of each component
+    slen <- lengths.psp(as.psp(L))
+    lenY <- tapplysum(slen, list(slab))
+    #' assign points of X to components
+    xlab <- slab[coords(X)$seg]
+    wY <- tapplysum(weights, list(xlab))
+    #' intensity of X in each component
+    valY <- switch(what,
+                   estimate = wY/lenY,
+                   var      = wY/lenY^2,
+                   se       = sqrt(wY)/lenY)
+    #' function returning intensity estimate on relevant component
+    fff <- function(x, y, seg, tp) { valY[ slab[seg] ] }
+  }
+  result <- linfun(fff, L)
+  return(result)
+}
+
+flatdensityatpointslpp <- function(X, ...,
+                                   leaveoneout=TRUE,
+                                   disconnect=TRUE, weights=NULL,
+                                   what=c("estimate", "var", "se")) {
+  stopifnot(is.lpp(X))
+  trap.extra.arguments(...)
+  what <- match.arg(what)
+  L <- domain(X)
+  nX <- npoints(X)
+  if(nX == 0) return(numeric(0))
+  if(is.null(weights)) { weights <- rep(1, nX) } else check.nvector(weights, nX)
+  if(!disconnect) {
+    #' constant intensity across entire network
+    totlen <- volume(L)
+    numX <- rep(sum(weights), nX)
+    if(leaveoneout) numX <- numX - weights
+    valX <- switch(what,
+                   estimate = numX/totlen,
+                   var      = numX/totlen^2,
+                   se       = sqrt(numX)/totlen)
+  } else {
+    #' divide L into connected components and assign each vertex to a component
+    vlab <- connected(L, what="labels")
+    vlab <- factor(vlab)
+    #' assign each segment to a component
+    slab <- vlab[L$from]
+    #' total length of each component
+    slen <- lengths.psp(as.psp(L))
+    lenY <- tapplysum(slen, list(slab))
+    #' assign points of X to components
+    Xlab <- slab[coords(X)$seg]
+    #' number of points in each component (or total weight in each component)
+    sumY <- tapplysum(weights, list(Xlab))
+    #' look up relevant values for each point of X
+    numX <- sumY[ Xlab ]
+    lenX <- lenY[ Xlab ]
+    #' subtract contribution from point itself
+    if(leaveoneout)
+      numX <- numX - weights
+    #' intensity in each component
+    valX <- switch(what,
+                   estimate = numX/lenX,
+                   var      = numX/lenX^2,
+                   se       = sqrt(numX)/lenX)
+  }
+  return(valX)
 }

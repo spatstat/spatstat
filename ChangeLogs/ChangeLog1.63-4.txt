@@ -499,4 +499,41 @@ Change log from 1.63-3 to 1.63-4
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
 
-   
+04 apr 2020
+
+   density.lpp.R
+   spatstat-internal.Rd
+	New internal functions 'flatdensityfunlpp' and 'flatdensityatpointslpp'
+
+   density.lpp.R
+   density.lpp.Rd
+   densityHeat.Rd
+   densityEqualSplit.Rd
+	Now allow sigma = Inf
+
+   quickndirty.R
+   densityQuick.lpp.Rd
+   	Now allow sigma = Inf
+
+   densityQuick.lpp.Rd
+   bw.scott.Rd
+	updated bibliography
+
+   tests/lppstuff.R
+	Adjust usage; test sigma=Inf
+	
+   pairs.im.R
+   linim.R
+	Bug fixes in 'pairs' methods
+
+   linim.R
+	integral.linim handles complex values
+	
+   DESCRIPTION
+   NEWS
+   Nickname.txt
+	Version 1.63-3.024
+
+------------- passed R-3.6.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------

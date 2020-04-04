@@ -23,7 +23,8 @@
     to be smoothed.
   }
   \item{sigma}{
-    Smoothing bandwidth (standard deviation of the kernel)
+    Smoothing bandwidth (standard deviation of the kernel).
+    A single numerical value
     in the same units as the spatial coordinates of \code{x}.
   }
   \item{\dots}{
@@ -102,6 +103,13 @@
   }
   There is also a method for split point patterns on a linear network
   (class \code{"splitppx"}) which will return a list of pixel images.
+}
+\section{Infinite bandwidth}{
+  If \code{sigma=Inf}, the resulting density estimate is 
+  constant over all locations,
+  and is equal to the average density of points per unit length.
+  (If the network is not connected, then this rule
+  is applied separately to each connected component of the network).
 }
 \value{
   A pixel image on the linear network (object of class \code{"linim"}).

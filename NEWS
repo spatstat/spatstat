@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.63-3.023
+        CHANGES IN spatstat VERSION 1.63-3.024
 
 OVERVIEW
 
@@ -12,7 +12,7 @@ OVERVIEW
 
     o Add new vertices to a linear network.
     
-    o Improvements to linear networks code.
+    o Improvements and extensions to linear networks code.
 
     o Function lengths.psp has been renamed lengths_psp.
 
@@ -45,6 +45,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
     These functions can now handle large networks,
     using the sparse representation.
 
+    o density.lpp, densityQuick.lpp
+    Infinite bandwidth (sigma=Inf) is now permitted,
+    and results in a density estimate that is constant over all locations.
+    
     o as.linnet.psp
     The resulting network now has an attribute 'camefrom'
     indicating the provenance of each line segment in the network.
@@ -63,7 +67,7 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o as.lpp
     Accepts more data formats.
-    
+
     o iplot, iplot.ppp, iplot.layered, iplot.linnet, iplot.default
     These interactive plotting functions have been removed from spatstat
     into a new package 'spatstat.gui'
@@ -81,6 +85,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o density.lpp
     Formal arguments changed. No effect on usage.
+
+    o integral.linim
+    Now handles complex-valued functions.
     
 BUG FIXES
 

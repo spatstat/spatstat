@@ -182,6 +182,8 @@
 \alias{findcbind}
 \alias{fii}
 \alias{fillNA}
+\alias{flatdensityfunlpp}
+\alias{flatdensityatpointslpp}
 \alias{flatfname}
 \alias{flipxypolygon}
 \alias{flipxy.msr}
@@ -1028,6 +1030,8 @@ findCovariate(covname, scope, scopename=NULL)
 findcbind(root, depth, maxdepth)
 fii(interaction, coefs, Vnames, IsOffset, vnameprefix)
 fillNA(x, value)
+flatdensityfunlpp(X, \dots, disconnect, weights, what)
+flatdensityatpointslpp(X, \dots, leaveoneout, disconnect, weights, what)
 flatfname(x)
 flipxypolygon(p)
 \method{flipxy}{msr}(X)

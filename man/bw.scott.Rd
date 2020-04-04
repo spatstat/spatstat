@@ -107,8 +107,8 @@
   Nair, G., Mateu, J. and Baddeley, A. (2019)
   Fast kernel smoothing of point patterns on a large
   network using 2D convolution.
-  \emph{International Statistical Review}.
-  In press.
+  \emph{International Statistical Review} \bold{87} (3) 531--556.
+  DOI: 10.1111/insr.12327.
 }
 \author{
   \spatstatAuthors.

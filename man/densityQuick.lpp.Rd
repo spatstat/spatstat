@@ -84,6 +84,13 @@ densityQuick.lpp(X, sigma=NULL, \dots,
   disadvantage is that it ignores the connectivity of the network.
   See Rakshit et al (2019) for further explanation.
 }
+\section{Infinite bandwidth}{
+  If \code{sigma=Inf}, the resulting density estimate is 
+  constant over all locations,
+  and is equal to the average density of points per unit length.
+  (If the network is not connected, then this rule
+  is applied separately to each connected component of the network).
+}
 \value{
   Image on a linear network (object of class \code{"linim"}).
 }
@@ -92,8 +99,7 @@ densityQuick.lpp(X, sigma=NULL, \dots,
   McSwiggan, G., Nair, G., Mateu, J. and Baddeley, A. (2019)
   Fast kernel smoothing of point patterns on a large
   network using 2D convolution.
-  \emph{International Statistical Review}.
-  In press. Published online 06 June 2019.
+  \emph{International Statistical Review} \bold{87} (3) 531--556.
   DOI: 10.1111/insr.12327.
 }
 \author{

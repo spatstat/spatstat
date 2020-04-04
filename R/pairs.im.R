@@ -1,7 +1,7 @@
 #
 #   pairs.im.R
 #
-#   $Revision: 1.16 $   $Date: 2020/01/11 12:15:24 $
+#   $Revision: 1.17 $   $Date: 2020/04/04 04:22:50 $
 #
 
 pairs.listof <- pairs.solist <- function(..., plot=TRUE) {
@@ -48,12 +48,16 @@ pairs.im <- function(..., plot=TRUE) {
   ## 
   if(nim == 1) {
     ## one image: plot histogram
-    do.call(hist, append(list(imlist[[1L]], xname=imnames[1L], plot=plot),
-                         rest))
+    Z <- imlist[[1L]]
+    xname <- imnames[1L]
+    do.call(hist,
+            resolve.defaults(list(x=Z, plot=plot),
+                             rest, 
+                             list(xlab=xname,
+                                  main=paste("Histogram of", xname))))
     ## save pixel values
-    Z <- imlist[[1]]
     pixvals <- list(Z[])
-    names(pixvals) <- imnames
+    names(pixvals) <- xname
   } else {
     ## extract pixel rasters and reconcile them
     imwins <- lapply(imlist, as.owin)
@@ -82,7 +86,7 @@ plot.plotpairsim <- function(x, ...) {
     do.call(hist.default,
             resolve.defaults(list(x=x[,1]),
                              list(...),
-                             list(main=xname)))
+                             list(main=xname, xlab=xname)))
   } else {
     do.call(pairs.default,
             resolve.defaults(list(x=x),

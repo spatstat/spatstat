@@ -55,6 +55,13 @@
   time-dependent heat equation on the network, as described in McSwiggan et al (2016).
   Computational time is short, but increases quadratically with \code{sigma}.
 }
+\section{Infinite bandwidth}{
+  If \code{sigma=Inf}, the resulting density estimate is 
+  constant over all locations,
+  and is equal to the average density of points per unit length.
+  (If the network is not connected, then this rule
+  is applied separately to each connected component of the network).
+}
 \value{
   A pixel image on the linear network (object of class \code{"linim"}).
 }
