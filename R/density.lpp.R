@@ -295,8 +295,7 @@ FDMKERNEL <- function(lppobj, dtt, dtx, M, nsave=1,
     ff <- factor(vert_init_events1, levels=seq_len(nvert))
     ww <- if(is.null(weights)) tp2 else (rep(weights, each=2) * tp2)
     ww <- ww/dtx
-    U0 <- tapply(ww, ff, sum)
-    U0[is.na(U0)] <- 0
+    U0 <- tapplysum(ww, list(ff))
   }
   if(verbose) cat("Done.", fill=TRUE)
   if(setuponly) {
@@ -320,19 +319,20 @@ FDMKERNEL <- function(lppobj, dtt, dtx, M, nsave=1,
   }
   
   blocklength <- blockend - blockstart + 1L
-  elapsedtime <- c(0,blockend) * dtt
-
-  U <- cbind(U0, matrix(0, nvert, nsave))
+  elapsedtime <- blockend * dtt
 
   if(verbose) cat("Running iterative solver ..")
   
+  U <- matrix(0, nvert, nsave)
+
   if(npts > 0) {
+    currentU <- U0
     for(i in 1:nsave) {
-      v <- U[,i]
+      v <- currentU
       nit <- blocklength[i]
       for(j in 1:nit)
         v <- A %*% v
-      U[,i+1L] <- as.numeric(v)
+      U[,i] <- currentU <- as.numeric(v)
     }
   }
 
@@ -355,7 +355,7 @@ FDMKERNEL <- function(lppobj, dtt, dtx, M, nsave=1,
   if(nsave > 1) {
     interpUxystK <- function(x, y, seg, tp, k) {
       nono <- nodemap(x,y,seg,tp)
-      if(missing(k)) U[nono, ] else U[nono, k+1L]
+      if(missing(k)) U[nono, ] else U[nono, k]
     }
     interpUK <- linfun(interpUxystK, net2)
   } else interpUK <- NULL

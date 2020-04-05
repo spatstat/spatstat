@@ -1,12 +1,12 @@
 
-        CHANGES IN spatstat VERSION 1.63-3.024
+        CHANGES IN spatstat VERSION 1.63-3.025
 
 OVERVIEW
 
-    o We thank Robert Aue, Tyler Rudolph and Rasmus Plenge Waagepetersen
-    for contributions.
+    o We thank Robert Aue, Greg McSwiggan, Tyler Rudolph
+    and Rasmus Plenge Waagepetersen for contributions.
     
-    o Interactive graphics functions removed to a separate package.
+    o Interactive graphics functions have been removed to a separate package.
 
     o spatstat no longer 'Suggests' the packages 'tcltk' and 'rpanel'.
 
@@ -24,6 +24,9 @@ OVERVIEW
 
 NEW FUNCTIONS
 
+    o densityfun.lpp
+    Method for 'densityfun' for point patterns on a linear network.
+
     o addVertices
     Add new vertices to a network, at locations outside the existing network.
     
@@ -38,6 +41,13 @@ NEW FUNCTIONS
     o densityEqualSplit
     The equal-split algorithm for kernel density estimation on a network
     is now visible as a separate function.
+
+    o hotrod
+    Compute the heat kernel kappa(u,v) on a one-dimensional line segment.
+
+    o heatkernelapprox
+    Calculate an approximation to the value of the heat kernel
+    on a network evaluated at the source point, kappa(u,u).
     
 SIGNIFICANT USER-VISIBLE CHANGES
 

@@ -451,7 +451,6 @@ Change log from 1.63-3 to 1.63-4
 
    DESCRIPTION
    NEWS
-   Nickname.txt
 	Version 1.63-3.021
 
 ------------- passed R-3.6.3 CMD check ---------------
@@ -472,7 +471,6 @@ Change log from 1.63-3 to 1.63-4
 
    DESCRIPTION
    NEWS
-   Nickname.txt
 	Version 1.63-3.022
 
 ------------- passed R-3.6.3 CMD check ---------------
@@ -492,7 +490,6 @@ Change log from 1.63-3 to 1.63-4
 	
    DESCRIPTION
    NEWS
-   Nickname.txt
 	Version 1.63-3.023
 
 ------------- passed R-3.6.3 CMD check ---------------
@@ -531,9 +528,34 @@ Change log from 1.63-3 to 1.63-4
 	
    DESCRIPTION
    NEWS
-   Nickname.txt
 	Version 1.63-3.024
 
 ------------- passed R-3.6.3 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
+
+05 mar 2020
+
+   densityfunlpp.R [New file]
+   densityfun.lpp.Rd [New file]
+        New function densityfun.lpp
+
+   hotrod.c [New file]
+   hotrod.R [New file]
+   hotrod.Rd [New file]
+   	Heat kernel on a 1-dimensional segment
+	
+   heatapprox.c [New file]
+   heatapprox.R [New file]
+   heatkernelapprox.Rd [New file]
+   	Approximation to heat kernel at source, kappa(u,u)
+   
+   DESCRIPTION
+   NEWS
+	Acknowledged Greg McSwiggan.
+	Version 1.63-3.025
+
+------------- passed R-3.6.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+   
