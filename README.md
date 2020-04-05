@@ -6,10 +6,17 @@ spatstat
 [![codecov.io](https://codecov.io/github/spatstat/spatstat/coverage.svg)](https://codecov.io/github/spatstat/spatstat?branch=covr)
 [![appveyor build status](https://ci.appveyor.com/api/projects/status/github/spatstat/spatstat)](https://ci.appveyor.com/api/projects/status/github/spatstat/spatstat)
 
+## What is spatstat?
+
+`spatstat` is an R package for analysing 
+spatial point pattern data (and other kinds of spatial data).
+See the website [www.spatstat.org](http://www.spatstat.org)
+or read the [book](http://book.spatstat.org).
+  
 ## This is the development version
 
 This repository holds a copy of the _current development version_ 
-of the contributed R-package `spatstat`.
+of `spatstat`.
 
 This development version is more recent than the *official release* 
 of `spatstat` on CRAN. Each official release of `spatstat` has a
