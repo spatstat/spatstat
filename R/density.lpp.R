@@ -3,7 +3,7 @@
 #'
 #'    Method for 'density' for lpp objects
 #'
-#'    Copyright (C) 2017 Greg McSwiggan and Adrian Baddeley
+#'    Copyright (C) 2017-2020 Greg McSwiggan and Adrian Baddeley
 #'
 
 density.lpp <- function(x, sigma=NULL, ...,
@@ -208,14 +208,29 @@ densityEqualSplit <- function(x, sigma=NULL, ...,
   return(out)
 }
 
-
-densityHeat <- function(x, sigma, ..., weights=NULL, 
+densityHeat <- function(x, sigma, ...,
+                        at=c("pixels", "points"),
+                        leaveoneout=TRUE, weights=NULL, 
                         dx=NULL, dt=NULL, iterMax=1e6, verbose=FALSE) {
   stopifnot(is.lpp(x))
-  L <- as.linnet(x)
   check.1.real(sigma)
+  at <- match.arg(at)
+  if(!is.null(weights)) 
+    check.nvector(weights, npoints(x))
+
   if(bandwidth.is.infinite(sigma)) {
-    out <- as.linim(flatdensityfunlpp(x, weights=weights))
+    out <- switch(at,
+                  pixels = as.linim(flatdensityfunlpp(x, weights=weights)),
+                  points = flatdensityatpointslpp(x, weights=weights,
+                                                  leaveoneout=leaveoneout))
+    attr(out, "sigma") <- sigma
+    return(out)
+  }
+  if(at == "points") {
+    out <- densitypointsLPP(x, sigma, ..., leaveoneout=leaveoneout, 
+                            weights=weights, nsigma=1,
+                            dx=dx, dt=dt, iterMax=iterMax,
+                            verbose=verbose)
     attr(out, "sigma") <- sigma
     return(out)
   }
@@ -223,9 +238,8 @@ densityHeat <- function(x, sigma, ..., weights=NULL,
   fun         <- resolve.1.default(list(fun=FALSE), list(...))
   finespacing <- resolve.1.default(list(finespacing=FALSE), list(...))
   ## 
-  if(!is.null(weights)) 
-    check.nvector(weights, npoints(x))
   ## determine algorithm parameters
+  L <- as.linnet(x)
   p <- resolve.heat.steps(sigma, dx=dx, dt=dt, iterMax=iterMax, L=L, ...,
                           verbose=verbose)
   ## go
@@ -382,7 +396,7 @@ resolve.heat.steps <-
            dx=NULL, # spacing of sample points (A)
            dt=NULL, # time step                (A)
            niter=NULL,  # number of iterations (A*)
-           iterMax=100000, # maximum number of iterations (can be Inf) (F)
+           iterMax=1e6, # maximum number of iterations (can be Inf) (F)
            nsave=1, # number of time points for which data should be saved (F)
            ## network information
            seglengths=NULL, # lengths of network edges
@@ -578,8 +592,8 @@ resolve.heat.steps <-
         splat(" Coarse spacing rule")
         splat(" Pixel size/1.4 =", eps/1.4)
       }
-    } else splat("Fine spacing rule") 
-    splat(" dx = ", dx)
+    } else if(verbose) splat("Fine spacing rule") 
+    if(verbose) splat(" dx = ", dx)
     nlixels <- ceiling(ltot/dx)
     nlixels <- min(nlixels, .Machine$integer.max)
     dx <- ltot/nlixels
@@ -681,7 +695,7 @@ flatdensityfunlpp <- function(X, ..., disconnect=TRUE, weights=NULL,
     #' assign each segment to a component
     slab <- vlab[L$from]
     #' total length of each component
-    slen <- lengths.psp(as.psp(L))
+    slen <- lengths_psp(as.psp(L))
     lenY <- tapplysum(slen, list(slab))
     #' assign points of X to components
     xlab <- slab[coords(X)$seg]
@@ -725,7 +739,7 @@ flatdensityatpointslpp <- function(X, ...,
     #' assign each segment to a component
     slab <- vlab[L$from]
     #' total length of each component
-    slen <- lengths.psp(as.psp(L))
+    slen <- lengths_psp(as.psp(L))
     lenY <- tapplysum(slen, list(slab))
     #' assign points of X to components
     Xlab <- slab[coords(X)$seg]

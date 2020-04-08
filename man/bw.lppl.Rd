@@ -10,7 +10,7 @@
 }
 \usage{
    bw.lppl(X, \dots, srange=NULL, ns=16, sigma=NULL, weights=NULL,
-           distance="euclidean", shortcut=FALSE, warn=TRUE)
+           distance=c("euclidean", "path"), shortcut=TRUE, warn=TRUE)
 }
 \arguments{
   \item{X}{

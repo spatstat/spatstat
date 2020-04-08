@@ -8,7 +8,7 @@
   network, and returns the intensity estimate as a function of spatial location.
 }
 \usage{
-\method{densityfun}{lpp}(X, sigma, \dots, weights=NULL, nsigma=1)
+\method{densityfun}{lpp}(X, sigma, \dots, weights=NULL, nsigma=1, verbose=FALSE)
 }
 \arguments{
   \item{X}{
@@ -35,6 +35,9 @@
     the result is a function with an additional argument \code{k}
     containing the kernel estimates for the \code{nsigma+1}
     equally-spaced time steps from \code{0} to \code{sigma^2}.
+  }
+  \item{verbose}{
+    Logical value indicating whether to print progress reports.
   }
 }
 \details{
@@ -91,12 +94,12 @@
 \examples{
   X <- unmark(chicago)
   # single bandwidth
-  g <- densityfun(X, 100)
+  g <- densityfun(X, 30)
   plot(g)
   Y <- X[1:5]
   g(Y)
   # weighted
-  gw <- densityfun(X, 100, weights=runif(npoints(X)))
+  gw <- densityfun(X, 30, weights=runif(npoints(X)))
   # sequence of bandwidths 
   g10 <- densityfun(X, 30, nsigma=10)
   g10(Y, k=10)

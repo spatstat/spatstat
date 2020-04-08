@@ -3,10 +3,7 @@
 #'
 #'   Likelihood cross-validation for kernel smoother of point pattern
 #'
-#'   bw.ppl    class ppp
-#'   bw.lppl   class lpp
-#' 
-#'   $Revision: 1.11 $ $Date: 2019/09/30 07:48:05 $
+#'   $Revision: 1.12 $ $Date: 2020/04/08 04:27:12 $
 #'
 
 bw.ppl <- function(X, ..., srange=NULL, ns=16, sigma=NULL,
@@ -50,65 +47,3 @@ bw.ppl <- function(X, ..., srange=NULL, ns=16, sigma=NULL,
 }
 
 
-bw.lppl <- function(X, ..., srange=NULL, ns=16, sigma=NULL,
-                    weights=NULL, distance="euclidean",
-                    shortcut=FALSE, warn=TRUE) {
-  stopifnot(is.lpp(X))
-  if(!is.null(sigma)) {
-    stopifnot(is.numeric(sigma) && is.vector(sigma))
-    ns <- length(sigma)
-  } else {
-    if(!is.null(srange)) check.range(srange) else {
-      dd <- diameter(Frame(X))                                               
-      ss <- bw.scott.iso(X)
-      srange <- range(c(ss/10, ss*5, dd/5))
-    }
-    sigma <- geomseq(from=srange[1L], to=srange[2L], length.out=ns)
-  }
-  cv <- numeric(ns)
-  if(shortcut) {
-    #' omit calculation of integral term
-    #' precompute the geometry data
-    lam1 <- density(X, sigma=sigma[1], weights=weights, distance=distance, ...,
-                     savecomputed=TRUE)
-    precooked <- attr(lam1, "savedstuff")
-    for(i in 1:ns) {
-      si <- sigma[i]
-      lamx <- density(X, sigma=si, at="points", leaveoneout=TRUE,
-                      weights=weights, distance=distance,
-                      precomputed=precooked, ...)
-      lamx <- pmax(0, lamx)
-      cv[i] <- sum(log(lamx))
-    }
-  } else {
-    #' full calculation
-    precooked <- NULL
-    cooking <- TRUE
-    for(i in 1:ns) {
-      si <- sigma[i]
-      lamx <- density(X, sigma=si, at="points", leaveoneout=TRUE,
-                      weights=weights, distance=distance, 
-                      precomputed=precooked,
-                      ...)
-      lam <- density(X, sigma=si,
-                     weights=weights, distance=distance,
-                     precomputed=precooked,
-                     savecomputed=cooking,
-                     ...)
-      if(cooking) {
-        #' save geometry info for re-use in subsequent iterations
-        precooked <- attr(lam, "savedstuff")
-        cooking <- FALSE
-      }
-      lamx <- pmax(0, lamx)
-      cv[i] <- sum(log(lamx)) - integral(lam)
-    }
-  }
-  result <- bw.optim(cv, sigma, iopt=which.max(cv), 
-                     creator="bw.lppl",
-                     criterion="Likelihood Cross-Validation",
-                     warnextreme=warn,
-                     hargnames="srange",
-                     unitname=unitname(X))
-  return(result)
-}

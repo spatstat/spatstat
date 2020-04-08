@@ -3,9 +3,10 @@
 ##
 ##    Copyright (c) Greg McSwiggan and Adrian Baddeley 2017-2020
 ##
-##    $Revision: 1.7 $  $Date: 2020/04/05 03:59:54 $
+##    $Revision: 1.8 $  $Date: 2020/04/07 13:33:50 $
 
-densityfun.lpp <- function(X, sigma, ..., weights=NULL, nsigma=1) {
+densityfun.lpp <- function(X, sigma, ...,
+                           weights=NULL, nsigma=1, verbose=FALSE) {
   stopifnot(is.lpp(X))
   check.1.real(sigma)
   if(sigma == Inf) {
@@ -17,7 +18,7 @@ densityfun.lpp <- function(X, sigma, ..., weights=NULL, nsigma=1) {
     check.nvector(weights, npoints(X))
   #' 
   L <- as.linnet(X)
-  p <- resolve.heat.steps(sigma, L=L, ..., verbose=FALSE)
+  p <- resolve.heat.steps(sigma, L=L, ..., verbose=verbose)
 
   #' internal argument
   exit <- resolve.1.default(list(exit="no"), list(...))
@@ -29,7 +30,7 @@ densityfun.lpp <- function(X, sigma, ..., weights=NULL, nsigma=1) {
   a <- FDMKERNEL(lppobj=X, weights=weights, 
                  dtx=p$dx, dtt=p$dt, M=p$niter, nsave=nsigma,
                  stepnames=list(time="dt", space="dx"),
-                 setuponly=setuponly)
+                 setuponly=setuponly, verbose=verbose)
   if(setuponly) return(a)
   #' 
   if(nsigma == 1) {

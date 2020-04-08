@@ -119,6 +119,7 @@
 \alias{dflt.redraw}
 \alias{densitycrossEngine}
 \alias{densitypointsEngine}
+\alias{densitypointsLPP}
 \alias{diagnose.ppm.engine}
 \alias{diagramobj}
 \alias{digestCovariates}
@@ -322,6 +323,7 @@
 \alias{logi.dummy}
 \alias{logi.engine}
 \alias{logLik.vblogit}
+\alias{looHeatLPP}
 \alias{looVoronoiLPP}
 \alias{makeLinnetTolerance}
 \alias{markvaluetype}
@@ -935,6 +937,10 @@ densitypointsEngine(x, sigma, \dots,
                     kernel, scalekernel,
                     weights, edge, varcov,
                     leaveoneout, diggle, sorted, spill, cutoff)
+densitypointsLPP(x, sigma, \dots,
+                 weights, nsigma, leaveoneout, fast,
+                 fastmethod, floored,
+                 dx, dt, iterMax, verbose, debug)
 diagnose.ppm.engine(object, \dots, type, typename, opt,
                          sigma, rbord, compute.sd, compute.cts,
                          envelope, nsim, nrank,
@@ -1191,8 +1197,10 @@ logi.engine(Q, trend, interaction, \dots,
             vnamebase, vnameprefix, justQ, savecomputed, precomputed,
             VB)
 \method{logLik}{vblogit}(object, \dots)
+looHeatLPP(U0, Amatrix, npts, niter, nsave,
+           lixelweight, lixelmap, verbose) 
 looVoronoiLPP(X)
-makeLinnetTolerance
+makeLinnetTolerance(toler)
 maskLaslett(X, \dots, eps, dimyx, xy, oldX, verbose, plotit)
 markvaluetype(x)
 match2DkernelName(kernel)

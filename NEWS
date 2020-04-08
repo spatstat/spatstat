@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.63-3.025
+        CHANGES IN spatstat VERSION 1.63-3.027
 
 OVERVIEW
 
@@ -11,6 +11,8 @@ OVERVIEW
     o spatstat no longer 'Suggests' the packages 'tcltk' and 'rpanel'.
 
     o Add new vertices to a linear network.
+
+    o Leave-one-out density estimation on a network.
     
     o Improvements and extensions to linear networks code.
 
@@ -34,13 +36,14 @@ NEW FUNCTIONS
     This is the new name of the function 'lengths.psp',
     which had to be changed because of a conflict with the generic 'lengths'.
 
-    o densityHeat
-    The heat-equation algorithm for kernel density estimation on a network
-    is now visible as a separate function.
-
     o densityEqualSplit
     The equal-split algorithm for kernel density estimation on a network
     is now visible as a separate function.
+
+    o densityHeat
+    The heat-equation algorithm for kernel density estimation on a network
+    is now visible as a separate function. It has also been extended
+    to computing leave-one-out density estimates at the data points.
 
     o hotrod
     Compute the heat kernel kappa(u,v) on a one-dimensional line segment.
@@ -98,6 +101,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o integral.linim
     Now handles complex-valued functions.
+    
+    o bw.lppl
+    Accelerated when distance="path".
     
 BUG FIXES
 

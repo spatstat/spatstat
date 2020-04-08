@@ -558,4 +558,46 @@ Change log from 1.63-3 to 1.63-4
 ------------- passed R-3.6.3 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
-   
+
+07 mar 2020
+
+   density.loo.R [New file]
+   spatstat-internal.Rd
+	new internal functions densitypointsLPP, looHeatLPP
+	
+   density.lpp.R
+   density.lpp.Rd
+	densityHeat supports calculation of density at data points.
+	New arguments 'at' and 'leaveoneout'
+
+   DESCRIPTION
+   NEWS
+	Version 1.63-3.026
+
+------------- passed R-3.6.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+
+   bw.ppl.R
+   bw.lppl.R [New file]
+   	 Excised bw.lppl to a separate file.
+	 
+   bw.lppl.Rd
+   spatstat-internal.Rd
+	bw.lppl now handles leave-one-out computation when distance="path"
+	using densityHeat.
+	New internal functions lcvlppHeat, lcvlppQuick
+	
+   densityfunlpp.R
+   density.loo.R
+   density.lpp.R
+	Bug fixes and performance tweaks.
+	
+   DESCRIPTION
+   NEWS
+	Version 1.63-3.027
+
+------------- passed R-3.6.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+	
