@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.63-3.027
+        CHANGES IN spatstat VERSION 1.63-3.028
 
 OVERVIEW
 
@@ -8,8 +8,10 @@ OVERVIEW
     
     o Interactive graphics functions have been removed to a separate package.
 
-    o spatstat no longer 'Suggests' the packages 'tcltk' and 'rpanel'.
+    o spatstat no longer needs the packages 'tcltk' and 'rpanel'.
 
+    o The suggested package 'maptools' should be version 0.9-9 or later.
+    
     o Add new vertices to a linear network.
 
     o Leave-one-out density estimation on a network.

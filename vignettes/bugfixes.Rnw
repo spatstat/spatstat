@@ -86,6 +86,9 @@ book \cite{baddrubaturn15}.
 Following is a list of the {\bf most serious bugs}, 
 in decreasing order of potential impact.
 
+Bugs which cause an error exit are not listed, because these 
+are immediately obvious.
+
 \newcommand\bugger[4]{%
   \\  {} %
   {\small (Bug introduced in \texttt{spatstat {#1}}, {#2}; %

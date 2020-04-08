@@ -174,6 +174,9 @@ the News and Release Notes for each update.
 
   \item The interactive graphics functions \texttt{iplot} and \texttt{istat}
     have been removed from \spst\ into a new package \pkg{spatstat.gui}.
+
+  \item The packages \pkg{tcltk} and \pkg{rpanel} are no longer 
+    Suggested by \spst.
     
   \item \spst\ now Imports the package \pkg{spatstat.utils}.
 
@@ -182,6 +185,8 @@ the News and Release Notes for each update.
   \item \spst\ now suggests the package \pkg{fftwtools}.
 
   \item Add new vertices to a linear network.
+    
+  \item Leave-one-out density estimation on a network.
     
    \item Function \texttt{lengths.psp} has been renamed \verb!lengths_psp!.
 
@@ -479,6 +484,14 @@ Following is a list of all the functions that have been added.
 
 \begin{itemize}
 
+\item \texttt{bw.lppl}:
+  Bandwidth selection for kernel density estimation
+  of point patterns on a linear network,
+  using likelihood cross-validation.
+  
+  \item  \texttt{densityfun.lpp}: a method for \texttt{densityfun}
+    for point patterns on a linear network.
+    
   \item \texttt{addVertices}:
     Add new vertices to a network, at locations outside the
     existing network.
@@ -487,6 +500,24 @@ Following is a list of all the functions that have been added.
     function \texttt{lengths.psp}, which had to be changed because of
     a conflict with the generic \texttt{lengths}.
   
+    
+  \item \texttt{densityEqualSplit}:
+    The equal-split algorithm for kernel density estimation on a network
+    is now visible as a separate function.
+
+  \item \texttt{densityHeat}:
+    The heat-equation algorithm for kernel density estimation on a network
+    is now visible as a separate function. It has also been extended
+    to computing leave-one-out density estimates at the data points.
+
+   
+  \item \texttt{hotrod}:
+    Compute the heat kernel $\kappa(u,v)$ on a one-dimensional line segment.
+
+  \item \texttt{heatkernelapprox}:
+    Calculate an approximation to the value of the heat kernel
+    on a network evaluated at the source point, $\kappa(u,u)$.
+    
   \item \texttt{is.linim}: test whether an object is 
       a pixel image on a linear network (class \verb!"linim"!).
   
@@ -1246,6 +1277,8 @@ listed alphabetically.
       If the line segment pattern has marks, then the resulting linear network
       also carries these marks in the \verb!$lines! component.
     \item Computation accelerated.
+    \item The resulting network has attribute \texttt{"camefrom"} 
+      indicating the provenance of each line segment in the network.
     \end{itemize}
 
     
@@ -1512,6 +1545,8 @@ listed alphabetically.
      New arguments \texttt{weights} and \texttt{old}.
    \item New argument \texttt{distance} offers a choice of different
      kernel methods.
+   \item Infinite bandwidth (\texttt{sigma=Inf}) is now permitted,
+     and results in a density estimate that is constant over all locations.
    \end{itemize}
    
  \item \texttt{density.ppp}:
@@ -1747,10 +1782,15 @@ listed alphabetically.
    \item    New argument \texttt{delta} controls step length of
    approximation to integral.
    \item    Argument \code{domain} can be a tessellation.
+   \item Now handles complex-valued functions.
    \end{itemize}
 
  \item \texttt{integral.linim}:
-   Argument \code{domain} can be a tessellation.
+   \begin{itemize}
+   \item    Argument \code{domain} can be a tessellation.
+   \item Now handles complex-valued functions.
+
+   \end{itemize}
 
  \item \texttt{integral.ssf}:
    Argument \code{domain} can be a tessellation.
