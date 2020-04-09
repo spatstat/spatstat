@@ -484,6 +484,9 @@ Following is a list of all the functions that have been added.
 
 \begin{itemize}
 
+  \item \texttt{relrisk.lpp}: 
+    nonparametric estimation of relative risk on a network.
+    
 \item \texttt{bw.lppl}:
   Bandwidth selection for kernel density estimation
   of point patterns on a linear network,

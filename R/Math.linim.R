@@ -1,7 +1,7 @@
 ##
 ##   Math.linim.R
 ##
-##   $Revision: 1.7 $ $Date: 2019/10/07 01:27:14 $
+##   $Revision: 1.8 $ $Date: 2020/04/09 01:59:33 $
 ##
 
 Ops.linim <- function(e1,e2=NULL){
@@ -35,8 +35,10 @@ Summary.linim <- function(..., na.rm, finite){
   values <- lapply(argh, "[")
   dfvalues <- if(is.element(.Generic, c("sum", "prod"))) list() else 
               lapply(lapply(argh, attr, which="df"), getElement, name="values")
-  vals <- as.numeric(unlist(c(values, dfvalues)))
-  if(finite) {
+  vals <- unlist(c(values, dfvalues))
+  logique <- is.element(.Generic, c("all", "any"))
+  vals <- if(logique) as.logical(vals) else as.numeric(vals)
+  if(finite && !logique) {
     vals <- vals[is.finite(vals)]
   } else if(na.rm) {
     vals <- vals[!is.na(vals)]

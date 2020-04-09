@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.63-3.028
+        CHANGES IN spatstat VERSION 1.63-3.029
 
 OVERVIEW
 
@@ -14,6 +14,8 @@ OVERVIEW
     
     o Add new vertices to a linear network.
 
+    o Relative risk estimation on a network.
+    
     o Leave-one-out density estimation on a network.
     
     o Improvements and extensions to linear networks code.
@@ -28,6 +30,9 @@ OVERVIEW
 
 NEW FUNCTIONS
 
+    o relrisk.lpp
+    Method for 'relrisk' for point patterns on a linear network.
+    
     o densityfun.lpp
     Method for 'densityfun' for point patterns on a linear network.
 
@@ -133,6 +138,11 @@ BUG FIXES
     between all pairs of network vertices.
     Fixed.
 
+    o Summary.linim
+    A spurious warning was generated when the operation any() or all()
+    was applied to a logical-valued image on a network.
+    Fixed.
+    
         CHANGES IN spatstat VERSION 1.63-3
 
 OVERVIEW
