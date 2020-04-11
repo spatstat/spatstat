@@ -184,9 +184,11 @@ the News and Release Notes for each update.
 
   \item \spst\ now suggests the package \pkg{fftwtools}.
 
-  \item Add new vertices to a linear network.
+  \item Relative risk estimation on a network.
     
   \item Leave-one-out density estimation on a network.
+    
+  \item Add new vertices to a linear network.
     
    \item Function \texttt{lengths.psp} has been renamed \verb!lengths_psp!.
 
@@ -486,6 +488,9 @@ Following is a list of all the functions that have been added.
 
   \item \texttt{relrisk.lpp}: 
     nonparametric estimation of relative risk on a network.
+    
+  \item \texttt{bw.relrisklpp}: 
+  Bandwidth selection for relative risk estimation on a network.
     
 \item \texttt{bw.lppl}:
   Bandwidth selection for kernel density estimation

@@ -105,7 +105,7 @@
   The result also belongs to the class \code{"bw.optim"}
   allowing it to be printed and plotted. The plot shows the cross-validation
   criterion as a function of bandwidth.  
-  
+
   The range of values for the smoothing bandwidth \code{sigma}
   is set by the arguments \code{hmin, hmax}. There is a sensible default,
   based on the linear network version of Scott's rule
@@ -116,7 +116,13 @@
   (unless \code{warn=FALSE}). If this occurs, then it is probably advisable
   to expand the interval by changing the arguments \code{hmin, hmax}.
 
-  Computation time depends greatly on the maximum value \code{hmax}.
+  The cross-validation procedure is based on kernel estimates
+  of intensity, which are computed by \code{\link{density.lpp}}.
+  Any arguments \code{...} are passed to \code{\link{density.lpp}}
+  to control the kernel estimation procedure. This includes the
+  argument \code{distance} which specifies the type of kernel.
+  The default is \code{distance="path"};
+  the fastest option is \code{distance="euclidean"}.
 }
 \value{
   A numerical value giving the selected bandwidth.
@@ -144,6 +150,7 @@
    f <- linfun(g, simplenet)
    X <- superimpose(A=runiflpp(20, simplenet), B=rlpp(15, f))
    plot(bw.relrisklpp(X, hmin=0.1, hmax=0.3))
+   plot(bw.relrisklpp(X, hmin=0.1, hmax=0.3, distance="euclidean"))
 }
 \keyword{spatial}
 \keyword{methods}
