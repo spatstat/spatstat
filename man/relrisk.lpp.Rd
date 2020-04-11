@@ -26,6 +26,8 @@
     The numeric value of the smoothing bandwidth
     (the standard deviation of Gaussian smoothing kernel)
     passed to \code{\link{density.lpp}}.
+    Alternatively \code{sigma} may be a function which can be used
+    to select the bandwidth. See Details.
   }
   \item{\dots}{
     Arguments passed to \code{\link{density.lpp}} to control the
@@ -132,13 +134,19 @@
   An infinite value of relative risk (arising because the
   probability of a control is zero) will be returned as \code{Inf}.
 
-  Estimation is performed by a simple Nadaraja-Watson type kernel
+  Estimation is performed by a Nadaraja-Watson type kernel
   smoother (McSwiggan et al., 2019).
+
   The smoothing bandwidth \code{sigma}
-  is a single numeric value, giving the standard
+  should be a single numeric value, giving the standard
   deviation of the isotropic Gaussian kernel.
   If \code{adjust} is given, the smoothing bandwidth will be
-  \code{adjust * sigma}.
+  \code{adjust * sigma} before the computation of relative risk.
+
+  Alternatively, \code{sigma} may be a function that can be applied
+  to the point pattern \code{X} to select a bandwidth; the function
+  must return a single numerical value; examples include the
+  functions \code{\link{bw.relrisklpp}} and \code{\link{bw.scott.iso}}.
 
   Accuracy depends on the spatial resolution of the density
   computations. If the arguments \code{dx} and \code{dt} are present,

@@ -4,12 +4,15 @@
 #  Class of optimised bandwidths
 #  Plotting the object displays the optimisation criterion
 #
-#  $Revision: 1.30 $  $Date: 2019/09/30 11:17:34 $
+#  $Revision: 1.32 $  $Date: 2020/04/11 05:29:57 $
 #
 
-bw.optim <- function(cv, h, iopt=which.min(cv), ...,
+bw.optim <- function(cv, h,
+                     iopt=if(optimum == "min") which.min(cv) else which.max(cv),
+                     ...,
                      cvname, hname,
                      criterion="cross-validation",
+                     optimum = c("min", "max"), 
                      warnextreme=TRUE, hargnames=NULL,
                      unitname=NULL) {
   if(missing(cvname) || is.null(cvname)) cvname <- deparse(substitute(cv))
@@ -17,16 +20,25 @@ bw.optim <- function(cv, h, iopt=which.min(cv), ...,
   stopifnot(is.numeric(cv))
   stopifnot(is.numeric(h))
   stopifnot(length(h) == length(cv))
-  if(warnextreme && (iopt == length(h) || iopt == 1)) 
-    warning(paste(criterion, "criterion was optimised at",
-                  if(iopt == 1) "left-hand" else "right-hand",
-                  "end of interval",
-                  paste0(prange(signif(range(h), 3)), ";"), 
-                  "use", ngettext(length(hargnames), "argument", "arguments"),
-                  paste(sQuote(hargnames), collapse=", "),
-                  "to specify a wider interval for bandwidth", sQuote(hname)),
-            call.=FALSE)
+  optimum <- match.arg(optimum)
   result <- h[iopt]
+  if(warnextreme) {
+    optimised <- switch(optimum, min="minimised", max="maximised")
+    if(is.infinite(result)) {
+      warning(paste(criterion, "criterion was", optimised, "at",
+                    hname, "=", as.numeric(result)),
+              call.=FALSE)
+    } else if((iopt == length(h) || iopt == 1)) {
+      warning(paste(criterion, "criterion was", optimised, "at",
+                    if(iopt == 1) "left-hand" else "right-hand",
+                    "end of interval",
+                    paste0(prange(signif(range(h[is.finite(h)]), 3)), ";"), 
+                    "use", ngettext(length(hargnames), "argument", "arguments"),
+                    paste(sQuote(hargnames), collapse=", "),
+                    "to specify a wider interval for bandwidth", sQuote(hname)),
+              call.=FALSE)
+    }
+  }
   attr(result, "cv") <- cv
   attr(result, "h") <- h
   attr(result, "iopt") <- iopt

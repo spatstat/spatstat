@@ -637,4 +637,26 @@ Change log from 1.63-3 to 1.63-4
 ------------- passed R-3.6.3 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
+
+11 apr 2020
+
+   relrisk.lpp.R
+   bw.relrisklpp.Rd [New file]
+        New function bw.relrisklpp
+
+   relrisk.lpp.R
+   relrisk.lpp.Rd
+	relrisk.lpp accepts sigma=<function>
+
+   bw.optim.R
+	Handles infinite values of bandwidth.
+
+   DESCRIPTION
+   NEWS
+	Version 1.63-3.030
+
+------------- passed R-3.6.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+
    

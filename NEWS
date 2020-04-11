@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.63-3.029
+        CHANGES IN spatstat VERSION 1.63-3.030
 
 OVERVIEW
 
@@ -32,6 +32,9 @@ NEW FUNCTIONS
 
     o relrisk.lpp
     Method for 'relrisk' for point patterns on a linear network.
+
+    o bw.relrisklpp
+    Bandwidth selection for relative risk on a network.
     
     o densityfun.lpp
     Method for 'densityfun' for point patterns on a linear network.
