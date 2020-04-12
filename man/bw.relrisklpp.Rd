@@ -10,8 +10,9 @@
 }
 \usage{
   bw.relrisklpp(X, \dots,
-    method = c("McSwiggan", "KelsallDiggle", "likelihood", "leastsquares"),
-    hmin = NULL, hmax = NULL, nh = 256,
+    method = c("likelihood", "leastsquares", "KelsallDiggle", "McSwiggan"),
+    distance=c("path", "euclidean"),
+    hmin = NULL, hmax = NULL, nh = NULL,
     fast = TRUE, fastmethod = "onestep",
     floored = TRUE, reference = c("thumb", "uniform", "sigma"),
     allow.infinite = TRUE, epsilon = 1e-20, fudge = 0,
@@ -27,7 +28,14 @@
     resolution of the algorithm.
   }
   \item{method}{
-    Character string determining the cross-validation method.
+    Character string (partially matched)
+    determining the cross-validation method.
+    See Details.
+  }
+  \item{distance}{
+    Character string (partially matched)
+    specifying the type of smoothing kernel.
+    See \code{\link{density.lpp}}.
   }
   \item{hmin,hmax}{
     Optional. Numeric values.
@@ -92,12 +100,12 @@
 
   The cross-validation criterion is selected by the argument \code{method}:
   \tabular{ll}{
-    \code{method="leastsquares"} \tab least squares cross-validation \cr
     \code{method="likelihood"} \tab likelihood cross-validation \cr
+    \code{method="leastsquares"} \tab least squares cross-validation \cr
     \code{method="KelsallDiggle"} \tab Kelsall and Diggle (1995) density
   ratio cross-validation \cr
     \code{method="McSwiggan"} \tab McSwiggan et al (2019) modified
-  density ratio \cr
+  density ratio cross-validation \cr
   }
   See McSwiggan et al (2019) for details.
 
@@ -146,10 +154,9 @@
 }
 \examples{
    set.seed(2020)
-   g <- function(x,y,seg,tp) { as.numeric(seg == 1) }
-   f <- linfun(g, simplenet)
-   X <- superimpose(A=runiflpp(20, simplenet), B=rlpp(15, f))
-   plot(bw.relrisklpp(X, hmin=0.1, hmax=0.3))
+   X <- superimpose(A=runiflpp(20, simplenet),
+                    B=runifpointOnLines(20, as.psp(simplenet)[1]))
+   plot(bw.relrisklpp(X, hmin=0.1, hmax=0.3, method="McSwiggan"))
    plot(bw.relrisklpp(X, hmin=0.1, hmax=0.3, distance="euclidean"))
 }
 \keyword{spatial}

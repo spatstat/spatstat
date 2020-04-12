@@ -3,7 +3,7 @@
 #
 #   Estimation of relative risk on network
 #
-#  $Revision: 1.4 $  $Date: 2020/04/11 06:49:34 $
+#  $Revision: 1.5 $  $Date: 2020/04/12 02:55:34 $
 #
 
 relrisk.lpp <- local({
@@ -235,12 +235,13 @@ bw.relrisklpp <- local({
 hargnames <- c("hmin", "hmax")
 
 bw.relrisklpp <- function(X, ..., 
-                          method=c("McSwiggan",
+                          method=c("likelihood",
+                                   "leastsquares",
                                    "KelsallDiggle",
-                                   "likelihood",
-                                   "leastsquares"),
+                                   "McSwiggan"),
+                          distance=c("path", "euclidean"),
                           hmin=NULL, hmax=NULL,
-                          nh=256,
+                          nh=NULL,
                           fast=TRUE, fastmethod="onestep", floored=TRUE,
                           reference=c("thumb", "uniform", "sigma"),
                           allow.infinite=TRUE,
@@ -251,15 +252,17 @@ bw.relrisklpp <- function(X, ...,
   stopifnot(is.multitype(X))
   method <- match.arg(method)
   reference <- match.arg(reference)
+  distance <- match.arg(distance)
+  if(is.null(nh)) nh <- switch(distance, path=256, euclidean=16)
   ## validate X
   marx <- marks(X)
   types <- levels(marx)
   ntypes <- length(types)
   if(ntypes == 1L)
     stop("There is only one type of point", call.=FALSE)
-  if(ntypes > 2L)
-    stop("Sorry, not yet implemented for more than 2 types of points",
-         call.=FALSE)
+  if(ntypes > 2L && distance == "path")
+    stop(paste("Sorry, bw.relrisklpp(distance='path') is not yet supported",
+               "for > 2 types of points"), call.=FALSE)
   ## determine range of bandwidths
   if(got.hmax <- !missing(hmax)) { check.1.real(hmax) ; stopifnot(hmax > 0) }
   if(got.hmin <- !missing(hmin)) { check.1.real(hmin) ; stopifnot(hmin > 0) }
@@ -276,9 +279,44 @@ bw.relrisklpp <- function(X, ...,
     hmin <- srange[1L]
     hmax <- srange[2L]
   }
+  if(verbose) splat("Bandwidth range:", prange(c(hmin, hmax)))
+  ##
+  if(distance == "euclidean") {
+    if(verbose) splat("Euclidean smoothing")
+    if(method %in% c("McSwiggan", "KelsallDiggle"))
+      stop(paste0("Sorry, bw.relrisklpp(method=", sQuote(method),
+                  ") is not yet supported for > 2 types of points"),
+           call.=FALSE)
+    sigmavalues <- seq(hmin, hmax, length.out=nh)
+    cv <- numeric(nh)
+    witch <- cbind(seq_along(marx), as.integer(marx))
+    pstate <- list()
+    if(verbose) cat(paste("Processing", nh, "values of bandwidth ..."))
+    for(i in 1:nh) {
+      si <- sigmavalues[i]
+      p <- relrisk(X, si, at="points", distance="euclidean", casecontrol=FALSE)
+      pobs <- p[witch]
+      cv[i] <- switch(method,
+                      likelihood=log(prod(pobs)),
+                      leastsquares=sum((1-pobs)^2))
+      if(verbose) pstate <- progressreport(i, nh, state=pstate)
+    }
+    result <- switch(method,
+                     likelihood = bw.optim(cv, sigmavalues, optimum="max", 
+                              hname="sigma", cvname="logL",  
+                              criterion="likelihood cross-validation",
+                              hargnames=hargnames,
+                              unitname=unitname(X)),
+                     leastsquares = bw.optim(cv, sigmavalues, 
+                              hname="sigma", cvname="psq", 
+                              criterion="least squares cross-validation",
+                              hargnames=hargnames,
+                              unitname=unitname(X)))
+    return(result)
+  }
+  ## ---------- heat kernel (distance='path') ------------------------------
   sigma <- hmax
   nsigma <- ceiling(nh * hmax/(hmax-hmin))
-  if(verbose) splat("Bandwidth range:", prange(c(hmin, hmax)))
   #'
   if(verbose) splat("Setting up network data...")
   L <- domain(X)

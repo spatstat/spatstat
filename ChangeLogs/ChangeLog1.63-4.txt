@@ -675,3 +675,21 @@ Change log from 1.63-3 to 1.63-4
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
 
+12 apr 2020
+
+   relrisk.lpp.R
+   bw.relrisklpp.Rd
+	bw.relrisklpp supports distance="euclidean"
+	and supports > 2 types of points
+	
+   relrisk.lpp.Rd
+   bw.relrisklpp.Rd
+	Improved examples
+
+   DESCRIPTION
+   NEWS
+	Version 1.63-3.032
+
+------------- passed R-3.6.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------

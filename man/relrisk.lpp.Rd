@@ -196,9 +196,22 @@
   \code{\link{relrisk}}
 }
 \examples{
+   ## case-control data: 2 types of points
+   set.seed(2020)
+   X <- superimpose(A=runiflpp(20, simplenet),
+                    B=runifpointOnLines(20, as.psp(simplenet)[1]))
+   plot(X)
+   plot(relrisk(X, 0.2))
+   plot(relrisk(X, 0.2, case="B"))
+   head(relrisk(X, 0.2, at="points"))
+   ## cross-validated bandwidth selection
+   plot(relrisk(X, bw.relrisklpp, hmax=0.3))
+
+   ## more than 2 types
    sig <- if(interactive()) 170 else 50
    plot(relrisk(chicago, sig))
    head(relrisk(chicago, sig, at="points"))
+   plot(relrisk(chicago, sig, relative=TRUE, control="theft"))
 }
 \references{
   McSwiggan, G., Baddeley, A. and Nair, G. (2019)
