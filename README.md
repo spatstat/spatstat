@@ -74,15 +74,16 @@ Currently there are four extension packages:
    . [spatstat.local](https://github.com/baddstats/spatstat.local)
    for local model-fitting, 
 
-   . [spatstat.sphere](https://github.com/spatstat/spatstat.sphere)
-   for analysing point patterns on a sphere,
-
    . [spatstat.Knet](https://github.com/spatstat/spatstat.Knet)
-   for analysing point patterns on a network of lines.
+   for analysing point patterns on a network of lines,
 
    . [spatstat.gui](https://github.com/spatstat/spatstat.gui)
    for interactive graphics (containing the functions `iplot` and `istat` that
-   were previously part of `spatstat`).
+   were previously part of `spatstat`),
+
+   . [spatstat.sphere](https://github.com/spatstat/spatstat.sphere)
+   for analysing point patterns on a sphere
+   (_package is still in preparation_).
 
 ## Installation
 
