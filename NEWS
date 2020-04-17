@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.63-3.032
+        CHANGES IN spatstat VERSION 1.63-3.033
 
 OVERVIEW
 
@@ -145,7 +145,11 @@ BUG FIXES
     A spurious warning was generated when the operation any() or all()
     was applied to a logical-valued image on a network.
     Fixed.
-    
+
+    o "[<-.linim"
+    Crashed if the assignment would have replaced some existing NA values.
+    Fixed.
+
         CHANGES IN spatstat VERSION 1.63-3
 
 OVERVIEW

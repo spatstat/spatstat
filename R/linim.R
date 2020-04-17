@@ -1,7 +1,7 @@
 #
 # linim.R
 #
-#  $Revision: 1.74 $   $Date: 2020/04/04 04:33:27 $
+#  $Revision: 1.75 $   $Date: 2020/04/17 08:57:40 $
 #
 #  Image/function on a linear network
 #
@@ -670,7 +670,7 @@ as.linnet.linim <- function(X, ...) {
   pos <- cbind(pos$row, pos$col)
   yvalue <- y$v[pos]
   xvalue <- x$v[pos]
-  changed <- (yvalue != xvalue)
+  changed <- (is.na(yvalue) != is.na(xvalue)) | (yvalue != xvalue)
   df$values[changed] <- yvalue[changed]
   #' restrict main pixel image to network
   m <- as.mask.psp(L, as.mask(y))$m

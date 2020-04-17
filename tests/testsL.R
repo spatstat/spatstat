@@ -372,7 +372,7 @@ local({
 #
 # Tests for lpp code
 #
-#  $Revision: 1.61 $  $Date: 2020/04/04 04:00:41 $
+#  $Revision: 1.62 $  $Date: 2020/04/17 09:03:02 $
 
 
 require(spatstat)
@@ -767,15 +767,16 @@ local({
   D <- density(X, 0.05, finespacing=TRUE) # }
   D <- density(X, 0.05, eps=0.008)        # }  code blocks in resolve.heat.steps
   D <- density(X, 0.05, dimyx=256)        # }
+  DX <- density(X, 0.05, at="points", fastmethod="a")
+  DX <- density(X, 0.05, at="points", fast=FALSE)
   #' disconnected network
   L <- thinNetwork(simplenet, retainedges=-c(3,5))
   Y <- runiflpp(5, L)
   D <- density(Y, 0.05)
   D <- density(Y, 0.05, weights=w)
   D <- density(Y, Inf)
-  #' density.splitppx
-  Z <- split(chicago)[1:3]
-  D <- density(Z, 7)
+  g <- flatdensityfunlpp(Y, disconnect=FALSE)
+  a <- flatdensityatpointslpp(Y, disconnect=FALSE)
   #' density.lpp -> densityEqualSplit
   D <- density(X, 0.05, kernel="e", weights=w)
   D <- density(X, Inf, kernel="e")
@@ -799,6 +800,11 @@ local({
   densityVoronoi(Y[FALSE], f=0.5)
   #' bandwidth selection
   bw.voronoi(X, nrep=4, prob=c(0.2, 0.4, 0.6))
+  bw.lppl(X)
+  sug <- seq(0.1, 0.3, by=0.05)
+  bw.lppl(X, sigma=sug)
+  bw.lppl(X, sigma=sug, shortcut=FALSE)
+  bw.lppl(X, sigma=sug, distance="path", shortcut=FALSE)
   #' inhomogeneous K and g
   SD <- split(dendrite)
   DT <- density(SD[["thin"]], 100, distance="euclidean")
@@ -821,7 +827,32 @@ local({
   C <- resolve.heat.steps(100, L=L, niter=1e5)
   C <- resolve.heat.steps(100, L=L, niter=1e5, nsave=3)
   D <- resolve.heat.steps(100, L=L, dx=1, dt=0.2)
-  E <- resolve.heat.steps(500, L=L, dt=0.5, iterMax=2e5) 
+  E <- resolve.heat.steps(500, L=L, dt=0.5, iterMax=2e5)
+  A <- resolve.heat.steps(1, L=simplenet, dt=2, dx=0.05)
+  B <- resolve.heat.steps(1, L=simplenet)
+  C <- resolve.heat.steps(1, L=simplenet, finespacing=FALSE)
+  D <- resolve.heat.steps(1, seglengths=rep(0.7, 5), maxdegree=4, AMbound=7)
+})
+
+local({
+  #' multitype
+  #' density.splitppx
+  Z <- split(chicago)[1:3]
+  D <- density(Z, 7)
+  #' relrisk.lpp for 3 types
+  U <- do.call(superimpose, Z)
+  A <- relrisk(U, 20, control=1, relative=TRUE)
+  A <- relrisk(U, 20, control=1, relative=TRUE, at="points")
+  #' relrisk.lpp for 2 types
+  V <- do.call(superimpose, Z[1:2])
+  A <- relrisk(V, 20, control=2, casecontrol=FALSE) # issues warning
+  B <- relrisk(V, 20, control="assault", case=2, relative=TRUE)
+  D <- relrisk(V, 20, control=1, case="burglary", relative=TRUE, at="points")
+  #' bw.relrisklpp
+  b1 <- bw.relrisklpp(V, hmax=3, fudge=0.01,
+                      method="leastsquares", reference="sigma")
+  b2 <- bw.relrisklpp(V, hmax=3, fudge=0.01,
+                      method="KelsallDiggle", reference="uniform")
 })
 
 local({

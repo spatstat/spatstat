@@ -693,3 +693,27 @@ Change log from 1.63-3 to 1.63-4
 ------------- passed R-3.6.3 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
+
+   breakpts.R
+	Hardened against weird arguments
+
+17 apr 2020
+
+   linim.R
+	Bug fix in [<-.linim 
+	
+   bw.lppl.R
+   density.lpp.R
+   relrisk.lpp.R
+	Bug fixes (handling of NA, NaN)
+
+   tests/lppstuff.R
+	Tests of the bugs.
+
+   DESCRIPTION
+   NEWS
+	Version 1.63-3.033
+
+------------- passed R-3.6.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------

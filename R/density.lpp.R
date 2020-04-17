@@ -435,7 +435,6 @@ resolve.heat.steps <-
 
   ## ---------- CHARACTERISTICS OF NETWORK ------------------
   if(is.null(L)) {
-    check.nvector(seglengths, nsegments(L), things="edges of the network")
     check.1.integer(maxdegree)
     check.1.integer(AMbound)
   } else {
@@ -500,7 +499,7 @@ resolve.heat.steps <-
   } else if(dt.given) {
     if(verbose) splat(" Determining niter from dt",
                       if(nsave.given) "and nsave" else NULL)
-    niter <- nsave * round(sigma^2/(nsave*2*dt))
+    niter <- nsave * max(1L, round(sigma^2/(nsave*2*dt)))
     if(niter > iterMax) {
       problem <- paste("Time step dt =", dt,
                        "implies number of iterations =", niter,
@@ -510,7 +509,7 @@ resolve.heat.steps <-
              call.=FALSE)
       niter <- iterMax
       if(nsave.given)
-        niter <- nsave * floor(as.double(niter)/nsave)
+        niter <- nsave * max(1L, floor(as.double(niter)/nsave))
       dt <- sigma^2/(2 * niter)
       if(warn.adjust || verbose) {
         comment <- paste0(problem,
@@ -527,7 +526,7 @@ resolve.heat.steps <-
     if(verbose) splat(" Validating dt")
     dxmax <- lmin/3
     dtmax <- min(0.95 * (dxmax^2)/AMbound, sigma^2/(2 * 10), sigma * dxmax/6)
-    niterMin <- round(sigma^2/(2 * dtmax))
+    niterMin <- max(1L, round(sigma^2/(2 * dtmax)))
     if(niterMin > iterMax) 
       stop(paste("Minimum number of iterations required is", niterMin,
                  "which exceeds iterMax =", iterMax,
@@ -546,9 +545,9 @@ resolve.heat.steps <-
         if(warn.adjust) warning(gripe, call.=FALSE)
         if(verbose) splat(gripe)
         if(niter.given) {
-          niter <- round(sigma^2/(2 * dt))
+          niter <- max(1L, round(sigma^2/(2 * dt)))
           if(nsave.given)
-            niter <- nsave * floor(as.double(niter)/nsave)
+            niter <- nsave * max(1L, floor(as.double(niter)/nsave))
           comment <- paste("niter adjusted to", niter)
           if(warn.adjust) warning(comment, call.=FALSE)
           if(verbose) splat(comment)
@@ -622,9 +621,9 @@ resolve.heat.steps <-
       if(warn.adjust) warning(gripe, call.=FALSE)
       if(verbose) splat(gripe)
       if(niter.given) {
-        niter <- round(sigma^2/(2 * dt))
+        niter <- max(1L, round(sigma^2/(2 * dt)))
         if(nsave.given)
-          niter <- nsave * floor(as.double(niter)/nsave)
+          niter <- nsave * max(1L, floor(as.double(niter)/nsave))
         comment <- paste("niter adjusted to", niter)
         if(warn.adjust) warning(comment, call.=FALSE)
         if(verbose) splat(comment)
@@ -635,7 +634,7 @@ resolve.heat.steps <-
   #' finally determine the number of iterations, if not already done.
 
   if(is.null(niter)) {
-    niter <- nsave * round(sigma^2/(nsave * 2 * dt))
+    niter <- nsave * max(1L, round(sigma^2/(nsave * 2 * dt)))
     dt <- sigma^2/(2 * niter)
     if(verbose) {
       splat(" Number of iterations (determined from dt) =", niter)

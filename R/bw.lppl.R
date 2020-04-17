@@ -29,7 +29,7 @@ bw.lppl <- function(X, ..., srange=NULL, ns=16, sigma=NULL,
               euclidean = lcvlppQuick(X, sigma, ...,
                                       weights=weights, shortcut=shortcut))
   result <- with(a,
-                 bw.optim(cv, sigma, iopt=which.max(cv), 
+                 bw.optim(cv, sigma, optimum="max",
                           creator="bw.lppl",
                           criterion="Likelihood Cross-Validation",
                           warnextreme=warn,

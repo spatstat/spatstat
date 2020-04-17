@@ -6,7 +6,7 @@
 #
 #	even.breaks()
 #
-#	$Revision: 1.24 $	$Date: 2019/11/01 01:07:53 $
+#	$Revision: 1.25 $	$Date: 2020/04/12 08:34:19 $
 #
 #
 #       Other functions in this directory use the standard Splus function
@@ -56,8 +56,11 @@
 #       
 # --------------------------------------------------------------------
 breakpts <- function(val, maxi, even=FALSE, npos=NULL, step=NULL) {
-  out <- list(val=val, max=maxi, ncells=length(val)-1L, r = val[-1L],
-              even=even, npos=npos, step=step)
+  out <- list(val=as.numeric(val),
+              max=as.numeric(maxi),
+              ncells=length(val)-1L, r = val[-1L],
+              even=isTRUE(even),
+              npos=npos, step=step)
   class(out) <- "breakpts"
   out
 }
@@ -70,24 +73,26 @@ scalardilate.breakpts <- function(X, f, ...) {
                    r      = f*r,
                    even   = even,
                    npos   = npos,
-                   step   = f*step))
+                   step   = if(is.null(step)) NULL else (f*step)))
   class(out) <- "breakpts"
   out
 }  
                             
-"make.even.breaks" <- 
-function(bmax, npos, bstep) {
+make.even.breaks <- function(bmax, npos, bstep) {
+  bmax <- as.numeric(bmax)
   if(bmax <= 0)
     stop("bmax must be positive")
   if(missing(bstep) && missing(npos))
     stop(paste("Must specify either", sQuote("bstep"),
                "or", sQuote("npos")))
   if(!missing(npos)) {
+    npos <- as.integer(npos)
     bstep <- bmax/npos
     val <- seq(from=0, to=bmax, length.out=npos+1L)
     val <- c(-bstep,val)
     right <- bmax
   } else {
+    bstep <- as.numeric(bstep)
     npos <- ceiling(bmax/bstep)
     right <- bstep * npos
     val <- seq(from=0, to=right, length.out=npos+1L)
@@ -109,7 +114,8 @@ function(bmax, npos, bstep) {
       return(X)
   
     if(is.vector(X) && length(X) > 2) {
-    # it's a vector
+      ## it's a vector
+      X <- as.numeric(X)
       if(X[2L] != 0)
         stop("breakpoints do not satisfy breaks[2] = 0")
       # The following test for equal spacing is used in hist.default
@@ -153,6 +159,7 @@ check.hist.lengths <- function(hist, breaks) {
 breakpts.from.r <- function(r) {
   if(!is.numeric(r) && !is.vector(r))
     stop("r must be a numeric vector")
+  r <- as.numeric(r)
   if(length(r) < 2)
     stop(paste("r has length", length(r), "- must be at least 2"))
   if(r[1L] != 0)
