@@ -3,7 +3,7 @@
 ##
 ##    Copyright (c) Greg McSwiggan and Adrian Baddeley 2017-2020
 ##
-##    $Revision: 1.8 $  $Date: 2020/04/07 13:33:50 $
+##    $Revision: 1.10 $  $Date: 2020/04/18 08:10:11 $
 
 densityfun.lpp <- function(X, sigma, ...,
                            weights=NULL, nsigma=1, verbose=FALSE) {
@@ -18,7 +18,7 @@ densityfun.lpp <- function(X, sigma, ...,
     check.nvector(weights, npoints(X))
   #' 
   L <- as.linnet(X)
-  p <- resolve.heat.steps(sigma, L=L, ..., verbose=verbose)
+  p <- resolve.heat.steps(sigma, L=L, ..., nsave=nsigma, verbose=verbose)
 
   #' internal argument
   exit <- resolve.1.default(list(exit="no"), list(...))
@@ -28,10 +28,10 @@ densityfun.lpp <- function(X, sigma, ...,
 
   #' call Greg's solver
   a <- FDMKERNEL(lppobj=X, weights=weights, 
-                 dtx=p$dx, dtt=p$dt, M=p$niter, nsave=nsigma,
+                 dtx=p$dx, dtt=p$dt, M=p$niter, nsave=p$nsave,
                  stepnames=list(time="dt", space="dx"),
                  setuponly=setuponly, verbose=verbose)
-  if(setuponly) return(a)
+  if(setuponly) return(resolve.defaults(a, p))
   #' 
   if(nsigma == 1) {
     #' return smoother with bandwidth sigma

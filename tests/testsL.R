@@ -372,7 +372,7 @@ local({
 #
 # Tests for lpp code
 #
-#  $Revision: 1.62 $  $Date: 2020/04/17 09:03:02 $
+#  $Revision: 1.65 $  $Date: 2020/04/18 08:46:10 $
 
 
 require(spatstat)
@@ -767,8 +767,10 @@ local({
   D <- density(X, 0.05, finespacing=TRUE) # }
   D <- density(X, 0.05, eps=0.008)        # }  code blocks in resolve.heat.steps
   D <- density(X, 0.05, dimyx=256)        # }
-  DX <- density(X, 0.05, at="points", fastmethod="a")
-  DX <- density(X, 0.05, at="points", fast=FALSE)
+  DX <- density(X, 0.05, at="points", fastmethod="a", debug=TRUE)
+  DX <- density(X, 0.05, at="points", fast=FALSE,     debug=TRUE)
+  ## densityfun.lpp, code blocks
+  ff <- densityfun(X, 0.05, nsigma=Inf)
   #' disconnected network
   L <- thinNetwork(simplenet, retainedges=-c(3,5))
   Y <- runiflpp(5, L)
@@ -826,6 +828,7 @@ local({
   B <- resolve.heat.steps(100, L=L, dt=0.2)
   C <- resolve.heat.steps(100, L=L, niter=1e5)
   C <- resolve.heat.steps(100, L=L, niter=1e5, nsave=3)
+  C <- resolve.heat.steps(100, L=L, niter=1e5, nsave=Inf)
   D <- resolve.heat.steps(100, L=L, dx=1, dt=0.2)
   E <- resolve.heat.steps(500, L=L, dt=0.5, iterMax=2e5)
   A <- resolve.heat.steps(1, L=simplenet, dt=2, dx=0.05)

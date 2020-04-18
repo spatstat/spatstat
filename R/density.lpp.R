@@ -398,6 +398,7 @@ resolve.heat.steps <-
            niter=NULL,  # number of iterations (A*)
            iterMax=1e6, # maximum number of iterations (can be Inf) (F)
            nsave=1, # number of time points for which data should be saved (F)
+                    # nsave = Inf means save all iterations, nsave = niter
            ## network information
            seglengths=NULL, # lengths of network edges
            maxdegree=NULL, # maximum vertex degree
@@ -417,12 +418,15 @@ resolve.heat.steps <-
   ## Based on original code by Greg McSwiggan 2015-2016
 
   check.1.real(sigma)  # infinite sigma is allowed
-  check.1.integer(nsave)
+  check.1.real(nsave)  # infinite 'nsave' is allowed (will be reset to niter)
+  if(is.finite(nsave)) check.1.integer(nsave)
   stopifnot(nsave >= 1)
   dx.given    <- !is.null(dx) && check.1.real(dx)
   dt.given    <- !is.null(dt) && check.1.real(dt)
   niter.given <- !is.null(niter) && check.1.integer(niter)
   nsave.given <- (nsave > 1)
+  obey.nsave  <- nsave.given && is.finite(nsave) 
+  save.all    <- is.infinite(nsave)
   
   one <- 1 + .Machine$double.eps # tolerance for comparisons
 
@@ -465,7 +469,9 @@ resolve.heat.steps <-
     if(verbose) splat(" Validating niter =", niter)
     stopifnot(niter >= 10)
     stopifnot(niter <= iterMax)
-    if(nsave.given && ((niter < nsave) || (niter %% nsave != 0))) {
+    if(save.all) {
+      nsave <- niter
+    } else if(obey.nsave && ( (niter < nsave) || (niter %% nsave != 0) )) {
       if(!allow.adjust)
         stop(paste("niter =", niter, "is not a multiple of nsave =", nsave),
              call.=FALSE)
@@ -498,8 +504,10 @@ resolve.heat.steps <-
     } else if(verbose) splat(" dt =", dt)
   } else if(dt.given) {
     if(verbose) splat(" Determining niter from dt",
-                      if(nsave.given) "and nsave" else NULL)
-    niter <- nsave * max(1L, round(sigma^2/(nsave*2*dt)))
+                      if(obey.nsave) "and nsave" else NULL)
+    stepratio <- sigma^2/(2 * dt)
+    niter <- if(save.all) max(1L, round(stepratio)) else 
+             nsave * max(1L, round(stepratio/nsave))
     if(niter > iterMax) {
       problem <- paste("Time step dt =", dt,
                        "implies number of iterations =", niter,
@@ -508,8 +516,10 @@ resolve.heat.steps <-
         stop(paste0(problem, "; increase dt or increase iterMax"),
              call.=FALSE)
       niter <- iterMax
-      if(nsave.given)
+      if(obey.nsave)
         niter <- nsave * max(1L, floor(as.double(niter)/nsave))
+      if(save.all)
+        nsave <- niter
       dt <- sigma^2/(2 * niter)
       if(warn.adjust || verbose) {
         comment <- paste0(problem,
@@ -518,7 +528,10 @@ resolve.heat.steps <-
         if(verbose) splat(comment)
       }
     } 
-    if(verbose) splat(" niter =", niter)
+    if(verbose) {
+      splat(" niter =", niter)
+      splat(" nsave =", nsave)
+    }
   }
 
   ## check dt satisfies basic constraint
@@ -546,11 +559,15 @@ resolve.heat.steps <-
         if(verbose) splat(gripe)
         if(niter.given) {
           niter <- max(1L, round(sigma^2/(2 * dt)))
-          if(nsave.given)
+          if(obey.nsave)
             niter <- nsave * max(1L, floor(as.double(niter)/nsave))
           comment <- paste("niter adjusted to", niter)
           if(warn.adjust) warning(comment, call.=FALSE)
           if(verbose) splat(comment)
+          if(save.all) {
+            nsave <- niter
+            if(verbose) splat("  nsave = niter =", nsave)
+          }
         }
       }
     }
@@ -608,7 +625,7 @@ resolve.heat.steps <-
   if(!dt.known) {
     dt <- dtmax
     if(verbose) 
-      splat(" dt (determined by constraints) = ", dt)
+      splat(" dt (determined by all constraints) = ", dt)
   } else if(dt > dtmax) {
     really <- (dt > dtmax * one)
     dtOLD <- dt
@@ -622,11 +639,15 @@ resolve.heat.steps <-
       if(verbose) splat(gripe)
       if(niter.given) {
         niter <- max(1L, round(sigma^2/(2 * dt)))
-        if(nsave.given)
+        if(obey.nsave)
           niter <- nsave * max(1L, floor(as.double(niter)/nsave))
         comment <- paste("niter adjusted to", niter)
         if(warn.adjust) warning(comment, call.=FALSE)
         if(verbose) splat(comment)
+        if(save.all) {
+          nsave <- niter
+          if(verbose) splat(" nsave = niter =", nsave)
+        }
       }
     }
   }
@@ -634,11 +655,19 @@ resolve.heat.steps <-
   #' finally determine the number of iterations, if not already done.
 
   if(is.null(niter)) {
-    niter <- nsave * max(1L, round(sigma^2/(nsave * 2 * dt)))
+    niter <- if(save.all) max(1L, round(sigma^2/(2 * dt)))
+             else nsave * max(1L, round(sigma^2/(nsave * 2 * dt)))
     dt <- sigma^2/(2 * niter)
     if(verbose) {
-      splat(" Number of iterations (determined from dt) =", niter)
+      splat(" Number of iterations",
+            paren(paste0("determined from dt",
+                        if(obey.nsave) " and nsave" else NULL)),
+            "=", niter)
       splat(" Updated dt =", dt)
+    }
+    if(save.all) {
+      nsave <- niter
+      if(verbose) splat(" nsave = niter =", nsave)
     }
   }
 

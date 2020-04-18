@@ -14,6 +14,7 @@ densitypointsLPP <- function(x, sigma, ...,
                              dx=NULL, dt=NULL,
                              iterMax=1e6, verbose=FALSE, debug=FALSE) {
   stopifnot(is.lpp(x))
+  verbose <- verbose || debug
   #' compute density estimates at points
   fastmethod <- match.arg(fastmethod)
   if(identical(sigma, Inf)) {
@@ -66,7 +67,7 @@ densitypointsLPP <- function(x, sigma, ...,
     return(result)
   }
   #' get setup data
-  g <- densityfun(x, sigma, weights=weights,
+  g <- densityfun(x, sigma, weights=weights, nsigma=nsigma,
                   dx=dx, dt=dt, iterMax=iterMax,
                   verbose=verbose, debug=debug, 
                   exit="setup")
@@ -78,6 +79,8 @@ densitypointsLPP <- function(x, sigma, ...,
   U0          <- g$U0
   deltax      <- g$deltax
   deltat      <- g$deltat
+  niter       <- g$niter
+  nsave       <- g$nsave
   #' 
   if(debug) {
     cat("finenet:\n")
@@ -88,11 +91,11 @@ densitypointsLPP <- function(x, sigma, ...,
     str(lixelweight)
   }
   #'
-  niter <- ceiling(sigma^2/(deltat * 2))
   #' do the full iterative computation for each X[-i]
   U0 <- as.numeric(U0)
-  v <- looHeatLPP(U0, Amatrix, npoints(x), niter, nsigma, lixelweight, lixelmap)
-  result <- if(nsigma == 1) as.numeric(v) else t(v)
+  v <- looHeatLPP(U0, Amatrix, npoints(x), niter, nsave,
+                  lixelweight, lixelmap, verbose=verbose)
+  result <- if(nsave == 1) as.numeric(v) else t(v)
   attr(result, "sigma") <- sigma * sqrt(attr(v, "iter")/niter)
   return(result)
 }
@@ -100,53 +103,38 @@ densitypointsLPP <- function(x, sigma, ...,
 
 looHeatLPP <- function(U0, Amatrix, npts, niter, nsave, lixelweight, lixelmap,
                        verbose=TRUE) {
-  pstate <- list()
-  result <- matrix(nrow=nsave, ncol=npts)
+  niter <- as.integer(niter)
+  nsave <- as.integer(nsave)
   lixelmap <- as.integer(lixelmap)
+
+  nsave <- min(nsave, niter)
+  result <- matrix(nrow=nsave, ncol=npts)
+
+  pstate <- list()
   if(verbose) cat(paste("Processing", npts, "points ... "))
-  if(nsave == niter) {
-    #' save results of all iterations
-    for(i in 1:npts) {
-      u0 <- U0
-      #' subtract weights corresponding to i-th data point
-      ii <- 2 * i + c(-1, 0)
-      ll <- lixelmap[ii]
-      ww <- lixelweight[ii]
-      u0[ll] <- u0[ll] - ww
-      #' which node is closest to i-th data point
-      kk <- ll[which.max(abs(ww))]
-      #' run solver
-      U <- u0
-      for(iter in 1:niter) {
+  #' save results of 'nsave' equally-spaced iterations
+  blocksize <- niter/nsave
+  blockends <- pmin(niter, blocksize * (1:nsave))
+  blockleng <- diff(c(0L, blockends))
+  for(i in 1:npts) {
+    u0 <- U0
+    #' subtract weights corresponding to i-th data point
+    ii <- 2 * i + c(-1, 0)
+    ll <- lixelmap[ii]
+    ww <- lixelweight[ii]
+    u0[ll] <- u0[ll] - ww
+    #' which node is closest to i-th data point
+    knodei <- ll[which.max(abs(ww))]
+    #' run solver
+    U <- u0
+    for(jsave in 1:nsave) {
+      nsub <- blockleng[jsave]
+      for(l in seq_len(nsub)) 
         U <- Amatrix %*% U
-        result[iter, i] <- U[kk]
-      }
-      if(verbose) pstate <- progressreport(i, npts, state=pstate)
+      result[jsave, i] <- U[knodei]
     }
-    attr(result, "iter") <- 1:niter
-  } else {
-    #' save results of 'nsave' equally-spaced iterations
-    blocksize <- ceiling(niter/nsave)
-    for(i in 1:npts) {
-      u0 <- U0
-      #' subtract weights corresponding to i-th data point
-      ii <- 2 * i + c(-1, 0)
-      ll <- lixelmap[ii]
-      ww <- lixelweight[ii]
-      u0[ll] <- u0[ll] - ww
-      #' which node is closest to i-th data point
-      kk <- ll[which.max(abs(ww))]
-      #' run solver
-      U <- u0
-      for(isave in 1:nsave) {
-        nit <- min(blocksize, niter - (isave-1)*blocksize)
-        for(j in 1:nit)
-          U <- Amatrix %*% U
-        result[isave, i] <- U[kk]
-      }
-      if(verbose) pstate <- progressreport(i, npts, state=pstate)
-    }
-    attr(result, "iter") <- pmin(niter, blocksize * (1:nsave))
+    if(verbose) pstate <- progressreport(i, npts, state=pstate)
   }
+  attr(result, "iter") <- blockends
   return(result)
 }

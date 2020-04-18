@@ -717,3 +717,23 @@ Change log from 1.63-3 to 1.63-4
 ------------- passed R-3.6.3 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
+
+18 apr 2020
+
+   density.lpp.R
+   density.loo.R
+   densityfunlpp.R
+	Further extensions allowing nsigma (=nsave) = Inf,
+	with the interpretation that it should be set to niter.
+
+   tests/lppstuff.R
+	Tests of this code
+
+   DESCRIPTION
+   NEWS
+	Version 1.63-3.034
+
+------------- passed R-3.6.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+
