@@ -65,6 +65,11 @@
 
   Columns that are not named in \code{same} or \code{different} will not
   be included.
+
+  The arguments \code{same} and \code{different} can be \code{NULL},
+  or they can be character vectors containing the names
+  of columns of \code{object}. The argument \code{different} can be
+  one of the abbreviations recognised by \code{\link{fvnames}}.
 }
 \value{
   Object of class \code{"fv"}.

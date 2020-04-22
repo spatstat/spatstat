@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.63-3.034
+        CHANGES IN spatstat VERSION 1.63-3.035
 
 OVERVIEW
 
@@ -112,8 +112,14 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o integral.linim
     Now handles complex-valued functions.
     
+    o transect.im
+    New argument 'nsample'.
+    
     o bw.lppl
     Accelerated when distance="path".
+
+    o collapse.fv
+    Recognises the abbreviations used by fvnames()
     
 BUG FIXES
 

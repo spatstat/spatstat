@@ -4,7 +4,7 @@
 ##
 ##    class "fv" of function value objects
 ##
-##    $Revision: 1.155 $   $Date: 2019/12/10 07:18:00 $
+##    $Revision: 1.157 $   $Date: 2020/04/22 07:36:08 $
 ##
 ##
 ##    An "fv" object represents one or more related functions
@@ -227,7 +227,7 @@ print.fv <- local({
             flat.deparse(as.formula(a$fmla)))
       splat("where", dQuote("."), "stands for",
             commasep(sQuote(fvnames(x, ".")), ", "))
-      if(!is.null(a$shade)) 
+      if(length(a$shade)) 
         splat("Columns", commasep(sQuote(a$shade)), 
               "will be plotted as shading (by default)")
       alim <- a$alim
@@ -261,47 +261,33 @@ print.fv <- local({
 
 fvnames <- function(X, a=".") {
   verifyclass(X, "fv")
-  if(!is.character(a) || length(a) > 1)
+  if(!is.character(a))
     stop("argument a must be a character string")
-  switch(a,
-         ".y"={
-           return(attr(X, "valu"))
-         },
-         ".x"={
-           return(attr(X, "argu"))
-         },
-         ".s"={
-           return(attr(X, "shade"))
-         },
-         "." = {
-           ## The specified 'dotnames'
-           dn <- attr(X, "dotnames")
-           if(is.null(dn)) 
-             dn <- fvnames(X, "*")
-           return(dn)
-         },
-         ".a"={
-           ## all column names other than the function argument
-           allvars <- names(X)
-           argu <- attr(X, "argu")
-           nam <- allvars[allvars != argu]
-           return(nam)
-         },
-         "*"={
-           ## Not documented at user level
-           ## All column names other than the function argument
-           ##           IN REVERSE ORDER
-           allvars <- names(X)
-           argu <- attr(X, "argu")
-           nam <- allvars[allvars != argu]
-           nam <- rev(nam) # NB
-           return(nam)
-         },
-         {
-           if(a %in% names(X)) return(a)
-           stop(paste("Unrecognised abbreviation", dQuote(a)))
-         }
-       )
+  namesX <- names(X)
+  Abb    <- .Spatstat.FvAbbrev
+  ##
+  if(any(unknown <- is.na(match(a, c(namesX, Abb)))))
+    stop(paste("Unrecognised",
+               ngettext(sum(unknown), "abbreviation", "abbreviations"),
+               commasep(sQuote(a[unknown]))))
+  ##
+  result <- as.list(a)
+  if(any(expand <- !is.na(match(a, Abb)))) {
+    vnames <- setdiff(namesX, attr(X, "argu"))
+    for(i in which(expand)) 
+      result[[i]] <- switch(a[i],
+                            ".y" = attr(X, "valu"),
+                            ".x" = attr(X, "argu"),
+                            ".s" = attr(X, "shade"),
+                            ".a" = vnames,
+                            "*"  = rev(vnames),
+                            "."  = attr(X, "dotnames") %orifnull% rev(vnames))
+  }
+  if(length(a) == 1) {
+    result <- unlist(result)
+    if(length(result) == 0) result <- NULL
+  }
+  return(result)
 }
 
 "fvnames<-" <- function(X, a=".", value) {
@@ -373,7 +359,7 @@ fvnames <- function(X, a=".") {
   fvnames(x, ".x") <- value[indx]
   fvnames(x, ".y") <- value[indy]
   fvnames(x, ".")  <- value[ind.]
-  if(length(inds) > 0)
+  if(length(inds))
     fvnames(x, ".s") <- value[inds]
   namemap <- setNames(lapply(value, as.name), nama)
   formula(x) <- flat.deparse(eval(substitute(substitute(fom, um),
@@ -461,7 +447,7 @@ fvlabelmap <- local({
       ## map other fvnames to their corresponding labels
       map <- append(map, list(".x"=map[[fvnames(x, ".x")]],
                               ".y"=map[[fvnames(x, ".y")]]))
-      if(!is.null(fvnames(x, ".s"))) {
+      if(length(fvnames(x, ".s"))) {
         shex <- unname(map[fvnames(x, ".s")])
         shadexpr <- substitute(c(A,B), list(A=shex[[1L]], B=shex[[2L]]))
         map <- append(map, list(".s" = shadexpr))
@@ -482,8 +468,7 @@ fvexprmap <- function(x) {
   ux <- as.name(fvnames(x, ".x"))
   uy <- as.name(fvnames(x, ".y"))
   umap <- list(.=u, .a=u, .x=ux, .y=uy)
-  if(!is.null(fvnames(x, ".s"))) {
-    shnm <- fvnames(x, ".s")
+  if(length(shnm <- fvnames(x, ".s"))) {
     shadexpr <- substitute(cbind(A,B), list(A=as.name(shnm[1L]),
                                             B=as.name(shnm[2L])))
     umap <- append(umap, list(.s = shadexpr))
@@ -662,6 +647,7 @@ collapse.fv <- local({
       ## retain .y for now and delete it later.
       z <- y[, c(xname, yname)]
     } else {
+      same <-  fvnames(y, same) # expand abbreviations if present
       if(!(yname %in% same))
         fvnames(y, ".y") <- same[1L]
       z <- y[, c(xname, same)]
@@ -672,7 +658,8 @@ collapse.fv <- local({
       for(i in seq_along(x)) {
         ## extract values for i-th object
         xi <- x[[i]]
-        wanted <- (names(xi) %in% different)
+        diffi <- fvnames(xi, different) # expand abbreviations if present
+        wanted <- (names(xi) %in% diffi)
         if(any(wanted)) {
           y <- as.data.frame(xi)[, wanted, drop=FALSE]
           desc <- attr(xi, "desc")[wanted]
@@ -698,7 +685,12 @@ collapse.fv <- local({
     return(z)
   }
 
-  missingnames <- function(z, expected) { expected[!(expected %in% names(z))] }
+  
+  missingnames <- function(z, expected) {
+    known <- c(names(z), .Spatstat.FvAbbrev)
+    absent <- is.na(match(expected, known)) 
+    return(expected[absent])
+  }
   
   collapse.fv
 })
@@ -894,7 +886,7 @@ rename.fv <- function(x, fname, ylab, yexp=ylab) {
   dotn <- fvnames(x, ".")
   fvnames(result, ".") <- dotn[dotn %in% colnames(result)]
   shad <- fvnames(x, ".s")
-  if(!is.null(shad) && all(shad %in% colnames(result)))
+  if(length(shad) && all(shad %in% colnames(result)))
     fvnames(result, ".s") <- shad
   return(result)
 }  
@@ -981,12 +973,12 @@ with.fv <- function(data, expr, ..., fun=NULL, enclos=NULL) {
   yname <- fvnames(data, ".y")
   ux <- as.name(xname)
   uy <- as.name(yname)
-  dnames <- datanames[datanames %in% fvnames(data, ".")]
+  dnames <- intersect(datanames, fvnames(data, "."))
   ud <- as.call(lapply(c("cbind", dnames), as.name))
-  anames <- datanames[datanames %in% fvnames(data, ".a")]
+  anames <- intersect(datanames, fvnames(data, ".a"))
   ua <- as.call(lapply(c("cbind", anames), as.name))
-  if(!is.null(fvnames(data, ".s"))) {
-    snames <- datanames[datanames %in% fvnames(data, ".s")]
+  if(length(snames <- fvnames(data, ".s"))) {
+    snames <- intersect(datanames, snames)
     us <- as.call(lapply(c("cbind", snames), as.name))
   } else us <- NULL
   expandelang <- eval(substitute(substitute(ee,

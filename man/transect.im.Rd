@@ -9,7 +9,7 @@
 }
 \usage{
 transect.im(X, ..., from="bottomleft", to="topright",
-             click=FALSE, add=FALSE)
+            nsample=512, click=FALSE, add=FALSE)
 }
 \arguments{
   \item{X}{
@@ -24,6 +24,9 @@ transect.im(X, ..., from="bottomleft", to="topright",
     in a format acceptable to \code{\link{xy.coords}},
     or keywords \code{"bottom"}, \code{"left"}, \code{"top"},
     \code{"right"}, \code{"bottomleft"} etc.
+  }
+  \item{nsample}{
+    Integer. Number of sample locations along the transect.
   }
   \item{click}{
     Optional.

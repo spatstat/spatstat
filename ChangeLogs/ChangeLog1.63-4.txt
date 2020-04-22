@@ -737,3 +737,21 @@ Change log from 1.63-3 to 1.63-4
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
 
+22 apr 2020
+
+   transect.R
+   transect.im.Rd
+	New argument 'nsample'.
+
+   fv.R
+   collapse.fv.Rd
+	fvnames() handles character vectors.
+	collapse.fv accepts abbreviations recognised by fvnames().
+	
+   DESCRIPTION
+   NEWS
+	Version 1.63-3.035
+
+------------- passed R-3.6.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------

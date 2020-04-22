@@ -3,7 +3,7 @@
 #
 # Line transects of pixel images
 #
-#  $Revision: 1.6 $  $Date: 2013/03/15 01:28:06 $
+#  $Revision: 1.7 $  $Date: 2020/04/22 05:18:40 $
 #
 
 transect.im <- local({
@@ -37,10 +37,11 @@ transect.im <- local({
 
   transect.im <- 
     function(X, ..., from="bottomleft", to="topright",
-             click=FALSE, add=FALSE) {
+             nsample=512, click=FALSE, add=FALSE) {
       Xname <- short.deparse(substitute(X))
       Xname <- sensiblevarname(Xname, "X")
       stopifnot(is.im(X))
+      check.1.integer(nsample)
       # determine transect position
       if(click) {
         # interactive
@@ -60,7 +61,7 @@ transect.im <- local({
       if(identical(from,to))
         stop(paste(sQuote("from"), "and", sQuote("to"),
                    "must be distinct points"), call.=FALSE)
-      u <- seq(0,1,length=512)
+      u <- seq(0,1,length.out=nsample)
       x <- from$x + u * (to$x - from$x)
       y <- from$y + u * (to$y - from$y)
       leng <- sqrt( (to$x - from$x)^2 +  (to$y - from$y)^2)
