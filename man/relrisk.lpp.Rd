@@ -208,10 +208,17 @@
    plot(relrisk(X, bw.relrisklpp, hmax=0.3))
 
    ## more than 2 types
-   sig <- if(interactive()) 170 else 50
-   plot(relrisk(chicago, sig))
-   head(relrisk(chicago, sig, at="points"))
-   plot(relrisk(chicago, sig, relative=TRUE, control="theft"))
+   if(interactive()) {
+     U <- chicago
+     sig <- 170
+   } else {
+     U <- do.call(superimpose,
+                  split(chicago)[c("theft", "cartheft", "burglary")])
+     sig <- 50
+   }
+   plot(relrisk(U, sig))
+   head(relrisk(U, sig, at="points"))
+   plot(relrisk(U, sig, relative=TRUE, control="theft"))
 }
 \references{
   McSwiggan, G., Baddeley, A. and Nair, G. (2019)

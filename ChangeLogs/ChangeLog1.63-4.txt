@@ -755,3 +755,19 @@ Change log from 1.63-3 to 1.63-4
 ------------- passed R-3.6.3 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
+
+23 apr 2020
+
+   fv.R
+	tidied
+
+   relrisk.lpp.Rd
+	Shortened example computation time
+
+   DESCRIPTION
+   NEWS
+	Version 1.63-3.036
+
+------------- passed R-3.6.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------

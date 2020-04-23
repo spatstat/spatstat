@@ -4,7 +4,7 @@
 ##
 ##    class "fv" of function value objects
 ##
-##    $Revision: 1.157 $   $Date: 2020/04/22 07:36:08 $
+##    $Revision: 1.159 $   $Date: 2020/04/23 04:04:41 $
 ##
 ##
 ##    An "fv" object represents one or more related functions
@@ -263,31 +263,22 @@ fvnames <- function(X, a=".") {
   verifyclass(X, "fv")
   if(!is.character(a))
     stop("argument a must be a character string")
+  if(length(a) != 1) return(lapply(a, function(b, Z) fvnames(Z, b), Z=X))
   namesX <- names(X)
-  Abb    <- .Spatstat.FvAbbrev
-  ##
-  if(any(unknown <- is.na(match(a, c(namesX, Abb)))))
-    stop(paste("Unrecognised",
-               ngettext(sum(unknown), "abbreviation", "abbreviations"),
-               commasep(sQuote(a[unknown]))))
-  ##
-  result <- as.list(a)
-  if(any(expand <- !is.na(match(a, Abb)))) {
-    vnames <- setdiff(namesX, attr(X, "argu"))
-    for(i in which(expand)) 
-      result[[i]] <- switch(a[i],
-                            ".y" = attr(X, "valu"),
-                            ".x" = attr(X, "argu"),
-                            ".s" = attr(X, "shade"),
-                            ".a" = vnames,
-                            "*"  = rev(vnames),
-                            "."  = attr(X, "dotnames") %orifnull% rev(vnames))
-  }
-  if(length(a) == 1) {
-    result <- unlist(result)
-    if(length(result) == 0) result <- NULL
-  }
-  return(result)
+  if(a %in% namesX) return(a)
+  vnames <- setdiff(namesX, attr(X, "argu"))
+  answer <- switch(a,
+                   ".y" = attr(X, "valu"),
+                   ".x" = attr(X, "argu"),
+                   ".s" = attr(X, "shade"),
+                   ".a" = vnames,
+                   "*"  = rev(vnames),
+                   "."  = attr(X, "dotnames") %orifnull% rev(vnames),
+                   {
+                     stop(paste("Unrecognised abbreviation", sQuote(a)),
+                          call.=FALSE)
+                     })
+  return(answer)
 }
 
 "fvnames<-" <- function(X, a=".", value) {
