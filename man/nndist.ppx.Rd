@@ -8,7 +8,7 @@
   second nearest neighbour, or third nearest, etc.
 }
 \usage{
-  \method{nndist}{ppx}(X, \dots, k=1)
+  \method{nndist}{ppx}(X, \dots, k=1, by=NULL)
 }
 \arguments{
   \item{X}{
@@ -22,6 +22,11 @@
   \item{k}{
     Integer, or integer vector. The algorithm will compute the distance to the
     \code{k}th nearest neighbour. 
+  }
+  \item{by}{
+    Optional. A factor, which separates \code{X} into groups.
+    The algorithm will compute the distance to
+    the nearest point in each group. 
   }
 }
 \value{
@@ -61,6 +66,13 @@
   If there are no points (if \code{x} has length zero)
   a numeric vector of length zero is returned.
 
+  If the argument \code{by} is given, it should be a \code{factor},
+  of length equal to the number of points in \code{X}.
+  This factor effectively partitions \code{X} into subsets,
+  each subset associated with one of the levels of \code{X}.
+  The algorithm will then compute, for each point of \code{X},
+  the distance to the nearest neighbour \emph{in each subset}.
+
   To identify \emph{which} point is the nearest neighbour of a given point,
   use \code{\link{nnwhich}}.
 
@@ -93,11 +105,14 @@
 
    # first, second and third nearest
    d1to3 <- nndist(X, k=1:3)
+
+   # nearest neighbour distances to each group
+   marks(X) <- factor(c("a","a", "b", "b", "b"))
+   nndist(X, by=marks(X))
+   nndist(X, by=marks(X), k=1:2)
 }
 \author{
   \adrian
-  
-  
 }
 \keyword{spatial}
 \keyword{math}

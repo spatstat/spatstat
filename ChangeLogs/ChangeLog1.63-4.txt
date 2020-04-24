@@ -771,3 +771,29 @@ Change log from 1.63-3 to 1.63-4
 ------------- passed R-3.6.3 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
+
+24 apr 2020
+
+   distanxD.R
+   spatstat-internal.Rd
+	New internal function 'genericNNdistBy' calculates
+	'nndist(X, by)' using the generic nndist and nncross
+	assuming the relevant methods work.
+
+   distanxD.R
+   distan3D.R
+   nndistlpp.R
+   nndist.ppx.Rd
+   nndist.pp3.Rd
+   nndist.lpp.Rd
+	New argument 'by' for nndist .ppx, .pp3, .lpp
+
+   DESCRIPTION
+   NEWS
+	Version 1.63-3.037
+
+------------- passed R-3.6.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+
+

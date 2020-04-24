@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.63-3.036
+        CHANGES IN spatstat VERSION 1.63-3.037
 
 OVERVIEW
 
@@ -19,6 +19,8 @@ OVERVIEW
     o Leave-one-out density estimation on a network.
     
     o Improvements and extensions to linear networks code.
+
+    o Improvements to 'nndist' methods.
 
     o Function lengths.psp has been renamed lengths_psp.
 
@@ -64,6 +66,10 @@ NEW FUNCTIONS
     
 SIGNIFICANT USER-VISIBLE CHANGES
 
+    o nndist.pp3, nndist.ppx, nndist.lpp
+    These functions now recognise the argument 'by'
+    allowing computation of the nearest distance to each group of points.
+    
     o pairdist.lpp, crossdist.lpp
     These functions can now handle large networks,
     using the sparse representation.

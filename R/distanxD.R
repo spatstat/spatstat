@@ -1,7 +1,7 @@
 #
 #      distanxD.R
 #
-#      $Revision: 1.14 $     $Date: 2019/12/04 09:08:47 $
+#      $Revision: 1.15 $     $Date: 2020/04/24 03:33:47 $
 #
 #      Interpoint distances for multidimensional points
 #
@@ -36,10 +36,37 @@ crossdist.ppx <- function(X, Y, ...) {
   return(ans)
 }
 
-nndist.ppx <- function(X, ..., k=1) {
+genericNNdistBy <- function(X, by, k=1) {
+  #' performs nndist(X, by) using generic nndist and nncross
+  #' assuming they conform to the standard output format
+  Y <- split(X, by) 
+  m <- length(Y)
+  lev <- names(Y)
+  blanklist <- vector(mode="list", length=m)
+  partresults <- blanklist
+  for(i in 1:m) {
+    Yi <- Y[[i]]
+    contrib <- blanklist
+    for(j in 1:m)
+      contrib[[j]] <-
+        if(i == j) nndist(Yi, k=k) else nncross(Yi, Y[[j]], k=k, what="dist")
+    names(contrib) <- lev
+    partresults[[i]] <- do.call(cbind, contrib)
+  }
+  names(partresults) <- lev
+  result <- as.data.frame(matrix(, npoints(X), m * length(k)))
+  colnames(result) <- colnames(partresults[[1L]])
+  split(result, marks(X)) <- partresults
+  return(result)
+}
+
+nndist.ppx <- function(X, ..., k=1, by=NULL) {
   verifyclass(X, "ppx")
 
-  # extract point coordinates
+  if(!is.null(by)) 
+    return(genericNNdistBy(X, by, k=k))
+  
+  ## extract point coordinates
   coo <- as.matrix(coords(X, ...))
   n <- nrow(coo)
   m <- ncol(coo)
@@ -116,6 +143,10 @@ nndist.ppx <- function(X, ..., k=1) {
     infs <- matrix(as.numeric(Inf), nrow=n, ncol=kmax-kmaxcalc)
     nnd <- cbind(nnd, infs)
   }
+
+  # add labels
+  if(kmax > 1)
+    colnames(nnd) <- paste0("dist.", 1:kmax)
 
   if(length(k) < kmax) {
     # select only the specified columns
@@ -218,6 +249,9 @@ nnwhich.ppx <- function(X, ..., k=1) {
     nnw <- cbind(nnw, nas)
   }
 
+  if(kmax > 1)
+    colnames(nnw) <- paste0("which.", 1:kmax)
+  
   if(length(k) < kmax) {
     # select only the specified columns
     nnw <- nnw[, k, drop=TRUE]

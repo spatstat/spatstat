@@ -53,7 +53,7 @@ pairdist.pp3 <- function(X, ..., periodic=FALSE, squared=FALSE) {
   return(dout)
 }
 
-nndist.pp3 <- function(X, ..., k=1) {
+nndist.pp3 <- function(X, ..., k=1, by=NULL) {
   verifyclass(X, "pp3")
 
   if((narg <- length(list(...))) > 0) 
@@ -61,6 +61,9 @@ nndist.pp3 <- function(X, ..., k=1) {
                   ngettext(narg, "argument was", "arguments were"),
                   "ignored"))
 
+  if(!is.null(by)) 
+    return(genericNNdistBy(X, by, k=k))
+  
   # extract point coordinates
   xyz <- coords(X)
   n <- nrow(xyz)

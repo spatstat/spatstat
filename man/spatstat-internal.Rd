@@ -201,6 +201,7 @@
 \alias{gammabreaks}
 \alias{g3engine}
 \alias{g3Cengine}
+\alias{genericNNdistBy}
 \alias{getdataname}
 \alias{getfields}
 \alias{getglmdata}
@@ -1054,6 +1055,7 @@ fvlegend(object, elang)
 gammabreaks(ra, n, gamma)
 g3engine(x, y, z, box, rmax, nrval, correction)
 g3Cengine(x, y, z, box, rmax, nrval)
+genericNNdistBy(X, by, k)
 getdataname(defaultvalue, \dots, dataname)
 getfields(X, L, fatal = TRUE)
 getglmdata(object, drop=FALSE)
