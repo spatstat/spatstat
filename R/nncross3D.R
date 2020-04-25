@@ -1,7 +1,7 @@
 #
 #   nncross3D.R
 #
-#    $Revision: 1.8 $  $Date: 2017/06/05 10:31:58 $
+#    $Revision: 1.9 $  $Date: 2020/04/25 10:14:28 $
 #
 #  Copyright (C) Adrian Baddeley, Jens Oehlschlaegel and Rolf Turner 2000-2013
 #  Licence: GNU Public Licence >= 2
@@ -221,10 +221,7 @@ nncross.pp3 <- function(X, Y, iX=NULL, iY=NULL,
       if(want.which)
         NNW <- NNW[, k, drop=TRUE]
     }
-
-    result <- as.data.frame(list(dist=NND, which=NNW)[what])
-    if(ncol(result) == 1)
-      result <- result[, , drop=TRUE]
+    result <- packupNNdata(NND, NNW, what, k)
     return(result)
   }
 }

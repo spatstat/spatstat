@@ -796,4 +796,16 @@ Change log from 1.63-3 to 1.63-4
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
 
+25 apr 2020
+
+   distan3D.R
+	Bug fix in output labels of nncross.pp3(X)
+
+   DESCRIPTION
+   NEWS
+	Version 1.63-3.038
+
+------------- passed R-3.6.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
 
