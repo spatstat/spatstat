@@ -809,3 +809,24 @@ Change log from 1.63-3 to 1.63-4
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
 
+26 apr 2020
+
+    demo/spatstat.R
+	Updated usage
+	Added examples
+
+    Kmeasure.R
+	important bug fix in second.moment.engine
+	for edge correction in non-rectangular windows.
+
+    updates.Rnw
+    bugfixes.Rnw
+	updated to cover all the above.
+
+   DESCRIPTION
+   NEWS
+	Version 1.63-3.039
+
+------------- passed R-3.6.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------

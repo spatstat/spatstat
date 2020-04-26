@@ -1,7 +1,7 @@
 #
 #           Kmeasure.R
 #
-#           $Revision: 1.70 $    $Date: 2019/11/01 08:56:38 $
+#           $Revision: 1.71 $    $Date: 2020/04/26 10:09:16 $
 #
 #     Kmeasure()         compute an estimate of the second order moment measure
 #
@@ -192,7 +192,7 @@ second.moment.engine <-
   ystep <- X$ystep
   ## ensure obswin has same bounding frame as X
   if(!obswin.given) {
-    obswin <- Window(X)
+    obswin <- Window(x)
   } else if(!identical(Frame(obswin), Frame(X))) {
     obswin <- rebound.owin(obswin, as.rectangle(X))
   }

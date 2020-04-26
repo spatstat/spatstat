@@ -1,9 +1,9 @@
 
-        CHANGES IN spatstat VERSION 1.63-3.038
+        CHANGES IN spatstat VERSION 1.63-3.039
 
 OVERVIEW
 
-    o We thank Robert Aue, Greg McSwiggan, Tyler Rudolph
+    o We thank Robert Aue, Tilman Davies, Greg McSwiggan, Tyler Rudolph
     and Rasmus Plenge Waagepetersen for contributions.
     
     o Interactive graphics functions have been removed to a separate package.
@@ -11,6 +11,8 @@ OVERVIEW
     o spatstat no longer needs the packages 'tcltk' and 'rpanel'.
 
     o The suggested package 'maptools' should be version 0.9-9 or later.
+
+    o Important bug fix in density.ppp.
     
     o Add new vertices to a linear network.
 
@@ -128,6 +130,13 @@ SIGNIFICANT USER-VISIBLE CHANGES
     Recognises the abbreviations used by fvnames()
     
 BUG FIXES
+
+    o density.ppp
+    Edge correction factors were calculated incorrectly when the
+    window was not a rectangle, causing a negative bias in the
+    estimated intensity. [Spotted by Tilman Davies.]
+    Bug introduced in spatstat 1.57-0, october 2018.
+    Fixed.
 
     o mppm
     Internal data were malformed if the interaction was Hardcore()

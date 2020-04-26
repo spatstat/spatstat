@@ -1464,9 +1464,13 @@ listed alphabetically.
   mapped to the same colour.
   
 \item \texttt{collapse.fv}:
+  \begin{itemize}
+  \item 
    This is now treated as a method for the \texttt{nlme} 
    generic \texttt{collapse}.
    Its syntax has been adjusted slightly.
+ \item Recognises the abbreviations used by \texttt{fvnames()}.
+  \end{itemize}
 
 \item \texttt{connected.im}:
     Now handles a logical-valued image properly.
@@ -1628,6 +1632,13 @@ listed alphabetically.
     object for the argument \texttt{x},
     instead of giving two coordinate vectors \texttt{x} and \texttt{y}.
 
+ \item \texttt{distfun.lpp}:
+   \begin{itemize}
+   \item    New argument \texttt{k} allows computation of $k$-th nearest point.
+   \item    Computation accelerated.
+   \end{itemize}
+
+    
     \item \texttt{dppm}:
     Changed precedence rule for handling the algorithm parameters
     in the minimum contrast algorithm. Individually-named arguments
@@ -2140,9 +2151,36 @@ listed alphabetically.
  \item \texttt{nncorr,nnmean,nnvario}:
    New argument \texttt{na.action}.
    
- \item \texttt{nndist.lpp, nnwhich.lpp, nncross.lpp, distfun.lpp}:
-   New argument \texttt{k} allows computation of $k$-th nearest point.
-   Computation accelerated.
+ \item \texttt{nncross.lpp}:
+   \begin{itemize}
+   \item    New argument \texttt{k} allows computation of $k$-th nearest point.
+   \item    Computation accelerated.
+   \end{itemize}
+
+ \item \texttt{nndist.pp3}:
+   New argument \texttt{by} allows computation of the nearest 
+     distance to each group of points.
+
+ \item \texttt{nndist.ppx}:
+   New argument \texttt{by} allows computation of the nearest 
+     distance to each group of points.
+
+ \item \texttt{nndist.lpp}:
+   \begin{itemize}
+   \item    New argument \texttt{k} allows computation of $k$-th nearest point.
+   \item new argument \texttt{by} allows computation of the nearest 
+     distance to each group of points.
+   \item    Computation accelerated.
+   \end{itemize}
+
+ \item \texttt{nnwhich.lpp}:
+   \begin{itemize}
+   \item    New argument \texttt{k} allows computation of $k$-th nearest point.
+   \item new argument \texttt{by} allows computation of the nearest 
+     distance to each group of points.
+   \item    Computation accelerated.
+   \end{itemize}
+
 
    \texttt{nnfun.lpp}: 
    \begin{itemize}
@@ -2898,6 +2936,7 @@ listed alphabetically.
    \item \texttt{to.grey}
    New argument \texttt{transparent}.
 
+   \item \texttt{transect.im}: new argument \texttt{nsample}.
 %%U
    
   \item \texttt{union.owin}:

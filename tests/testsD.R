@@ -43,7 +43,7 @@ local({
 #'                    and inhomogeneous summary functions
 #'                    and idw, adaptive.density, intensity
 #'
-#'  $Revision: 1.53 $  $Date: 2020/04/03 03:18:58 $
+#'  $Revision: 1.54 $  $Date: 2020/04/26 10:23:54 $
 #'
 
 require(spatstat)
@@ -92,6 +92,15 @@ local({
   trymost(sigma=Inf, weights=wdf)
   trymost(varcov=V, weights=wdf)
   trymost(varcov=V, weights=expression(cbind(x,y)))
+
+  ## check conservation of mass (non-rectangular window)
+  lung <- split(chorley)[["lung"]]
+  veritas <- npoints(lung)
+  vino <- integral(density(lung, 2, diggle=TRUE))
+  if(abs(vino-veritas)/veritas > 0.01)
+    stop(paste("density.ppp(diggle=TRUE) fails to conserve mass:",
+               vino, "!=", veritas),
+         call.=FALSE)
   
   ## run C algorithm 'denspt'
   opa <- spatstat.options(densityC=TRUE, densityTransform=FALSE)
@@ -99,7 +108,7 @@ local({
   tryit(varcov=V, weights=expression(x))
   trymost(varcov=V, weights=wdf)
   spatstat.options(opa)
-  
+
   crossit <- function(..., sigma=NULL) {
     U <- runifpoint(20, Window(cells))
     a <- densitycrossEngine(cells, U, ..., sigma=sigma)

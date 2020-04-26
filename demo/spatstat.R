@@ -428,6 +428,12 @@ X <- unmark(chicago)
 plot(X, col="green", cols="red", pch=16,
      main="Chicago Street Crimes", cex.main=0.75,
      show.window=FALSE)
+plot(density(X, 100, distance="e"), main="Kernel density estimate (Euclidean)")
+plot(density(X, 100, distance="p"), main="Kernel density estimate (shortest path)")
+
+plot(X, col="green", cols="red", pch=16,
+     main="Chicago Street Crimes", cex.main=0.75,
+     show.window=FALSE)
 plot(linearK(X, correction="none"), main="Network K-function", cex.main=0.75)
 plot(linearK(X, correction="Ang"), main="Corrected K-function", cex.main=0.75)
 
@@ -676,12 +682,12 @@ plot(WS, add=TRUE, border="green")
 nopa <- par(mfrow=c(2,2))
 Rbox <- grow.rectangle(as.rectangle(letterR), 0.3)
 
-v <- erode.owin(letterR, 0.25)
+v <- erosion.owin(letterR, 0.25)
 plot(Rbox, type="n", main="erode.owin", cex.main=0.75)
 plot(letterR, add=TRUE, col="red", cex.main=0.75)
 plot(v, add=TRUE, col="blue")
 
-v <- dilate.owin(letterR, 0.25)
+v <- dilation.owin(letterR, 0.25)
 plot(Rbox, type="n", main="dilate.owin", cex.main=0.75)
 plot(v, add=TRUE, col="blue")
 plot(letterR, add=TRUE, col="red")
