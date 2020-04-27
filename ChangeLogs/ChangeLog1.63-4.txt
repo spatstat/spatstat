@@ -819,6 +819,9 @@ Change log from 1.63-3 to 1.63-4
 	important bug fix in second.moment.engine
 	for edge correction in non-rectangular windows.
 
+    tests/density.R
+	Added test of conservation of mass for density.ppp(diggle=TRUE).
+	
     updates.Rnw
     bugfixes.Rnw
 	updated to cover all the above.
@@ -830,3 +833,44 @@ Change log from 1.63-3 to 1.63-4
 ------------- passed R-3.6.3 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
+
+27 apr 2020
+
+   tests/density.R
+	More tests of correctness of density.ppp
+	
+   linScrossdist.c
+	Removed unused variables.
+
+   tests/imageops.R
+	More tests of special cases.
+
+   DESCRIPTION
+   NEWS
+	Version 1.63-3.040
+
+------------- passed R-3.6.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+
+
++++++++++++++    installed R-4.0.0     +++++++++++++++
+
+   sparselinalg.R
+   spatstat-internal.Rd
+   leverage.R
+	Function 'marginSums' renamed 'marginSumsSparse'
+	to avoid collision with R-4.0.0 function 'marginSums'
+
+   relrisk.lpp.R
+   density.loo.R
+	Removed unused variables and streamlined code
+   
+   DESCRIPTION
+   NEWS
+	Version 1.63-3.041
+
+------------- passed R-4.0.0 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+

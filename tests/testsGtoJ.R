@@ -136,7 +136,7 @@ local({
 #
 #  tests/imageops.R
 #
-#   $Revision: 1.27 $   $Date: 2020/02/04 06:07:48 $
+#   $Revision: 1.28 $   $Date: 2020/04/27 01:03:54 $
 #
 
 require(spatstat)
@@ -147,6 +147,10 @@ local({
   b <- update(b)
 
   mat <- matrix(sample(0:4, 12, replace=TRUE), 3, 4)
+  a <- im(mat)
+  levels(a$v) <- 0:4
+  a <- update(a)
+  
   levels(mat) <- 0:4
   b <- im(mat)
   b <- update(b)
@@ -202,7 +206,7 @@ local({
   Y <- dirichlet(runifpoint(7, W))
   Z <- split(X, as.im(Y))
   
-  ## cases of "[.im"
+  ## ...........  cases of "[.im" ........................
   ee  <- d[simplenet, drop=FALSE]
   eev <- d[simplenet]
   Empty <- cells[FALSE]
@@ -215,7 +219,15 @@ local({
   gg <- d[2:4, 3:5]
   hh <- d[2:4, 3:5, rescue=TRUE]
   if(!is.im(hh)) stop("rectangle was not rescued in [.im")
-  ## cases of "[<-.im"
+  ## factor and NA values
+  f <- cut(d, breaks=4)
+  f <- f[f != levels(f)[1], drop=FALSE]
+  fff <- f[, , drop=FALSE]
+  fff <- f[cells]
+  fff <- f[cells, drop=FALSE]
+  fff <- f[Empty]
+
+  ## ...........  cases of "[<-.im"  .......................
   d[,] <- d[] + 1
   d[Empty] <- 42
   d[EmptyFun] <- 42
@@ -266,6 +278,7 @@ local({
   h <- hist(Z, plot=FALSE)
   Zcut <- cut(Z, breaks=5)
   h <- hist(Zcut) # barplot
+  hp <- hist(Zcut, probability=TRUE) # barplot
   plot(h) # plot.barplotdata
 
   #' plot.im code blocks
@@ -304,7 +317,8 @@ local({
                    W=B)
   a <- safelookup(Z, X)
   b <- safelookup(cut(Z, breaks=4), X)
-
+  aa <- lookup.im(Z, X)
+  
   #' Smooth.im -> blur.im with sigma=NULL
   ZS <- Smooth(Z)
   
@@ -313,6 +327,7 @@ local({
   set.seed(911911)
   X <- runifpoint(1000, W)
   Z <- quantess(W, function(x,y) { x }, 9)$image
+  nearest.valid.pixel(numeric(0), numeric(0), Z)
   x <- X$x
   y <- X$y
   a <- nearest.valid.pixel(x, y, Z, method="interpreted")
@@ -321,7 +336,7 @@ local({
     stop("Unequal results in nearest.valid.pixel")
   if(!identical(a,b)) 
     stop("Equal, but not identical, results in nearest.valid.pixel")
-
+    
   #' cases of distcdf
   distcdf(cells[1:5])
   distcdf(W=cells[1:5], dW=1:5)

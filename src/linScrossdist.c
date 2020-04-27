@@ -11,7 +11,7 @@
 
    'Sparse version' 
 
-   $Revision: 1.3 $  $Date: 2020/03/25 15:24:59 $
+   $Revision: 1.4 $  $Date: 2020/04/27 00:52:04 $
 
    Works with sparse representation
    Requires point data to be ordered by segment index.
@@ -48,8 +48,8 @@ linScrossdist(np, sp, tp,  /* data points 'from' (ordered by sp) */
   double *seglen; 
   double *dist; 
 {
-  int Np, Nq, Nv, Npairs, i, j, k, ivleft, ivright, spi, sqj, maxchunk;
-  double dleft, dright, deuclid, dij, hugevalue, slen, tpi, tqj;
+  int Np, Nq, Nv, Npairs, i, j, ivleft, ivright, spi, sqj;
+  double dleft, dright, dij, hugevalue, slen, tpi, tqj;
   double *dminvert;  /* min dist from each vertex */
   int one;
 

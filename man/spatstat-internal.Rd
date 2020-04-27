@@ -782,7 +782,7 @@
 \alias{applySparseEntries}
 \alias{sumsymouterSparse}
 \alias{tenseur}
-\alias{marginSums}
+\alias{marginSumsSparse}
 \alias{rbindCompatibleDataFrames}
 \alias{bind.sparse3Darray}
 %%%%
@@ -1750,7 +1750,7 @@ mapSparseEntries(x, margin, values, conform, across)
 applySparseEntries(x, f, \dots)
 sumsymouterSparse(x, w, dbg)
 tenseur(A, B, alongA, alongB)
-marginSums(X, MARGIN)
+marginSumsSparse(X, MARGIN)
 rbindCompatibleDataFrames(x)
 bind.sparse3Darray(A, B, along)
 %%

@@ -3,7 +3,7 @@
 #
 #   Estimation of relative risk on network
 #
-#  $Revision: 1.5 $  $Date: 2020/04/12 02:55:34 $
+#  $Revision: 1.6 $  $Date: 2020/04/27 03:08:26 $
 #
 
 relrisk.lpp <- local({
@@ -19,14 +19,14 @@ relrisk.lpp <- local({
     control.given <- !missing(control)
     case.given <- !missing(case)
     at <- match.arg(at)
-    npts <- npoints(X)
-    Y <- split(X)
-    uX <- unmark(X)
-    types <- names(Y)
-    ntypes <- length(Y)
-    if(ntypes == 1)
+    ##
+    marx <- marks(X)
+    types <- levels(marx)
+    ntypes <- length(types)
+    ## 
+    if(ntypes == 1L)
       stop("Data contains only one type of points")
-    casecontrol <- casecontrol && (ntypes == 2)
+    casecontrol <- casecontrol && (ntypes == 2L)
     if((control.given || case.given) && !(casecontrol || relative)) {
       aa <- c("control", "case")[c(control.given, case.given)]
       nn <- length(aa)
@@ -34,12 +34,9 @@ relrisk.lpp <- local({
                     paste(sQuote(aa), collapse=" and "),
                     ngettext(nn, "was", "were"),
                     "ignored, because relative=FALSE and",
-                    if(ntypes==2) "casecontrol=FALSE" else
+                    if(ntypes==2L) "casecontrol=FALSE" else
                     "there are more than 2 types of points"))
     }
-    marx <- marks(X)
-    imarks <- as.integer(marx)
-    lev <- levels(marx)
     ## compute bandwidth
     if(is.function(sigma)) {
       sigma <- do.call.matched(sigma, list(X=X, ...))
@@ -52,13 +49,14 @@ relrisk.lpp <- local({
     ## .........................................
     ## compute intensity estimates for each type
     ## .........................................
+    Y <- split(X)
     switch(at,
            pixels = {
              ## intensity estimates of each type
              Deach <- solapply(Y, density.lpp, sigma=sigma,
                                ..., finespacing=finespacing)
              ## compute intensity estimate for unmarked pattern
-             Dall  <- density(X, sigma=sigma,
+             Dall  <- density(unmark(X), sigma=sigma,
                               ..., finespacing=finespacing)
            },
            points = {
@@ -89,7 +87,7 @@ relrisk.lpp <- local({
           icontrol <- control <- as.integer(control)
           stopifnot(control %in% 1:2)
         } else if(is.character(control)) {
-          icontrol <- match(control, levels(marks(X)))
+          icontrol <- match(control, types)
           if(is.na(icontrol)) stop(paste("No points have mark =", control))
         } else
           stop(paste("Unrecognised format for argument", sQuote("control")))
@@ -102,7 +100,7 @@ relrisk.lpp <- local({
           icase <- case <- as.integer(case)
           stopifnot(case %in% 1:2)
         } else if(is.character(case)) {
-          icase <- match(case, levels(marks(X)))
+          icase <- match(case, types)
           if(is.na(icase)) stop(paste("No points have mark =", case))
         } else stop(paste("Unrecognised format for argument", sQuote("case")))
         if(!control.given) 
@@ -139,6 +137,7 @@ relrisk.lpp <- local({
                ## trap NaN values
                if(any(nbg <- badvalues(pcase))) {
                  ## apply l'Hopital's rule
+                 imarks <- as.integer(marx)
                  nntype <- imarks[nnwhich(X)]
                  pcase[nbg] <- as.integer(nntype[nbg] == icase)
                }
@@ -157,7 +156,7 @@ relrisk.lpp <- local({
           icontrol <- control <- as.integer(control)
           stopifnot(control %in% 1:ntypes)
         } else if(is.character(control)) {
-          icontrol <- match(control, levels(marks(X)))
+          icontrol <- match(control, types)
           if(is.na(icontrol)) stop(paste("No points have mark =", control))
         } else
           stop(paste("Unrecognised format for argument", sQuote("control")))
@@ -172,8 +171,8 @@ relrisk.lpp <- local({
                nbg <- Reduce("|", nbg)
                if(any(nbg)) {
                  ## apply l'Hopital's rule
-                 distX <- as.linim(distfun(X))
                  whichnn <- as.linim(nnfun(X))
+                 imarks <- as.integer(marx)
                  typenn <- eval.im(imarks[whichnn])
                  typennsub <- typenn[nbg]
                  for(k in seq_along(probs)) 
@@ -196,6 +195,7 @@ relrisk.lpp <- local({
                badrow <- matrowany(bad)
                if(any(badrow)) {
                  ## apply l'Hopital's rule
+                 imarks <- as.integer(marx)
                  typenn <- imarks[nnwhich(X)]
                  probs[badrow, ] <- (typenn == col(result))[badrow, ]
                }
@@ -328,7 +328,7 @@ bw.relrisklpp <- function(X, ...,
   lixelmap    <- g$lixelmap
   lixelweight <- g$lixelweight
   Amatrix     <- g$Amatrix
-  U0          <- g$U0
+  ## U0          <- g$U0  # not used
   deltax      <- g$deltax
   deltat      <- g$deltat
   #'
@@ -453,9 +453,9 @@ bw.relrisklpp <- function(X, ...,
            gbarminusj <- rep.int((n2-1)/TOTLEN, n2)
          })
   #'   reference intensity of type 1 process at type 1 points
-  fbari <- fbar[J1]
+  #' fbari <- fbar[J1]  # not used
   #'   reference intensity of type 2 process at type 2 points
-  gbarj <- gbar[J2]
+  #' gbarj <- gbar[J2]  # not used
   
   #' Avoid very small estimates
   if(fudge > 0) {

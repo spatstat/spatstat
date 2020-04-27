@@ -4,9 +4,9 @@
 #'   Counterpart of linalg.R for sparse matrices/arrays
 #'
 #' 
-#'   $Revision: 1.11 $  $Date: 2019/12/31 02:19:08 $
+#'   $Revision: 1.12 $  $Date: 2020/04/27 02:08:31 $
 
-marginSums <- function(X, MARGIN) {
+marginSumsSparse <- function(X, MARGIN) {
   #' equivalent to apply(X, MARGIN, sum)
   if(length(MARGIN) == 0) return(sum(X))
   if(is.array(X) || is.matrix(X))

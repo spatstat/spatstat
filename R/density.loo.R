@@ -97,6 +97,8 @@ densitypointsLPP <- function(x, sigma, ...,
                   lixelweight, lixelmap, verbose=verbose)
   result <- if(nsave == 1) as.numeric(v) else t(v)
   attr(result, "sigma") <- sigma * sqrt(attr(v, "iter")/niter)
+  attr(result, "deltat") <- deltat
+  attr(result, "deltax") <- deltax
   return(result)
 }
 

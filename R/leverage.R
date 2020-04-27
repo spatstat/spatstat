@@ -3,7 +3,7 @@
 #
 #  leverage and influence
 #
-#  $Revision: 1.117 $ $Date: 2020/02/03 10:06:52 $
+#  $Revision: 1.118 $ $Date: 2020/04/27 02:08:26 $
 #
 
 leverage <- function(model, ...) {
@@ -532,7 +532,7 @@ ppmInfluenceEngine <- function(fit,
       ## interior for border correction by earlier call to
       ## deltasuffstat(..., restrict = "first"))
       ddSX <- ddS[isdataB, , , drop=FALSE]
-      eff.data.B <- marginSums(ddSX, c(2,3))
+      eff.data.B <- marginSumsSparse(ddSX, c(2,3))
       ## check if any quadrature points have zero conditional intensity;
       ## these do not contribute to this term
       if(anyzerocifB)
@@ -730,7 +730,7 @@ ppmInfluenceEngine <- function(fit,
       ## integrate
       if(logi){
         # eff.back.B <- tenseur(ddSintegrand, rep(1, length(wB)), 1, 1)
-        eff.back.B <- marginSums(ddSintegrand, c(2,3))
+        eff.back.B <- marginSumsSparse(ddSintegrand, c(2,3))
       } else{
         eff.back.B <- changesignB * tenseur(ddSintegrand, wB, 1, 1)
       }
