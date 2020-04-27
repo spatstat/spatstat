@@ -453,15 +453,15 @@ resolve.heat.steps <-
   }
   ## segment lengths
   nseg <- length(seglengths)
-  lmin <- min(seglengths)
-  lbar <- mean(seglengths)
-  ltot <- lbar * nseg
+  lmin <- min(seglengths[seglengths > 0])
+  lbar <- mean(seglengths[seglengths > 0])
+  ltot <- sum(seglengths)
   if(verbose) {
     splat(" Network:")
     splat("    total length =", ltot)
     splat("    number of edges =", nseg)
-    splat("    average edge length = ", lbar)
-    splat("    shortest edge length = ", lmin)
+    splat("    average nonzero edge length = ", lbar)
+    splat("    shortest nonzero edge length = ", lmin)
   }
 
   ## ----------- NUMBER OF ITERATIONS ---------------------------------
@@ -579,7 +579,8 @@ resolve.heat.steps <-
     check.finite(dx)
     stopifnot(dx > 0)
     if(dx > lmin/3)
-      stop(paste("dx must not exceed (shortest edge length)/3 =", lmin/3),
+      stop(paste("dx must not exceed (shortest nonzero edge length)/3 =",
+                 lmin/3),
            call.=FALSE)
   } else if(dt.known) {
     ## determine dx from dt
@@ -591,9 +592,9 @@ resolve.heat.steps <-
     if(verbose) splat(" Determine dx by default rule")    
     dx <- min(lbar/fineNsplit, ltot/fineNlixels, lmin/3)
     if(verbose) {
-      splat(" Mean Edge Length/", fineNsplit, "=", lbar/fineNsplit)
+      splat(" Mean Nonzero Edge Length/", fineNsplit, "=", lbar/fineNsplit)
       splat(" Total Network Length/", fineNlixels, "=", ltot/fineNlixels)
-      splat(" Min Edge Length/3 = ", lmin/3)
+      splat(" Min Nonzero Edge Length/3 = ", lmin/3)
       splat(" dx = minimum of the above =", dx)
     }
     if(!finespacing && is.owin(W)) {

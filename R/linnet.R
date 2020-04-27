@@ -3,7 +3,7 @@
 #    
 #    Linear networks
 #
-#    $Revision: 1.77 $    $Date: 2020/03/16 10:28:51 $
+#    $Revision: 1.78 $    $Date: 2020/04/27 04:24:18 $
 #
 # An object of class 'linnet' defines a linear network.
 # It includes the following components
@@ -547,8 +547,9 @@ rescale.linnet <- function(X, s, unitname) {
     ## extract relevant subset of network graph
     x <- thinNetwork(x, retainedges=okedge)
     ## Now add vertices at crossing points with boundary of 'w'
-    b <- crossing.psp(xlines, wlines)
-    x <- insertVertices(x, unique(b))
+    b <- unique(crossing.psp(xlines, wlines))
+    novel <- (nncross(b, x$vertices, what="dist") > 0)
+    x <- insertVertices(x, b[novel])
     boundarypoints <- attr(x, "id")
     ## update data
     from <- x$from
@@ -558,8 +559,11 @@ rescale.linnet <- function(X, s, unitname) {
   }
   ## find segments whose endpoints BOTH lie in 'w'
   edgeinside <- vertinside[from] & vertinside[to]
+  ## .. and which are not trivial
+  umap <- uniquemap(x$vertices)
+  nontrivial <- (umap[from] != umap[to])
   ## extract relevant subset of network
-  xnew <- thinNetwork(x, retainedges=edgeinside)
+  xnew <- thinNetwork(x, retainedges=edgeinside & nontrivial)
   ## adjust window efficiently
   Window(xnew, check=FALSE) <- w
   return(xnew)

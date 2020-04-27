@@ -16,7 +16,7 @@ local({
 ##   Tests of psp class and related code
 ##                      [SEE ALSO: tests/xysegment.R]
 ##
-##  $Revision: 1.24 $  $Date: 2020/01/27 09:29:59 $
+##  $Revision: 1.25 $  $Date: 2020/04/27 04:26:13 $
 
 require(spatstat)
 
@@ -52,7 +52,7 @@ ns <- 50
 out <- numeric(ns)
 for(i in 1:ns) {
   X <- psp(runif(1), runif(1), runif(1), runif(1), window=owin())
-  len <- lengths.psp(X)
+  len <- lengths_psp(X)
   dlen <- sum(pixellate(X)$v)
   out[i] <- if(len > 1e-7) dlen/len else 1
 }
@@ -69,14 +69,14 @@ co <- cbind(runif(n), runif(n))
 ow <- owin()
 X <- psp(co[-n,1], co[-n,2], co[-1,1], co[-1,2], window=ow)
 s1 <- sum(pixellate(X))
-s2 <- sum(lengths.psp(X))
+s2 <- sum(lengths_psp(X))
 if(abs(s1 - s2)/s2 > 0.01) {
   stop(paste("pixellate.psp test 2:",
              "sum(pixellate(X)) = ", s1,
-             "!=", s2, "= sum(lengths.psp(X))"))
+             "!=", s2, "= sum(lengths_psp(X))"))
 }
 
-wts <- 1/(lengths.psp(X) * X$n)
+wts <- 1/(lengths_psp(X) * X$n)
 s1 <- sum(pixellate(X, weights=wts))
 if(abs(s1-1) > 0.01) {
   stop(paste("pixellate.psp test 3:",
@@ -86,20 +86,20 @@ if(abs(s1-1) > 0.01) {
 
 X <- psp(0, 0, 0.01, 0.001, window=owin())
 s1 <- sum(pixellate(X))
-s2 <- sum(lengths.psp(X))
+s2 <- sum(lengths_psp(X))
 if(abs(s1 - s2)/s2 > 0.01) {
   stop(paste("pixellate.psp test 4:",
              "sum(pixellate(X)) = ", s1,
-             "!=", s2, "= sum(lengths.psp(X))"))
+             "!=", s2, "= sum(lengths_psp(X))"))
 }
 
 X <- psp(0, 0, 0.001, 0.001, window=owin())
 s1 <- sum(pixellate(X))
-s2 <- sum(lengths.psp(X))
+s2 <- sum(lengths_psp(X))
 if(abs(s1 - s2)/s2 > 0.01) {
   stop(paste("pixellate.psp test 5:",
              "sum(pixellate(X)) = ", s1,
-             "!=", s2, "= sum(lengths.psp(X))"))
+             "!=", s2, "= sum(lengths_psp(X))"))
 }
 
 #' cases of superimpose.psp
@@ -146,7 +146,7 @@ density(Y, 0.2, at=Z, edge=TRUE, method="C")
   summary(G)
   summary(H)
   M <- B
-  marks(M) <- data.frame(id=marks(B), len=lengths.psp(B))
+  marks(M) <- data.frame(id=marks(B), len=lengths_psp(B))
   M
   summary(M)
   subset(M, select=len)

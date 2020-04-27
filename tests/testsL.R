@@ -372,7 +372,7 @@ local({
 #
 # Tests for lpp code
 #
-#  $Revision: 1.65 $  $Date: 2020/04/18 08:46:10 $
+#  $Revision: 1.66 $  $Date: 2020/04/27 04:29:23 $
 
 
 require(spatstat)
@@ -535,7 +535,9 @@ local({
   XV <- insertVertices(X, V)
   validate.lpp.coords(XV, context="calculated by insertVertices")
   X0 <- insertVertices(X, x=numeric(0), y=numeric(0))
-
+  ## vertices on boundary of new window
+  LL <- simplenet[boundingbox(vertices(simplenet))]
+  
   ## Test [.lpp internal data
   B <- owin(c(0.1,0.7),c(0.19,0.6))
   XB <- X[B]
@@ -565,7 +567,7 @@ local({
   L <- thinNetwork(simplenet, retainedges = -c(3,8))
   S <- as.psp(L)
   x <- midpoints.psp(S)[1]
-  len <- lengths.psp(S)[1]
+  len <- lengths_psp(S)[1]
   A <- lineardisc(L, x, len,  plotit=FALSE) # involves many segments of network
   B <- lineardisc(L, x, len/5, plotit=FALSE) # involves one segment of network
   op <- spatstat.options(Ccountends=FALSE)
@@ -694,7 +696,7 @@ local({
   S <- as.psp(simplenet)
   ns <- nsegments(S)
   df <- data.frame(seg=1:ns, t0=0, t1=1, tile=letters[1:ns])
-  M <- data.frame(len=lengths.psp(S), ang=angles.psp(S))
+  M <- data.frame(len=lengths_psp(S), ang=angles.psp(S))
   V <- lintess(simplenet, df, marks=M)
 
   ## methods for class lintess
@@ -835,6 +837,11 @@ local({
   B <- resolve.heat.steps(1, L=simplenet)
   C <- resolve.heat.steps(1, L=simplenet, finespacing=FALSE)
   D <- resolve.heat.steps(1, seglengths=rep(0.7, 5), maxdegree=4, AMbound=7)
+  ## vertices on boundary 
+  L <- simplenet
+  L <- L[boundingbox(vertices(L))]
+  X <- as.lpp(0.41259, 0.6024, L=L)
+  D <- density(X, 0.1)
 })
 
 local({

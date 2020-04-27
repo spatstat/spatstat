@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.63-3.041
+        CHANGES IN spatstat VERSION 1.63-3.042
 
 OVERVIEW
 
@@ -146,6 +146,11 @@ BUG FIXES
 
     o mppm
     Ignored the arguments 'nd' and 'eps' controlling the quadrature scheme.
+    Fixed.
+
+    o "[.linnet", "[.lpp"
+    In X[W] where W is a window, if a vertex of the network
+    lay exactly on the boundary of W, an edge of length zero was created.
     Fixed.
     
     o valid.ppm

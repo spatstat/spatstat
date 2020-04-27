@@ -874,3 +874,24 @@ Change log from 1.63-3 to 1.63-4
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
 
+   linnet.R
+	Bug fix in [.linnet
+	(zero-length segments could arise)
+
+   lixellate.R
+   density.lpp.R
+	Handle zero-length segments
+
+   tests/lppstuff.R
+	More tests of [.linnet and resolve.heat.steps
+	
+   DESCRIPTION
+   NEWS
+	Version 1.63-3.042
+
+------------- passed R-4.0.0 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+
+
+
