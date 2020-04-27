@@ -1,0 +1,912 @@
+Change log from 1.63-3 to 1.64-0
+================================
+
+01 mar 2020
+
+   DESCRIPTION
+   NEWS
+   Nickname.txt
+	Nickname changed to 'How can?'
+	Version 1.63-3.001
+
+03 mar 2020
+
+   iplot.R		[REMOVED]
+   iplotlayered.R	[REMOVED]
+   istat.R		[REMOVED]
+   iplot.Rd		[REMOVED]
+   istat.Rd 		[REMOVED]
+   	These functions are now part of package 'spatstat.gui'
+
+   linnet.R
+	Moved 'iplot.linnet' to package 'spatstat.gui'
+	
+   lpp.R
+	Moved 'iplot.lpp' to package 'spatstat.gui'
+	
+   plot.ppp.Rd
+   spatstat-package.Rd
+   spatstat-internal.Rd
+   tests/undoc.R
+	Consequential adjustments
+
+   updates.Rnw
+	Now includes package size information from 'spatstat.gui'
+	
+   DESCRIPTION
+   NEWS
+	Version 1.63-3.001
+
+------------- passed R-3.6.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+
+04 mar 2020
+
+   mppm.R
+	saves the list of 'IsOffset' vectors
+
+   subfits.R
+	handles the list of 'IsOffset' vectors
+
+   ppmclass.R
+	Bug fix in valid.ppm when handling the results of subfits()
+
+   fii.R
+   spatstat-internal.Rd
+	fii() now has argument 'vnameprefix'
+
+   mpl.R
+	$fitin now handles vnameprefix
+
+   vcov.mppm
+	Handles offsets
+
+   tests/ppmclass.R
+   tests/mppm.R
+	Added examples from Robert Aue of handling 'offset' interactions
+	(eg Hardcore) and hybrids of them.
+	
+   DESCRIPTION
+   NEWS
+   spatstat-package.Rd
+	Acknowledged Robert Aue.
+	Version 1.63-3.002
+
+------------- passed R-3.6.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+
+   tests/ippm.R
+	Test more cases of model.matrix
+
+   updates.Rnw
+	Now mentions spatstat.gui
+	
+   DESCRIPTION
+   NEWS
+	Version 1.63-3.003
+
+------------- passed R-3.6.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+
+10 mar 2020
+
+   fii.R
+   summary.mppm.R
+	Bug fix in handling Hardcore()
+
+   tests/mppm.R
+	Tests of these bugs.
+	
+   DESCRIPTION
+   NEWS
+	Version 1.63-3.004
+
+------------- passed R-3.6.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+
+11 mar 2020
+
+   mppm.R
+	Bug fix in handling arguments 'nd', 'eps'
+
+   DESCRIPTION
+   NEWS
+	Version 1.63-3.005
+
+------------- passed R-3.6.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+
+12 mar 2020
+
+   linnet.R
+   methods.linnet.Rd
+	as.linnet.linnet is hardened against out-of-memory crashes
+	and has new argument 'maxsize'
+
+   pairdistlpp.R
+	Added fallback algorithm for large networks.
+	
+   DESCRIPTION
+   NEWS
+   spatstat-package.Rd
+	Acknowledged Tyler Rudolph
+
+   DESCRIPTION
+   NEWS
+	Version 1.63-3.006
+
+------------- passed R-3.6.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+
+13 mar 2020
+
+   pairdistlpp.R
+	Tweak
+
+   psp.R
+   lengths.psp.Rd
+	New function lengths_psp will ultimately replace lengths.psp
+
+   DESCRIPTION
+   NEWS
+	Version 1.63-3.007
+
+------------- passed R-3.6.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+
+16 mar 2020
+
+   convexify.R
+   density.lpp.R
+   densitylppVoronoi.R
+   density.psp.R
+   laslett.R
+   lindirichlet.R
+   lineardisc.R
+   linequad.R
+   linim.R
+   linnet.R
+   lintess.R
+   lixellate.R
+   lpp.R
+   morphology.R
+   nndistlpp.R
+   nnfromvertex.R
+   pointsonlines.R
+   pspcross.R
+   psp.R
+   randomlpp.R
+   randomonlines.R
+   rcelllpp.R
+   rhohat.R
+   wingeom.R
+	Replaced calls to lengths.psp by lengths_psp
+
+   lengths.psp.Rd -> lengths_psp.Rd [RENAMED]
+   	Renamed file
+	Tidied.
+
+   angles.psp.Rd
+   endpoints.psp.Rd
+   extrapolate.psp.Rd
+   lintess.Rd
+   midpoints.psp.Rd
+   pixellate.psp.Rd
+   psp.object.Rd
+   psp.Rd
+   spatstat-package.Rd
+	Adjusted cross-references.
+	
+   DESCRIPTION
+   NEWS
+	Version 1.63-3.008
+
+------------- passed R-3.6.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+	
+18 mar 2020
+
+   lpp.R
+   as.lpp.Rd
+	More data formats accepted by as.lpp
+
+   linnetsurgery.R
+   addVertices.Rd [New file]
+   	New function addVertices
+
+   insertVertices.Rd
+   spatstat-package.Rd
+	Cross-references
+
+   DESCRIPTION
+   NEWS
+	Version 1.63-3.009
+
+------------- passed R-3.6.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+	
+   updates.Rnw
+   bugfixes.Rnw
+	Updated to cover all the above.
+
+   linnetsurgery.R
+	'bug' fix in addVertices
+
+   domain.Rd
+	typo.
+	
+   DESCRIPTION
+   NEWS
+	Version 1.63-3.010
+
+------------- passed R-3.6.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+
+20 mar 2020
+
+   linnetsurgery.R
+	Bug fix in addVertices
+        More functionality in repairNetwork
+
+   DESCRIPTION
+   NEWS
+	Version 1.63-3.011
+
+------------- passed R-3.6.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+
+23 mar 2020
+
+   pspcross.R
+	selfcut.psp no longer checks for validity of the resulting segments.
+
+   linnet.R
+   as.linnet.psp.Rd
+	Result of as.linnet.psp now has attribute 'camefrom'.
+   
+   DESCRIPTION
+   NEWS
+	Version 1.63-3.012
+
+------------- passed R-3.6.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+
+   linnetsurgery.R
+	insertVertices retains any marks attached to the line segments.
+	joinVertices has new argument 'marks'.
+	addVertices has new argument 'joinmarks'.
+
+   tests/lppstuff.R
+	More tests of handling marks attached to lines.
+	
+   DESCRIPTION
+   NEWS
+	Version 1.63-3.013
+
+------------- passed R-3.6.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+
+25 mar 2020
+
+   linScrossdist.c [New file]
+   crossdistlpp.R
+	Experimental sparse algorithm for crossdist.lpp
+
+   tests/lppstuff.R
+	Test the new sparse algorithm for crossdist.lpp
+	
+   DESCRIPTION
+   NEWS
+	Version 1.63-3.014
+
+------------- passed R-3.6.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+
+26 mar 2020
+
+   crossdistlpp.R
+   crossdist.lpp.Rd
+        Handles sparse networks using the new sparse algorithm linScrossdist.
+	New argument 'check'
+	
+   tests/lppstuff.R
+	Test the sparse algorithm and its agreement with the non-sparse one.
+
+   spatstat.options.Rd
+   Kest.Rd
+	Tweaks to the help files.
+
+   updates.Rnw
+	updated to cover all the above.
+	
+   DESCRIPTION
+   NEWS
+	Version 1.63-3.015
+
+------------- passed R-3.6.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+
+27 mar 2020
+
+   linSpairdist.h [New file]
+   linSpairdist.c [New file]
+   pairdistlpp.R
+   	New sparse algorithm for pairdist.lpp
+
+   crossdist.lpp.Rd
+   pairdist.lpp.Rd
+	Improved explanation.
+
+   tests/lppstuff.R
+	Test the new sparse algorithm for pairdist.lpp
+	
+   DESCRIPTION
+   NEWS
+	Version 1.63-3.016
+
+------------- passed R-3.6.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+
+29 mar 2020
+
+   pairdistlpp.R
+   crossdistlpp.R
+   linSpairdist.h
+	Tweaks/ bug fixes 
+
+   tests/lppstuff.R
+	Test bug fixes.
+	
+   DESCRIPTION
+   NEWS
+	Version 1.63-3.017
+
+------------- passed R-3.6.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+
+30 mar 2020
+
+   updates.Rnw
+   bugfixes.Rnw
+	updated to cover all the above.
+	
+   density.lpp.R
+   spatstat-internal.Rd
+	New internal function 'resolve.heat.steps'
+
+   tests/lppstuff.R
+	Test 'resolve.heat.steps'
+
+   DESCRIPTION
+   NEWS
+	Version 1.63-3.018
+
+------------- passed R-3.6.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+
+01 april 2020
+
+   linnetsurgery.R
+	Bug fix.
+	Internal error checks.
+
+   psp.R
+	Improved an error message.
+
+   DESCRIPTION
+   NEWS
+   Nickname.txt
+	Nickname changed to "Poisson d'Avril"
+	Version 1.63-3.019
+
+------------- passed R-3.6.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+
+02 april 2020
+
+   density.lpp.R
+   spatstat-internal.Rd
+	Extended resolve.heat.steps
+
+   tests/lppstuff.R
+	More tests of resolve.heat.steps
+
+   DESCRIPTION
+   NEWS
+   Nickname.txt
+	Nickname changed to "Correct at time of publication"
+	Version 1.63-3.020
+
+------------- passed R-3.6.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+
+   density.lpp.R
+   spatstat-internal.Rd
+   density.lpp.Rd
+   densityHeat.Rd [New file]
+   densityEqualSplit.Rd [New file]
+   	Reorganised density.lpp as a wrapper for three functions
+	densityQuick.lpp, densityHeat and densityEqualSplit
+	which are all visible and separately documented.
+
+   DESCRIPTION
+   NEWS
+	Version 1.63-3.021
+
+------------- passed R-3.6.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+
+03 apr 2020
+
+   density.lpp.R
+   spatstat-internal.Rd
+	Rearranged internals so that all parameter checking and adjustment
+	is done by 'resolve.heat.steps'.
+
+   density.lpp.R
+   spatstat-internal.Rd
+	Merged some code from lppdevel.
+	FDMKERNEL can now save intermediate states using 'nsave'
+
+   DESCRIPTION
+   NEWS
+	Version 1.63-3.022
+
+------------- passed R-3.6.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+
+   density.lpp.R
+   densityHeat.Rd
+   spatstat-internal.Rd
+	densityHeat has new argument 'verbose=FALSE'
+
+   densityfun.R
+	bug fix in as.im.densityfun
+
+   as.linfun.Rd
+	Consequential tweak.
+	
+   DESCRIPTION
+   NEWS
+	Version 1.63-3.023
+
+------------- passed R-3.6.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+
+04 apr 2020
+
+   density.lpp.R
+   spatstat-internal.Rd
+	New internal functions 'flatdensityfunlpp' and 'flatdensityatpointslpp'
+
+   density.lpp.R
+   density.lpp.Rd
+   densityHeat.Rd
+   densityEqualSplit.Rd
+	Now allow sigma = Inf
+
+   quickndirty.R
+   densityQuick.lpp.Rd
+   	Now allow sigma = Inf
+
+   densityQuick.lpp.Rd
+   bw.scott.Rd
+	updated bibliography
+
+   tests/lppstuff.R
+	Adjust usage; test sigma=Inf
+	
+   pairs.im.R
+   linim.R
+	Bug fixes in 'pairs' methods
+
+   linim.R
+	integral.linim handles complex values
+	
+   DESCRIPTION
+   NEWS
+	Version 1.63-3.024
+
+------------- passed R-3.6.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+
+05 mar 2020
+
+   densityfunlpp.R [New file]
+   densityfun.lpp.Rd [New file]
+        New function densityfun.lpp
+
+   hotrod.c [New file]
+   hotrod.R [New file]
+   hotrod.Rd [New file]
+   	Heat kernel on a 1-dimensional segment
+	
+   heatapprox.c [New file]
+   heatapprox.R [New file]
+   heatkernelapprox.Rd [New file]
+   	Approximation to heat kernel at source, kappa(u,u)
+   
+   DESCRIPTION
+   NEWS
+	Acknowledged Greg McSwiggan.
+	Version 1.63-3.025
+
+------------- passed R-3.6.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+
+07 mar 2020
+
+   density.loo.R [New file]
+   spatstat-internal.Rd
+	new internal functions densitypointsLPP, looHeatLPP
+	
+   density.lpp.R
+   density.lpp.Rd
+	densityHeat supports calculation of density at data points.
+	New arguments 'at' and 'leaveoneout'
+
+   DESCRIPTION
+   NEWS
+	Version 1.63-3.026
+
+------------- passed R-3.6.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+
+08 mar 2020
+
+   bw.ppl.R
+   bw.lppl.R [New file]
+   	 Excised bw.lppl to a separate file.
+	 
+   bw.lppl.Rd
+   spatstat-internal.Rd
+	bw.lppl now handles leave-one-out computation when distance="path"
+	using densityHeat.
+	New internal functions lcvlppHeat, lcvlppQuick
+	
+   densityfunlpp.R
+   density.loo.R
+   density.lpp.R
+	Bug fixes and performance tweaks.
+	
+   DESCRIPTION
+   NEWS
+	Version 1.63-3.027
+
+------------- passed R-3.6.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+
+   DESCRIPTION
+	Suggests: maptools >= 0.9-9
+
+   updates.Rnw
+   bugfixes.Rnw
+	Updated to cover all the above.
+	
+   DESCRIPTION
+   NEWS
+	Version 1.63-3.028
+
+------------- passed R-3.6.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+
+09 apr 2020
+
+   Math.linim.R
+	Buglet fix: spurious warning in any(Z), all(Z) where Z is logical image
+	
+   relrisk.lpp.R [New file]
+   relrisk.lpp.Rd [New file]
+   	relrisk method for lpp
+
+   updates.Rnw
+   bugfixes.Rnw
+	updated to cover all the above.
+	
+   DESCRIPTION
+   NEWS
+	Version 1.63-3.029
+
+------------- passed R-3.6.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+
+11 apr 2020
+
+   relrisk.lpp.R
+   bw.relrisklpp.Rd [New file]
+        New function bw.relrisklpp
+
+   relrisk.lpp.R
+   relrisk.lpp.Rd
+	relrisk.lpp accepts sigma=<function>
+
+   bw.optim.R
+	Handles infinite values of bandwidth.
+
+   DESCRIPTION
+   NEWS
+	Version 1.63-3.030
+
+------------- passed R-3.6.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+
+   bw.relrisklpp.Rd
+	Tweak.
+
+   updates.Rnw
+   bugfixes.Rnw
+	updated to cover all the above.
+
+   DESCRIPTION
+   NEWS
+	Version 1.63-3.031
+
+------------- passed R-3.6.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+
+12 apr 2020
+
+   relrisk.lpp.R
+   bw.relrisklpp.Rd
+	bw.relrisklpp supports distance="euclidean"
+	and supports > 2 types of points
+	
+   relrisk.lpp.Rd
+   bw.relrisklpp.Rd
+	Improved examples
+
+   DESCRIPTION
+   NEWS
+	Version 1.63-3.032
+
+------------- passed R-3.6.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+
+   breakpts.R
+	Hardened against weird arguments
+
+17 apr 2020
+
+   linim.R
+	Bug fix in [<-.linim 
+	
+   bw.lppl.R
+   density.lpp.R
+   relrisk.lpp.R
+	Bug fixes (handling of NA, NaN)
+
+   tests/lppstuff.R
+	Tests of the bugs.
+
+   DESCRIPTION
+   NEWS
+	Version 1.63-3.033
+
+------------- passed R-3.6.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+
+18 apr 2020
+
+   density.lpp.R
+   density.loo.R
+   densityfunlpp.R
+	Further extensions allowing nsigma (=nsave) = Inf,
+	with the interpretation that it should be set to niter.
+
+   tests/lppstuff.R
+	Tests of this code
+
+   DESCRIPTION
+   NEWS
+	Version 1.63-3.034
+
+------------- passed R-3.6.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+
+22 apr 2020
+
+   transect.R
+   transect.im.Rd
+	New argument 'nsample'.
+
+   fv.R
+   collapse.fv.Rd
+	fvnames() handles character vectors.
+	collapse.fv accepts abbreviations recognised by fvnames().
+	
+   DESCRIPTION
+   NEWS
+	Version 1.63-3.035
+
+------------- passed R-3.6.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+
+23 apr 2020
+
+   fv.R
+	tidied
+
+   relrisk.lpp.Rd
+	Shortened example computation time
+
+   DESCRIPTION
+   NEWS
+	Version 1.63-3.036
+
+------------- passed R-3.6.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+
+24 apr 2020
+
+   distanxD.R
+   spatstat-internal.Rd
+	New internal function 'genericNNdistBy' calculates
+	'nndist(X, by)' using the generic nndist and nncross
+	assuming the relevant methods work.
+
+   distanxD.R
+   distan3D.R
+   nndistlpp.R
+   nndist.ppx.Rd
+   nndist.pp3.Rd
+   nndist.lpp.Rd
+	New argument 'by' for nndist .ppx, .pp3, .lpp
+
+   DESCRIPTION
+   NEWS
+	Version 1.63-3.037
+
+------------- passed R-3.6.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+
+25 apr 2020
+
+   distan3D.R
+	Bug fix in output labels of nncross.pp3(X)
+
+   DESCRIPTION
+   NEWS
+	Version 1.63-3.038
+
+------------- passed R-3.6.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+
+26 apr 2020
+
+    demo/spatstat.R
+	Updated usage
+	Added examples
+
+    Kmeasure.R
+	important bug fix in second.moment.engine
+	for edge correction in non-rectangular windows.
+
+    tests/density.R
+	Added test of conservation of mass for density.ppp(diggle=TRUE).
+	
+    updates.Rnw
+    bugfixes.Rnw
+	updated to cover all the above.
+
+   DESCRIPTION
+   NEWS
+	Version 1.63-3.039
+
+------------- passed R-3.6.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+
+27 apr 2020
+
+   tests/density.R
+	More tests of correctness of density.ppp
+	
+   linScrossdist.c
+	Removed unused variables.
+
+   tests/imageops.R
+	More tests of special cases.
+
+   DESCRIPTION
+   NEWS
+	Version 1.63-3.040
+
+------------- passed R-3.6.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+
+
++++++++++++++    installed R-4.0.0     +++++++++++++++
+
+   sparselinalg.R
+   spatstat-internal.Rd
+   leverage.R
+	Function 'marginSums' renamed 'marginSumsSparse'
+	to avoid collision with R-4.0.0 function 'marginSums'
+
+   relrisk.lpp.R
+   density.loo.R
+	Removed unused variables and streamlined code
+   
+   DESCRIPTION
+   NEWS
+	Version 1.63-3.041
+
+------------- passed R-4.0.0 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+
+   linnet.R
+	Bug fix in [.linnet
+	(zero-length segments could arise)
+
+   lixellate.R
+   density.lpp.R
+	Handle zero-length segments
+
+   tests/lppstuff.R
+	More tests of [.linnet and resolve.heat.steps
+	
+   DESCRIPTION
+   NEWS
+	Version 1.63-3.042
+
+------------- passed R-4.0.0 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+
+............. passed 'make bookcheck'  ...............
+............. passed 'make fullcheck'  ...............
+
+------------- passed Rdevel CMD check ---------------
+                (2020-04-26 r78306)
+
+   DESCRIPTION
+   NEWS
+   Nickname
+	Nickname changed to 'Susana Distancia'
+	Version 1.64-0
+
+------------- passed R-4.0.0 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+
+
