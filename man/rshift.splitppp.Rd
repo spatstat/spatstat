@@ -5,7 +5,7 @@
   Randomly shifts each point pattern in a list of point patterns.
 }
 \usage{
-   \method{rshift}{splitppp}(X, \dots, which=seq_along(X))
+   \method{rshift}{splitppp}(X, \dots, which=seq_along(X), nsim=1, drop=TRUE)
 }
 \arguments{
   \item{X}{
@@ -22,9 +22,16 @@
     while other patterns are not shifted.
     Any valid subset index for \code{X}.
   }
+  \item{nsim}{Number of simulated realisations to be generated.}
+  \item{drop}{
+    Logical. If \code{nsim=1} and \code{drop=TRUE} (the default), the
+    result will be a split point pattern object, rather than a list 
+    containing the split point pattern.
+  }
 }
 \value{
-  Another object of class \code{"splitppp"}.
+  Another object of class \code{"splitppp"},
+  or a list of such objects.
 }
 \details{
   This operation applies a random shift to each of the
@@ -48,6 +55,10 @@
 
   See the help page for \code{\link{rshift.ppp}}
   for details of the other arguments.
+
+  If \code{nsim > 1}, then the simulation procedure is
+  performed \code{nsim} times; the result is a list of 
+  split point patterns. 
 }
 \seealso{
   \code{\link{rshift}},
@@ -71,10 +82,7 @@
    X <- rshift(Y, radius=0.1, edge="erode")
 }
 \author{\adrian
-  
-  
   and \rolf
-  
 }
 \keyword{spatial}
 \keyword{datagen}

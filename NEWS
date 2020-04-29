@@ -1,4 +1,25 @@
 
+        CHANGES IN spatstat VERSION 1.64-0.001
+
+OVERVIEW
+
+    o Nickname: 'Geostrophic' 
+
+    o We thank Maximilian Vogtland and Maximilian Hesselbarth
+    for contributions.
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o rshift.ppp, rshift.splitppp
+    New argument 'nsim'.
+
+BUG FIXES
+
+    o rbind.hyperframe
+    Crashed unless all arguments had the same number of rows.
+    (Spotted by  Maximilian Vogtland).
+    Fixed.
+    
         CHANGES IN spatstat VERSION 1.64-0
 
 OVERVIEW

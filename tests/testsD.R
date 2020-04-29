@@ -1,11 +1,23 @@
 #'
+#'   Header for all (concatenated) test files
+#'
+#'   Require spatstat.
+#'   Obtain environment variable controlling tests.
+#'
+#'   $Revision: 1.4 $ $Date: 2020/04/28 08:17:40 $
+
+require(spatstat)
+FULLTEST <- !is.na(Sys.getenv("SPATSTAT_TEST", unset=NA))
+ALWAYS   <- TRUE
+
+#'
 #'    tests/deltasuffstat.R
 #' 
 #'    Explicit tests of 'deltasuffstat'
 #' 
-#' $Revision: 1.2 $ $Date: 2018/03/28 09:04:06 $
+#' $Revision: 1.3 $ $Date: 2020/04/28 12:58:26 $
 
-require(spatstat)
+if(ALWAYS) {  # depends on C code
 local({
   
   disagree <- function(x, y, tol=1e-7) { !is.null(x) && !is.null(y) && max(abs(x-y)) > tol }
@@ -35,6 +47,8 @@ local({
   modelA <- ppm(antsub ~ 1, HierStrauss(rmat, archy=c(2,1)), nd=16)
   flydelta(modelA, "HierStrauss")
 })
+
+}
 #'
 #'  tests/density.R
 #'
@@ -43,10 +57,8 @@ local({
 #'                    and inhomogeneous summary functions
 #'                    and idw, adaptive.density, intensity
 #'
-#'  $Revision: 1.55 $  $Date: 2020/04/27 01:12:04 $
+#'  $Revision: 1.56 $  $Date: 2020/04/28 12:58:26 $
 #'
-
-require(spatstat)
 
 local({
 
@@ -62,36 +74,46 @@ local({
     return(invisible(NULL))
   }
 
-  tryit(0.05)
-  tryit(0.05, diggle=TRUE)
-  tryit(0.05, se=TRUE)
-  tryit(0.05, weights=expression(x))
-
-  tryit(0.07, kernel="epa")
-  tryit(0.07, kernel="quartic")
-  tryit(0.07, kernel="disc")
-
-  tryit(0.07, kernel="epa", weights=expression(x))
-
-  tryit(sigma=Inf)
-  tryit(sigma=Inf, weights=expression(x))
+  if(ALWAYS) {
+    tryit(0.05)
+    tryit(0.05, diggle=TRUE)
+    tryit(0.05, se=TRUE)
+    tryit(0.05, weights=expression(x))
+    tryit(0.07, kernel="epa")
+    tryit(sigma=Inf)
+  }
+  if(FULLTEST) {
+    tryit(0.07, kernel="quartic")
+    tryit(0.07, kernel="disc")
+    tryit(0.07, kernel="epa", weights=expression(x))
+    tryit(sigma=Inf, weights=expression(x))
+  }
   
   V <- diag(c(0.05^2, 0.07^2))
-  tryit(varcov=V)
-  tryit(varcov=V, diggle=TRUE)
-  tryit(varcov=V, weights=expression(x))
-  tryit(varcov=V, weights=expression(x), diggle=TRUE)
-  Z <- distmap(runifpoint(5, Window(cells)))
-  tryit(0.05, weights=Z)
-  tryit(0.05, weights=Z, diggle=TRUE)
+
+  if(ALWAYS) {
+    tryit(varcov=V)
+  }
+  if(FULLTEST) {
+    tryit(varcov=V, diggle=TRUE)
+    tryit(varcov=V, weights=expression(x))
+    tryit(varcov=V, weights=expression(x), diggle=TRUE)
+    Z <- distmap(runifpoint(5, Window(cells)))
+    tryit(0.05, weights=Z)
+    tryit(0.05, weights=Z, diggle=TRUE)
+  }
 
   trymost <- function(...) tryit(..., do.fun=FALSE) 
   wdf <- data.frame(a=1:42,b=42:1)
-  trymost(0.05, weights=wdf)
-  trymost(0.05, weights=wdf, diggle=TRUE)
-  trymost(sigma=Inf, weights=wdf)
-  trymost(varcov=V, weights=wdf)
-  trymost(varcov=V, weights=expression(cbind(x,y)))
+  if(ALWAYS) {
+    trymost(0.05, weights=wdf)
+    trymost(sigma=Inf, weights=wdf)
+  }
+  if(FULLTEST) {
+    trymost(0.05, weights=wdf, diggle=TRUE)
+    trymost(varcov=V, weights=wdf)
+    trymost(varcov=V, weights=expression(cbind(x,y)))
+  }
 
   ## check conservation of mass
   checkconserve <- function(X, xname, sigma, toler=0.01) {
@@ -105,14 +127,22 @@ local({
            call.=FALSE)
     return(relerr)
   }
-  checkconserve(cells, "cells", 0.15)
-  checkconserve(split(chorley)[["lung"]], "lung", 2)
+  if(FULLTEST) {
+    checkconserve(cells, "cells", 0.15)
+  }
+  if(ALWAYS) {
+    checkconserve(split(chorley)[["lung"]], "lung", 2)
+  }
   
   ## run C algorithm 'denspt'
   opa <- spatstat.options(densityC=TRUE, densityTransform=FALSE)
-  tryit(varcov=V)
-  tryit(varcov=V, weights=expression(x))
-  trymost(varcov=V, weights=wdf)
+  if(ALWAYS) {
+    tryit(varcov=V)
+  }
+  if(FULLTEST) {
+    tryit(varcov=V, weights=expression(x))
+    trymost(varcov=V, weights=wdf)
+  }
   spatstat.options(opa)
 
   crossit <- function(..., sigma=NULL) {
@@ -121,17 +151,24 @@ local({
     a <- densitycrossEngine(cells, U, ..., sigma=sigma, diggle=TRUE)
     invisible(NULL)
   }
-  crossit(varcov=V, weights=cells$x)
-  crossit(varcov=V, weights=wdf)
-  crossit(sigma=0.1, weights=wdf)
-  crossit(sigma=0.1, kernel="epa", weights=wdf)
-
-  crossit(sigma=Inf)
+  if(ALWAYS) {
+    crossit(varcov=V, weights=cells$x)
+    crossit(sigma=Inf)
+  }
+  if(FULLTEST) {
+    crossit(varcov=V, weights=wdf)
+    crossit(sigma=0.1, weights=wdf)
+    crossit(sigma=0.1, kernel="epa", weights=wdf)
+  }
   
-  # apply different discretisation rules
-  Z <- density(cells, 0.05, fractional=TRUE)
-  Z <- density(cells, 0.05, preserve=TRUE)
-  Z <- density(cells, 0.05, fractional=TRUE, preserve=TRUE)
+  ## apply different discretisation rules
+  if(ALWAYS) {
+    Z <- density(cells, 0.05, fractional=TRUE)
+  }
+  if(FULLTEST) {
+    Z <- density(cells, 0.05, preserve=TRUE)
+    Z <- density(cells, 0.05, fractional=TRUE, preserve=TRUE)
+  }
         
   ## compare results with different algorithms
   crosscheque <- function(expr) {
@@ -159,11 +196,13 @@ local({
 
   ## execute & compare results of density(at="points") with different algorithms
   wdfr <- cbind(1:npoints(redwood), 2)
-  crosscheque(density(redwood, at="points", sigma=0.13, edge=FALSE))
-  crosscheque(density(redwood, at="points", sigma=0.13, edge=FALSE,
-                      weights=wdfr[,1]))
-  crosscheque(density(redwood, at="points", sigma=0.13, edge=FALSE,
-                      weights=wdfr))
+  if(ALWAYS) {
+    crosscheque(density(redwood, at="points", sigma=0.13, edge=FALSE))
+    crosscheque(density(redwood, at="points", sigma=0.13, edge=FALSE,
+                        weights=wdfr[,1]))
+    crosscheque(density(redwood, at="points", sigma=0.13, edge=FALSE,
+                        weights=wdfr))
+  }
 
   ## correctness of non-Gaussian kernel calculation
   leavein <- function(ker, maxd=0.025) {
@@ -178,65 +217,85 @@ local({
                  "in calculation for", ker, "kernel"))
     return(invisible(NULL))
   }
-  leavein("epanechnikov", 0.015)
-  leavein("quartic",      0.010)
-  leavein("disc",         0.100) 
+  if(ALWAYS) {
+    leavein("epanechnikov", 0.015)
+  }
+  if(FULLTEST) {
+    leavein("quartic",      0.010)
+    leavein("disc",         0.100)
+  }
 
   ## bandwidth selection code blocks
   sigvec <- 0.01 * 2:15
   sigran <- range(sigvec)
-  bw.ppl(redwood, sigma=sigvec)
-  bw.ppl(redwood, srange=sigran, ns=5)
-  bw.CvL(redwood, sigma=sigvec)
-  bw.CvL(redwood, srange=sigran, ns=5)
-
+  if(ALWAYS) {
+    bw.ppl(redwood, sigma=sigvec)
+    bw.CvL(redwood, sigma=sigvec)
+  }
+  if(FULLTEST) {
+    bw.ppl(redwood, srange=sigran, ns=5)
+    bw.CvL(redwood, srange=sigran, ns=5)
+  }
   ## adaptive bandwidth
-  a <- bw.abram(redwood)
-  a <- bw.abram(redwood, pilot=density(redwood, 0.2))
-  a <- bw.abram(redwood, smoother="densityVoronoi", at="pixels")
+  if(ALWAYS) {
+    a <- bw.abram(redwood)
+  }
+  if(FULLTEST) {
+    a <- bw.abram(redwood, pilot=density(redwood, 0.2))
+    a <- bw.abram(redwood, smoother="densityVoronoi", at="pixels")
+  }
   
-  ## Kinhom 
-  lam <- density(redwood)
-  K <- Kinhom(redwood, lam)
+  ## Kinhom
+  if(ALWAYS) {
+    lam <- density(redwood)
+    K <- Kinhom(redwood, lam)
   
-  lamX <- density(redwood, at="points")
-  KX <- Kinhom(redwood, lamX)
+    lamX <- density(redwood, at="points")
+    KX <- Kinhom(redwood, lamX)
+  }
 
   ## test all code cases of new 'relrisk.ppp' algorithm
   pants <- function(..., X=ants, sigma=100, se=TRUE) {
     a <- relrisk(X, sigma=sigma, se=se, ...)
     return(TRUE)
   }
-  pants()
-  pants(diggle=TRUE)
-  pants(edge=FALSE)
-  pants(diggle=TRUE, at="points")
-  pants(edge=FALSE, at="points")
-  pants(casecontrol=FALSE)
-  pants(relative=TRUE)
-  pants(casecontrol=FALSE, relative=TRUE)
-  pants(at="points")
-  pants(casecontrol=FALSE,at="points")
-  pants(relative=TRUE,at="points")
-  pants(casecontrol=FALSE, relative=TRUE,at="points")
-  pants(relative=TRUE, control="Cataglyphis", case="Messor")
-  pants(relative=TRUE, control="Cataglyphis", case="Messor", at="points")
-  pants(casecontrol=FALSE, case="Messor", se=FALSE)
-  pants(case=2, at="pixels", relative=TRUE)
-  pants(case=2, at="points", relative=TRUE)
-  pants(case=2, at="pixels", relative=FALSE)
-  pants(case=2, at="points", relative=FALSE)
-  pants(sigma=Inf)
-  pants(sigma=NULL, varcov=diag(c(100,100)^2))
-  
+  if(ALWAYS) {
+    pants()
+    pants(diggle=TRUE)
+    pants(edge=FALSE)
+    pants(at="points")
+    pants(casecontrol=FALSE)
+    pants(relative=TRUE)
+    pants(sigma=Inf)
+    pants(sigma=NULL, varcov=diag(c(100,100)^2))
+  }
+  if(FULLTEST) {
+    pants(diggle=TRUE, at="points")
+    pants(edge=FALSE, at="points")
+    pants(casecontrol=FALSE, relative=TRUE)
+    pants(casecontrol=FALSE,at="points")
+    pants(relative=TRUE,at="points")
+    pants(casecontrol=FALSE, relative=TRUE,at="points")
+    pants(relative=TRUE, control="Cataglyphis", case="Messor")
+    pants(relative=TRUE, control="Cataglyphis", case="Messor", at="points")
+    pants(casecontrol=FALSE, case="Messor", se=FALSE)
+    pants(case=2, at="pixels", relative=TRUE)
+    pants(case=2, at="points", relative=TRUE)
+    pants(case=2, at="pixels", relative=FALSE)
+    pants(case=2, at="points", relative=FALSE)
+  }
   ## more than 2 types
-  pants(X=sporophores)
-  pants(X=sporophores, sigma=20, at="points")
-  pants(X=sporophores, sigma=20, relative=TRUE, at="points")
-  pants(X=sporophores, sigma=20, at="pixels", se=FALSE)
-  pants(X=sporophores, sigma=20, relative=TRUE, at="pixels", se=FALSE)
-  bw.relrisk(sporophores, method="leastsquares")
-  bw.relrisk(sporophores, method="weightedleastsquares")
+  if(ALWAYS) {
+    pants(X=sporophores)
+    pants(X=sporophores, sigma=20, at="points")
+    bw.relrisk(sporophores, method="leastsquares")
+  }
+  if(FULLTEST) {
+    pants(X=sporophores, sigma=20, relative=TRUE, at="points")
+    pants(X=sporophores, sigma=20, at="pixels", se=FALSE)
+    pants(X=sporophores, sigma=20, relative=TRUE, at="pixels", se=FALSE)
+    bw.relrisk(sporophores, method="weightedleastsquares")
+  }
   
   ## likewise 'relrisk.ppm'
   fit <- ppm(ants ~ x)
@@ -244,26 +303,33 @@ local({
     a <- relrisk(model, sigma=100, se=TRUE, ...)
     return(TRUE)
   }
-  rants()
-  rants(diggle=TRUE)
-  rants(edge=FALSE)
-  rants(diggle=TRUE, at="points")
-  rants(edge=FALSE, at="points")
-  rants(casecontrol=FALSE)
-  rants(relative=TRUE)
-  rants(casecontrol=FALSE, relative=TRUE)
-  rants(at="points")
-  rants(casecontrol=FALSE,at="points")
-  rants(relative=TRUE,at="points")
-  rants(casecontrol=FALSE, relative=TRUE,at="points")
-  rants(relative=TRUE, control="Cataglyphis", case="Messor")
-  rants(relative=TRUE, control="Cataglyphis", case="Messor", at="points")
-
+  if(ALWAYS) {
+    rants()
+    rants(diggle=TRUE)
+    rants(edge=FALSE)
+    rants(at="points")
+    rants(casecontrol=FALSE)
+    rants(relative=TRUE)
+  }
+  if(FULLTEST) {
+    rants(diggle=TRUE, at="points")
+    rants(edge=FALSE, at="points")
+    rants(casecontrol=FALSE, relative=TRUE)
+    rants(casecontrol=FALSE,at="points")
+    rants(relative=TRUE,at="points")
+    rants(casecontrol=FALSE, relative=TRUE,at="points")
+    rants(relative=TRUE, control="Cataglyphis", case="Messor")
+    rants(relative=TRUE, control="Cataglyphis", case="Messor", at="points")
+  }
   ## more than 2 types
   fut <- ppm(sporophores ~ x)
-  rants(model=fut)
-  rants(model=fut, at="points")
-  rants(model=fut, relative=TRUE, at="points")
+  if(ALWAYS) {
+    rants(model=fut)
+  }
+  if(FULLTEST) {
+    rants(model=fut, at="points")
+    rants(model=fut, relative=TRUE, at="points")
+  }
   
   ## execute Smooth.ppp and Smoothfun.ppp in all cases
   stroke <- function(..., Y = longleaf) {
@@ -277,22 +343,25 @@ local({
     U <- as.im(f)
     return(invisible(NULL))
   }
-  stroke()
-  stroke(5, diggle=TRUE)
-  stroke(5, geometric=TRUE)
-  stroke(1e-6) # generates warning about small bandwidth
-  stroke(5, weights=runif(npoints(longleaf)))
-  stroke(5, weights=expression(x))
-  stroke(5, kernel="epa")
-  stroke(varcov=diag(c(25, 36)))
-  stroke(varcov=diag(c(25, 36)), weights=runif(npoints(longleaf)))
-  stroke(5, Y=longleaf %mark% 1)
-  stroke(5, Y=cut(longleaf,breaks=3))
-  Z <- as.im(function(x,y){abs(x)+1}, Window(longleaf))
-  stroke(5, weights=Z)
-  stroke(5, weights=Z, geometric=TRUE)
-
-  stroke(sigma=Inf)
+  if(ALWAYS) {
+    stroke()
+    stroke(5, diggle=TRUE)
+    stroke(5, geometric=TRUE)
+    stroke(1e-6) # generates warning about small bandwidth
+    stroke(5, weights=expression(x))
+    stroke(5, kernel="epa")
+    stroke(sigma=Inf)
+  }
+  if(FULLTEST) {
+    Z <- as.im(function(x,y){abs(x)+1}, Window(longleaf))
+    stroke(5, weights=Z)
+    stroke(5, weights=runif(npoints(longleaf)))
+    stroke(varcov=diag(c(25, 36)))
+    stroke(varcov=diag(c(25, 36)), weights=runif(npoints(longleaf)))
+    stroke(5, Y=longleaf %mark% 1)
+    stroke(5, Y=cut(longleaf,breaks=3))
+    stroke(5, weights=Z, geometric=TRUE)
+  }
   
   markmean(longleaf, 9)
   
@@ -307,40 +376,53 @@ local({
     U <- as.im(f)
     return(invisible(NULL))
   }
-  strike()
-  strike(sigma=1.5, kernel="epa")
-  strike(varcov=diag(c(1.2, 2.1)))
-  strike(sigma=1e-6)
-  strike(sigma=1e-6, kernel="epa")
-  strike(sigma=Inf)
-  strike(1.5, weights=runif(npoints(finpines)))
-  strike(1.5, weights=expression(y))
-  strike(1.5, geometric=TRUE)
-  strike(1.5, Y=finpines[FALSE])
-  flatfin <- finpines %mark% data.frame(a=rep(1, npoints(finpines)), b=2)
-  strike(1.5, Y=flatfin)
-  strike(1.5, Y=flatfin, geometric=TRUE)
-
+  if(ALWAYS) {
+    strike()
+    strike(sigma=1.5, kernel="epa")
+    strike(varcov=diag(c(1.2, 2.1)))
+    strike(sigma=1e-6)
+    strike(sigma=Inf)
+  }
+  if(FULLTEST) {
+    strike(sigma=1e-6, kernel="epa")
+    strike(1.5, weights=runif(npoints(finpines)))
+    strike(1.5, weights=expression(y))
+    strike(1.5, geometric=TRUE)
+    strike(1.5, Y=finpines[FALSE])
+    flatfin <- finpines %mark% data.frame(a=rep(1, npoints(finpines)), b=2)
+    strike(1.5, Y=flatfin)
+    strike(1.5, Y=flatfin, geometric=TRUE)
+  }
   opx <- spatstat.options(densityTransform=FALSE)
-  stroke(5, Y=longleaf[order(longleaf$x)], sorted=TRUE)
-  strike(1.5, Y=finpines[order(finpines$x)], sorted=TRUE)
+  if(ALWAYS) {
+    stroke(5, Y=longleaf[order(longleaf$x)], sorted=TRUE)
+  }
+  if(FULLTEST) {
+    strike(1.5, Y=finpines[order(finpines$x)], sorted=TRUE)
+  }
   spatstat.options(opx)
 
   ## detect special cases
-  Smooth(longleaf[FALSE])
-  Smooth(longleaf, minnndist(longleaf))
-  Xconst <- cells %mark% 1
-  Smooth(Xconst, 0.1)
-  Smooth(Xconst, 0.1, at="points")
-  Smooth(cells %mark% runif(42), sigma=Inf)
-  Smooth(cells %mark% runif(42), sigma=Inf, at="points")
-  Smooth(cells %mark% runif(42), sigma=Inf, at="points", leaveoneout=FALSE)
-  Smooth(cut(longleaf, breaks=4))
-
+  if(ALWAYS) {
+    Smooth(longleaf[FALSE])
+    Smooth(longleaf, minnndist(longleaf))
+    Xconst <- cells %mark% 1
+    Smooth(Xconst, 0.1)
+    Smooth(Xconst, 0.1, at="points")
+    Smooth(cells %mark% runif(42), sigma=Inf)
+    Smooth(cells %mark% runif(42), sigma=Inf, at="points")
+    Smooth(cells %mark% runif(42), sigma=Inf, at="points", leaveoneout=FALSE)
+    Smooth(cut(longleaf, breaks=4))
+  }
+  
   ## code not otherwise reached
-  smoothpointsEngine(cells, values=rep(1, npoints(cells)), sigma=0.2)
-  smoothpointsEngine(cells, values=runif(npoints(cells)), sigma=Inf)
-  smoothpointsEngine(cells, values=runif(npoints(cells)), sigma=1e-16)
+  if(ALWAYS) {
+    smoothpointsEngine(cells, values=rep(1, npoints(cells)), sigma=0.2)
+  }
+  if(FULLTEST) {
+    smoothpointsEngine(cells, values=runif(npoints(cells)), sigma=Inf)
+    smoothpointsEngine(cells, values=runif(npoints(cells)), sigma=1e-16)
+  }
   
   ## validity of Smooth.ppp(at='points')
   Y <- longleaf %mark% runif(npoints(longleaf), min=41, max=43)
@@ -355,25 +437,34 @@ local({
     stop("Implausible results from Smooth.ppp(at=points, leaveoneout=FALSE)")
 
   ## compare Smooth.ppp results with different algorithms
-  crosscheque(Smooth(longleaf, at="points", sigma=6))
-  wt <- runif(npoints(longleaf))
-  vc <- diag(c(25,36))
-  crosscheque(Smooth(longleaf, at="points", sigma=6, weights=wt))
-  crosscheque(Smooth(longleaf, at="points", varcov=vc))
-  crosscheque(Smooth(longleaf, at="points", varcov=vc, weights=wt))
-
+  if(ALWAYS) {
+    crosscheque(Smooth(longleaf, at="points", sigma=6))
+    wt <- runif(npoints(longleaf))
+    crosscheque(Smooth(longleaf, at="points", sigma=6, weights=wt))
+  }
+  if(FULLTEST) {
+    vc <- diag(c(25,36))
+    crosscheque(Smooth(longleaf, at="points", varcov=vc))
+    crosscheque(Smooth(longleaf, at="points", varcov=vc, weights=wt))
+  }
   ## drop-dimension coding errors
-  X <- longleaf
-  marks(X) <- cbind(marks(X), 1)
-  Z <- Smooth(X, 5)
+  if(FULLTEST) {
+    X <- longleaf
+    marks(X) <- cbind(marks(X), 1)
+    Z <- Smooth(X, 5)
 
-  ZZ <- bw.smoothppp(finpines, hmin=0.01, hmax=0.012, nh=2) # reshaping problem
+    ZZ <- bw.smoothppp(finpines, hmin=0.01, hmax=0.012, nh=2) # reshaping problem
+  }
 
   ## geometric-mean smoothing
-  U <- Smooth(longleaf, 5, geometric=TRUE)
-  UU <- Smooth(X, 5, geometric=TRUE)
-  V <- Smooth(longleaf, 5, geometric=TRUE, at="points")
-  VV <- Smooth(X, 5, geometric=TRUE, at="points")
+  if(ALWAYS) {
+    U <- Smooth(longleaf, 5, geometric=TRUE)
+  }
+  if(FULLTEST) {
+    UU <- Smooth(X, 5, geometric=TRUE)
+    V <- Smooth(longleaf, 5, geometric=TRUE, at="points")
+    VV <- Smooth(X, 5, geometric=TRUE, at="points")
+  }
 })
 
 reset.spatstat.options()
@@ -492,10 +583,10 @@ reset.spatstat.options()
 #'
 #'  Diagnostic tools such as diagnose.ppm, qqplot.ppm
 #'
-#'  $Revision: 1.5 $  $Date: 2019/12/31 03:32:54 $
+#'  $Revision: 1.6 $  $Date: 2020/04/28 12:58:26 $
 #'
 
-require(spatstat)
+if(FULLTEST) {
 local({
   fit <- ppm(cells ~ x)
   diagE <- diagnose.ppm(fit, type="eem")
@@ -557,13 +648,15 @@ local({
   #' plot.lurk
   plot(stuff, shade=NULL)
 })
+}
+
 #'
 #'  tests/discarea.R
 #'
-#'   $Revision: 1.2 $ $Date: 2019/01/20 08:44:50 $
+#'   $Revision: 1.3 $ $Date: 2020/04/28 12:58:26 $
 #'
 
-require(spatstat)
+if(ALWAYS) {
 local({
   u <- c(0.5,0.5)
   B <- owin(poly=list(x=c(0.3, 0.5, 0.7, 0.4), y=c(0.3, 0.3, 0.6, 0.8)))
@@ -579,68 +672,81 @@ local({
   areaLoss(X, 0.1, exact=FALSE, method="distmap")          # -> areaLoss.grid
   areaLoss(X, c(0.1, 0.15), exact=FALSE, method="distmap") # -> areaLoss.grid
 })
+}
 #'
 #'   tests/disconnected.R
 #'
 #'   disconnected linear networks
 #'
-#'    $Revision: 1.3 $ $Date: 2018/07/21 03:00:09 $
-
-require(spatstat)
+#'    $Revision: 1.4 $ $Date: 2020/04/28 12:58:26 $
 
 local({
 
-#'   disconnected network
-m <- simplenet$m
-m[4,5] <- m[5,4] <- m[6,10] <- m[10,6] <- m[4,6] <- m[6,4] <- FALSE
-L <- linnet(vertices(simplenet), m)
-L
-summary(L)
-is.connected(L)
-Z <- connected(L, what="components")
+  #'   disconnected network
+  m <- simplenet$m
+  m[4,5] <- m[5,4] <- m[6,10] <- m[10,6] <- m[4,6] <- m[6,4] <- FALSE
+  L <- linnet(vertices(simplenet), m)
+  if(FULLTEST) {
+    L
+    summary(L)
+    is.connected(L)
+    Z <- connected(L, what="components")
+  }
 
-#' point pattern with no points in one connected component
-set.seed(42)
-X <- rpoislpp(lambda=function(x,y) { 10 * (x < 0.5)}, L)
-B <- lineardirichlet(X)
-plot(B)
-summary(B)
-D <- pairdist(X)
-A <- nndist(X)
-H <- nnwhich(X)
-Y <- rpoislpp(lambda=function(x,y) { 10 * (x < 0.5)}, L)
-G <- nncross(X, Y)
-J <- crossdist(X, Y)
-plot(distfun(X))  # includes evaluation of nncross(what="dist")
+  #' point pattern with no points in one connected component
+  set.seed(42)
+  X <- rpoislpp(lambda=function(x,y) { 10 * (x < 0.5)}, L)
+  B <- lineardirichlet(X)
+  if(FULLTEST) {
+    plot(B)
+    summary(B)
+  }
+  if(ALWAYS) {
+    D <- pairdist(X)
+    A <- nndist(X)
+  }
+  if(FULLTEST) {
+    H <- nnwhich(X)
+    Y <- rpoislpp(lambda=function(x,y) { 10 * (x < 0.5)}, L)
+    G <- nncross(X, Y)
+    J <- crossdist(X, Y)
+    plot(distfun(X))  # includes evaluation of nncross(what="dist")
+  }
+  
+  #' K functions in disconnected network
+  if(ALWAYS) {
+    K <- linearK(X)
+    lamX <- intensity(X)
+    nX <- npoints(X)
+    KI <- linearKinhom(X, lambda=rep(lamX, nX))
+    P <- linearpcf(X)
+    PJ <- linearpcfinhom(X, lambda=rep(lamX, nX))
+  }
+  Y <- X %mark% factor(rep(1:2, nX)[1:nX])
+  if(FULLTEST) {
+    Y1 <- split(Y)[[1]]
+    Y2 <- split(Y)[[2]]
+    KY <- linearKcross(Y)
+    PY <- linearpcfcross(Y)
+    KYI <- linearKcross.inhom(Y, lambdaI=rep(intensity(Y1), npoints(Y1)),
+                              lambdaJ=rep(intensity(Y2), npoints(Y2)))
+    PYI <- linearpcfcross.inhom(Y, lambdaI=rep(intensity(Y1), npoints(Y1)),
+                                lambdaJ=rep(intensity(Y2), npoints(Y2)))
+  }
 
-#' K functions in disconnected network
-K <- linearK(X)
-lamX <- intensity(X)
-nX <- npoints(X)
-KI <- linearKinhom(X, lambda=rep(lamX, nX))
-P <- linearpcf(X)
-PJ <- linearpcfinhom(X, lambda=rep(lamX, nX))
-Y <- X %mark% factor(rep(1:2, nX)[1:nX])
-Y1 <- split(Y)[[1]]
-Y2 <- split(Y)[[2]]
-KY <- linearKcross(Y)
-PY <- linearpcfcross(Y)
-KYI <- linearKcross.inhom(Y, lambdaI=rep(intensity(Y1), npoints(Y1)),
-                       lambdaJ=rep(intensity(Y2), npoints(Y2)))
-PYI <- linearpcfcross.inhom(Y, lambdaI=rep(intensity(Y1), npoints(Y1)),
-                    lambdaJ=rep(intensity(Y2), npoints(Y2)))
-
-#' internal utilities
-K <- ApplyConnected(X, linearK, rule=function(...) list())
+  #' internal utilities
+  if(FULLTEST) {
+    K <- ApplyConnected(X, linearK, rule=function(...) list())
+  }
 })
 #'
 #'   tests/dominic.R
 #'
 #'   Additional tests for Dominic Schuhmacher's code
 #'
-#'   $Revision: 1.3 $  $Date: 2019/10/11 04:33:29 $
+#'   $Revision: 1.4 $  $Date: 2020/04/28 12:58:26 $
 
-require(spatstat)
+if(ALWAYS) {   # tests C code
 local({
   X <- runifpoint(10)
   Y <- runifpoint(10)
@@ -662,6 +768,7 @@ local({
   m3 <- pppdist.mat(X[FALSE], Y[FALSE], q=2, cutoff=0.001)
 
 })
+}
 
 
 
@@ -670,41 +777,47 @@ local({
 #'
 #'    Tests for determinantal point process models
 #' 
-#'    $Revision: 1.6 $ $Date: 2020/01/10 03:10:21 $
+#'    $Revision: 1.7 $ $Date: 2020/04/28 12:58:26 $
 
-require(spatstat)
 local({
-  #' simulate.dppm
-  jpines <- residualspaper$Fig1
-  fit <- dppm(jpines ~ 1, dppGauss)
-  set.seed(10981)
-  simulate(fit, W=square(5))
-  #' simulate.detpointprocfamily - code blocks
-  model <- dppGauss(lambda=100, alpha=.05, d=2)
-  simulate(model, seed=1999, correction="border")
-  u <- is.stationary(model)
-  #' other methods for dppm
-  kay <- Kmodel(fit)
-  gee <- pcfmodel(fit)
-  lam <- intensity(fit)
-  arr <- reach(fit)
-  pah <- parameters(fit)
-  
+  if(ALWAYS) {
+    #' simulate.dppm
+    jpines <- residualspaper$Fig1
+    fit <- dppm(jpines ~ 1, dppGauss)
+    set.seed(10981)
+    simulate(fit, W=square(5))
+  }
+  if(FULLTEST) {
+    #' simulate.detpointprocfamily - code blocks
+    model <- dppGauss(lambda=100, alpha=.05, d=2)
+    simulate(model, seed=1999, correction="border")
+    u <- is.stationary(model)
+    #' other methods for dppm
+    kay <- Kmodel(fit)
+    gee <- pcfmodel(fit)
+    lam <- intensity(fit)
+    arr <- reach(fit)
+    pah <- parameters(fit)
+  }
   #' dppeigen code blocks
-  mod <- dppMatern(lambda=2, alpha=0.01, nu=1, d=2)
-  uT <- dppeigen(mod, trunc=1.1,  Wscale=c(1,1), stationary=TRUE)
-  uF <- dppeigen(mod, trunc=1.1,  Wscale=c(1,1), stationary=FALSE)
-  vT <- dppeigen(mod, trunc=0.98, Wscale=c(1,1), stationary=TRUE)
-  vF <- dppeigen(mod, trunc=0.98, Wscale=c(1,1), stationary=FALSE)
+  if(ALWAYS) {
+    mod <- dppMatern(lambda=2, alpha=0.01, nu=1, d=2)
+    uT <- dppeigen(mod, trunc=1.1,  Wscale=c(1,1), stationary=TRUE)
+  }
+  if(FULLTEST) {
+    uF <- dppeigen(mod, trunc=1.1,  Wscale=c(1,1), stationary=FALSE)
+    vT <- dppeigen(mod, trunc=0.98, Wscale=c(1,1), stationary=TRUE)
+    vF <- dppeigen(mod, trunc=0.98, Wscale=c(1,1), stationary=FALSE)
+  }
 })
 #'
 #'   tests/duplicity.R
 #'
 #'  Tests of duplicated/multiplicity code
 #'
-#' $Revision: 1.7 $ $Date: 2019/12/06 02:41:32 $
+#' $Revision: 1.8 $ $Date: 2020/04/28 12:58:26 $
 
-require(spatstat)
+if(ALWAYS) {
 local({
    X <- ppp(c(1,1,0.5,1), c(2,2,1,2), window=square(3), check=FALSE)
    Y <- X %mark% factor(letters[c(3,2,4,3)])
@@ -780,3 +893,4 @@ local({
    if(!isTRUE(all.equal(u1, u2)))
      stop("Inconsistency between algorithms in uniquemap.default")
 })
+}

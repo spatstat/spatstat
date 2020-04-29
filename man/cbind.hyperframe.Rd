@@ -57,7 +57,7 @@
   h <- hyperframe(lambda=lambda, X=X)
   g <- hyperframe(id=letters[1:5], Y=rev(X))
   gh <- cbind(h, g)
-  hh <- rbind(h, h)
+  hh <- rbind(h[1:2, ], h[3:5,])
 }
 \keyword{spatial}
 \keyword{manip}

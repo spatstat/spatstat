@@ -1,9 +1,21 @@
+#'
+#'   Header for all (concatenated) test files
+#'
+#'   Require spatstat.
+#'   Obtain environment variable controlling tests.
+#'
+#'   $Revision: 1.4 $ $Date: 2020/04/28 08:17:40 $
+
+require(spatstat)
+FULLTEST <- !is.na(Sys.getenv("SPATSTAT_TEST", unset=NA))
+ALWAYS   <- TRUE
+
 ##
 ##    tests/gcc323.R
 ##
-##    $Revision: 1.2 $  $Date: 2015/12/29 08:54:49 $
+##    $Revision: 1.3 $  $Date: 2020/04/28 12:58:26 $
 ##
-require(spatstat)
+if(ALWAYS) { # depends on hardware
 local({
   # critical R values that provoke GCC bug #323
   a <- marktable(lansing, R=0.25)
@@ -11,14 +23,15 @@ local({
   a <- marktable(lansing, R=0.20)
   a <- marktable(lansing, R=0.10)
 })
+}
 #       
 #        tests/hobjects.R
 #
 #   Validity of methods for ppm(... method="ho")
 #
 
-require(spatstat)
 
+if(FULLTEST) {
 local({
   set.seed(42)
   fit  <- ppm(cells ~1,         Strauss(0.1), method="ho", nsim=10)
@@ -33,6 +46,7 @@ local({
   p  <- predict(fit)
   px <- predict(fitx)
 })
+}
 
 
 #
@@ -40,10 +54,10 @@ local({
 #
 # test "[.hyperframe" etc
 #
-#  $Revision: 1.7 $  $Date: 2020/01/11 04:55:17 $
+#  $Revision: 1.8 $  $Date: 2020/04/28 12:58:26 $
 #
 
-require(spatstat)
+if(FULLTEST) {
 local({
   lambda <- runif(4, min=50, max=100)
   X <- lapply(as.list(lambda), function(x) { rpoispp(x) })
@@ -88,14 +102,13 @@ local({
   G[["a"]]$B <- 42
   split(H, f) <- G
 })
-
-
+}
 #'     tests/hypotests.R
 #'     Hypothesis tests
 #' 
-#'  $Revision: 1.5 $ $Date: 2019/12/14 03:11:05 $
+#'  $Revision: 1.6 $ $Date: 2020/04/28 12:58:26 $
 
-require(spatstat)
+if(FULLTEST) {
 local({
   hopskel.test(redwood, method="MonteCarlo", nsim=5)
   
@@ -133,13 +146,14 @@ local({
   scan.test(cells, rr, nsim=5,
             method="poisson", baseline=lam, alternative="less")
 })
+}
 #
 #  tests/imageops.R
 #
-#   $Revision: 1.28 $   $Date: 2020/04/27 01:03:54 $
+#   $Revision: 1.29 $   $Date: 2020/04/28 12:58:26 $
 #
 
-require(spatstat)
+if(FULLTEST) {
 local({
   #' cases of 'im' data
   tab <- table(sample(factor(letters[1:10]), 30, replace=TRUE))
@@ -322,21 +336,6 @@ local({
   #' Smooth.im -> blur.im with sigma=NULL
   ZS <- Smooth(Z)
   
-  #' check nearest.valid.pixel
-  W <- Window(demopat)
-  set.seed(911911)
-  X <- runifpoint(1000, W)
-  Z <- quantess(W, function(x,y) { x }, 9)$image
-  nearest.valid.pixel(numeric(0), numeric(0), Z)
-  x <- X$x
-  y <- X$y
-  a <- nearest.valid.pixel(x, y, Z, method="interpreted")
-  b <- nearest.valid.pixel(x, y, Z, method="C")
-  if(!isTRUE(all.equal(a,b)))
-    stop("Unequal results in nearest.valid.pixel")
-  if(!identical(a,b)) 
-    stop("Equal, but not identical, results in nearest.valid.pixel")
-    
   #' cases of distcdf
   distcdf(cells[1:5])
   distcdf(W=cells[1:5], dW=1:5)
@@ -360,11 +359,32 @@ local({
   #' rotmean
   U <- rotmean(Z, origin="midpoint", result="im", padzero=FALSE)
 })
+}
+
+if(ALWAYS) {
+  local({
+    #' check nearest.valid.pixel
+    W <- Window(demopat)
+    set.seed(911911)
+    X <- runifpoint(1000, W)
+    Z <- quantess(W, function(x,y) { x }, 9)$image
+    nearest.valid.pixel(numeric(0), numeric(0), Z)
+    x <- X$x
+    y <- X$y
+    a <- nearest.valid.pixel(x, y, Z, method="interpreted")
+    b <- nearest.valid.pixel(x, y, Z, method="C")
+    if(!isTRUE(all.equal(a,b)))
+      stop("Unequal results in nearest.valid.pixel")
+      if(!identical(a,b)) 
+        stop("Equal, but not identical, results in nearest.valid.pixel")
+  })
+}
+
 #' indices.R
 #' Tests of code for understanding index vectors etc
-#' $Revision: 1.1 $ $Date: 2018/03/01 03:38:07 $
+#' $Revision: 1.2 $ $Date: 2020/04/28 12:58:26 $
 
-require(spatstat)
+if(FULLTEST) {
 local({
 
   a <- grokIndexVector(c(FALSE,TRUE),         10)
@@ -385,14 +405,16 @@ local({
 
   aa <- ppsubset(cells, square(0.1))
 })
+}
+
 #'
 #'  tests/interact.R
 #'
 #'  Support for interaction objects
 #'
-#'  $Revision: 1.1 $ $Date: 2019/12/10 01:57:18 $
+#'  $Revision: 1.2 $ $Date: 2020/04/28 12:58:26 $
 
-require(spatstat)
+if(FULLTEST) {
 local({
   #' print.intermaker
   Strauss
@@ -403,12 +425,13 @@ local({
   BD <- function(r) { instantiate.interact(BS, list(r=r)) }
   BlueDanube <- intermaker(BD, BS) 
 })
+}
+
 #'   tests/ippm.R
 #'   Tests of 'ippm' class
-#'   $Revision: 1.5 $ $Date: 2020/03/04 08:57:19 $
+#'   $Revision: 1.6 $ $Date: 2020/04/28 12:58:26 $
 
-require(spatstat)
-
+if(FULLTEST) {
 local({
   # .......... set up example from help file .................
   nd <- 10
@@ -492,3 +515,4 @@ local({
   A <- anova(fit0, fit)
   Alo <- anova(fit0lo, fitlo)
 })
+}

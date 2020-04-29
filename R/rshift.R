@@ -3,16 +3,19 @@
 #
 #   random shift with optional toroidal boundary
 #
-#   $Revision: 1.18 $   $Date: 2017/12/30 05:39:13 $
+#   $Revision: 1.19 $   $Date: 2020/04/29 13:20:21 $
 #
 #
 rshift <- function(X, ...) {
   UseMethod("rshift")
 }
 
-rshift.splitppp <- function(X, ..., which=seq_along(X))
+rshift.splitppp <- function(X, ..., which=seq_along(X),
+                            nsim=1, drop=TRUE)
 {
   verifyclass(X, "splitppp")
+  check.1.integer(nsim)
+  
   if("group" %in% names(list(...)))
     stop(paste("argument", sQuote("group"),
                "not implemented for splitppp objects"))
@@ -35,19 +38,28 @@ rshift.splitppp <- function(X, ..., which=seq_along(X))
     if(length(iwhich) < length(X)) 
       X[-iwhich] <- lapply(X[-iwhich], "[.ppp", i=clip)
   }
-  # perform shift on selected patterns
-  # (setting group = NULL ensures each pattern is not split further)
-  shiftXsub <- do.call(lapply, append(list(X[iwhich], rshift.ppp, group=NULL),
-                                        arglist))
-  # put back
-  X[iwhich] <- shiftXsub
+  Xvariable <- X[iwhich]
 
-  return(X)
+  resultlist <- vector(mode="list", length=nsim)
+
+  for(isim in seq_len(nsim)) {
+    Xsim <- X
+    ## perform shift on selected patterns
+    ## (setting group = NULL ensures each pattern is not split further)
+    shiftXsub <- do.call(lapply, append(list(Xvariable, rshift.ppp, group=NULL),
+                                        arglist))
+    ## put back
+    Xsim[iwhich] <- shiftXsub
+    resultlist[[isim]] <- Xsim
+  }
+
+  return(simulationresult(resultlist, nsim, drop))
 }
 
-rshift.ppp <- function(X, ..., which=NULL, group)
+rshift.ppp <- function(X, ..., which=NULL, group, nsim=1, drop=TRUE)
 {
   verifyclass(X, "ppp")
+  check.1.integer(nsim)
   
   # validate arguments and determine common clipping window
   arglist <- handle.rshift.args(X$window, ..., edgedefault="torus")
@@ -63,13 +75,20 @@ rshift.ppp <- function(X, ..., which=NULL, group)
     stop(paste("Cannot apply argument", sQuote("which"),
                "; no grouping defined"))
 
+  resultlist <- vector(mode="list", length=nsim)
+  
   # if grouping, use split
   if(!is.null(group)) {
     Y <- split(X, group)
-    split(X, group) <- do.call(rshift.splitppp,
-                               append(list(Y, which=which),
-                                      arglist))
-    return(X)
+    splitshifts <- do.call(rshift.splitppp,
+                           append(list(Y, which=which, nsim=nsim, drop=FALSE),
+                                  arglist))
+    for(isim in seq_len(nsim)) {
+      Xsim <- X
+      split(Xsim, group) <- splitshifts[[isim]]
+      resultlist[[isim]] <- Xsim
+    }
+    return(simulationresult(resultlist, nsim, drop))
   } 
     
   # ungrouped point pattern
@@ -82,43 +101,47 @@ rshift.ppp <- function(X, ..., which=NULL, group)
   edge   <- arglist$edge
   clip   <- arglist$clip
  
-  W <- X$window
-  W <- rescue.rectangle(W)
-  if(W$type != "rectangle" && edge=="torus")
-    stop("Torus (periodic) boundary is only meaningful for rectangular windows")
+  W <- rescue.rectangle(Window(X))
 
-  # generate random translation vector
-  
-  if(!is.null(radius)) 
-    jump <- runifdisc(1, radius=radius)
-  else {
-    jump <- list(x=runif(1, min=0, max=width),
-                 y=runif(1, min=0, max=height))
-  }
-
-  # translate points
-  x <- X$x + jump$x
-  y <- X$y + jump$y
-
-  # wrap points
   if(edge == "torus") {
+    if(!is.rectangle(W))
+      stop("edge = 'torus' is only meaningful for rectangular windows")
     xr <- W$xrange
     yr <- W$yrange
     Wide <- diff(xr)
     High <- diff(yr)
-    x <- xr[1] + (x - xr[1]) %% Wide
-    y <- yr[1] + (y - yr[1]) %% High
   }
 
-  # put back into point pattern
-  X$x <- x
-  X$y <- y
-
-  # clip to window
-  if(!is.null(clip))
-    X <- X[clip]
-
-  return(X)
+  ## .......... simulation loop ..................
+  resultlist <- vector(mode="list", length=nsim)
+  for(isim in seq_len(nsim)) {
+    #' generate random translation vector
+    if(!is.null(radius)) {
+      jump <- runifdisc(1, radius=radius)
+    } else {
+      jump <- list(x=runif(1, min=0, max=width),
+                   y=runif(1, min=0, max=height))
+    }
+    #' translate points of X
+    x <- X$x + jump$x
+    y <- X$y + jump$y
+    #' wrap points
+    if(edge == "torus") {
+      x <- xr[1] + (x - xr[1]) %% Wide
+      y <- yr[1] + (y - yr[1]) %% High
+    }
+    #' save as point pattern
+    Xsim <- X
+    Xsim$x <- x
+    Xsim$y <- y
+    #' clip to window
+    if(!is.null(clip))
+      Xsim <- Xsim[clip]
+    #' save result
+    resultlist[[isim]] <- Xsim
+  }
+  ## ................ end loop ..................
+  return(simulationresult(resultlist, nsim, drop))
 }
 
 

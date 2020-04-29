@@ -1,7 +1,7 @@
 #
 #  hyperframe.R
 #
-# $Revision: 1.72 $  $Date: 2020/01/21 04:15:26 $
+# $Revision: 1.73 $  $Date: 2020/04/29 12:37:48 $
 #
 
 hyperframe <- local({
@@ -474,22 +474,17 @@ rbind.hyperframe <- function(...) {
       # data frame column: already made
       rslt[[k]] <- dfall[,k]
     } else {
-      # hypercolumns or hyperatoms: extract them
+      ## hypercolumns or hyperatoms: extract them
       hdata <- lapply(argh, "[", j=nama, drop=FALSE)
       hdata <- lapply(lapply(hdata, as.list), getElement, name=nama)
-      # append them
-      hh <- hdata[[1L]]
-      for(j in 2:nargh) {
-        hh <- append(hh, hdata[[j]])
-      }
+      ## bind them
+      hh <- Reduce(append, hdata)
       rslt[[k]] <- hh
     }
   }
-  ## collect the row names
-  rona <- sapply(dfs, row.names)
-  rona <- make.names(rona, unique=TRUE)
   ## make hyperframe
   names(rslt) <- nam
+  rona <- row.names(dfall)
   out <- do.call(hyperframe, append(rslt,
                                     list(stringsAsFactors=FALSE,
                                          row.names=rona)))

@@ -1,3 +1,15 @@
+#'
+#'   Header for all (concatenated) test files
+#'
+#'   Require spatstat.
+#'   Obtain environment variable controlling tests.
+#'
+#'   $Revision: 1.4 $ $Date: 2020/04/28 08:17:40 $
+
+require(spatstat)
+FULLTEST <- !is.na(Sys.getenv("SPATSTAT_TEST", unset=NA))
+ALWAYS   <- TRUE
+
 #' spatstat/tests/package.R
 #' Package information
 #' $Revision$ $Date$

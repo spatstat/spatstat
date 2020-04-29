@@ -1,0 +1,145 @@
+Change log from 1.64-0 to 1.64-1
+================================
+
+28 apr 2020
+
+   tests/EveryStart.R [New file]
+        Get environment variable 'SPATSTAT_TEST' controlling test options.
+	This will be included at the head of every concatenated test file.
+	
+   tests/Kfuns.R
+   tests/aucroc.R
+   tests/badwindowcheck.R
+   tests/cdf.test.R
+   tests/circular.R
+   tests/closeshave.R
+   tests/cluck.R
+   tests/colour.R
+   tests/contact.R
+   tests/contrib.R
+   tests/correctC.R
+   tests/deepeepee.R
+   tests/deltasuffstat.R
+   tests/density.R
+   tests/diagnostique.R
+   tests/discarea.R
+   tests/disconnected.R
+   tests/dominic.R
+   tests/duplicity.R
+   tests/emptymarks.R
+   tests/envelopes.R
+   tests/enveltest.R
+   tests/factorbugs.R
+   tests/fastK.R
+   tests/fastgeyer.R
+   tests/formuli.R
+   tests/func.R
+   tests/funnymarks.R
+   tests/fvproblems.R
+   tests/gcc323.R
+   tests/hobjects.R
+   tests/hyperframe.R
+   tests/hypotests.R
+   tests/imageops.R
+   tests/indices.R
+   tests/interact.R
+   tests/ippm.R
+   tests/kppm.R
+   tests/layered.R
+   tests/legacy.R
+   tests/leverinf.R
+   tests/linalgeb.R
+   tests/localpcf.R
+   tests/lppmodels.R
+   
+	Many tests are now switched off	unless 'SPATSTAT_TEST' is defined.
+
+   tests/rmhMulti.R
+	Bug fix.
+
+   hyperframe.R
+	Fix bug in rbind.hyperframe (spotted by Maximilian Vogtland)
+
+   rshift.R
+	rshift.ppp and rshift.splitppp have argument 'nsim'
+      	(suggested by Maximilian Hesselbarth)
+
+   DESCRIPTION
+   NEWS
+   Nickname.txt
+	Nickname changed to 'Geostrophic'
+	Acknowledged Maximilian Vogtland and Maximilian Hesselbarth
+   
+	Version 1.64-0.001
+
+------------- passed R-4.0.0 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+
+
+   STILL TO DO:
+
+   tests/lppstuff.R
+   tests/marcelinodata.R
+   tests/marcelino.R
+   tests/markcor.R
+   tests/mctests.R
+   tests/morpho.R
+   tests/mppm.R
+   tests/msr.R
+   tests/NAinCov.R
+   tests/nndist.R
+   tests/package.R
+   tests/percy.R
+   tests/perspim.R
+   tests/pixelgripes.R
+   tests/polygons.R
+   tests/ppmBadData.R
+   tests/ppmclass.R
+   tests/ppmgam.R
+   tests/ppmlogi.R
+   tests/ppmmarkorder.R
+   tests/ppmscope.R
+   tests/ppmtricks.R
+   tests/ppp.R
+   tests/ppx.R
+   tests/prediction.R
+   tests/project.ppm.R
+   tests/quadschemes.R
+   tests/randoms.R
+   tests/resid.R
+   tests/rhohat.R
+   tests/rmhAux.R
+   tests/rmhBasic.R
+   tests/rmhErrors.R
+   tests/rmhExpand.R
+   tests/rmhmodelHybrids.R
+   tests/rmhmodel.ppm.R
+   tests/rmhMulti.R
+   tests/rmh.ppm.R
+   tests/rmhsnoopy.R
+   tests/rmhTrend.R
+   tests/rmhWeird.R
+   tests/sdr.R
+   tests/segments.R
+   tests/sigtraceprogress.R
+   tests/simplepan.R
+   tests/slrm.R
+   tests/sparse3Darrays.R
+   tests/sparseSlabs.R
+   tests/splitpea.R
+   tests/ssf.R
+   tests/step.R
+   tests/sumfun.R
+   tests/symbolmaps.R
+   tests/tessera.R
+   tests/testaddvar.R
+   tests/testparres.R
+   tests/threedee.R
+   tests/trigraph.R
+   tests/triplets.R
+   tests/undoc.R
+   tests/updateppm.R
+   tests/vcovppm.R
+   tests/windows.R
+   tests/xysegment.R

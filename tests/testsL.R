@@ -1,11 +1,23 @@
 #'
+#'   Header for all (concatenated) test files
+#'
+#'   Require spatstat.
+#'   Obtain environment variable controlling tests.
+#'
+#'   $Revision: 1.4 $ $Date: 2020/04/28 08:17:40 $
+
+require(spatstat)
+FULLTEST <- !is.na(Sys.getenv("SPATSTAT_TEST", unset=NA))
+ALWAYS   <- TRUE
+
+#'
 #'   tests/layered.R
 #'
 #'   Tests of 'layered' class
 #'
-#'   $Revision: 1.1 $  $Date: 2018/07/14 06:23:45 $
+#'   $Revision: 1.2 $  $Date: 2020/04/29 08:55:17 $
 #'
-require(spatstat)
+if(FULLTEST) {
 local({
   D <- distmap(cells)
   L <- layered(D, cells,
@@ -28,13 +40,15 @@ local({
   M <- as.layered(finpines)
   M2 <- as.layered(split(amacrine))
 })
+}
 ## 
 ##    tests/legacy.R
 ##
 ## Test that current version of spatstat is compatible with outmoded usage
-## $Revision: 1.2 $ $Date: 2015/12/29 08:54:49 $
+## $Revision: 1.3 $ $Date: 2020/04/29 08:55:17 $
+
+if(FULLTEST) {
 local({
-  require(spatstat)
 
   ## (1) Old syntax of ppm
   ppm(cells, ~x)
@@ -50,6 +64,7 @@ local({
 
   NULL
 })
+}
 #'
 #'    tests/leverinf.R
 #'
@@ -58,83 +73,88 @@ local({
 #'   $Revision: 1.28 $ $Date: 2020/02/06 08:03:59 $
 #' 
 
-require(spatstat)
 local({
   cat("Running non-sparse algorithm...", fill=TRUE)
   # original non-sparse algorithm
   Leverage <- function(...) leverage(..., sparseOK=FALSE)
   Influence <- function(...) influence(..., sparseOK=FALSE)
   Dfbetas <- function(...) dfbetas(..., sparseOK=FALSE)
-  # Strauss()$delta2
-  fitS <- ppm(cells ~ x, Strauss(0.12), rbord=0)
-  levS <- Leverage(fitS)
-  infS <- Influence(fitS)
-  dfbS <- Dfbetas(fitS)
-  # Geyer()$delta2
-  fitG <- ppm(redwood ~ 1, Geyer(0.1, 2), rbord=0)
-  levG <- Leverage(fitG)
-  infG <- Influence(fitG)
-  # AreaInter()$delta2
-  fitA <- ppm(cells ~ 1, AreaInter(0.07), rbord=0, nd=11)
-  levA <- Leverage(fitA)
-  infA <- Influence(fitA)
-  # pairwise.family$delta2
-  fitD <- ppm(cells ~ 1, DiggleGatesStibbard(0.12), rbord=0)
-  levD <- Leverage(fitD)
-  infD <- Influence(fitD)
-  # DiggleGratton() special code
-  fitDG <- ppm(cells ~ 1, DiggleGratton(0.05, 0.12), rbord=0)
-  levDG <- Leverage(fitDG)
-  infDG <- Influence(fitDG)
-  # ppmInfluence; offset is present; coefficient vector has length 0
-  fitH <- ppm(cells ~ 1, Hardcore(0.07))
-  levH <- Leverage(fitH)
-  infH <- Influence(fitH)
-  # ppmInfluence; hard core
-  fitSH <- ppm(cells ~ 1, StraussHard(0.07, 0.01))
-  levSH <- Leverage(fitSH)
-  infSH <- Influence(fitSH)
-  # ppmInfluence; offset is present; coefficient vector has length 1
-  fitHx <- ppm(cells ~ x, Hardcore(0.07), rbord=0)
-  levHx <- Leverage(fitHx)
-  infHx <- Influence(fitHx)
-  ## multitype 
-  futAm <- ppm(amacrine ~ x + marks, Strauss(0.07))
-  levAm <- leverage(futAm)
+  if(ALWAYS) {
+    ## Strauss()$delta2
+    fitS <- ppm(cells ~ x, Strauss(0.12), rbord=0)
+    levS <- Leverage(fitS)
+    infS <- Influence(fitS)
+    dfbS <- Dfbetas(fitS)
+    ## Geyer()$delta2
+    fitG <- ppm(redwood ~ 1, Geyer(0.1, 2), rbord=0)
+    levG <- Leverage(fitG)
+    infG <- Influence(fitG)
+    ## AreaInter()$delta2
+    fitA <- ppm(cells ~ 1, AreaInter(0.07), rbord=0, nd=11)
+    levA <- Leverage(fitA)
+    infA <- Influence(fitA)
+    ## pairwise.family$delta2
+    fitD <- ppm(cells ~ 1, DiggleGatesStibbard(0.12), rbord=0)
+    levD <- Leverage(fitD)
+    infD <- Influence(fitD)
+    ## DiggleGratton() special code
+    fitDG <- ppm(cells ~ 1, DiggleGratton(0.05, 0.12), rbord=0)
+    levDG <- Leverage(fitDG)
+    infDG <- Influence(fitDG)
+    ## ppmInfluence; offset is present; coefficient vector has length 0
+    fitH <- ppm(cells ~ 1, Hardcore(0.07))
+    levH <- Leverage(fitH)
+    infH <- Influence(fitH)
+    ## ppmInfluence; hard core
+    fitSH <- ppm(cells ~ 1, StraussHard(0.07, 0.01))
+    levSH <- Leverage(fitSH)
+    infSH <- Influence(fitSH)
+    ## ppmInfluence; offset is present; coefficient vector has length 1
+    fitHx <- ppm(cells ~ x, Hardcore(0.07), rbord=0)
+    levHx <- Leverage(fitHx)
+    infHx <- Influence(fitHx)
+    ## multitype 
+    futAm <- ppm(amacrine ~ x + marks, Strauss(0.07))
+    levAm <- leverage(futAm)
+  }
 
-  ## .........   class support .............................
-  ## other methods for classes leverage.ppm and influence.ppm
-  ## not elsewhere tested
-  cat("Testing class support...", fill=TRUE)
-  w <- domain(levS)
-  w <- Window(infS)
-  vv <- shift(levS, c(1.2, 1.3))
-  vv <- shift(infS, c(1.2, 1.3))
-  A <- quadrats(Window(cells), 2)
-  a <- integral(levS,domain=A)
-  b <- integral(infS,domain=A)
-  u <- Smooth(levS, sigma=0.07)
-  v <- Smooth(infS, sigma=0.1)
-  ## plot options
-  plot(levS, what="exact")
-  plot(levS, what="nearest")
-  contour(levS, what="nearest")
-  persp(levS, what="nearest")
-  ## plotting for multitype models
-  plot(levAm)
-  contour(levAm)
-  persp(levAm)
-  plot(levAm, multiplot=FALSE)
-  contour(levAm, multiplot=FALSE)
+  if(FULLTEST) {
+    ## .........   class support .............................
+    ## other methods for classes leverage.ppm and influence.ppm
+    ## not elsewhere tested
+    cat("Testing class support...", fill=TRUE)
+    w <- domain(levS)
+    w <- Window(infS)
+    vv <- shift(levS, c(1.2, 1.3))
+    vv <- shift(infS, c(1.2, 1.3))
+    A <- quadrats(Window(cells), 2)
+    a <- integral(levS,domain=A)
+    b <- integral(infS,domain=A)
+    u <- Smooth(levS, sigma=0.07)
+    v <- Smooth(infS, sigma=0.1)
+    ## plot options
+    plot(levS, what="exact")
+    plot(levS, what="nearest")
+    contour(levS, what="nearest")
+    persp(levS, what="nearest")
+    ## plotting for multitype models
+    plot(levAm)
+    contour(levAm)
+    persp(levAm)
+    plot(levAm, multiplot=FALSE)
+    contour(levAm, multiplot=FALSE)
+  }
 
-  ## ..........  compare algorithms .........................
-  ## divide and recombine algorithm
-  cat("Reduce maximum block side to 50,000 ...", fill=TRUE)
-  op <- spatstat.options(maxmatrix=50000)
-  ## non-sparse
-  levSB <- Leverage(fitS)
-  infSB <- Influence(fitS)
-  dfbSB <- Dfbetas(fitS)
+  if(ALWAYS) {
+    ## ..........  compare algorithms .........................
+    ## divide and recombine algorithm
+    cat("Reduce maximum block side to 50,000 ...", fill=TRUE)
+    op <- spatstat.options(maxmatrix=50000)
+    ## non-sparse
+    levSB <- Leverage(fitS)
+    infSB <- Influence(fitS)
+    dfbSB <- Dfbetas(fitS)
+  }
 
   chk <- function(x, y, what,
                   from="single-block and multi-block",
@@ -146,68 +166,77 @@ local({
     invisible(NULL)
   }
 
-  cat("Compare single-block to multi-block...", fill=TRUE)
-  chk(marks(as.ppp(infS)), marks(as.ppp(infSB)), "influence")
-  chk(as.im(levS),         as.im(levSB),         "leverage")
-  chk(dfbS$val,            dfbSB$val,            "dfbetas$value")
-  chk(dfbS$density,        dfbSB$density,        "dfbetas$density")
+  if(ALWAYS) {
+    cat("Compare single-block to multi-block...", fill=TRUE)
+    chk(marks(as.ppp(infS)), marks(as.ppp(infSB)), "influence")
+    chk(as.im(levS),         as.im(levSB),         "leverage")
+    chk(dfbS$val,            dfbSB$val,            "dfbetas$value")
+    chk(dfbS$density,        dfbSB$density,        "dfbetas$density")
 
-  # also check case of zero cif
-  cat("Check zero cif cases...", fill=TRUE)
-  levHB <- Leverage(fitH)
-  infHB <- Influence(fitH)
-  dfbHB <- Dfbetas(fitH)
-  levHxB <- Leverage(fitHx)
-  infHxB <- Influence(fitHx)
-  dfbHxB <- Dfbetas(fitHx)
+    ## also check case of zero cif
+    cat("Check zero cif cases...", fill=TRUE)
+    levHB <- Leverage(fitH)
+    infHB <- Influence(fitH)
+    dfbHB <- Dfbetas(fitH)
+    levHxB <- Leverage(fitHx)
+    infHxB <- Influence(fitHx)
+    dfbHxB <- Dfbetas(fitHx)
+  }
 
   ## run all code segments
   Everything <- function(model, ...) { ppmInfluence(model, ..., what="all") }
+    
+  if(FULLTEST) {
+    cat("Run full code on AreaInteraction model...", fill=TRUE)
+    pmiA <- Everything(fitA)
+    
+    ## sparse algorithm, with blocks
+    cat("Run sparse algorithm with blocks...", fill=TRUE)
+    pmiSSB <- Everything(fitS, sparseOK=TRUE)
+    ## also check case of zero cif
+    pmiHSB <- Everything(fitH, sparseOK=TRUE)
+    pmiSHSB <- Everything(fitSH, sparseOK=TRUE)
+    pmiHxSB <- Everything(fitHx, sparseOK=TRUE)
 
-  cat("Run full code on AreaInteraction model...", fill=TRUE)
-  pmiA <- Everything(fitA)
+    cat("Reinstate maxmatrix...", fill=TRUE)
+    spatstat.options(op)
+  }
+
+  if(ALWAYS) {
+    ## sparse algorithm, no blocks
+    cat("Compare sparse and non-sparse results...", fill=TRUE)
+    pmi <- Everything(fitS, sparseOK=TRUE)
+    levSp <- pmi$leverage
+    infSp <- pmi$influence
+    dfbSp <- pmi$dfbetas
+    chks <- function(...) chk(..., from="sparse and non-sparse")
   
-  ## sparse algorithm, with blocks
-  cat("Run sparse algorithm with blocks...", fill=TRUE)
-  pmiSSB <- Everything(fitS, sparseOK=TRUE)
-  # also check case of zero cif
-  pmiHSB <- Everything(fitH, sparseOK=TRUE)
-  pmiSHSB <- Everything(fitSH, sparseOK=TRUE)
-  pmiHxSB <- Everything(fitHx, sparseOK=TRUE)
+    chks(marks(as.ppp(infS)), marks(as.ppp(infSp)), "influence")
+    chks(as.im(levS),         as.im(levSp),         "leverage")
+    chks(dfbS$val,            dfbSp$val,            "dfbetas$value")
+    chks(dfbS$density,        dfbSp$density,        "dfbetas$density")
+  }
 
-  cat("Reinstate maxmatrix...", fill=TRUE)
-  spatstat.options(op)
-
-  ## sparse algorithm, no blocks
-  cat("Compare sparse and non-sparse results...", fill=TRUE)
-  pmi <- Everything(fitS, sparseOK=TRUE)
-  levSp <- pmi$leverage
-  infSp <- pmi$influence
-  dfbSp <- pmi$dfbetas
-  chks <- function(...) chk(..., from="sparse and non-sparse")
-  
-  chks(marks(as.ppp(infS)), marks(as.ppp(infSp)), "influence")
-  chks(as.im(levS),         as.im(levSp),         "leverage")
-  chks(dfbS$val,            dfbSp$val,            "dfbetas$value")
-  chks(dfbS$density,        dfbSp$density,        "dfbetas$density")
-
-  #' case of zero cif
-  cat("zero cif...", fill=TRUE)
-  pmiH <- Everything(fitH, sparseOK=TRUE)
-  pmiSH <- Everything(fitSH, sparseOK=TRUE)
-  pmiHx <- Everything(fitHx, sparseOK=TRUE)
-
-  #' other code blocks - check execution only
-  cat("other code blocks...", fill=TRUE)
-  a <- Everything(fitS) 
-  a <- Everything(fitS, method="interpreted") 
-  a <- Everything(fitS, method="interpreted", entrywise=FALSE)
-  a <- Everything(fitS,                       entrywise=FALSE)
-  #' zero cif
-  b <- Everything(fitSH) 
-  b <- Everything(fitSH, method="interpreted") 
-  b <- Everything(fitSH, method="interpreted", entrywise=FALSE)
-  b <- Everything(fitSH,                       entrywise=FALSE) 
+  if(ALWAYS) {
+    #' case of zero cif
+    cat("zero cif...", fill=TRUE)
+    pmiH <- Everything(fitH, sparseOK=TRUE)
+    pmiSH <- Everything(fitSH, sparseOK=TRUE)
+    pmiHx <- Everything(fitHx, sparseOK=TRUE)
+  }
+  if(FULLTEST) {
+    #' other code blocks - check execution only
+    cat("other code blocks...", fill=TRUE)
+    a <- Everything(fitS) 
+    a <- Everything(fitS, method="interpreted") 
+    a <- Everything(fitS, method="interpreted", entrywise=FALSE)
+    a <- Everything(fitS,                       entrywise=FALSE)
+    #' zero cif
+    b <- Everything(fitSH) 
+    b <- Everything(fitSH, method="interpreted") 
+    b <- Everything(fitSH, method="interpreted", entrywise=FALSE)
+    b <- Everything(fitSH,                       entrywise=FALSE)
+  }
   #' NOTE: code for irregular parameters is tested below, and in 'make bookcheck'
 
   ## ...........  logistic fits .......................
@@ -305,7 +334,7 @@ reset.spatstat.options()
 ##
 ##  $Revision: 1.5 $ $Date: 2020/01/05 02:34:17 $
 ##
-require(spatstat)
+
 local({
   p <- 3
   n <- 4
@@ -360,7 +389,6 @@ local({
 ## temporary test file for localpcfmatrix
 ##  $Revision: 1.2 $  $Date: 2015/12/29 08:54:49 $
 
-require(spatstat)
 local({
   a <- localpcfmatrix(redwood)
   a
@@ -1011,61 +1039,74 @@ reset.spatstat.options()
 #'   $Revision: 1.1 $ $Date: 2018/05/13 04:14:28 $
 #'
 
-require(spatstat)
-
 local({
-  fit0 <- lppm(spiders)
-  fit1 <- lppm(spiders ~ x)
-  fit2 <- lppm(chicago ~ x+y)
-  X <- runiflpp(10, simplenet)
-  Z <- distfun(runiflpp(10, simplenet))
-  fit3 <- lppm(X ~ Z)
-
-  summary(fit0)
-  summary(fit1)
-  summary(fit2)
-  summary(fit3)
-  
-  pseudoR2(fit0)
-  pseudoR2(fit1)
-  pseudoR2(fit2)
-  pseudoR2(fit3)
+  if(ALWAYS) {
+    fit0 <- lppm(spiders)
+    fit1 <- lppm(spiders ~ x)
+    summary(fit0)
+    summary(fit1)
+    pseudoR2(fit0)
+    pseudoR2(fit1)
+  }
+  if(FULLTEST) {
+    fit2 <- lppm(chicago ~ x+y)
+    summary(fit2)
+    pseudoR2(fit2)    
+  }
+  if(ALWAYS) {
+    X <- runiflpp(10, simplenet)
+    Z <- distfun(runiflpp(10, simplenet))
+    fit3 <- lppm(X ~ Z)
+    summary(fit3)
+    pseudoR2(fit3)
+  }
 
   Window(fit1)
 
-  a <- model.images(fit0)
-  a <- model.images(fit1)
-  a <- model.images(fit2)
-  a <- model.images(fit3)
+  if(ALWAYS) a <- model.images(fit0)
+  if(FULLTEST) {
+    a <- model.images(fit1)
+    a <- model.images(fit2)
+    a <- model.images(fit3)
+  }
+  if(ALWAYS)
+    b <- model.matrix(fit0)
+  if(FULLTEST) {
+    b <- model.matrix(fit1)
+    b <- model.matrix(fit2)
+    b <- model.matrix(fit3)
+  }
 
-  b <- model.matrix(fit0)
-  b <- model.matrix(fit1)
-  b <- model.matrix(fit2)
-  b <- model.matrix(fit3)
-
-  is.multitype(fit0)
-  is.multitype(fit1)
-  is.multitype(fit2)
-  is.multitype(fit3)
-
-  fit0e <- emend(fit0)
-  fit1e <- emend(fit1)
-  fit2e <- emend(fit2)
-  fit3e <- emend(fit3)
+  if(ALWAYS) 
+    is.multitype(fit0)
+  if(FULLTEST) {
+    is.multitype(fit1)
+    is.multitype(fit2)
+    is.multitype(fit3)
+  }
+  
+  if(ALWAYS) fit0e <- emend(fit0)
+  if(FULLTEST) {
+    fit1e <- emend(fit1)
+    fit2e <- emend(fit2)
+    fit3e <- emend(fit3)
+  }
 
   #' fundamental utilities:
   #' evalCovar
   ycoord <- function(x,y) { y }
-  YS <- as.linim(ycoord, L=domain(spiders))
-  YC <- as.linim(ycoord, L=domain(chicago))
+  if(ALWAYS) YS <- as.linim(ycoord, L=domain(spiders))
+  if(FULLTEST) YC <- as.linim(ycoord, L=domain(chicago))
 
-  aT <- evalCovar(fit1, YS, interpolate=TRUE)
-  aF <- evalCovar(fit1, YS, interpolate=FALSE)
-  dT <- evalCovar(fit1, ycoord, interpolate=TRUE)
-  dF <- evalCovar(fit1, ycoord, interpolate=FALSE)
-
-  bT <- evalCovar(fit2, YC, interpolate=TRUE)
-  bF <- evalCovar(fit2, YC, interpolate=FALSE)
-  cT <- evalCovar(fit2, ycoord, interpolate=TRUE)
-  cF <- evalCovar(fit2, ycoord, interpolate=FALSE)
+  if(ALWAYS) aT <- evalCovar(fit1, YS, interpolate=TRUE)
+  if(FULLTEST) {
+    aF <- evalCovar(fit1, YS, interpolate=FALSE)
+    dT <- evalCovar(fit1, ycoord, interpolate=TRUE)
+    dF <- evalCovar(fit1, ycoord, interpolate=FALSE)
+    bT <- evalCovar(fit2, YC, interpolate=TRUE)
+    bF <- evalCovar(fit2, YC, interpolate=FALSE)
+    cT <- evalCovar(fit2, ycoord, interpolate=TRUE)
+    cF <- evalCovar(fit2, ycoord, interpolate=FALSE)
+  }
+  
 })

@@ -1,3 +1,15 @@
+#'
+#'   Header for all (concatenated) test files
+#'
+#'   Require spatstat.
+#'   Obtain environment variable controlling tests.
+#'
+#'   $Revision: 1.4 $ $Date: 2020/04/28 08:17:40 $
+
+require(spatstat)
+FULLTEST <- !is.na(Sys.getenv("SPATSTAT_TEST", unset=NA))
+ALWAYS   <- TRUE
+
 #
 #  tests/rmhAux.R
 #
@@ -40,7 +52,7 @@ local({
 ##
 ##   tests/rmhBasic.R
 ##
-##   $Revision: 1.20 $  $Date: 2019/12/31 05:01:21 $
+##   $Revision: 1.22 $  $Date: 2020/01/26 05:01:07 $
 #
 # Test examples for rmh.default
 # run to reasonable length
@@ -143,6 +155,10 @@ spatstat.options(expand=1.1)
                 control=list(nrep=nr))
    X.pen2 <- rmh(model=modpen,start=list(n.start=10),
                  control=list(nrep=nr, periodic=FALSE))
+   # equivalent to hardcore
+   modpen$par$gamma <- 0
+   X.penHard <- rmh(model=modpen,start=list(n.start=3),
+                control=list(nrep=nr))
 
    # Area-interaction, inhibitory
    mod.area <- list(cif="areaint",par=list(beta=2,eta=0.5,r=0.5), w=square(10))
@@ -209,6 +225,8 @@ spatstat.options(expand=1.1)
    data(redwood)
    X3.geyer <- rmh(model=mod16,start=list(x.start=redwood),
                    control=list(periodic=TRUE,nrep=nr))
+   X3.geyer2 <- rmh(model=mod16,start=list(x.start=redwood),
+                    control=list(periodic=FALSE,nrep=nr))
    
    # Geyer, starting from the redwood data set, simulating
    # on a torus, and conditioning on n:
@@ -224,6 +242,13 @@ spatstat.options(expand=1.1)
       X.lookup <- rmh(model=mod17,start=list(n.start=100),
                       control=list(nrep=nr, periodic=TRUE))
       X.lookup2 <- rmh(model=mod17,start=list(n.start=100),
+                       control=list(nrep=nr, expand=1, periodic=FALSE))
+   # irregular
+   mod17x <- mod17
+   mod17x$par$r <- 0.05*sqrt(mod17x$par$r/0.05)
+   X.lookupX <- rmh(model=mod17x,start=list(n.start=100),
+                    control=list(nrep=nr, periodic=TRUE))
+   X.lookupX2 <- rmh(model=mod17x,start=list(n.start=100),
                        control=list(nrep=nr, expand=1, periodic=FALSE))
 
    # Strauss with trend
@@ -354,7 +379,7 @@ if(!inherits(out, "try-error"))
 #
 # test decisions about expansion of simulation window
 #
-#  $Revision: 1.4 $  $Date: 2018/07/21 00:46:16 $
+#  $Revision: 1.6 $  $Date: 2020/01/08 01:24:35 $
 #
 
 require(spatstat)
@@ -371,6 +396,15 @@ unitname(wcel) <- unitname(cells)
 # test
 if(!identical(wsim, wcel))
   stop("Expansion occurred improperly in rmhmodel.ppm")
+
+# rmhexpand class 
+a <- summary(rmhexpand(area=2))
+print(a)
+b <- summary(rmhexpand(length=4))
+print(b)
+print(summary(rmhexpand(distance=2)))
+print(summary(rmhexpand(square(2))))
+
 })
 
 
@@ -379,7 +413,7 @@ if(!identical(wsim, wcel))
 #
 #  tests of rmh, running multitype point processes
 #
-#   $Revision: 1.12 $  $Date: 2019/12/13 00:57:28 $
+#   $Revision: 1.15 $  $Date: 2020/01/26 04:57:03 $
 
 require(spatstat)
 
@@ -412,7 +446,16 @@ spatstat.options(expand=1.1)
    X1.straussm <- rmh(model=mod08,start=list(n.start=80),
                       control=list(ptypes=c(0.75,0.25),nrep=nr,nverb=nv))
    
-
+   # Multitype Strauss equivalent to hard core:
+   mod08hard <- mod08
+   mod08hard$par$gamma[] <- 0
+   X1.straussm.Hard <- rmh(model=mod08hard,start=list(n.start=20),
+                           control=list(ptypes=c(0.75,0.25),nrep=nr,nverb=nv),
+                           periodic=FALSE)
+   X1.straussmP.Hard <- rmh(model=mod08hard,start=list(n.start=20),
+                            control=list(ptypes=c(0.75,0.25),nrep=nr,nverb=nv),
+                            periodic=TRUE)
+   
    # Multitype Strauss conditioning upon the total number
    # of points being 80:
    X2.straussm <- rmh(model=mod08,start=list(n.start=80),
@@ -429,32 +472,48 @@ spatstat.options(expand=1.1)
 
    # Multitype hardcore:
    rhc  <- matrix(c(9.1,5.0,5.0,2.5),2,2)
-   mod085 <- list(cif="multihard",par=list(beta=beta,hradii=rhc),
-                  w=c(0,250,0,250))
-   X.multihard <- rmh(model=mod085,start=list(n.start=80),
-                      control=list(ptypes=c(0.75,0.25),nrep=nr,nverb=nv))
-   X.multihardP <- rmh(model=mod085,start=list(n.start=80),
-                       control=list(ptypes=c(0.75,0.25),nrep=nr,nverb=nv,
-                                    periodic=TRUE))
-   #' check handling of initial state which violates hard core
-   set.seed(19171025)
    mod087 <- list(cif="multihard",par=list(beta=5*beta,hradii=rhc),
                   w=square(12))
+   cheque <- function(X, r) {
+     Xname <- deparse(substitute(X))
+     nn <- minnndist(X, by=marks(X))
+     print(nn)
+     if(!all(nn >= r, na.rm=TRUE))
+       stop(paste(Xname, "violates hard core constraint"), call.=FALSE)
+     return(invisible(NULL))
+   }
+   #' make an initial state that violates hard core
    #' (cannot use 'x.start' here because it disables thinning)
+   #' and check that result satisfies hard core
+   set.seed(19171025)
    X.multihard.close <- rmh(model=mod087,start=list(n.start=100),
-                            control=list(ptypes=c(0.75,0.25),nrep=nr,nverb=nv))
+                            control=list(ptypes=c(0.75,0.25),nrep=nr,nverb=nv),
+                            periodic=FALSE)
+   cheque(X.multihard.close, rhc)
    X.multihard.closeP <- rmh(model=mod087,start=list(n.start=100),
                              control=list(ptypes=c(0.75,0.25),nrep=nr,nverb=nv,
                                           periodic=TRUE))
+   cheque(X.multihard.closeP, rhc)
 
    # Multitype Strauss hardcore:
    mod09 <- list(cif="straushm",par=list(beta=5*beta,gamma=gmma,
                 iradii=r,hradii=rhc),w=square(12))
    X.straushm <- rmh(model=mod09,start=list(n.start=100),
-                     control=list(ptypes=c(0.75,0.25),nrep=nr,nverb=nv))
+                     control=list(ptypes=c(0.75,0.25),nrep=nr,nverb=nv),
+                     periodic=FALSE)
    X.straushmP <- rmh(model=mod09,start=list(n.start=100),
                       control=list(ptypes=c(0.75,0.25),nrep=nr,nverb=nv,
                                    periodic=TRUE))
+
+   # Multitype Strauss hardcore equivalent to multitype hardcore:
+   mod09hard <- mod09
+   mod09hard$par$gamma[] <- 0
+   X.straushm.hard <- rmh(model=mod09hard,start=list(n.start=15),
+                          control=list(ptypes=c(0.75,0.25),nrep=nr,nverb=nv,
+                                       periodic=FALSE))
+   X.straushmP.hard <- rmh(model=mod09hard,start=list(n.start=15),
+                           control=list(ptypes=c(0.75,0.25),nrep=nr,nverb=nv),
+                           periodic=TRUE)
 
    # Multitype Strauss hardcore with trends for each type:
    beta  <- c(0.27,0.08)
@@ -704,7 +763,7 @@ local({
 #
 #      tests/rmhmodel.ppm.R
 #
-#    $Revision: 1.8 $  $Date: 2015/12/29 08:54:49 $
+#    $Revision: 1.9 $  $Date: 2020/01/18 01:53:16 $
 #
 # Case-by-case tests of rmhmodel.ppm
 #
@@ -722,6 +781,7 @@ m <- rmhmodel(f)
 
 f <- ppm(cells ~1, StraussHard(r=0.1,hc=0.05))
 m <- rmhmodel(f)
+print(m)
 
 f <- ppm(cells ~1, Hardcore(0.07))
 m <- rmhmodel(f)
@@ -743,12 +803,14 @@ m <- rmhmodel(f)
 
 f <- ppm(cells ~1, AreaInter(r=0.06))
 m <- rmhmodel(f)
+print(m)
 
 # multitype
 
 r <- matrix(0.07, 2, 2)
 f <- ppm(amacrine ~1, MultiStrauss(c("off","on"),r))
 m <- rmhmodel(f)
+print(m)
 
 h <- matrix(min(nndist(amacrine))/2, 2, 2)
 f <- ppm(amacrine ~1, MultiStraussHard(c("off","on"),r, h))
@@ -766,6 +828,7 @@ m <- rmhmodel(f)
 
 f <- ppm(amacrine ~marks, Strauss(0.05))
 m <- rmhmodel(f)
+print(m)
 
 # trends
 
@@ -777,6 +840,7 @@ m <- rmhmodel(f)
 
 f <- ppm(cells ~x+y, Hardcore(0.07))
 m <- rmhmodel(f)
+print(m)
 
 f <- ppm(cells ~polynom(x,y,2), Softcore(0.5), correction="isotropic")
 m <- rmhmodel(f)
@@ -787,6 +851,7 @@ Z <- as.im(function(x,y){ x^2+y^2 }, as.owin(cells))
 f <- ppm(cells ~z, covariates=list(z=Z))
 m <- rmhmodel(f)
 m <- rmhmodel(f, control=list(p=1))
+print(m)
 
 Zim <- as.im(Z, as.owin(cells))
 f <- ppm(cells ~z, covariates=list(z=Zim))
@@ -795,12 +860,15 @@ m <- rmhmodel(f)
 Z <- as.im(function(x,y){ x^2+y }, as.owin(amacrine))
 f <- ppm(amacrine ~z + marks, covariates=list(z=Z))
 m <- rmhmodel(f)
+print(m)
 m <- rmhmodel(f, control=list(p=1))
 m <- rmhmodel(f, control=list(p=1,fixall=TRUE))
+print(m)
 
 Zim <- as.im(Z, as.owin(amacrine))
 f <- ppm(amacrine ~z + marks, covariates=list(z=Zim))
 m <- rmhmodel(f)
+print(m)
 
 })
 #
@@ -980,24 +1048,26 @@ reset.spatstat.options()
 #'
 #'   Test the rmh interactive debugger
 #' 
-#'   $Revision: 1.8 $  $Date: 2018/10/17 08:57:32 $
+#'   $Revision: 1.9 $  $Date: 2020/01/07 07:26:18 $
 
 require(spatstat)
 local({
   ## fit a model and prepare to simulate
   R <- 0.1
-  fit <- ppm(cells ~ 1, Strauss(R))
+  fit <- ppm(amacrine ~ marks + x, Strauss(R))
   siminfo <- rmh(fit, preponly=TRUE)
   Wsim <- siminfo$control$internal$w.sim
   Wclip <- siminfo$control$internal$w.clip
   if(is.null(Wclip)) Wclip <- Window(cells)
 
   ## determine debugger interface panel geometry
+  Xinit <- runifpoint(ex=amacrine)[1:40]
   P <- rmhsnoop(Wsim=Wsim, Wclip=Wclip, R=R,
-                xcoords=runif(40),
-                ycoords=runif(40),
-                mlevels=NULL, mcodes=NULL,
-                irep=3, itype=1,
+                xcoords=Xinit$x,
+                ycoords=Xinit$y,
+                mlevels=levels(marks(Xinit)),
+                mcodes=as.integer(marks(Xinit)) - 1L,
+                irep=3L, itype=1L,
                 proptype=1, proplocn=c(0.5, 0.5), propmark=0, propindx=0,
                 numerator=42, denominator=24,
                 panel.only=TRUE)

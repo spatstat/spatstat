@@ -1,10 +1,22 @@
+#'
+#'   Header for all (concatenated) test files
+#'
+#'   Require spatstat.
+#'   Obtain environment variable controlling tests.
+#'
+#'   $Revision: 1.4 $ $Date: 2020/04/28 08:17:40 $
+
+require(spatstat)
+FULLTEST <- !is.na(Sys.getenv("SPATSTAT_TEST", unset=NA))
+ALWAYS   <- TRUE
+
 #  tests/emptymarks.R
 #
 # test cases where there are no (rows or columns of) marks
 #
-#  $Revision: 1.3 $ $Date: 2015/12/29 08:54:49 $
+#  $Revision: 1.4 $ $Date: 2020/04/28 12:58:26 $
 
-require(spatstat)
+if(ALWAYS) {
 local({
   n <- npoints(cells)
   df <- data.frame(x=1:n, y=factor(sample(letters, n, replace=TRUE)))
@@ -20,15 +32,14 @@ local({
   marks(Z) <- df[norows,nocolumns]
   stopifnot(!is.marked(Z))
 })
+}
 #
 #  tests/envelopes.R
 #
 #  Test validity of envelope data
 #
-#  $Revision: 1.21 $  $Date: 2019/12/14 02:15:38 $
+#  $Revision: 1.22 $  $Date: 2020/04/28 12:58:26 $
 #
-
-require(spatstat)
 
 local({
 checktheo <- function(fit) {
@@ -50,59 +61,72 @@ checktheo <- function(fit) {
   }
   cat(paste(context, "has correct format\n"))
 }
-  
-checktheo(ppm(cells))
-checktheo(ppm(cells ~x))
-checktheo(ppm(cells ~1, Strauss(0.1)))
+
+if(ALWAYS) {
+  checktheo(ppm(cells ~x))
+}
+if(FULLTEST) {
+  checktheo(ppm(cells))
+  checktheo(ppm(cells ~1, Strauss(0.1)))
+}
 
 # check envelope calls from 'alltypes'
-a <- alltypes(demopat, Kcross, nsim=4, envelope=TRUE)
-b <- alltypes(demopat, Kcross, nsim=4, envelope=TRUE, global=TRUE)
+if(ALWAYS) a <- alltypes(demopat, Kcross, nsim=4, envelope=TRUE)
+if(FULLTEST) b <- alltypes(demopat, Kcross, nsim=4, envelope=TRUE, global=TRUE)
 
 # check 'transform' idioms
-A <- envelope(cells, Kest, nsim=4, transform=expression(. - .x))
-B <- envelope(cells, Kest, nsim=4, transform=expression(sqrt(./pi) - .x))
+if(ALWAYS) A <- envelope(cells, Kest, nsim=4, transform=expression(. - .x))
+if(FULLTEST) B <- envelope(cells, Kest, nsim=4, transform=expression(sqrt(./pi) - .x))
 
 #' check savefuns/savepatterns with global 
 fit <- ppm(cells~x)
-Ef <- envelope(fit, Kest, nsim=4, savefuns=TRUE, global=TRUE)
-Ep <- envelope(fit, Kest, nsim=4, savepatterns=TRUE, global=TRUE)
+if(ALWAYS) Ef <- envelope(fit, Kest, nsim=4, savefuns=TRUE, global=TRUE)
+if(FULLTEST) Ep <- envelope(fit, Kest, nsim=4, savepatterns=TRUE, global=TRUE)
 
 #' check handling of 'dangerous' cases
-fut <- ppm(redwood ~ x)
-Ek <- envelope(fut, Kinhom, update=FALSE, nsim=4)
-kfut <- kppm(redwood3 ~ x)
-Ekk <- envelope(kfut, Kinhom, lambda=density(redwood3), nsim=7)
+if(FULLTEST) {
+  fut <- ppm(redwood ~ x)
+  Ek <- envelope(fut, Kinhom, update=FALSE, nsim=4)
+  kfut <- kppm(redwood3 ~ x)
+  Ekk <- envelope(kfut, Kinhom, lambda=density(redwood3), nsim=7)
+}
 
 # check conditional simulation
-e1 <- envelope(cells, Kest, nsim=4, fix.n=TRUE)
-e2 <- envelope(amacrine, Kest, nsim=4, fix.n=TRUE)
-e3 <- envelope(amacrine, Kcross, nsim=4, fix.marks=TRUE)
-e4 <- envelope(finpines, Kest, nsim=4, fix.n=TRUE) # multiple columns of marks
-e5 <- envelope(finpines, Kest, nsim=4, fix.marks=TRUE)
-fit <- ppm(japanesepines ~ 1, Strauss(0.04))
-e6 <- envelope(fit, Kest, nsim=4, fix.n=TRUE)
-fit2 <- ppm(amacrine ~ 1, Strauss(0.03))
-e7 <- envelope(fit2, Gcross, nsim=4, fix.marks=TRUE)
+if(FULLTEST) {
+  e1 <- envelope(cells, Kest, nsim=4, fix.n=TRUE)
+  e2 <- envelope(amacrine, Kest, nsim=4, fix.n=TRUE)
+  e3 <- envelope(amacrine, Kcross, nsim=4, fix.marks=TRUE)
+  e4 <- envelope(finpines, Kest, nsim=4, fix.n=TRUE) # multiple columns of marks
+  e5 <- envelope(finpines, Kest, nsim=4, fix.marks=TRUE)
+}
+if(ALWAYS) { # invokes C code
+  fit <- ppm(japanesepines ~ 1, Strauss(0.04))
+  e6 <- envelope(fit, Kest, nsim=4, fix.n=TRUE)
+  fit2 <- ppm(amacrine ~ 1, Strauss(0.03))
+  e7 <- envelope(fit2, Gcross, nsim=4, fix.marks=TRUE)
+}
 
 # check pooling of envelopes in global case
 E1 <- envelope(cells, Kest, nsim=5, savefuns=TRUE, global=TRUE)
 E2 <- envelope(cells, Kest, nsim=12, savefuns=TRUE, global=TRUE)
 p12 <- pool(E1, E2)
 p12 <- pool(E1, E2, savefuns=TRUE)
-F1 <- envelope(cells, Kest, nsim=5,
-               savefuns=TRUE, savepatterns=TRUE, global=TRUE)
-F2 <- envelope(cells, Kest, nsim=12,
-               savefuns=TRUE, savepatterns=TRUE, global=TRUE)
-p12 <- pool(F1, F2)
-p12 <- pool(F1, F2, savefuns=TRUE, savepatterns=TRUE)
-E1r <- envelope(cells, Kest, nsim=5, savefuns=TRUE, global=TRUE,
-                ginterval=c(0.05, 0.15))
-E2r <- envelope(cells, Kest, nsim=12, savefuns=TRUE, global=TRUE,
-                ginterval=c(0.05, 0.15))
-p12r <- pool(E1r, E2r)
+if(FULLTEST) {
+  F1 <- envelope(cells, Kest, nsim=5,
+                 savefuns=TRUE, savepatterns=TRUE, global=TRUE)
+  F2 <- envelope(cells, Kest, nsim=12,
+                 savefuns=TRUE, savepatterns=TRUE, global=TRUE)
+  p12 <- pool(F1, F2)
+  p12 <- pool(F1, F2, savefuns=TRUE, savepatterns=TRUE)
+  E1r <- envelope(cells, Kest, nsim=5, savefuns=TRUE, global=TRUE,
+                  ginterval=c(0.05, 0.15))
+  E2r <- envelope(cells, Kest, nsim=12, savefuns=TRUE, global=TRUE,
+                  ginterval=c(0.05, 0.15))
+  p12r <- pool(E1r, E2r)
+}
 })
 
+if(FULLTEST) {
 local({
   #' as.data.frame.envelope
   Nsim <- 5
@@ -111,7 +135,9 @@ local({
   B <- as.data.frame(E, simfuns=TRUE)
   stopifnot(ncol(B) - ncol(A) == Nsim)
 })
+}
 
+if(FULLTEST) {
 local({
   #' cases not covered elsewhere
   A <- envelope(cells, nsim=5, alternative="less",
@@ -158,7 +184,9 @@ local({
   #' so secret I've even forgotten how to do it
   M <- envelope(cells, nsim=4, internal=list(eject="patterns"))
 })
+}
 
+if(FULLTEST) {
 local({
   #' envelope computations in other functions
   P <- lurking(cells, expression(x), envelope=TRUE, nsim=9)
@@ -170,7 +198,9 @@ local({
   B <- envelope(cells, nsim=5, savepatterns=TRUE, savefuns=FALSE)
   envelope(B)
 })
+}
 
+if(FULLTEST) {
 local({
   X <- runiflpp(10, simplenet)
   Xr <- X %mark% runif(10)
@@ -192,7 +222,9 @@ local({
   EEf <- envelope(fut, linearK,      fix.n=TRUE)
   EEm <- envelope(fut, linearKcross, fix.n=TRUE, fix.marks=TRUE)
 })
+}
 
+if(ALWAYS) {
 local({
   #' Test robustness of envelope() sorting procedure when NA's are present
   #' Fails with spatstat.utils 1.12-0
@@ -205,7 +237,9 @@ local({
   E <- envelope(X, Kcross, nsim=39, maxnerr=2, maxerr.action="warn")
   A <- alltypes(X, Kcross, envelope=TRUE, nsim=39, maxnerr=2)
 })
+}
 
+if(ALWAYS) {
 local({
   #' Internals: envelope.matrix
   Y <- matrix(rnorm(200), 10, 20)
@@ -224,13 +258,15 @@ local({
                 nsim=10, nsim2=10)
   E <- envelope(Y, rvals=rr, observed=oo, type="global",
                 jsim=1:10, jsim.mean=11:20)
-  print(E)
+  if(FULLTEST) print(E)
   E <- envelope(Y, rvals=rr, observed=oo, type="global",
                 nsim=10, jsim.mean=11:20)
   E <- envelope(Y, rvals=rr, observed=oo, type="global",
                 jsim=1:10, nsim2=10)
 })
+}
 
+if(ALWAYS) {
 local({
   #' quirk with handmade summary functions ('conserve' attribute)
   Kdif <- function(X, r=NULL) { # note no ellipsis
@@ -242,13 +278,14 @@ local({
   }
   envelope(amacrine, Kdif, nsim=3)
 })
+}
 #'  tests/enveltest.R
 #'     Envelope tests (dclf.test, mad.test)
 #'     and two-stage tests (bits.test, dg.test, bits.envelope, dg.envelope)
 #' 
-#'     $Revision: 1.2 $  $Date: 2020/01/10 06:41:04 $ 
+#'     $Revision: 1.3 $  $Date: 2020/04/28 12:58:26 $ 
 #'
-require(spatstat)
+if(FULLTEST) {
 local({
   #' handling of NA function values (due to empty point patterns)
   set.seed(1234)
@@ -262,14 +299,16 @@ local({
   dclf.test(fit, rinterval=c(0, 3), nsim=9)
   envelopeTest(X, exponent=3, clamp=TRUE, nsim=9)
 })
+}
 #
 #    tests/factorbugs.R
 #
 # check for various bugs related to factor conversions
 #
-#    $Revision: 1.4 $  $Date: 2019/02/10 07:21:02 $
+#    $Revision: 1.5 $  $Date: 2020/04/28 12:58:26 $
 #
-require(spatstat)
+
+if(ALWAYS) {
 local({
   ## make a factor image
   m <- factor(rep(letters[1:4], 4))
@@ -299,16 +338,15 @@ local({
   P <- X %mark% Z[X]
   Pv <- mergeLevels(P, vowel="a", consonant=c("b","c","d"))
 })
-
-
+}
 #
 #    tests/fastgeyer.R
 #
 # checks validity of fast C implementation of Geyer interaction
 #
-#    $Revision: 1.3 $  $Date: 2015/12/29 08:54:49 $
+#    $Revision: 1.4 $  $Date: 2020/04/28 12:58:26 $
 #
-require(spatstat)
+if(FULLTEST) {  # depends on hardware
 local({
   X <- redwood
   Q <- quadscheme(X)
@@ -339,6 +377,7 @@ local({
   if(!all(a==b))
     stop("Results of Geyer()$fasteval and pairsat.family$eval do not match when sat < 1")
 })
+}
 
 #
 #  tests/fastK.R
@@ -346,9 +385,9 @@ local({
 # check fast and slow code for Kest
 #       and options not tested elsewhere
 #
-#   $Revision: 1.4 $   $Date: 2018/04/13 04:01:25 $
+#   $Revision: 1.5 $   $Date: 2020/04/28 12:58:26 $
 #
-require(spatstat)
+if(ALWAYS) {
 local({
   ## fast code
   Kb <- Kest(cells, nlarge=0)
@@ -377,14 +416,13 @@ local({
   Lidd <- Linhom(unmark(demopat), sigma=bw.scott)
 })
 
-
+}
 #' tests/formuli.R
 #'
 #'  Test machinery for manipulating formulae
 #' 
-#' $Revision: 1.6 $  $Date: 2020/01/08 01:38:24 $
+#' $Revision: 1.7 $  $Date: 2020/04/28 12:58:26 $
 
-require(spatstat)
 local({
 
   ff <- function(A, deletevar, B) {
@@ -420,11 +458,11 @@ local({
 #
 #  tests/func.R
 #
-#   $Revision: 1.4 $   $Date: 2019/01/14 07:05:27 $
+#   $Revision: 1.5 $   $Date: 2020/04/28 12:58:26 $
 #
 #  Tests of 'funxy' infrastructure etc
 
-require(spatstat)
+if(FULLTEST) {
 local({
   ## Check the peculiar function-building code in funxy
   W <- square(1)
@@ -456,17 +494,14 @@ local({
   b <- F1a(Y)
   d <- F1a(Q)
 })
-
-
-
-
+}
 ##  
 ##     tests/funnymarks.R
 ##
 ## tests involving strange mark values
-## $Revision: 1.6 $ $Date: 2020/01/05 02:32:34 $
+## $Revision: 1.7 $ $Date: 2020/04/28 12:58:26 $
 
-require(spatstat)
+if(ALWAYS) { # depends on locale
 local({
   ## ppm() where mark levels contain illegal characters
   hyphenated <- c("a", "not-a")
@@ -537,18 +572,18 @@ local({
   b <- markcbind(df, h)
   b <- markcbind(h, df)
 })
+}
 ## 
 ##    tests/fvproblems.R
 ##
 ##    problems with fv, ratfv and fasp code
 ##
-##    $Revision: 1.14 $  $Date: 2020/01/10 03:11:49 $
-
-require(spatstat)
+##    $Revision: 1.15 $  $Date: 2020/04/28 12:58:26 $
 
 #' This appears in the workshop notes
 #' Problem detected by Martin Bratschi
 
+if(FULLTEST) {
 local({
   Jdif <- function(X, ..., i) {
     Jidot <- Jdot(X, ..., i=i)
@@ -558,40 +593,54 @@ local({
   }
   Z <- Jdif(amacrine, i="on")
 })
+}
 #'
 #'  Test mathlegend code
 #'
 local({
   K <- Kest(cells)
-  plot(K)
-  plot(K, . ~ r)
-  plot(K, . - theo ~ r)
-  plot(K, sqrt(./pi)  ~ r)
-  plot(K, cbind(iso, theo) ~ r)
-  plot(K, cbind(iso, theo) - theo ~ r)
-  plot(K, sqrt(cbind(iso, theo)/pi)  ~ r)
-  plot(K, cbind(iso/2, -theo) ~ r)
-  plot(K, cbind(iso/2, trans/2) - theo ~ r)
-
-  # test expansion of .x and .y
-  plot(K, . ~ .x)
-  plot(K, . - theo ~ .x)
-  plot(K, .y - theo ~ .x)
-  plot(K, sqrt(.y) - sqrt(theo) ~ .x)
+  if(FULLTEST) {
+    plot(K)
+    plot(K, . ~ r)
+    plot(K, . - theo ~ r)
+  }
+  if(ALWAYS) {
+    plot(K, sqrt(./pi)  ~ r)
+  }
+  if(FULLTEST) {
+    plot(K, cbind(iso, theo) ~ r)
+    plot(K, cbind(iso, theo) - theo ~ r)
+    plot(K, sqrt(cbind(iso, theo)/pi)  ~ r)
+    plot(K, cbind(iso/2, -theo) ~ r)
+    plot(K, cbind(iso/2, trans/2) - theo ~ r)
+  }
+  if(FULLTEST) {
+    ## test expansion of .x and .y
+    plot(K, . ~ .x)
+    plot(K, . - theo ~ .x)
+    plot(K, .y - theo ~ .x)
+  }
+  if(ALWAYS) {
+    plot(K, sqrt(.y) - sqrt(theo) ~ .x)
+  }
 
   # problems with parsing weird strings in levels(marks(X))
   # noted by Ulf Mehlig
-
-  levels(marks(amacrine)) <- c("Nasticreechia krorluppia", "Homo habilis")
-  plot(Kcross(amacrine))
-  plot(alltypes(amacrine, "K"))
-  plot(alltypes(amacrine, "J"))
-  plot(alltypes(amacrine, pcfcross))
+  if(ALWAYS) {
+    levels(marks(amacrine)) <- c("Nasticreechia krorluppia", "Homo habilis")
+    plot(Kcross(amacrine))
+    plot(alltypes(amacrine, "K"))
+  }
+  if(FULLTEST) {
+    plot(alltypes(amacrine, "J"))
+    plot(alltypes(amacrine, pcfcross))
+  }
 })
 
 #'
 #'  Test quirks related to 'alim' attribute
 
+if(FULLTEST) {
 local({
   K <- Kest(cells)
   attr(K, "alim") <- NULL
@@ -599,10 +648,12 @@ local({
   attr(K, "alim") <- c(0, 0.1)
   plot(tail(K))
 })
+}
 
 #'
 #' Check that default 'r' vector passes the test for fine spacing
 
+if(ALWAYS) {
 local({
   a <- Fest(cells)
   A <- Fest(cells, r=a$r)
@@ -614,9 +665,11 @@ local({
   FXr <- Fest(X, r=FX$r)
   JX <- Jest(X)
 })
+}
 
 ##' various functionality in fv.R
 
+if(ALWAYS) {
 local({
   M <- cbind(1:20, matrix(runif(100), 20, 5))
   A <- as.fv(M)
@@ -653,7 +706,9 @@ local({
   names(Klist) <- LETTERS[24:26]
   collapse.fv(Klist, same="theo", different=c("iso", "border"))
 })
+}
 
+if(FULLTEST) {
 local({
   ## rat
   K <- Kest(cells, ratio=TRUE)
@@ -663,8 +718,9 @@ local({
   compatible(K, G)
   H <- rat(K, attr(K, "numerator"), attr(K, "denominator"), check=TRUE)
 })
+}
 
-
+if(FULLTEST) {
 local({
   ## bug in Jmulti.R colliding with breakpts.R
   B <- owin(c(0,3), c(0,10))
@@ -679,7 +735,9 @@ local({
   }
   E <- envelope(Y, Jdif, nsim=19, i="A", simulate=expression(rlabel(Y)))
 })
+}
 
+if(FULLTEST) {
 local({
   #' fasp axes, title, dimnames
   a <- alltypes(amacrine)
@@ -689,10 +747,13 @@ local({
 
   b <- as.fv(a)
 })
+}
 
+if(FULLTEST) {
 local({
   ## plot.anylist (fv)
   b <- anylist(A=Kcross(amacrine), B=Kest(amacrine))
   plot(b, equal.scales=TRUE, main=expression(sqrt(pi)))
   plot(b, arrange=FALSE)
 })
+}

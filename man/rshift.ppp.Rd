@@ -5,7 +5,7 @@
   Randomly shifts the points of a point pattern.
 }
 \usage{
-   \method{rshift}{ppp}(X, \dots, which=NULL, group)
+   \method{rshift}{ppp}(X, \dots, which=NULL, group, nsim=1, drop=TRUE)
 }
 \arguments{
   \item{X}{Point pattern to be subjected to a random shift.
@@ -27,9 +27,16 @@
     Optional. Identifies which groups of the pattern will be shifted,
     while other groups are not shifted. A vector of levels of \code{group}.
   }
+  \item{nsim}{Number of simulated realisations to be generated.}
+  \item{drop}{
+    Logical. If \code{nsim=1} and \code{drop=TRUE} (the default), the
+    result will be a point pattern, rather than a list 
+    containing a point pattern.
+  }
 }
 \value{
-  A point pattern (object of class \code{"ppp"}).
+  A point pattern (object of class \code{"ppp"})
+  or a list of point patterns.
 }
 \details{
   This operation randomly shifts the locations of the points
@@ -162,14 +169,16 @@
   }
   The optional argument \code{clip} specifies a smaller window
   to which the pattern should be restricted.
+
+  If \code{nsim > 1}, then the simulation procedure is
+  performed \code{nsim} times; the result is a list of \code{nsim}
+  point patterns.
 }
 \seealso{
   \code{\link{rshift}},
   \code{\link{rshift.psp}}
 }
 \examples{
-   data(amacrine)
-
    # random toroidal shift
    # shift "on" and "off" points separately
    X <- rshift(amacrine)
@@ -181,16 +190,14 @@
    X <- rshift(amacrine, group=NULL)
 
    # maximum displacement distance 0.1 units
-   X <- rshift(amacrine, radius=0.1)
+   X <- rshift(amacrine, radius=0.1, nsim=2)
 
    # shift with erosion
    X <- rshift(amacrine, radius=0.1, edge="erode")
 }
-\author{\adrian
-  
-  
+\author{
+  \adrian
   and \rolf
-  
 }
 \keyword{spatial}
 \keyword{datagen}

@@ -1,3 +1,15 @@
+#'
+#'   Header for all (concatenated) test files
+#'
+#'   Require spatstat.
+#'   Obtain environment variable controlling tests.
+#'
+#'   $Revision: 1.4 $ $Date: 2020/04/28 08:17:40 $
+
+require(spatstat)
+FULLTEST <- !is.na(Sys.getenv("SPATSTAT_TEST", unset=NA))
+ALWAYS   <- TRUE
+
 #'  tests/randoms.R
 #'   Further tests of random generation code
 #'  $Revision: 1.11 $ $Date: 2019/12/11 00:30:12 $
@@ -149,11 +161,13 @@ local({
 ##
 ## Test all combinations of options for rhohatCalc
 ##
-## $Revision: 1.3 $ $Date: 2018/05/13 04:42:21 $
+## $Revision: 1.4 $ $Date: 2020/01/21 05:03:07 $
 
 local({
   require(spatstat)
   X <-  rpoispp(function(x,y){exp(3+3*x)})
+  Z <- as.im(function(x,y) { x }, Window(X))
+  f <- funxy(function(x,y) { y + 1 }, Window(X))
   ## rhohat.ppp
   ## done in example(rhohat):
   ## rhoA <- rhohat(X, "x")
@@ -165,11 +179,21 @@ local({
   rhoB <- rhohat(X, "x", smoother="local", method="reweight")
   rhoC <- rhohat(X, "x", smoother="local", method="transform")
 
+  #' code blocks
+  rhoD <- rhohat(X, "y", positiveCI=TRUE)
+  rhoE <- rhohat(X, Z,   positiveCI=TRUE)
+  #' weights 
+  rhoF <- rhohat(X, Z,   weights=f(X))
+  rhoG <- rhohat(X, Z,   weights=f)
+  rhoH <- rhohat(X, Z,   weights=as.im(f))
+
   ## rhohat.ppm
-  fit <- ppm(X, ~x)
+  fit <- ppm(X ~x)
   rhofitA <- rhohat(fit, "x")
   rhofitB <- rhohat(fit, "x", method="reweight")
   rhofitC <- rhohat(fit, "x", method="transform")
+  rhofitD <- rhohat(fit, Z)
+  rhofitD <- rhohat(fit, Z, positiveCI=TRUE)
 
   ## Baseline
   lam <- predict(fit)
@@ -194,10 +218,19 @@ local({
   ## rho2hat
   r2xy <- rho2hat(X, "x", "y")
   r2xyw <- rho2hat(X, "x", "y", method="reweight")
+  print(r2xyw)
   plot(r2xy, do.points=TRUE)
   xcoord <- function(x,y) x
   ycoord <- function(x,y) y
   xim <- as.im(xcoord, W=Window(X))
   r2fi <- rho2hat(X, ycoord, xim)
   r2if <- rho2hat(X, xim, ycoord)
+  r2myx <- rho2hat(fit, "y", "x")
+  r2myxw <- rho2hat(fit, "y", "x", method="reweight")
+  plot(r2myx)
+  plot(r2myxw)
+  print(r2myxw)
+  predict(r2myxw)
+  predict(r2myxw, relative=TRUE)
+
 })

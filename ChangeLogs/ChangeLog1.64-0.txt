@@ -908,5 +908,5 @@ Change log from 1.63-3 to 1.64-0
 ------------- passed R-4.0.0 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
-
+!!!!!!!!!!!!! uploaded to CRAN         !!!!!!!!!!!!!!!
 

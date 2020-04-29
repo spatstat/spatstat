@@ -1,135 +1,169 @@
+#'
+#'   Header for all (concatenated) test files
+#'
+#'   Require spatstat.
+#'   Obtain environment variable controlling tests.
+#'
+#'   $Revision: 1.4 $ $Date: 2020/04/28 08:17:40 $
+
+require(spatstat)
+FULLTEST <- !is.na(Sys.getenv("SPATSTAT_TEST", unset=NA))
+ALWAYS   <- TRUE
+
 #'  tests/aucroc.R
 #'
 #'  AUC and ROC code
 #'
-#'  $Revision: 1.3 $ $Date: 2019/12/06 06:32:06 $
+#'  $Revision: 1.4 $ $Date: 2020/04/28 12:58:26 $
 
-require(spatstat)
 local({
-  A <- roc(spiders, "x")
-  B <- auc(spiders, "y")
-  fit <- kppm(redwood ~ I(y-x))
-  a <- roc(fit)
-  b <- auc(fit)
-  fet <- ppm(amacrine~x+y+marks)
-  d <- roc(fet)
-  e <- auc(fet)
-  fut <- lppm(spiders ~ I(y-x))
-  f <- roc(fut)
-  g <- auc(fut)
+  if(FULLTEST) {
+    A <- roc(spiders, "x")
+    B <- auc(spiders, "y")
+    fit <- kppm(redwood ~ I(y-x))
+    a <- roc(fit)
+    b <- auc(fit)
+    fet <- ppm(amacrine~x+y+marks)
+    d <- roc(fet)
+    e <- auc(fet)
+    fut <- lppm(spiders ~ I(y-x))
+    f <- roc(fut)
+    g <- auc(fut)
+  }
 })
 ## badwindowcheck.R
-## $Revision: 1.2 $  $Date: 2014/01/27 07:18:41 $
+## $Revision: 1.3 $  $Date: 2020/04/28 12:58:26 $
 ##
 
-require(spatstat)
 local({
-  ## Simple example of self-crossing polygon
-  x <- read.table("selfcross.txt", header=TRUE)
-  ## Auto-repair
-  w <- owin(poly=x)
+  if(ALWAYS) {
+    ## Simple example of self-crossing polygon
+    x <- read.table("selfcross.txt", header=TRUE)
+    ## Auto-repair
+    w <- owin(poly=x)
 
-  ## Real data involving various quirks
-  b <- read.table("badwindow.txt", header=TRUE)
-  b <- split(b, factor(b$i))
-  b <- lapply(b, function(z) { as.list(z[,-3]) })
-  ## make owin without checking
-  W <- owin(poly=b, check=FALSE, fix=FALSE)
-  ## Apply stringent checks
-  owinpolycheck(W,verbose=FALSE)
-  ## Auto-repair
-  W2 <- owin(poly=b)
+    ## Real data involving various quirks
+    b <- read.table("badwindow.txt", header=TRUE)
+    b <- split(b, factor(b$i))
+    b <- lapply(b, function(z) { as.list(z[,-3]) })
+    ## make owin without checking
+    W <- owin(poly=b, check=FALSE, fix=FALSE)
+    ## Apply stringent checks
+    owinpolycheck(W,verbose=FALSE)
+    ## Auto-repair
+    W2 <- owin(poly=b)
+  }
 })
 
 
 
 
 ## tests/cdf.test.R
-require(spatstat)
+
 local({
-  ## (1) check cdf.test with strange data
-  ## Marked point patterns with some marks not represented
   AC <- split(ants, un=FALSE)$Cataglyphis
   AM <- split(ants, un=FALSE)$Messor
   DM <- distmap(AM)
-  ## should produce a warning, rather than a crash:
-  cdf.test(AC, DM)
-  ## should be OK:
-  cdf.test(unmark(AC), DM)
-  cdf.test(unmark(AC), DM, "cvm")
-  cdf.test(unmark(AC), DM, "ad")
-  ## other code blocks
-  cdf.test(finpines, "x")
+  if(ALWAYS) {
+    ## (1) check cdf.test with strange data
+    ## Marked point patterns with some marks not represented
+    ## should produce a warning, rather than a crash:
+    cdf.test(AC, DM)
+  }
+  if(FULLTEST) {
+    ## should be OK:
+    cdf.test(unmark(AC), DM)
+    cdf.test(unmark(AC), DM, "cvm")
+    cdf.test(unmark(AC), DM, "ad")
+    ## other code blocks
+    cdf.test(finpines, "x")
+  }
+  if(ALWAYS) {
+    ## (2) linear networks
+    set.seed(42)
+    X <- runiflpp(20, simplenet)
+    cdf.test(X, "x")
+  }
+  if(FULLTEST) {
+    cdf.test(X, "x", "cvm")
+    cdf.test(X %mark% runif(20), "x")
+  }
+  if(ALWAYS) {
+    fit <- lppm(X ~1)
+    cdf.test(fit, "y", "cvm")
+  }
+  if(FULLTEST) {
+    cdf.test(fit, "y")
+    cdf.test(fit, "y", "ad")
+  }
+  if(FULLTEST) {
+    ## marked
+    cdf.test(chicago, "y")
+    cdf.test(subset(chicago, marks != "assault"), "y")
+  }
 
-  ## (2) linear networks
-  set.seed(42)
-  X <- runiflpp(20, simplenet)
-  cdf.test(X, "x")
-  cdf.test(X, "x", "cvm")
-  cdf.test(X %mark% runif(20), "x")
-  fit <- lppm(X ~1)
-  cdf.test(fit, "y")
-  cdf.test(fit, "y", "cvm")
-  cdf.test(fit, "y", "ad")
-  ## marked
-  cdf.test(chicago, "y")
-  cdf.test(subset(chicago, marks != "assault"), "y")
+  if(FULLTEST) {
+    ## (3) Monte Carlo test for Gibbs model
+    fit <- ppm(cells ~ 1, Strauss(0.07))
+    cdf.test(fit, "x", nsim=9)
 
-  ## (3) Monte Carlo test for Gibbs model
-  fit <- ppm(cells ~ 1, Strauss(0.07))
-  cdf.test(fit, "x", nsim=9)
-
-  ## cdf.test.slrm
-  fut <- slrm(japanesepines ~ x + y)
-  Z <- distmap(japanesepines)
-  cdf.test(fut, Z)
+    ## cdf.test.slrm
+    fut <- slrm(japanesepines ~ x + y)
+    Z <- distmap(japanesepines)
+    cdf.test(fut, Z)
+  }
 })
-
-
-
 #'    tests/circular.R
 #'
 #'    Circular data and periodic distributions
 #'
-#'    $Revision: 1.3 $  $Date: 2019/12/06 06:15:22 $
+#'    $Revision: 1.4 $  $Date: 2020/04/28 12:58:26 $
 
-require(spatstat)
+
 local({
-  a <- pairorient(redwood, 0.05, 0.15, correction="none")
-  b <- pairorient(redwood, 0.05, 0.15, correction="best")
-  rose(a)
-  rose(b, start="N", clockwise=TRUE)
-
-  #' arcs on the circle 
-  set.seed(19171025)
-  aa <- replicate(7, runif(1, 0, 2*pi) + c(0, runif(1, 0, pi)), simplify=FALSE)
-  bb <- circunion(aa)
-
-  assertsingle <- function(x, a, id) {
-    y <- circunion(x)
-    if(length(y) != 1 || max(abs(y[[1]] - a)) > .Machine$double.eps)
-      stop(paste("Incorrect result from circunion in case", id),
-           call.=FALSE)
-    invisible(NULL)
+  if(ALWAYS) {
+    a <- pairorient(redwood, 0.05, 0.15, correction="none")
+    rose(a)
   }
+  if(FULLTEST) {
+    b <- pairorient(redwood, 0.05, 0.15, correction="best")
+    rose(b, start="N", clockwise=TRUE)
+  }
+  if(ALWAYS) {
+    #' arcs on the circle 
+    #'       (depends on numerical behaviour)
+    set.seed(19171025)
+    aa <- replicate(7, runif(1, 0, 2*pi) + c(0, runif(1, 0, pi)),
+                    simplify=FALSE)
+    bb <- circunion(aa)
 
-  assertsingle(list(c(pi/3, pi), c(pi/2, 3*pi/2)),
-               c(pi/3, 3*pi/2),
-               1)
-  assertsingle(list(c(0, pi/2), c(pi/4, pi)),
-               c(0,pi),
-               2)
-  assertsingle(list(c(-pi/4, pi/2), c(pi/4, pi)),
-               c((2-1/4)*pi, pi),
-               3)
+    assertsingle <- function(x, a, id) {
+      y <- circunion(x)
+      if(length(y) != 1 || max(abs(y[[1]] - a)) > .Machine$double.eps)
+        stop(paste("Incorrect result from circunion in case", id),
+             call.=FALSE)
+      invisible(NULL)
+    }
+
+    assertsingle(list(c(pi/3, pi), c(pi/2, 3*pi/2)),
+                 c(pi/3, 3*pi/2),
+                 1)
+    assertsingle(list(c(0, pi/2), c(pi/4, pi)),
+                 c(0,pi),
+                 2)
+    assertsingle(list(c(-pi/4, pi/2), c(pi/4, pi)),
+                 c((2-1/4)*pi, pi),
+                 3)
+  }
 })
 
   
 ##  tests/closeshave.R
 ## check 'closepairs/crosspairs' code
 ## validity and memory allocation
-## $Revision: 1.22 $ $Date: 2020/02/06 05:53:13 $
+## $Revision: 1.23 $ $Date: 2020/04/28 12:58:26 $
 
+## ------- All this code must be run on every hardware -------
 local({
   r <- 0.12
   close.all <- closepairs(redwood, r)
@@ -306,142 +340,172 @@ reset.spatstat.options()
 #'   Tests of "click*" functions
 #'   using queueing feature of spatstatLocator
 #'
-#'   $Revision: 1.3 $ $Date: 2019/12/21 04:43:36 $
+#'   $Revision: 1.4 $ $Date: 2020/04/28 12:58:26 $
 
 require(spatstat)
 local({
   #' clickppp
-  spatstat.utils::queueSpatstatLocator(runif(5), runif(5))
-  XA <- clickppp(hook=square(0.5))
-  spatstat.utils::queueSpatstatLocator(runif(6), runif(6))
-  XB <- clickppp(n=3, types=c("a", "b"))
-  #' clickbox
-  spatstat.utils::queueSpatstatLocator(runif(2), runif(2))
-  BB <- clickbox()
-  #' clickdist
-  spatstat.utils::queueSpatstatLocator(runif(2), runif(2))
-  dd <- clickdist()
-  #' clickpoly
-  hex <- vertices(disc(radius=0.4, centre=c(0.5, 0.5), npoly=6))
-  spatstat.utils::queueSpatstatLocator(hex)
-  PA <- clickpoly()
-  holy <- vertices(disc(radius=0.2, centre=c(0.5, 0.5), npoly=6))
-  holy <- lapply(holy, rev)
-  spatstat.utils::queueSpatstatLocator(concatxy(hex, holy))
-  PB <- clickpoly(np=2, nv=6)
-  #' clicklpp
+  if(ALWAYS) {
+    spatstat.utils::queueSpatstatLocator(runif(5), runif(5))
+    XA <- clickppp(hook=square(0.5))
+  }
+  if(FULLTEST) {
+    spatstat.utils::queueSpatstatLocator(runif(6), runif(6))
+    XB <- clickppp(n=3, types=c("a", "b"))
+  }
+  if(ALWAYS) {
+    #' clickbox
+    spatstat.utils::queueSpatstatLocator(runif(2), runif(2))
+    BB <- clickbox()
+    #' clickdist
+    spatstat.utils::queueSpatstatLocator(runif(2), runif(2))
+    dd <- clickdist()
+    #' clickpoly
+    hex <- vertices(disc(radius=0.4, centre=c(0.5, 0.5), npoly=6))
+    spatstat.utils::queueSpatstatLocator(hex)
+    PA <- clickpoly()
+  }
+  if(FULLTEST) {
+    holy <- vertices(disc(radius=0.2, centre=c(0.5, 0.5), npoly=6))
+    holy <- lapply(holy, rev)
+    spatstat.utils::queueSpatstatLocator(concatxy(hex, holy))
+    PB <- clickpoly(np=2, nv=6)
+  }
   Y <- coords(runiflpp(6, simplenet))
-  spatstat.utils::queueSpatstatLocator(Y)
-  XL <- clicklpp(simplenet)
-  spatstat.utils::queueSpatstatLocator(Y)
-  XM <- clicklpp(simplenet, n=3, types=c("a", "b"))
-  #' identify.psp
-  E <- edges(letterR)[c(FALSE, TRUE)]
-  Z <- ppp(c(2.86, 3.65, 3.15), c(1.69, 1.98, 2.56), window=Frame(letterR))
-  spatstat.utils::queueSpatstatLocator(Z)
-  identify(E)
-  #' lineardisc
-  plot(simplenet)
-  spatstat.utils::queueSpatstatLocator(as.ppp(runiflpp(1, simplenet)))
-  V <- lineardisc(simplenet, r=0.3)
-  #' transect.im
-  Z <- density(cells)
-  spatstat.utils::queueSpatstatLocator(runifpoint(2, Window(cells)))
-  TZ <- transect.im(Z, click=TRUE)
+  if(FULLTEST) {
+    #' clicklpp
+    spatstat.utils::queueSpatstatLocator(Y)
+    XL <- clicklpp(simplenet)
+  }
+  if(ALWAYS) {
+    spatstat.utils::queueSpatstatLocator(Y)
+    XM <- clicklpp(simplenet, n=3, types=c("a", "b"))
+  }
+  if(ALWAYS) {
+    #' identify.psp
+    E <- edges(letterR)[c(FALSE, TRUE)]
+    Z <- ppp(c(2.86, 3.65, 3.15), c(1.69, 1.98, 2.56), window=Frame(letterR))
+    spatstat.utils::queueSpatstatLocator(Z)
+    identify(E)
+  }
+  if(ALWAYS) {
+    #' lineardisc
+    plot(simplenet)
+    spatstat.utils::queueSpatstatLocator(as.ppp(runiflpp(1, simplenet)))
+    V <- lineardisc(simplenet, r=0.3)
+  }
+  if(FULLTEST) {
+    #' transect.im
+    Z <- density(cells)
+    spatstat.utils::queueSpatstatLocator(runifpoint(2, Window(cells)))
+    TZ <- transect.im(Z, click=TRUE)
+  }
 })
 ## tests/colour.R
 ##
 ##  Colour value manipulation and colour maps
 ##
-## $Revision: 1.7 $ $Date: 2020/01/11 05:01:45 $
+## $Revision: 1.8 $ $Date: 2020/04/28 08:27:38 $
 ##
 
-require(spatstat)
-
 local({
-   f <- function(n) grey(seq(0,1,length=n))
-   z <- to.grey(f)
+  if(FULLTEST) {
+    f <- function(n) grey(seq(0,1,length=n))
+    z <- to.grey(f)
 
-   h <- colourmap(rainbow(9), range=c(0.01, 0.1))
-   plot(h, labelmap=100)
-   
-   a <- colourmap(rainbow(12), range=as.Date(c("2018-01-01", "2018-12-31")))
-   print(a)
-   print(summary(a))
-   a(as.Date("2018-06-15"))
-   
-   g <- colourmap(rainbow(4),
-                  breaks=as.Date(c("2018-01-01", "2018-04-01",
-                                   "2018-07-01", "2018-10-01", "2018-12-31")))
-   print(g)
-   print(summary(g))
-   g(as.Date("2018-06-15"))
-   
-   b <- colourmap(rainbow(12), inputs=month.name)
-   print(b)
-   print(summary(b))
-   to.grey(b)
-   to.grey(b, transparent=TRUE)
-   plot(b, vertical=FALSE)
-   plot(b, vertical=TRUE)
-   plot(b, vertical=FALSE, gap=0)
-   plot(b, vertical=TRUE, gap=0)
-   plot(b, vertical=FALSE, xlim=c(0, 2))
-   plot(b, vertical=TRUE, xlim=c(0,2))
-   plot(b, vertical=FALSE, ylim=c(0, 2))
-   plot(b, vertical=TRUE, ylim=c(0,2))
+    h <- colourmap(rainbow(9), range=c(0.01, 0.1))
+    plot(h, labelmap=100)
+  }
 
-   argh <- list(a="iets", e="niets", col=b, f=42)
-   arr <- col.args.to.grey(argh)
-   rrgh <- col.args.to.grey(argh, transparent=TRUE)
+  if(ALWAYS) {
+    a <- colourmap(rainbow(12), range=as.Date(c("2018-01-01", "2018-12-31")))
+    print(a)
+    print(summary(a))
+    a(as.Date("2018-06-15"))
 
-   #' constant colour map
-   colourmap("grey", range=c(0.01, 0.1))
-   colourmap("grey", range=as.Date(c("2018-01-01", "2018-12-31")))
-   colourmap("grey",
-             breaks=as.Date(c("2018-01-01", "2018-04-01",
-                              "2018-07-01", "2018-10-01", "2018-12-31")))
-   colourmap("grey", inputs=month.name)
+    g <- colourmap(rainbow(4),
+                   breaks=as.Date(c("2018-01-01", "2018-04-01",
+                                    "2018-07-01", "2018-10-01", "2018-12-31")))
+    print(g)
+    print(summary(g))
+    g(as.Date("2018-06-15"))
+  }
 
-   #' empty colour map
-   niets <- lut()
-   print(niets)
-   summary(niets)
-   niets <- colourmap()
-   print(niets)
-   summary(niets)
-   plot(niets)
+  if(FULLTEST) {
+    b <- colourmap(rainbow(12), inputs=month.name)
+    print(b)
+    print(summary(b))
+    to.grey(b)
+    to.grey(b, transparent=TRUE)
+    plot(b, vertical=FALSE)
+    plot(b, vertical=TRUE)
+    plot(b, vertical=FALSE, gap=0)
+    plot(b, vertical=TRUE, gap=0)
+    plot(b, vertical=FALSE, xlim=c(0, 2))
+    plot(b, vertical=TRUE, xlim=c(0,2))
+    plot(b, vertical=FALSE, ylim=c(0, 2))
+    plot(b, vertical=TRUE, ylim=c(0,2))
 
-   #' interpolation - of transparent colours
-   co <- colourmap(inputs=c(0, 0.5, 1),
-                   rgb(red=c(1,0,0), green=c(0,1,0), blue=c(0,0,1),
-                       alpha=c(0.3, 0.6, 0.9)))
-   plot(interp.colourmap(co))
+    argh <- list(a="iets", e="niets", col=b, f=42)
+    arr <- col.args.to.grey(argh)
+    rrgh <- col.args.to.grey(argh, transparent=TRUE)
+  }
+
+  if(ALWAYS) {
+    #' constant colour map
+    colourmap("grey", range=c(0.01, 0.1))
+    colourmap("grey", range=as.Date(c("2018-01-01", "2018-12-31")))
+    colourmap("grey",
+              breaks=as.Date(c("2018-01-01", "2018-04-01",
+                               "2018-07-01", "2018-10-01", "2018-12-31")))
+    colourmap("grey", inputs=month.name)
+  }
+
+  if(FULLTEST) {
+    #' empty colour map
+    niets <- lut()
+    print(niets)
+    summary(niets)
+    niets <- colourmap()
+    print(niets)
+    summary(niets)
+    plot(niets)
+  }
+
+  if(ALWAYS) {
+    #' interpolation - of transparent colours
+    co <- colourmap(inputs=c(0, 0.5, 1),
+                    rgb(red=c(1,0,0), green=c(0,1,0), blue=c(0,0,1),
+                        alpha=c(0.3, 0.6, 0.9)))
+    plot(interp.colourmap(co))
+  }
 })
+
 #'
 #'     contact.R
 #'
 #'   Check machinery for first contact distributions
 #'
-#'   $Revision: 1.5 $  $Date: 2019/10/14 08:34:27 $
+#'   $Revision: 1.6 $  $Date: 2020/04/28 12:58:26 $
 
-require(spatstat)
 local({
-  #' reduce complexity
-  Y <- as.mask(heather$coarse, dimyx=c(100, 50))
+  if(ALWAYS) {
+    #' reduce complexity
+    Y <- as.mask(heather$coarse, dimyx=c(100, 50))
+    
+    X <- runifpoint(100, win = complement.owin(Y))
+    G <- Gfox(X, Y)
+    J <- Jfox(X, Y)
 
-  X <- runifpoint(100, win = complement.owin(Y))
-  G <- Gfox(X, Y)
-  J <- Jfox(X, Y)
+    Y <- as.polygonal(Y)
+    X <- runifpoint(100, win = complement.owin(Y))
+    G <- Gfox(X, Y)
+    J <- Jfox(X, Y)
 
-  Y <- as.polygonal(Y)
-  X <- runifpoint(100, win = complement.owin(Y))
-  G <- Gfox(X, Y)
-  J <- Jfox(X, Y)
-
-  op <- spatstat.options(exactdt.checks.data=TRUE)
-  U <- exactdt(X)
-  spatstat.options(op)
+    op <- spatstat.options(exactdt.checks.data=TRUE)
+    U <- exactdt(X)
+    spatstat.options(op)
+  }
 })
 
 reset.spatstat.options()
@@ -450,9 +514,8 @@ reset.spatstat.options()
 #'
 #'   Tests for user-contributed code in spatstat
 #'
-#'   $Revision: 1.1 $  $Date: 2018/07/01 04:48:25 $
+#'   $Revision: 1.2 $  $Date: 2020/04/28 12:58:26 $
 
-require(spatstat)
 local({
   #' Jinhom
   #' Marie-Colette van Lieshout and Ottmar Cronie
@@ -462,20 +525,25 @@ local({
   lamX <- fitted(fit, dataonly=TRUE)
   lmin <- 0.9 * min(lam)
   g1 <- Ginhom(X, lambda=fit, update=TRUE)
-  g2 <- Ginhom(X, lambda=fit, update=FALSE, lmin = lmin)
-  g3 <- Ginhom(X, lambda=lam,  lmin=lmin)
-  g4 <- Ginhom(X, lambda=lamX, lmin=lmin)
-  f1 <- Finhom(X, lambda=fit, update=TRUE)
-  f2 <- Finhom(X, lambda=fit, update=FALSE)
-  f3 <- Finhom(X, lambda=lam,  lmin=lmin)
+  if(FULLTEST) {
+    g2 <- Ginhom(X, lambda=fit, update=FALSE, lmin = lmin)
+    g3 <- Ginhom(X, lambda=lam,  lmin=lmin)
+    g4 <- Ginhom(X, lambda=lamX, lmin=lmin)
+  }
+  if(ALWAYS) {
+    f2 <- Finhom(X, lambda=fit, update=FALSE)
+  }
+  if(FULLTEST) {
+    f1 <- Finhom(X, lambda=fit, update=TRUE)
+    f3 <- Finhom(X, lambda=lam,  lmin=lmin)
+  }
 })
 # tests/correctC.R
 # check for agreement between C and interpreted code
 # for interpoint distances etc.
-# $Revision: 1.6 $ $Date: 2018/10/07 09:58:42 $
+# $Revision: 1.7 $ $Date: 2020/04/28 12:58:26 $
 
-require(spatstat)
-
+if(ALWAYS) { # depends on hardware
 local({
   eps <- .Machine$double.eps * 4
 
@@ -549,4 +617,4 @@ local({
 })
 
 reset.spatstat.options()
-
+}
