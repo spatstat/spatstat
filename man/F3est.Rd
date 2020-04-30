@@ -147,9 +147,16 @@ F3est(X, ..., rmax = NULL, nrval = 128, vside = NULL,
   \code{\link{spatstat.options}("nvoxel")}.
 }
 \seealso{
+  \code{\link{pp3}} to create a three-dimensional point
+  pattern (object of class \code{"pp3"}).
+  
   \code{\link{G3est}},
   \code{\link{K3est}},
-  \code{\link{pcf3est}}.
+  \code{\link{pcf3est}} for other summary functions of
+  a three-dimensional point pattern.
+
+  \code{\link{Fest}} to estimate the empty space function of
+  point patterns in two dimensions.
 }
 \examples{
   \testonly{op <- spatstat.options(nvoxel=2^18)}

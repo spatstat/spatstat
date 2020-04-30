@@ -98,14 +98,20 @@
 }
 \author{
   \adrian
-  
-  
   and Rana Moyeed.
 }
 \seealso{
+  \code{\link{pp3}} to create a three-dimensional point
+  pattern (object of class \code{"pp3"}).
+  
+  \code{\link{pcf3est}},
   \code{\link{F3est}},
-  \code{\link{G3est}},
-  \code{\link{pcf3est}}
+  \code{\link{G3est}}
+  for other summary functions of
+  a three-dimensional point pattern.
+
+  \code{\link{Kest}} to estimate the \eqn{K}-function of
+  point patterns in two dimensions or other spaces.
 }
 \examples{
   X <- rpoispp3(42)

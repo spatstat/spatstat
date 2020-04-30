@@ -51,7 +51,6 @@ Change log from 1.64-0 to 1.64-1
    tests/linalgeb.R
    tests/localpcf.R
    tests/lppmodels.R
-   
 	Many tests are now switched off	unless 'SPATSTAT_TEST' is defined.
 
    tests/rmhMulti.R
@@ -67,10 +66,38 @@ Change log from 1.64-0 to 1.64-1
    DESCRIPTION
    NEWS
    Nickname.txt
+	Version 1.64-0.001
 	Nickname changed to 'Geostrophic'
 	Acknowledged Maximilian Vogtland and Maximilian Hesselbarth
-   
-	Version 1.64-0.001
+
+------------- passed R-4.0.0 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+
+30 apr 2020
+
+   spatstat-package.Rd
+	Acknowledged Maximilian Vogtland
+	
+   pcf3est.Rd
+   K3est.Rd
+   F3est.Rd
+   G3est.Rd
+	More cross-references.
+
+   tests/lppstuff.R
+   tests/marcelino.R
+   tests/markcor.R
+   tests/mctests.R
+   tests/morpho.R
+   tests/mppm.R
+
+	Many tests are now switched off	unless 'SPATSTAT_TEST' is defined.
+	
+   DESCRIPTION
+   NEWS
+
+	Version 1.64-0.002
 
 ------------- passed R-4.0.0 CMD check ---------------
 ------------- installed on laptop      ---------------
@@ -79,13 +106,7 @@ Change log from 1.64-0 to 1.64-1
 
    STILL TO DO:
 
-   tests/lppstuff.R
-   tests/marcelinodata.R
-   tests/marcelino.R
-   tests/markcor.R
-   tests/mctests.R
-   tests/morpho.R
-   tests/mppm.R
+
    tests/msr.R
    tests/NAinCov.R
    tests/nndist.R

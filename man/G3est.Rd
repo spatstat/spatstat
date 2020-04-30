@@ -95,8 +95,6 @@ G3est(X, ..., rmax = NULL, nrval = 128, correction = c("rs", "km", "Hanisch"))
 }
 \author{
   \adrian
-  
-  
   and Rana Moyeed.
 }
 \section{Warnings}{
@@ -105,9 +103,16 @@ G3est(X, ..., rmax = NULL, nrval = 128, correction = c("rs", "km", "Hanisch"))
   calculation).
 }
 \seealso{
+  \code{\link{pp3}} to create a three-dimensional point
+  pattern (object of class \code{"pp3"}).
+  
   \code{\link{F3est}},
   \code{\link{K3est}},
-  \code{\link{pcf3est}}
+  \code{\link{pcf3est}} for other summary functions of
+  a three-dimensional point pattern.
+
+  \code{\link{Gest}} to estimate the empty space function of
+  point patterns in two dimensions.
 }
 \examples{
   X <- rpoispp3(42)

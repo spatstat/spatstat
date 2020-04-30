@@ -1965,6 +1965,7 @@
   Mikko Vihtakari,
   Alexendre Villers,
   Fabrice Vinatier,
+  Maximilian Vogtland,
   Sasha Voss,
   Sven Wagner,
   Hao Wang,

@@ -9,8 +9,9 @@
   from a three-dimensional point pattern.
 }
 \usage{
-pcf3est(X, ..., rmax = NULL, nrval = 128, correction = c("translation",
-"isotropic"), delta=NULL, adjust=1, biascorrect=TRUE)
+   pcf3est(X, \dots, rmax = NULL, nrval = 128,
+           correction = c("translation", "isotropic"),
+           delta=NULL, adjust=1, biascorrect=TRUE)
 }
 \arguments{
   \item{X}{
@@ -113,13 +114,19 @@ pcf3est(X, ..., rmax = NULL, nrval = 128, correction = c("translation",
 }
 \author{
   \adrian
-  
-  
   and Rana Moyeed.
 }
 \seealso{
-  \code{\link{K3est}},
-  \code{\link{pcf}}
+  \code{\link{pp3}} to create a three-dimensional point
+  pattern (object of class \code{"pp3"}).
+  
+  \code{\link{F3est}},
+  \code{\link{G3est}},
+  \code{\link{K3est}} for other summary functions of
+  a three-dimensional point pattern.
+
+  \code{\link{pcf}} to estimate the pair correlation function of
+  point patterns in two dimensions or other spaces.
 }
 \examples{
   X <- rpoispp3(250)
