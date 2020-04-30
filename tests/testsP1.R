@@ -4,42 +4,45 @@
 #'   Require spatstat.
 #'   Obtain environment variable controlling tests.
 #'
-#'   $Revision: 1.4 $ $Date: 2020/04/28 08:17:40 $
+#'   $Revision: 1.5 $ $Date: 2020/04/30 05:31:37 $
 
 require(spatstat)
-FULLTEST <- !is.na(Sys.getenv("SPATSTAT_TEST", unset=NA))
+FULLTEST <- (nchar(Sys.getenv("SPATSTAT_TEST", unset="")) > 0)
 ALWAYS   <- TRUE
-
+cat(paste("--------- Executing",
+          if(FULLTEST) "** ALL **" else "**RESTRICTED** subset of",
+          "test code -----------\n"))
 #' spatstat/tests/package.R
 #' Package information
-#' $Revision$ $Date$
+#' $Revision: 1.2 $ $Date: 2020/04/30 05:23:52 $
 
-require(spatstat)
+if(FULLTEST) {
 local({
   a <- bugfixes("book", show=FALSE)
   bugfixes(package="deldir")
 })
+}
 ## 
 ##    tests/percy.R
 ##
 ## Tests of Percus-Yevick approximations
 ##
-##    $Revision: 1.2 $ $Date: 2015/12/29 08:54:49 $
+##    $Revision: 1.3 $ $Date: 2020/04/30 05:23:52 $
 
-require(spatstat)
+if(FULLTEST) {
 local({
   fit <- ppm(swedishpines ~1, DiggleGatesStibbard(6))
   K <- Kmodel(fit)
 })
+}
 
 #'   tests/perspim.R
 #'
 #'   Check persp.im handling of NA, etc
 #' 
-#'   $Revision: 1.1 $  $Date: 2016/08/27 02:53:35 $
+#'   $Revision: 1.2 $  $Date: 2020/04/30 05:23:52 $
 
-require(spatstat)
-
+if(FULLTEST) {
 local({
   set.seed(42)
   Z <- distmap(letterR, invert=TRUE)[letterR, drop=FALSE]
@@ -56,13 +59,14 @@ local({
   persp(Z, colmap=beachcolours, sealevel=mean(Z))
   persp(Z, colin=as.im(Z, dimyx=dim(Z)/4))
 })
+}
 ##
 ## tests/pixelgripes.R
 ##     Problems related to pixellation of windows
 ##
-## $Revision: 1.4 $ $Date: 2018/10/10 08:04:10 $
+## $Revision: 1.5 $ $Date: 2020/04/30 05:23:52 $
 
-require(spatstat)
+if(FULLTEST) {
 local({
   ## From Philipp Hunziker: bug in rNeymanScott (etc)
   ## Create an irregular window
@@ -78,22 +82,20 @@ local({
   ## Covariates: Simulation fails
   fit1 <- kppm(X ~ distorigin, clusters="MatClust")
   Y1 <- simulate(fit1, retry=0)
-})
 
-local({
   ## pixellate.ppp includes mapping from (x,y) to (row, col)
   Z <- pixellate(cells, savemap=TRUE)
   ind <- attr(Z, "map")
   m <- (as.matrix(Z))[ind]
   if(!all(m == 1)) stop("Coordinate mismatch in pixellate.ppp")
 })
-
+}
 ## 
 ## tests/polygons.R
 ##
-##  $Revision: 1.4 $ $Date: 2019/11/03 03:18:05 $
+##  $Revision: 1.5 $ $Date: 2020/04/30 05:23:52 $
 ##
-require(spatstat)
+if(ALWAYS) { # involves C code
 local({
   co <- as.ppp(corners(letterR), letterR, check=FALSE)
   co[letterR]
@@ -106,4 +108,4 @@ local({
   x <- read.table("selfcross.txt", header=TRUE)
   y <- xypolyselfint(x)
 })
-
+}

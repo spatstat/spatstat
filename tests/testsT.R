@@ -4,12 +4,14 @@
 #'   Require spatstat.
 #'   Obtain environment variable controlling tests.
 #'
-#'   $Revision: 1.4 $ $Date: 2020/04/28 08:17:40 $
+#'   $Revision: 1.5 $ $Date: 2020/04/30 05:31:37 $
 
 require(spatstat)
-FULLTEST <- !is.na(Sys.getenv("SPATSTAT_TEST", unset=NA))
+FULLTEST <- (nchar(Sys.getenv("SPATSTAT_TEST", unset="")) > 0)
 ALWAYS   <- TRUE
-
+cat(paste("--------- Executing",
+          if(FULLTEST) "** ALL **" else "**RESTRICTED** subset of",
+          "test code -----------\n"))
 #'   tests/tessera.R
 #'   Tessellation code, not elsewhere tested
 #'   $Revision: 1.7 $ $Date: 2019/10/17 01:45:56 $

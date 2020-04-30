@@ -4,12 +4,14 @@
 #'   Require spatstat.
 #'   Obtain environment variable controlling tests.
 #'
-#'   $Revision: 1.4 $ $Date: 2020/04/28 08:17:40 $
+#'   $Revision: 1.5 $ $Date: 2020/04/30 05:31:37 $
 
 require(spatstat)
-FULLTEST <- !is.na(Sys.getenv("SPATSTAT_TEST", unset=NA))
+FULLTEST <- (nchar(Sys.getenv("SPATSTAT_TEST", unset="")) > 0)
 ALWAYS   <- TRUE
-
+cat(paste("--------- Executing",
+          if(FULLTEST) "** ALL **" else "**RESTRICTED** subset of",
+          "test code -----------\n"))
 #'   tests/sdr.R
 #'
 #'   $Revision: 1.1 $ $Date: 2018/05/13 03:14:49 $

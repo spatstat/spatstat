@@ -91,21 +91,15 @@ Change log from 1.64-0 to 1.64-1
    tests/mctests.R
    tests/morpho.R
    tests/mppm.R
-
 	Many tests are now switched off	unless 'SPATSTAT_TEST' is defined.
-	
+
    DESCRIPTION
    NEWS
-
 	Version 1.64-0.002
 
 ------------- passed R-4.0.0 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
-
-
-   STILL TO DO:
-
 
    tests/msr.R
    tests/NAinCov.R
@@ -120,12 +114,23 @@ Change log from 1.64-0 to 1.64-1
    tests/ppmgam.R
    tests/ppmlogi.R
    tests/ppmmarkorder.R
-   tests/ppmscope.R
+   tests/ppmscope.R   
    tests/ppmtricks.R
    tests/ppp.R
    tests/ppx.R
    tests/prediction.R
    tests/project.ppm.R
+	Many tests are now switched off unless 'SPATSTAT_TEST' is defined.
+
+   DESCRIPTION
+   NEWS
+	Version 1.64-0.003
+
+------------- passed R-4.0.0 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+
+STILL TO DO:
    tests/quadschemes.R
    tests/randoms.R
    tests/resid.R

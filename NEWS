@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.64-0.001
+        CHANGES IN spatstat VERSION 1.64-0.003
 
 OVERVIEW
 
@@ -17,7 +17,7 @@ BUG FIXES
 
     o rbind.hyperframe
     Crashed unless all arguments had the same number of rows.
-    (Spotted by  Maximilian Vogtland).
+    (Spotted by Maximilian Vogtland).
     Fixed.
     
         CHANGES IN spatstat VERSION 1.64-0
