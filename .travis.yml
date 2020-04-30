@@ -5,6 +5,7 @@ language: c
 env:
   global:
     - _R_CHECK_FORCE_SUGGESTS_=false
+    - SPATSTAT_TEST=true
   matrix:
   - R_CODECOV_TEST=true
   - R_CODECOV_EXAMPLE=true
