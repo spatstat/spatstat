@@ -17,10 +17,10 @@ cat(paste("--------- Executing",
 #'
 #'    Quadrature schemes, dummy points etc
 #' 
-#'   $Revision: 1.6 $ $Date: 2019/01/20 05:49:40 $
+#'   $Revision: 1.7 $ $Date: 2020/05/01 02:42:58 $
 #'
 
-require(spatstat)
+if(FULLTEST) {
 local({
   ##  class 'quad' 
   qu <- quadscheme(cells)
@@ -71,3 +71,4 @@ local({
                        logi.dummy(amacrine, "poisson", mark.repeat=FALSE))
   print(summary(d))
 })
+}

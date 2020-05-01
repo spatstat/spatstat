@@ -15,7 +15,7 @@ cat(paste("--------- Executing",
 #
 #  tests/rmhAux.R
 #
-#  $Revision: 1.1 $  $Date: 2013/02/18 10:41:27 $
+#  $Revision: 1.2 $  $Date: 2020/05/01 02:42:58 $
 #
 #  For interactions which maintain 'auxiliary data',
 #  verify that the auxiliary data are correctly updated.
@@ -26,8 +26,7 @@ cat(paste("--------- Executing",
 #  the result of simulation without saving.
 # ----------------------------------------------------
 
-require(spatstat)
-
+if(ALWAYS) { # involves C code
 local({
 
    # Geyer:
@@ -51,329 +50,335 @@ local({
    stopifnot(max(nncross(X.save, X.nosave)$dist) == 0)
    stopifnot(max(nncross(X.nosave, X.save)$dist) == 0)
 })
+}
 ##
 ##   tests/rmhBasic.R
 ##
-##   $Revision: 1.22 $  $Date: 2020/01/26 05:01:07 $
+##   $Revision: 1.23 $  $Date: 2020/05/01 02:42:58 $
 #
 # Test examples for rmh.default
 # run to reasonable length
 # and with tests for validity added
 # ----------------------------------------------------
 
-require(spatstat)
-
 local({
-if(!exists("nr"))
-   nr   <- 2e3
 
-spatstat.options(expand=1.1)
-   
-   # Strauss process.
-   mod01 <- list(cif="strauss",par=list(beta=2,gamma=0.2,r=0.7),
-                 w=c(0,10,0,10))
-   X1.strauss <- rmh(model=mod01,start=list(n.start=80),
-                     control=list(nrep=nr))
-   X1.strauss2 <- rmh(model=mod01,start=list(n.start=80),
-                     control=list(nrep=nr, periodic=FALSE))
+  if(!exists("nr") || is.null(nr)) nr <- 1000
+  nrlong <- 2e3
+  spatstat.options(expand=1.05)
 
-   # Strauss process, conditioning on n = 80:
-   X2.strauss <- rmh(model=mod01,start=list(n.start=80),
-                     control=list(p=1,nrep=nr))
-   stopifnot(npoints(X2.strauss) == 80)
-
-   # test tracking mechanism
-   X1.strauss <- rmh(model=mod01,start=list(n.start=80),
-                     control=list(nrep=nr), track=TRUE)
-   X2.strauss <- rmh(model=mod01,start=list(n.start=80),
-                         control=list(p=1,nrep=nr), track=TRUE)
-   
-   # Hard core process:
-   mod02 <- list(cif="hardcore",par=list(beta=2,hc=0.7),w=c(0,10,0,10))
-   X3.hardcore <- rmh(model=mod02,start=list(n.start=60),
-                     control=list(nrep=nr))
-   X3.hardcore2 <- rmh(model=mod02,start=list(n.start=60),
+  if(ALWAYS) {  ## fundamental C code
+    ## Strauss process.
+    mod01 <- list(cif="strauss",
+                  par=list(beta=2,gamma=0.2,r=0.7),
+                  w=c(0,10,0,10))
+    X1.strauss <- rmh(model=mod01,
+                      start=list(n.start=80),
+                      control=list(nrep=nr))
+    X1.strauss2 <- rmh(model=mod01,
+                       start=list(n.start=80),
                        control=list(nrep=nr, periodic=FALSE))
 
-   # Strauss process equal to pure hardcore:
-   mod02 <- list(cif="strauss",par=list(beta=2,gamma=0,r=0.7),w=c(0,10,0,10))
-   X3.strauss <- rmh(model=mod02,start=list(n.start=60),
-                     control=list(nrep=nr))
-   
-   # Strauss process in a polygonal window.
-   x     <- c(0.55,0.68,0.75,0.58,0.39,0.37,0.19,0.26,0.42)
-   y     <- c(0.20,0.27,0.68,0.99,0.80,0.61,0.45,0.28,0.33)
-   mod03 <- list(cif="strauss",par=list(beta=2000,gamma=0.6,r=0.07),
-                w=owin(poly=list(x=x,y=y)))
-   X4.strauss <- rmh(model=mod03,start=list(n.start=90),
-                     control=list(nrep=nr))
-   
-   # Strauss process in a polygonal window, conditioning on n = 42.
-   X5.strauss <- rmh(model=mod03,start=list(n.start=42),
-                     control=list(p=1,nrep=nr))
-   stopifnot(npoints(X5.strauss) == 42)
+    ## Strauss process, conditioning on n = 80:
+    X2.strauss <- rmh(model=mod01,start=list(n.start=80),
+                      control=list(p=1,nrep=nr))
+    stopifnot(npoints(X2.strauss) == 80)
 
-   # Strauss process, starting off from X4.strauss, but with the
-   # polygonal window replace by a rectangular one.  At the end,
-   # the generated pattern is clipped to the original polygonal window.
-   xxx <- X4.strauss
-   xxx$window <- as.owin(c(0,1,0,1))
-   X6.strauss <- rmh(model=mod03,start=list(x.start=xxx),
-                     control=list(nrep=nr))
+    ## test tracking mechanism
+    X1.strauss <- rmh(model=mod01,start=list(n.start=80),
+                      control=list(nrep=nr), track=TRUE)
+    X2.strauss <- rmh(model=mod01,start=list(n.start=80),
+                      control=list(p=1,nrep=nr), track=TRUE)
    
-   # Strauss with hardcore:
-   mod04 <- list(cif="straush",par=list(beta=2,gamma=0.2,r=0.7,hc=0.3),
-                w=c(0,10,0,10))
-   X1.straush <- rmh(model=mod04,start=list(n.start=70),
-                     control=list(nrep=nr))
-   X1.straush2 <- rmh(model=mod04,start=list(n.start=70),
-                     control=list(nrep=nr, periodic=FALSE))
+    ## Hard core process:
+    mod02 <- list(cif="hardcore",par=list(beta=2,hc=0.7),w=c(0,10,0,10))
+    X3.hardcore <- rmh(model=mod02,start=list(n.start=60),
+                       control=list(nrep=nr))
+    X3.hardcore2 <- rmh(model=mod02,start=list(n.start=60),
+                        control=list(nrep=nr, periodic=FALSE))
+
+    ## Strauss process equal to pure hardcore:
+    mod02 <- list(cif="strauss",par=list(beta=2,gamma=0,r=0.7),w=c(0,10,0,10))
+    X3.strauss <- rmh(model=mod02,start=list(n.start=60),
+                      control=list(nrep=nr))
    
-   # Another Strauss with hardcore (with a perhaps surprising result):
-   mod05 <- list(cif="straush",par=list(beta=80,gamma=0.36,r=45,hc=2.5),
-                w=c(0,250,0,250))
-   X2.straush <- rmh(model=mod05,start=list(n.start=250),
-                     control=list(nrep=nr))
+    ## Strauss process in a polygonal window.
+    x     <- c(0.55,0.68,0.75,0.58,0.39,0.37,0.19,0.26,0.42)
+    y     <- c(0.20,0.27,0.68,0.99,0.80,0.61,0.45,0.28,0.33)
+    mod03 <- list(cif="strauss",par=list(beta=2000,gamma=0.6,r=0.07),
+                  w=owin(poly=list(x=x,y=y)))
+    X4.strauss <- rmh(model=mod03,start=list(n.start=90),
+                      control=list(nrep=nr))
    
-   # Pure hardcore (identical to X3.strauss).
-   mod06 <- list(cif="straush",par=list(beta=2,gamma=1,r=1,hc=0.7),
-                w=c(0,10,0,10))
-   X3.straush <- rmh(model=mod06,start=list(n.start=60),
-                     control=list(nrep=nr))
+    ## Strauss process in a polygonal window, conditioning on n = 42.
+    X5.strauss <- rmh(model=mod03,start=list(n.start=42),
+                      control=list(p=1,nrep=nr))
+    stopifnot(npoints(X5.strauss) == 42)
 
-   # Fiksel
-   modFik <- list(cif="fiksel",
-                  par=list(beta=180,r=0.15,hc=0.07,kappa=2,a= -1.0),
-                  w=square(1))
-   X.fiksel <- rmh(model=modFik,start=list(n.start=10),
-                   control=list(nrep=nr))
-   X.fiksel2 <- rmh(model=modFik,start=list(n.start=10),
-                   control=list(nrep=nr,periodic=FALSE))
+    ## Strauss process, starting off from X4.strauss, but with the
+    ## polygonal window replace by a rectangular one.  At the end,
+    ## the generated pattern is clipped to the original polygonal window.
+    xxx <- X4.strauss
+    xxx$window <- as.owin(c(0,1,0,1))
+    X6.strauss <- rmh(model=mod03,start=list(x.start=xxx),
+                      control=list(nrep=nr))
+   
+    ## Strauss with hardcore:
+    mod04 <- list(cif="straush",par=list(beta=2,gamma=0.2,r=0.7,hc=0.3),
+                  w=c(0,10,0,10))
+    X1.straush <- rmh(model=mod04,start=list(n.start=70),
+                      control=list(nrep=nr))
+    X1.straush2 <- rmh(model=mod04,start=list(n.start=70),
+                       control=list(nrep=nr, periodic=FALSE))
+   
+    ## Another Strauss with hardcore (with a perhaps surprising result):
+    mod05 <- list(cif="straush",par=list(beta=80,gamma=0.36,r=45,hc=2.5),
+                  w=c(0,250,0,250))
+    X2.straush <- rmh(model=mod05,start=list(n.start=250),
+                      control=list(nrep=nr))
+   
+    ## Pure hardcore (identical to X3.strauss).
+    mod06 <- list(cif="straush",par=list(beta=2,gamma=1,r=1,hc=0.7),
+                  w=c(0,10,0,10))
+    X3.straush <- rmh(model=mod06,start=list(n.start=60),
+                      control=list(nrep=nr))
 
-   # Penttinen process:
-   modpen <- rmhmodel(cif="penttinen",par=list(beta=2,gamma=0.6,r=1),
-                 w=c(0,10,0,10))
-   X.pen <- rmh(model=modpen,start=list(n.start=10),
-                control=list(nrep=nr))
-   X.pen2 <- rmh(model=modpen,start=list(n.start=10),
-                 control=list(nrep=nr, periodic=FALSE))
-   # equivalent to hardcore
-   modpen$par$gamma <- 0
-   X.penHard <- rmh(model=modpen,start=list(n.start=3),
-                control=list(nrep=nr))
+    ## Fiksel
+    modFik <- list(cif="fiksel",
+                   par=list(beta=180,r=0.15,hc=0.07,kappa=2,a= -1.0),
+                   w=square(1))
+    X.fiksel <- rmh(model=modFik,start=list(n.start=10),
+                    control=list(nrep=nr))
+    X.fiksel2 <- rmh(model=modFik,start=list(n.start=10),
+                     control=list(nrep=nr,periodic=FALSE))
 
-   # Area-interaction, inhibitory
-   mod.area <- list(cif="areaint",par=list(beta=2,eta=0.5,r=0.5), w=square(10))
-   X.area <- rmh(model=mod.area,start=list(n.start=60),
+    ## Penttinen process:
+    modpen <- rmhmodel(cif="penttinen",par=list(beta=2,gamma=0.6,r=1),
+                       w=c(0,10,0,10))
+    X.pen <- rmh(model=modpen,start=list(n.start=10),
                  control=list(nrep=nr))
-   X.areaE <- rmh(model=mod.area,start=list(n.start=60),
-                 control=list(nrep=nr, periodic=FALSE))
+    X.pen2 <- rmh(model=modpen,start=list(n.start=10),
+                  control=list(nrep=nr, periodic=FALSE))
+    ## equivalent to hardcore
+    modpen$par$gamma <- 0
+    X.penHard <- rmh(model=modpen,start=list(n.start=3),
+                     control=list(nrep=nr))
 
-   # Area-interaction, clustered
-   mod.area2 <- list(cif="areaint",par=list(beta=2,eta=1.5,r=0.5), w=square(10))
-   X.area2 <- rmh(model=mod.area2,start=list(n.start=60),
-                 control=list(nrep=nr))
-
-   # Area-interaction close to hard core
-   set.seed(42)
-   mod.area0 <- list(cif="areaint",par=list(beta=2,eta=1e-300,r=0.35),
+    ## Area-interaction, inhibitory
+    mod.area <- list(cif="areaint",
+                     par=list(beta=2,eta=0.5,r=0.5),
                      w=square(10))
-   X.area0 <- rmh(model=mod.area0,start=list(x.start=X3.hardcore),
-                 control=list(nrep=nr))
-   stopifnot(nndist(X.area0) > 0.6)
-   
-   # Soft core:
-   w    <- c(0,10,0,10)
-   mod07 <- list(cif="sftcr",par=list(beta=0.8,sigma=0.1,kappa=0.5),
-                w=c(0,10,0,10))
-   X.sftcr <- rmh(model=mod07,start=list(n.start=70),
+    X.area <- rmh(model=mod.area,start=list(n.start=60),
                   control=list(nrep=nr))
-   X.sftcr2 <- rmh(model=mod07,start=list(n.start=70),
+    X.areaE <- rmh(model=mod.area,start=list(n.start=60),
                    control=list(nrep=nr, periodic=FALSE))
-   
-   # Diggle, Gates, and Stibbard:
-   mod12 <- list(cif="dgs",par=list(beta=3600,rho=0.08),w=c(0,1,0,1))
-   X.dgs <- rmh(model=mod12,start=list(n.start=300),
-                control=list(nrep=nr))
-   X.dgs2 <- rmh(model=mod12,start=list(n.start=300),
-                 control=list(nrep=nr, periodic=FALSE))
-   
-   # Diggle-Gratton:
-   mod13 <- list(cif="diggra",
-                 par=list(beta=1800,kappa=3,delta=0.02,rho=0.04),
-                 w=square(1))
-   X.diggra <- rmh(model=mod13,start=list(n.start=300),
+
+    ## Area-interaction, clustered
+    mod.area2 <- list(cif="areaint", par=list(beta=2,eta=1.5,r=0.5),
+                      w=square(10))
+    X.area2 <- rmh(model=mod.area2,start=list(n.start=60),
                    control=list(nrep=nr))
-   X.diggra2 <- rmh(model=mod13,start=list(n.start=300),
+
+    ## Area-interaction close to hard core
+    set.seed(42)
+    mod.area0 <- list(cif="areaint",par=list(beta=2,eta=1e-300,r=0.35),
+                      w=square(10))
+    X.area0 <- rmh(model=mod.area0,start=list(x.start=X3.hardcore),
+                   control=list(nrep=nrlong))
+    stopifnot(nndist(X.area0) > 0.6)
+   
+    ## Soft core:
+    w    <- c(0,10,0,10)
+    mod07 <- list(cif="sftcr",par=list(beta=0.8,sigma=0.1,kappa=0.5),
+                  w=c(0,10,0,10))
+    X.sftcr <- rmh(model=mod07,start=list(n.start=70),
+                   control=list(nrep=nr))
+    X.sftcr2 <- rmh(model=mod07,start=list(n.start=70),
                     control=list(nrep=nr, periodic=FALSE))
    
-   # Geyer:
-   mod14 <- list(cif="geyer",par=list(beta=1.25,gamma=1.6,r=0.2,sat=4.5),
-                 w=c(0,10,0,10))
-   X1.geyer <- rmh(model=mod14,start=list(n.start=200),
-                   control=list(nrep=nr))
+    ## Diggle, Gates, and Stibbard:
+    mod12 <- list(cif="dgs",par=list(beta=3600,rho=0.08),w=c(0,1,0,1))
+    X.dgs <- rmh(model=mod12,start=list(n.start=300),
+                 control=list(nrep=nr))
+    X.dgs2 <- rmh(model=mod12,start=list(n.start=300),
+                  control=list(nrep=nr, periodic=FALSE))
    
-   # Geyer; same as a Strauss process with parameters
-   # (beta=2.25,gamma=0.16,r=0.7):
+    ## Diggle-Gratton:
+    mod13 <- list(cif="diggra",
+                  par=list(beta=1800,kappa=3,delta=0.02,rho=0.04),
+                  w=square(1))
+    X.diggra <- rmh(model=mod13,start=list(n.start=300),
+                    control=list(nrep=nr))
+    X.diggra2 <- rmh(model=mod13,start=list(n.start=300),
+                     control=list(nrep=nr, periodic=FALSE))
    
-   mod15 <- list(cif="geyer",par=list(beta=2.25,gamma=0.4,r=0.7,sat=10000),
-                 w=c(0,10,0,10))
-   X2.geyer <- rmh(model=mod15,start=list(n.start=200),
-                   control=list(nrep=nr))
-   X2.geyer2 <- rmh(model=mod15,start=list(n.start=200),
-                   control=list(nrep=nr, periodic=FALSE))
+    ## Geyer:
+    mod14 <- list(cif="geyer",par=list(beta=1.25,gamma=1.6,r=0.2,sat=4.5),
+                  w=c(0,10,0,10))
+    X1.geyer <- rmh(model=mod14,start=list(n.start=200),
+                    control=list(nrep=nr))
    
-   mod16 <- list(cif="geyer",par=list(beta=8.1,gamma=2.2,r=0.08,sat=3))
-   data(redwood)
-   X3.geyer <- rmh(model=mod16,start=list(x.start=redwood),
-                   control=list(periodic=TRUE,nrep=nr))
-   X3.geyer2 <- rmh(model=mod16,start=list(x.start=redwood),
-                    control=list(periodic=FALSE,nrep=nr))
+    ## Geyer; same as a Strauss process with parameters
+    ## (beta=2.25,gamma=0.16,r=0.7):
+    mod15 <- list(cif="geyer",par=list(beta=2.25,gamma=0.4,r=0.7,sat=10000),
+                  w=c(0,10,0,10))
+    X2.geyer <- rmh(model=mod15,start=list(n.start=200),
+                    control=list(nrep=nr))
+    X2.geyer2 <- rmh(model=mod15,start=list(n.start=200),
+                     control=list(nrep=nr, periodic=FALSE))
    
-   # Geyer, starting from the redwood data set, simulating
-   # on a torus, and conditioning on n:
-   X4.geyer <- rmh(model=mod16,start=list(x.start=redwood),
-                   control=list(p=1,periodic=TRUE,nrep=nr))
+    mod16 <- list(cif="geyer",par=list(beta=8.1,gamma=2.2,r=0.08,sat=3))
+    X3.geyer <- rmh(model=mod16,start=list(x.start=redwood),
+                    control=list(periodic=TRUE,nrep=nr))
+    X3.geyer2 <- rmh(model=mod16,start=list(x.start=redwood),
+                     control=list(periodic=FALSE,nrep=nr))
+   
+    ## Geyer, starting from the redwood data set, simulating
+    ## on a torus, and conditioning on n:
+    X4.geyer <- rmh(model=mod16,start=list(x.start=redwood),
+                    control=list(p=1,periodic=TRUE,nrep=nr))
 
-   # Lookup (interaction function h_2 from page 76, Diggle (2003)):
-      r <- seq(from=0,to=0.2,length=101)[-1] # Drop 0.
-      h <- 20*(r-0.05)
-      h[r<0.05] <- 0
-      h[r>0.10] <- 1
-      mod17 <- list(cif="lookup",par=list(beta=4000,h=h,r=r),w=c(0,1,0,1))
-      X.lookup <- rmh(model=mod17,start=list(n.start=100),
-                      control=list(nrep=nr, periodic=TRUE))
-      X.lookup2 <- rmh(model=mod17,start=list(n.start=100),
-                       control=list(nrep=nr, expand=1, periodic=FALSE))
-   # irregular
-   mod17x <- mod17
-   mod17x$par$r <- 0.05*sqrt(mod17x$par$r/0.05)
-   X.lookupX <- rmh(model=mod17x,start=list(n.start=100),
+    ## Lookup (interaction function h_2 from page 76, Diggle (2003)):
+    r <- seq(from=0,to=0.2,length=101)[-1] # Drop 0.
+    h <- 20*(r-0.05)
+    h[r<0.05] <- 0
+    h[r>0.10] <- 1
+    mod17 <- list(cif="lookup",par=list(beta=4000,h=h,r=r),w=c(0,1,0,1))
+    X.lookup <- rmh(model=mod17,start=list(n.start=100),
                     control=list(nrep=nr, periodic=TRUE))
-   X.lookupX2 <- rmh(model=mod17x,start=list(n.start=100),
-                       control=list(nrep=nr, expand=1, periodic=FALSE))
+    X.lookup2 <- rmh(model=mod17,start=list(n.start=100),
+                     control=list(nrep=nr, expand=1, periodic=FALSE))
+    ## irregular
+    mod17x <- mod17
+    mod17x$par$r <- 0.05*sqrt(mod17x$par$r/0.05)
+    X.lookupX <- rmh(model=mod17x,start=list(n.start=100),
+                     control=list(nrep=nr, periodic=TRUE))
+    X.lookupX2 <- rmh(model=mod17x,start=list(n.start=100),
+                      control=list(nrep=nr, expand=1, periodic=FALSE))
 
-   # Strauss with trend
-   tr <- function(x,y){x <- x/250; y <- y/250;
-   			   exp((6*x + 5*y - 18*x^2 + 12*x*y - 9*y^2)/6)
-                         }
-   beta <- 0.3
-   gmma <- 0.5
-   r    <- 45
-   tr3   <- function(x,y){x <- x/250; y <- y/250;
-   			   exp((6*x + 5*y - 18*x^2 + 12*x*y - 9*y^2)/6)
-                         }
-                         # log quadratic trend
-   mod17 <- list(cif="strauss",par=list(beta=beta,gamma=gmma,r=r),w=c(0,250,0,250),
-                 trend=tr3)
-   X1.strauss.trend <- rmh(model=mod17,start=list(n.start=90),
-                           control=list(nrep=nr))
+    ## Strauss with trend
+    tr <- function(x,y){x <- x/250; y <- y/250;
+      exp((6*x + 5*y - 18*x^2 + 12*x*y - 9*y^2)/6)
+    }
+    beta <- 0.3
+    gmma <- 0.5
+    r    <- 45
+    tr3   <- function(x,y){x <- x/250; y <- y/250;
+      exp((6*x + 5*y - 18*x^2 + 12*x*y - 9*y^2)/6)
+    }
+    ## log quadratic trend
+    mod17 <- list(cif="strauss",
+                  par=list(beta=beta,gamma=gmma,r=r),w=c(0,250,0,250),
+                  trend=tr3)
+    X1.strauss.trend <- rmh(model=mod17,start=list(n.start=90),
+                            control=list(nrep=nr))
 
-   #' trend is an image
-   mod18 <- mod17
-   mod18$trend <- as.im(mod18$trend, square(10))
-   X1.strauss.trendim <- rmh(model=mod18,start=list(n.start=90),
-                             control=list(nrep=nr))
+    #' trend is an image
+    mod18 <- mod17
+    mod18$trend <- as.im(mod18$trend, square(10))
+    X1.strauss.trendim <- rmh(model=mod18,start=list(n.start=90),
+                              control=list(nrep=nr))
 
+  }
+  if(FULLTEST) {
+    #'.....  Test other code blocks .................
 
-   #'.....  Test other code blocks .................
+    #' argument passing to rmhcontrol
+    X1S <- rmh(model=mod01, control=NULL, nrep=nr)
+    X1f <- rmh(model=mod01, fixall=TRUE,  nrep=nr) # issues a warning
+  }
 
-   #' argument passing to rmhcontrol
-   X1S <- rmh(model=mod01, control=NULL, nrep=nr)
-   X1f <- rmh(model=mod01, fixall=TRUE,  nrep=nr) # issues a warning
+  if(ALWAYS) {
+    #'  nsim > 1
+    Xlist <- rmh(model=mod01,start=list(n.start=80),
+                 control=list(nrep=nr),
+                 nsim=2)
+    #' Condition on contents of window
+    XX <- Xlist[[1]]
+    YY <- XX[square(2)]
+    XXwindow <- rmh(model=mod01, start=list(n.start=80),
+                    control=list(nrep=nr, x.cond=YY))
+    XXwindowTrend <- rmh(model=mod17, start=list(n.start=80),
+                         control=list(nrep=nr, x.cond=YY))
 
-   #'  nsim > 1
-   Xlist <- rmh(model=mod01,start=list(n.start=80),
-             control=list(nrep=nr),
-             nsim=2)
-   #' Condition on contents of window
-   XX <- Xlist[[1]]
-   YY <- XX[square(2)]
-   XXwindow <- rmh(model=mod01, start=list(n.start=80),
-                   control=list(nrep=nr, x.cond=YY))
-   XXwindowTrend <- rmh(model=mod17, start=list(n.start=80),
-                        control=list(nrep=nr, x.cond=YY))
-   #' Palm conditioning
-   XXpalm <- rmh(model=mod01,start=list(n.start=80),
-                 control=list(nrep=nr, x.cond=coords(YY)))
-   XXpalmTrend <- rmh(model=mod17,start=list(n.start=80),
-                      control=list(nrep=nr, x.cond=coords(YY)))
+    #' Palm conditioning
+    XXpalm <- rmh(model=mod01,start=list(n.start=80),
+                  control=list(nrep=nr, x.cond=coords(YY)))
+    XXpalmTrend <- rmh(model=mod17,start=list(n.start=80),
+                       control=list(nrep=nr, x.cond=coords(YY)))
 
-   #' nsave, nburn
-   chq <- function(X) {
-     Xname <- deparse(substitute(X))
-     A <- attr(X, "saved")
-     if(length(A) == 0)
-       stop(paste(Xname, "did not include a saved list of patterns"))
-     return("ok")
-   }
-   XXburn <- rmh(model=mod01,start=list(n.start=80), verbose=FALSE,
-                 control=list(nrep=nr, nsave=500, nburn=100))
-   chq(XXburn)
-   XXburnTrend <- rmh(model=mod17,start=list(n.start=80), verbose=FALSE,
-                      control=list(nrep=nr, nsave=500, nburn=100))
-   chq(XXburnTrend)
-   XXburn0 <- rmh(model=mod01,start=list(n.start=80), verbose=FALSE,
-                  control=list(nrep=nr, nsave=500, nburn=0))
-   chq(XXburn0)
-   XXsaves <- rmh(model=mod01,start=list(n.start=80), verbose=FALSE,
-                  control=list(nrep=nr, nsave=c(500, 200)))
-   chq(XXsaves)
-   XXsaves0 <- rmh(model=mod01,start=list(n.start=80), verbose=FALSE,
-                  control=list(nrep=nr, nsave=c(500, 200), nburn=0))
-   chq(XXsaves0)
+    #' nsave, nburn
+    chq <- function(X) {
+      Xname <- deparse(substitute(X))
+      A <- attr(X, "saved")
+      if(length(A) == 0)
+        stop(paste(Xname, "did not include a saved list of patterns"))
+      return("ok")
+    }
+    XXburn <- rmh(model=mod01,start=list(n.start=80), verbose=FALSE,
+                  control=list(nrep=nr, nsave=500, nburn=100))
+    chq(XXburn)
+    XXburnTrend <- rmh(model=mod17,start=list(n.start=80), verbose=FALSE,
+                       control=list(nrep=nr, nsave=500, nburn=100))
+    chq(XXburnTrend)
+    XXburn0 <- rmh(model=mod01,start=list(n.start=80), verbose=FALSE,
+                   control=list(nrep=nr, nsave=500, nburn=0))
+    chq(XXburn0)
+    XXsaves <- rmh(model=mod01,start=list(n.start=80), verbose=FALSE,
+                   control=list(nrep=nr, nsave=c(500, 200)))
+    chq(XXsaves)
+    XXsaves0 <- rmh(model=mod01,start=list(n.start=80), verbose=FALSE,
+                    control=list(nrep=nr, nsave=c(500, 200), nburn=0))
+    chq(XXsaves0)
+  }
 
-   #' code blocks for various interactions, not otherwise tested
-   rr <- seq(0,0.2,length=8)[-1]
-   gmma <- c(0.5,0.6,0.7,0.8,0.7,0.6,0.5)
-   mod18 <- list(cif="badgey",par=list(beta=4000, gamma=gmma,r=rr,sat=5),
-                 w=square(1))
-   Xbg <- rmh(model=mod18,start=list(n.start=20),
-              control=list(nrep=1e4, periodic=TRUE))
-   Xbg2 <- rmh(model=mod18,start=list(n.start=20),
-              control=list(nrep=1e4, periodic=FALSE))
+  if(FULLTEST) {
+    #' code blocks for various interactions, not otherwise tested
+    rr <- seq(0,0.2,length=8)[-1]
+    gmma <- c(0.5,0.6,0.7,0.8,0.7,0.6,0.5)
+    mod18 <- list(cif="badgey",par=list(beta=4000, gamma=gmma,r=rr,sat=5),
+                  w=square(1))
+    Xbg <- rmh(model=mod18,start=list(n.start=20),
+               control=list(nrep=1e4, periodic=TRUE))
+    Xbg2 <- rmh(model=mod18,start=list(n.start=20),
+                control=list(nrep=1e4, periodic=FALSE))
+    #' supporting classes
+    rs <- rmhstart()
+    print(rs)
+    rs <- rmhstart(x.start=cells)
+    print(rs)
+    rc <- rmhcontrol(x.cond=as.list(as.data.frame(cells)))
+    print(rc)
+    rc <- rmhcontrol(x.cond=as.data.frame(cells)[FALSE, , drop=FALSE])
+    print(rc)
+    rc <- rmhcontrol(nsave=100, ptypes=c(0.7, 0.3), x.cond=amacrine)
+    print(rc)
+    rc <- rmhcontrol(ptypes=c(0.7, 0.3), x.cond=as.data.frame(amacrine))
+    print(rc)
+  }
 
 })
-
-local({
-  #' supporting classes
-  rs <- rmhstart()
-  print(rs)
-  rs <- rmhstart(x.start=cells)
-  print(rs)
-  
-  rc <- rmhcontrol(x.cond=as.list(as.data.frame(cells)))
-  print(rc)
-  rc <- rmhcontrol(x.cond=as.data.frame(cells)[FALSE, , drop=FALSE])
-  print(rc)
-  rc <- rmhcontrol(nsave=100, ptypes=c(0.7, 0.3), x.cond=amacrine)
-  print(rc)
-  rc <- rmhcontrol(ptypes=c(0.7, 0.3), x.cond=as.data.frame(amacrine))
-  print(rc)
-})
-
 reset.spatstat.options()
 ##
 ##     tests/rmhErrors.R
 ##
-##     $Revision: 1.5 $ $Date: 2015/12/29 08:54:49 $
+##     $Revision: 1.6 $ $Date: 2020/05/01 02:42:58 $
 ##
 # Things which should cause an error
-require(spatstat)
 
-local({
-if(!exists("nv"))
-  nv <- 0
-if(!exists("nr"))
-  nr   <- 1e3
+if(ALWAYS) {
+  local({
+    if(!exists("nv")) nv <- 0
+    if(!exists("nr")) nr <- 1e3
+    ## Strauss with zero intensity and p = 1
+    mod0S <- list(cif="strauss",par=list(beta=0,gamma=0.6,r=0.7), w = square(3))
+    out <- try(X0S <- rmh(model=mod0S,start=list(n.start=80),
+                          control=list(p=1,nrep=nr,nverb=nv),verbose=FALSE))
+    if(!inherits(out, "try-error"))
+      stop("Error not trapped (Strauss with zero intensity and p = 1) in tests/rmhErrors.R")
+  })
+}
 
-# Strauss with zero intensity and p = 1
-mod0S <- list(cif="strauss",par=list(beta=0,gamma=0.6,r=0.7), w = square(3))
-out <- try(X0S   <- rmh(model=mod0S,start=list(n.start=80),
-               control=list(p=1,nrep=nr,nverb=nv),verbose=FALSE))
-if(!inherits(out, "try-error"))
-  stop("Error not trapped (Strauss with zero intensity and p = 1) in tests/rmhErrors.R")
-})
 
 
 #
@@ -381,33 +386,32 @@ if(!inherits(out, "try-error"))
 #
 # test decisions about expansion of simulation window
 #
-#  $Revision: 1.6 $  $Date: 2020/01/08 01:24:35 $
+#  $Revision: 1.7 $  $Date: 2020/05/01 02:42:58 $
 #
 
-require(spatstat)
 local({
-fit <- ppm(cells ~x)
-
-# check rmhmodel.ppm
-mod <- rmhmodel(fit)
-is.expandable(mod)
-wsim <- as.rectangle(mod$trend)
-# work around changes in 'unitname'
-wcel <- as.owin(cells)
-unitname(wcel) <- unitname(cells)
-# test
-if(!identical(wsim, wcel))
-  stop("Expansion occurred improperly in rmhmodel.ppm")
-
-# rmhexpand class 
-a <- summary(rmhexpand(area=2))
-print(a)
-b <- summary(rmhexpand(length=4))
-print(b)
-print(summary(rmhexpand(distance=2)))
-print(summary(rmhexpand(square(2))))
-
+  if(FULLTEST) {
+    fit <- ppm(cells ~x)
+    ## check rmhmodel.ppm
+    mod <- rmhmodel(fit)
+    is.expandable(mod)
+    wsim <- as.rectangle(mod$trend)
+    ## work around changes in 'unitname'
+    wcel <- as.owin(cells)
+    unitname(wcel) <- unitname(cells)
+    ## test
+    if(!identical(wsim, wcel))
+      stop("Expansion occurred improperly in rmhmodel.ppm")
+    ## rmhexpand class 
+    a <- summary(rmhexpand(area=2))
+    print(a)
+    b <- summary(rmhexpand(length=4))
+    print(b)
+    print(summary(rmhexpand(distance=2)))
+    print(summary(rmhexpand(square(2))))
+  }
 })
+
 
 
 #
