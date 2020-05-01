@@ -14,9 +14,9 @@ cat(paste("--------- Executing",
           "test code -----------\n"))
 #'   tests/sdr.R
 #'
-#'   $Revision: 1.1 $ $Date: 2018/05/13 03:14:49 $
+#'   $Revision: 1.2 $ $Date: 2020/05/01 09:59:59 $
 
-require(spatstat)
+if(FULLTEST) {
 local({
   AN <- sdr(bei, bei.extra, method="NNIR")
   AV <- sdr(bei, bei.extra, method="SAVE")
@@ -25,218 +25,234 @@ local({
   subspaceDistance(AN$B, AV$B)
   dimhat(AN$M)
 })
+}
 ##
 ##  tests/segments.R
 ##   Tests of psp class and related code
 ##                      [SEE ALSO: tests/xysegment.R]
 ##
-##  $Revision: 1.25 $  $Date: 2020/04/27 04:26:13 $
-
-require(spatstat)
+##  $Revision: 1.26 $  $Date: 2020/05/01 09:59:59 $
 
 local({
-# pointed out by Jeff Laake
-W <- owin()
-X <- psp(x0=.25,x1=.25,y0=0,y1=1,window=W)
-X[W]
+  if(ALWAYS) { # depends on platform
+    ## pointed out by Jeff Laake
+    W <- owin()
+    X <- psp(x0=.25,x1=.25,y0=0,y1=1,window=W)
+    X[W]
+  }
 
-# migrated from 'lpp'
+  X <- psp(runif(10),runif(10),runif(10),runif(10), window=owin())
 
-X <- psp(runif(10),runif(10),runif(10),runif(10), window=owin())
-Z <- as.mask.psp(X)
-Z <- pixellate(X)
+  if(FULLTEST) {
+    ## migrated from 'lpp'
+    Z <- as.mask.psp(X)
+    Z <- pixellate(X)
+  }
 
-# add short segment
-Shorty <- psp(0.5, 0.6, 0.5001, 0.6001, window=Window(X))
-XX <- superimpose(X[1:5], Shorty, X[6:10])
-ZZ <- as.mask.psp(XX)
-ZZ <- pixellate(XX)
+  if(ALWAYS) { # platform dependent
+    ## add short segment
+    Shorty <- psp(0.5, 0.6, 0.5001, 0.6001, window=Window(X))
+    XX <- superimpose(X[1:5], Shorty, X[6:10])
+    ZZ <- as.mask.psp(XX)
+    ZZ <- pixellate(XX)
+  }
 
-#' misc
-PX <- periodify(X, 2)
+  if(FULLTEST) {
+    #' misc
+    PX <- periodify(X, 2)
+  }
 
-# more tests of lppm code
+  if(FULLTEST) {
+    ## more tests of lppm code
+    fit <- lppm(unmark(chicago) ~ polynom(x,y,2))
+    Z <- predict(fit)
+  }
 
-fit <- lppm(unmark(chicago) ~ polynom(x,y,2))
-Z <- predict(fit)
+  if(ALWAYS) { # C code
+    ## tests of pixellate.psp -> seg2pixL
+    ns <- 50
+    out <- numeric(ns)
+    for(i in 1:ns) {
+      X <- psp(runif(1), runif(1), runif(1), runif(1), window=owin())
+      len <- lengths_psp(X)
+      dlen <- sum(pixellate(X)$v)
+      out[i] <- if(len > 1e-7) dlen/len else 1
+    }
+    if(diff(range(out)) > 0.01) stop(paste(
+                                  "pixellate.psp test 1: relative error [",
+                                  paste(diff(range(out)), collapse=", "),
+                                  "]"))
 
-# tests of pixellate.psp -> seg2pixL
+    ## Michael Sumner's test examples
+    set.seed(33)
+    n <- 2001
+    co <- cbind(runif(n), runif(n))
+    ow <- owin()
+    X <- psp(co[-n,1], co[-n,2], co[-1,1], co[-1,2], window=ow)
+    s1 <- sum(pixellate(X))
+    s2 <- sum(lengths_psp(X))
+    if(abs(s1 - s2)/s2 > 0.01) {
+      stop(paste("pixellate.psp test 2:",
+                 "sum(pixellate(X)) = ", s1,
+                 "!=", s2, "= sum(lengths_psp(X))"))
+    }
 
-ns <- 50
-out <- numeric(ns)
-for(i in 1:ns) {
-  X <- psp(runif(1), runif(1), runif(1), runif(1), window=owin())
-  len <- lengths_psp(X)
-  dlen <- sum(pixellate(X)$v)
-  out[i] <- if(len > 1e-7) dlen/len else 1
-}
-if(diff(range(out)) > 0.01) stop(paste(
-       "pixellate.psp test 1: relative error [",
-       paste(diff(range(out)), collapse=", "),
-       "]"))
+    wts <- 1/(lengths_psp(X) * X$n)
+    s1 <- sum(pixellate(X, weights=wts))
+    if(abs(s1-1) > 0.01) {
+      stop(paste("pixellate.psp test 3:",
+                 "sum(pixellate(X, weights))=", s1,
+                 " (should be 1)"))
+    }
+    
+    X <- psp(0, 0, 0.01, 0.001, window=owin())
+    s1 <- sum(pixellate(X))
+    s2 <- sum(lengths_psp(X))
+    if(abs(s1 - s2)/s2 > 0.01) {
+      stop(paste("pixellate.psp test 4:",
+                 "sum(pixellate(X)) = ", s1,
+                 "!=", s2, "= sum(lengths_psp(X))"))
+    }
 
-# Michael Sumner's test examples
+    X <- psp(0, 0, 0.001, 0.001, window=owin())
+    s1 <- sum(pixellate(X))
+    s2 <- sum(lengths_psp(X))
+    if(abs(s1 - s2)/s2 > 0.01) {
+      stop(paste("pixellate.psp test 5:",
+                 "sum(pixellate(X)) = ", s1,
+                 "!=", s2, "= sum(lengths_psp(X))"))
+    }
+  }
 
-set.seed(33)
-n <- 2001
-co <- cbind(runif(n), runif(n))
-ow <- owin()
-X <- psp(co[-n,1], co[-n,2], co[-1,1], co[-1,2], window=ow)
-s1 <- sum(pixellate(X))
-s2 <- sum(lengths_psp(X))
-if(abs(s1 - s2)/s2 > 0.01) {
-  stop(paste("pixellate.psp test 2:",
-             "sum(pixellate(X)) = ", s1,
-             "!=", s2, "= sum(lengths_psp(X))"))
-}
+  if(FULLTEST) {
+    #' cases of superimpose.psp
+    A <- as.psp(matrix(runif(40), 10, 4), window=owin())
+    B <- as.psp(matrix(runif(40), 10, 4), window=owin())
+    superimpose(A, B, W=ripras)
+    superimpose(A, B, W="convex")
+  }
 
-wts <- 1/(lengths_psp(X) * X$n)
-s1 <- sum(pixellate(X, weights=wts))
-if(abs(s1-1) > 0.01) {
-  stop(paste("pixellate.psp test 3:",
-             "sum(pixellate(X, weights))=", s1,
-             " (should be 1)"))
-}
+  if(ALWAYS) { # C code
+    #' tests of density.psp
+    Y <- as.psp(simplenet)
+    YC <- density(Y, 0.2, method="C", edge=FALSE, dimyx=64)
+    YI <- density(Y, 0.2, method="interpreted", edge=FALSE, dimyx=64)
+    YF <- density(Y, 0.2, method="FFT", edge=FALSE, dimyx=64)
+    xCI <- max(abs(YC/YI - 1))
+    xFI <- max(abs(YF/YI - 1))
+    if(xCI > 0.01) stop(paste("density.psp C algorithm relative error =", xCI))
+    if(xFI > 0.01) stop(paste("density.psp FFT algorithm relative error =", xFI))
+    B <- square(0.3)
+    density(Y, 0.2, at=B)
+    density(Y, 0.2, at=B, edge=TRUE, method="C")
+    Z <- runifpoint(3, B)
+    density(Y, 0.2, at=Z)
+    density(Y, 0.2, at=Z, edge=TRUE, method="C")
+  }
 
-X <- psp(0, 0, 0.01, 0.001, window=owin())
-s1 <- sum(pixellate(X))
-s2 <- sum(lengths_psp(X))
-if(abs(s1 - s2)/s2 > 0.01) {
-  stop(paste("pixellate.psp test 4:",
-             "sum(pixellate(X)) = ", s1,
-             "!=", s2, "= sum(lengths_psp(X))"))
-}
-
-X <- psp(0, 0, 0.001, 0.001, window=owin())
-s1 <- sum(pixellate(X))
-s2 <- sum(lengths_psp(X))
-if(abs(s1 - s2)/s2 > 0.01) {
-  stop(paste("pixellate.psp test 5:",
-             "sum(pixellate(X)) = ", s1,
-             "!=", s2, "= sum(lengths_psp(X))"))
-}
-
-#' cases of superimpose.psp
-A <- as.psp(matrix(runif(40), 10, 4), window=owin())
-B <- as.psp(matrix(runif(40), 10, 4), window=owin())
-superimpose(A, B, W=ripras)
-superimpose(A, B, W="convex")
-
-#' tests of density.psp
-Y <- as.psp(simplenet)
-YC <- density(Y, 0.2, method="C", edge=FALSE, dimyx=64)
-YI <- density(Y, 0.2, method="interpreted", edge=FALSE, dimyx=64)
-YF <- density(Y, 0.2, method="FFT", edge=FALSE, dimyx=64)
-xCI <- max(abs(YC/YI - 1))
-xFI <- max(abs(YF/YI - 1))
-if(xCI > 0.01) stop(paste("density.psp C algorithm relative error =", xCI))
-if(xFI > 0.01) stop(paste("density.psp FFT algorithm relative error =", xFI))
-B <- square(0.3)
-density(Y, 0.2, at=B)
-density(Y, 0.2, at=B, edge=TRUE, method="C")
-Z <- runifpoint(3, B)
-density(Y, 0.2, at=Z)
-density(Y, 0.2, at=Z, edge=TRUE, method="C")
-
-#' as.psp.data.frame
-
-  df <- as.data.frame(matrix(runif(40), ncol=4))
-  A <- as.psp(df, window=square(1))
-  colnames(df) <- c("x0","y0","x1","y1")
-  df <- cbind(df, data.frame(marks=1:nrow(df)))
-  B <- as.psp(df, window=square(1))
-  colnames(df) <- c("xmid", "ymid", "length", "angle", "marks")
-  E <- as.psp(df, window=square(c(-1,2)))
-  G <- E %mark% factor(sample(letters[1:3], nsegments(E), replace=TRUE))
-  H <- E %mark% runif(nsegments(E))
+  if(FULLTEST) {
+    #' as.psp.data.frame
+    df <- as.data.frame(matrix(runif(40), ncol=4))
+    A <- as.psp(df, window=square(1))
+    colnames(df) <- c("x0","y0","x1","y1")
+    df <- cbind(df, data.frame(marks=1:nrow(df)))
+    B <- as.psp(df, window=square(1))
+    colnames(df) <- c("xmid", "ymid", "length", "angle", "marks")
+    E <- as.psp(df, window=square(c(-1,2)))
+    G <- E %mark% factor(sample(letters[1:3], nsegments(E), replace=TRUE))
+    H <- E %mark% runif(nsegments(E))
   
-#' print and summary methods
-  A
-  B
-  E
-  G
-  H
-  summary(B)
-  summary(G)
-  summary(H)
-  M <- B
-  marks(M) <- data.frame(id=marks(B), len=lengths_psp(B))
-  M
-  summary(M)
-  subset(M, select=len)
+    #' print and summary methods
+    A
+    B
+    E
+    G
+    H
+    summary(B)
+    summary(G)
+    summary(H)
+    M <- B
+    marks(M) <- data.frame(id=marks(B), len=lengths_psp(B))
+    M
+    summary(M)
+    subset(M, select=len)
 
-  #' plot method cases  
-  spatstat.options(monochrome=TRUE)
-  plot(B)
-  plot(G)
-  plot(M)
-  spatstat.options(monochrome=FALSE)
-  plot(B)
-  plot(G)
-  plot(M)
-  #' misuse of 'col' argument - several cases
-  plot(G, col="grey") # discrete
-  plot(B, col="grey") 
-  plot(unmark(B), col="grey") 
-  plot(M, col="grey") 
+    #' plot method cases  
+    spatstat.options(monochrome=TRUE)
+    plot(B)
+    plot(G)
+    plot(M)
+    spatstat.options(monochrome=FALSE)
+    plot(B)
+    plot(G)
+    plot(M)
+    #' misuse of 'col' argument - several cases
+    plot(G, col="grey") # discrete
+    plot(B, col="grey") 
+    plot(unmark(B), col="grey") 
+    plot(M, col="grey") 
   
-  #' miscellaneous class support cases
-  marks(M) <- marks(M)[1,,drop=FALSE]
+    #' miscellaneous class support cases
+    marks(M) <- marks(M)[1,,drop=FALSE]
+    
+    #' undocumented  
+    as.ppp(B)
+  }
 
-  #' undocumented  
-  as.ppp(B)
+  if(ALWAYS) { # C code
+    #' segment crossing code
+    X <- psp(runif(30),runif(30),runif(30),runif(30), window=owin())
+    A <- selfcut.psp(X, eps=1e-11)
+    B <- selfcut.psp(X[1])
+    #' 
+    Y <- psp(runif(30),runif(30),runif(30),runif(30), window=owin())
+    Z <- edges(letterR)[c(FALSE,TRUE)]
+    spatstat.options(selfcrossing.psp.useCall=FALSE, crossing.psp.useCall=FALSE)
+    A <- selfcrossing.psp(X)
+    B <- selfcrossing.psp(Z)
+    D <- crossing.psp(X,Y,details=TRUE)
+    spatstat.options(selfcrossing.psp.useCall=TRUE, crossing.psp.useCall=TRUE)
+    A <- selfcrossing.psp(X)
+    B <- selfcrossing.psp(Z)
+    D <- crossing.psp(X,Y,details=TRUE)
+  }
 
-  #' segment crossing code
-  X <- psp(runif(30),runif(30),runif(30),runif(30), window=owin())
-  A <- selfcut.psp(X, eps=1e-11)
-  B <- selfcut.psp(X[1])
-  #' 
-  Y <- psp(runif(30),runif(30),runif(30),runif(30), window=owin())
-  Z <- edges(letterR)[c(FALSE,TRUE)]
-  spatstat.options(selfcrossing.psp.useCall=FALSE, crossing.psp.useCall=FALSE)
-  A <- selfcrossing.psp(X)
-  B <- selfcrossing.psp(Z)
-  D <- crossing.psp(X,Y,details=TRUE)
-  spatstat.options(selfcrossing.psp.useCall=TRUE, crossing.psp.useCall=TRUE)
-  A <- selfcrossing.psp(X)
-  B <- selfcrossing.psp(Z)
-  D <- crossing.psp(X,Y,details=TRUE)
-})
+  if(FULLTEST) {
+    #' test rshift.psp and append.psp with marks (Ute Hahn)
+    m <- data.frame(A=1:10, B=letters[1:10])
+    g <- gl(3, 3, length=10)
+    X <- psp(runif(10), runif(10), runif(10), runif(10), window=owin(), marks=m)
+    Y <- rshift(X, radius = 0.1)
+    Y <- rshift(X, radius = 0.1, group=g)
+    #' mark management
+    b <- data.frame(A=1:10)
+    X <- psp(runif(10), runif(10), runif(10), runif(10), window=owin(), marks=b)
+    stopifnot(is.data.frame(marks(X)))
+    Y <- rshift(X, radius = 0.1)
+    Y <- rshift(X, radius = 0.1, group=g)
+  }
 
-local({
-  #' test rshift.psp and append.psp with marks (Ute Hahn)
-  m <- data.frame(A=1:10, B=letters[1:10])
-  g <- gl(3, 3, length=10)
-  X <- psp(runif(10), runif(10), runif(10), runif(10), window=owin(), marks=m)
-  Y <- rshift(X, radius = 0.1)
-  Y <- rshift(X, radius = 0.1, group=g)
-  #' mark management
-  b <- data.frame(A=1:10)
-  X <- psp(runif(10), runif(10), runif(10), runif(10), window=owin(), marks=b)
-  stopifnot(is.data.frame(marks(X)))
-  Y <- rshift(X, radius = 0.1)
-  Y <- rshift(X, radius = 0.1, group=g)
-})
+  if(FULLTEST) {
+    #' geometry
+    m <- data.frame(A=1:10, B=letters[1:10])
+    X <- psp(runif(10), runif(10), runif(10), runif(10), window=owin(), marks=m)
+    Z <- rotate(X, angle=pi/3, centre=c(0.5, 0.5))
+    Y <- endpoints.psp(X, which="lower")
+    Y <- endpoints.psp(X, which="upper")
+    Y <- endpoints.psp(X, which="right")
+    U <- flipxy(X)
+  }
+  
+  if(ALWAYS) {
+    ## nnfun.psp
+    P <- psp(runif(10), runif(10), runif(10), runif(10),
+             window=square(1), marks=runif(10))
+    f <- nnfun(P)
+    f <- nnfun(P, value="mark")
+    d <- domain(f)
+    Z <- as.im(f)
+  }
 
-local({
-  #' geometry
-  m <- data.frame(A=1:10, B=letters[1:10])
-  X <- psp(runif(10), runif(10), runif(10), runif(10), window=owin(), marks=m)
-  Z <- rotate(X, angle=pi/3, centre=c(0.5, 0.5))
-  Y <- endpoints.psp(X, which="lower")
-  Y <- endpoints.psp(X, which="upper")
-  Y <- endpoints.psp(X, which="right")
-  U <- flipxy(X)
-})
-
-local({
-  ## nnfun.psp
-  P <- psp(runif(10), runif(10), runif(10), runif(10),
-           window=square(1), marks=runif(10))
-  f <- nnfun(P)
-  f <- nnfun(P, value="mark")
-  d <- domain(f)
-  Z <- as.im(f)
 })
 
 reset.spatstat.options()
@@ -245,9 +261,9 @@ reset.spatstat.options()
 #
 ## Tests of *.sigtrace and *.progress
 #
-## $Revision: 1.4 $ $Date: 2018/11/02 00:53:45 $
+## $Revision: 1.5 $ $Date: 2020/05/01 09:59:59 $
 
-require(spatstat)
+if(FULLTEST) {
 local({
   plot(dclf.sigtrace(redwood, nsim=19, alternative="greater", rmin=0.02,
                      verbose=FALSE))
@@ -273,17 +289,17 @@ local({
   g <- dg.progress(redwood, nsim=5, scale=function(x) x^2)
   g <- dg.progress(redwood, nsim=5, normalize=TRUE, deflate=TRUE)
 })
+}
 #'
 #'     tests/simplepan.R
 #'
 #'   Tests of user interaction in simplepanel
 #'   Handled by spatstatLocator()
 #'
-#'   $Revision: 1.2 $  $Date: 2018/10/16 00:46:41 $
+#'   $Revision: 1.3 $  $Date: 2020/05/01 09:59:59 $
 #'
 
-require(spatstat)
-
+if(ALWAYS) {  # may depend on platform
 local({
   ## Adapted from example(simplepanel)
   ## make boxes
@@ -341,15 +357,16 @@ local({
   ## go
   run.simplepanel(P)
 })
+}
 #
 # tests/slrm.R
 #
-# $Revision: 1.2 $ $Date: 2020/01/10 04:54:49 $
+# $Revision: 1.3 $ $Date: 2020/05/01 09:59:59 $
 #
 # Test slrm fitting and prediction when there are NA's
 #
 
-require(spatstat)
+if(ALWAYS) {
 local({
   X <- copper$SouthPoints
   W <- owin(poly=list(x=c(0,35,35,1),y=c(1,1,150,150)))
@@ -359,21 +376,24 @@ local({
   extractAIC(fit)
   fitx <- update(fit, . ~ x)
   simulate(fitx, seed=42)
-  unitname(fitx)
-  unitname(fitx) <- "km"
+  if(FULLTEST) {
+    unitname(fitx)
+    unitname(fitx) <- "km"
 
-  mur <- solapply(murchison,rescale, 1000, "km")
-  mur$dfault <- distfun(mur$faults)
-  fut <- slrm(gold ~ dfault, data=mur, splitby="greenstone")
-  A <- model.images(fut)
+    mur <- solapply(murchison,rescale, 1000, "km")
+    mur$dfault <- distfun(mur$faults)
+    fut <- slrm(gold ~ dfault, data=mur, splitby="greenstone")
+    A <- model.images(fut)
+  }
 })
+}
 
 
 #'    tests/sparse3Darrays.R
 #'  Basic tests of code in sparse3Darray.R and sparsecommon.R
-#'  $Revision: 1.21 $ $Date: 2019/12/31 02:38:48 $
+#'  $Revision: 1.22 $ $Date: 2020/05/01 09:59:59 $
 
-require(spatstat)
+if(ALWAYS) { # fundamental, C code
 local({
   #' forming arrays
 
@@ -658,6 +678,7 @@ local({
   M <- as.sparse3Darray(A)
   M[rep(1,3), c(1,1,2), rep(2, 3)]
 })
+}
 #
 #  tests/splitpea.R
 #
@@ -665,102 +686,103 @@ local({
 #
 #  Thanks to Marcelino de la Cruz
 #
-#  $Revision: 1.13 $  $Date: 2019/12/15 04:46:57 $
+#  $Revision: 1.14 $  $Date: 2020/05/01 09:59:59 $
 #
 
-require(spatstat)
-
 local({
-W <- square(8)
-X <- ppp(c(2.98, 4.58, 7.27, 1.61, 7.19),
-         c(7.56, 5.29, 5.03, 0.49, 1.65),
-         window=W)
-Z <- quadrats(W, 4, 4)
-Yall <- split(X, Z, drop=FALSE)
-Ydrop <- split(X, Z, drop=TRUE)
+  W <- square(8)
+  X <- ppp(c(2.98, 4.58, 7.27, 1.61, 7.19),
+           c(7.56, 5.29, 5.03, 0.49, 1.65),
+           window=W)
+  Z <- quadrats(W, 4, 4)
+  Yall <- split(X, Z, drop=FALSE)
+  Ydrop <- split(X, Z, drop=TRUE)
 
-P <- Yall[[1]]
-if(!all(inside.owin(P$x, P$y, P$window)))
-  stop("Black hole detected when drop=FALSE")
-P <- Ydrop[[1]]
-if(!all(inside.owin(P$x, P$y, P$window)))
-  stop("Black hole detected when drop=TRUE")
+  if(ALWAYS) { # may depend on platform
+    P <- Yall[[1]]
+    if(!all(inside.owin(P$x, P$y, P$window)))
+      stop("Black hole detected when drop=FALSE")
+    P <- Ydrop[[1]]
+    if(!all(inside.owin(P$x, P$y, P$window)))
+      stop("Black hole detected when drop=TRUE")
+    Ydrop[[1]] <- P[1]
+    split(X, Z, drop=TRUE) <- Ydrop
+  }
 
-Ydrop[[1]] <- P[1]
-split(X, Z, drop=TRUE) <- Ydrop
+  ## test NA handling
+  Zbad <- quadrats(square(4), 2, 2)
+  Ybdrop <- split(X, Zbad, drop=TRUE)
+  Yball  <- split(X, Zbad, drop=FALSE)
 
-# test NA handling
-Zbad <- quadrats(square(4), 2, 2)
-Ybdrop <- split(X, Zbad, drop=TRUE)
-Yball  <- split(X, Zbad, drop=FALSE)
+  if(FULLTEST) {
+    ## other bugs/ code blocks in split.ppp, split<-.ppp, [<-.splitppp
+    flog <- rep(c(TRUE,FALSE), 21)
+    fimg <- as.im(dirichlet(runifpoint(5, Window(cells))))
+    A <- split(cells, flog)
+    B <- split(cells, square(0.5))
+    D <- split(cells, fimg)
+    E <- split(cells, logical(42), drop=TRUE)
+    Cellules <- cells
+    split(Cellules, flog) <- solapply(A, rjitter)
+    split(Cellules, fimg) <- solapply(D, rjitter)
+    D[[2]] <- rjitter(D[[2]])
+    Funpines <- finpines
+    marks(Funpines)[,"diameter"] <- factor(marks(Funpines)[,"diameter"])
+    G <- split(Funpines)
+    H <- split(Funpines, "diameter")
+    split(Funpines) <- solapply(G, rjitter)
+    split(Funpines, "diameter") <- solapply(H, rjitter)
 
-# other bugs/ code blocks in split.ppp, split<-.ppp, [<-.splitppp
-flog <- rep(c(TRUE,FALSE), 21)
-fimg <- as.im(dirichlet(runifpoint(5, Window(cells))))
-A <- split(cells, flog)
-B <- split(cells, square(0.5))
-D <- split(cells, fimg)
-E <- split(cells, logical(42), drop=TRUE)
-Cellules <- cells
-split(Cellules, flog) <- solapply(A, rjitter)
-split(Cellules, fimg) <- solapply(D, rjitter)
-D[[2]] <- rjitter(D[[2]])
-Funpines <- finpines
-marks(Funpines)[,"diameter"] <- factor(marks(Funpines)[,"diameter"])
-G <- split(Funpines)
-H <- split(Funpines, "diameter")
-split(Funpines) <- solapply(G, rjitter)
-split(Funpines, "diameter") <- solapply(H, rjitter)
+    ## From Marcelino
+    set.seed(1)
+    W<- square(10) # the big window
+    puntos<- rpoispp(0.5, win=W)
+    r00 <- letterR
+    r05 <- shift(letterR,c(0,5))
+    r50 <- shift(letterR,c(5,0))
+    r55 <- shift(letterR,c(5,5))
+    tessr4 <- tess(tiles=list(r00, r05,r50,r55))
+    puntosr4 <- split(puntos, tessr4, drop=TRUE)
+    split(puntos, tessr4, drop=TRUE) <- puntosr4
 
-# From Marcelino
-set.seed(1)
-W<- square(10) # the big window
-puntos<- rpoispp(0.5, win=W)
-data(letterR)
-r00 <- letterR
-r05 <- shift(letterR,c(0,5))
-r50 <- shift(letterR,c(5,0))
-r55 <- shift(letterR,c(5,5))
-tessr4 <- tess(tiles=list(r00, r05,r50,r55))
-puntosr4 <- split(puntos, tessr4, drop=TRUE)
-split(puntos, tessr4, drop=TRUE) <- puntosr4
+    ## More headaches with mark format
+    A <- runifpoint(10)
+    B <- runifpoint(10)
+    AB <- split(superimpose(A=A, B=B))
 
-## More headaches with mark format
-A <- runifpoint(10)
-B <- runifpoint(10)
-AB <- split(superimpose(A=A, B=B))
+    #' check that split<- respects ordering where possible
+    X <- amacrine
+    Y <- split(X)
+    split(X) <- Y
+    stopifnot(identical(X, amacrine))
 
-#' check that split<- respects ordering where possible
-X <- amacrine
-Y <- split(X)
-split(X) <- Y
-stopifnot(identical(X, amacrine))
-
-#' split.ppx
-df <- data.frame(x=runif(4),y=runif(4),t=runif(4),
-                 age=rep(c("old", "new"), 2),
-                 mineral=factor(rep(c("Au","Cu"), each=2),
-                                levels=c("Au", "Cu", "Pb")),
-                 size=runif(4))
-X <- ppx(data=df, coord.type=c("s","s","t","m", "m","m"))
-Y <- split(X, "age")
-Y <- split(X, "mineral", drop=TRUE)
-Y <- split(X, "mineral")
-print(Y)
-print(summary(Y))
-Y[c(TRUE,FALSE,TRUE)]
-Y[1:2]
-Y[3] <- Y[1]
+    #' split.ppx
+    df <- data.frame(x=runif(4),y=runif(4),t=runif(4),
+                     age=rep(c("old", "new"), 2),
+                     mineral=factor(rep(c("Au","Cu"), each=2),
+                                    levels=c("Au", "Cu", "Pb")),
+                     size=runif(4))
+    X <- ppx(data=df, coord.type=c("s","s","t","m", "m","m"))
+    Y <- split(X, "age")
+    Y <- split(X, "mineral", drop=TRUE)
+    Y <- split(X, "mineral")
+    print(Y)
+    print(summary(Y))
+    Y[c(TRUE,FALSE,TRUE)]
+    Y[1:2]
+    Y[3] <- Y[1]
+  }
 })
+
 #'
 #'    tests/ssf.R
 #'
 #'   Tests of 'ssf' class
 #'
-#'   $Revision: 1.2 $ $Date: 2018/10/21 04:05:33 $
+#'   $Revision: 1.3 $ $Date: 2020/05/01 09:59:59 $
 #'
 
-require(spatstat)
+if(FULLTEST) {
 local({
   Y <- cells[1:5]
   X <- rsyst(Window(Y), 5)
@@ -781,14 +803,15 @@ local({
   max(f1)
   integral(f1, weights=tile.areas(dirichlet(X)))
 })
+}
 #
 #   tests/step.R
 #
-#   $Revision: 1.4 $  $Date: 2015/12/29 08:54:49 $
+#   $Revision: 1.5 $  $Date: 2020/05/01 09:59:59 $
 #
 # test for step() operation
 #
-require(spatstat)
+if(FULLTEST) {
 local({
   Z <- as.im(function(x,y){ x^3 - y^2 }, nztrees$window)
   fitP <- ppm(nztrees ~x+y+Z, covariates=list(Z=Z))
@@ -799,6 +822,8 @@ local({
               MultiStrauss(types=levels(marks(amacrine)), radii=matrix(0.04, 2, 2)))
   step(fitM)
 })
+}
+
 
 
 #'
@@ -807,9 +832,9 @@ local({
 #'   Tests of code for summary functions
 #'       including score residual functions etc
 #'
-#'   $Revision: 1.5 $ $Date: 2020/02/06 05:38:15 $
+#'   $Revision: 1.6 $ $Date: 2020/05/01 09:59:59 $
 
-require(spatstat)
+if(ALWAYS) { # involves C code 
 local({
   W <- owin(c(0,1), c(-1/2, 0))
   Gr <- Gest(redwood, correction="all",domain=W)
@@ -848,15 +873,16 @@ local({
   b <- as.breakpts(42, max=pi, npos=20)
   b <- even.breaks.owin(letterR)
 })
+}
 ##
 ## tests/symbolmaps.R
 ##
 ##   Quirks associated with symbolmaps, etc.
 ##
-## $Revision: 1.3 $ $Date: 2015/12/29 08:54:49 $
+## $Revision: 1.4 $ $Date: 2020/05/01 09:59:59 $
 
+if(FULLTEST) {
 local({
-  require(spatstat)
   set.seed(100)
   X <- runifpoint(8)
 
@@ -891,3 +917,4 @@ local({
   ## infrastructure
   plan.legend.layout(owin(), side="top", started=TRUE)
 })
+}

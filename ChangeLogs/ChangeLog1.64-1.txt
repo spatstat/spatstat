@@ -167,20 +167,30 @@ Change log from 1.64-0 to 1.64-1
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
 
-STILL TO DO:
-
    tests/sdr.R
    tests/segments.R
    tests/sigtraceprogress.R
    tests/simplepan.R
    tests/slrm.R
    tests/sparse3Darrays.R
-   tests/sparseSlabs.R
    tests/splitpea.R
    tests/ssf.R
    tests/step.R
    tests/sumfun.R
    tests/symbolmaps.R
+	Many tests are now switched off unless 'SPATSTAT_TEST' is defined.
+
+   DESCRIPTION
+   NEWS
+	Version 1.64-0.006
+
+------------- passed R-4.0.0 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+
+STILL TO DO:
+
+
    tests/tessera.R
    tests/testaddvar.R
    tests/testparres.R
