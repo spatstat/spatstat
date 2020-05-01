@@ -150,7 +150,6 @@ Change log from 1.64-0 to 1.64-1
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
 
-STILL TO DO:
    tests/rmhmodelHybrids.R
    tests/rmhmodel.ppm.R
    tests/rmhMulti.R
@@ -158,6 +157,18 @@ STILL TO DO:
    tests/rmhsnoopy.R
    tests/rmhTrend.R
    tests/rmhWeird.R
+	Many tests are now switched off unless 'SPATSTAT_TEST' is defined.
+
+   DESCRIPTION
+   NEWS
+	Version 1.64-0.005
+
+------------- passed R-4.0.0 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+
+STILL TO DO:
+
    tests/sdr.R
    tests/segments.R
    tests/sigtraceprogress.R

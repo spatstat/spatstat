@@ -419,255 +419,253 @@ local({
 #
 #  tests of rmh, running multitype point processes
 #
-#   $Revision: 1.15 $  $Date: 2020/01/26 04:57:03 $
-
-require(spatstat)
+#   $Revision: 1.16 $  $Date: 2020/05/01 05:29:42 $
 
 local({
-if(!exists("nr"))
-   nr   <- 5e3
+  if(!exists("nr"))  nr <- 2e3
+  if(!exists("nv"))  nv <- 0
+  spatstat.options(expand=1.05)
 
-if(!exists("nv"))
-   nv   <- 0
+  if(FULLTEST) {
+    ## Multitype Poisson
+    modp2 <- list(cif="poisson",
+                  par=list(beta=2), types=letters[1:3], w = square(10))
+    Xp2 <- rmh(modp2, start=list(n.start=0), control=list(p=1))
 
-spatstat.options(expand=1.1)
+    ## Multinomial 
+    Xp2fix <- rmh(modp2, start=list(n.start=c(10,20,30)),
+                  control=list(fixall=TRUE, p=1))
+    Xp2fixr <- rmh(modp2, start=list(x.start=Xp2fix),
+                   control=list(fixall=TRUE, p=1))
+  }
 
-   # Multitype Poisson
-   modp2 <- list(cif="poisson",
-                 par=list(beta=2), types=letters[1:3], w = square(10))
-   Xp2 <- rmh(modp2, start=list(n.start=0), control=list(p=1))
-
-   # Multinomial 
-   Xp2fix <- rmh(modp2, start=list(n.start=c(10,20,30)),
-                 control=list(fixall=TRUE, p=1))
-   Xp2fixr <- rmh(modp2, start=list(x.start=Xp2fix),
-                 control=list(fixall=TRUE, p=1))
+  if(ALWAYS) { ## Gibbs models => C code
   
-   # Multitype Strauss:
-   beta <- c(0.027,0.008)
-   gmma <- matrix(c(0.43,0.98,0.98,0.36),2,2)
-   r    <- matrix(c(45,45,45,45),2,2)
-   mod08 <- list(cif="straussm",par=list(beta=beta,gamma=gmma,radii=r),
-                w=c(0,250,0,250))
-   X1.straussm <- rmh(model=mod08,start=list(n.start=80),
-                      control=list(ptypes=c(0.75,0.25),nrep=nr,nverb=nv))
+    ## Multitype Strauss:
+    beta <- c(0.027,0.008)
+    gmma <- matrix(c(0.43,0.98,0.98,0.36),2,2)
+    r    <- matrix(c(45,45,45,45),2,2)
+    mod08 <- list(cif="straussm",par=list(beta=beta,gamma=gmma,radii=r),
+                  w=c(0,250,0,250))
+    X1.straussm <- rmh(model=mod08,start=list(n.start=80),
+                       control=list(ptypes=c(0.75,0.25),nrep=nr,nverb=nv))
    
-   # Multitype Strauss equivalent to hard core:
-   mod08hard <- mod08
-   mod08hard$par$gamma[] <- 0
-   X1.straussm.Hard <- rmh(model=mod08hard,start=list(n.start=20),
-                           control=list(ptypes=c(0.75,0.25),nrep=nr,nverb=nv),
-                           periodic=FALSE)
-   X1.straussmP.Hard <- rmh(model=mod08hard,start=list(n.start=20),
-                            control=list(ptypes=c(0.75,0.25),nrep=nr,nverb=nv),
-                            periodic=TRUE)
-   
-   # Multitype Strauss conditioning upon the total number
-   # of points being 80:
-   X2.straussm <- rmh(model=mod08,start=list(n.start=80),
-                      control=list(p=1,ptypes=c(0.75,0.25),nrep=nr,
-                                   nverb=nv))
-   stopifnot(X2.straussm$n == 80)
-
-   # Conditioning upon the number of points of type 1 being 60
-   # and the number of points of type 2 being 20:
-   X3.straussm <- rmh(model=mod08,start=list(n.start=c(60,20)),
-                      control=list(fixall=TRUE,p=1,ptypes=c(0.75,0.25),
-                                   nrep=nr,nverb=nv))
-   stopifnot(all(table(X3.straussm$marks) == c(60,20)))
-
-   # Multitype hardcore:
-   rhc  <- matrix(c(9.1,5.0,5.0,2.5),2,2)
-   mod087 <- list(cif="multihard",par=list(beta=5*beta,hradii=rhc),
-                  w=square(12))
-   cheque <- function(X, r) {
-     Xname <- deparse(substitute(X))
-     nn <- minnndist(X, by=marks(X))
-     print(nn)
-     if(!all(nn >= r, na.rm=TRUE))
-       stop(paste(Xname, "violates hard core constraint"), call.=FALSE)
-     return(invisible(NULL))
-   }
-   #' make an initial state that violates hard core
-   #' (cannot use 'x.start' here because it disables thinning)
-   #' and check that result satisfies hard core
-   set.seed(19171025)
-   X.multihard.close <- rmh(model=mod087,start=list(n.start=100),
+    ## Multitype Strauss equivalent to hard core:
+    mod08hard <- mod08
+    mod08hard$par$gamma[] <- 0
+    X1.straussm.Hard <- rmh(model=mod08hard,start=list(n.start=20),
                             control=list(ptypes=c(0.75,0.25),nrep=nr,nverb=nv),
                             periodic=FALSE)
-   cheque(X.multihard.close, rhc)
-   X.multihard.closeP <- rmh(model=mod087,start=list(n.start=100),
-                             control=list(ptypes=c(0.75,0.25),nrep=nr,nverb=nv,
-                                          periodic=TRUE))
-   cheque(X.multihard.closeP, rhc)
-
-   # Multitype Strauss hardcore:
-   mod09 <- list(cif="straushm",par=list(beta=5*beta,gamma=gmma,
-                iradii=r,hradii=rhc),w=square(12))
-   X.straushm <- rmh(model=mod09,start=list(n.start=100),
-                     control=list(ptypes=c(0.75,0.25),nrep=nr,nverb=nv),
-                     periodic=FALSE)
-   X.straushmP <- rmh(model=mod09,start=list(n.start=100),
-                      control=list(ptypes=c(0.75,0.25),nrep=nr,nverb=nv,
-                                   periodic=TRUE))
-
-   # Multitype Strauss hardcore equivalent to multitype hardcore:
-   mod09hard <- mod09
-   mod09hard$par$gamma[] <- 0
-   X.straushm.hard <- rmh(model=mod09hard,start=list(n.start=15),
-                          control=list(ptypes=c(0.75,0.25),nrep=nr,nverb=nv,
-                                       periodic=FALSE))
-   X.straushmP.hard <- rmh(model=mod09hard,start=list(n.start=15),
-                           control=list(ptypes=c(0.75,0.25),nrep=nr,nverb=nv),
-                           periodic=TRUE)
-
-   # Multitype Strauss hardcore with trends for each type:
-   beta  <- c(0.27,0.08)
-   tr3   <- function(x,y){x <- x/250; y <- y/250;
-   			   exp((6*x + 5*y - 18*x^2 + 12*x*y - 9*y^2)/6)
-                         }
-                         # log quadratic trend
-   tr4   <- function(x,y){x <- x/250; y <- y/250;
-                         exp(-0.6*x+0.5*y)}
-                        # log linear trend
-   mod10 <- list(cif="straushm",par=list(beta=beta,gamma=gmma,
-                 iradii=r,hradii=rhc),w=c(0,250,0,250),
-                 trend=list(tr3,tr4))
-   X1.straushm.trend <- rmh(model=mod10,start=list(n.start=350),
-                            control=list(ptypes=c(0.75,0.25),
-                            nrep=nr,nverb=nv))
+    X1.straussmP.Hard <- rmh(model=mod08hard,start=list(n.start=20),
+                             control=list(ptypes=c(0.75,0.25),nrep=nr,nverb=nv),
+                             periodic=TRUE)
    
-   # Multitype Strauss hardcore with trends for each type, given as images:
-   bigwin <- square(250)
-   i1 <- as.im(tr3, bigwin)
-   i2 <- as.im(tr4, bigwin)
-   mod11 <- list(cif="straushm",par=list(beta=beta,gamma=gmma,
-                 iradii=r,hradii=rhc),w=bigwin,
-                 trend=list(i1,i2))
-   X2.straushm.trend <- rmh(model=mod11,start=list(n.start=350),
-                            control=list(ptypes=c(0.75,0.25),expand=1,
-                            nrep=nr,nverb=nv))
+    ## Multitype Strauss conditioning upon the total number
+    ## of points being 80:
+    X2.straussm <- rmh(model=mod08,start=list(n.start=80),
+                       control=list(p=1,ptypes=c(0.75,0.25),nrep=nr,
+                                    nverb=nv))
+    stopifnot(X2.straussm$n == 80)
 
+    ## Conditioning upon the number of points of type 1 being 60
+    ## and the number of points of type 2 being 20:
+    X3.straussm <- rmh(model=mod08,start=list(n.start=c(60,20)),
+                       control=list(fixall=TRUE,p=1,ptypes=c(0.75,0.25),
+                                    nrep=nr,nverb=nv))
+    stopifnot(all(table(X3.straussm$marks) == c(60,20)))
 
-   #' nsave, nburn
-   chq <- function(X) {
-     Xname <- deparse(substitute(X))
-     A <- attr(X, "saved")
-     if(length(A) == 0)
-       stop(paste(Xname, "did not include a saved list of patterns"))
-     return("ok")
-   }
-   XburnMS <- rmh(model=mod08,start=list(n.start=80), verbose=FALSE,
-                  control=list(ptypes=c(0.75,0.25),
-                               nrep=nr,nsave=500, nburn=100))
-   chq(XburnMS)
-   XburnMStrend <- rmh(model=mod10,start=list(n.start=350), verbose=FALSE,
+    ## Multitype hardcore:
+    rhc  <- matrix(c(9.1,5.0,5.0,2.5),2,2)
+    mod087 <- list(cif="multihard",par=list(beta=5*beta,hradii=rhc),
+                   w=square(12))
+    cheque <- function(X, r) {
+      Xname <- deparse(substitute(X))
+      nn <- minnndist(X, by=marks(X))
+      print(nn)
+      if(!all(nn >= r, na.rm=TRUE))
+        stop(paste(Xname, "violates hard core constraint"), call.=FALSE)
+      return(invisible(NULL))
+    }
+    #' make an initial state that violates hard core
+    #' (cannot use 'x.start' here because it disables thinning)
+    #' and check that result satisfies hard core
+    set.seed(19171025)
+    X.multihard.close <- rmh(model=mod087,start=list(n.start=100),
+                             control=list(ptypes=c(0.75,0.25),nrep=nr,nverb=nv),
+                             periodic=FALSE)
+    cheque(X.multihard.close, rhc)
+    X.multihard.closeP <- rmh(model=mod087,start=list(n.start=100),
+                              control=list(ptypes=c(0.75,0.25),nrep=nr,nverb=nv,
+                                           periodic=TRUE))
+    cheque(X.multihard.closeP, rhc)
+
+    ## Multitype Strauss hardcore:
+    mod09 <- list(cif="straushm",
+                  par=list(beta=5*beta,gamma=gmma,
+                           iradii=r,hradii=rhc),w=square(12))
+    X.straushm <- rmh(model=mod09,start=list(n.start=100),
+                      control=list(ptypes=c(0.75,0.25),nrep=nr,nverb=nv),
+                      periodic=FALSE)
+    X.straushmP <- rmh(model=mod09,start=list(n.start=100),
+                       control=list(ptypes=c(0.75,0.25),nrep=nr,nverb=nv,
+                                    periodic=TRUE))
+
+    ## Multitype Strauss hardcore equivalent to multitype hardcore:
+    mod09hard <- mod09
+    mod09hard$par$gamma[] <- 0
+    X.straushm.hard <- rmh(model=mod09hard,start=list(n.start=15),
+                           control=list(ptypes=c(0.75,0.25),nrep=nr,nverb=nv,
+                                        periodic=FALSE))
+    X.straushmP.hard <- rmh(model=mod09hard,start=list(n.start=15),
+                            control=list(ptypes=c(0.75,0.25),nrep=nr,nverb=nv),
+                            periodic=TRUE)
+
+    ## Multitype Strauss hardcore with trends for each type:
+    beta  <- c(0.27,0.08)
+    tr3   <- function(x,y){x <- x/250; y <- y/250;
+      exp((6*x + 5*y - 18*x^2 + 12*x*y - 9*y^2)/6)
+    } # log quadratic trend
+    tr4   <- function(x,y){x <- x/250; y <- y/250; exp(-0.6*x+0.5*y)}
+                        # log linear trend
+    mod10 <- list(cif="straushm",
+                  par=list(beta=beta,gamma=gmma,
+                           iradii=r,hradii=rhc),w=c(0,250,0,250),
+                  trend=list(tr3,tr4))
+    X1.straushm.trend <- rmh(model=mod10,start=list(n.start=350),
+                             control=list(ptypes=c(0.75,0.25),
+                                          nrep=nr,nverb=nv))
+   
+    ## Multitype Strauss hardcore with trends for each type, given as images:
+    bigwin <- square(250)
+    i1 <- as.im(tr3, bigwin)
+    i2 <- as.im(tr4, bigwin)
+    mod11 <- list(cif="straushm",par=list(beta=beta,gamma=gmma,
+                                          iradii=r,hradii=rhc),w=bigwin,
+                  trend=list(i1,i2))
+    X2.straushm.trend <- rmh(model=mod11,start=list(n.start=350),
+                             control=list(ptypes=c(0.75,0.25),expand=1,
+                                          nrep=nr,nverb=nv))
+
+    #' nsave, nburn
+    chq <- function(X) {
+      Xname <- deparse(substitute(X))
+      A <- attr(X, "saved")
+      if(length(A) == 0)
+        stop(paste(Xname, "did not include a saved list of patterns"))
+      return("ok")
+    }
+    XburnMS <- rmh(model=mod08,start=list(n.start=80), verbose=FALSE,
+                   control=list(ptypes=c(0.75,0.25),
+                                nrep=nr,nsave=500, nburn=100))
+    chq(XburnMS)
+    XburnMStrend <- rmh(model=mod10,start=list(n.start=350), verbose=FALSE,
                         control=list(ptypes=c(0.75,0.25),
                                      nrep=nr,nsave=500, nburn=100))
-   chq(XburnMStrend)
+    chq(XburnMStrend)
 
-
+    
 #######################################################################
 ############  checks on distribution of output  #######################
 #######################################################################
 
-checkp <- function(p, context, testname, failmessage, pcrit=0.01) {
-  if(missing(failmessage))
-    failmessage <- paste("output failed", testname)
-  if(p < pcrit)
-    warning(paste(context, ",",  failmessage), call.=FALSE)
-  cat(paste("\n", context, ",", testname, "has p-value", signif(p,4), "\n"))
-}
+    checkp <- function(p, context, testname, failmessage, pcrit=0.01) {
+      if(missing(failmessage))
+        failmessage <- paste("output failed", testname)
+      if(p < pcrit)
+        warning(paste(context, ",",  failmessage), call.=FALSE)
+      cat(paste("\n", context, ",", testname, "has p-value", signif(p,4), "\n"))
+    }
 
-# Multitype Strauss code; output is multitype Poisson
+    ## Multitype Strauss code; output is multitype Poisson
 
-beta  <- 100 * c(1,1)
-ri    <- matrix(0.07, 2, 2)
-gmma  <- matrix(1, 2, 2)  # no interaction
-tr1   <- function(x,y){ rep(1, length(x)) }
-tr2   <- function(x,y){ rep(2, length(x)) }
-mod <- rmhmodel(cif="straussm",
-                  par=list(beta=beta,gamma=gmma,radii=ri),
-                  w=owin(),
-                  trend=list(tr1,tr2))
+    beta  <- 100 * c(1,1)
+    ri    <- matrix(0.07, 2, 2)
+    gmma  <- matrix(1, 2, 2)  # no interaction
+    tr1   <- function(x,y){ rep(1, length(x)) }
+    tr2   <- function(x,y){ rep(2, length(x)) }
+    mod <- rmhmodel(cif="straussm",
+                    par=list(beta=beta,gamma=gmma,radii=ri),
+                    w=owin(),
+                    trend=list(tr1,tr2))
 
-X <- rmh(mod, start=list(n.start=0), control=list(nrep=1e6))
+    X <- rmh(mod, start=list(n.start=0), control=list(nrep=1e6))
 
-# The model is Poisson with intensity 100 for type 1 and 200 for type 2.
-# Total number of points is Poisson (300)
-# Marks are i.i.d. with P(type 1) = 1/3, P(type 2) = 2/3.
+    ## The model is Poisson with intensity 100 for type 1 and 200 for type 2.
+    ## Total number of points is Poisson (300)
+    ## Marks are i.i.d. with P(type 1) = 1/3, P(type 2) = 2/3.
+    
+    ## Test whether the total intensity looks right
+    ##
+    p <- ppois(X$n, 300)
+    p.val <- 2 * min(p, 1-p)
+    checkp(p.val, 
+           "In multitype Poisson simulation",
+           "test whether total number of points has required mean value")
 
-# Test whether the total intensity looks right
-#
-p <- ppois(X$n, 300)
-p.val <- 2 * min(p, 1-p)
-checkp(p.val, 
-       "In multitype Poisson simulation",
-       "test whether total number of points has required mean value")
-
-# Test whether the mark distribution looks right
-ta <- table(X$marks)
-cat("Frequencies of marks:")
-print(ta)
-checkp(chisq.test(ta, p = c(1,2)/3)$p.value,
-       "In multitype Poisson simulation",
-       "chi-squared goodness-of-fit test for mark distribution (1/3, 2/3)")
+    ## Test whether the mark distribution looks right
+    ta <- table(X$marks)
+    cat("Frequencies of marks:")
+    print(ta)
+    checkp(chisq.test(ta, p = c(1,2)/3)$p.value,
+           "In multitype Poisson simulation",
+           "chi-squared goodness-of-fit test for mark distribution (1/3, 2/3)")
 
 #####
 ####  multitype Strauss code; fixall=TRUE;
 ####  output is multinomial process with nonuniform locations
 ####
 
-the.context <- "In nonuniform multinomial simulation"
+    the.context <- "In nonuniform multinomial simulation"
 
-beta  <- 100 * c(1,1)
-ri    <- matrix(0.07, 2, 2)
-gmma  <- matrix(1, 2, 2)  # no interaction
-tr1   <- function(x,y){ ifelse(x < 0.5, 0, 2) } 
-tr2   <- function(x,y){ ifelse(y < 0.5, 1, 3) }
-# cdf of these distributions
-Fx1 <- function(x) { ifelse(x < 0.5, 0, ifelse(x < 1, 2 * x - 1, 1)) }
-Fy2 <- function(y) { ifelse(y < 0, 0,
-                           ifelse(y < 0.5, y/2,
-                                  ifelse(y < 1, (1/2 + 3 * (y-1/2))/2, 1))) }
+    beta  <- 100 * c(1,1)
+    ri    <- matrix(0.07, 2, 2)
+    gmma  <- matrix(1, 2, 2)  # no interaction
+    tr1   <- function(x,y){ ifelse(x < 0.5, 0, 2) } 
+    tr2   <- function(x,y){ ifelse(y < 0.5, 1, 3) }
+    ## cdf of these distributions
+    Fx1 <- function(x) { ifelse(x < 0.5, 0, ifelse(x < 1, 2 * x - 1, 1)) }
+    Fy2 <- function(y) { ifelse(y < 0, 0,
+                         ifelse(y < 0.5, y/2,
+                         ifelse(y < 1, (1/2 + 3 * (y-1/2))/2, 1))) }
                                                                
 
-mod <- rmhmodel(cif="straussm",
-                  par=list(beta=beta,gamma=gmma,radii=ri),
-                  w=owin(),
-                  trend=list(tr1,tr2))
+    mod <- rmhmodel(cif="straussm",
+                    par=list(beta=beta,gamma=gmma,radii=ri),
+                    w=owin(),
+                    trend=list(tr1,tr2))
 
-X <- rmh(mod, start=list(n.start=c(50,50)),
-           control=list(nrep=1e6, expand=1, p=1, fixall=TRUE))
+    X <- rmh(mod, start=list(n.start=c(50,50)),
+             control=list(nrep=1e6, expand=1, p=1, fixall=TRUE))
 
-# The model is Poisson 
-# Mean number of type 1 points = 100
-# Mean number of type 2 points = 200
-# Total intensity = 300
-# Marks are i.i.d. with P(type 1) = 1/3, P(type 2) = 2/3
+    ## The model is Poisson 
+    ## Mean number of type 1 points = 100
+    ## Mean number of type 2 points = 200
+    ## Total intensity = 300
+    ## Marks are i.i.d. with P(type 1) = 1/3, P(type 2) = 2/3
 
-# Test whether the coordinates look OK
-Y <- split(X)
-X1 <- Y[[names(Y)[1]]]
-X2 <- Y[[names(Y)[2]]]
-checkp(ks.test(X1$y, "punif")$p.value,
-       the.context,
-       "Kolmogorov-Smirnov test of uniformity of y coordinates of type 1 points")
-if(any(X1$x < 0.5)) {
-  stop(paste(the.context, ",", 
-             "x-coordinates of type 1 points are IMPOSSIBLE"), call.=FALSE)
-} else {
-  checkp(ks.test(Fx1(X1$x), "punif")$p.value,
-       the.context,
-       "Kolmogorov-Smirnov test of uniformity of transformed x coordinates of type 1 points")
-}
-checkp(ks.test(X2$x, "punif")$p.value,
-       the.context,
-     "Kolmogorov-Smirnov test of uniformity of x coordinates of type 2 points")
-checkp(ks.test(Fy2(X2$y), "punif")$p.value,
-       the.context,
-       "Kolmogorov-Smirnov test of uniformity of transformed y coordinates of type 2 points")
-
+    ## Test whether the coordinates look OK
+    Y <- split(X)
+    X1 <- Y[[names(Y)[1]]]
+    X2 <- Y[[names(Y)[2]]]
+    checkp(ks.test(X1$y, "punif")$p.value,
+           the.context,
+           "Kolmogorov-Smirnov test of uniformity of y coordinates of type 1 points")
+    if(any(X1$x < 0.5)) {
+      stop(paste(the.context, ",", 
+                 "x-coordinates of type 1 points are IMPOSSIBLE"), call.=FALSE)
+    } else {
+      checkp(ks.test(Fx1(X1$x), "punif")$p.value,
+             the.context,
+             "Kolmogorov-Smirnov test of uniformity of transformed x coordinates of type 1 points")
+    }
+    checkp(ks.test(X2$x, "punif")$p.value,
+           the.context,
+           "Kolmogorov-Smirnov test of uniformity of x coordinates of type 2 points")
+    checkp(ks.test(Fy2(X2$y), "punif")$p.value,
+           the.context,
+           "Kolmogorov-Smirnov test of uniformity of transformed y coordinates of type 2 points")
+  }
+  
 })
 
 reset.spatstat.options()
@@ -677,7 +675,7 @@ reset.spatstat.options()
 #  Problems with trend images (rmhmodel.ppm or rmhEngine)
 #
 
-require(spatstat)
+if(ALWAYS) {
 local({
   set.seed(42)
 
@@ -685,7 +683,6 @@ local({
   # rmhmodel.ppm -> predict.ppm
   # + rmhResolveTypes -> is.subset.owin
 
-  data(demopat)
   Z <- rescale(demopat, 7000)
   X <- unmark(Z)
   X1 <- split(Z)[[1]]
@@ -699,82 +696,87 @@ local({
   Y   <- rmh(Fut,control=list(expand=M,nrep=1e3), verbose=FALSE)
 
 })
+}
 #
 #   tests/rmhWeird.R
 #
-#   $Revision: 1.3 $  $Date: 2015/12/29 08:54:49 $
+#   $Revision: 1.4 $  $Date: 2020/05/01 05:29:42 $
 #
 # strange boundary cases
 
-require(spatstat)
-
 local({
-   if(!exists("nv"))
-     nv <- 0
-   if(!exists("nr"))
-     nr   <- 5e3
+   if(!exists("nv"))  nv <- 0
+   if(!exists("nr"))  nr <- 2e3
 
-   # Poisson process
-   cat("Poisson\n")
-   modP <- list(cif="poisson",par=list(beta=10), w = square(3))
-   XP <- rmh(model = modP,
-             start = list(n.start=25),
-             control=list(nrep=nr,nverb=nv))
+   if(FULLTEST) {
+     ## Poisson process
+     cat("Poisson\n")
+     modP <- list(cif="poisson",par=list(beta=10), w = square(3))
+     XP <- rmh(model = modP,
+               start = list(n.start=25),
+               control=list(nrep=nr,nverb=nv))
+   }
 
-   # Poisson process case of Strauss
-   cat("\nPoisson case of Strauss\n")
-   modPS <- list(cif="strauss",par=list(beta=10,gamma=1,r=0.7), w = square(3))
-   XPS <- rmh(model=modPS,
-              start=list(n.start=25),
-              control=list(nrep=nr,nverb=nv))
+   if(ALWAYS) {
+     ## Poisson process case of Strauss
+     cat("\nPoisson case of Strauss\n")
+     modPS <- list(cif="strauss",par=list(beta=10,gamma=1,r=0.7), w = square(3))
+     XPS <- rmh(model=modPS,
+                start=list(n.start=25),
+                control=list(nrep=nr,nverb=nv))
    
-   # Strauss with zero intensity
-   cat("\nStrauss with zero intensity\n")
-   mod0S <- list(cif="strauss",par=list(beta=0,gamma=0.6,r=0.7), w = square(3))
-   X0S   <- rmh(model=mod0S,start=list(n.start=80),
-                     control=list(nrep=nr,nverb=nv))
-   stopifnot(X0S$n == 0)
+     ## Strauss with zero intensity
+     cat("\nStrauss with zero intensity\n")
+     mod0S <- list(cif="strauss",
+                   par=list(beta=0,gamma=0.6,r=0.7), w = square(3))
+     X0S   <- rmh(model=mod0S,start=list(n.start=80),
+                  control=list(nrep=nr,nverb=nv))
+     stopifnot(X0S$n == 0)
+   }
 
-   # Poisson with zero intensity
-   cat("\nPoisson with zero intensity\n")
-   mod0P <- list(cif="poisson",par=list(beta=0), w = square(3))
-   X0P <- rmh(model = mod0P,
-             start = list(n.start=25),
-             control=list(nrep=nr,nverb=nv))
+   if(FULLTEST) {
+     ## Poisson with zero intensity
+     cat("\nPoisson with zero intensity\n")
+     mod0P <- list(cif="poisson",par=list(beta=0), w = square(3))
+     X0P <- rmh(model = mod0P,
+                start = list(n.start=25),
+                control=list(nrep=nr,nverb=nv))
 
 
-   # Poisson conditioned on zero points
-   cat("\nPoisson conditioned on zero points\n")
-   modp <- list(cif="poisson",
-                 par=list(beta=2), w = square(10))
-   Xp <- rmh(modp, start=list(n.start=0), control=list(p=1, nrep=nr))
-   stopifnot(Xp$n == 0)
+     ## Poisson conditioned on zero points
+     cat("\nPoisson conditioned on zero points\n")
+     modp <- list(cif="poisson",
+                  par=list(beta=2), w = square(10))
+     Xp <- rmh(modp, start=list(n.start=0), control=list(p=1, nrep=nr))
+     stopifnot(Xp$n == 0)
 
-   # Multitype Poisson conditioned on zero points
-   cat("\nMultitype Poisson conditioned on zero points\n")
-   modp2 <- list(cif="poisson",
-                 par=list(beta=2), types=letters[1:3], w = square(10))
-   Xp2 <- rmh(modp2, start=list(n.start=0), control=list(p=1, nrep=nr))
-   stopifnot(is.marked(Xp2))
-   stopifnot(Xp2$n == 0)
+     ## Multitype Poisson conditioned on zero points
+     cat("\nMultitype Poisson conditioned on zero points\n")
+     modp2 <- list(cif="poisson",
+                   par=list(beta=2), types=letters[1:3], w = square(10))
+     Xp2 <- rmh(modp2, start=list(n.start=0), control=list(p=1, nrep=nr))
+     stopifnot(is.marked(Xp2))
+     stopifnot(Xp2$n == 0)
 
-   # Multitype Poisson conditioned on zero points of each type
-   cat("\nMultitype Poisson conditioned on zero points of each type\n")
-   Xp2fix <- rmh(modp2, start=list(n.start=c(0,0,0)),
-                 control=list(p=1, fixall=TRUE, nrep=nr))
-   stopifnot(is.marked(Xp2fix))
-   stopifnot(Xp2fix$n == 0)
+     ## Multitype Poisson conditioned on zero points of each type
+     cat("\nMultitype Poisson conditioned on zero points of each type\n")
+     Xp2fix <- rmh(modp2, start=list(n.start=c(0,0,0)),
+                   control=list(p=1, fixall=TRUE, nrep=nr))
+     stopifnot(is.marked(Xp2fix))
+     stopifnot(Xp2fix$n == 0)
     
- })
+   }
+})
+
 #
 #      tests/rmhmodel.ppm.R
 #
-#    $Revision: 1.9 $  $Date: 2020/01/18 01:53:16 $
+#    $Revision: 1.10 $  $Date: 2020/05/01 05:29:42 $
 #
 # Case-by-case tests of rmhmodel.ppm
 #
-require(spatstat)
 
+if(FULLTEST) {
 local({
 f <- ppm(cells)
 m <- rmhmodel(f)
@@ -877,20 +879,19 @@ m <- rmhmodel(f)
 print(m)
 
 })
+}
 #
 #    tests/rmhmodelHybrids.R
 #
 #  Test that rmhmodel.ppm and rmhmodel.default
 #  work on Hybrid interaction models
 #
-#   $Revision: 1.4 $  $Date: 2015/12/29 08:54:49 $
+#   $Revision: 1.5 $  $Date: 2020/05/01 05:29:42 $
 #
 
-require(spatstat)
-
+if(ALWAYS) { # involves C code
 local({
   # ......... rmhmodel.ppm .......................
-
   fit1 <- ppm(redwood ~1,
               Hybrid(A=Strauss(0.02), B=Geyer(0.1, 2), C=Geyer(0.15, 1)))
   m1 <- rmhmodel(fit1)
@@ -936,18 +937,16 @@ local({
    reach(rmodPP)
   
 })
-
-
+}
 #
 #  tests/rmh.ppm.R
 #
-#  $Revision: 1.4 $ $Date: 2019/02/21 01:59:48 $
+#  $Revision: 1.5 $ $Date: 2020/05/01 05:29:42 $
 #
 #  Examples removed from rmh.ppm.Rd
 #  stripped down to minimal tests of validity
 #
 
-require(spatstat)
 local({
    op <- spatstat.options()
    spatstat.options(rmh.nrep=10, npixel=10, ndummy.min=10)
@@ -955,94 +954,102 @@ local({
    Nrep <- 10
 
    X <- swedishpines
-   # Poisson process
-   fit <- ppm(X ~1, Poisson())
-   Xsim <- rmh(fit)
-   # Strauss process   
-   fit <- ppm(X ~1, Strauss(r=7))
-   Xsim <- rmh(fit)
+   if(FULLTEST) {
+     ## Poisson process
+     fit <- ppm(X ~1, Poisson())
+     Xsim <- rmh(fit)
+   }
+   if(ALWAYS) { # Gibbs model => C code
+     ## Strauss process   
+     fit <- ppm(X ~1, Strauss(r=7))
+     Xsim <- rmh(fit)
 
-   # Strauss process simulated on a larger window
-   # then clipped to original window
-   Xsim <- rmh(fit, control=list(nrep=Nrep, expand=1.1, periodic=TRUE))
+     ## Strauss process simulated on a larger window
+     ## then clipped to original window
+     Xsim <- rmh(fit, control=list(nrep=Nrep, expand=1.1, periodic=TRUE))
 
-   # Extension of model to another window (thanks to Tuomas Rajala)
-   Xsim <- rmh(fit, w=square(2))
-   Xsim <- simulate(fit, w=square(2))
+     ## Extension of model to another window (thanks to Tuomas Rajala)
+     Xsim <- rmh(fit, w=square(2))
+     Xsim <- simulate(fit, w=square(2))
    
-   # Strauss - hard core process
-#   fit <- ppm(X ~1, StraussHard(r=7,hc=2))
-#   Xsim <- rmh(fit, start=list(n.start=X$n))
+     ## Strauss - hard core process
+     ##   fit <- ppm(X ~1, StraussHard(r=7,hc=2))
+     ##   Xsim <- rmh(fit, start=list(n.start=X$n))
 
-   # Geyer saturation process
-#   fit <- ppm(X ~1, Geyer(r=7,sat=2))
-#   Xsim <- rmh(fit, start=list(n.start=X$n))
+     ## Geyer saturation process
+     ##   fit <- ppm(X ~1, Geyer(r=7,sat=2))
+     ##   Xsim <- rmh(fit, start=list(n.start=X$n))
 
-   # Area-interaction process
+     ## Area-interaction process
      fit <- ppm(X ~1, AreaInter(r=7))
      Xsim <- rmh(fit, start=list(n.start=X$n))
   
-   # Penttinen process
+     ## Penttinen process
      fit <- ppm(X ~1, Penttinen(r=7))
      Xsim <- rmh(fit, start=list(n.start=X$n))
   
-     # soft core interaction process
-#     X <- quadscheme(X, nd=50)
-#     fit <- ppm(X ~1, Softcore(kappa=0.1), correction="isotropic")
-#     Xsim <- rmh(fit, start=list(n.start=X$n))
+     ## soft core interaction process
+     ##     X <- quadscheme(X, nd=50)
+     ##     fit <- ppm(X ~1, Softcore(kappa=0.1), correction="isotropic")
+     ##     Xsim <- rmh(fit, start=list(n.start=X$n))
 
-     # Diggle-Gratton pairwise interaction model
-#     fit <- ppm(cells ~1, DiggleGratton(0.05, 0.1))
-#     Xsim <- rmh(fit, start=list(n.start=cells$n))
-#     plot(Xsim, main="simulation from fitted Diggle-Gratton model")
+     ## Diggle-Gratton pairwise interaction model
+     ##     fit <- ppm(cells ~1, DiggleGratton(0.05, 0.1))
+     ##     Xsim <- rmh(fit, start=list(n.start=cells$n))
+     ##     plot(Xsim, main="simulation from fitted Diggle-Gratton model")
    
-   X <- rSSI(0.05, 100)
 
-   # piecewise-constant pairwise interaction function
-   fit <- ppm(X ~1, PairPiece(seq(0.02, 0.1, by=0.01)))
-   Xsim <- rmh(fit)
-
-   # marked point pattern
+     ## piecewise-constant pairwise interaction function
+     X <- rSSI(0.05, 100)
+     fit <- ppm(X ~1, PairPiece(seq(0.02, 0.1, by=0.01)))
+     Xsim <- rmh(fit)
+   }
+   
+   ## marked point pattern
    Y <- amacrine
 
-   #' marked Poisson models
-   fit <- ppm(Y)
-   Ysim <- rmh(fit)
+   if(FULLTEST) {
+     #' marked Poisson models
+     fit <- ppm(Y)
+     Ysim <- rmh(fit)
 
-   fit <- ppm(Y~marks)
-   Ysim <- rmh(fit)
+     fit <- ppm(Y~marks)
+     Ysim <- rmh(fit)
 
-   fit <- ppm(Y~x)
-   Ysim <- rmh(fit)
+     fit <- ppm(Y~x)
+     Ysim <- rmh(fit)
+     
+     fit <- ppm(Y~marks+x)
+     Ysim <- rmh(fit)
+   }
 
-   fit <- ppm(Y~marks+x)
-   Ysim <- rmh(fit)
+   if(ALWAYS) {
+     #' multitype Strauss
+     typ <- levels(Y$marks)
+     MS <- MultiStrauss(types = typ,
+                        radii=matrix(0.07, ncol=2, nrow=2))
 
-   #' multitype Strauss
-   typ <- levels(Y$marks)
-   MS <- MultiStrauss(types = typ,
-                      radii=matrix(0.07, ncol=2, nrow=2))
+     fit <- ppm(Y~marks*x, MS)
+     Ysim <- rmh(fit)
 
-   fit <- ppm(Y~marks*x, MS)
-   Ysim <- rmh(fit)
+     #' multitype Hardcore
+     h0 <- minnndist(unmark(Y)) * 0.95
+     MH <- MultiHard(types = typ,
+                     hradii=matrix(h0, ncol=2, nrow=2))
+     fit <- ppm(Y ~ marks+x, MH)
+     Ysim <- rmh(fit)
+     #' other code blocks
+     Ysim <- rmh(fit, control=list(periodic=TRUE, expand=1))
+     Ysim <- rmh(fit, control=list(periodic=FALSE, expand=1))
+     #' multihard core with invalid initial state
+     Ydouble <- superimpose(Y, rjitter(Y, h0/10))
+     Ysim <- rmh(fit, start=list(x.start=Ydouble))
 
-   #' multitype Hardcore
-   h0 <- minnndist(unmark(Y)) * 0.95
-   MH <- MultiHard(types = typ,
-                   hradii=matrix(h0, ncol=2, nrow=2))
-   fit <- ppm(Y ~ marks+x, MH)
-   Ysim <- rmh(fit)
-   #' other code blocks
-   Ysim <- rmh(fit, control=list(periodic=TRUE, expand=1))
-   Ysim <- rmh(fit, control=list(periodic=FALSE, expand=1))
-   #' multihard core with invalid initial state
-   Ydouble <- superimpose(Y, rjitter(Y, h0/10))
-   Ysim <- rmh(fit, start=list(x.start=Ydouble))
-
-   #' Lennard-Jones
-   fut <- ppm(unmark(longleaf) ~ 1, LennardJones(), rbord=1)
-   Ysim <- rmh(fut)
-   Ysim <- rmh(fut, control=list(periodic=TRUE, expand=1))
+     #' Lennard-Jones
+     fut <- ppm(unmark(longleaf) ~ 1, LennardJones(), rbord=1)
+     Ysim <- rmh(fut)
+     Ysim <- rmh(fut, control=list(periodic=TRUE, expand=1))
+   }
    
    spatstat.options(op)
  })
@@ -1054,9 +1061,9 @@ reset.spatstat.options()
 #'
 #'   Test the rmh interactive debugger
 #' 
-#'   $Revision: 1.9 $  $Date: 2020/01/07 07:26:18 $
+#'   $Revision: 1.10 $  $Date: 2020/05/01 05:29:42 $
 
-require(spatstat)
+if(ALWAYS) { # may depend on platform
 local({
   ## fit a model and prepare to simulate
   R <- 0.1
@@ -1098,3 +1105,4 @@ local({
   ## go
   rmh(fit, snoop=TRUE)
 })
+}
