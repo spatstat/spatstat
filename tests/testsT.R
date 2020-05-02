@@ -14,9 +14,9 @@ cat(paste("--------- Executing",
           "test code -----------\n"))
 #'   tests/tessera.R
 #'   Tessellation code, not elsewhere tested
-#'   $Revision: 1.7 $ $Date: 2019/10/17 01:45:56 $
+#'   $Revision: 1.8 $ $Date: 2020/05/02 01:32:58 $
 #'
-require(spatstat)
+if(FULLTEST) {
 local({
   W <- owin()
   Wsub <- square(0.5)
@@ -122,14 +122,15 @@ local({
   ## 
   da <- dirichletAreas(discretise(runifpoint(15, letterR)))
 })
+}
 #
 #   tests/testaddvar.R
 #
 # test addvar options
 #
-#   $Revision: 1.2 $  $Date: 2015/12/29 08:54:49 $
+#   $Revision: 1.3 $  $Date: 2020/05/02 01:32:58 $
 
-require(spatstat)
+if(FULLTEST) {
 local({
   X <-  rpoispp(function(x,y){exp(3+3*x)})
   model <- ppm(X ~y)
@@ -141,14 +142,16 @@ local({
   Z <- as.im(function(x,y) { x }, Window(X))
   addvar(model, Z)
 })
+}
 #
 #   tests/testparres.R
 #
 # additional test of parres
 #
-#  $Revision: 1.6 $  $Date: 2020/02/04 03:23:38 $
+#  $Revision: 1.7 $  $Date: 2020/05/02 01:32:58 $
 #
-require(spatstat)
+
+if(FULLTEST) {
 local({
 X <-  rpoispp(function(x,y){exp(3+x+2*x^2)})
 model <- ppm(X ~x+y)
@@ -197,64 +200,71 @@ check.separable(dmat, "x", c(x=FALSE, marks=FALSE), FALSE)
 check.separable(dmat, "x", c(FALSE, FALSE), FALSE)
 check.separable(dmat, "x", c(x=FALSE, marks=TRUE), FALSE)
 })
+}
 #'
 #'     tests/threedee.R
 #'
 #'     Tests of 3D code 
 #'
-#'      $Revision: 1.7 $ $Date: 2020/01/21 04:16:32 $
+#'      $Revision: 1.8 $ $Date: 2020/05/02 01:32:58 $
 #'
 
-require(spatstat)
 local({
-  A <- runifpoint3(10, nsim=2)
-  ##
   X <- runifpoint3(30)
   Y <- runifpoint3(20)
-  d <- pairdist(X, periodic=TRUE, squared=TRUE)
-  d <- crossdist(X, Y, squared=TRUE)
-  d <- crossdist(X, Y, squared=TRUE, periodic=TRUE)
-  Z <- ppsubset(X, 2:4)
-  #' 
-  h <- has.close(X, 0.2)
-  h <- has.close(X, 0.2, periodic=TRUE)
-  h <- has.close(X, 0.2, Y=Y)
-  h <- has.close(X, 0.2, Y=Y, periodic=TRUE)
-  #' code blocks not otherwise reached
-  rmax <- 0.6 * max(nndist(X))
-  g <- G3est(X, rmax=rmax, correction="rs")
-  g <- G3est(X, rmax=rmax, correction="km")
-  g <- G3est(X, rmax=rmax, correction="Hanisch")
-  g <- G3est(X, rmax=rmax, sphere="ideal")
-  g <- G3est(X, rmax=rmax, sphere="digital")
-  v <- sphere.volume()
-  v <- digital.volume()
-  #' older code
-  co <- coords(X)
-  xx <- co$x
-  yy <- co$y
-  zz <- co$z
-  gg1 <- g3engine(xx, yy, zz, correction="Hanisch G3")
-  gg2 <- g3engine(xx, yy, zz, correction="minus sampling")
-  ff1 <- f3engine(xx, yy, zz, correction="no")
-  ff2 <- f3engine(xx, yy, zz, correction="minus sampling")
+  if(FULLTEST) {
+    A <- runifpoint3(10, nsim=2)
+    Z <- ppsubset(X, 2:4)
+  }
   ##
-  X <- runifpoint3(10)
-  print(X)
-  print(X %mark% runif(10))
-  print(X %mark% factor(letters[c(1:5,5:1)]))
-  print(X %mark% data.frame(a=1:10, b=runif(10)))
-  da <- as.Date(paste0("2020-01-0", c(1:5,5:1)))
-  print(X %mark% da)
-  print(X %mark% data.frame(a=1:10, b=da))
+  if(ALWAYS) { # includes C code
+    d <- pairdist(X, periodic=TRUE, squared=TRUE)
+    d <- crossdist(X, Y, squared=TRUE)
+    d <- crossdist(X, Y, squared=TRUE, periodic=TRUE)
+    #' 
+    h <- has.close(X, 0.2)
+    h <- has.close(X, 0.2, periodic=TRUE)
+    h <- has.close(X, 0.2, Y=Y)
+    h <- has.close(X, 0.2, Y=Y, periodic=TRUE)
+    #' code blocks not otherwise reached
+    rmax <- 0.6 * max(nndist(X))
+    g <- G3est(X, rmax=rmax, correction="rs")
+    g <- G3est(X, rmax=rmax, correction="km")
+    g <- G3est(X, rmax=rmax, correction="Hanisch")
+    g <- G3est(X, rmax=rmax, sphere="ideal")
+    g <- G3est(X, rmax=rmax, sphere="digital")
+    v <- sphere.volume()
+    v <- digital.volume()
+    #' older code
+    co <- coords(X)
+    xx <- co$x
+    yy <- co$y
+    zz <- co$z
+    gg1 <- g3engine(xx, yy, zz, correction="Hanisch G3")
+    gg2 <- g3engine(xx, yy, zz, correction="minus sampling")
+    ff1 <- f3engine(xx, yy, zz, correction="no")
+    ff2 <- f3engine(xx, yy, zz, correction="minus sampling")
+  }
+  ##
+  if(ALWAYS) {
+    #'class support
+    X <- runifpoint3(10)
+    print(X)
+    print(X %mark% runif(10))
+    print(X %mark% factor(letters[c(1:5,5:1)]))
+    print(X %mark% data.frame(a=1:10, b=runif(10)))
+    da <- as.Date(paste0("2020-01-0", c(1:5,5:1)))
+    print(X %mark% da)
+    print(X %mark% data.frame(a=1:10, b=da))
+  }
 })
 #'    tests/trigraph.R
 #'
 #'   Tests for C code in trigraf.c
 #'   
-#'  $Revision: 1.3 $  $Date: 2018/09/23 09:37:29 $
+#'  $Revision: 1.4 $  $Date: 2020/05/02 01:32:58 $
 #'
-require(spatstat)
+if(ALWAYS) { # depends on C code 
 local({
   #' called from deldir.R
   spatstat.deldir.setopt(FALSE, TRUE)
@@ -277,7 +287,7 @@ local({
   tryangles(c(ii, 1),    c(jj, 5),    1)
   tryangles(c(ii, 1, 8), c(jj, 5, 9), 2)
 })
-
+}
 reset.spatstat.options()
 
 
@@ -286,9 +296,9 @@ reset.spatstat.options()
 #
 # test code for triplet interaction and associated summary function Tstat 
 #
-# $Revision: 1.7 $ $Date: 2020/01/26 04:49:09 $
+# $Revision: 1.8 $ $Date: 2020/05/02 01:32:58 $
 #
-require(spatstat)
+if(ALWAYS) { # C code, platform dependence
 local({
   #' valid model
   fit <- ppm(cells ~1, Triplets(0.1))
@@ -317,3 +327,4 @@ local({
   mod$par$gamma <- 0
   XmHard <- rmh(model=mod,start=list(n.start=5), control=list(nrep=1e5))
 })
+}
