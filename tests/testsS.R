@@ -393,6 +393,9 @@ local({
 #'  Basic tests of code in sparse3Darray.R and sparsecommon.R
 #'  $Revision: 1.22 $ $Date: 2020/05/01 09:59:59 $
 
+if(!exists("ALWAYS")) ALWAYS <- TRUE
+if(!exists("FULLTEST")) FULLTEST <- ALWAYS
+
 if(ALWAYS) { # fundamental, C code
 local({
   #' forming arrays
@@ -572,20 +575,20 @@ local({
     Mduf <- Msub - M
     
     ## tensor operator
-    tenseur(c(1,-1), M, 1, 3)
-    tenseur(M, M, 1:2, 1:2)
-    tenseur(M, M, 1:2, 2:1)
+    tensorSparse(c(1,-1), M, 1, 3)
+    tensorSparse(M, M, 1:2, 1:2)
+    tensorSparse(M, M, 1:2, 2:1)
     V <- sparseVector(i=c(1,3,6),x=1:3, length=7)
-    tenseur(V,V)
-    tenseur(V,V,1,1)
+    tensorSparse(V,V)
+    tensorSparse(V,V,1,1)
     A <- sparseMatrix(i=integer(0), j=integer(0), x=numeric(0), dims=c(7, 15))
     A[1:4, 2:5] <- 3
-    tenseur(A, A, 1, 1)
-    tenseur(t(A), A, 2, 1)
-    tenseur(V, A, 1, 1)
-    tenseur(t(A), V, 2, 1)
-    tenseur(as.vector(V), A, 1, 1)
-    tenseur(t(A), as.vector(V), 2, 1)
+    tensorSparse(A, A, 1, 1)
+    tensorSparse(t(A), A, 2, 1)
+    tensorSparse(V, A, 1, 1)
+    tensorSparse(t(A), V, 2, 1)
+    tensorSparse(as.vector(V), A, 1, 1)
+    tensorSparse(t(A), as.vector(V), 2, 1)
 
     v <- 0:3
     tensor1x1(v, Mfix)

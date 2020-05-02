@@ -4,7 +4,7 @@
 #'   Counterpart of linalg.R for sparse matrices/arrays
 #'
 #' 
-#'   $Revision: 1.12 $  $Date: 2020/04/27 02:08:31 $
+#'   $Revision: 1.13 $  $Date: 2020/05/02 09:33:16 $
 
 marginSumsSparse <- function(X, MARGIN) {
   #' equivalent to apply(X, MARGIN, sum)
@@ -45,9 +45,9 @@ tensor1x1 <- function(A, B) {
   return(result)
 }
 
-tenseur <- local({
+tensorSparse <- local({
 
-  tenseur <- function(A, B, alongA=integer(0), alongB=integer(0)) {
+  tensorSparse <- function(A, B, alongA=integer(0), alongB=integer(0)) {
     #' full arrays?
     if(isfull(A) && isfull(B))
       return(tensor::tensor(A=A, B=B, alongA=alongA, alongB=alongB))
@@ -181,7 +181,7 @@ tenseur <- local({
     return(dfC)
   }
 
-  tenseur
+  tensorSparse
 })
 
 sumsymouterSparse <- function(x, w=NULL, dbg=FALSE) {
