@@ -5,7 +5,7 @@
 
    Yes, really
 
-   $Revision: 1.13 $ $Date: 2019/02/21 02:21:17 $ 
+   $Revision: 1.14 $ $Date: 2020/05/04 03:37:34 $ 
 
   Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2018
   Licence: GNU Public Licence >= 2
@@ -242,11 +242,12 @@ void Cbiform(x, y, n, p, v, z)
 
 #undef FNAME
 #undef WEIGHTED
+#undef DISTINCT
 
 /*
   sumsymouter
   computes the sum of outer products 
-  x[,i,j] %o% x[,j,i]  over all pairs i, j
+  x[,i,j] %o% x[,j,i]  over all pairs i, j 
 */
 
 #define FNAME Csumsymouter
@@ -264,3 +265,29 @@ void Cbiform(x, y, n, p, v, z)
 #include "sumsymouter.h"
 #undef FNAME
 #undef WEIGHTED
+
+
+#define DISTINCT
+
+/*
+  sumDsymouter
+  computes the sum of outer products 
+  x[,i,j] %o% x[,j,i]  over all pairs i, j with i != j
+*/
+
+#define FNAME CsumDsymouter
+#include "sumsymouter.h"
+#undef FNAME
+
+/*
+  wsumDsymouter
+  computes the weighted sum of outer products 
+  w[i,j] * (x[,i,j] %o% x[,j,i])  over all pairs i, j with i != j
+*/
+
+#define FNAME CwsumDsymouter
+#define WEIGHTED
+#include "sumsymouter.h"
+#undef FNAME
+#undef WEIGHTED
+

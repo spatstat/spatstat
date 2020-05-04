@@ -1,9 +1,11 @@
 
-        CHANGES IN spatstat VERSION 1.64-0.008
+        CHANGES IN spatstat VERSION 1.64-0.009
 
 OVERVIEW
 
-    o Nickname: 'Geostrophic' 
+    o Nickname: 'Geostrophic'
+
+    o Important bug fix in vcov.ppm
 
     o We thank Maximilian Vogtland and Maximilian Hesselbarth
     for contributions.
@@ -15,6 +17,13 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
 BUG FIXES
 
+    o vcov.ppm
+    Variances were sometimes overestimated for Gibbs models.
+    That is, entries of the Fisher information matrix were underestimated,
+    because some contributions due to interaction were omitted
+    (due to a coding error).
+    Fixed.
+    
     o rbind.hyperframe
     Crashed unless all arguments had the same number of rows.
     (Spotted by Maximilian Vogtland).

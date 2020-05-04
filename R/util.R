@@ -1,7 +1,7 @@
 #
 #    util.R    miscellaneous utilities
 #
-#    $Revision: 1.242 $    $Date: 2020/02/03 11:14:58 $
+#    $Revision: 1.245 $    $Date: 2020/05/03 03:48:27 $
 #
 
 # common invocation of matrixsample
@@ -368,13 +368,3 @@ allElementsIdentical <- function(x, entry=NULL) {
   return(TRUE)
 }
 
-representativeRows <- function(x) {
-  # select a unique representative of each equivalence class of rows,
-  # in a numeric matrix or data frame of numeric values.
-  ord <- do.call(order, as.list(as.data.frame(x)))
-  y <- x[ord, , drop=FALSE]
-  dy <- apply(y, 2, diff)
-  answer <- logical(nrow(y))
-  answer[ord] <- c(TRUE, !matrowall(dy == 0))
-  return(answer)
-}

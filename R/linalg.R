@@ -3,7 +3,7 @@
 #
 #  Linear Algebra
 #
-# $Revision: 1.24 $ $Date: 2017/12/06 07:37:02 $
+# $Revision: 1.27 $ $Date: 2020/05/04 03:48:07 $
 #
 
 sumouter <- function(x, w=NULL, y=x) {
@@ -169,13 +169,13 @@ bilinearform <- function(x, v, y) {
   return(fullresult)
 }
 
-sumsymouter <- function(x, w=NULL) {
+sumsymouter <- function(x, w=NULL, distinct=TRUE) {
   ## x is a 3D array
   ## w is a matrix
   ## Computes the sum of outer(x[,i,j], x[,j,i]) * w[i,j] over all pairs i != j
   if(inherits(x, c("sparseSlab", "sparse3Darray")) &&
      (is.null(w) || inherits(w, "sparseMatrix")))
-    return(sumsymouterSparse(x, w))
+    return(sumsymouterSparse(x, w, distinct=distinct))
   x <- as.array(x)
   stopifnot(length(dim(x)) == 3)
   if(dim(x)[2L] != dim(x)[3L])
@@ -187,24 +187,47 @@ sumsymouter <- function(x, w=NULL) {
   }
   p <- dim(x)[1L]
   n <- dim(x)[2L]
-  if(is.null(w)) {
-    zz <- .C("Csumsymouter",
-             x = as.double(x),
-             p = as.integer(p),
-             n = as.integer(n),
-             y = as.double(numeric(p * p)),
-             PACKAGE = "spatstat")
+  if(!distinct) {
+    ## contributions from all pairs i,j
+    if(is.null(w)) {
+      zz <- .C("Csumsymouter",
+               x = as.double(x),
+               p = as.integer(p),
+               n = as.integer(n),
+               y = as.double(numeric(p * p)),
+               PACKAGE = "spatstat")
+    } else {
+      zz <- .C("Cwsumsymouter",
+               x = as.double(x),
+               w = as.double(w),
+               p = as.integer(p),
+               n = as.integer(n),
+               y = as.double(numeric(p * p)),
+               PACKAGE = "spatstat")
+    }
   } else {
-    zz <- .C("Cwsumsymouter",
-             x = as.double(x),
-             w = as.double(w),
-             p = as.integer(p),
-             n = as.integer(n),
-             y = as.double(numeric(p * p)),
-             PACKAGE = "spatstat")
+    ## contributions from pairs i != j
+    if(is.null(w)) {
+      zz <- .C("CsumDsymouter",
+               x = as.double(x),
+               p = as.integer(p),
+               n = as.integer(n),
+               y = as.double(numeric(p * p)),
+               PACKAGE = "spatstat")
+    } else {
+      zz <- .C("CwsumDsymouter",
+               x = as.double(x),
+               w = as.double(w),
+               p = as.integer(p),
+               n = as.integer(n),
+               y = as.double(numeric(p * p)),
+               PACKAGE = "spatstat")
+    }
   }
   matrix(zz$y, p, p)
 }
+
+## matrix utilities
 
 checksolve <- function(M, action, descrip, target="") {
   Mname <- short.deparse(substitute(M))

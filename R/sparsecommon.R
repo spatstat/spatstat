@@ -3,7 +3,7 @@
 #'
 #'  Utilities for sparse arrays
 #'
-#'  $Revision: 1.15 $  $Date: 2019/12/31 03:07:33 $
+#'  $Revision: 1.16 $  $Date: 2020/05/03 03:24:49 $
 #'
 
 #'  .............. completely generic ....................
@@ -278,3 +278,13 @@ check.anySparseVector <- function(v, npoints=NULL, fatal=TRUE, things="data poin
   return(TRUE)
 }
 
+representativeRows <- function(x) {
+  # select a unique representative of each equivalence class of rows,
+  # in a numeric matrix or data frame of numeric values.
+  ord <- do.call(order, as.list(as.data.frame(x)))
+  y <- x[ord, , drop=FALSE]
+  dy <- apply(y, 2, diff)
+  answer <- logical(nrow(y))
+  answer[ord] <- c(TRUE, !matrowall(dy == 0))
+  return(answer)
+}

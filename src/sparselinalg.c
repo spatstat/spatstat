@@ -25,3 +25,15 @@
 #include "spasumsymout.h"
 #undef FNAME
 
+#define DBG
+
+#define FNAME CDspaSumSymOut
+#undef WEIGHTS
+#include "spasumsymout.h"
+#undef FNAME
+
+#define FNAME CDspaWtSumSymOut
+#define WEIGHTS
+#include "spasumsymout.h"
+#undef FNAME
+

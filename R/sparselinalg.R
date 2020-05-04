@@ -4,7 +4,7 @@
 #'   Counterpart of linalg.R for sparse matrices/arrays
 #'
 #' 
-#'   $Revision: 1.13 $  $Date: 2020/05/02 09:33:16 $
+#'   $Revision: 1.14 $  $Date: 2020/05/04 03:47:43 $
 
 marginSumsSparse <- function(X, MARGIN) {
   #' equivalent to apply(X, MARGIN, sum)
@@ -184,7 +184,7 @@ tensorSparse <- local({
   tensorSparse
 })
 
-sumsymouterSparse <- function(x, w=NULL, dbg=FALSE) {
+sumsymouterSparse <- function(x, w=NULL, distinct=TRUE, dbg=FALSE) {
   dimx <- dim(x)
   if(length(dimx) != 3) stop("x should be a 3D array")
   stopifnot(dim(x)[2] == dim(x)[3])
@@ -200,18 +200,23 @@ sumsymouterSparse <- function(x, w=NULL, dbg=FALSE) {
                      k = x$k - 1L,
                      value = x$x)
   } else stop("x is not a recognised kind of sparse array")
-  # trivial?
+  if(distinct) {
+    #' remove entries with j = k
+    ok <- with(df, j != k)
+    df <- df[ok, , drop=TRUE]
+  }
+  ## trivial?
   if(nrow(df) < 2) {
     y <- matrix(0, m, m)
     dimnames(y) <- rep(dimnames(x)[1], 2)
     return(y)
   }
-  # order by increasing j, then k
+  ## order by increasing j, then k
   oo <- with(df, order(j, k, i))
   df <- df[oo, ]
-  # now provide ordering by increasing k then j
+  ## now provide ordering by increasing k then j
   ff <- with(df, order(k,j,i))
-  #
+  ##
   if(dbg) {
     cat("----------------- Data ---------------------\n")
     print(df)
@@ -219,39 +224,76 @@ sumsymouterSparse <- function(x, w=NULL, dbg=FALSE) {
     print(df[ff,])
     cat("Calling......\n")
   }
-  if(is.null(w)) {
-    z <- .C("CspaSumSymOut",
-            m = as.integer(m),
-            n = as.integer(n),
-            lenx = as.integer(nrow(df)),
-            ix = as.integer(df$i), # indices are already 0-based
-            jx = as.integer(df$j),
-            kx = as.integer(df$k),
-            x  = as.double(df$value),
-            flip = as.integer(ff - 1L), # convert 1-based to 0-based
-            y  = as.double(numeric(m * m)),
-            PACKAGE = "spatstat")
+  if(!dbg) {
+    if(is.null(w)) {
+      z <- .C("CspaSumSymOut",
+              m = as.integer(m),
+              n = as.integer(n),
+              lenx = as.integer(nrow(df)),
+              ix = as.integer(df$i), # indices are already 0-based
+              jx = as.integer(df$j),
+              kx = as.integer(df$k),
+              x  = as.double(df$value),
+              flip = as.integer(ff - 1L), # convert 1-based to 0-based
+              y  = as.double(numeric(m * m)),
+              PACKAGE = "spatstat")
+    } else {
+      ## extract triplet representation of w
+      w <- as(w, Class="TsparseMatrix")
+      dfw <- data.frame(j=w@i, k=w@j, w=w@x)
+      woo <- with(dfw, order(j, k))
+      dfw <- dfw[woo, , drop=FALSE]
+      z <- .C("CspaWtSumSymOut",
+              m = as.integer(m),
+              n = as.integer(n),
+              lenx = as.integer(nrow(df)),
+              ix = as.integer(df$i), # indices are already 0-based
+              jx = as.integer(df$j),
+              kx = as.integer(df$k),
+              x  = as.double(df$value),
+              flip = as.integer(ff - 1L),  # convert 1-based to 0-based
+              lenw = as.integer(nrow(dfw)),
+              jw = as.integer(dfw$j),
+              kw = as.integer(dfw$k),
+              w = as.double(dfw$w),
+              y  = as.double(numeric(m * m)),
+              PACKAGE = "spatstat")
+    }
   } else {
-    # extract triplet representation of w
-    w <- as(w, Class="TsparseMatrix")
-    dfw <- data.frame(j=w@i, k=w@j, w=w@x)
-    woo <- with(dfw, order(j, k))
-    dfw <- dfw[woo, , drop=FALSE]
-    z <- .C("CspaWtSumSymOut",
-            m = as.integer(m),
-            n = as.integer(n),
-            lenx = as.integer(nrow(df)),
-            ix = as.integer(df$i), # indices are already 0-based
-            jx = as.integer(df$j),
-            kx = as.integer(df$k),
-            x  = as.double(df$value),
-            flip = as.integer(ff - 1L),  # convert 1-based to 0-based
-            lenw = as.integer(nrow(dfw)),
-            jw = as.integer(dfw$j),
-            kw = as.integer(dfw$k),
-            w = as.double(dfw$w),
-            y  = as.double(numeric(m * m)),
-            PACKAGE = "spatstat")
+    if(is.null(w)) {
+      z <- .C("CDspaSumSymOut",
+              m = as.integer(m),
+              n = as.integer(n),
+              lenx = as.integer(nrow(df)),
+              ix = as.integer(df$i), # indices are already 0-based
+              jx = as.integer(df$j),
+              kx = as.integer(df$k),
+              x  = as.double(df$value),
+              flip = as.integer(ff - 1L), # convert 1-based to 0-based
+              y  = as.double(numeric(m * m)),
+              PACKAGE = "spatstat")
+    } else {
+      ## extract triplet representation of w
+      w <- as(w, Class="TsparseMatrix")
+      dfw <- data.frame(j=w@i, k=w@j, w=w@x)
+      woo <- with(dfw, order(j, k))
+      dfw <- dfw[woo, , drop=FALSE]
+      z <- .C("CDspaWtSumSymOut",
+              m = as.integer(m),
+              n = as.integer(n),
+              lenx = as.integer(nrow(df)),
+              ix = as.integer(df$i), # indices are already 0-based
+              jx = as.integer(df$j),
+              kx = as.integer(df$k),
+              x  = as.double(df$value),
+              flip = as.integer(ff - 1L),  # convert 1-based to 0-based
+              lenw = as.integer(nrow(dfw)),
+              jw = as.integer(dfw$j),
+              kw = as.integer(dfw$k),
+              w = as.double(dfw$w),
+              y  = as.double(numeric(m * m)),
+              PACKAGE = "spatstat")
+    }
   }
   y <- matrix(z$y, m, m)
   dimnames(y) <- rep(dimnames(x)[1], 2)

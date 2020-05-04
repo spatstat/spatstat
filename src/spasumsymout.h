@@ -13,7 +13,7 @@
 
   WEIGHTS   (#ifdef) use weights 
 
-  $Revision: 1.6 $  $Date: 2018/12/18 02:43:11 $
+  $Revision: 1.7 $  $Date: 2020/05/04 08:41:24 $
 
   Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2018
   Licence: GNU Public Licence >= 2
@@ -163,7 +163,7 @@ void FNAME(m, n,
     }
 #endif
     lstart = ((lend > lstart) ? lend : lstart) + 1;
-    tstart = ((tend > tstart) ? tend : tstart) + 1;
+    /* INCORRECT:    tstart = ((tend > tstart) ? tend : tstart) + 1; */
   }
 }
 

@@ -4,7 +4,7 @@
 #	A class 'ppp' to define point patterns
 #	observed in arbitrary windows in two dimensions.
 #
-#	$Revision: 4.112 $	$Date: 2018/06/03 09:17:56 $
+#	$Revision: 4.113 $	$Date: 2020/05/03 03:10:05 $
 #
 #	A point pattern contains the following entries:	
 #
@@ -691,3 +691,44 @@ domain.ppp <- Window.ppp <- function(X, ...) { as.owin(X) }
   return(X)
 }
 
+#' convert any appropriate subset index for any kind of point pattern
+#' to a logical vector
+
+ppsubset <- function(X, I, Iname, fatal=FALSE) {
+  if(missing(Iname))
+    Iname <- deparse(substitute(I))
+  # I could be a window or logical image
+  if(is.im(I))
+    I <- solutionset(I)
+  if((is.ppp(X) || is.lpp(X)) && is.owin(I)) {
+    I <- inside.owin(X, w=I)
+    return(I)
+  }
+  if((is.pp3(X) && inherits(I, "box3")) ||
+     (is.ppx(X) && inherits(I, "boxx"))) {
+    I <- inside.boxx(X, w=I)
+    return(I)
+  }
+  # I could be a function to be applied to X
+  if(is.function(I)) {
+    I <- I(X)
+    if(!is.vector(I)) {
+      whinge <- paste("Function", sQuote(Iname), "did not return a vector")
+      if(fatal) stop(whinge, call.=FALSE)
+      warning(whinge, call.=FALSE)
+      return(NULL)
+    }
+  }      
+  # I is now a subset index: convert to logical
+  I <- grokIndexVector(I, npoints(X))$strict$lo
+
+  if(anyNA(I)) {
+    #' illegal entries
+    whinge <- paste("Indices in", sQuote(Iname), "exceed array limits")
+    if(fatal) stop(whinge, call.=FALSE)
+    warning(whinge, call.=FALSE)
+    return(NULL)
+  }
+
+  return(I)
+}

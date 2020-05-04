@@ -66,12 +66,9 @@
 \alias{change.default.expand}          
 \alias{checkbigmatrix}          
 \alias{checkfields}          
-\alias{checksolve}
 \alias{check.arc}
-\alias{check.anySparseVector}
 \alias{check.finespacing}
 \alias{check.hist.lengths}
-\alias{check.mat.mul}
 \alias{check.separable}
 \alias{check.testfun}
 \alias{circticks}
@@ -158,7 +155,6 @@
 \alias{evalInteraction}
 \alias{evalInterEngine}
 \alias{evalPairPotential}
-\alias{evalSparse3Dentrywise}
 \alias{evaluate2Dkernel}
 \alias{even.breaks.owin}
 \alias{exactdt}              
@@ -192,7 +188,6 @@
 \alias{format.numberwithunit}
 \alias{FormatFaspFormulae}
 \alias{framebottomleft}
-\alias{fullIndexSequence}
 \alias{fvexprmap}
 \alias{fvlabels}
 \alias{fvlabels<-}
@@ -221,7 +216,6 @@
 %\alias{gridadjacencymatrix} %DoNotExport
 \alias{gridindex}            
 \alias{grid1index}
-\alias{grokIndexVector}
 \alias{grow.mask}
 \alias{hackglmmPQL}
 \alias{hasenvelope}
@@ -551,8 +545,6 @@
 \alias{reheat}
 \alias{RelevantDeviation}
 \alias{repair.image.xycoords}
-\alias{replacementIndex}
-\alias{representativeRows}
 \alias{rescale.msr}
 \alias{resolveEinfo}
 \alias{resolve.foxall.window}
@@ -671,7 +663,6 @@
 \alias{sphere.volume}
 \alias{store.versionstring.spatstat}
 \alias{str.hyperframe}
-\alias{strictIndexSequence}
 \alias{strausscounts}
 \alias{suffloc}
 \alias{suffstat.generic}
@@ -690,12 +681,10 @@
 \alias{summary.splitppx}
 \alias{summary.rmhexpand}
 \alias{summary.vblogit}
-\alias{sumsymouter}
 \alias{superimposeMarks}
 \alias{symbolmapdomain}
 \alias{symbolmaptype}
 \alias{tail.hyperframe}
-\alias{tensor1x1}
 \alias{thinjump}
 \alias{tilecentroids}        
 \alias{trianglediameters}
@@ -752,6 +741,17 @@
 \alias{xypolyselfint}
 \alias{ZeroValue}
 \alias{ZeroValue.im}
+%%%%%%%%%%%%%%% BEGIN SPARSE %%%%%%%%%%%%%%%%%%%%%%%%
+%%%% indices
+\alias{fullIndexSequence}
+\alias{grokIndexVector}
+\alias{replacementIndex}
+\alias{representativeRows}
+\alias{strictIndexSequence}
+%%%%  undocumented linear algebra
+\alias{checksolve}
+\alias{check.mat.mul}
+\alias{sumsymouter}
 %%%% sparse 3D arrays
 \alias{sparse3Darray}
 \alias{as.sparse3Darray}
@@ -785,16 +785,20 @@
 \alias{marginSumsSparse}
 \alias{rbindCompatibleDataFrames}
 \alias{bind.sparse3Darray}
+\alias{check.anySparseVector}
+\alias{evalSparse3Dentrywise}
+\alias{expandSparse}
+\alias{sparseVectorCumul}
+\alias{tensor1x1}
+%%%%%%%%%%%%%%%%%%%%%  END SPARSE %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%
 \alias{spatstatDiagnostic}
 %%
 \alias{as.ppplist}
 \alias{as.imlist}
 \alias{pointsAlongNetwork}
-\alias{expandSparse}
 \alias{allElementsIdentical}
 \alias{resampleNetworkDataFrame}
-\alias{sparseVectorCumul}
 %%
 \alias{as.ppm.lppm}
 \alias{as.ppm.rppm}
@@ -876,13 +880,9 @@ censtimeCDFest(o, cc, d, breaks, \dots,
 change.default.expand(x, newdefault)
 checkbigmatrix(n, m, fatal, silent)
 checkfields(X,L)
-checksolve(M, action, descrip, target)
 check.arc(arc, fatal)
-check.anySparseVector(v, npoints, fatal, things,
-                      naok, warn, vname, oneok)
 check.finespacing(r, eps, win, rmaxdefault, context, action, rname)
 check.hist.lengths(hist,breaks)
-check.mat.mul(A, B, Acols, Brows, fatal)
 check.separable(dmat, covname, isconstant, fatal)
 check.testfun(f, f1, X)
 circticks(R, at, unit, start, clockwise, labels)
@@ -1011,7 +1011,6 @@ evalInteraction(X,P,E,interaction,correction,splitInf,\dots,
 evalInterEngine(X,P,E,interaction,correction,splitInf,\dots,
                 Reach,precomputed,savecomputed)
 evalPairPotential(X,P,E,pairpot,potpars,R)
-evalSparse3Dentrywise(expr, envir)
 evaluate2Dkernel(kernel, x, y, sigma, varcov, \dots, scalekernel)
 even.breaks.owin(w)
 exactdt(X, \dots)              
@@ -1046,7 +1045,6 @@ forbid.logi(object)
 \method{format}{numberwithunit}(x, \dots, collapse, modifier)
 FormatFaspFormulae(f, argname)
 framebottomleft(w)
-fullIndexSequence(g)
 fvexprmap(x)
 fvlabels(x, expand=FALSE)
 fvlabels(x) <- value
@@ -1076,7 +1074,6 @@ good.correction.K(X)
 %gridadjacencymatrix(dims)
 gridindex(x, y, xrange, yrange, nx, ny)            
 grid1index(x, xrange, nx)
-grokIndexVector(ind, len, nama)
 grow.mask(M, xmargin=0, ymargin=xmargin)
 hackglmmPQL(fixed, random, family, data, correlation, weights,
             control, niter, verbose, subset, \dots, reltol)
@@ -1473,8 +1470,6 @@ reduceformula(fmla, deletevar, verbose)
 reheat(model, invtemp)
 RelevantDeviation(x, alternative, clamp, scaling)
 repair.image.xycoords(x)
-replacementIndex(ii, stuff)
-representativeRows(x)
 \method{rescale}{msr}(X, s, unitname)
 resolveEinfo(x, what, fallback, warn, atomic)
 resolve.foxall.window(X, Y, W, warn.trim)
@@ -1630,7 +1625,6 @@ sp.foundclass(cname, inlist, formalname, argsgiven)
 sp.foundclasses(cnames, inlist, formalname, argsgiven)
 store.versionstring.spatstat()
 \method{str}{hyperframe}(object, \dots)
-strictIndexSequence(g)
 strausscounts(U,X,r,EqualPairs)
 suffloc(object)
 suffstat.generic(model, X, callstring)
@@ -1649,12 +1643,10 @@ summarise.trend(trend, w, a)
 \method{summary}{rmhexpand}(object, \dots)
 \method{summary}{splitppx}(object, \dots)
 \method{summary}{vblogit}(object, \dots)
-sumsymouter(x, w)
 superimposeMarks(arglist, nobj)
 symbolmapdomain(x)
 symbolmaptype(x)
 \method{tail}{hyperframe}(x,n,\dots)
-tensor1x1(A,B)
 thinjump(n, p)
 tilecentroids(W, nx, ny)
 trianglediameters(iedge, jedge, edgelength, \dots,
@@ -1716,6 +1708,17 @@ xypolyselfint(p, eps, proper, yesorno, checkinternal)
 xypolygon2psp(p, w, check)
 ZeroValue(x)
 \method{ZeroValue}{im}
+%%%%%%%%%%%%%  BEGIN SPARSE %%%%%%%%%%%%%%%%%%%%%%%%
+%%% indices
+fullIndexSequence(g)
+grokIndexVector(ind, len, nama)
+replacementIndex(ii, stuff)
+representativeRows(x)
+strictIndexSequence(g)
+%%% undocumented linear algebra
+checksolve(M, action, descrip, target)
+check.mat.mul(A, B, Acols, Brows, fatal)
+sumsymouter(x, w, distinct)
 %%% sparse 3D arrays
 sparse3Darray(i,j,k,x,dims,dimnames,strict,nonzero)
 as.sparse3Darray(x, \dots)
@@ -1748,21 +1751,26 @@ SparseIndices(x)
 EntriesToSparse(df, dims)
 mapSparseEntries(x, margin, values, conform, across)
 applySparseEntries(x, f, \dots)
-sumsymouterSparse(x, w, dbg)
+sumsymouterSparse(x, w, distinct, dbg)
 tensorSparse(A, B, alongA, alongB)
 marginSumsSparse(X, MARGIN)
 rbindCompatibleDataFrames(x)
 bind.sparse3Darray(A, B, along)
+check.anySparseVector(v, npoints, fatal, things,
+                      naok, warn, vname, oneok)
+evalSparse3Dentrywise(expr, envir)
+expandSparse(x, n, across)
+sparseVectorCumul(x, i, length)
+tensor1x1(A,B)
+%%%%%%%%%%%%%  END SPARSE %%%%%%%%%%%%%%%%%%%%%%%%
 %%
 spatstatDiagnostic(msg)
 %%
 as.ppplist(x, check)
 as.imlist(x, check)
 pointsAlongNetwork(L, delta)
-expandSparse(x, n, across)
 allElementsIdentical(x, entry)
 resampleNetworkDataFrame(df, template)
-sparseVectorCumul(x, i, length)
 %%
 \method{as.ppm}{lppm}(object)
 \method{as.ppm}{rppm}(object)

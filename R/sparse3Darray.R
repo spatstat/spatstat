@@ -3,7 +3,7 @@
 #'
 #' Sparse 3D arrays represented as list(i,j,k,x)
 #' 
-#' $Revision: 1.39 $  $Date: 2019/12/31 01:03:10 $
+#' $Revision: 1.40 $  $Date: 2020/05/03 03:37:17 $
 #'
 
 sparse3Darray <- function(i=integer(0), j=integer(0), k=integer(0),
@@ -11,11 +11,12 @@ sparse3Darray <- function(i=integer(0), j=integer(0), k=integer(0),
                           dims=c(max(i),max(j),max(k)),
                           dimnames=NULL, strict=FALSE, nonzero=FALSE) {
   dat <- data.frame(i, j, k, x)
-  if(typeof(x) == "complex")
-    warn.once("sparse.complex",
-              "complex-valued sparse 3D arrays are supported in spatstat,",
-              "but complex-valued sparse matrices",
-              "are not yet supported by the Matrix package")
+  if(typeof(x) == "complex") 
+    warning(paste(
+      "complex-valued sparse 3D arrays are supported in spatstat,",
+      "but complex-valued sparse matrices",
+      "are not yet supported by the Matrix package"),
+      call.=FALSE)
   stopifnot(length(dims) == 3)
   dims <- as.integer(dims)
   if(!all(i >= 1 & i <= dims[1])) stop("indices i are outside range")

@@ -391,7 +391,7 @@ local({
 
 #'    tests/sparse3Darrays.R
 #'  Basic tests of code in sparse3Darray.R and sparsecommon.R
-#'  $Revision: 1.22 $ $Date: 2020/05/01 09:59:59 $
+#'  $Revision: 1.23 $ $Date: 2020/05/03 04:03:25 $
 
 if(!exists("ALWAYS")) ALWAYS <- TRUE
 if(!exists("FULLTEST")) FULLTEST <- ALWAYS
@@ -598,14 +598,18 @@ local({
     anyNA(M)
     
     ## a possible application in spatstat
-    cl10 <- as.data.frame(closepairs(cells, 0.1))
-    cl12 <- as.data.frame(closepairs(cells, 0.12))
+    ## n <- npoints(cells)
+    ## cl10 <- as.data.frame(closepairs(cells, 0.1))
+    ## cl12 <- as.data.frame(closepairs(cells, 0.12))
+    n <- 42
+    ii <- sample(1:n, 20)
+    jj <- sample(1:n, 20)
+    cl12 <- data.frame(i=ii, j=jj)
+    cl10 <- data.frame(i=ii[1:15], j=jj[1:15])
     cl10$k <- 1
     cl12$k <- 2
     cl <- rbind(cl10, cl12)
-    n <- npoints(cells)
-    Z <- with(cl,
-              sparse3Darray(i=i, j=j, k=k, x=1, dims=c(n,n,2)))
+    Z <- with(cl, sparse3Darray(i=i, j=j, k=k, x=1, dims=c(n,n,2)))
     dimnames(Z) <- list(NULL, NULL, c("r=0.1", "r=0.12"))
 
     Z <- aperm(Z, c(3,1,2))
