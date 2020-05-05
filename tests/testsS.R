@@ -391,7 +391,7 @@ local({
 
 #'    tests/sparse3Darrays.R
 #'  Basic tests of code in sparse3Darray.R and sparsecommon.R
-#'  $Revision: 1.23 $ $Date: 2020/05/03 04:03:25 $
+#'  $Revision: 1.24 $ $Date: 2020/05/05 03:06:28 $
 
 if(!exists("ALWAYS")) ALWAYS <- TRUE
 if(!exists("FULLTEST")) FULLTEST <- ALWAYS
@@ -596,29 +596,51 @@ local({
     
     ## test of anyNA method
     anyNA(M)
+
+    ## previously caused an error 
+    a <- list(i = c(1L, 1L, 1L, 1L, 1L, 1L, 1L,
+                    1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L,
+                    2L, 2L, 2L, 2L, 2L, 2L, 2L, 2L,
+                    2L, 2L, 2L, 2L, 2L, 2L, 2L, 2L,
+                    2L, 2L, 2L, 2L),
+              j = c(17L, 4L, 34L, 39L, 38L, 25L, 14L, 
+                    40L, 1L, 19L, 36L, 9L, 16L, 23L,
+                    15L, 17L, 4L, 34L, 39L, 38L, 
+                    25L, 14L, 40L, 1L, 19L, 36L, 9L,
+                    16L, 23L, 15L, 13L, 31L, 8L, 
+                    5L, 42L),
+              k = c(14L, 8L, 38L, 30L, 17L, 5L, 9L,
+                    6L, 31L, 39L, 26L, 27L, 41L, 1L,
+                    28L, 14L, 8L, 38L, 30L, 17L, 5L, 9L, 6L, 31L, 
+                    39L, 26L, 27L, 41L, 1L, 28L, 36L, 15L, 19L, 21L, 42L))
+    A <- with(a, sparse3Darray(i=i, j=j, k=k, x=1, dims=c(2, 42, 42)))
+    stopifnot(all(sumsymouterSparse(A) == sumsymouter(as.array(A))))
     
-    ## a possible application in spatstat
-    ## n <- npoints(cells)
-    ## cl10 <- as.data.frame(closepairs(cells, 0.1))
-    ## cl12 <- as.data.frame(closepairs(cells, 0.12))
-    n <- 42
-    ii <- sample(1:n, 20)
-    jj <- sample(1:n, 20)
-    cl12 <- data.frame(i=ii, j=jj)
-    cl10 <- data.frame(i=ii[1:15], j=jj[1:15])
-    cl10$k <- 1
-    cl12$k <- 2
-    cl <- rbind(cl10, cl12)
-    Z <- with(cl, sparse3Darray(i=i, j=j, k=k, x=1, dims=c(n,n,2)))
-    dimnames(Z) <- list(NULL, NULL, c("r=0.1", "r=0.12"))
-
-    Z <- aperm(Z, c(3,1,2))
-    stopifnot(all(sumsymouterSparse(Z) == sumsymouter(as.array(Z))))
-
     # no entries indexed
-    Z[integer(0), integer(0), integer(0)] <- 42
-    Z[matrix(, 0, 3)] <- 42
+    A[integer(0), integer(0), integer(0)] <- 99
+    A[matrix(, 0, 3)] <- 99
 
+    if(FULLTEST) { # re-check with randomised data 
+      ## .......... a possible application in spatstat
+      ## n <- npoints(cells)
+      ## cl10 <- as.data.frame(closepairs(cells, 0.1))
+      ## cl12 <- as.data.frame(closepairs(cells, 0.12))
+      ## ...........
+      n <- 42
+      ii <- sample(1:n, 20)
+      jj <- sample(1:n, 20)
+      cl12 <- data.frame(i=ii, j=jj)
+      cl10 <- data.frame(i=ii[1:15], j=jj[1:15])
+      ## ...........
+      cl10$k <- 1
+      cl12$k <- 2
+      cl <- rbind(cl10, cl12)
+      Z <- with(cl, sparse3Darray(i=i, j=j, k=k, x=1, dims=c(n,n,2)))
+      dimnames(Z) <- list(NULL, NULL, c("r=0.1", "r=0.12"))
+      Z <- aperm(Z, c(3,1,2))
+      stopifnot(all(sumsymouterSparse(Z) == sumsymouter(as.array(Z))))
+    }
+    
     ## complex valued arrays
     Mcplx <- sparse3Darray(i=1:3, j=c(3,1,2), k=4:2,
                            x=runif(3)+runif(3)*1i, dims=rep(4, 3))

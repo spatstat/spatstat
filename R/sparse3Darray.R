@@ -3,14 +3,17 @@
 #'
 #' Sparse 3D arrays represented as list(i,j,k,x)
 #' 
-#' $Revision: 1.40 $  $Date: 2020/05/03 03:37:17 $
+#' $Revision: 1.41 $  $Date: 2020/05/05 03:08:39 $
 #'
 
 sparse3Darray <- function(i=integer(0), j=integer(0), k=integer(0),
                           x=numeric(0),
                           dims=c(max(i),max(j),max(k)),
                           dimnames=NULL, strict=FALSE, nonzero=FALSE) {
-  dat <- data.frame(i, j, k, x)
+  dat <- data.frame(i=as.integer(i),
+                    j=as.integer(j),
+                    k=as.integer(k),
+                    x=x)
   if(typeof(x) == "complex") 
     warning(paste(
       "complex-valued sparse 3D arrays are supported in spatstat,",
