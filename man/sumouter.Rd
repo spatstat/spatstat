@@ -26,11 +26,12 @@
   The command \code{sumouter} computes the sum of the outer
   products of corresponding row vectors, weighted by the entries of \code{w}:
   \deqn{
-    M = \sum_i w_i x_i y_i^\top
+    M = \sum_i w_i x_i^\top y_i
   }{
     M = sum[i] (w[i] * outer(x[i,], y[i,]))
   }
-  where the sum is over all rows of \code{x} 
+  where \eqn{x_i}{x[i,]} is the \code{i}-th row of \code{x}
+  and \eqn{y_i}{y[i,]} is the \code{i}-th row of \code{y}
   (after removing any rows containing \code{NA} or other non-finite
   values).
   If \code{w} is missing, the weights will be taken as 1.
