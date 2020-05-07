@@ -1,7 +1,7 @@
 #
 # split.ppp.R
 #
-# $Revision: 1.34 $ $Date: 2019/12/15 04:44:38 $
+# $Revision: 1.35 $ $Date: 2020/05/07 13:03:38 $
 #
 # split.ppp and "split<-.ppp"
 #
@@ -312,9 +312,20 @@ print.summary.splitppp <- function(x, ...) {
   x
 }
   
-density.splitppp <- function(x, ..., se=FALSE) {
-  density.ppplist(x, ..., se=se)
+density.ppplist <- 
+density.splitppp <- function(x, ..., weights=NULL, se=FALSE) {
+  if(is.null(weights)) weights <- rep(list(NULL), length(x))
+  y <- mapply(density.ppp, x=x, weights=weights,
+              MoreArgs=list(se=se, ...),
+              SIMPLIFY=FALSE)
+  if(!se) return(as.solist(y, demote=TRUE))
+  y.est <- lapply(y, getElement, name="estimate")
+  y.se  <- lapply(y, getElement, name="SE")
+  z <- list(estimate = as.solist(y.est, demote=TRUE),
+            SE       = as.solist(y.se,  demote=TRUE))
+  return(z)
 }
+
 
 plot.splitppp <- function(x, ..., main) {
   if(missing(main)) main <- short.deparse(substitute(x))

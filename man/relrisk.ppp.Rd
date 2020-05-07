@@ -11,8 +11,9 @@
   cross-validation.
 }
 \usage{
-\method{relrisk}{ppp}(X, sigma = NULL, ..., varcov = NULL,
+\method{relrisk}{ppp}(X, sigma = NULL, ...,
            at = c("pixels", "points"),
+           weights = NULL, varcov = NULL, 
            relative=FALSE,
            adjust=1, edge=TRUE, diggle=FALSE, se=FALSE,
            casecontrol=TRUE, control=1, case)
@@ -34,14 +35,18 @@
     bandwidth, or passed to \code{\link{density.ppp}} to control the
     pixel resolution.
   }
-  \item{varcov}{
-    Optional. Variance-covariance matrix of anisotopic Gaussian
-    smoothing kernel. Incompatible with \code{sigma}.
-  }
   \item{at}{
     Character string specifying whether to compute the probability values
     at a grid of pixel locations (\code{at="pixels"}) or
     only at the points of \code{X} (\code{at="points"}).
+  }
+  \item{weights}{
+    Optional. Weights for the data points of \code{X}.
+    A numeric vector, an \code{expression}, or a pixel image.
+  }
+  \item{varcov}{
+    Optional. Variance-covariance matrix of anisotopic Gaussian
+    smoothing kernel. Incompatible with \code{sigma}.
   }
   \item{relative}{
     Logical.
@@ -175,6 +180,20 @@
   If \code{se=TRUE} then standard errors will also be computed,
   based on asymptotic theory, \emph{assuming a Poisson process}.
 
+  The optional argument \code{weights} may provide numerical weights
+  for the points of \code{X}. It should be a numeric vector of length
+  equal to \code{npoints(X)}.
+  
+  The argument \code{weights} can also be an \code{expression}.
+  It will be evaluated in the data frame \code{as.data.frame(X)}
+  to obtain a vector of weights. The expression may involve
+  the symbols \code{x} and \code{y} representing the Cartesian
+  coordinates, and the symbol \code{marks} representing the mark values.
+
+  The argument \code{weights} can also be a pixel image
+  (object of class \code{"im"}). numerical weights for the data points
+  will be extracted from this image (by looking up the pixel values
+  at the locations of the data points in \code{X}).
 }
 \value{
   If \code{se=FALSE} (the default), the format is described below.

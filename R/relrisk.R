@@ -3,15 +3,16 @@
 #
 #   Estimation of relative risk
 #
-#  $Revision: 1.44 $  $Date: 2019/12/12 00:37:13 $
+#  $Revision: 1.46 $  $Date: 2020/05/07 13:38:55 $
 #
 
 relrisk <- function(X, ...) UseMethod("relrisk")
                                       
 relrisk.ppp <- local({
 
-  relrisk.ppp <- function(X, sigma=NULL, ..., varcov=NULL,
-                          at=c("pixels", "points"), 
+  relrisk.ppp <- function(X, sigma=NULL, ..., 
+                          at=c("pixels", "points"),
+                          weights = NULL, varcov=NULL, 
                           relative=FALSE,
                           adjust=1, edge=TRUE, diggle=FALSE, se=FALSE,
                           casecontrol=TRUE, control=1, case) {
@@ -20,13 +21,18 @@ relrisk.ppp <- local({
     control.given <- !missing(control)
     case.given <- !missing(case)
     at <- match.arg(at)
+    ## 
+    weights <- pointweights(X, weights=weights, parent=parent.frame())
+    weighted <- !is.null(weights)
+    ## 
     npts <- npoints(X)
-    Y <- split(X)
-    uX <- unmark(X)
-    types <- names(Y)
-    ntypes <- length(Y)
+    marx <- marks(X)
+    imarks <- as.integer(marx)
+    types <- levels(marx)
+    ntypes <- length(types)
     if(ntypes == 1)
       stop("Data contains only one type of points")
+    ## 
     casecontrol <- casecontrol && (ntypes == 2)
     if((control.given || case.given) && !(casecontrol || relative)) {
       aa <- c("control", "case")[c(control.given, case.given)]
@@ -38,9 +44,10 @@ relrisk.ppp <- local({
                     if(ntypes==2) "casecontrol=FALSE" else
                     "there are more than 2 types of points"))
     }
-    marx <- marks(X)
-    imarks <- as.integer(marx)
-    lev <- levels(marx)
+    ## prepare for analysis
+    Y <- split(X) 
+    splitweights <- if(weighted) split(weights, marx) else rep(list(NULL), ntypes)
+    uX <- unmark(X)
     ## compute bandwidth (default bandwidth selector is bw.relrisk)
     ker <- resolve.2D.kernel(...,
                              sigma=sigma, varcov=varcov, adjust=adjust,
@@ -86,7 +93,8 @@ relrisk.ppp <- local({
            pixels = {
              ## intensity estimates of each type
              Deach <- do.call(density.splitppp,
-                              append(list(x=Y), SmoothPars))
+                              append(list(x=Y, weights=splitweights),
+                                     SmoothPars))
              ## compute intensity estimate for unmarked pattern
              Dall <- im.apply(Deach, sum, check=FALSE)
              ## WAS: Dall <- Reduce("+", Deach)
@@ -95,17 +103,20 @@ relrisk.ppp <- local({
                if(!edge) {
                  ## no edge correction
                  Veach <- do.call(density.splitppp,
-                                  append(list(x=Y), VarPars))
+                                  append(list(x=Y, weights=splitweights),
+                                         VarPars))
                } else if(!diggle) {
                  ## edge correction e(u)
                  Veach <- do.call(density.splitppp,
-                                  append(list(x=Y), VarPars))
+                                  append(list(x=Y, weights=splitweights),
+                                         VarPars))
                  Veach <- lapply(Veach, "/", e2=edgeim)
                } else {
                  ## Diggle edge correction e(x_i)
+                 diggweights <- if(weighted) { diggleX * weights } else diggleX
                  Veach <- mapply(density.ppp,
                                  x=Y,
-                                 weights=split(diggleX, marx),
+                                 weights=split(diggweights, marx),
                                  MoreArgs=VarPars,
                                  SIMPLIFY=FALSE)
                }
@@ -119,7 +130,8 @@ relrisk.ppp <- local({
              ## dummy variable matrix
              dumm <- matrix(0, npts, ntypes)
              dumm[cbind(seq_len(npts), imarks)] <- 1
-             colnames(dumm) <- lev
+             colnames(dumm) <- types
+             if(weighted) dumm <- dumm * weights
              Deach <- do.call(density.ppp,
                               append(list(x=uX, weights=dumm),
                                      SmoothPars))
@@ -158,7 +170,7 @@ relrisk.ppp <- local({
           icontrol <- control <- as.integer(control)
           stopifnot(control %in% 1:2)
         } else if(is.character(control)) {
-          icontrol <- match(control, levels(marks(X)))
+          icontrol <- match(control, types)
           if(is.na(icontrol)) stop(paste("No points have mark =", control))
         } else
           stop(paste("Unrecognised format for argument", sQuote("control")))
@@ -171,7 +183,7 @@ relrisk.ppp <- local({
           icase <- case <- as.integer(case)
           stopifnot(case %in% 1:2)
         } else if(is.character(case)) {
-          icase <- match(case, levels(marks(X)))
+          icase <- match(case, types)
           if(is.na(icase)) stop(paste("No points have mark =", case))
         } else stop(paste("Unrecognised format for argument", sQuote("case")))
         if(!control.given) 
@@ -256,7 +268,7 @@ relrisk.ppp <- local({
           icontrol <- control <- as.integer(control)
           stopifnot(control %in% 1:ntypes)
         } else if(is.character(control)) {
-          icontrol <- match(control, levels(marks(X)))
+          icontrol <- match(control, types)
           if(is.na(icontrol)) stop(paste("No points have mark =", control))
         } else
           stop(paste("Unrecognised format for argument", sQuote("control")))

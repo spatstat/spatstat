@@ -7,7 +7,7 @@
 ##
 ## plot.solist is defined in plot.solist.R
 ##
-## $Revision: 1.20 $ $Date: 2019/09/12 01:30:50 $
+## $Revision: 1.21 $ $Date: 2020/05/07 13:04:05 $
 
 anylist <- function(...) {
   x <- list(...)
@@ -207,16 +207,6 @@ solapply <- function(X, FUN, ..., check=TRUE, promote=TRUE, demote=FALSE) {
   v <- lapply(X, FUN, ...)
   u <- as.solist(v, check=check, promote=promote, demote=demote)
   return(u)
-}
-
-density.ppplist <- function(x, ..., se=FALSE) {
-  y <- lapply(x, density, ..., se=se)
-  if(!se) return(as.solist(y, demote=TRUE))
-  y.est <- lapply(y, getElement, name="estimate")
-  y.se  <- lapply(y, getElement, name="SE")
-  z <- list(estimate = as.solist(y.est, demote=TRUE),
-            SE       = as.solist(y.se,  demote=TRUE))
-  return(z)
 }
 
 expandSpecialLists <- function(x, special="solist") {

@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.64-0.011
+        CHANGES IN spatstat VERSION 1.64-0.012
 
 OVERVIEW
 
@@ -7,6 +7,8 @@ OVERVIEW
 
     o Important bug fix in vcov.ppm
 
+    o Relative risk estimation may include case weights.
+   
     o We thank Maximilian Vogtland and Maximilian Hesselbarth
     for contributions.
 
@@ -14,6 +16,12 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o rshift.ppp, rshift.splitppp
     New argument 'nsim'.
+
+    o relrisk.ppp
+    New argument 'weights'.
+
+    o density.splitppp
+    New argument 'weights'.
 
 BUG FIXES
 

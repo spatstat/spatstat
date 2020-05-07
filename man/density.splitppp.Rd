@@ -8,9 +8,9 @@
   or each of the point patterns in a list.
 }
 \usage{
-  \method{density}{splitppp}(x, \dots, se=FALSE)
+  \method{density}{splitppp}(x, \dots, weights=NULL, se=FALSE)
 
-  \method{density}{ppplist}(x, \dots, se=FALSE)
+  \method{density}{ppplist}(x, \dots, weights=NULL, se=FALSE)
 }
 \arguments{
   \item{x}{
@@ -22,6 +22,11 @@
   \item{\dots}{
     Arguments passed to \code{\link{density.ppp}} to control
     the smoothing, pixel resolution, edge correction etc.
+  }
+  \item{weights}{
+    Numerical weights for the points.
+    Either \code{NULL}, or a list containing numeric vectors of weights
+    for each of the point patterns.
   }
   \item{se}{
     Logical value indicating whether to compute standard errors as well.
@@ -69,11 +74,8 @@
   Z <- density(split(amacrine), 0.05)
   plot(Z)
 }
-\author{\adrian
-  
-  
-  and \rolf
-  
+\author{
+  \spatstatAuthors.
 }
 \keyword{spatial}
 \keyword{methods}

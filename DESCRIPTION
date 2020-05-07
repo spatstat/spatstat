@@ -1,6 +1,6 @@
 Package: spatstat
-Version: 1.64-0.011
-Date: 2020-05-06
+Version: 1.64-0.012
+Date: 2020-05-07
 Title: Spatial Point Pattern Analysis, Model-Fitting, Simulation, Tests
 Author: Adrian Baddeley <Adrian.Baddeley@curtin.edu.au>,
 	Rolf Turner <r.turner@auckland.ac.nz> 
