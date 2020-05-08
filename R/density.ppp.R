@@ -3,7 +3,7 @@
 #
 #  Method for 'density' for point patterns
 #
-#  $Revision: 1.106 $    $Date: 2018/10/29 01:25:21 $
+#  $Revision: 1.107 $    $Date: 2020/05/08 01:48:24 $
 #
 
 # ksmooth.ppp <- function(x, sigma, ..., edge=TRUE) {
@@ -204,9 +204,10 @@ denspppSEcalc <- function(x, sigma, varcov, ...,
   ## Calculate standard error, rather than estimate
   nx <- npoints(x)
 
+  single <- is.null(dim(weights))
+  
   if(bandwidth.is.infinite(sigma)) {
     #' special case - uniform
-    single <- is.null(dim(weights))
     totwt2 <- if(is.null(weights)) nx else
               if(single) sum(weights^2) else colSums(weights^2)
     if(!edge)
@@ -261,10 +262,14 @@ denspppSEcalc <- function(x, sigma, varcov, ...,
     ## edge correction e(u)
     V <- density(x, sigma=tau, varcov=taumat, ...,
                  weights=weights, edge=edge, diggle=diggle, at=at)
-    V <- if(at == "pixels") (V/edgeim) else (V * diggleX)
+    V <- if(at == "points") {
+           V * diggleX
+         } else {
+           if(single) V/edgeim else solapply(V, "/", e2=edgeim)
+         }
   } else {
     ## Diggle edge correction e(x_i)
-    wts <- diggleX * (weights %orifnull% 1)
+    wts <- if(is.null(weights)) diggleX else (diggleX * weights)
     V <- density(x, sigma=tau, varcov=taumat, ...,
                  weights=wts, edge=edge, diggle=diggle, at=at)
   }

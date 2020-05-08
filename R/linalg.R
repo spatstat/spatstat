@@ -3,7 +3,7 @@
 #
 #  Linear Algebra
 #
-# $Revision: 1.27 $ $Date: 2020/05/04 03:48:07 $
+# $Revision: 1.29 $ $Date: 2020/05/08 03:17:46 $
 #
 
 sumouter <- function(x, w=NULL, y=x) {
@@ -11,16 +11,51 @@ sumouter <- function(x, w=NULL, y=x) {
   stopifnot(is.matrix(x))
   weighted <- !is.null(w)
   symmetric <- missing(y) || identical(x,y)
-  if(weighted) {
-    if(length(dim(w)) > 1) stop("w should be a vector")
-    w <- as.numeric(w)
-    check.nvector(w, nrow(x), things="rows of x")
-  }
   if(!symmetric) {
     stopifnot(is.matrix(y))
     stopifnot(nrow(x) == nrow(y))
   }
-  #' transpose (compute outer squares of columns)
+  if(weighted) {
+    if(max(1L, dim(w)) > 1L) stop("w should be a vector")
+    w <- as.vector(w)
+    if(is.complex(w)) {
+      stopifnot(length(w) == nrow(x))
+    } else {
+      w <- as.numeric(w)
+      check.nvector(w, nrow(x), things="rows of x")
+    }
+  }
+    
+  #' ............ complex arguments ....................
+  #' handle complex weights ...
+  if(weighted && is.complex(w)) {
+    a <- if(symmetric) sumouter(x, Re(w)) else sumouter(x, Re(w), y)
+    b <- if(symmetric) sumouter(x, Im(w)) else sumouter(x, Im(w), y)
+    result <- a + b * 1i
+    return(result)
+  }
+  #' handle complex x, y ...
+  if(is.complex(x) || is.complex(y)) {
+    Rex <- Re(x)
+    Imx <- Im(x)
+    Sux <- Rex + Imx
+    if(symmetric) {
+      RexRey <- sumouter(Rex, w)
+      ImxImy <- sumouter(Imx, w)
+      SuxSuy <- sumouter(Sux, w)
+    } else {
+      Rey <- Re(y)
+      Imy <- Im(y)
+      Suy <- Rey + Imy
+      RexRey <- sumouter(Rex, w, Rey)
+      ImxImy <- sumouter(Imx, w, Imy)
+      SuxSuy <- sumouter(Sux, w, Suy)
+    }
+    result <- RexRey - ImxImy + (SuxSuy - RexRey - ImxImy) * 1i
+    return(result)
+  }
+  #' .......... All arguments are numeric. .................
+  #' Transpose (compute outer squares of columns)
   tx <- t(x)
   if(!symmetric) ty <- t(y)
   #' check for NA etc
@@ -91,6 +126,29 @@ sumouter <- function(x, w=NULL, y=x) {
 quadform <- function(x, v) {
   #' compute vector of values y[i] = x[i, ] %*% v %*% t(x[i,])
   stopifnot(is.matrix(x))
+  #'
+  if(missing(v)) {
+    v <- diag(rep.int(1, p))
+  } else {
+    stopifnot(is.matrix(v))
+    if(nrow(v) != ncol(v)) stop("v should be a square matrix")
+    stopifnot(ncol(x) == nrow(v))
+  }
+  #' handle complex values
+  if(is.complex(v)) {
+    a <- quadform(x, Re(v))
+    b <- quadform(x, Im(v))
+    result <- a + b * 1i
+    return(result)
+  }
+  if(is.complex(x)) {
+    A <- quadform(Re(x), v)
+    B <- quadform(Im(x), v)
+    D <- quadform(Re(x) + Im(x), v)
+    result <- A - B + (D - A - B) * 1i
+    return(result)
+  }
+  #' arguments are numeric
   p <- ncol(x)
   n <- nrow(x)
   nama <- rownames(x)
@@ -101,13 +159,6 @@ quadform <- function(x, v) {
   if(!allok) {
     tx <- tx[ , ok, drop=FALSE]
     n <- ncol(tx)
-  }
-  if(missing(v)) {
-    v <- diag(rep.int(1, p))
-  } else {
-    stopifnot(is.matrix(v))
-    if(nrow(v) != ncol(v)) stop("v should be a square matrix")
-    stopifnot(ncol(x) == nrow(v))
   }
   z <- .C("Cquadform",
           x=as.double(tx),
@@ -131,6 +182,21 @@ bilinearform <- function(x, v, y) {
   stopifnot(is.matrix(x))
   stopifnot(is.matrix(y))
   stopifnot(identical(dim(x), dim(y)))
+  #' handle complex values
+  if(is.complex(v)) {
+    a <- bilinearform(x, Re(v), y)
+    b <- bilinearform(x, Im(v), y)
+    result <- a + b * 1i
+    return(result)
+  }
+  if(is.complex(x) || is.complex(y)) {
+    a <- bilinearform(Re(x), v, Re(y))
+    b <- bilinearform(Im(x), v, Im(y))
+    d <- bilinearform(Re(x)+Im(x), v, Re(y)+Im(y))
+    result <- a - b + (d - a - b) * 1i
+    return(result)
+  }
+  #' arguments are numeric
   p <- ncol(x)
   n <- nrow(x)
   nama <- rownames(x)
@@ -173,9 +239,25 @@ sumsymouter <- function(x, w=NULL, distinct=TRUE) {
   ## x is a 3D array
   ## w is a matrix
   ## Computes the sum of outer(x[,i,j], x[,j,i]) * w[i,j] over all pairs i != j
+  ## handle complex values
+  if(is.complex(w)) {
+    a <- sumsymouter(x, Re(w), distinct=distinct)
+    b <- sumsymouter(x, Im(w), distinct=distinct)
+    result <- a + b * 1i
+    return(result)
+  }
+  if(is.complex(x)) {
+    a <- sumsymouter(Re(x), w=w, distinct=distinct)
+    b <- sumsymouter(Im(x), w=w, distinct=distinct)
+    d <- sumsymouter(Re(x)+Im(x), w=w, distinct=distinct)
+    result <- a - b + (d - a - b) * 1i
+    return(result)
+  }
+  ## handle sparse arrays
   if(inherits(x, c("sparseSlab", "sparse3Darray")) &&
      (is.null(w) || inherits(w, "sparseMatrix")))
     return(sumsymouterSparse(x, w, distinct=distinct))
+  ## arguments are numeric
   x <- as.array(x)
   stopifnot(length(dim(x)) == 3)
   if(dim(x)[2L] != dim(x)[3L])

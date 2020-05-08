@@ -22,6 +22,8 @@
 \details{
   The matrices \code{x} and \code{y} will be interpreted as
   collections of row vectors. They must have the same number of rows.
+  The entries of \code{x} and \code{y} may be
+  numeric, integer, logical or complex values.
 
   The command \code{sumouter} computes the sum of the outer
   products of corresponding row vectors, weighted by the entries of \code{w}:

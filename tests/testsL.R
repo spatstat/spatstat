@@ -334,7 +334,7 @@ reset.spatstat.options()
 ##
 ## checks validity of linear algebra code
 ##
-##  $Revision: 1.5 $ $Date: 2020/01/05 02:34:17 $
+##  $Revision: 1.6 $ $Date: 2020/05/08 02:56:30 $
 ##
 
 local({
@@ -361,7 +361,12 @@ local({
     stop("sumouter gives incorrect result in Unweighted Asymmetric case")
   if(!identical(zWA, sumouter(x, w, y)))
     stop("sumouter gives incorrect result in Weighted Asymmetric case")
+
+  #' complex quadratic forms
+  a <- sumouter(x + 1i)
+  b <- sumouter(x + 1i, w + 1i)
   
+  #' sumsymouter
   x <- array(as.numeric(1:(p * n * n)), dim=c(p, n, n))
   w <- matrix(1:(n*n), n, n)
   y <- matrix(numeric(p * p), p, p)
@@ -372,6 +377,10 @@ local({
   if(!identical(y,z))
     stop("sumsymouter gives incorrect result")
 
+  #' complex sumsymouter
+  a <- sumsymouter(x + 1i)
+  b <- sumsymouter(x + 1i, w + 1i)
+  
   #' power of complex matrix
   M <- diag(c(1,-1))
   V <- matrixsqrt(M)

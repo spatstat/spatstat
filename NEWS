@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.64-0.012
+        CHANGES IN spatstat VERSION 1.64-0.013
 
 OVERVIEW
 
@@ -30,6 +30,10 @@ BUG FIXES
     That is, entries of the Fisher information matrix were underestimated,
     because some contributions due to interaction were omitted
     (due to a coding error).
+    Fixed.
+
+    o density.ppp
+    Crashed when se=TRUE if there were multiple columns of 'weights'.
     Fixed.
     
     o rbind.hyperframe

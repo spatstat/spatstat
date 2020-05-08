@@ -1,7 +1,7 @@
 #
 # split.ppp.R
 #
-# $Revision: 1.35 $ $Date: 2020/05/07 13:03:38 $
+# $Revision: 1.36 $ $Date: 2020/05/08 01:22:18 $
 #
 # split.ppp and "split<-.ppp"
 #
@@ -314,7 +314,8 @@ print.summary.splitppp <- function(x, ...) {
   
 density.ppplist <- 
 density.splitppp <- function(x, ..., weights=NULL, se=FALSE) {
-  if(is.null(weights)) weights <- rep(list(NULL), length(x))
+  if(is.null(weights) || is.im(weights) || is.expression(weights))
+    weights <- rep(list(weights), length(x))
   y <- mapply(density.ppp, x=x, weights=weights,
               MoreArgs=list(se=se, ...),
               SIMPLIFY=FALSE)

@@ -24,9 +24,7 @@
     the smoothing, pixel resolution, edge correction etc.
   }
   \item{weights}{
-    Numerical weights for the points.
-    Either \code{NULL}, or a list containing numeric vectors of weights
-    for each of the point patterns.
+    Numerical weights for the points. See Details.
   }
   \item{se}{
     Logical value indicating whether to compute standard errors as well.
@@ -65,6 +63,21 @@
 
   If \code{se=TRUE}, the result is a list with two elements named
   \code{estimate} and \code{SE}, each of the format described above.
+
+  The argument \code{weights} specifies numerical case weights
+  for the data points.
+  Normally it should be a list, with the same length as
+  \code{x}. The entry \code{weights[[i]]} will determine the
+  case weights for the pattern \code{x[[i]]}, and may be given in
+  any format acceptable to \code{\link{density.ppp}}.
+  For example, \code{weights[[i]]} can be
+  a numeric vector of length equal to \code{npoints(x[[i]])},
+  a single numeric value, a numeric matrix,
+  a pixel image (object of class \code{"im"}),
+  or an \code{expression}.
+
+  For convenience, \code{weights} can also be a single \code{expression}
+  or a single pixel image (object of class \code{"im"}). 
 }
 \seealso{
   \code{\link{ppp.object}},

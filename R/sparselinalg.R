@@ -4,7 +4,7 @@
 #'   Counterpart of linalg.R for sparse matrices/arrays
 #'
 #' 
-#'   $Revision: 1.14 $  $Date: 2020/05/04 03:47:43 $
+#'   $Revision: 1.15 $  $Date: 2020/05/08 03:00:18 $
 
 marginSumsSparse <- function(X, MARGIN) {
   #' equivalent to apply(X, MARGIN, sum)
@@ -192,6 +192,21 @@ sumsymouterSparse <- function(x, w=NULL, distinct=TRUE, dbg=FALSE) {
     stopifnot(inherits(w, "sparseMatrix"))
     stopifnot(all(dim(w) == dim(x)[2:3]))
   }
+  ## handle complex values
+  if(is.complex(w)) {
+    a <- sumsymouter(x, Re(w), distinct=distinct)
+    b <- sumsymouter(x, Im(w), distinct=distinct)
+    result <- a + b * 1i
+    return(result)
+  }
+  if(is.complex(x)) {
+    a <- sumsymouter(Re(x), w=w, distinct=distinct)
+    b <- sumsymouter(Im(x), w=w, distinct=distinct)
+    d <- sumsymouter(Re(x)+Im(x), w=w, distinct=distinct)
+    result <- a - b + (d - a - b) * 1i
+    return(result)
+  }
+  ## arguments are sparse numeric arrays
   m <- dimx[1]
   n <- dimx[2]
   if(inherits(x, "sparse3Darray")) {
