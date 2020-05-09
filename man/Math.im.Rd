@@ -93,6 +93,9 @@
   the image are ignored. To enable this, we added the argument
   \code{drop}. Pixel values that are \code{NA} are removed
   if \code{drop=TRUE} or if \code{na.rm=TRUE}.
+
+  For the \code{Ops} group, one of the arguments is permitted to be
+  a single atomic value instead of an image.
 }
 \seealso{
   \code{\link{eval.im}} for evaluating expressions involving images.

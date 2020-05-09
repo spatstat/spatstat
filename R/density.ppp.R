@@ -3,7 +3,7 @@
 #
 #  Method for 'density' for point patterns
 #
-#  $Revision: 1.107 $    $Date: 2020/05/08 01:48:24 $
+#  $Revision: 1.110 $    $Date: 2020/05/09 04:02:00 $
 #
 
 # ksmooth.ppp <- function(x, sigma, ..., edge=TRUE) {
@@ -127,8 +127,8 @@ density.ppp <- function(x, sigma=NULL, ...,
                                weights=weights, varcov=varcov)
     raw <- divide.by.pixelarea(both$smooth)
     edg <- both$edge
-    smo <- if(is.im(raw)) eval.im(raw/edg) else
-           lapply(raw, divideimage, denom=edg)
+    ## Math.im / Math.imlist not yet working
+    smo <- imagelistOp(raw, edg, "/")
   } else {
     # edge correction e(x_i)
     edg <- second.moment.calc(x, sigma, what="edge", ...,
@@ -262,11 +262,7 @@ denspppSEcalc <- function(x, sigma, varcov, ...,
     ## edge correction e(u)
     V <- density(x, sigma=tau, varcov=taumat, ...,
                  weights=weights, edge=edge, diggle=diggle, at=at)
-    V <- if(at == "points") {
-           V * diggleX
-         } else {
-           if(single) V/edgeim else solapply(V, "/", e2=edgeim)
-         }
+    V <- if(at == "points") V * diggleX else imagelistOp(V, edgeim, "/")
   } else {
     ## Diggle edge correction e(x_i)
     wts <- if(is.null(weights)) diggleX else (diggleX * weights)

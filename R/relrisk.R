@@ -3,7 +3,7 @@
 #
 #   Estimation of relative risk
 #
-#  $Revision: 1.46 $  $Date: 2020/05/07 13:38:55 $
+#  $Revision: 1.50 $  $Date: 2020/05/09 05:29:13 $
 #
 
 relrisk <- function(X, ...) UseMethod("relrisk")
@@ -21,7 +21,7 @@ relrisk.ppp <- local({
     control.given <- !missing(control)
     case.given <- !missing(case)
     at <- match.arg(at)
-    ## 
+    ## evaluate numerical weights (multiple columns not allowed)
     weights <- pointweights(X, weights=weights, parent=parent.frame())
     weighted <- !is.null(weights)
     ## 
@@ -110,17 +110,19 @@ relrisk.ppp <- local({
                  Veach <- do.call(density.splitppp,
                                   append(list(x=Y, weights=splitweights),
                                          VarPars))
-                 Veach <- lapply(Veach, "/", e2=edgeim)
+                 #' Ops.imlist not yet working
+                 Veach <- imagelistOp(Veach, edgeim, "/")
                } else {
                  ## Diggle edge correction e(x_i)
                  diggweights <- if(weighted) { diggleX * weights } else diggleX
-                 Veach <- mapply(density.ppp,
-                                 x=Y,
-                                 weights=split(diggweights, marx),
-                                 MoreArgs=VarPars,
-                                 SIMPLIFY=FALSE)
+                 Veach <- as.solist(mapply(density.ppp,
+                                           x=Y,
+                                           weights=split(diggweights, marx),
+                                           MoreArgs=VarPars,
+                                           SIMPLIFY=FALSE))
                }
-               Veach <- lapply(Veach, "*", varconst)
+               #' Ops.imlist not yet working
+               Veach <- imagelistOp(Veach, varconst, "*")
                Vall <- im.apply(Veach, sum, check=FALSE)
                ## WAS:   Vall <- Reduce("+", Veach)
              }
@@ -275,7 +277,8 @@ relrisk.ppp <- local({
       }
       switch(at,
              pixels={
-               probs <- as.solist(lapply(Deach, "/", e2=Dall))
+               #' Ops.imagelist not yet working
+               probs <- imagelistOp(Deach, Dall, "/")
                ## correct small numerical errors
                probs <- as.solist(lapply(probs, clamp01))
                ## trap NaN values

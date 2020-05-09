@@ -1583,6 +1583,8 @@ listed alphabetically.
    \item Accelerated by 1 to 2 orders of magnitude.
    \end{itemize}
 
+ \item \texttt{density.splitppp}: New argument \texttt{weights}.
+   
  \item \texttt{dfbetas.ppm}:
    \begin{itemize}
    \item 
@@ -2628,6 +2630,8 @@ listed alphabetically.
      \item
        The arguments \texttt{adjust}, \texttt{edge}, \texttt{diggle}
        are now explicit formal arguments.
+     \item 
+       New argument \texttt{weights}.
      \end{itemize}
      
    \texttt{rhohat}:
@@ -2731,6 +2735,9 @@ listed alphabetically.
      If \texttt{lambda} is a list of \texttt{"linim"} or \texttt{"linfun"}
      objects, then the argument \texttt{L} can be omitted.
 
+   \item \texttt{rshift.ppp}, \texttt{rshift.splitppp}: 
+     new argument \texttt{nsim}.
+     
  \item \texttt{rStrauss, rHardcore, rStraussHard, rDiggleGratton, rDGS, rPenttinen:}
    New argument \texttt{drop}.
 

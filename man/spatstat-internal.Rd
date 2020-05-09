@@ -232,6 +232,8 @@
 \alias{IdenticalRows}
 \alias{idorempty}
 \alias{illegal.iformula}
+\alias{imageOp}
+\alias{imagelistOp}
 \alias{implemented.for.K}
 \alias{impliedpresence}
 \alias{impliedcoefficients}
@@ -1092,6 +1094,8 @@ IdenticalRowPair(i,j,a,b)
 IdenticalRows(i,j,a,b)
 idorempty(w, r, caller)
 illegal.iformula(ifmla, itags, dfvarnames)
+imageOp(e1, e2, op)
+imagelistOp(e1, e2, op)
 implemented.for.K(correction, windowtype, explicit)
 impliedpresence(tags, formula, df, extranames=character(0))
 impliedcoefficients(object, tag)

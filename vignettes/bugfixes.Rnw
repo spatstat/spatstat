@@ -336,6 +336,11 @@ are immediately obvious.
   \subsection{Bugs, Substantially Incorrect, Moderate Impact}
 
   \begin{itemize}
+  \item \texttt{vcov.ppm}:
+    Result was sometimes incorrect for Gibbs models.
+    The Fisher information was slightly underestimated.
+    \bugger{1.31-1}{march 2013}{1.64-1}{may 2020}
+    
   \item \texttt{as.linnet.psp}:
     Sometimes produced a network with duplicated segments.
     [Such objects can be repaired using \texttt{repairNetwork}.]

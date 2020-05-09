@@ -1,22 +1,8 @@
 ##
 ##   Math.im.R
 ##
-##   $Revision: 1.7 $ $Date: 2017/01/12 03:50:22 $
+##   $Revision: 1.8 $ $Date: 2020/05/08 06:09:14 $
 ##
-
-Ops.im <- function(e1,e2=NULL){
-    unary <- nargs() == 1L
-    if(unary){
-        if(!is.element(.Generic, c("!", "-", "+")))
-            stop("Unary usage is undefined for this operation for images.")
-        callstring <- paste(.Generic, "e1")
-    } else {
-        callstring <- paste("e1", .Generic, "e2")
-    }
-    expr <- parse(text = callstring)
-    return(do.call(eval.im, list(expr = expr)))
-}
-
 Math.im <- function(x, ...){
     m <- do.call(.Generic, list(x$v, ...))
     rslt <- im(m, xcol = x$xcol, yrow = x$yrow, xrange = x$xrange,
@@ -37,3 +23,21 @@ Complex.im <- function(z){
                yrange = z$yrange, unitname = unitname(z))
     return(rslt)
 }
+
+## The following function defines what happens in Ops.im
+## but the formal 'Ops' method is now in Ops.im.R
+
+imageOp <- function(e1, e2=NULL, op) {
+  ## operate on an image or pair of images
+  if(is.null(e2)) {
+    ## unary operation
+    if(!is.element(op, c("!", "-", "+")))
+      stop(paste("Unary operation", sQuote(op), "is undefined for images"),
+           call.=FALSE)
+    expr <- parse(text = paste(op, "e1"))
+  } else {
+    expr <- parse(text = paste("e1", op, "e2"))
+  }
+  return(do.call(eval.im, list(expr = expr)))
+}                  
+

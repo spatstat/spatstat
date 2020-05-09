@@ -22,13 +22,21 @@
 %NAMESPACE S3method("Summary", "imlist")
 }
 \arguments{
-  \item{x, z, e1, e2}{objects of class \code{"imlist"}.}
+  \item{x,z,e1,e2}{
+    Lists of pixel images (objects of class \code{"imlist"}).
+  }
   \item{\dots}{further arguments passed to methods.}
   \item{na.rm}{logical: should missing values be removed?}
 }
 \details{
-  Below is a list of mathematical functions and operators which are
-  defined for lists of images. Not all functions will make sense for all
+  An object of class \code{"imlist"} represents a list of pixel images.
+  It is a \code{list}, whose entries are pixel images
+  (objects of class \code{"im"}).
+  
+  The following mathematical functions and operators are
+  defined for lists of images.
+
+  Not all functions will make sense for all
   types of images. For example, none of the functions in the \code{"Math"} group
   make sense for character-valued images. Note that the \code{"Ops"}
   group methods are implemented using \code{\link{eval.im}}, which tries
@@ -82,6 +90,18 @@
       \item \code{Arg}, \code{Conj}, \code{Im}, \code{Mod}, \code{Re}
     }
   }
+
+  For the binary operations in \code{"Ops"},
+  either
+  \itemize{
+    \item \code{e1} and \code{e2} are lists of pixel images,
+    and contain the same number of images.
+%    \item one of \code{e1,e2} is a list of pixel images,
+%    and the other is an individual pixel image (class \code{"im"}).
+    \item one of \code{e1,e2} is a list of pixel images,
+    and the other is a single atomic value.
+  }
+  
 }
 \value{
   The result of \code{"Math"}, \code{"Ops"} and \code{"Complex"} group
@@ -92,6 +112,7 @@
 \seealso{
   \code{\link{Math.im}} or \code{\link{eval.im}}
   for evaluating expressions involving images.
+  \code{\link{solapply}} for a wrapper for \code{\link[base]{lapply}}.
 }
 \examples{
   a <- Smooth(finpines, 2)
