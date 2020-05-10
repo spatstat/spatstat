@@ -1,9 +1,7 @@
 
-        CHANGES IN spatstat VERSION 1.64-0.018
+        CHANGES IN spatstat VERSION 1.64-1
 
 OVERVIEW
-
-    o Nickname: 'Geostrophic'
 
     o Important bug fix in vcov.ppm
 
@@ -11,6 +9,8 @@ OVERVIEW
    
     o We thank Maximilian Vogtland and Maximilian Hesselbarth
     for contributions.
+
+    o Nickname: 'Help you I can, yes!'
 
 SIGNIFICANT USER-VISIBLE CHANGES
 

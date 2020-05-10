@@ -441,8 +441,26 @@ Change log from 1.64-0 to 1.64-1
 	Version 1.64-0.018
 
 ------------- passed R-4.0.0 CMD check ---------------
-            (with SPATSTAT_TESTS defined and undefined)
+(with environment variable SPATSTAT_TESTS defined/undefined)
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
 
-   		   
+............. passed 'make covercheck' ................
+............. passed 'make bookcheck' .................
+............. passed 'make crancheck' .................
+   (with environment variable SPATSTAT_TESTS undefined)
+
+............. passed R-devel CMD check ................
+                (2020-05-09 r78395)
+   (with environment variable SPATSTAT_TESTS undefined)
+
+   DESCRIPTION
+   NEWS
+   Nickname.txt
+	Nickname 'Help you I can, yes!'
+	Version 1.64-1
+	
+------------- passed R-4.0.0 CMD check ---------------
+(with environment variable SPATSTAT_TESTS defined/undefined)
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
