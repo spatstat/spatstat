@@ -3,7 +3,7 @@
 #
 #  Linear Algebra
 #
-# $Revision: 1.29 $ $Date: 2020/05/08 03:17:46 $
+# $Revision: 1.31 $ $Date: 2020/05/10 00:59:17 $
 #
 
 sumouter <- function(x, w=NULL, y=x) {
@@ -311,14 +311,17 @@ sumsymouter <- function(x, w=NULL, distinct=TRUE) {
 
 ## matrix utilities
 
-checksolve <- function(M, action, descrip, target="") {
+checksolve <- function(M, action=c("fatal", "warn", "silent"),
+                       descrip, target="inverse") {
   Mname <- short.deparse(substitute(M))
+  action <- match.arg(action)
   Minv <- try(solve(M), silent=(action=="silent"))
   if(!inherits(Minv, "try-error"))
     return(Minv)
-  if(missing(descrip))
+  if(missing(descrip) || sum(nzchar(descrip)) == 0)
     descrip <- paste("the matrix", sQuote(Mname))
-  whinge <- paste0("Cannot compute ", target, ": ", descrip, " is singular")
+  whinge <- paste("Cannot compute", paste0(target, ":"),
+                  descrip, "is singular")
   switch(action,
          fatal=stop(whinge, call.=FALSE),
          warn= warning(whinge, call.=FALSE),

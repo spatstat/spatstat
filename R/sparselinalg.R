@@ -4,7 +4,7 @@
 #'   Counterpart of linalg.R for sparse matrices/arrays
 #'
 #' 
-#'   $Revision: 1.15 $  $Date: 2020/05/08 03:00:18 $
+#'   $Revision: 1.16 $  $Date: 2020/05/09 12:17:37 $
 
 marginSumsSparse <- function(X, MARGIN) {
   #' equivalent to apply(X, MARGIN, sum)
@@ -193,12 +193,13 @@ sumsymouterSparse <- function(x, w=NULL, distinct=TRUE, dbg=FALSE) {
     stopifnot(all(dim(w) == dim(x)[2:3]))
   }
   ## handle complex values
-  if(is.complex(w)) {
-    a <- sumsymouter(x, Re(w), distinct=distinct)
-    b <- sumsymouter(x, Im(w), distinct=distinct)
-    result <- a + b * 1i
-    return(result)
-  }
+  #' there are no complex-valued sparse matrices yet
+  ## if(is.complex(w)) {
+  ##  a <- sumsymouter(x, Re(w), distinct=distinct)
+  ##  b <- sumsymouter(x, Im(w), distinct=distinct)
+  ##  result <- a + b * 1i
+  ##  return(result)
+  ## }
   if(is.complex(x)) {
     a <- sumsymouter(Re(x), w=w, distinct=distinct)
     b <- sumsymouter(Im(x), w=w, distinct=distinct)

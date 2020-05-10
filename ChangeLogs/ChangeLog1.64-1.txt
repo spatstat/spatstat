@@ -424,3 +424,25 @@ Change log from 1.64-0 to 1.64-1
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
 
+   sparselinalg.R
+	Commented-out unused code.
+
+10 may 2020
+
+   linalg.R
+	Tweaked checksolve()
+
+   tests/indices.R [REMOVED]
+        This test file is no longer included in the spatstat tests folder
+	because it is included in spatstat.sparse
+
+   DESCRIPTION
+   NEWS
+	Version 1.64-0.018
+
+------------- passed R-4.0.0 CMD check ---------------
+            (with SPATSTAT_TESTS defined and undefined)
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+
+   		   

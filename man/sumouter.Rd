@@ -84,11 +84,9 @@
   sumouter(x, w)
   quadform(x, v)
 }
-\author{\adrian
-  
-  
+\author{
+  \adrian
   and \rolf
-  
 }
 \keyword{array}
  
