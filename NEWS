@@ -1,12 +1,18 @@
 
-        CHANGES IN spatstat VERSION 1.64-1.001
+        CHANGES IN spatstat VERSION 1.64-1.002
 
 OVERVIEW
 
-    o Nothing yet.
+    o Bug fixes.
 
     o version nickname: 'I eat trolls for breakfast'
 
+BUG FIXES
+
+    o sumouter
+    Crashed if 'w' contained NA values.
+    Fixed.
+    
         CHANGES IN spatstat VERSION 1.64-1
 
 OVERVIEW

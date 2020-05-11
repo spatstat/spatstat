@@ -412,7 +412,7 @@ reset.spatstat.options()
 #'
 #'   tests/ppp.R
 #'
-#'   $Revision: 1.10 $ $Date: 2020/04/30 05:41:59 $
+#'   $Revision: 1.11 $ $Date: 2020/05/11 01:25:17 $
 #'
 #'  Untested cases in ppp() or associated code
 
@@ -490,6 +490,8 @@ local({
   }
 
   if(FULLTEST) {
+    ## ppsubset
+    aa <- ppsubset(cells, square(0.1))
     ## superimpose.ppp, extra cases
     X <- runifpoint(20)
     A <- superimpose(cells, X, W="convex")

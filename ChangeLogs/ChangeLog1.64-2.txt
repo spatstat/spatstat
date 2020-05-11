@@ -1,5 +1,5 @@
-Change log from 1.64-1 to 1.64-2
-================================
+Change log from spatstat 1.64-1 to spatstat 1.64-2
+==================================================
 
 10 may 2020
 
@@ -13,4 +13,30 @@ Change log from 1.64-1 to 1.64-2
 (with environment variable SPATSTAT_TESTS defined/undefined)
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
+
+   tests/linalgeb.R
+	More tests.
+	
+11 may 2020
+
+   linalg.R
+	Bug fix in handling NA's in sumouter(w)
+
+   tests/linalgeb.R
+	bug fix in test.
+	
+   tests/indices.R
+   tests/ppp.R
+	Rearranged test files in preparation for splitoff of spatstat.sparse.
+
+   DESCRIPTION
+   NEWS
+	Version 1.64-1.002
+
+------------- passed R-4.0.0 CMD check ---------------
+(with environment variable SPATSTAT_TESTS defined/undefined)
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+
+ 
 

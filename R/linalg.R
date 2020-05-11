@@ -3,7 +3,7 @@
 #
 #  Linear Algebra
 #
-# $Revision: 1.31 $ $Date: 2020/05/10 00:59:17 $
+# $Revision: 1.32 $ $Date: 2020/05/11 01:29:27 $
 #
 
 sumouter <- function(x, w=NULL, y=x) {
@@ -22,7 +22,7 @@ sumouter <- function(x, w=NULL, y=x) {
       stopifnot(length(w) == nrow(x))
     } else {
       w <- as.numeric(w)
-      check.nvector(w, nrow(x), things="rows of x")
+      check.nvector(w, nrow(x), things="rows of x", naok=TRUE)
     }
   }
     

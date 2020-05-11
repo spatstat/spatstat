@@ -316,7 +316,6 @@
 \alias{localpcfengine}
 \alias{localpcfmatrix}
 \alias{local2lpp}
-\alias{logicalIndex}
 \alias{logi.dummy}
 \alias{logi.engine}
 \alias{logLik.vblogit}
@@ -338,7 +337,6 @@
 \alias{PoisSaddlePairwise}
 \alias{polyLaslett}
 \alias{polytileareaEngine}
-\alias{positiveIndex}
 \alias{PPMmodelmatrix}
 \alias{putSpatstatVariable}
 \alias{lookup.im}
@@ -745,11 +743,13 @@
 \alias{ZeroValue.im}
 %%%%%%%%%%%%%%% BEGIN SPARSE %%%%%%%%%%%%%%%%%%%%%%%%
 %%%% indices
-\alias{fullIndexSequence}
 \alias{grokIndexVector}
-\alias{replacementIndex}
-\alias{representativeRows}
 \alias{strictIndexSequence}
+\alias{fullIndexSequence}
+\alias{replacementIndex}
+\alias{positiveIndex}
+\alias{logicalIndex}
+\alias{representativeRows}
 %%%%  undocumented linear algebra
 \alias{checksolve}
 \alias{check.mat.mul}
@@ -1192,7 +1192,6 @@ localKmultiEngine(X, from, to,
 localpcfengine(X, \dots, delta, rmax, nr, stoyan, lambda)
 localpcfmatrix(X, i, \dots, lambda, delta, rmax, nr, stoyan)
 local2lpp(L, seg, tp, X, df.only)
-logicalIndex(i, nama, len)
 logi.dummy(X, dummytype, nd, mark.repeat, \dots)
 logi.engine(Q, trend, interaction, \dots, 
             covariates, subsetexpr, clipwin,
@@ -1220,7 +1219,6 @@ PoisSaddleGeyer(beta, fi)
 PoisSaddlePairwise(beta, fi)
 polyLaslett(X, \dots, oldX, verbose, plotit)
 polytileareaEngine(P, xrange, yrange, nx, ny, DivideByPixelArea)
-positiveIndex(i, nama, len)
 PPMmodelmatrix(object, data, \dots, subset, Q, keepNA, irregular,
                splitInf)
 \method{print}{localpcfmatrix}(x, \dots)
@@ -1714,11 +1712,13 @@ ZeroValue(x)
 \method{ZeroValue}{im}
 %%%%%%%%%%%%%  BEGIN SPARSE %%%%%%%%%%%%%%%%%%%%%%%%
 %%% indices
-fullIndexSequence(g)
 grokIndexVector(ind, len, nama)
-replacementIndex(ii, stuff)
-representativeRows(x)
 strictIndexSequence(g)
+fullIndexSequence(g)
+replacementIndex(ii, stuff)
+positiveIndex(i, nama, len)
+logicalIndex(i, nama, len)
+representativeRows(x)
 %%% undocumented linear algebra
 checksolve(M, action, descrip, target)
 check.mat.mul(A, B, Acols, Brows, fatal)
