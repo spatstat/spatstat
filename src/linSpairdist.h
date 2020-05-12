@@ -8,7 +8,7 @@
 
    Sparse representation of network
 
-   $Revision: 1.3 $  $Date: 2020/03/27 03:49:56 $
+   $Revision: 1.4 $  $Date: 2020/05/12 03:37:23 $
 
   Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2018
   Licence: GNU Public Licence >= 2
@@ -42,13 +42,12 @@ FNAME(np, sp, tp,  /* data points (ordered by sp) */
   double *dist; 
 {
   int Np, Nv, i, j, ivleft, ivright, spi, spj;
-  double dleft, dright, dij, hugevalue, slen, tpi, tpj;
+  double dleft, dright, dij, slen, tpi, tpj;
   double *dminvert;  /* min dist from each vertex */
   int one;
 
   Np = *np;
   Nv = *nv;
-  hugevalue = *huge;
 
   if(Np <= 1) return;
   

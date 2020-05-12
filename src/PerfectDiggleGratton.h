@@ -1,6 +1,6 @@
 
 // ........................... Diggle-Gratton process ..........................
-//  $Revision: 1.5 $   $Date: 2012/03/10 11:22:56 $
+//  $Revision: 1.6 $   $Date: 2020/05/12 03:30:46 $
 
 class DiggleGrattonProcess : public PointProcess {
  public:
@@ -119,35 +119,24 @@ extern "C" {
     // that's 6 protected objects
 
     // extract arguments
+    // model parameters
     Beta   = *(NUMERIC_POINTER(beta));
     Delta  = *(NUMERIC_POINTER(delta));
     Rho    = *(NUMERIC_POINTER(rho));
     Kappa  = *(NUMERIC_POINTER(kappa));
-
+    // window dimensions
     Xrange = NUMERIC_POINTER(xrange);
     Xmin   = Xrange[0];
     Xmax   = Xrange[1];
     Yrange = NUMERIC_POINTER(yrange);
     Ymin   = Yrange[0];
     Ymax   = Yrange[1];
-
     // compute cell array size
     xcells = (int) floor((Xmax-Xmin)/ Rho);
-    if(xcells > 9) xcells = 9; if(xcells < 1) xcells = 1;
+    if(xcells > 9) { xcells = 9; } else if(xcells < 1) { xcells = 1; }
     ycells = (int) floor((Ymax-Ymin)/ Rho);
-
-    Xrange = NUMERIC_POINTER(xrange);
-    Xmin   = Xrange[0];
-    Xmax   = Xrange[1];
-    Yrange = NUMERIC_POINTER(yrange);
-    Ymin   = Yrange[0];
-    Ymax   = Yrange[1];
-
-    // compute cell array size
-    xcells = (int) floor((Xmax-Xmin)/ Rho);
-    if(xcells > 9) xcells = 9; if(xcells < 1) xcells = 1;
-    ycells = (int) floor((Ymax-Ymin)/ Rho);
-    if(ycells > 9) ycells = 9; if(ycells < 1) ycells = 1;
+    if(ycells > 9) { ycells = 9; } else if(ycells < 1) { ycells = 1; }
+    
 #ifdef DBGS
     Rprintf("xcells %d   ycells %d\n",xcells,ycells);
     Rprintf("Initialising\n");

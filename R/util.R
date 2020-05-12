@@ -1,7 +1,7 @@
 #
 #    util.R    miscellaneous utilities
 #
-#    $Revision: 1.245 $    $Date: 2020/05/03 03:48:27 $
+#    $Revision: 1.247 $    $Date: 2020/05/12 02:45:52 $
 #
 
 # common invocation of matrixsample
@@ -368,3 +368,8 @@ allElementsIdentical <- function(x, entry=NULL) {
   return(TRUE)
 }
 
+resolve.stringsAsFactors <- function(stringsAsFactors=NULL) {
+  if(is.null(stringsAsFactors) || is.na(stringsAsFactors)) {
+    if(getRversion() < "4.1.0") default.stringsAsFactors() else FALSE
+  } else isTRUE(stringsAsFactors) 
+}  

@@ -9,7 +9,7 @@
 \usage{
    hyperframe(...,
              row.names=NULL, check.rows=FALSE, check.names=TRUE,
-             stringsAsFactors=default.stringsAsFactors())
+             stringsAsFactors=NULL)
 }
 \arguments{
   \item{\dots}{
@@ -20,7 +20,7 @@
     The \code{tag} determines the name of the column. See Details.
   }
   \item{row.names,check.rows,check.names,stringsAsFactors}{
-    Arguments passed to \code{\link{data.frame}} controlling the
+    Arguments passed to \code{\link[base]{data.frame}} controlling the
     names of the rows, whether to check that rows are consistent,
     whether to check validity of the column names, and whether to
     convert character columns to factors.
@@ -61,14 +61,29 @@
   \code{cbind} and \code{rbind} for the class of hyperframes. There is also
   \code{is.hyperframe} and \code{\link{as.hyperframe}}.
 }
+\section{Handling Character Strings}{
+  The argument \code{stringsAsFactors}
+  is a logical value (passed to \code{\link[base]{data.frame}})
+  specifying how to handle pixel values which
+  are character strings. If \code{TRUE}, character values are
+  interpreted as factor levels. If \code{FALSE}, they remain
+  as character strings. The default values of \code{stringsAsFactors}
+  depends on the version of \R.
+  \itemize{
+    \item In \R versions \code{< 4.1.0}
+    the factory-fresh default is \code{stringsAsFactors=FALSE} and
+    the default can be changed by setting
+    \code{options(stringsAsFactors=FALSE)}.
+    \item in \R versions {>= 4.1.0} the default
+    is \code{stringsAsFactors=FALSE} and there is no option to
+    change the default.
+  }
+}
 \value{
   An object of class \code{"hyperframe"}.
 }
 \author{\adrian
-  
-  
   and \rolf
-  
 }
 \seealso{
   \code{\link{as.hyperframe}},

@@ -104,11 +104,12 @@ as.im.funxy <- function(X, W=Window(X), ...) {
 as.im.function <- function(X, W=NULL, ...,
                            eps=NULL, dimyx=NULL, xy=NULL,
                            na.replace=NULL,
-                           stringsAsFactors=default.stringsAsFactors(),
+                           stringsAsFactors=NULL,
                            strict=FALSE, drop=TRUE) {
   f <- X
   if(is.null(W))
     stop("A window W is required")
+  stringsAsFactors <- resolve.stringsAsFactors(stringsAsFactors)
   W <- as.owin(W)
   W <- as.mask(W, eps=eps, dimyx=dimyx, xy=xy)
   m <- W$m

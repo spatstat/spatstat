@@ -8,10 +8,12 @@ hyperframe <- local({
 
   hyperframe <- function(...,
                          row.names=NULL, check.rows=FALSE, check.names=TRUE,
-                         stringsAsFactors=default.stringsAsFactors()) {
+                         stringsAsFactors=NULL) {
     aarg <- list(...)
     nama <- names(aarg)
 
+    stringsAsFactors <- resolve.stringsAsFactors(stringsAsFactors)
+    
     ## number of columns (= variables)
     nvars <- length(aarg)
   

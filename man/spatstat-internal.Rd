@@ -551,6 +551,7 @@
 \alias{resolve.heat.steps}
 \alias{resolve.lambda}
 \alias{resolve.lambda.cross}
+\alias{resolve.stringsAsFactors}
 \alias{resolve.vargamma.shape}
 \alias{rgbNA}
 \alias{rhohatEngine}
@@ -1487,6 +1488,7 @@ resolve.lambda.cross(X, I, J, lambdaI, lambdaJ, \dots, lambdaX,
                      sigma, varcov, leaveoneout, update, lambdaIJ,
                      Iexplain, Jexplain, miss.update, miss.leave,
                      caller)
+resolve.stringsAsFactors(stringsAsFactors)
 resolve.vargamma.shape(\dots, nu.ker, nu.pcf, default)
 rgbNA(red, green, blue, alpha, maxColorValue)
 rhohatEngine(model, covariate, reference, volume, \dots,

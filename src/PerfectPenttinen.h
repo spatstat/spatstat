@@ -1,6 +1,6 @@
 
 // ........................... Penttinen process ................
-// $Revision: 1.2 $  $Date: 2016/02/02 01:30:01 $
+// $Revision: 1.4 $  $Date: 2020/05/12 03:32:19 $
 
 class PenttProcess : public PointProcess {
  public:
@@ -117,34 +117,23 @@ extern "C" {
     // that's 5 protected objects
 
     // extract arguments
+    // model parameters
     Beta   = *(NUMERIC_POINTER(beta));
     Gamma  = *(NUMERIC_POINTER(gamma));
     R      = *(NUMERIC_POINTER(r));
-
+    // window
     Xrange = NUMERIC_POINTER(xrange);
     Xmin   = Xrange[0];
     Xmax   = Xrange[1];
     Yrange = NUMERIC_POINTER(yrange);
     Ymin   = Yrange[0];
     Ymax   = Yrange[1];
-
     // compute cell array size
     xcells = (int) floor((Xmax-Xmin)/ R);
-    if(xcells > 9) xcells = 9; if(xcells < 1) xcells = 1;
+    if(xcells > 9) { xcells = 9; } else if(xcells < 1) { xcells = 1; }
     ycells = (int) floor((Ymax-Ymin)/ R);
-
-    Xrange = NUMERIC_POINTER(xrange);
-    Xmin   = Xrange[0];
-    Xmax   = Xrange[1];
-    Yrange = NUMERIC_POINTER(yrange);
-    Ymin   = Yrange[0];
-    Ymax   = Yrange[1];
-
-    // compute cell array size
-    xcells = (int) floor((Xmax-Xmin)/ R);
-    if(xcells > 9) xcells = 9; if(xcells < 1) xcells = 1;
-    ycells = (int) floor((Ymax-Ymin)/ R);
-    if(ycells > 9) ycells = 9; if(ycells < 1) ycells = 1;
+    if(ycells > 9) { ycells = 9; } else if(ycells < 1) { ycells = 1; }
+    
 #ifdef DBGS
     Rprintf("xcells %d   ycells %d\n",xcells,ycells);
     Rprintf("Initialising\n");

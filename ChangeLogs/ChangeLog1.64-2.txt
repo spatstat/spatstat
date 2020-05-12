@@ -10,7 +10,7 @@ Change log from spatstat 1.64-1 to spatstat 1.64-2
 	Nickname changed to 'I eat trolls for breakfast'
 
 ------------- passed R-4.0.0 CMD check ---------------
-(with environment variable SPATSTAT_TESTS defined/undefined)
+(with environment variable SPATSTAT_TEST defined/undefined)
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
 
@@ -34,9 +34,47 @@ Change log from spatstat 1.64-1 to spatstat 1.64-2
 	Version 1.64-1.002
 
 ------------- passed R-4.0.0 CMD check ---------------
-(with environment variable SPATSTAT_TESTS defined/undefined)
+(with environment variable SPATSTAT_TEST defined/undefined)
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
 
- 
+12 may 2020
 
+   util.R
+   spatstat-internal.Rd
+	New internal function resolve.stringsAsFactors
+	
+   as.im.R
+   as.im.Rd
+   hyperframe.R
+   hyperframe.Rd
+	Default for 'stringsAsFactors' changed to NULL
+	and an explanation given.
+
+   src/PerfectDGS.h
+   src/PerfectDiggleGratton.h
+   src/PerfectPenttinen.h
+	Removed redundant code (cut & paste error)
+   
+   src/PerfectDiggleGratton.h
+   src/PerfectDGS.h
+   src/PerfectHardcore.h
+   src/PerfectPenttinen.h
+   src/PerfectStrauss.h
+   src/PerfectStraussHard.h
+	Tweaked layout to satisfy a very finicky compiler
+
+   src/linScrossdist.c
+   src/linSpairdist.h
+	Removed unused variables
+
+   DESCRIPTION
+   NEWS
+	Version 1.64-1.003
+
+------------- passed R-4.0.0 CMD check ---------------
+(with environment variable SPATSTAT_TEST defined/undefined)
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+
+   

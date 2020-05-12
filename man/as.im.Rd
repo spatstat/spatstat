@@ -38,7 +38,7 @@
   \method{as.im}{function}(X, W=NULL, \dots,
         eps=NULL, dimyx=NULL, xy=NULL,
         na.replace=NULL,
-        stringsAsFactors=default.stringsAsFactors(),
+        stringsAsFactors=NULL,
         strict=FALSE, drop=TRUE)
 
   \method{as.im}{funxy}(X, W=Window(X), \dots)
@@ -116,9 +116,8 @@
     specifying how to handle pixel values which
     are character strings. If \code{TRUE}, character values are
     interpreted as factor levels. If \code{FALSE}, they remain
-    as character strings. The factory-fresh befault is \code{TRUE},
-    but that can be changed by setting
-    \code{options(stringsAsFactors=FALSE)}.
+    as character strings. The default depends on the version of \R.
+    See section \emph{Handling Character Strings}.
   }
   \item{approx}{
    Logical value indicating whether to compute an approximate result
@@ -291,6 +290,24 @@
   which is recognised by most of the
   methods for \code{as.im}, or alternatively set
   \code{options(stringsAsFactors=FALSE)}.
+}
+\section{Handling Character Strings}{
+  The argument \code{stringsAsFactors}
+  is a logical value (passed to \code{\link[base]{data.frame}})
+  specifying how to handle pixel values which
+  are character strings. If \code{TRUE}, character values are
+  interpreted as factor levels. If \code{FALSE}, they remain
+  as character strings. The default values of \code{stringsAsFactors}
+  depends on the version of \R.
+  \itemize{
+    \item In \R versions \code{< 4.1.0}
+    the factory-fresh default is \code{stringsAsFactors=FALSE} and
+    the default can be changed by setting
+    \code{options(stringsAsFactors=FALSE)}.
+    \item in \R versions {>= 4.1.0} the default
+    is \code{stringsAsFactors=FALSE} and there is no option to
+    change the default.
+  }
 }
 \value{
   A pixel image (object of class \code{"im"}),
