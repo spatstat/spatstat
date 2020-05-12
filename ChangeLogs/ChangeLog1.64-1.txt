@@ -208,7 +208,7 @@ Change log from 1.64-0 to 1.64-1
 	Version 1.64-0.007
 
 ------------- passed R-4.0.0 CMD check ---------------
-            (with SPATSTAT_TESTS defined and undefined)
+            (with SPATSTAT_TEST defined and undefined)
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
 
@@ -226,7 +226,7 @@ Change log from 1.64-0 to 1.64-1
 	Version 1.64-0.008
 
 ------------- passed R-4.0.0 CMD check ---------------
-            (with SPATSTAT_TESTS defined and undefined)
+            (with SPATSTAT_TEST defined and undefined)
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
 
@@ -263,7 +263,7 @@ Change log from 1.64-0 to 1.64-1
 	Version 1.64-0.009
 
 ------------- passed R-4.0.0 CMD check ---------------
-            (with SPATSTAT_TESTS defined and undefined)
+            (with SPATSTAT_TEST defined and undefined)
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
 
@@ -280,7 +280,7 @@ Change log from 1.64-0 to 1.64-1
 	Version 1.64-0.010
 
 ------------- passed R-4.0.0 CMD check ---------------
-            (with SPATSTAT_TESTS defined and undefined)
+            (with SPATSTAT_TEST defined and undefined)
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
 
@@ -294,7 +294,7 @@ Change log from 1.64-0 to 1.64-1
 	Version 1.64-0.011
 
 ------------- passed R-4.0.0 CMD check ---------------
-            (with SPATSTAT_TESTS defined and undefined)
+            (with SPATSTAT_TEST defined and undefined)
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
 
@@ -317,7 +317,7 @@ Change log from 1.64-0 to 1.64-1
 	Version 1.64-0.012
 
 ------------- passed R-4.0.0 CMD check ---------------
-            (with SPATSTAT_TESTS defined and undefined)
+            (with SPATSTAT_TEST defined and undefined)
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
 
@@ -346,7 +346,7 @@ Change log from 1.64-0 to 1.64-1
 	Version 1.64-0.013
 
 ------------- passed R-4.0.0 CMD check ---------------
-            (with SPATSTAT_TESTS defined and undefined)
+            (with SPATSTAT_TEST defined and undefined)
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
 
@@ -360,7 +360,7 @@ Change log from 1.64-0 to 1.64-1
 	Version 1.64-0.014
 
 ------------- passed R-4.0.0 CMD check ---------------
-            (with SPATSTAT_TESTS defined and undefined)
+            (with SPATSTAT_TEST defined and undefined)
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
 
@@ -373,7 +373,7 @@ Change log from 1.64-0 to 1.64-1
 	Version 1.64-0.015
 
 ------------- passed R-4.0.0 CMD check ---------------
-            (with SPATSTAT_TESTS defined and undefined)
+            (with SPATSTAT_TEST defined and undefined)
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
 
@@ -397,7 +397,7 @@ Change log from 1.64-0 to 1.64-1
 	Version 1.64-0.016
 
 ------------- passed R-4.0.0 CMD check ---------------
-            (with SPATSTAT_TESTS defined and undefined)
+            (with SPATSTAT_TEST defined and undefined)
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
 
@@ -420,7 +420,7 @@ Change log from 1.64-0 to 1.64-1
 	Version 1.64-0.017
 
 ------------- passed R-4.0.0 CMD check ---------------
-            (with SPATSTAT_TESTS defined and undefined)
+            (with SPATSTAT_TEST defined and undefined)
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
 
@@ -441,18 +441,18 @@ Change log from 1.64-0 to 1.64-1
 	Version 1.64-0.018
 
 ------------- passed R-4.0.0 CMD check ---------------
-(with environment variable SPATSTAT_TESTS defined/undefined)
+(with environment variable SPATSTAT_TEST defined/undefined)
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
 
 ............. passed 'make covercheck' ................
 ............. passed 'make bookcheck' .................
 ............. passed 'make crancheck' .................
-   (with environment variable SPATSTAT_TESTS undefined)
+   (with environment variable SPATSTAT_TEST undefined)
 
 ............. passed R-devel CMD check ................
                 (2020-05-09 r78395)
-   (with environment variable SPATSTAT_TESTS undefined)
+   (with environment variable SPATSTAT_TEST undefined)
 
    DESCRIPTION
    NEWS
@@ -461,6 +461,6 @@ Change log from 1.64-0 to 1.64-1
 	Version 1.64-1
 	
 ------------- passed R-4.0.0 CMD check ---------------
-(with environment variable SPATSTAT_TESTS defined/undefined)
+(with environment variable SPATSTAT_TEST defined/undefined)
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
