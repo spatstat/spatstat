@@ -77,4 +77,52 @@ Change log from spatstat 1.64-1 to spatstat 1.64-2
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
 
-   
+13 may 2020
+
+   DESCRIPTION
+   NAMESPACE
+	spatstat now Imports the new sub-package 'spatstat.sparse'.
+
+   indices.R		[REMOVED FILE]
+   linalg.R		[REMOVED FILE]
+   matrixpower.R	[REMOVED FILE]
+   sparse3Darray.R	[REMOVED FILE]
+   sparsecommon.R	[REMOVED FILE]	
+   sparselinalg.R	[REMOVED FILE]
+
+   linalg.c		[REMOVED FILE]
+   sparselinalg.c	[REMOVED FILE]
+   spasumsymout.h	[REMOVED FILE]
+   sumsymouter.h	[REMOVED FILE]
+
+   sumouter.Rd		[REMOVED FILE]
+   matrixpower.Rd	[REMOVED FILE]
+   	These files are now in the new sub-package 'spatstat.sparse'
+
+   spatstat-internal.Rd
+	Removed references to the code that is now in spatstat.sparse.
+	
+   updates.Rnw
+   inst/doc/spatstatKnetsize.txt [New file]
+   	Add size of spatstat.Knet to the graph of spatstat growth.
+
+   updates.Rnw
+   	Add size of spatstat.sparse to the graph of spatstat growth.
+
+   DESCRIPTION
+   NEWS
+   spatstat-package.Rd
+	More acknowledgements.
+
+   updates.Rnw
+	updated to cover all the above.
+	
+   DESCRIPTION
+   NEWS
+	Version 1.64-1.004
+
+------------- passed R-4.0.0 CMD check ---------------
+(with environment variable SPATSTAT_TEST defined/undefined)
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+

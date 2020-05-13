@@ -44,7 +44,7 @@ access to all the functions in `spatstat` that you know from previous versions.
 
 However, messages from `R` about the installation and loading of the package
 will now show that `spatstat` consists of several pieces.
-Currently there are three pieces:
+Currently there are four pieces:
 
   - `spatstat`: contains the main functionality of the `spatstat` family.
 
@@ -57,13 +57,20 @@ Currently there are three pieces:
   The current development version of `spatstat.utils` is
   [here](https://github.com/spatstat/spatstat.utils).
 
+  - `spatstat.sparse`: functions for linear algebra and sparse arrays,
+  originally included in `spatstat`
+  which are now accessible as a separate package.
+  The current development version of `spatstat.sparse` is
+  [here](https://github.com/spatstat/spatstat.sparse).
+
 When you type `library(spatstat)` this will load
 the main `spatstat` library
 and the `spatstat.data` library, 
-and will also *import* the `spatstat.utils` library. This means that
-`spatstat.utils` functions can be used by `spatstat` but cannot be accessed by
+and will also *import* the `spatstat.utils` and `spatstat.sparse` libraries.
+Importing means that the `spatstat.utils` and `spatstat.sparse` functions
+can be used by `spatstat` but cannot be accessed by
 the user. To access these utility functions directly, you need to type
-`library(spatstat.utils)`.
+`library(spatstat.utils)` and `library(spatstat.sparse)` respectively.
 
 ### Extension packages
 

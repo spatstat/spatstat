@@ -57,14 +57,20 @@ mergeSizeTables <- function(a, b) {
   return(a)
 }
 z <- getSizeTable()
+## sub-packages- access via the sub-package
 zutils <- getSizeTable("spatstat.utils")
 zdata <- getSizeTable("spatstat.data")
-zlocal <- getSizeTable("spatstat", "spatstatlocalsize.txt")
-zgui <- getSizeTable("spatstat", "spatstatguisize.txt")
+zsparse <- getSizeTable("spatstat.sparse")
 z <- mergeSizeTables(z, zutils)
 z <- mergeSizeTables(z, zdata)
+z <- mergeSizeTables(z, zsparse)
+## extension packages - use copy of package size file stored in spatstat
+zlocal <- getSizeTable("spatstat", "spatstatlocalsize.txt")
+zgui <- getSizeTable("spatstat", "spatstatguisize.txt")
+zKnet <- getSizeTable("spatstat", "spatstatKnetsize.txt")
 z <- mergeSizeTables(z, zlocal)
 z <- mergeSizeTables(z, zgui)
+z <- mergeSizeTables(z, zKnet)
 #
 currentcount <- z[nrow(z), counts]
 bookcount    <- z[z$version == "1.42-0", counts]
@@ -125,9 +131,10 @@ text(as.Date("2015-01-01"), 60, "R code")
 
     \subsection{The parts of \pkg{spatstat}}
     
-    Currently there are three sub-packages, called 
+    Currently there are four sub-packages, called 
     \pkg{spatstat.utils},
-    \pkg{spatstat.data} 
+    \pkg{spatstat.data},
+    \pkg{spatstat.sparse},
     and \pkg{spatstat}.
 
     \begin{itemize}
@@ -139,14 +146,19 @@ text(as.Date("2015-01-01"), 60, "R code")
     \item
       The \pkg{spatstat.utils} package
       contains utility functions for \pkg{spatstat}.
+    \item
+      The \pkg{spatstat.sparse} package
+      contains functions for manipulating sparse arrays
+      and performing linear algebra.
     \end{itemize}
     
     Typing \code{library(spatstat)} 
     will automatically load \pkg{spatstat.data}
-    and silently ``import'' \pkg{spatstat.utils}.
+    and silently \textbf{``import''}
+    \pkg{spatstat.utils} and \pkg{spatstat.sparse}.
 
     To access the functions in \pkg{spatstat.utils} directly, you would need to
-    type \code{library(spatstat.utils)}. 
+    type \code{library(spatstat.utils)}. Similarly for \pkg{spatstat.sparse}.
 
     \subsection{Extension packages}
     
@@ -156,11 +168,12 @@ text(as.Date("2015-01-01"), 60, "R code")
     
     \begin{itemize}
     \item \pkg{spatstat.local} for local model-fitting, 
-    \item \pkg{spatstat.sphere} for analysing point patterns on a sphere,
     \item \pkg{spatstat.Knet} for analysing point patterns
       on a network.
     \item \pkg{spatstat.gui} containing interactive graphics
-      functions.
+      functions,
+    \item \pkg{spatstat.sphere} for analysing point patterns on a sphere
+      (under development!)
     \end{itemize}
 
 \pagebreak
@@ -172,6 +185,8 @@ the News and Release Notes for each update.
 
 \begin{itemize}
 
+  \item \spst\ now Imports the package \pkg{spatstat.sparse}.
+    
   \item The interactive graphics functions \texttt{iplot} and \texttt{istat}
     have been removed from \spst\ into a new package \pkg{spatstat.gui}.
 
