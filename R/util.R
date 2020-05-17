@@ -1,7 +1,7 @@
 #
 #    util.R    miscellaneous utilities
 #
-#    $Revision: 1.247 $    $Date: 2020/05/12 02:45:52 $
+#    $Revision: 1.248 $    $Date: 2020/05/16 03:59:30 $
 #
 
 # common invocation of matrixsample
@@ -298,17 +298,30 @@ multiply.only.finite.entries <- function(x, a) {
  
 ## print names and version numbers of libraries loaded
 
-sessionLibs <- function() {
-  a <- sessionInfo()
-  b <- unlist(lapply(a$otherPkgs, getElement, name="Version"))
-  g <- rbind(names(b), unname(b))
-  d <- apply(g, 2, paste, collapse=" ")
-  if(length(d) > 0) {
-    cat("Libraries loaded:\n")
-    for(di in d) cat(paste("\t", di, "\n"))
-  } else cat("Libraries loaded: None\n")
-  return(invisible(d))
-}
+sessionLibs <- local({
+
+  sessionLibs <- function() {
+    a <- sessionInfo()
+    d1 <- mangle(a$otherPkgs, "loaded")
+    d2 <- mangle(a$loadedOnly, "imported")
+    return(invisible(list(loaded=d1,imported=d2)))
+  }
+
+  mangle <- function(pkglist, type="loaded") {
+    if(length(pkglist)) {
+      b <- unlist(lapply(pkglist, getElement, name="Version"))
+      g <- rbind(names(b), unname(b))
+      d <- apply(g, 2, paste, collapse=" ")
+    } else d <- NULL
+    if(length(d) > 0) {
+      cat(paste0("Libraries ", type, ":\n"))
+      for(di in d) cat(paste("\t", di, "\n"))
+    } else cat(paste0("Libraries ", type, ": None\n"))
+    return(invisible(d))
+  }
+    
+  sessionLibs
+})
 
 
 

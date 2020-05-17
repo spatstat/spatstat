@@ -1,7 +1,7 @@
 #
 # mppm.R
 #
-#  $Revision: 1.95 $   $Date: 2020/03/11 05:29:58 $
+#  $Revision: 1.98 $   $Date: 2020/05/17 09:30:00 $
 #
 
 mppm <- local({
@@ -685,17 +685,32 @@ simulate.mppm <- function(object, nsim=1, ..., verbose=TRUE) {
 }
 
 model.matrix.mppm <- function(object, ..., keepNA=TRUE, separate=FALSE) {
-  FIT <- object$Fit$FIT
   df <- object$Fit$moadf
+  FIT <- object$Fit$FIT
   environment(FIT) <- list2env(df)
+  #' track subset
+  ok <- complete.cases(df) & df$.mpl.SUBSET
+  nok <- sum(ok)
+  nfull <- nrow(df)
+  #'
   if(keepNA) {
     mm <- model.matrix(FIT, ..., subset=NULL, na.action=NULL)
-    if(nrow(mm) != nrow(df))
-      stop("Internal error: model matrix has wrong number of rows", call.=FALSE)
+    nr <- nrow(mm)
+    if(nr != nfull) {
+      if(nr == nok) {
+        ## some methods for model.matrix ignore 'subset=NULL'
+        mmfull <- matrix(NA, nfull, ncol(mm), dimnames=list(NULL, colnames(mm)))
+        mmfull[ok,] <- mm
+        mm <- mmfull
+      } else {
+        stop(paste("Internal error: model matrix has wrong number of rows:",
+                   nr, "should be", nfull, "or", nok),
+             call.=FALSE)
+      }
+    }
   } else {
     mm <- model.matrix(FIT, ...)
-    ok <- complete.cases(df) & df$.mpl.SUBSET
-    if(nrow(mm) != sum(ok))
+    if(nrow(mm) != nok)
       stop("Internal error: model matrix has wrong number of rows", call.=FALSE)
     df <- df[ok, , drop=FALSE]
   }

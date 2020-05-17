@@ -126,3 +126,22 @@ Change log from spatstat 1.64-1 to spatstat 1.64-2
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
 
+16 may 2020
+
+   util.R
+	sessionInfo is more informative.
+
+17 may 2020
+
+   mppm.R
+   anova.mppm.R
+	Bug fixes and workarounds for random-effects models.
+	
+   DESCRIPTION
+   NEWS
+	Version 1.64-1.005
+
+------------- passed R-4.0.0 CMD check ---------------
+(with environment variable SPATSTAT_TEST defined/undefined)
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------

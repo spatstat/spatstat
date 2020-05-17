@@ -1,7 +1,7 @@
 #
 # anova.mppm.R
 #
-# $Revision: 1.16 $ $Date: 2020/01/30 05:06:54 $
+# $Revision: 1.17 $ $Date: 2020/05/17 04:59:58 $
 #
 
 anova.mppm <- local({
@@ -109,7 +109,15 @@ anova.mppm <- local({
 
     ## Finally do the appropriate ANOVA
     opt <- list(test=test)
-    if(fitter != "glmmPQL") opt <- append(opt, list(dispersion=1))
+    if(fitter == "glmmPQL") {
+      ## HACK: anova.lme forbids other classes
+      ##       and does not recognise 'dispersion'
+      fitz <- lapply(fitz, drop1class)
+      warning("anova is not strictly valid for penalised quasi-likelihood fits")
+    } else {
+      ## normal case
+      opt <- append(opt, list(dispersion=1))
+    }
     result <- try(do.call(anova, append(fitz, opt)))
     if(inherits(result, "try-error"))
       stop("anova failed")
@@ -259,6 +267,11 @@ anova.mppm <- local({
       result[inject] <- result[inject] + x
     }
     return(result)
+  }
+
+  drop1class <- function(object) {
+    class(object) <- class(object)[-1L];
+    return(object)
   }
     
   anova.mppm
