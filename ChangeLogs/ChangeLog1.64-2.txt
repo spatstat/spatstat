@@ -145,3 +145,26 @@ Change log from spatstat 1.64-1 to spatstat 1.64-2
 (with environment variable SPATSTAT_TEST defined/undefined)
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
+
+19 may 2020
+
+   rotmean.R
+   rotmean.Rd
+	The unitname of X is carried over to the result.
+
+22 may 2020
+
+   rotmean.R
+   rotmean.Rd
+	New argument 'adjust'. New default bandwidth for smoothing.
+
+   DESCRIPTION
+   NEWS
+	Version 1.64-1.006
+
+------------- passed R-4.0.0 CMD check ---------------
+(with environment variable SPATSTAT_TEST defined/undefined)
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+
+   

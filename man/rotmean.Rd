@@ -8,7 +8,7 @@
   about the origin, as a function of distance from the origin.
 }
 \usage{
-rotmean(X, ..., origin, padzero=TRUE, Xname, result=c("fv", "im"))
+rotmean(X, ..., origin, padzero=TRUE, Xname, result=c("fv", "im"), adjust=1)
 }
 \arguments{
   \item{X}{
@@ -35,6 +35,9 @@ rotmean(X, ..., origin, padzero=TRUE, Xname, result=c("fv", "im"))
   \item{result}{
     Character string specifying the kind of result required:
     either a function object or a pixel image.
+  }
+  \item{adjust}{
+    Adjustment factor for bandwidth used in kernel smoothing.
   }
 }
 \details{
@@ -65,15 +68,11 @@ rotmean(X, ..., origin, padzero=TRUE, Xname, result=c("fv", "im"))
   of radius \eqn{r} that lies entirely inside the window.
 }
 \value{
-  An object of class \code{"fv"} or \code{"im"}.
+  An object of class \code{"fv"} or \code{"im"},
+  with the same coordinate units as \code{X}.
 }
-\author{\adrian
-  
-  
-  \rolf
-  
-  and \ege
-  
+\author{
+  \spatstatAuthors.
 }
 \examples{
   if(interactive()) {

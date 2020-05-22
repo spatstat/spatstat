@@ -3,9 +3,10 @@
 ##
 ## rotational average of pixel values
 ##
-##  $Revision: 1.11 $ $Date: 2018/12/19 05:29:34 $
+##  $Revision: 1.13 $ $Date: 2020/05/22 02:43:34 $
 
-rotmean <- function(X, ..., origin, padzero=TRUE, Xname, result=c("fv", "im")) {
+rotmean <- function(X, ..., origin, padzero=TRUE, Xname, result=c("fv", "im"),
+                    adjust=1) {
   if(missing(Xname))
     Xname <- sensiblevarname(short.deparse(substitute(X)), "X")
   trap.extra.arguments(..., .Context="rotmean")
@@ -25,8 +26,8 @@ rotmean <- function(X, ..., origin, padzero=TRUE, Xname, result=c("fv", "im")) {
   values <- Xdata$value
   radii <- with(Xdata, sqrt(x^2+y^2))
   ra <- pmin(range(radii), rmax)
-  ## eps <- sqrt(X$xstep^2 + X$ystep^2)
-  a <- unnormdensity(radii,                 from=ra[1], to=ra[2])
+  bw <- adjust * 0.1 * sqrt(X$xstep^2 + X$ystep^2)
+  a <- unnormdensity(radii,                 from=ra[1], to=ra[2], bw=bw)
   b <- unnormdensity(radii, weights=values, from=ra[1], to=ra[2], bw=a$bw)
   df <- data.frame(r=a$x, f=b$y/a$y)
   FUN <- fv(df,
@@ -41,6 +42,7 @@ rotmean <- function(X, ..., origin, padzero=TRUE, Xname, result=c("fv", "im")) {
             unitname=unitname(X),
             fname=paste0("bar", paren(Xname)))
   attr(FUN, "dotnames") <- "f"
+  unitname(FUN) <- unitname(X)
   if(result == "fv") return(FUN)
   ## compute image
   FUN <- as.function(FUN)
@@ -48,5 +50,6 @@ rotmean <- function(X, ..., origin, padzero=TRUE, Xname, result=c("fv", "im")) {
   IM <- as.im(function(x,y,FUN){ FUN(sqrt(x^2+y^2)) }, XX, FUN=FUN)
   if(!is.null(backshift))
     IM <- shift(IM,backshift)
+  unitname(IM) <- unitname(X)
   return(IM)
 }

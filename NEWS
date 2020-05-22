@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.64-1.005
+        CHANGES IN spatstat VERSION 1.64-1.006
 
 OVERVIEW
 
@@ -28,6 +28,12 @@ SIGNIFICANT USER-VISIBLE CHANGES
     to conform to changes in R. (The actual default value is TRUE for R < 4.1.0
     and FALSE for R >= 4.1.0)
 
+    o rotmean
+    The result now has the same 'unitname' as the input object X.
+    
+    o rotmean
+    New argument 'adjust' controls the smoothing bandwidth.
+    
     o sessionInfo
     Output now includes a list of packages that are imported but not loaded.
 
@@ -49,7 +55,7 @@ OVERVIEW
 
     o Relative risk estimation may include case weights.
    
-    o We thank Ian Buller, brian Ripley, Maximilian Vogtland
+    o We thank Ian Buller, Brian Ripley, Maximilian Vogtland
     and Maximilian Hesselbarth for contributions.
 
     o Nickname: 'Help you I can, yes!'
