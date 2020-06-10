@@ -39,7 +39,8 @@
   The method for line segment patterns (class \code{"psp"})
   counts the number of line segments in the pattern.
 
-  The method for tessellations (class \code{"tess"} or \code{"lintess"})
+  The method for tessellations
+  (class \code{"tess"} or \code{"lintess"})
   counts the number of tiles of the tessellation.
 }
 \value{

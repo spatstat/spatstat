@@ -22,12 +22,15 @@
 
   \method{model.images}{lppm}(object, L = as.linnet(object), ...)
 
+
   \method{model.images}{slrm}(object, ...)
 }
 \arguments{
   \item{object}{
     The fitted point process model. An object of class \code{"ppm"}
-    or \code{"kppm"} or \code{"lppm"} or \code{"slrm"} or \code{"dppm"}.
+    or \code{"kppm"}
+    or \code{"lppm"} 
+    or \code{"slrm"} or \code{"dppm"}.
   }
   \item{W}{
     A window (object of class \code{"owin"}) in which the
@@ -54,14 +57,15 @@
   function \code{\link{ppm}}) or class \code{"kppm"} (produced by the
   fitting function \code{\link{kppm}})
   or class \code{"dppm"} (produced by the
-  fitting function \code{\link{dppm}}) or class \code{"lppm"} (produced
-  by \code{\link{lppm}}) or class \code{"slrm"} (produced by
-  \code{\link{slrm}}). 
+  fitting function \code{\link{dppm}})
+  or class \code{"lppm"} (produced by \code{\link{lppm}})
+  or class \code{"slrm"} (produced by \code{\link{slrm}}). 
 
   The spatial covariates required by the model-fitting procedure
   are computed at every pixel location in the window \code{W}.
   For \code{lppm} objects, the covariates are computed at every
-  location on the network \code{L}. For \code{slrm} objects, the
+  location on the network \code{L}.
+  For \code{slrm} objects, the
   covariates are computed on the pixels that were used to fit the
   model.
 
@@ -105,13 +109,8 @@
   pixel images (objects of class \code{"im"}).
   For \code{model.images.lppm}, the images are also of class \code{"linim"}.
 }
-\author{\adrian
-  
-  
-  \rolf
-  
-  and \ege
-  
+\author{
+  \spatstatAuthors.
 }
 \seealso{
   \code{\link{model.matrix.ppm}},

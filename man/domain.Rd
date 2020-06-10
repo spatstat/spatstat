@@ -5,19 +5,14 @@
 \alias{domain.im}
 \alias{domain.ppx}
 \alias{domain.pp3}
-\alias{domain.lpp}
 \alias{domain.ppm}
 \alias{domain.kppm}
 \alias{domain.dppm}
-\alias{domain.lpp}
-\alias{domain.lppm}
 \alias{domain.msr}
 \alias{domain.quad}
 \alias{domain.quadratcount}
 \alias{domain.quadrattest}
 \alias{domain.tess}
-\alias{domain.linfun}
-\alias{domain.lintess}
 \alias{domain.im}
 \alias{domain.layered}
 \alias{domain.distfun}
@@ -26,6 +21,10 @@
 \alias{domain.rmhmodel}
 \alias{domain.leverage.ppm}
 \alias{domain.influence.ppm}
+\alias{domain.lpp}
+\alias{domain.lppm}
+\alias{domain.linfun}
+\alias{domain.lintess}
 \title{
   Extract the Domain of any Spatial Object
 }
@@ -46,17 +45,11 @@
 
    \method{domain}{pp3}(X, \dots)
 
-   \method{domain}{lpp}(X, \dots)
-
  \method{domain}{ppm}(X, \dots, from=c("points", "covariates"))
 
  \method{domain}{kppm}(X, \dots, from=c("points", "covariates"))
 
  \method{domain}{dppm}(X, \dots, from=c("points", "covariates"))
-
- \method{domain}{lpp}(X, \dots)
-
- \method{domain}{lppm}(X, \dots)
 
  \method{domain}{msr}(X, \dots)
 
@@ -67,6 +60,10 @@
  \method{domain}{quadrattest}(X, \dots)
 
  \method{domain}{tess}(X, \dots)
+
+ \method{domain}{lpp}(X, \dots)
+
+ \method{domain}{lppm}(X, \dots)
 
  \method{domain}{linfun}(X, \dots)
 

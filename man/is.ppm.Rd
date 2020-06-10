@@ -6,7 +6,8 @@
 \title{Test Whether An Object Is A Fitted Point Process Model}
 \description{
   Checks whether its argument is a fitted point process model
-  (object of class \code{"ppm"}, \code{"kppm"}, \code{"lppm"}
+  (object of class \code{"ppm"}, \code{"kppm"}, 
+  \code{"lppm"}
   or \code{"slrm"}).
 }
 \usage{
@@ -29,11 +30,8 @@ is.slrm(x)
 \value{
   A single logical value.
 }
-\author{\adrian
-  
-  
-  and \rolf
-  
+\author{
+  \spatstatAuthors.
 }
 \keyword{spatial}
 \keyword{manip}

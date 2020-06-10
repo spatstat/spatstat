@@ -15,15 +15,16 @@ tilenames(x) <- value
 
 \method{tilenames}{tess}(x)
 
-\method{tilenames}{lintess}(x)
-
 \method{tilenames}{tess}(x) <- value
+
+\method{tilenames}{lintess}(x)
 
 \method{tilenames}{lintess}(x) <- value
 }
 \arguments{
   \item{x}{
-    A tessellation (object of class \code{"tess"})
+    A tessellation 
+    (object of class \code{"tess"})
     or a tessellation on a linear network (object of class \code{"lintess"}).
   }
   \item{value}{Character vector giving new names for the tiles.}
@@ -39,7 +40,8 @@ tilenames(x) <- value
   \code{tilenames} returns a character vector.
 }
 \seealso{
-  \code{\link{tess}}, \code{\link{lintess}},
+  \code{\link{tess}},
+  \code{\link{lintess}},
   \code{\link{tiles}}
 }
 \examples{

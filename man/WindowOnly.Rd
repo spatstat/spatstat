@@ -72,7 +72,7 @@
   is defined. 
 
   The argument \code{from} applies when \code{X} is a fitted 
-  point process model
+  two-dimensional point process model
   (object of class \code{"ppm"}, \code{"kppm"} or \code{"dppm"}).
   If \code{from="data"} (the default),
   \code{Window} extracts the window of the original point
@@ -91,12 +91,8 @@
    X <- quadratcount(cells, 4)
    Window(X)
 }
-\author{\adrian
-  
-  
-  \rolf
-  
-  and \ege 
+\author{
+  \spatstatAuthors.
 }
 \keyword{spatial}
 \keyword{manip}

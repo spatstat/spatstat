@@ -3,8 +3,8 @@
 \alias{density.linnet}
 \title{Kernel Smoothing of Line Segment Pattern or Linear Network}
 \description{
-  Compute a kernel smoothed intensity function from a line segment
-  pattern or a linear network.
+  Compute a kernel smoothed intensity function from a line segment pattern
+  or a linear network.
 }
 \usage{
   \method{density}{psp}(x, sigma, \dots, edge=TRUE,

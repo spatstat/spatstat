@@ -40,7 +40,9 @@
 \arguments{
   \item{object}{
     The fitted point process model. An object of class \code{"ppm"}
-    or \code{"kppm"} or \code{"dppm"} or \code{"ippm"} or \code{"lppm"}.
+    or \code{"kppm"} or \code{"dppm"} 
+    or \code{"lppm"}
+    or \code{"ippm"}.
   }
   \item{data}{
     A model frame, containing the data required for the Berman-Turner device.
@@ -67,8 +69,9 @@
   These commands are methods for the generic function
   \code{\link{model.matrix}}.
   They extract the design matrix of a spatial point process model
-  (class \code{"ppm"} or \code{"kppm"} or \code{"dppm"}
-  or \code{"lppm"}).
+  (class \code{"ppm"} or \code{"kppm"} 
+  or \code{"lppm"}
+  or \code{"dppm"}).
 
   More precisely, this command extracts
   the design matrix of the generalised linear model associated with
@@ -76,15 +79,18 @@
   
   The \code{object} must be a fitted point process model
   (object of class \code{"ppm"} or \code{"kppm"}
-  or \code{"dppm"} or \code{"lppm"})
+  or \code{"lppm"}
+  or \code{"dppm"})
   fitted to spatial point pattern data.
   Such objects are produced by the model-fitting
-  functions \code{\link{ppm}}, \code{\link{kppm}}, \code{\link{dppm}}
-  and \code{\link{lppm}}.
+  functions \code{\link{ppm}}, \code{\link{kppm}}, 
+  \code{\link{lppm}},
+  and \code{\link{dppm}}.
 
   The methods \code{model.matrix.ppm},
-  \code{model.matrix.kppm}, \code{model.matrix.dppm}
-  and \code{model.matrix.lppm} 
+  \code{model.matrix.kppm}, 
+  \code{model.matrix.lppm},
+  and \code{model.matrix.dppm}
   extract the model matrix for the GLM.
 
   The result is a matrix, with one row for every quadrature point

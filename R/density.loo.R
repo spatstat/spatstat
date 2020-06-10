@@ -67,7 +67,7 @@ densitypointsLPP <- function(x, sigma, ...,
     return(result)
   }
   #' get setup data
-  g <- densityfun(x, sigma, weights=weights, nsigma=nsigma,
+  g <- densityfun(x, sigma, weights=weights, nsigma=nsigma, ..., 
                   dx=dx, dt=dt, iterMax=iterMax,
                   verbose=verbose, debug=debug, 
                   exit="setup")

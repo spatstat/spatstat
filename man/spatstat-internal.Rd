@@ -17,7 +17,6 @@
 \alias{affine.msr}
 \alias{ang2rad}
 \alias{anycrossing.psp}
-\alias{ApplyConnected}
 \alias{applytolayers}
 \alias{applyPolyclipArgs}
 \alias{areadelta2}
@@ -33,10 +32,8 @@
 \alias{as.data.frame.bw.optim}
 \alias{as.data.frame.fv}
 \alias{as.double.im}
-\alias{as.linfun.linfun}
 \alias{as.list.hyperframe}
 \alias{as.listof}
-\alias{as.owin.lintess}
 \alias{as.unitname}
 \alias{augment.msr}
 \alias{avenndist}
@@ -103,20 +100,16 @@
 \alias{datagen.runifpoisppOnLines}
 \alias{datagen.rpoisppOnLines}
 \alias{default.clipwindow}
-\alias{default.linnet.tolerance}
 \alias{default.n.tiling}
 \alias{default.ntile}
 \alias{deltasuffstat}
 \alias{dimnames.hyperframe}
 \alias{dimnames<-.hyperframe}
-\alias{DoCountCrossEnds}
-\alias{DoCountEnds}
 \alias{Deviation}
 \alias{dfbetas.ppmInfluence}
 \alias{dflt.redraw}
 \alias{densitycrossEngine}
 \alias{densitypointsEngine}
-\alias{densitypointsLPP}
 \alias{diagnose.ppm.engine}
 \alias{diagramobj}
 \alias{digestCovariates}
@@ -136,7 +129,6 @@
 \alias{doMultiStraussHard}
 \alias{dppmFixAlgorithm}
 \alias{dppmFixIntensity}
-\alias{drawSignedPoly}
 \alias{emptywindow}
 \alias{envelopeEngine}
 \alias{envelopeProgressData}
@@ -150,7 +142,6 @@
 \alias{erodemask}
 \alias{evalCovar}
 \alias{evalCovar.ppm}
-\alias{evalCovar.lppm}
 \alias{evalCovariate}
 \alias{evalInteraction}
 \alias{evalInterEngine}
@@ -170,7 +161,6 @@
 \alias{f3engine}
 \alias{f3Cengine}
 \alias{fasp}
-\alias{FDMKERNEL}
 \alias{fft2D}
 \alias{fftwAvailable}
 \alias{fill.coefs}
@@ -179,8 +169,6 @@
 \alias{findcbind}
 \alias{fii}
 \alias{fillNA}
-\alias{flatdensityfunlpp}
-\alias{flatdensityatpointslpp}
 \alias{flatfname}
 \alias{flipxypolygon}
 \alias{flipxy.msr}
@@ -202,7 +190,6 @@
 \alias{getglmdata}
 \alias{getglmfit}
 \alias{getglmsubset}
-\alias{getlambda.lpp}
 \alias{getlastshift}
 \alias{getppmdatasubset}
 \alias{getppmOriginalCovariates}
@@ -297,31 +284,18 @@
 \alias{kraever}
 \alias{kraeverRandomFields}
 \alias{labels.ppm}
-\alias{ldtEngine}
 \alias{levels.im}
 \alias{levels<-.im}
 \alias{levelsAsFactor}
 \alias{leverage.ppmInfluence}
-\alias{linearKengine}
-\alias{linearKmulti}
-\alias{linearKmulti.inhom}
-\alias{linearKmultiEngine}
-\alias{linearpcfengine}
-\alias{linearpcfmulti}
-\alias{linearpcfmulti.inhom}
-\alias{linearPCFmultiEngine}
 \alias{listof}
 \alias{localKengine}
 \alias{localKmultiEngine}
 \alias{localpcfengine}
 \alias{localpcfmatrix}
-\alias{local2lpp}
 \alias{logi.dummy}
 \alias{logi.engine}
 \alias{logLik.vblogit}
-\alias{looHeatLPP}
-\alias{looVoronoiLPP}
-\alias{makeLinnetTolerance}
 \alias{markvaluetype}
 \alias{maskLaslett}
 \alias{match2DkernelName}
@@ -329,7 +303,6 @@
 \alias{parbreak}
 \alias{PairPotentialType}
 \alias{plan.legend.layout}
-\alias{plotWidthMap}
 \alias{pointweights}
 \alias{PoisSaddle}
 \alias{PoisSaddleArea}
@@ -473,7 +446,6 @@
 \alias{print.laslett}
 \alias{print.layered}
 \alias{print.leverage.ppm}
-\alias{print.lintess}
 \alias{print.localpcfmatrix}
 \alias{print.lurk}
 \alias{print.lut}
@@ -506,9 +478,6 @@
 \alias{print.summary.funxy}
 \alias{print.summary.hyperframe}
 \alias{print.summary.listof}
-\alias{print.summary.linim}
-\alias{print.summary.linnet}
-\alias{print.summary.lintess}
 \alias{print.summary.logiquad}
 \alias{print.summary.lut}
 \alias{print.summary.mppm}
@@ -548,7 +517,6 @@
 \alias{rescale.msr}
 \alias{resolveEinfo}
 \alias{resolve.foxall.window}
-\alias{resolve.heat.steps}
 \alias{resolve.lambda}
 \alias{resolve.lambda.cross}
 \alias{resolve.stringsAsFactors}
@@ -649,7 +617,6 @@
 \alias{smoothpointsEngine}
 \alias{smudge}
 \alias{sort.im}
-\alias{sortalongsegment}
 \alias{spatstat.deldir.setopt}
 \alias{spatstat.xy.coords}
 \alias{spatstatClusterModelInfo}
@@ -671,7 +638,6 @@
 \alias{summarise.trend}
 \alias{summary.envelope}
 \alias{summary.hyperframe}
-\alias{summary.lintess}
 \alias{summary.logiquad}
 \alias{summary.lut}
 \alias{summary.mppm}
@@ -710,7 +676,6 @@
 \alias{validradius}
 \alias{validate2Dkernel}
 \alias{validate.angles}        
-\alias{validate.lpp.coords}
 \alias{validate.mask}        
 \alias{validate.quad}        
 \alias{validate.weights}        
@@ -724,10 +689,6 @@
 \alias{versionstring.spatstat}
 \alias{verifyclass}
 \alias{veryunique}
-\alias{vnnFind}
-\alias{Window.lintess}
-\alias{Window<-.linnet}
-\alias{Window<-.lpp}
 \alias{warn.once}
 \alias{waxlyrical}
 \alias{weightedclosepairs}
@@ -747,13 +708,54 @@
 %%
 \alias{as.ppplist}
 \alias{as.imlist}
-\alias{pointsAlongNetwork}
 \alias{allElementsIdentical}
-\alias{resampleNetworkDataFrame}
 %%
-\alias{as.ppm.lppm}
 \alias{as.ppm.rppm}
 \alias{predict.profilepl}
+%% Linear networks code is corralled here
+\alias{ApplyConnected}
+\alias{DoCountCrossEnds}
+\alias{DoCountEnds}
+\alias{FDMKERNEL}
+\alias{as.linfun.linfun}
+\alias{as.owin.lintess}
+\alias{default.linnet.tolerance}
+\alias{makeLinnetTolerance}
+\alias{print.lintess}
+\alias{print.summary.linim}
+\alias{print.summary.linnet}
+\alias{print.summary.lintess}
+\alias{resolve.heat.steps}
+\alias{summary.lintess}
+\alias{Window.lintess}
+\alias{Window<-.linnet}
+\alias{Window<-.lpp}
+\alias{densitypointsLPP}
+\alias{evalCovar.lppm}
+\alias{flatdensityfunlpp}
+\alias{flatdensityatpointslpp}
+\alias{getlambda.lpp}
+\alias{local2lpp}
+\alias{looHeatLPP}
+\alias{looVoronoiLPP}
+\alias{validate.lpp.coords}
+\alias{as.ppm.lppm}
+\alias{pointsAlongNetwork}
+\alias{linearKengine}
+\alias{linearKmulti}
+\alias{linearKmulti.inhom}
+\alias{linearKmultiEngine}
+\alias{linearpcfengine}
+\alias{linearpcfmulti}
+\alias{linearpcfmulti.inhom}
+\alias{linearPCFmultiEngine}
+\alias{resampleNetworkDataFrame}
+\alias{sortalongsegment}
+\alias{vnnFind}
+\alias{ldtEngine}
+\alias{drawSignedPoly}
+\alias{plotWidthMap}
+
 %%%%%%%
 \description{
   Internal spatstat functions.
@@ -774,7 +776,6 @@ affinexypolygon(p, mat, vec, detmat)
 \method{affine}{msr}(X, mat, vec, \dots)
 ang2rad(ang, unit, start, clockwise)
 anycrossing.psp(A,B)
-ApplyConnected(X, Engine, r, \dots, rule, auxdata)
 applytolayers(L, FUN, \dots)
 applyPolyclipArgs(x, p)
 areadelta2(X, r, \dots, sparseOK)
@@ -793,10 +794,8 @@ as.breakpts(\dots)
 \method{as.data.frame}{bw.optim}(x, \dots)
 \method{as.data.frame}{fv}(x, \dots)
 \method{as.double}{im}(x, \dots)
-\method{as.linfun}{linfun}(X, \dots)
 \method{as.list}{hyperframe}(x, \dots)
 as.listof(x)
-\method{as.owin}{lintess}(W, \dots)
 as.unitname(s)
 augment.msr(x, \dots, sigma, recompute)
 avenndist(X)
@@ -868,7 +867,6 @@ datagen.runifpointOnLines(n, L)
 datagen.runifpoisppOnLines(lambda, L)
 datagen.rpoisppOnLines(lambda, L, lmax, \dots, check)
 default.clipwindow(object, epsilon)
-default.linnet.tolerance(L)
 default.n.tiling(X, nd, ntile, npix, eps, random, quasi, verbose)
 default.ntile(X)
 deltasuffstat(model, \dots,
@@ -876,8 +874,6 @@ deltasuffstat(model, \dots,
               force, warn.forced, verbose, use.special)
 \method{dimnames}{hyperframe}(x)
 \method{dimnames}{hyperframe}(x) <- value
-DoCountEnds(X, D, toler)
-DoCountCrossEnds(X, I, J, DIJ, toler)
 Deviation(x, ref, leaveout, n, xi)
 \method{dfbetas}{ppmInfluence}(model, \dots)
 dflt.redraw(button, name, env)
@@ -889,10 +885,6 @@ densitypointsEngine(x, sigma, \dots,
                     kernel, scalekernel,
                     weights, edge, varcov,
                     leaveoneout, diggle, sorted, spill, cutoff)
-densitypointsLPP(x, sigma, \dots,
-                 weights, nsigma, leaveoneout, fast,
-                 fastmethod, floored,
-                 dx, dt, iterMax, verbose, debug)
 diagnose.ppm.engine(object, \dots, type, typename, opt,
                          sigma, rbord, compute.sd, compute.cts,
                          envelope, nsim, nrank,
@@ -915,7 +907,6 @@ do.call.plotfun(fun, arglist, \dots)
 doMultiStraussHard(iradii, hradii, types)
 dppmFixIntensity(DPP, lambda, po)
 dppmFixAlgorithm(algorithm, changealgorithm, clusters, startpar)
-drawSignedPoly(x,y,pars,sgn)
 emptywindow(w)
 envelopeEngine(X, fun, simul,
            nsim, nrank, \dots, funargs, funYargs,
@@ -953,9 +944,6 @@ evalCovar(model, covariate, \dots)
 \method{evalCovar}{ppm}(model, covariate, \dots, lambdatype,
           dimyx, eps, interpolate, jitter, modelname, covname, dataname,
           subset) 
-\method{evalCovar}{lppm}(model, covariate, \dots, lambdatype, 
-          eps, nd, interpolate, jitter, modelname, covname, dataname,
-          subset)
 evalCovariate(covariate, locations)
 evalInteraction(X,P,E,interaction,correction,splitInf,\dots,
                 precomputed,savecomputed)
@@ -977,8 +965,6 @@ fakemaintitle(bb, main, \dots)
 f3engine(x, y, z, box, vside, range, nval, correction)
 f3Cengine(x, y, z, box, vside, rmax, nrval)
 fasp(fns, which, formulae, dataname, title, rowNames, colNames, checkfv)
-FDMKERNEL(lppobj, dtt, dtx, M, nsave, weights,
-          stepnames, setuponly, verbose)
 fft2D(z, inverse, west)
 fftwAvailable()
 fill.coefs(coefs, required)
@@ -987,8 +973,6 @@ findCovariate(covname, scope, scopename=NULL)
 findcbind(root, depth, maxdepth)
 fii(interaction, coefs, Vnames, IsOffset, vnameprefix)
 fillNA(x, value)
-flatdensityfunlpp(X, \dots, disconnect, weights, what)
-flatdensityatpointslpp(X, \dots, leaveoneout, disconnect, weights, what)
 flatfname(x)
 flipxypolygon(p)
 \method{flipxy}{msr}(X)
@@ -1010,8 +994,6 @@ getfields(X, L, fatal = TRUE)
 getglmdata(object, drop=FALSE)
 getglmfit(object)
 getglmsubset(object)
-getlambda.lpp(lambda, X, subset, \dots,
-              update, leaveoneout, loo.given, lambdaname)
 getlastshift(X)
 getppmdatasubset(object)
 getppmOriginalCovariates(object)
@@ -1112,25 +1094,10 @@ kppmPalmLik(X, Xname, po, clusters, control, weightfun, rmax,
 kraever(package, fatal)
 kraeverRandomFields()
 \method{labels}{ppm}(object, \dots)
-ldtEngine(nv, ns, from, to, seglen, huge,
-          coUXord, vnndist, vnnwhich, vnnlab)
 \method{levels}{im}(x)
 \method{levels}{im}(x) <- value
 levelsAsFactor(x)
 \method{leverage}{ppmInfluence}(model, \dots)
-linearKengine(X, \dots, r, reweight, denom, correction,
-              ratio, showworking)
-linearKmulti(X, I, J, r, \dots, correction)
-linearKmulti.inhom(X, I, J, lambdaI, lambdaJ, r, \dots, correction,
-             normalise)
-linearpcfengine(X, \dots, r, reweight, denom, correction, ratio)
-linearpcfmulti(X, I, J, r, \dots, correction)
-linearpcfmulti.inhom(X, I, J, lambdaI, lambdaJ, r, \dots,
-                     correction, normalise)
-linearKmultiEngine(X, I, J, \dots,
-                   r, reweight, denom, correction, showworking)
-linearPCFmultiEngine(X, I, J, \dots,
-                   r, reweight, denom, correction, showworking)
 listof(\dots)
 localKengine(X, \dots, wantL, lambda, rmax, correction, verbose, rvalue)
 localKmultiEngine(X, from, to,
@@ -1140,7 +1107,6 @@ localKmultiEngine(X, from, to,
            Iexplain, Jexplain, Ikey, Jkey, miss.update, miss.leave)
 localpcfengine(X, \dots, delta, rmax, nr, stoyan, lambda)
 localpcfmatrix(X, i, \dots, lambda, delta, rmax, nr, stoyan)
-local2lpp(L, seg, tp, X, df.only)
 logi.dummy(X, dummytype, nd, mark.repeat, \dots)
 logi.engine(Q, trend, interaction, \dots, 
             covariates, subsetexpr, clipwin,
@@ -1148,10 +1114,6 @@ logi.engine(Q, trend, interaction, \dots,
             vnamebase, vnameprefix, justQ, savecomputed, precomputed,
             VB)
 \method{logLik}{vblogit}(object, \dots)
-looHeatLPP(U0, Amatrix, npts, niter, nsave,
-           lixelweight, lixelmap, verbose) 
-looVoronoiLPP(X)
-makeLinnetTolerance(toler)
 maskLaslett(X, \dots, eps, dimyx, xy, oldX, verbose, plotit)
 markvaluetype(x)
 match2DkernelName(kernel)
@@ -1160,7 +1122,6 @@ parbreak(terse)
 plan.legend.layout(B, \dots, side, sep, size, sep.frac, size.frac,
                    started, map)
 PairPotentialType(pairpot)
-plotWidthMap(bb.leg, zlim, phys.scale, leg.scale, leg.side, leg.args, grafpar)
 pointweights(X, \dots, weights, parent)
 PoisSaddle(beta, fi)
 PoisSaddleArea(beta, fi)
@@ -1347,7 +1308,6 @@ prepareTitle(main)
 \method{print}{laslett}(x, \dots)
 \method{print}{layered}(x, \dots)
 \method{print}{leverage.ppm}(x, \dots)
-\method{print}{lintess}(x, \dots)
 \method{print}{lurk}(x, \dots)
 \method{print}{lut}(x, \dots)
 \method{print}{minconfit}(x, \dots)
@@ -1378,9 +1338,6 @@ prepareTitle(main)
 \method{print}{summary.distfun}(x, \dots)
 \method{print}{summary.funxy}(x, \dots)
 \method{print}{summary.hyperframe}(x, \dots)
-\method{print}{summary.linim}(x, \dots)
-\method{print}{summary.linnet}(x, \dots)
-\method{print}{summary.lintess}(x, \dots)
 \method{print}{summary.listof}(x, \dots)
 \method{print}{summary.logiquad}(x, \dots, dp=3)
 \method{print}{summary.lut}(x, \dots)
@@ -1424,13 +1381,6 @@ repair.image.xycoords(x)
 \method{rescale}{msr}(X, s, unitname)
 resolveEinfo(x, what, fallback, warn, atomic)
 resolve.foxall.window(X, Y, W, warn.trim)
-resolve.heat.steps(sigma, \dots, dx, dt,
-                   niter, iterMax, nsave,
-                   seglengths, maxdegree, AMbound, L,
-                   finespacing, fineNsplit, fineNlixels,
-                   W, eps, dimyx, xy, 
-                   allow.adjust, warn.adjust,
-                   verbose, stepnames)
 resolve.lambda(X, lambda, \dots, sigma, varcov, leaveoneout, update)
 resolve.lambda.cross(X, I, J, lambdaI, lambdaJ, \dots, lambdaX,
                      sigma, varcov, leaveoneout, update, lambdaIJ,
@@ -1560,7 +1510,6 @@ smoothpointsEngine(x, values, sigma, \dots,
                    weights, varcov, leaveoneout, sorted, cutoff)
 smudge(X)
 \method{sort}{im}(x, \dots)
-sortalongsegment(df)
 spatstat.deldir.setopt(use.trigrafS, use.trigraf, debug.delaunay)
 spatstat.xy.coords(x, y)
 spatstatClusterModelInfo(name, onlyPCP)
@@ -1584,7 +1533,6 @@ suffstat.poisson(model, X, callstring)
 summarise.trend(trend, w, a)
 \method{summary}{envelope}(object,\dots)
 \method{summary}{hyperframe}(object, \dots, brief=FALSE)
-\method{summary}{lintess}(object, \dots)
 \method{summary}{logiquad}(object, \dots, checkdup=FALSE)
 \method{summary}{lut}(object, \dots)
 \method{summary}{mppm}(object, \dots, brief=FALSE)
@@ -1627,7 +1575,6 @@ unstackFilter(x)
 validradius(r, caller)
 validate2Dkernel(kernel, fatal)
 validate.angles(angles, unit, guess)
-validate.lpp.coords(X, fatal, context)
 validate.mask(w, fatal=TRUE)        
 validate.quad(Q, fatal, repair, announce)
 validate.weights(x, recip, how, allowzero, allowinf)
@@ -1641,10 +1588,6 @@ versionstring.ppm(object)
 versionstring.spatstat()
 veryunique(z)
 verifyclass(X, C, N = deparse(substitute(X)), fatal = TRUE)
-vnnFind(seg, tp, ns, nv, from, to, seglen, huge, tol, kmax)
-\method{Window}{lintess}(X, \dots)
-\method{Window}{linnet}(X, \dots, check=TRUE) <- value
-\method{Window}{lpp}(X, \dots, check=TRUE) <- value
 warn.once(key, \dots)
 waxlyrical(type, terse)
 weightedclosepairs(X, r, correction, what)
@@ -1665,14 +1608,73 @@ spatstatDiagnostic(msg)
 %%
 as.ppplist(x, check)
 as.imlist(x, check)
-pointsAlongNetwork(L, delta)
 allElementsIdentical(x, entry)
-resampleNetworkDataFrame(df, template)
 %%
-\method{as.ppm}{lppm}(object)
 \method{as.ppm}{rppm}(object)
 \method{predict}{profilepl}(object, \dots)
-%%%%%%%
+%% Linear networks code is corralled here
+ApplyConnected(X, Engine, r, \dots, rule, auxdata)
+DoCountEnds(X, D, toler)
+DoCountCrossEnds(X, I, J, DIJ, toler)
+FDMKERNEL(lppobj, dtt, dtx, M, nsave, weights,
+          stepnames, setuponly, verbose)
+\method{as.linfun}{linfun}(X, \dots)
+\method{as.owin}{lintess}(W, \dots)
+default.linnet.tolerance(L)
+makeLinnetTolerance(toler)
+\method{print}{lintess}(x, \dots)
+\method{print}{summary.linim}(x, \dots)
+\method{print}{summary.linnet}(x, \dots)
+\method{print}{summary.lintess}(x, \dots)
+\method{summary}{lintess}(object, \dots)
+\method{Window}{lintess}(X, \dots)
+\method{Window}{linnet}(X, \dots, check=TRUE) <- value
+\method{Window}{lpp}(X, \dots, check=TRUE) <- value
+densitypointsLPP(x, sigma, \dots,
+                 weights, nsigma, leaveoneout, fast,
+                 fastmethod, floored,
+                 dx, dt, iterMax, verbose, debug)
+\method{evalCovar}{lppm}(model, covariate, \dots, lambdatype, 
+          eps, nd, interpolate, jitter, modelname, covname, dataname,
+          subset)
+flatdensityfunlpp(X, \dots, disconnect, weights, what)
+flatdensityatpointslpp(X, \dots, leaveoneout, disconnect, weights, what)
+getlambda.lpp(lambda, X, subset, \dots,
+              update, leaveoneout, loo.given, lambdaname)
+local2lpp(L, seg, tp, X, df.only)
+looHeatLPP(U0, Amatrix, npts, niter, nsave,
+           lixelweight, lixelmap, verbose) 
+looVoronoiLPP(X)
+validate.lpp.coords(X, fatal, context)
+\method{as.ppm}{lppm}(object)
+pointsAlongNetwork(L, delta)
+linearKengine(X, \dots, r, reweight, denom, correction,
+              ratio, showworking)
+linearKmulti(X, I, J, r, \dots, correction)
+linearKmulti.inhom(X, I, J, lambdaI, lambdaJ, r, \dots, correction,
+             normalise)
+linearpcfengine(X, \dots, r, reweight, denom, correction, ratio)
+linearpcfmulti(X, I, J, r, \dots, correction)
+linearpcfmulti.inhom(X, I, J, lambdaI, lambdaJ, r, \dots,
+                     correction, normalise)
+linearKmultiEngine(X, I, J, \dots,
+                   r, reweight, denom, correction, showworking)
+linearPCFmultiEngine(X, I, J, \dots,
+                   r, reweight, denom, correction, showworking)
+resampleNetworkDataFrame(df, template)
+sortalongsegment(df)
+vnnFind(seg, tp, ns, nv, from, to, seglen, huge, tol, kmax)
+ldtEngine(nv, ns, from, to, seglen, huge,
+          coUXord, vnndist, vnnwhich, vnnlab)
+resolve.heat.steps(sigma, \dots, dx, dt,
+                   niter, iterMax, nsave,
+                   seglengths, maxdegree, AMbound, L,
+                   finespacing, fineNsplit, fineNlixels,
+                   W, eps, dimyx, xy, 
+                   allow.adjust, warn.adjust,
+                   verbose, stepnames)
+drawSignedPoly(x,y,pars,sgn)
+plotWidthMap(bb.leg, zlim, phys.scale, leg.scale, leg.side, leg.args, grafpar)
 }
 \details{
   These internal \pkg{spatstat} functions are not usually called

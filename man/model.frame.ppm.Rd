@@ -23,7 +23,9 @@ Extract the Variables in a Point Process Model
 \arguments{
   \item{formula}{
     A fitted point process model.
-    An object of class \code{"ppm"} or \code{"kppm"} or \code{"dppm"} or \code{"lppm"}.
+    An object of class \code{"ppm"}, \code{"kppm"},
+    \code{"lppm"}
+    or \code{"dppm"}.
   }
   \item{\dots}{
     Additional arguments passed to \code{\link{model.frame.glm}}.
@@ -32,9 +34,10 @@ Extract the Variables in a Point Process Model
 \details{
   The function \code{\link{model.frame}} is generic.
   These functions are method for \code{\link{model.frame}}
-  for fitted point process models (objects of class \code{"ppm"}
-  or \code{"kppm"} or \code{"dppm"} or \code{"lppm"}).
-
+  for fitted point process models (objects of class \code{"ppm"},
+  \code{"kppm"}, 
+  \code{"lppm"},
+  or \code{"dppm"}).
   The first argument should be a fitted point process model;
   it has to be named \code{formula} for consistency with the generic
   function.
@@ -70,13 +73,8 @@ Extract the Variables in a Point Process Model
   kfit <- kppm(redwood ~ x, "Thomas")
   kmf <- model.frame(kfit)
 }
-\author{\adrian
-  
-  
-  \rolf
-  
-  and \ege
-  
+\author{
+  \spatstatAuthors.
 }
 \keyword{spatial}
 \keyword{models}

@@ -11,7 +11,8 @@
   densityHeat(x, sigma, \dots,
               at=c("pixels", "points"), leaveoneout=TRUE,
               weights = NULL,
-              dx = NULL, dt = NULL, iterMax = 1e+06, verbose=FALSE)
+              dx = NULL, dt = NULL, iterMax = 1e+06,
+              finespacing = TRUE, verbose=FALSE)
 }
 \arguments{
   \item{x}{
@@ -50,6 +51,11 @@
   \item{iterMax}{
     Maximum number of iterations.
   }
+  \item{finespacing}{
+    Logical value specifying whether the discrete approximation is
+    required to be accurate along every segment of the network,
+    no matter how short the segment is. See the section on Discretisation.
+  }
   \item{verbose}{
     Logical value specifying whether to print progress reports.
   }
@@ -85,6 +91,44 @@
   and is equal to the average density of points per unit length.
   (If the network is not connected, then this rule
   is applied separately to each connected component of the network).
+}
+\section{Discretisation and Error Messages}{
+  The arguments \code{dx}, \code{dt} and \code{iterMax}
+  determine the discretisation of the network, according to
+  a set of rules. The argument \code{finespacing} determines
+  which rule will be applied. 
+
+  The arguments \code{dx}, \code{dt}, \code{iterMax}
+  are connected by several constraints; specifying one of these
+  arguments will affect the default values of the other two arguments.
+  
+  The argument \code{finespacing} specifies whether
+  a very fine spacing of sample points is required, in order to attain
+  hihg accuracy.
+  \itemize{
+    \item
+    If \code{finespacing=TRUE} (the default), then the
+    sample point spacing \code{dx} must not exceed
+    one-third of the length of the shortest
+    segment of the network. This ensures that the discrete approximation
+    is accurate along every segment, no matter how short the segment
+    is. However, this may not be feasible
+    if it implies a very large number of sample points, or a large number
+    of iterations: in such cases, the code may terminate with an error
+    about illegal values of \code{dx}, \code{dt} or \code{iterMax}.
+    \item
+    If \code{finespacing=FALSE}, then
+    the sample point spacing \code{dx} will be about one-half the width
+    of a pixel in the default pixellation of the window of \code{x}.
+    This is usually a much coarser resolution than the one
+    selected by \code{finespacing=TRUE}. If it is too coarse,
+    the pixel resolution can be refined using
+    the arguments \code{dimyx}, \code{eps} or \code{xy}
+    passed to \code{\link{as.mask}}. For example,
+    \code{dimyx=512} would specify a 512 x 512 pixel grid.
+    The default pixel resolution can be changed for the remainder of
+    the \R session by \code{\link{spatstat.options}('npixel')}.
+  }
 }
 \value{
   A pixel image on the linear network (object of class \code{"linim"}).

@@ -1,9 +1,9 @@
 \name{marks.tess}
 \alias{marks.tess}
-\alias{marks.lintess}
 \alias{marks<-.tess}
-\alias{marks<-.lintess}
 \alias{unmark.tess}
+\alias{marks.lintess}
+\alias{marks<-.lintess}
 \alias{unmark.lintess}
 \title{Marks of a Tessellation}
 \description{

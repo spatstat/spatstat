@@ -43,8 +43,9 @@ is.poisson(x)
 \arguments{
   \item{x}{
     A fitted spatial point process model
-    (object of class \code{"ppm"}, \code{"kppm"}, \code{"lppm"}, \code{"dppm"}
-    or \code{"slrm"}) or similar object.
+    (object of class \code{"ppm"}, \code{"kppm"},
+    \code{"lppm"}, 
+    \code{"dppm"} or \code{"slrm"}) or similar object.
   }
 }
 \details{
@@ -82,13 +83,7 @@ is.poisson(x)
   A logical value.
 }
 \author{
-  \adrian
-  
-  
-  \rolf
-  
-  and \ege
-  
+  \spatstatAuthors.
 }
 \seealso{
   \code{\link{is.marked}} to determine whether a model is a marked
@@ -104,9 +99,6 @@ is.poisson(x)
   \code{\link{slrm}}.
 }
 \examples{
-  data(cells)
-  data(redwood)
-
   fit <- ppm(cells ~ x)
   is.stationary(fit)
   is.poisson(fit)

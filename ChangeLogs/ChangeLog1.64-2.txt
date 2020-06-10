@@ -167,4 +167,61 @@ Change log from spatstat 1.64-1 to spatstat 1.64-2
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
 
-   
+08 jun 2020
+
+   domain.Rd
+   density.psp.Rd
+   as.owin.Rd
+   identify.ppp.Rd
+   is.connected.Rd
+   is.marked.ppm.Rd
+   is.multitype.ppp.Rd
+   is.multitype.ppm.Rd
+   is.ppm.Rd
+   is.stationary.Rd
+   marks.tess.Rd
+   model.frame.ppm.Rd
+   model.images.Rd
+   model.matrix.ppm.Rd
+   nobjects.Rd
+   tilenames.Rd
+   pseudoR2.Rd
+   rthin.Rd
+   text.ppp.Rd
+   spatdim.Rd
+   unstack.ppp.Rd
+   WindowOnly.Rd
+   spatstat-internal.Rd
+   spatstat-deprecated.Rd
+	Inserted 'filepp' macros which can switch off the
+	linear networks code (but are currently switched on).
+
+
+10 jun 2020
+
+   density.lpp.R
+   densityHeat.Rd
+	'finespacing' is now a formal argument.
+	The effective default has been changed.
+
+   density.loo.R
+	Internal argument passing improved.
+	
+   density.lpp.R
+	Added more 'verbose' comments.
+
+   DESCRIPTION
+   NEWS
+   spatstat-package.Rd
+	Acknowledged Yonatan Rosen.
+	
+   DESCRIPTION
+   NEWS
+	Version 1.64-1.007
+
+------------- passed R-4.0.0 CMD check ---------------
+(with environment variable SPATSTAT_TEST defined/undefined)
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+
+

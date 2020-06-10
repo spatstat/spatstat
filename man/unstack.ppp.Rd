@@ -1,8 +1,8 @@
 \name{unstack.ppp}
 \alias{unstack.ppp}
 \alias{unstack.psp}
-\alias{unstack.lpp}
 \alias{unstack.tess}
+\alias{unstack.lpp}
 \alias{unstack.lintess}
 \title{
   Separate Multiple Columns of Marks 
@@ -17,9 +17,9 @@
 
 \method{unstack}{psp}(x, \dots)
 
-\method{unstack}{lpp}(x, \dots)
-
 \method{unstack}{tess}(x, \dots)
+
+\method{unstack}{lpp}(x, \dots)
 
 \method{unstack}{lintess}(x, \dots)
 }

@@ -20,8 +20,8 @@ is.connected(X, \dots)
 \arguments{
   \item{X}{
     A spatial object such as a pixel image (object of class \code{"im"}),
-    a window (object of class \code{"owin"}) or a linear network
-    (object of class \code{"linnet"}).
+    a window (object of class \code{"owin"})
+    or a linear network (object of class \code{"linnet"}).
   }
   \item{\dots}{
     Arguments passed to \code{\link{connected}} to determine the
@@ -38,9 +38,9 @@ is.connected(X, \dots)
   The default method \code{is.connected.default} 
   works for many classes of objects, including windows (class \code{"owin"})
   and images (class \code{"im"}).
-  There is a method for linear networks, \code{is.connected.linnet},
-  described here, and a method for point patterns
-  described in \code{\link{is.connected.ppp}}.
+  There is 
+  a method for linear networks, \code{is.connected.linnet}, described here, and 
+  a method for point patterns, described in \code{\link{is.connected.ppp}}.
 }
 \value{
   A logical value.

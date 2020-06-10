@@ -1927,6 +1927,7 @@
   Ian Renner,
   Tom Richardson,
   Brian Ripley,
+  Yonatan Rosen,
   Ted Rosenbaum,
   Barry Rowlingson,
   Jason Rudokas,

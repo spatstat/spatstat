@@ -20,8 +20,8 @@
 }
 \arguments{
   \item{object}{
-    Fitted point process model. An object of class \code{"ppm"}
-    or \code{"lppm"}.
+    Fitted point process model.
+    An object of class \code{"ppm"} or \code{"lppm"}.
   }
   \item{keepoffset}{
     Logical value indicating whether to retain offset terms in the model
@@ -34,8 +34,8 @@
 }
 \details{
   The function \code{pseudoR2} is generic, with methods
-  for fitted point process models of class \code{"ppm"} and
-  \code{"lppm"}.
+  for fitted point process models
+  of class \code{"ppm"} and \code{"lppm"}.
 
   This function computes McFadden's pseudo-Rsquared
   \deqn{

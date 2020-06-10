@@ -211,16 +211,22 @@ densityEqualSplit <- function(x, sigma=NULL, ...,
 densityHeat <- function(x, sigma, ...,
                         at=c("pixels", "points"),
                         leaveoneout=TRUE, weights=NULL, 
-                        dx=NULL, dt=NULL, iterMax=1e6, verbose=FALSE) {
+                        dx=NULL, dt=NULL, iterMax=1e6,
+                        finespacing=TRUE, verbose=FALSE) {
   stopifnot(is.lpp(x))
   check.1.real(sigma)
   at <- match.arg(at)
   if(!is.null(weights)) 
     check.nvector(weights, npoints(x))
+  ## internal arguments
+  fun         <- resolve.1.default(list(fun=FALSE), list(...))
 
   if(bandwidth.is.infinite(sigma)) {
     out <- switch(at,
-                  pixels = as.linim(flatdensityfunlpp(x, weights=weights)),
+                  pixels = {
+                    if(fun) flatdensityfunlpp(x, weights=weights)
+                    else as.linim(flatdensityfunlpp(x, weights=weights))
+                  },
                   points = flatdensityatpointslpp(x, weights=weights,
                                                   leaveoneout=leaveoneout))
     attr(out, "sigma") <- sigma
@@ -230,17 +236,16 @@ densityHeat <- function(x, sigma, ...,
     out <- densitypointsLPP(x, sigma, ..., leaveoneout=leaveoneout, 
                             weights=weights, nsigma=1,
                             dx=dx, dt=dt, iterMax=iterMax,
+                            finespacing=finespacing,
                             verbose=verbose)
     attr(out, "sigma") <- sigma
     return(out)
   }
-  ## internal arguments
-  fun         <- resolve.1.default(list(fun=FALSE), list(...))
-  finespacing <- resolve.1.default(list(finespacing=FALSE), list(...))
   ## 
   ## determine algorithm parameters
   L <- as.linnet(x)
-  p <- resolve.heat.steps(sigma, dx=dx, dt=dt, iterMax=iterMax, L=L, ...,
+  p <- resolve.heat.steps(sigma, dx=dx, dt=dt, iterMax=iterMax, L=L, 
+                          finespacing=finespacing, ...,
                           verbose=verbose)
   ## go
   a <- FDMKERNEL(lppobj=x, dtx=p$dx, dtt=p$dt, M=p$niter,
@@ -250,9 +255,13 @@ densityHeat <- function(x, sigma, ...,
   if(fun) {
     result <- f
   } else if(!finespacing) {
+    if(verbose) cat("Computing pixel image... ")
     result <- as.linim(f, ...)
+    if(verbose) cat("Done.\n")
   } else {
+    if(verbose) cat("Computing pixel image... ")
     Z <- as.im(as.linim(f, ...))
+    if(verbose) cat("Saving data at sample points... ")
     df <- a$df
     colnames(df)[colnames(df) == "seg"] <- "mapXY"
     ij <- nearest.valid.pixel(df$x, df$y, Z)
@@ -260,6 +269,7 @@ densityHeat <- function(x, sigma, ...,
                      yc = Z$yrow[ij$row])
     df <- cbind(xy, df)
     result <- linim(domain(f), Z, restrict=FALSE, df=df)
+    if(verbose) cat("Done.\n")
   }
   attr(result, "sigma") <- sigma
   attr(result, "dx") <- a$deltax
