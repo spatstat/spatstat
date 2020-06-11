@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.64-1.007
+        CHANGES IN spatstat VERSION 1.64-1.008
 
 OVERVIEW
 
@@ -39,6 +39,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o sessionInfo
     Output now includes a list of packages that are imported but not loaded.
 
+    o [.linim
+    Accelerated.
+    
 BUG FIXES
 
     o model.matrix.mppm
@@ -47,6 +50,10 @@ BUG FIXES
 
     o anova.mppm
     Crashed with random-effects models.
+    Fixed.
+
+    o MinkowskiSum
+    Crashed sometimes with an error message about 'sumconnected'.
     Fixed.
     
         CHANGES IN spatstat VERSION 1.64-1

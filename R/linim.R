@@ -1,7 +1,7 @@
 #
 # linim.R
 #
-#  $Revision: 1.75 $   $Date: 2020/04/17 08:57:40 $
+#  $Revision: 1.76 $   $Date: 2020/06/11 01:10:11 $
 #
 #  Image/function on a linear network
 #
@@ -646,7 +646,7 @@ as.linnet.linim <- function(X, ...) {
   L <- attr(x, "L")
   df <- attr(x, "df")
   #' clip to new window
-  W <- Window(y)
+  W <- if(!missing(i) && is.owin(i)) i else Window(y)
   LW <- L[W]
   df <- df[inside.owin(df$xc, df$yc, W), , drop=FALSE]
   #' update local coordinates in data frame

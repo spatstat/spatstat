@@ -225,3 +225,20 @@ Change log from spatstat 1.64-1 to spatstat 1.64-2
 ------------- uploaded to github       ---------------
 
 
+11 jun 2020
+
+   minkowski.R
+	Bug fix in MinkowskiSum - erroneous error message
+
+   linim.R
+	Accelerated [.linim in many cases.
+
+   DESCRIPTION
+   NEWS
+	Version 1.64-1.008
+
+------------- passed R-4.0.0 CMD check ---------------
+(with environment variable SPATSTAT_TEST defined/undefined)
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+

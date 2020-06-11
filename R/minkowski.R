@@ -3,7 +3,7 @@
 #' 
 #'  Minkowski Sum and related operations
 #'
-#'  $Revision: 1.7 $ $Date: 2017/06/05 10:31:58 $
+#'  $Revision: 1.8 $ $Date: 2020/06/11 01:03:54 $
 
 
 "%(+)%" <- MinkowskiSum <- local({
@@ -16,28 +16,26 @@
     BB <- simplepolygons(B)
     ## determine common resolution for polyclip operations
     eps <- mean(c(sidelengths(Frame(A)), sidelengths(Frame(B))))/2^30
-    ## compute Minkowski sums of pieces
-    pieces <- NULL
-    for(b in BB) 
-      pieces <- append(pieces, lapply(AA, MinkSumConnected, b=b, eps=eps))
-    ## form union in one step, to avoid artefacts
-    result <- union.owin(solapply(pieces, poly2owin))
+    p <- list(eps=eps)
+    ## compute Minkowski sums of simply-connected pieces
+    result <- NULL
+    for(a in AA) {
+      partial.a <- NULL
+      for(b in BB) {
+        contrib.ab <- polyclip::polyminkowski(a, b, x0=0, y0=0, eps=eps)
+        partial.a <- union.owin(partial.a, poly2owin(contrib.ab), p=p)
+      }
+      result <- union.owin(result, partial.a, p=p)
+    }
+    ## resolve unitname
+    un <- list(unitname(A), unitname(B))
+    un <- unique(un[!sapply(un, is.vanilla)])
+    if(length(un) == 1)
+      unitname(result) <- un[[1L]]
     return(result)
   }
 
   poly2owin <- function(z) owin(poly=z, check=FALSE)
-
-  MinkSumConnected <- function(a, b, eps) {
-    ## a and b are list(x,y) simply-connected polygons
-    out <- polyclip::polyminkowski(a, b, x0=0, y0=0, eps=eps)
-    if(length(out) == 1) return(out)
-    ispos <- (sapply(out, Area.xypolygon) >= 0)
-    if(sum(ispos) > 1) {
-      stop("Internal error: result of sumconnected is not simply connected",
-           call.=FALSE)
-    }
-    return(out[ispos])
-  }
 
   simplepolygons <- function(A) {
     if(is.psp(A)) return(psp2poly(A))
