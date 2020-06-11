@@ -547,8 +547,11 @@ resolve.heat.steps <-
   ## check dt satisfies basic constraint
   if((dt.known <- dt.given || niter.given)) {
     if(verbose) splat(" Validating dt")
-    dxmax <- lmin/3
-    dtmax <- min(0.95 * (dxmax^2)/AMbound, sigma^2/(2 * 10), sigma * dxmax/6)
+    dtmax <- sigma^2/(2 * 10)
+    if(finespacing) {
+      dxmax <- lmin/3
+      dtmax <- min(dtmax, 0.95 * (dxmax^2)/AMbound, sigma * dxmax/6)
+    }
     niterMin <- max(1L, round(sigma^2/(2 * dtmax)))
     if(niterMin > iterMax) 
       stop(paste("Minimum number of iterations required is", niterMin,
@@ -588,9 +591,10 @@ resolve.heat.steps <-
     if(verbose) splat(" Validating dx =", dx)
     check.finite(dx)
     stopifnot(dx > 0)
-    if(dx > lmin/3)
+    if(finespacing && dx > lmin/3)
       stop(paste("dx must not exceed (shortest nonzero edge length)/3 =",
-                 lmin/3),
+                 signif(lmin/3, 6),
+                 "when finespacing=TRUE"),
            call.=FALSE)
   } else if(dt.known) {
     ## determine dx from dt
@@ -605,7 +609,7 @@ resolve.heat.steps <-
       splat(" Mean Nonzero Edge Length/", fineNsplit, "=", lbar/fineNsplit)
       splat(" Total Network Length/", fineNlixels, "=", ltot/fineNlixels)
       splat(" Min Nonzero Edge Length/3 = ", lmin/3)
-      splat(" dx = minimum of the above =", dx)
+      splat(" Minimum of the above =", dx)
     }
     if(!finespacing && is.owin(W)) {
       W <- Frame(W)
@@ -616,17 +620,16 @@ resolve.heat.steps <-
              else min(sidelengths(W)/spatstat.options("npixel"))
       dx <- max(dx, eps/1.4)
       if(verbose) {
-        splat(" Coarse spacing rule")
         splat(" Pixel size/1.4 =", eps/1.4)
+        splat(" Coarse spacing rule: dx =", dx)
       }
-    } else if(verbose) splat("Fine spacing rule") 
-    if(verbose) splat(" dx = ", dx)
+    } else if(verbose) splat("Fine spacing rule: dx =", dx) 
     nlixels <- ceiling(ltot/dx)
     nlixels <- min(nlixels, .Machine$integer.max)
     dx <- ltot/nlixels
     if(verbose) {
       splat(" Rounded total number of lixels =", nlixels)
-      splat(" dx =", dx)
+      splat(" Adjusted dx =", dx)
     }
   }
 
