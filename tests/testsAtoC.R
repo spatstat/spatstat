@@ -80,32 +80,8 @@ local({
     ## other code blocks
     cdf.test(finpines, "x")
   }
-  if(ALWAYS) {
-    ## (2) linear networks
-    set.seed(42)
-    X <- runiflpp(20, simplenet)
-    cdf.test(X, "x")
-  }
   if(FULLTEST) {
-    cdf.test(X, "x", "cvm")
-    cdf.test(X %mark% runif(20), "x")
-  }
-  if(ALWAYS) {
-    fit <- lppm(X ~1)
-    cdf.test(fit, "y", "cvm")
-  }
-  if(FULLTEST) {
-    cdf.test(fit, "y")
-    cdf.test(fit, "y", "ad")
-  }
-  if(FULLTEST) {
-    ## marked
-    cdf.test(chicago, "y")
-    cdf.test(subset(chicago, marks != "assault"), "y")
-  }
-
-  if(FULLTEST) {
-    ## (3) Monte Carlo test for Gibbs model
+    ## (2) Monte Carlo test for Gibbs model
     fit <- ppm(cells ~ 1, Strauss(0.07))
     cdf.test(fit, "x", nsim=9)
 
@@ -114,6 +90,29 @@ local({
     Z <- distmap(japanesepines)
     cdf.test(fut, Z)
   }
+#%^!ifdef LINEARNETWORKS  
+  if(ALWAYS) {
+    ## (3) linear networks
+    set.seed(42)
+    X <- runiflpp(20, simplenet)
+    cdf.test(X, "x")
+    if(FULLTEST) {
+      cdf.test(X, "x", "cvm")
+      cdf.test(X %mark% runif(20), "x")
+    }
+    fit <- lppm(X ~1)
+    cdf.test(fit, "y", "cvm")
+    if(FULLTEST) {
+      cdf.test(fit, "y")
+      cdf.test(fit, "y", "ad")
+    }
+    if(FULLTEST) {
+      ## marked
+      cdf.test(chicago, "y")
+      cdf.test(subset(chicago, marks != "assault"), "y")
+    }
+  }
+#%^!endif
 })
 #'    tests/circular.R
 #'
@@ -342,7 +341,7 @@ reset.spatstat.options()
 #'   Tests of "click*" functions
 #'   using queueing feature of spatstatLocator
 #'
-#'   $Revision: 1.4 $ $Date: 2020/04/28 12:58:26 $
+#'   $Revision: 1.5 $ $Date: 2020/06/12 00:11:40 $
 
 require(spatstat)
 local({
@@ -373,6 +372,20 @@ local({
     spatstat.utils::queueSpatstatLocator(concatxy(hex, holy))
     PB <- clickpoly(np=2, nv=6)
   }
+  if(ALWAYS) {
+    #' identify.psp
+    E <- edges(letterR)[c(FALSE, TRUE)]
+    Z <- ppp(c(2.86, 3.65, 3.15), c(1.69, 1.98, 2.56), window=Frame(letterR))
+    spatstat.utils::queueSpatstatLocator(Z)
+    identify(E)
+  }
+  if(FULLTEST) {
+    #' transect.im
+    Z <- density(cells)
+    spatstat.utils::queueSpatstatLocator(runifpoint(2, Window(cells)))
+    TZ <- transect.im(Z, click=TRUE)
+  }
+#%^!ifdef LINEARNETWORKS  
   Y <- coords(runiflpp(6, simplenet))
   if(FULLTEST) {
     #' clicklpp
@@ -384,24 +397,12 @@ local({
     XM <- clicklpp(simplenet, n=3, types=c("a", "b"))
   }
   if(ALWAYS) {
-    #' identify.psp
-    E <- edges(letterR)[c(FALSE, TRUE)]
-    Z <- ppp(c(2.86, 3.65, 3.15), c(1.69, 1.98, 2.56), window=Frame(letterR))
-    spatstat.utils::queueSpatstatLocator(Z)
-    identify(E)
-  }
-  if(ALWAYS) {
     #' lineardisc
     plot(simplenet)
     spatstat.utils::queueSpatstatLocator(as.ppp(runiflpp(1, simplenet)))
     V <- lineardisc(simplenet, r=0.3)
   }
-  if(FULLTEST) {
-    #' transect.im
-    Z <- density(cells)
-    spatstat.utils::queueSpatstatLocator(runifpoint(2, Window(cells)))
-    TZ <- transect.im(Z, click=TRUE)
-  }
+#%^!endif  
 })
 ## tests/colour.R
 ##

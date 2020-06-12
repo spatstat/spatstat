@@ -3,7 +3,7 @@
 #'
 #'   evaluate covariate values at data points and at pixels
 #'
-#' $Revision: 1.33 $ $Date: 2020/02/21 08:45:16 $
+#' $Revision: 1.34 $ $Date: 2020/06/12 01:58:23 $
 #'
 
 evalCovar <- function(model, covariate, ...) {
@@ -241,6 +241,8 @@ evalCovar.ppm <- local({
   evalCovar.ppm
 })
 
+#%^!ifdef LINEARNETWORKS
+
 evalCovar.lppm <- local({
 
   evalCovar.lppm <- function(model, covariate, ...,
@@ -467,3 +469,5 @@ evalCovar.lppm <- local({
   }
   evalCovar.lppm
 })
+
+#%^!endif

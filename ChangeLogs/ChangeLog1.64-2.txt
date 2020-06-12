@@ -255,3 +255,42 @@ Change log from spatstat 1.64-1 to spatstat 1.64-2
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
 
+12 jun 2020
+
+   auc.R
+   cdftest.R
+   rhohat.R
+   evalcovar.R
+	Inserted 'filepp' macros which can switch off the
+	linear networks code (but are currently switched on).
+   
+   tests/cdf.test.R
+   tests/cluck.R
+   tests/disconnected.R
+   tests/envelopes.R
+   tests/func.R
+   tests/hypotests.R
+   tests/imageops.R
+   tests/lppmodels.R
+   tests/lppstuff.R
+   tests/segments.R
+   tests/trigraph.R
+   tests/undoc.R
+   tests/updateppm.R
+   tests/xysegment.R
+	Inserted 'filepp' macros which can switch off the
+	linear networks code (but are currently switched on).
+
+   DESCRIPTION
+   NEWS
+	Version 1.64-1.010
+
+------------- passed R-4.0.0 CMD check ---------------
+(with environment variable SPATSTAT_TEST defined/undefined)
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+
+   
+   
+   
+   

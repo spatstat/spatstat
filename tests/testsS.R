@@ -31,7 +31,7 @@ local({
 ##   Tests of psp class and related code
 ##                      [SEE ALSO: tests/xysegment.R]
 ##
-##  $Revision: 1.26 $  $Date: 2020/05/01 09:59:59 $
+##  $Revision: 1.27 $  $Date: 2020/06/12 00:31:08 $
 
 local({
   if(ALWAYS) { # depends on platform
@@ -44,7 +44,6 @@ local({
   X <- psp(runif(10),runif(10),runif(10),runif(10), window=owin())
 
   if(FULLTEST) {
-    ## migrated from 'lpp'
     Z <- as.mask.psp(X)
     Z <- pixellate(X)
   }
@@ -62,11 +61,13 @@ local({
     PX <- periodify(X, 2)
   }
 
+#%^!ifdef LINEARNETWORKS  
   if(FULLTEST) {
     ## more tests of lppm code
     fit <- lppm(unmark(chicago) ~ polynom(x,y,2))
     Z <- predict(fit)
   }
+#%^!endif
 
   if(ALWAYS) { # C code
     ## tests of pixellate.psp -> seg2pixL

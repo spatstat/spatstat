@@ -138,6 +138,8 @@ rhohat.ppm <- function(object, covariate, ...,
                modelcall=modelcall, callstring=callstring)
 }
 
+#%^!ifdef LINEARNETWORKS
+
 rhohat.lpp <- rhohat.lppm <- 
   function(object, covariate, ...,
            weights=NULL,
@@ -206,6 +208,7 @@ rhohat.lpp <- rhohat.lppm <-
                confidence=confidence, positiveCI=positiveCI,
                modelcall=modelcall, callstring=callstring)
 }
+#%^!endif
 
 rhohatEngine <- function(model, covariate,
                          reference=c("Lebesgue", "model", "baseline"),

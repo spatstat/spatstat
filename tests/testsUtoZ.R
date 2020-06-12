@@ -15,7 +15,7 @@ cat(paste("--------- Executing",
 #
 #  tests/undoc.R
 #
-#   $Revision: 1.14 $   $Date: 2020/05/02 01:32:58 $
+#   $Revision: 1.15 $   $Date: 2020/06/12 00:38:25 $
 #
 #  Test undocumented hacks, experimental code, etc
 
@@ -33,14 +33,16 @@ local({
     ## test parts of 'rmhsnoop' that don't require interaction with user
     rmhSnoopEnv(cells, Window(cells), 0.1)
   }
+#%^!ifdef LINEARNETWORKS    
   if(FULLTEST) {
     ## linim helper functions
     df <- pointsAlongNetwork(simplenet, 0.2)
+  }
+#%^!endif
+  if(FULLTEST) {
     ## Berman-Turner frame
     A <- bt.frame(quadscheme(cells), ~x, Strauss(0.07), rbord=0.07)
     print(A)
-  }
-  if(FULLTEST) {
     ## digestCovariates
     D <- distfun(cells)
     Z <- distmap(cells)
@@ -117,7 +119,7 @@ local({
 ##
 ##  Check validity of update.ppm
 ##
-##  $Revision: 1.5 $ $Date: 2020/05/02 01:32:58 $
+##  $Revision: 1.6 $ $Date: 2020/06/12 00:39:22 $
 
 local({
 
@@ -209,6 +211,7 @@ local({
     cat("OK\n")
   }
 
+#%^!ifdef LINEARNETWORKS  
   if(ALWAYS) {
     ## test update.lppm
     X <- runiflpp(20, simplenet)
@@ -220,6 +223,7 @@ local({
     anova(fit0, fit2, test="LR")
     cat("update.lppm(fit, . ~ trend) is OK\n")
   }
+#%^!endif
 })
 #
 #  tests/vcovppm.R
@@ -535,7 +539,7 @@ reset.spatstat.options()
 ##
 ##    Test weird problems and boundary cases for line segment code
 ##
-##    $Version$ $Date: 2020/05/02 01:32:58 $ 
+##    $Version$ $Date: 2020/06/12 00:42:24 $ 
 ##
 local({
   if(FULLTEST) {
@@ -553,7 +557,11 @@ local({
     Z <- selfcut.psp(X)
 
     #' psp class support
+#%^!ifdef LINEARNETWORKS    
     S <- as.psp(simplenet)
+#%^!else    
+    S <- unmark(X)
+#%^!endif
     marks(S) <- sample(factor(c("A","B")), nobjects(S), replace=TRUE)
     intensity(S)
     intensity(S, weights=runif(nsegments(S)))

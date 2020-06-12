@@ -40,7 +40,7 @@ local({
 #
 #  Test validity of envelope data
 #
-#  $Revision: 1.22 $  $Date: 2020/04/28 12:58:26 $
+#  $Revision: 1.23 $  $Date: 2020/06/12 00:16:25 $
 #
 
 local({
@@ -202,6 +202,7 @@ local({
 })
 }
 
+#%^!ifdef LINEARNETWORKS
 if(FULLTEST) {
 local({
   X <- runiflpp(10, simplenet)
@@ -225,6 +226,7 @@ local({
   EEm <- envelope(fut, linearKcross, fix.n=TRUE, fix.marks=TRUE)
 })
 }
+#%^!endif
 
 if(ALWAYS) {
 local({
@@ -460,7 +462,7 @@ local({
 #
 #  tests/func.R
 #
-#   $Revision: 1.5 $   $Date: 2020/04/28 12:58:26 $
+#   $Revision: 1.6 $   $Date: 2020/06/12 00:18:36 $
 #
 #  Tests of 'funxy' infrastructure etc
 
@@ -490,11 +492,13 @@ local({
   stopifnot(identical(F4a(cells), F4b(cells)))
   ## check coordinate extraction from objects
   X <- runifpoint(9)
-  Y <- runiflpp(5, simplenet)
   Q <- quadscheme(X)
   a <- F1a(X)
-  b <- F1a(Y)
   d <- F1a(Q)
+#%^!ifdef LINEARNETWORKS  
+  Y <- runiflpp(5, simplenet)
+  b <- F1a(Y)
+#%^!endif
 })
 }
 ##  

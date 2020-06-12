@@ -346,7 +346,9 @@ local({
 #
 # Tests for lpp code
 #
-#  $Revision: 1.67 $  $Date: 2020/04/30 02:18:23 $
+#  $Revision: 1.68 $  $Date: 2020/06/12 00:24:57 $
+
+#%^!ifdef LINEARNETWORKS
 
 local({
   if(ALWAYS) {
@@ -1010,13 +1012,17 @@ local({
 })
 
 reset.spatstat.options()
+
+#%^!endif
 #'
 #'   lppmodels.R
 #'
 #'   Tests of lppm and class support
 #' 
-#'   $Revision: 1.1 $ $Date: 2018/05/13 04:14:28 $
+#'   $Revision: 1.2 $ $Date: 2020/06/12 00:24:09 $
 #'
+
+#%^!ifdef LINEARNETWORKS
 
 local({
   if(ALWAYS) {
@@ -1089,3 +1095,5 @@ local({
   }
   
 })
+
+#%^!endif

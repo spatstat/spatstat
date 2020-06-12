@@ -108,14 +108,16 @@ local({
 #'     tests/hypotests.R
 #'     Hypothesis tests
 #' 
-#'  $Revision: 1.6 $ $Date: 2020/04/28 12:58:26 $
+#'  $Revision: 1.7 $ $Date: 2020/06/12 01:11:49 $
 
 if(FULLTEST) {
 local({
   hopskel.test(redwood, method="MonteCarlo", nsim=5)
   
   berman.test(spiders, "x")
+#%^!ifdef LINEARNETWORKS  
   berman.test(lppm(spiders ~ x), "y")
+#%^!endif
 
   #' quadrat test - spatial methods
   a <- quadrat.test(redwood, 3)
@@ -152,7 +154,7 @@ local({
 #
 #  tests/imageops.R
 #
-#   $Revision: 1.29 $   $Date: 2020/04/28 12:58:26 $
+#   $Revision: 1.30 $   $Date: 2020/06/12 00:21:52 $
 #
 
 if(FULLTEST) {
@@ -223,8 +225,6 @@ local({
   Z <- split(X, as.im(Y))
   
   ## ...........  cases of "[.im" ........................
-  ee  <- d[simplenet, drop=FALSE]
-  eev <- d[simplenet]
   Empty <- cells[FALSE]
   EmptyFun <- ssf(Empty, numeric(0))
   ff <- d[Empty]
@@ -242,7 +242,12 @@ local({
   fff <- f[cells]
   fff <- f[cells, drop=FALSE]
   fff <- f[Empty]
-
+#%^!ifdef LINEARNETWORKS
+  ## linear networks
+  ee  <- d[simplenet, drop=FALSE]
+  eev <- d[simplenet]
+#%^!endif
+  
   ## ...........  cases of "[<-.im"  .......................
   d[,] <- d[] + 1
   d[Empty] <- 42

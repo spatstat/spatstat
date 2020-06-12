@@ -1,7 +1,7 @@
 #
 #  cdftest.R
 #
-#  $Revision: 2.21 $  $Date: 2019/12/31 05:16:01 $
+#  $Revision: 2.22 $  $Date: 2020/06/12 01:24:12 $
 #
 #
 
@@ -66,6 +66,8 @@ cdf.test.ppm <-
                                 covname=covname)))
 }
 
+#%^!ifdef LINEARNETWORKS
+
 cdf.test.lpp <-
   function(X, covariate, test=c("ks", "cvm", "ad"), ...,
            interpolate=TRUE, jitter=TRUE) {
@@ -124,6 +126,7 @@ cdf.test.lppm <- function(model, covariate,
                                 covname=covname)))
 }
 
+#%^!endif
 
 cdf.test.slrm <- function(model, covariate,
                           test=c("ks", "cvm", "ad"), ...,

@@ -262,7 +262,7 @@ local({
 #'
 #'   Tests for C code in trigraf.c
 #'   
-#'  $Revision: 1.4 $  $Date: 2020/05/02 01:32:58 $
+#'  $Revision: 1.5 $  $Date: 2020/06/12 00:35:44 $
 #'
 if(ALWAYS) { # depends on C code 
 local({
@@ -281,8 +281,10 @@ local({
     if(!all(dim(A) == dim(B)) || !all(A == B))
       stop(paste("Discrepancy in edges2triangles (with", nt, "triangles)"))
   }
-  ii <- simplenet$from
-  jj <- simplenet$to
+  ## ii <- simplenet$from
+  ## jj <- simplenet$to
+  ii <- c(1, 3, 4, 2, 4, 5, 5, 6, 7, 8)
+  jj <- c(4, 4, 5, 6, 6, 8, 9, 10, 10, 10)
   tryangles(ii,          jj,          0)
   tryangles(c(ii, 1),    c(jj, 5),    1)
   tryangles(c(ii, 1, 8), c(jj, 5, 9), 2)

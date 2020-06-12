@@ -682,6 +682,8 @@ local({
 #'
 #'    $Revision: 1.4 $ $Date: 2020/04/28 12:58:26 $
 
+#%^!ifdef LINEARNETWORKS
+
 local({
 
   #'   disconnected network
@@ -741,6 +743,9 @@ local({
     K <- ApplyConnected(X, linearK, rule=function(...) list())
   }
 })
+
+#%^!endif
+
 #'
 #'   tests/dominic.R
 #'
