@@ -248,8 +248,8 @@ rhohat(object, covariate, ...)
   In two dimensions (i.e.
   if \code{object} is of class \code{"ppp"}, \code{"ppm"} or
   \code{"quad"}) the arguments \code{dimyx, eps} are
-  passed to \code{\link{as.mask}} to control the pixel
-  resolution. On a linear network (i.e. if \code{object} is of class
+  passed to \code{\link{as.mask}} to control the pixel resolution.
+  On a linear network (i.e. if \code{object} is of class
   \code{"lpp"}) the argument \code{nd} specifies the
   total number of test locations on the linear
   network, \code{eps} specifies the linear separation between test

@@ -499,7 +499,6 @@
 \alias{print.yardstick}
 \alias{project3Dhom}
 \alias{putlastshift}
-\alias{qkdeEngine}
 \alias{qtPrepareCoordinate}
 \alias{quad}
 \alias{quad.mppm}
@@ -755,6 +754,7 @@
 \alias{ldtEngine}
 \alias{drawSignedPoly}
 \alias{plotWidthMap}
+\alias{qkdeEngine}
 
 %%%%%%%
 \description{
@@ -1360,10 +1360,6 @@ prepareTitle(main)
 \method{print}{yardstick}(x, \dots)
 project3Dhom(xyz, eye, org, vert)
 putlastshift(X, vec)
-qkdeEngine(X, sigma, \dots, at, what,
-           leaveoneout, diggle, raw, edge2D, edge,
-           weights, varcov, positive, shortcut,
-           precomputed, savecomputed) 
 qtPrepareCoordinate(covname, W, origin)
 quad(data, dummy, w, param)
 quad.mppm(x)
@@ -1675,6 +1671,10 @@ resolve.heat.steps(sigma, \dots, dx, dt,
                    verbose, stepnames)
 drawSignedPoly(x,y,pars,sgn)
 plotWidthMap(bb.leg, zlim, phys.scale, leg.scale, leg.side, leg.args, grafpar)
+qkdeEngine(X, sigma, \dots, at, what,
+           leaveoneout, diggle, raw, edge2D, edge,
+           weights, varcov, positive, shortcut,
+           precomputed, savecomputed) 
 }
 \details{
   These internal \pkg{spatstat} functions are not usually called

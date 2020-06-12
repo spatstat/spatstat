@@ -290,7 +290,47 @@ Change log from spatstat 1.64-1 to spatstat 1.64-2
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
 
-   
-   
-   
-   
+   auc.Rd
+   cdf.test.Rd
+   rhohat.Rd
+   roc.Rd
+   spatstat-internal.Rd
+	Inserted more 'filepp' macros which can switch off the
+	linear networks code (but are currently switched on).
+
+   DESCRIPTION
+   NEWS
+	Version 1.64-1.011
+
+------------- passed R-4.0.0 CMD check ---------------
+(with environment variable SPATSTAT_TEST defined/undefined)
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+
+   is.ppm.Rd
+	removed 'filepp' macro so that is.lpp is visible
+
+   bw.ppl.Rd
+   clickdist.Rd
+   connected.Rd
+   diameter.Rd
+   emend.Rd
+   envelope.Rd
+   nndist.Rd
+   pixellate.Rd
+   pseudoR2.Rd
+   rescale.Rd
+   rhohat.Rd
+   subset.ppp.Rd
+   unstack.solist.Rd
+   volume.Rd
+	added 'filepp' macros to suppress cross-references.
+	
+   DESCRIPTION
+   NEWS
+	Version 1.64-1.012
+
+------------- passed R-4.0.0 CMD check ---------------
+(with environment variable SPATSTAT_TEST defined/undefined)
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------

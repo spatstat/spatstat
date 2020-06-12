@@ -1,9 +1,9 @@
 \name{auc}
 \alias{auc}
 \alias{auc.ppp}
-\alias{auc.lpp}
 \alias{auc.ppm}
 \alias{auc.kppm}
+\alias{auc.lpp}
 \alias{auc.lppm}
 \title{
   Area Under ROC Curve

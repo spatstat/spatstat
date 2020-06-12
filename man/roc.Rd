@@ -1,9 +1,9 @@
 \name{roc}
 \alias{roc}
 \alias{roc.ppp}
-\alias{roc.lpp}
 \alias{roc.ppm}
 \alias{roc.kppm}
+\alias{roc.lpp}
 \alias{roc.lppm}
 \title{
   Receiver Operating Characteristic

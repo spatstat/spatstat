@@ -31,17 +31,12 @@
 }
 \seealso{
   \code{\link{area.owin}},
+  \code{\link{volume.linnet}},
   \code{\link{volume.box3}},
-  \code{\link{volume.boxx}},
-  \code{\link{volume.linnet}}
+  \code{\link{volume.boxx}}.
 }
-\author{\adrian
-  
-  
-  \rolf
-  
-  and \ege
-  
+\author{
+  \spatstatAuthors.
 }
 \keyword{spatial}
 \keyword{math}

@@ -38,9 +38,10 @@ connected(X, \dots)
 \details{
   The function \code{connected} is generic, with methods
   for pixel images (class \code{"im"}) and windows (class \code{"owin"})
-  described here. There are also methods for tessellations
-  (\code{\link{connected.tess}}), point patterns
-  (\code{\link{connected.ppp}} and \code{\link{connected.lpp}}),
+  described here. There are also methods for
+  tessellations (\code{\link{connected.tess}}),
+  point patterns (\code{\link{connected.ppp}} and
+  \code{\link{connected.lpp}}),
   and linear networks (\code{\link{connected.linnet}}).
   
   The functions described here compute the connected component transform

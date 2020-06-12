@@ -84,7 +84,8 @@
   \code{\link{nndist.psp}},
   three-dimensional point patterns, \code{\link{nndist.pp3}},
   higher-dimensional point patterns, \code{\link{nndist.ppx}}
-  and point patterns on a linear network, \code{\link{nndist.lpp}};
+  and point patterns on a linear network,
+  \code{\link{nndist.lpp}};
   these are described in their own help files.
   Type \code{methods(nndist)} to see all available methods.
 

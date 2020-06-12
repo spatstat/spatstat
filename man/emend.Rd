@@ -30,13 +30,7 @@ emend(object, \dots)
   Another model of the same kind.
 }
 \author{
-  \adrian
-  
-  
-  \rolf
-  
-  and \ege
-  
+  \spatstatAuthors.
 }
 \seealso{
   \code{\link{emend.ppm}},

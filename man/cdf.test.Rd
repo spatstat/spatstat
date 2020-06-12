@@ -1,10 +1,10 @@
 \name{cdf.test} 
 \alias{cdf.test}
 \alias{cdf.test.ppm}
-\alias{cdf.test.lppm}
-\alias{cdf.test.lpp}
 \alias{cdf.test.ppp}
 \alias{cdf.test.slrm}
+\alias{cdf.test.lppm}
+\alias{cdf.test.lpp}
 \title{Spatial Distribution Test for Point Pattern or Point Process Model} 
 \description{
   Performs a test of goodness-of-fit of a point process model.
@@ -27,11 +27,11 @@ cdf.test(...)
 \method{cdf.test}{lpp}(X, covariate,  test=c("ks", "cvm", "ad"), \dots,
         interpolate=TRUE, jitter=TRUE)
 
-\method{cdf.test}{lppm}(model, covariate,  test=c("ks", "cvm", "ad"),
-\dots,
+\method{cdf.test}{lppm}(model, covariate,  test=c("ks", "cvm", "ad"), \dots,
           interpolate=TRUE, jitter=TRUE, nsim=99, verbose=TRUE)
 
-\method{cdf.test}{slrm}(model, covariate,  test=c("ks", "cvm", "ad"), \dots, modelname=NULL, covname=NULL)
+\method{cdf.test}{slrm}(model, covariate,  test=c("ks", "cvm", "ad"), \dots,
+          modelname=NULL, covname=NULL)
 }
 \arguments{
   \item{X}{
@@ -218,10 +218,7 @@ cdf.test(...)
   set \code{jitter=FALSE}.
 }
 \author{\adrian
-  
-  
   and \rolf
-  
 }
 \seealso{
   \code{\link{plot.cdftest}},

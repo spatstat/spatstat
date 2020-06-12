@@ -56,11 +56,8 @@ pixellate(x, ...)
   \code{\link{pixellate.linnet}},
   \code{\link{as.im}}
 }
-\author{\adrian
-  
-  
-  and \rolf
-  
+\author{
+  \spatstatAuthors.
 }
 \keyword{spatial}
 \keyword{manip}

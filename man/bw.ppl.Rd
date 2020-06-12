@@ -92,7 +92,6 @@
   \code{\link{bw.scott}},
   \code{\link{bw.CvL}},
   \code{\link{bw.frac}}.
-
   For point patterns on a linear network, use \code{\link{bw.lppl}}.
 }
 \examples{

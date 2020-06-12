@@ -30,15 +30,12 @@
 }
 \seealso{
   \code{\link{diameter.owin}},
+  \code{\link{diameter.linnet}}
   \code{\link{diameter.box3}},
   \code{\link{diameter.boxx}},
-  \code{\link{diameter.linnet}}
 }
-\author{\adrian
-  
-  
-  and \rolf
-  
+\author{
+  \spatstatAuthors.
 }
 \keyword{spatial}
 \keyword{math}

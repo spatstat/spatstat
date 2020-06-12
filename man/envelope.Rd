@@ -289,7 +289,8 @@
   the classes \code{"ppp"}, \code{"ppm"} and \code{"kppm"}
   described here. There are also methods for the classes \code{"pp3"},
   \code{"lpp"} and \code{"lppm"} which are described separately
-  under \code{\link{envelope.pp3}} and \code{\link{envelope.lpp}}.
+  under \code{\link{envelope.pp3}}
+  and \code{\link{envelope.lpp}}.
   Envelopes can also be computed from other envelopes, using
   \code{\link{envelope.envelope}}.
   
