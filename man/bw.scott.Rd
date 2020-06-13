@@ -33,7 +33,8 @@
 \details{
   These functions select a bandwidth \code{sigma}
   for the kernel estimator of point process intensity
-  computed by \code{\link{density.ppp}} or \code{\link{density.lpp}}
+  computed by \code{\link{density.ppp}}
+  or \code{\link{density.lpp}}
   or other appropriate functions.
   They can be applied to a point pattern
   belonging to any class \code{"ppp"}, \code{"lpp"}, \code{"pp3"}

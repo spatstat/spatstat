@@ -321,7 +321,10 @@ plot(bei.extra$elev, main="Beilschmiedia")
 plot(bei, add=TRUE, pch=16, cex=0.3)
 @ 
 
-<<fig=TRUE>>=
+The following command gives a perspective display
+similar to the front cover of Baddeley, Rubak and Turner (2015):
+
+<<eval=FALSE>>=
 M <- persp(bei.extra$elev, 
            theta=-45, phi=18, expand=7,
            border=NA, apron=TRUE, shade=0.3, 
@@ -429,7 +432,7 @@ named \texttt{elevation}, \texttt{orientation},
 \texttt{slope} and \texttt{landuse}. 
 
 <<fig=TRUE>>=
-plot(clmfires.extra$clmcov200, main="Covariates for forest fires")
+plot(clmfires.extra$clmcov100$elevation, main="Elevation")
 @ %$ 
 
 \subsubsection*{\texttt{copper}: Queensland copper data}

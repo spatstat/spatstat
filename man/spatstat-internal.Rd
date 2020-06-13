@@ -129,6 +129,7 @@
 \alias{doMultiStraussHard}
 \alias{dppmFixAlgorithm}
 \alias{dppmFixIntensity}
+\alias{drawSignedPoly}
 \alias{emptywindow}
 \alias{envelopeEngine}
 \alias{envelopeProgressData}
@@ -391,6 +392,7 @@
 \alias{ploterodeimage}
 \alias{plot3Dpoints}
 \alias{plotPolygonBdry}
+\alias{plotWidthMap}
 \alias{plot.addvar}
 \alias{plot.barplotdata}
 \alias{plot.bw.frac}
@@ -651,6 +653,7 @@
 \alias{symbolmapdomain}
 \alias{symbolmaptype}
 \alias{tail.hyperframe}
+\alias{thickSegments}
 \alias{thinjump}
 \alias{tilecentroids}        
 \alias{trianglediameters}
@@ -711,6 +714,8 @@
 %%
 \alias{as.ppm.rppm}
 \alias{predict.profilepl}
+
+
 %% Linear networks code is corralled here
 \alias{ApplyConnected}
 \alias{DoCountCrossEnds}
@@ -752,8 +757,6 @@
 \alias{sortalongsegment}
 \alias{vnnFind}
 \alias{ldtEngine}
-\alias{drawSignedPoly}
-\alias{plotWidthMap}
 \alias{qkdeEngine}
 
 %%%%%%%
@@ -907,6 +910,7 @@ do.call.plotfun(fun, arglist, \dots)
 doMultiStraussHard(iradii, hradii, types)
 dppmFixIntensity(DPP, lambda, po)
 dppmFixAlgorithm(algorithm, changealgorithm, clusters, startpar)
+drawSignedPoly(x,y,pars,sgn)
 emptywindow(w)
 envelopeEngine(X, fun, simul,
            nsim, nrank, \dots, funargs, funYargs,
@@ -1242,6 +1246,7 @@ plot3Dpoints(xyz, eye, org,
              type, xlim, ylim, zlim,
              add, box, main, cex, box.back, box.front)
 plotPolygonBdry(x, \dots)
+plotWidthMap(bb.leg, zlim, phys.scale, leg.scale, leg.side, leg.args, grafpar)
 \method{plot}{addvar}(x, \dots, do.points=FALSE)
 \method{plot}{barplotdata}(x, \dots)
 \method{plot}{bw.frac}(x, \dots)
@@ -1543,6 +1548,11 @@ superimposeMarks(arglist, nobj)
 symbolmapdomain(x)
 symbolmaptype(x)
 \method{tail}{hyperframe}(x,n,\dots)
+thickSegments(x, widths, \dots,
+             add, main, do.plot, show.all, show.window,
+             scale, adjust, negative.args,
+             legend, leg.side, leg.sep, leg.wid, leg.args, leg.scale,
+             zlim, box)
 thinjump(n, p)
 tilecentroids(W, nx, ny)
 trianglediameters(iedge, jedge, edgelength, \dots,
@@ -1669,8 +1679,6 @@ resolve.heat.steps(sigma, \dots, dx, dt,
                    W, eps, dimyx, xy, 
                    allow.adjust, warn.adjust,
                    verbose, stepnames)
-drawSignedPoly(x,y,pars,sgn)
-plotWidthMap(bb.leg, zlim, phys.scale, leg.scale, leg.side, leg.args, grafpar)
 qkdeEngine(X, sigma, \dots, at, what,
            leaveoneout, diggle, raw, edge2D, edge,
            weights, varcov, positive, shortcut,

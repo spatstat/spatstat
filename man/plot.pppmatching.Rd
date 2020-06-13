@@ -46,7 +46,7 @@
   Additional graphics arguments \code{\dots} control the
   plotting of the window (and are passed to \code{\link{plot.owin}})
   and the plotting of the line segments 
-  (and are passed to \code{\link{plot.psp}}, \code{\link{plot.linim}}
+  (and are passed to \code{\link{plot.psp}}, 
   and ultimately to the base graphics function
   \code{\link[graphics]{polygon}}).
 

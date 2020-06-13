@@ -31,7 +31,7 @@ local({
 ##   Tests of psp class and related code
 ##                      [SEE ALSO: tests/xysegment.R]
 ##
-##  $Revision: 1.27 $  $Date: 2020/06/12 00:31:08 $
+##  $Revision: 1.28 $  $Date: 2020/06/13 11:33:54 $
 
 local({
   if(ALWAYS) { # depends on platform
@@ -135,14 +135,17 @@ local({
 
   if(ALWAYS) { # C code
     #' tests of density.psp
-    Y <- as.psp(simplenet)
+    Y <- edges(letterR)
+    Window(Y) <- grow.rectangle(Frame(Y), 0.4)
     YC <- density(Y, 0.2, method="C", edge=FALSE, dimyx=64)
     YI <- density(Y, 0.2, method="interpreted", edge=FALSE, dimyx=64)
     YF <- density(Y, 0.2, method="FFT", edge=FALSE, dimyx=64)
     xCI <- max(abs(YC/YI - 1))
     xFI <- max(abs(YF/YI - 1))
+    cat(paste("xCI =", xCI, "\txFI =", signif(xFI, 5)), fill=TRUE)
     if(xCI > 0.01) stop(paste("density.psp C algorithm relative error =", xCI))
-    if(xFI > 0.01) stop(paste("density.psp FFT algorithm relative error =", xFI))
+    if(xFI > 0.1) stop(paste("density.psp FFT algorithm relative error =", xFI))
+
     B <- square(0.3)
     density(Y, 0.2, at=B)
     density(Y, 0.2, at=B, edge=TRUE, method="C")

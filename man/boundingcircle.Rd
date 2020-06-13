@@ -66,7 +66,8 @@ boundingcircle(x, \dots)
   \adrian 
 }
 \seealso{
- \code{\link{boundingradius.linnet}}
+  \code{\link{boundingradius.linnet}},
+  \code{\link{diameter}}
 }
 \examples{
   boundingradius(letterR)

@@ -64,7 +64,7 @@
   \code{\link{intensity}}
 }
 \examples{
-  S <- as.psp(simplenet)
+  S <- edges(letterR)
   intensity(S)
   intensity(S, weights=runif(nsegments(S)))
   intensity(S, weights=expression((x0+x1)/2))

@@ -148,12 +148,8 @@ berman.test(...)
   The meaning of a one-sided test must be carefully scrutinised: see
   the printed output.
 }
-\author{\adrian
-  
-  ,
-  \rolf
-  
-  and \ege.
+\author{
+  \spatstatAuthors.
 }
 \seealso{
   \code{\link{cdf.test}},

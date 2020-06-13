@@ -1,7 +1,7 @@
 #
 # linim.R
 #
-#  $Revision: 1.76 $   $Date: 2020/06/11 01:10:11 $
+#  $Revision: 1.77 $   $Date: 2020/06/13 07:27:38 $
 #
 #  Image/function on a linear network
 #
@@ -348,88 +348,6 @@ plot.linim <- local({
   plot.linim
 })
 
-drawSignedPoly <- local({
-  
-  ## internal function to plot line segments for style="width"
-  ## with sign-dependent colours, etc
-
-  pNames <- c("density", "angle", "border", "col", "lty")
-  posnames <- paste(pNames, ".pos", sep="")
-  negnames <- paste(pNames, ".neg", sep="")
-  
-  redub <- function(from, to, x) {
-    #' rename entry x$from to x$to
-    m <- match(from, names(x))
-    if(any(ok <- !is.na(m))) 
-      names(x)[m[ok]] <- to[ok]
-    return(resolve.defaults(x))
-  }
-  
-  drawSignedPoly <- function(x, y, pars, sgn) {
-    #' plot polygon using parameters appropriate to "sign"
-    if(sgn >= 0) {
-      pars <- redub(posnames, pNames, pars)
-    } else {
-      pars <- redub(negnames, pNames, pars)
-    }
-    pars <- pars[names(pars) %in% pNames]
-    if(is.null(pars$border)) pars$border <- pars$col
-    do.call(polygon, append(list(x=x, y=y), pars))
-    invisible(NULL)
-  }
-
-  drawSignedPoly
-})
-
-## internal function to plot the map of pixel values to line widths
-
-plotWidthMap <- function(bb.leg, zlim, phys.scale,
-                         leg.scale, leg.side,
-                         leg.args, grafpar) {
-  ## get graphical arguments
-  grafpar <- resolve.defaults(leg.args, grafpar)
-  ## set up scale of typical pixel values
-  gvals <- leg.args$at %orifnull% prettyinside(zlim)
-  ## corresponding widths
-  wvals <- phys.scale * gvals
-  ## glyph positions
-  ng <- length(gvals)
-  xr <- bb.leg$xrange
-  yr <- bb.leg$yrange
-  switch(leg.side,
-         right = ,
-         left = {
-           y <- seq(yr[1], yr[2], length.out=ng+1L)
-           y <- (y[-1L] + y[-(ng+1L)])/2
-           for(j in 1:ng) {
-             xx <- xr[c(1L,2L,2L,1L)]
-             yy <- (y[j] + c(-1,1) * wvals[j]/2)[c(1L,1L,2L,2L)]
-             drawSignedPoly(x = xx, y = yy, grafpar, sign(wvals[j]))
-           }
-         },
-         bottom = ,
-         top = {
-           x <- seq(xr[1], xr[2], length.out=ng+1L)
-           x <- (x[-1L] + x[-(ng+1L)])/2
-           for(j in 1:ng) {
-             xx <- (x[j] + c(-1,1) * wvals[j]/2)[c(1L,1L,2L,2L)]
-             yy <- yr[c(1L,2L,2L,1L)]
-             drawSignedPoly(x = xx, y = yy, grafpar, sign(wvals[j]))
-           }
-         })
-  ## add text labels
-  glabs <- signif(leg.scale * gvals, 2)
-  textpos <- switch(leg.side,
-                    right  = list(x=xr[2], y=y,     pos=4),
-                    left   = list(x=xr[1], y=y,     pos=2),
-                    bottom = list(x=x,     y=yr[1], pos=1),
-                    top    = list(x=x,     y=yr[2], pos=3))
-  textargs <- resolve.defaults(textpos,
-                               leg.args,
-                               list(labels=glabs))
-  do.call.matched(text, textargs, extrargs=graphicsPars("text"))
-  return(invisible(NULL))
-}
 
 sortalongsegment <- function(df) {
   df[fave.order(df$tp), , drop=FALSE]

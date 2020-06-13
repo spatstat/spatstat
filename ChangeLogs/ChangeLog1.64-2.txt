@@ -334,3 +334,79 @@ Change log from spatstat 1.64-1 to spatstat 1.64-2
 (with environment variable SPATSTAT_TEST defined/undefined)
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
+
+   bermantest.R
+   berman.test.Rd
+   deldir.R
+	Inserted more 'filepp' macros which can switch off the
+	linear networks code (but are currently switched on).
+   
+   boundingcircle.Rd
+   bw.scott.Rd
+   pseudoR2.Rd
+   superimpose.Rd
+   delaunay.Rd
+   delaunayDistance.Rd
+   densityVoronoi.Rd
+   	added 'filepp' macros to suppress cross-references.
+
+   tests/cluck.R
+   tests/mctests.R
+   tests/mppm.R
+	Remove stray 'require(spatstat)'
+
+   psp.R
+   lengths_psp.Rd
+	More filepp macros to switch off legacy code.
+	
+   DESCRIPTION
+   NEWS
+	Version 1.64-1.013
+
+------------- passed R-4.0.0 CMD check ---------------
+(with environment variable SPATSTAT_TEST defined/undefined)
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+
+13 jun 2020
+
+   psp.R
+   plot.psp.R [New file]
+   	Excised plot.psp to a separate file.
+
+   linim.R
+   plot.psp.R
+   spatstat-internal.Rd
+        Moved some internal graphics functions from linim.R to plot.psp.R
+	so they will be available in spatstat.core.
+
+   plot.psp.R
+   plot.psp.Rd
+   spatstat-internal.Rd
+        plot.psp(style="width") no longer uses the linear networks code.
+
+   plot.pppmatching.Rd
+	Delete cross-reference to plot.linim
+	
+   images.R
+   pairs.im.R
+   rhohat.R
+   superimpose.R
+	Inserted 'filepp' macros which add a 'requireNamespace' call
+	if the linear networks code is switched off.
+
+   tests/segments.R
+	Tweak to avoid using linnet code.
+
+   datasets.Rnw
+	Tweaks to reduce file size.
+	
+   DESCRIPTION
+   NEWS
+	Version 1.64-1.014
+
+------------- passed R-4.0.0 CMD check ---------------
+(with environment variable SPATSTAT_TEST defined/undefined)
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+

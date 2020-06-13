@@ -3,7 +3,7 @@
 #
 # Test statistics from Berman (1986)
 #
-#  $Revision: 1.21 $  $Date: 2018/01/17 08:46:51 $
+#  $Revision: 1.22 $  $Date: 2020/06/12 05:55:11 $
 #
 #
 
@@ -49,6 +49,7 @@ berman.test.ppm <- function(model, covariate,
                                 dataname=model$Qname)))
 }
 
+#%^!ifdef LINEARNETWORKS
 berman.test.lpp <-
   function(X, covariate,
            which=c("Z1", "Z2"),
@@ -86,6 +87,7 @@ berman.test.lppm <- function(model, covariate,
                                 covname=covname,
                                 dataname=model$Xname)))
 }
+#%^!endif
 
 bermantestEngine <- function(model, covariate,
                              which=c("Z1", "Z2"),

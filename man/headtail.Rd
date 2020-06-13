@@ -73,7 +73,7 @@
 }
 \examples{
   head(cells)
-  tail(as.psp(spiders), 10)
+  tail(edges(letterR), 5)
   head(dirichlet(cells), 4)
 }
 \keyword{spatial}

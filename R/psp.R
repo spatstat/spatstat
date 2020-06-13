@@ -1,7 +1,7 @@
 #
 #  psp.R
 #
-#  $Revision: 1.104 $ $Date: 2020/04/01 04:36:39 $
+#  $Revision: 1.107 $ $Date: 2020/06/13 08:14:28 $
 #
 # Class "psp" of planar line segment patterns
 #
@@ -320,157 +320,7 @@ unmark.psp <- function(X) {
   return(X)
 }
 
-#################################################
-#  plot and print methods
-#################################################
 
-plot.psp <- function(x, ..., main, add=FALSE,
-                     show.all=!add, 
-                     show.window=show.all,
-                     which.marks=1,
-                     style=c("colour", "width", "none"),
-                     col=NULL,
-                     ribbon=show.all, ribsep=0.15, ribwid=0.05, ribn=1024,
-                     do.plot=TRUE) {
-  if(missing(main) || is.null(main))
-    main <- short.deparse(substitute(x))
-  verifyclass(x, "psp")
-  #'
-  n <- nsegments(x)
-  marx <- marks(x)
-  #'
-  style <- match.arg(style)
-  use.marks <- !is.null(marx) && (n != 0) && (style != "none")
-  #'
-  if(use.marks && style == "width") {
-    #' plot marks as line width
-    #' temporary cheat using plot.linfun
-    L <- linnet(endpoints.psp(x), edges=cbind(2*(1:n)-1, 2*(1:n)), sparse=TRUE)
-    if(length(dim(marx))) marx <- marx[,which.marks]
-    f <- function(x,y,seg,tp, values=marx) { values[seg] }
-    g <- linfun(f, L)
-    out <- plot(g, style="width", ..., main=main, add=add, col=col,
-                show.all=show.all, show.window=show.window, do.plot=do.plot)
-    return(invisible(out))
-  }
-  #' plot marks as colours, if present
-  do.ribbon <- identical(ribbon, TRUE) && use.marks
-  ##
-  ## ....   initialise plot; draw observation window  ......
-  owinpars <- setdiff(graphicsPars("owin"), "col")
-  if(!do.ribbon) {
-    ## window of x only
-    bb.all <- as.rectangle(as.owin(x))
-    if(do.plot && (!add || show.window))
-      do.call.plotfun(plot.owin, 
-                      resolve.defaults(list(x=x$window,
-		                            main=if(show.all) main else "",
-                                            add=add,
-                                            type = if(show.window) "w" else "n",
-                                            show.all=show.all),
-                                       list(...)),
-                      extrargs=owinpars)
-  } else {
-    ## enlarged window with room for colour ribbon
-    ## x at left, ribbon at right
-    bb <- as.rectangle(as.owin(x))
-    xwidth <- diff(bb$xrange)
-    xheight <- diff(bb$yrange)
-    xsize <- max(xwidth, xheight)
-    bb.rib <- owin(bb$xrange[2] + c(ribsep, ribsep+ribwid) * xsize,
-                   bb$yrange)
-    bb.all <- boundingbox(bb.rib, bb)
-    if(do.plot) {
-      pt <- prepareTitle(main)
-      ## establish coordinate system
-      if(!add)
-      do.call.plotfun(plot.owin,
-                      resolve.defaults(list(x=bb.all,
-                                            type="n",
-                                            main=pt$blank),
-                                       list(...)),
-                      extrargs=owinpars)
-      ## now plot window of x
-      ## with title centred on this window
-      if(show.window) {
-        do.call.plotfun(plot.owin, 
-                        resolve.defaults(list(x=x$window,
-                                              add=TRUE,
-                                              main=main,
-                                              show.all=TRUE),
-                                         list(...)),
-                        extrargs=owinpars)
-        ## title done. 
-        main <- ""
-      }
-    }
-  }
-
-  # plot segments
-  if(n == 0) {
-    result <- symbolmap()
-    attr(result, "bbox") <- bb.all
-    return(invisible(result))
-  }
-  
-  ## determine colours if any
-  colmap <- NULL
-  if(use.marks) {
-    ## use colours
-    marx <- as.data.frame(marx)[, which.marks]
-    if(is.character(marx) || length(unique(marx)) == 1)
-      marx <- factor(marx)
-    if(is.null(col)) {
-      ## no colour info: use default colour palette
-      nc <- if(is.factor(marx)) {
-              length(levels(marx))
-            } else {
-              min(256, length(unique(marx)))
-            }
-      colfun <- spatstat.options("image.colfun")
-      col <- colfun(nc)
-    }
-    ## determine colour map
-    if(inherits(col, "colourmap")) {
-      colmap <- colourmap
-    } else if(is.colour(col)) {
-      ## colour values given; create colour map
-      if(is.factor(marx)) {
-        lev <- levels(marx)
-        colmap <- colourmap(col=col, inputs=factor(lev))
-      } else {
-        if(!all(is.finite(marx)))
-          warning("Some mark values are infinite or NaN or NA")
-        colmap <- colourmap(col=col, range=range(marx, finite=TRUE))
-      }
-    } else stop("Format of argument 'col' is not recognised")
-    #' map the mark values to colours
-    col <- colmap(marx)
-  }
-  ## convert to greyscale?
-  if(spatstat.options("monochrome")) {
-    col <- to.grey(col)
-    colmap <- to.grey(colmap)
-  }
-  if(do.plot) {
-    ## plot segments
-    do.call.plotfun(segments,
-                    resolve.defaults(as.list(x$ends),
-                                     list(...),
-                                     list(col=col),
-                                     .MatchNull=FALSE, .StripNull=TRUE),
-                    extrargs=names(par()))
-    ## plot ribbon
-    if(do.ribbon) 
-      plot(colmap, vertical=TRUE, add=TRUE,
-           xlim=bb.rib$xrange, ylim=bb.rib$yrange)
-  }
-  
-  # return colour map
-  result <- colmap %orifnull% colourmap()
-  attr(result, "bbox") <- bb.all
-  return(invisible(result))
-}
 
 print.psp <- function(x, ...) {
   verifyclass(x, "psp")
@@ -574,7 +424,9 @@ midpoints.psp <- function(x) {
   ppp(x=xm, y=ym, window=win, check=FALSE)
 }
 
-lengths_psp <- lengths.psp <- function(x, squared=FALSE) {
+lengths_psp <-
+  lengths.psp <-
+  function(x, squared=FALSE) {
   verifyclass(x, "psp")
   lengths2 <- eval(expression((x1-x0)^2 + (y1-y0)^2), envir=x$ends)
   return(if(squared) lengths2 else sqrt(lengths2))

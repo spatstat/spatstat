@@ -33,7 +33,7 @@ delaunayDistance(X)
 }
 \seealso{
   \code{\link{delaunay}},
-  \code{\link{delaunayNetwork}}
+  \code{\link{delaunayNetwork}}.
 }
 \examples{
   X <- runifpoint(20)
@@ -42,13 +42,7 @@ delaunayDistance(X)
   text(X, labels=M[1, ], cex=2)
 }
 \author{
-\adrian
-
-
-\rolf
-
-and \ege
-
+  \spatstatAuthors.
 }
 \keyword{spatial}
 \keyword{manip}

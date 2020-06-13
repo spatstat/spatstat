@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.64-1.012
+        CHANGES IN spatstat VERSION 1.64-1.014
 
 OVERVIEW
 
@@ -39,9 +39,14 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o sessionInfo
     Output now includes a list of packages that are imported but not loaded.
 
+    o plot.psp
+    The code for 'style="width"' has been completely rewritten,
+    so that it no longer depends on plot.linim, and is much more efficient.
+    The formal argument list has been extended.
+
     o [.linim
     Accelerated.
-    
+
 BUG FIXES
 
     o model.matrix.mppm

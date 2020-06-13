@@ -341,9 +341,8 @@ reset.spatstat.options()
 #'   Tests of "click*" functions
 #'   using queueing feature of spatstatLocator
 #'
-#'   $Revision: 1.5 $ $Date: 2020/06/12 00:11:40 $
+#'   $Revision: 1.6 $ $Date: 2020/06/12 06:10:26 $
 
-require(spatstat)
 local({
   #' clickppp
   if(ALWAYS) {

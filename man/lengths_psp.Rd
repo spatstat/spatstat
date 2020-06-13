@@ -39,13 +39,6 @@
   The name of this function has changed from \code{lengths.psp}
   to \code{lengths_psp}, because the old name \code{lengths.psp}
   could be misinterpreted as a method for \code{\link[base]{lengths}}.
-  
-  The older function name \code{lengths.psp} is retained temporarily,
-  for consistency with older code and documentation.
-  
-  In future versions of \pkg{spatstat}, the 
-  function name \code{lengths.psp} will be removed.
-  The newer function name \code{lengths_psp} should be used.
 }
 \seealso{
   \code{\link{marks.psp}},

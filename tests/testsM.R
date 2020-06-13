@@ -90,9 +90,8 @@ local({
 #' tests/mctests.R
 #' Monte Carlo tests
 #'        (mad.test, dclf.test, envelopeTest, hasenvelope)
-#' $Revision: 1.3 $ $Date: 2020/04/30 02:18:23 $
+#' $Revision: 1.4 $ $Date: 2020/06/12 06:10:47 $
 
-require(spatstat)
 local({
   if(FULLTEST) {
     envelopeTest(cells, Lest, exponent=1, nsim=9, savepatterns=TRUE)
@@ -148,10 +147,8 @@ local({
 #
 # Basic tests of mppm
 #
-# $Revision: 1.17 $ $Date: 2020/04/30 02:18:23 $
+# $Revision: 1.18 $ $Date: 2020/06/12 06:11:01 $
 # 
-
-require(spatstat)
 
 local({
   ## test interaction formulae and subfits

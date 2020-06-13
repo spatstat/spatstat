@@ -1,6 +1,6 @@
 # superimpose.R
 #
-# $Revision: 1.37 $ $Date: 2017/12/30 05:03:15 $
+# $Revision: 1.39 $ $Date: 2020/06/13 08:56:57 $
 #
 #
 ############################# 
@@ -18,8 +18,9 @@ superimpose.default <- function(...) {
   #' First expand any arguments which are lists of objects
   argh <- expandSpecialLists(argh, "solist")
   #' Now dispatch
-  if(any(sapply(argh, is.lpp)) || any(sapply(argh, inherits, what="linnet")))
+  if(any(sapply(argh, is.lpp)) || any(sapply(argh, inherits, what="linnet"))) {
     return(do.call(superimpose.lpp, argh))
+  }
   if(any(sapply(argh, is.psp)))
     return(do.call(superimpose.psp, argh))
   #' default
