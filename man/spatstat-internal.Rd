@@ -715,7 +715,6 @@
 \alias{as.ppm.rppm}
 \alias{predict.profilepl}
 
-
 %% Linear networks code is corralled here
 \alias{ApplyConnected}
 \alias{DoCountCrossEnds}
@@ -1618,6 +1617,7 @@ allElementsIdentical(x, entry)
 %%
 \method{as.ppm}{rppm}(object)
 \method{predict}{profilepl}(object, \dots)
+
 %% Linear networks code is corralled here
 ApplyConnected(X, Engine, r, \dots, rule, auxdata)
 DoCountEnds(X, D, toler)

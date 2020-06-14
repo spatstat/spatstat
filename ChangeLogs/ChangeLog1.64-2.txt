@@ -410,3 +410,19 @@ Change log from spatstat 1.64-1 to spatstat 1.64-2
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
 
+14 jun 2020
+
+   evalcovar.R 
+   evalcovarlppm.R [New file]
+   deldir.R
+   deldirnet.R [New file]
+   	Excised linear networks code to separate files.
+
+   DESCRIPTION
+   NEWS
+	Version 1.64-1.015
+
+------------- passed R-4.0.0 CMD check ---------------
+(with environment variable SPATSTAT_TEST defined/undefined)
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------

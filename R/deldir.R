@@ -3,7 +3,7 @@
 #'
 #' Interface to deldir package
 #'
-#'  $Revision: 1.33 $ $Date: 2020/06/12 06:04:42 $
+#'  $Revision: 1.34 $ $Date: 2020/06/14 10:34:23 $
 #'
 
 #' ..............................................
@@ -337,24 +337,6 @@ dirichletEdges <- function(X) {
     return(edges(W))
   return(as.psp(dd$dirsgs[,1:4], window=W))
 }
-
-#%^!ifdef LINEARNETWORKS
-dirichletNetwork <- function(X, ...) as.linnet(dirichletEdges(X), ...)
-
-delaunayNetwork <- function(X) {
-  stopifnot(is.ppp(X))
-  X <- unique(X, rule="deldir")
-  nX <- npoints(X)
-  if(nX == 0) return(NULL)
-  if(nX == 1L) return(linnet(X, !diag(TRUE)))
-  if(nX == 2L) return(linnet(X, !diag(c(TRUE,TRUE))))
-  dd <- safedeldir(X)
-  if(is.null(dd)) 
-    return(NULL)
-  joins <- as.matrix(dd$delsgs[, 5:6])
-  return(linnet(X, edges=joins))
-}
-#%^!endif
 
 
 ## deprecated older names
