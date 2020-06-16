@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.64-1.015
+        CHANGES IN spatstat VERSION 1.64-1.016
 
 OVERVIEW
 
@@ -9,7 +9,7 @@ OVERVIEW
 
     o Bug fixes and minor improvements.
 
-    o version nickname: 'I eat trolls for breakfast'
+    o version nickname: 'Warm Machine Wash'
 
     o We thank Kurt Hornik and Yonatan Rosen for contributions.
 
@@ -49,6 +49,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
 BUG FIXES
 
+    o deviance.lppm, pseudoR2.lppm
+    Results were completely incorrect, due to a coding error.
+    Fixed.
+    
     o model.matrix.mppm
     Crashed with random-effects models.
     Fixed.

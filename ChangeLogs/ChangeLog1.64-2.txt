@@ -426,3 +426,33 @@ Change log from spatstat 1.64-1 to spatstat 1.64-2
 (with environment variable SPATSTAT_TEST defined/undefined)
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
+
+   heatapprox.R
+	call to lengths.psp replaced by lengths_psp
+
+16 jun 2020
+
+   lppm.R
+	Bug fix in deviance.lppm
+
+   marks.tess.Rd
+   subset.ppp.Rd
+	Tweaks
+
+   rhohat.R
+   rhohatlpp.R [New file]
+   	 Moved lpp and lppm methods to a separate file.
+
+   subset.R
+	Tweak filepp macro
+	
+   DESCRIPTION
+   NEWS
+   Nickname.txt
+	Nickname changed to 'Warm Machine Wash'
+	Version 1.64-1.016
+
+------------- passed R-4.0.0 CMD check ---------------
+(with environment variable SPATSTAT_TEST defined/undefined)
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------

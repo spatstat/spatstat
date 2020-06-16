@@ -1,7 +1,7 @@
 #'
 #'  rhohat.R
 #'
-#'  $Revision: 1.88 $  $Date: 2020/06/13 08:55:54 $
+#'  $Revision: 1.89 $  $Date: 2020/06/16 03:13:16 $
 #'
 #'  Non-parametric estimation of a transformation rho(z) determining
 #'  the intensity function lambda(u) of a point process in terms of a
@@ -132,76 +132,6 @@ rhohat.ppm <- function(object, covariate, ...,
                horvitz=horvitz,
                smoother=smoother,
                resolution=list(dimyx=dimyx, eps=eps),
-               n=n, bw=bw, adjust=adjust, from=from, to=to,
-               bwref=bwref, covname=covname, covunits=covunits,
-               confidence=confidence, positiveCI=positiveCI,
-               modelcall=modelcall, callstring=callstring)
-}
-
-
-rhohat.lpp <- rhohat.lppm <- 
-  function(object, covariate, ...,
-           weights=NULL,
-           method=c("ratio", "reweight", "transform"),
-           horvitz=FALSE,
-           smoother=c("kernel", "local", "decreasing", "increasing"),
-           subset=NULL,
-           nd=1000, eps=NULL, random=TRUE, 
-           n=512, bw="nrd0", adjust=1, from=NULL, to=NULL, 
-           bwref=bw, covname, confidence=0.95, positiveCI) {
-  callstring <- short.deparse(sys.call())
-  smoother <- match.arg(smoother)
-  method <- match.arg(method)
-  if(missing(positiveCI))
-    positiveCI <- (smoother == "local")
-  if(missing(covname)) 
-    covname <- sensiblevarname(short.deparse(substitute(covariate)), "X")
-  if(is.null(adjust))
-    adjust <- 1
-  # validate model
-  if(is.lpp(object)) {
-    X <- object
-    model <- lppm(object, ~1, eps=eps, nd=nd, random=random)
-    reference <- "Lebesgue"
-    modelcall <- NULL
-  } else if(inherits(object, "lppm")) {
-    model <- object
-    X <- model$X
-    reference <- "model"
-    modelcall <- model$call
-  } else stop("object should be of class lpp or lppm")
-  
-  if("baseline" %in% names(list(...)))
-    warning("Argument 'baseline' ignored: not available for ",
-            if(is.lpp(object)) "rhohat.lpp" else "rhohat.lppm")
-
-  if(is.character(covariate) && length(covariate) == 1) {
-    covname <- covariate
-    switch(covname,
-           x={
-             covariate <- function(x,y) { x }
-           }, 
-           y={
-             covariate <- function(x,y) { y }
-           },
-           stop("Unrecognised covariate name")
-         )
-    covunits <- unitname(X)
-  } else {
-    covunits <- NULL
-  }
-
-  S <- as.psp(as.linnet(X))
-  if(!is.null(subset)) S <- S[subset]
-  totlen <- sum(lengths_psp(S))
-  
-  rhohatEngine(model, covariate, reference, totlen, ...,
-               subset=subset,
-               weights=weights,
-               method=method,
-               horvitz=horvitz,
-               smoother=smoother,
-               resolution=list(nd=nd, eps=eps, random=random),
                n=n, bw=bw, adjust=adjust, from=from, to=to,
                bwref=bwref, covname=covname, covunits=covunits,
                confidence=confidence, positiveCI=positiveCI,

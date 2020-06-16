@@ -6,7 +6,7 @@
 #'
 #'  Copyright (c) Greg McSwiggan and Adrian Baddeley 2017-2020
 #'
-#'  $Revision: 1.2 $  $Date: 2020/04/05 03:46:04 $
+#'  $Revision: 1.3 $  $Date: 2020/06/14 12:19:52 $
 #'
 
 heatkernelapprox <- function(X, sigma, nmax=20, floored=TRUE) {
@@ -17,7 +17,7 @@ heatkernelapprox <- function(X, sigma, nmax=20, floored=TRUE) {
   stopifnot(all(sigma > 0))
   if(length(sigma) == 1) sigma <- rep(sigma, nX)
   check.1.integer(nmax)
-  lenf <- lengths.psp(as.psp(domain(X)))
+  lenf <- lengths_psp(as.psp(domain(X)))
   coo <- coords(X)
   seg <- coo$seg
   len <- lenf[seg]

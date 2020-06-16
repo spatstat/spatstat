@@ -47,7 +47,7 @@
   }
 }
 \details{
-  This is a method for the generic function \code{\link{subset}}.
+  This is a method for the generic function \code{\link[base]{subset}}.
   It extracts the subset of points of \code{x}
   that satisfy the logical expression
   \code{subset}, and retains only the columns of marks that are

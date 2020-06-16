@@ -3,7 +3,7 @@
 ##
 ## Methods for 'subset'
 ##
-##   $Revision: 1.6 $  $Date: 2018/10/02 03:50:44 $
+##   $Revision: 1.7 $  $Date: 2020/06/16 03:19:55 $
 
 subset.ppp <- function(x, subset, select, drop=FALSE, ...) {
   stopifnot(is.ppp(x))
@@ -43,7 +43,9 @@ subset.ppp <- function(x, subset, select, drop=FALSE, ...) {
   return(out)
 }
 
-subset.pp3 <- subset.lpp <- subset.ppx <- function(x, subset, select, drop=FALSE, ...) {
+subset.pp3 <- 
+subset.lpp <-
+subset.ppx <- function(x, subset, select, drop=FALSE, ...) {
   y <- as.data.frame(x)
   r <- if (missing(subset)) 
     rep_len(TRUE, nrow(y))
