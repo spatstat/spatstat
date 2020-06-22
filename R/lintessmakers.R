@@ -4,7 +4,7 @@
 #'   Creation of linear tessellations
 #'   and intersections between lintess objects
 #'
-#'   $Revision: 1.2 $  $Date: 2019/11/01 09:53:54 $
+#'   $Revision: 1.3 $  $Date: 2020/06/17 05:39:30 $
 #' 
 
 divide.linnet <- local({
@@ -49,17 +49,8 @@ divide.linnet <- local({
       jedge <- c(jedge, joined[-1L])
     }
     nedge <- length(iedge)
-    zz <- .C("cocoGraph",
-             nv = as.integer(nbits),
-             ne = as.integer(nedge), 
-             ie = as.integer(iedge - 1L),
-             je = as.integer(jedge - 1L),
-             label = as.integer(integer(nbits)), 
-             status = as.integer(integer(1L)),
-             PACKAGE = "spatstat")
-    if (zz$status != 0) 
-      stop("Internal error: connectedness algorithm did not converge")
-    lab <- zz$label + 1L
+    lab0 <- cocoEngine(nbits, iedge - 1L, jedge - 1L)
+    lab <- lab0 + 1L
     lab <- as.integer(factor(lab))
     df <- df[,c("seg", "t0", "t1")]
     df$tile <- lab

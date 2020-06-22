@@ -3,7 +3,7 @@
 #
 # connected component transform
 #
-#    $Revision: 1.20 $  $Date: 2017/11/06 02:01:55 $
+#    $Revision: 1.23 $  $Date: 2020/06/17 05:42:17 $
 #
 # Interpreted code for pixel images by Julian Burgos <jmburgos@u.washington.edu>
 # Rewritten in C by Adrian Baddeley
@@ -155,8 +155,22 @@ connected.ppp <- connected.pp3 <- function(X, R, ...) {
   internal <- resolve.1.default("internal", list(...), list(internal=FALSE))
   nv <- npoints(X)
   cl <- closepairs(X, R, what="indices")
-  ie <- cl$i - 1L
-  je <- cl$j - 1L
+  lab0 <- cocoEngine(nv, cl$i - 1L, cl$j - 1L, methodname)
+  if(internal)
+    return(lab0)
+  lab <- lab0 + 1L
+  # Renumber labels sequentially 
+  lab <- as.integer(factor(lab))
+  # Convert labels to factor
+  lab <- factor(lab)
+  # Apply to points
+  Y <- X %mark% lab
+  return(Y)
+}
+
+cocoEngine <- function(nv, ie, je, algoname="connectedness algorithm") {
+  #' no checks
+  #' ie, je are 0-based indices (range between 0 and nv-1)
   ne <- length(ie)
   zz <- .C("cocoGraph",
            nv=as.integer(nv),
@@ -167,18 +181,10 @@ connected.ppp <- connected.pp3 <- function(X, R, ...) {
            status=as.integer(integer(1L)),
            PACKAGE = "spatstat")
   if(zz$status != 0)
-    stop(paste("Internal error:", methodname, "did not converge"), call.=FALSE)
-  if(internal)
-    return(zz$label)
-  lab <- zz$label + 1L
-  # Renumber labels sequentially 
-  lab <- as.integer(factor(lab))
-  # Convert labels to factor
-  lab <- factor(lab)
-  # Apply to points
-  Y <- X %mark% lab
-  return(Y)
+    stop(paste("Internal error:", algoname, "did not converge"), call.=FALSE)
+  return(zz$label)
 }
+  
 
 # .................................................
 

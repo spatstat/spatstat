@@ -3,7 +3,7 @@
 #    
 #    Linear networks
 #
-#    $Revision: 1.78 $    $Date: 2020/04/27 04:24:18 $
+#    $Revision: 1.79 $    $Date: 2020/06/17 05:39:37 $
 #
 # An object of class 'linnet' defines a linear network.
 # It includes the following components
@@ -577,22 +577,9 @@ connected.linnet <- function(X, ..., what=c("labels", "components")) {
   verifyclass(X, "linnet")
   what <- match.arg(what)
   nv <- npoints(vertices(X))
-  ie <- X$from - 1L
-  je   <- X$to - 1L
-  ne <- length(ie)
-  zz <- .C("cocoGraph",
-           nv = as.integer(nv),
-           ne = as.integer(ne), 
-           ie = as.integer(ie),
-           je = as.integer(je),
-           label = as.integer(integer(nv)), 
-           status = as.integer(integer(1L)),
-           PACKAGE = "spatstat")
-  if (zz$status != 0) 
-    stop("Internal error: connected.linnet did not converge")
-  lab <- zz$label + 1L
-  lab <- as.integer(factor(lab))
-  lab <- factor(lab)
+  lab0 <- cocoEngine(nv, X$from - 1L, X$to - 1L, "connected.linnet")
+  lab <- lab0 + 1L
+  lab <- factor(as.integer(factor(lab)))
   if(what == "labels")
     return(lab)
   nets <- list()

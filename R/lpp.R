@@ -1,7 +1,7 @@
 #
 # lpp.R
 #
-#  $Revision: 1.69 $   $Date: 2020/03/18 06:05:22 $
+#  $Revision: 1.70 $   $Date: 2020/06/17 05:41:24 $
 #
 # Class "lpp" of point patterns on linear networks
 
@@ -635,20 +635,8 @@ connected.lpp <- function(X, R=Inf, ..., dismantle=TRUE) {
     close <- (pairdist(X) <= R)
     diag(close) <- FALSE
     ij <- which(close, arr.ind=TRUE)
-    ie <- ij[,1] - 1L
-    je <- ij[,2] - 1L
-    ne <- length(ie)
-    zz <- .C("cocoGraph",
-           nv=as.integer(nv),
-           ne=as.integer(ne),
-           ie=as.integer(ie),
-           je=as.integer(je),
-           label=as.integer(integer(nv)),
-           status=as.integer(integer(1L)),
-           PACKAGE = "spatstat")
-    if(zz$status != 0)
-      stop("Internal error: connected.ppp did not converge")
-    lab <- zz$label + 1L
+    lab0 <- cocoEngine(nv, ij[,1] - 1L, ij[,2] - 1L, "connected.lpp")
+    lab <- lab0 + 1L
     # Renumber labels sequentially 
     lab <- as.integer(factor(lab))
     # Convert labels to factor

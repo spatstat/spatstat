@@ -456,3 +456,36 @@ Change log from spatstat 1.64-1 to spatstat 1.64-2
 (with environment variable SPATSTAT_TEST defined/undefined)
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
+
+17 jun 2020
+
+   is.marked.ppm.Rd
+	Added an example.
+
+   model.images.Rd
+	Improved.
+
+   connected.R
+   spatstat-internal.Rd
+	New internal function 'cocoEngine' provides new interface to
+	the existing C function 'cocoGraph'.
+	
+   connected.R
+   linnet.R
+   lintessmakers.R
+	Calls to .C("cocoGraph") are now replaced by calls to cocoEngine().
+	
+22 jun 2020
+
+   datasets.Rnw
+	Reduced file size substantially by omitting/simplifying some plots.
+
+   DESCRIPTION
+   NEWS
+   Nickname.txt
+	Version 1.64-1.017
+
+------------- passed R-4.0.0 CMD check ---------------
+(with environment variable SPATSTAT_TEST defined/undefined)
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------

@@ -44,7 +44,7 @@
   }
   \item{\dots}{
     Other arguments (such as \code{na.action}) passed to
-    \code{\link{model.matrix.lm}}.
+    \code{\link[stats:model.matrix]{model.matrix.lm}}.
   }
 }
 \details{
@@ -70,8 +70,10 @@
   model.
 
   Note that the spatial covariates computed here
-  are not the original covariates that were supplied when fitting the
-  model. Rather, they are the covariates that actually appear in the
+  are not necessarily the original covariates
+  that were supplied when fitting the
+  model. Rather, they are the canonical covariates,
+  the covariates that appear in the
   loglinear representation of the (conditional) intensity
   and in the columns of the design matrix. For example, they might include
   dummy or indicator variables for different levels of a factor,
@@ -90,7 +92,7 @@
     the result is a named list of pixel images (objects of class
     \code{"im"}) containing the values of the spatial covariates.
     The names of the list elements are the names of the covariates
-    determined by \code{\link{model.matrix.lm}}.
+    determined by \code{\link[stats:model.matrix]{model.matrix.lm}}.
     The result is also of class \code{"solist"} so that it can
     be plotted immediately.
     \item 
@@ -100,7 +102,7 @@
     Each column is a named list of pixel images (objects of class
     \code{"im"}) containing the values of the spatial covariates.
     The row names of the hyperframe are the names of the covariates
-    determined by \code{\link{model.matrix.lm}}.
+    determined by \code{\link[stats:model.matrix]{model.matrix.lm}}.
   }
 }
 \value{
