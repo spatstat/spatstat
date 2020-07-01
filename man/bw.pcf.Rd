@@ -101,13 +101,16 @@
 }
 \section{Definition of bandwidth}{
   The bandwidth \code{bw} returned by \code{bw.pcf}
-  corresponds to the standard deviation of the smoothoing 
-  kernel. As mentioned in the documentation of 
+  is the standard deviation of the smoothing kernel,
+  following the standard convention in \R.
+  As mentioned in the documentation for
   \code{\link{density.default}} and \code{\link{pcf.ppp}}, 
-  this differs from the scale parameter \code{h} of 
-  the smoothing kernel which is often considered in the 
-  literature as the bandwidth of the kernel function.
-  For example for the Epanechnikov kernel, \code{bw=h/sqrt(h)}.
+  this differs from other definitions of bandwidth that can be
+  found in the literature. The scale parameter
+  \code{h}, which is called the bandwidth in some literature,
+  is defined differently.
+  For example for the Epanechnikov kernel, \code{h} is the half-width
+  of the kernel, and \code{bw=h/sqrt(5)}.
 }
 \value{
   A numerical value giving the selected bandwidth.

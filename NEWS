@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.64-1.017
+        CHANGES IN spatstat VERSION 1.64-1.018
 
 OVERVIEW
 
@@ -11,7 +11,8 @@ OVERVIEW
 
     o version nickname: 'Warm Machine Wash'
 
-    o We thank Kurt Hornik and Yonatan Rosen for contributions.
+    o We thank Kurt Hornik, Yonatan Rosen and Rasmus Waagepetersen
+    for contributions.
 
 SIGNIFICANT USER-VISIBLE CHANGES
 

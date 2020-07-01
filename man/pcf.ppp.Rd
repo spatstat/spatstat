@@ -29,7 +29,7 @@
   \item{bw}{
     Bandwidth for smoothing kernel,
     passed to \code{\link{density.default}}.
-    Either a single numeric value,
+    Either a single numeric value giving the standard deviation of the kernel,
     or a character string specifying a bandwidth selection rule
     recognised by \code{\link{density.default}}.
     If \code{bw} is missing or \code{NULL},
@@ -183,10 +183,10 @@
   Stoyan and Stoyan (1994, page 285).
 
   The bandwidth of the smoothing kernel can be controlled by the
-  argument \code{bw}. Its precise interpretation
-  is explained in the documentation for \code{\link{density.default}}.
-  For the Epanechnikov kernel, the argument \code{bw} is
-  equivalent to \eqn{h/\sqrt{5}}{h/sqrt(5)}.
+  argument \code{bw}. Bandwidth is defined as the standard deviation
+  of the kernel; see the documentation for \code{\link{density.default}}.
+  For the Epanechnikov kernel with half-width \code{h},
+  the argument \code{bw} is equivalent to \eqn{h/\sqrt{5}}{h/sqrt(5)}.
 
   Stoyan and Stoyan (1994, page 285) recommend using the Epanechnikov
   kernel with support \eqn{[-h,h]} chosen by the rule of thumn
