@@ -3,7 +3,7 @@
 #
 # support for colour maps and other lookup tables
 #
-# $Revision: 1.46 $ $Date: 2019/12/10 01:08:19 $
+# $Revision: 1.47 $ $Date: 2020/07/03 03:21:28 $
 #
 
 colourmap <- function(col, ..., range=NULL, breaks=NULL, inputs=NULL, gamma=1) {
@@ -83,11 +83,12 @@ lut <- function(outputs, ..., range=NULL, breaks=NULL, inputs=NULL, gamma=1) {
     if(is.time) {
       f <- function(x, what="value") {
         x <- as.vector(as.numeric(x))
-        z <- findInterval(x, stuff$breaks,
-                          rightmost.closed=TRUE)
+        z <- findInterval(x, stuff$breaks, rightmost.closed=TRUE)
+        oo <- stuff$outputs
+        z[z <= 0 | z > length(oo)] <- NA
         if(what == "index")
           return(z)
-        cout <- stuff$outputs[z]
+        cout <- oo[z]
         return(cout)
       }
     } else {
@@ -96,6 +97,8 @@ lut <- function(outputs, ..., range=NULL, breaks=NULL, inputs=NULL, gamma=1) {
         x <- as.vector(x)
         z <- findInterval(x, stuff$breaks,
                           rightmost.closed=TRUE)
+        oo <- stuff$outputs
+        z[z <= 0 | z > length(oo)] <- NA
         if(what == "index")
           return(z)
         cout <- stuff$outputs[z]
