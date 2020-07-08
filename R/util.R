@@ -1,7 +1,7 @@
 #
 #    util.R    miscellaneous utilities
 #
-#    $Revision: 1.248 $    $Date: 2020/05/16 03:59:30 $
+#    $Revision: 1.249 $    $Date: 2020/07/08 02:57:50 $
 #
 
 # common invocation of matrixsample
@@ -310,13 +310,14 @@ sessionLibs <- local({
   mangle <- function(pkglist, type="loaded") {
     if(length(pkglist)) {
       b <- unlist(lapply(pkglist, getElement, name="Version"))
+      b <- b[order(names(b))]
       g <- rbind(names(b), unname(b))
       d <- apply(g, 2, paste, collapse=" ")
     } else d <- NULL
     if(length(d) > 0) {
       cat(paste0("Libraries ", type, ":\n"))
       for(di in d) cat(paste("\t", di, "\n"))
-    } else cat(paste0("Libraries ", type, ": None\n"))
+    } else cat(paste0("Libraries ", type, ": none\n"))
     return(invisible(d))
   }
     

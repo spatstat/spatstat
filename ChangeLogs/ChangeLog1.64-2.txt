@@ -519,4 +519,16 @@ Change log from spatstat 1.64-1 to spatstat 1.64-2
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
 
-  
+08 jul 2020
+
+   util.R
+	sessionLibs() output is sorted alphabetically.
+
+   DESCRIPTION
+   NEWS
+	Version 1.64-1.020
+
+------------- passed R-4.0.0 CMD check ---------------
+(with environment variable SPATSTAT_TEST defined/undefined)
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------

@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.64-1.019
+        CHANGES IN spatstat VERSION 1.64-1.020
 
 OVERVIEW
 
@@ -19,7 +19,7 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o package structure
     We have removed some internal code from spatstat
     to make a new sub-package 'spatstat.sparse',
-    which is now required by 'spatstat'.
+    which is now Required by 'spatstat'.
     
     o sumouter, quadform, bilinearform
     These functions have been moved to the new sub-package 'spatstat.sparse'.
@@ -45,6 +45,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
     so that it no longer depends on plot.linim, and is much more efficient.
     The formal argument list has been extended.
 
+    o sessionLibs
+    Package names are now sorted alphabetically.
+    
     o [.linim
     Accelerated.
 
