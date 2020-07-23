@@ -1,10 +1,12 @@
-#
-# versions.R
-#
-# version numbers
-#
-# $Revision: 1.13 $  $Date: 2019/11/29 03:38:28 $
-#
+##
+##  versions.R
+##
+## version numbers
+##
+##   The string P A C K A G E N A M E  is substituted by filepp
+##
+## $Revision: 1.15 $  $Date: 2020/07/23 04:43:47 $
+##
 #####################
 
 
@@ -87,7 +89,7 @@ versioncurrency.spatstat <- function(today=Sys.Date(), checkR=TRUE) {
       }
       expired <- if(n == 1) paste("a", unit) else paste(n, paste0(unit, "s"))
       ver <- versionstring.spatstat()
-      msg <- paste("spatstat version", ver,
+      msg <- paste("spatstat", "version", ver,
                    "is out of date by more than",
                    paste0(expired, ";"), 
                    sowhat)

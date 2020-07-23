@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.64-1.020
+        CHANGES IN spatstat VERSION 1.64-1.021
 
 OVERVIEW
 
@@ -50,6 +50,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
     
     o [.linim
     Accelerated.
+
+    o integral.im
+    Accelerated in the case where 'domain' is a tessellation.
 
 BUG FIXES
 

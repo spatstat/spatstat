@@ -532,3 +532,21 @@ Change log from spatstat 1.64-1 to spatstat 1.64-2
 (with environment variable SPATSTAT_TEST defined/undefined)
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
+
+23 jul 2020
+
+   images.R
+	Accelerated integral.im in the case where 'domain' is a tessellation.
+
+   versions.R
+	Tweaked in preparation for package breakup.
+	
+   DESCRIPTION
+   NEWS
+	Version 1.64-1.020
+
+------------- passed R-4.0.0 CMD check ---------------
+(with environment variable SPATSTAT_TEST defined/undefined)
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+
