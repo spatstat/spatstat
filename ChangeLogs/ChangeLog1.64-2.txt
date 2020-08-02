@@ -543,10 +543,30 @@ Change log from spatstat 1.64-1 to spatstat 1.64-2
 	
    DESCRIPTION
    NEWS
-	Version 1.64-1.020
+	Version 1.64-1.021
 
 ------------- passed R-4.0.0 CMD check ---------------
 (with environment variable SPATSTAT_TEST defined/undefined)
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
 
+02 august 2020
+
+   lixel.c
+	Added an extra safety check on validity of 'tp' values
+
+   lixellate.R
+	Minor tweak
+
+   density.lpp.R
+	For efficiency, duplicated points are now detected
+	and their multiplicity is absorbed into the weights argument.
+
+   DESCRIPTION
+   NEWS
+	Version 1.64-1.022
+
+------------- passed R-4.0.0 CMD check ---------------
+(with environment variable SPATSTAT_TEST defined/undefined)
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------

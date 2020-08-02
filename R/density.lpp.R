@@ -14,6 +14,18 @@ density.lpp <- function(x, sigma=NULL, ...,
   stopifnot(inherits(x, "lpp"))
   distance <- match.arg(distance)
 
+  weights <- pointweights(x, weights=weights, parent=parent.frame())
+
+  #' collapse duplicates efficiently
+  um <- uniquemap(x)
+  ii <- seq_len(npoints(x))
+  uniek <- (um == ii)
+  if(!all(uniek)) {
+    x <- x[uniek]
+    m <- as.numeric(table(um))
+    weights <- if(is.null(weights)) m else m * weights
+  }
+    
   if(distance == "euclidean") {
     #' Euclidean 2D kernel
     return(densityQuick.lpp(x, sigma, ..., kernel=kernel, weights=weights))

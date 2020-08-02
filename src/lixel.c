@@ -50,7 +50,7 @@ void Clixellate(ns, fromcoarse, tocoarse,
 {
   int Np, oldNs, oldNv, i, j, k, ll;
   int oldfromi, oldtoi, newlines, newNv, newNs, SegmentForData;
-  double xstart, xend, ystart, yend, xincr, yincr, tn;
+  double xstart, xend, ystart, yend, xincr, yincr, tn, tpk;
 
   Np = *np;
   newNv = oldNv = *nv;
@@ -113,18 +113,22 @@ void Clixellate(ns, fromcoarse, tocoarse,
       ++newNs;
     }
 
-    /* handle data points lying on current segment i */
+    /* handle any data points lying on current segment i */
     while(SegmentForData == i) {
       if(newlines == 1) {
 	spfine[k] = spcoarse[k];
 	tpfine[k] = tpcoarse[k];
       } else {
+	/* map location on coarse segment to fine segment */
 	tn = tpcoarse[k] * newlines;
 	ll = (int) floor(tn); 
 	ll = (ll < 0) ? 0 : (ll >= newlines) ? (newlines - 1): ll;
-	tpfine[k] = tn - ll;
+	tpk = tn - ll;
+	if(tpk < 0.0) tpk = 0.0; else if(tpk > 1.0) tpk = 1.0;
+	tpfine[k] = tpk;
 	spfine[k] = newNs - newlines + ll;
       }
+      /* advance to next data point */
       ++k;
       SegmentForData = (k < Np) ? spcoarse[k] : -1;
     }

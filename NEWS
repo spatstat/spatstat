@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.64-1.021
+        CHANGES IN spatstat VERSION 1.64-1.022
 
 OVERVIEW
 
@@ -32,6 +32,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o densityHeat
     Default behaviour has changed slightly.
     New argument 'finespacing'.
+
+    o density.lpp
+    Accelerated when the pattern contains duplicated points.
     
     o rotmean
     The result now has the same 'unitname' as the input object X.
