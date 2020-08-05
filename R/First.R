@@ -1,9 +1,15 @@
 #  First.R
 #
-#  $Revision: 1.48 $ $Date: 2019/12/06 01:38:23 $
+#  $Revision: 1.49 $ $Date: 2020/08/05 08:30:17 $
 #
 
-.onLoad <- function(...) reset.spatstat.options()
+.onLoad <- function(...) {
+  reset.spatstat.options()
+  umf <- system.file("doc", "umbrella.txt", package="spatstat")
+  isum <- !is.null(umf) && file.exists(umf)
+  putSpatstatVariable("Spatstat.Is.Umbrella", isum)
+  invisible(NULL)
+}
 
 .onAttach <- function(libname, pkgname) {
   store.versionstring.spatstat()

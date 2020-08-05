@@ -48,15 +48,28 @@ getSizeTable <- function(packagename="spatstat", tablename="packagesizes.txt") {
 }
 counts <- c("nhelpfiles", "nobjects", "ndatasets", "Rlines", "srclines")
 mergeSizeTables <- function(a, b) {
+  #' a is the running total for spatstat; b is a sub-package
   if(is.null(b)) return(a)
   for(i in seq_len(nrow(a))) {
     j <- which(b$date <= a$date[i])
     if(length(j) > 0) 
       a[i,counts] <- a[i,counts] + b[max(j), counts]
   }
+  if(any(after <- (b$date > max(a$date)))) {
+    lastA <- a[nrow(a), ,drop=FALSE]
+    newB <- B[after, , drop=FALSE]
+    newB[,counts] <- newB[,counts] + lastA[,counts]
+    newB$version <- lastA$version
+    a <- rbind(a, newB)
+  }
   return(a)
 }
 z <- getSizeTable()
+## handle the case where spatstat is the umbrella package
+if(isTRUE(getSpatstatVariable("Spatstat.Is.Umbrella"))) {
+  zcore <- getSizeTable("spatstat.core")
+  z <- mergeSizeTables(zcore, z)
+} 
 ## sub-packages- access via the sub-package
 zutils <- getSizeTable("spatstat.utils")
 zdata <- getSizeTable("spatstat.data")
