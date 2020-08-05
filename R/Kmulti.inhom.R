@@ -1,7 +1,7 @@
 #
 #	Kmulti.inhom.S		
 #
-#	$Revision: 1.52 $	$Date: 2019/05/24 10:21:38 $
+#	$Revision: 1.53 $	$Date: 2020/08/05 02:50:32 $
 #
 #
 # ------------------------------------------------------------------------
@@ -413,6 +413,18 @@ function(X, I, J, lambdaI=NULL, lambdaJ=NULL,
 
 # Compute estimates by each of the selected edge corrections.
 
+  if(any(correction == "none")) {
+    ## uncorrected
+    wh <- whist(dclose, breaks$val, weight)
+    Kun <- cumsum(wh)/areaW
+    rmax <- diameter(W)/2
+    Kun[r >= rmax] <- NA
+    K <- bind.fv(K, data.frame(un=Kun),
+                 makefvlabel(NULL, "hat", fname, "un"),
+                 "uncorrected estimate of %s",
+                 "un")
+  }
+  
   if(any(correction == "border" | correction == "bord.modif")) {
     # border method
     # Compute distances to boundary

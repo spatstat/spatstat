@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.64-1.022
+        CHANGES IN spatstat VERSION 1.64-1.023
 
 OVERVIEW
 
@@ -11,8 +11,8 @@ OVERVIEW
 
     o version nickname: 'Warm Machine Wash'
 
-    o We thank Kurt Hornik, Yonatan Rosen and Rasmus Waagepetersen
-    for contributions.
+    o We thank Corey Anderson, Kurt Hornik, Yonatan Rosen
+    and Rasmus Waagepetersen for contributions.
 
 SIGNIFICANT USER-VISIBLE CHANGES
 
@@ -67,7 +67,12 @@ BUG FIXES
     If a colour map was applied to numbers lying outside the range of the
     colour map, the wrong number of NA's was sometimes produced.
     Fixed.
-    
+
+    o Lcross.inhom, Kcross.inhom, Kmulti.inhom
+    The option 'correction="none"' was accepted but ignored.
+    [Spotted by Corey Anderson.]
+    Fixed.
+
     o model.matrix.mppm
     Crashed with random-effects models.
     Fixed.
