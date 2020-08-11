@@ -1,21 +1,17 @@
 #
 # mppm.R
 #
-#  $Revision: 1.98 $   $Date: 2020/05/17 09:30:00 $
+#  $Revision: 1.99 $   $Date: 2020/08/11 06:56:20 $
 #
 
 mppm <- local({
 
   mppm <- function(formula, data, interaction=Poisson(), ...,
                    iformula=NULL,
-#%^!ifdef RANDOMEFFECTS                 
                    random=NULL,
-#%^!endif                 
                    weights=NULL,
                    use.gam=FALSE,
-#%^!ifdef RANDOMEFFECTS                                    
                    reltol.pql=1e-3,
-#%^!endif                 
                    gcontrol=list()
                    ) {
     ## remember call
@@ -32,14 +28,12 @@ mppm <- local({
       stop(paste("Hyperframe", sQuote("data"), "has zero rows"))
     if(!is.null(iformula) && !inherits(iformula, "formula"))
       stop(paste("Argument", sQuote("iformula"), "should be a formula or NULL"))
-#%^!ifdef RANDOMEFFECTS  
     if(has.random <- !is.null(random)) {
       if(!inherits(random, "formula"))
         stop(paste(sQuote("random"), "should be a formula or NULL"))
       if(use.gam)
         stop("Sorry, random effects are not available in GAMs")
     }
-#%^!endif
     if(! (is.interact(interaction) || is.hyperframe(interaction)))
       stop(paste("The argument", sQuote("interaction"),
                  "should be a point process interaction object (class",
@@ -111,7 +105,6 @@ mppm <- local({
       allvars <- c(allvars, ivars)
     } 
 
-#%^!ifdef RANDOMEFFECTS
   
     ## --- Random effects formula ----
     if(!is.null(random))  {
@@ -124,7 +117,6 @@ mppm <- local({
       allvars <- c(allvars, variablesinformula(random))
     }
 
-#%^!endif  
   
     ## ---- variables required (on RHS of one of the above formulae) -----
     allvars <- unique(allvars)
@@ -407,11 +399,9 @@ mppm <- local({
         names(vnsub) <- tag
         ## perform substitution in trend formula
         fmla <- eval(substitute(substitute(fom, vnsub), list(fom=fmla)))
-#%^!ifdef RANDOMEFFECTS      
         ## perform substitution in random effects formula
         if(has.random && tag %in% variablesinformula(random))
           random <- eval(substitute(substitute(fom, vnsub), list(fom=random)))
-#%^!endif      
       }
     }
 
@@ -435,7 +425,6 @@ mppm <- local({
                   data=moadf, subset=(.mpl.SUBSET=="TRUE"),
                   control=ctrl)
       deviants <- deviance(FIT)
-#%^!ifdef RANDOMEFFECTS    
     } else if(!is.null(random)) {
       fitter <- "glmmPQL"
       ctrl <- do.call(lmeControl, resolve.defaults(gcontrol, list(maxIter=50)))
@@ -448,7 +437,6 @@ mppm <- local({
                           control=attr(fixed, "ctrl"),
                           reltol=reltol.pql)
       deviants <-  -2 * logLik(FIT)
-#%^!endif    
     } else {
       fitter <- "glm"
       ctrl <- do.call(glm.control, resolve.defaults(gcontrol, list(maxit=50)))
@@ -471,9 +459,7 @@ mppm <- local({
     result <- list(Call = list(callstring=callstring, cl=cl),
                    Info =
                    list(
-#%^!ifdef RANDOMEFFECTS                      
                      has.random=has.random,
-#%^!endif                      
                      has.covar=has.covar,
                      has.design=has.design,
                      Yname=Yname,
@@ -509,9 +495,7 @@ mppm <- local({
                    formula=formula,
                    trend=trend,
                    iformula=iformula,
-#%^!ifdef RANDOMEFFECTS                 
                    random=random,
-#%^!endif                 
                    npat=npat,
                    data=data,
                    Y=Y,
@@ -573,7 +557,6 @@ coef.mppm <- function(object, ...) {
   coef(object$Fit$FIT)
 }
 
-#%^!ifdef RANDOMEFFECTS
 
 fixef.mppm <- function(object, ...) {
   if(object$Fit$fitter == "glmmPQL")
@@ -589,7 +572,6 @@ ranef.mppm <- function(object, ...) {
     as.data.frame(matrix(, nrow=object$npat, ncol=0))
 }
 
-#%^!endif
 
 print.mppm <- function(x, ...) {
   print(summary(x, ..., brief=TRUE))
@@ -609,6 +591,14 @@ data.mppm <- function(x) {
   solapply(x$Y, getElement, name="data")
 }
 
+is.marked.mppm <- function(X, ...) {
+  any(sapply(data.mppm(X), is.marked))
+}
+  
+is.multitype.mppm <- function(X, ...) {
+  any(sapply(data.mppm(X), is.multitype))
+}
+  
 windows.mppm <- function(x) {
   solapply(data.mppm(x), Window)
 }
@@ -618,11 +608,7 @@ logLik.mppm <- function(object, ..., warn=TRUE) {
     warning(paste("log likelihood is not available for non-Poisson model;",
                   "log-pseudolikelihood returned"))
   ll <- object$maxlogpl
-#%^!ifdef RANDOMEFFECTS  
   attr(ll, "df") <- length(fixef(object))
-#%^!else  
-#  attr(ll, "df") <- length(coef(object))
-#%^!endif  
   class(ll) <- "logLik"
   return(ll)
 }

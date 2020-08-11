@@ -599,3 +599,22 @@ Change log from spatstat 1.64-1 to spatstat 1.64-2
 (with environment variable SPATSTAT_TEST defined/undefined)
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
+
+11 aug 2020
+
+   mppm.R
+   spatstat-internal.Rd
+	New methods is.marked.mppm, is.multitype.mppm
+
+   predictmppm.R
+	Implemented prediction for multitype models.
+
+   DESCRIPTION
+   NEWS
+	Version 1.64-1.025
+
+------------- passed R-4.0.0 CMD check ---------------
+(with environment variable SPATSTAT_TEST defined/undefined)
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+

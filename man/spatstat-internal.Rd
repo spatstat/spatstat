@@ -253,10 +253,12 @@
 \alias{is.infline}
 \alias{is.interact}
 \alias{is.marked.default}    
+\alias{is.marked.mppm}    
 \alias{is.marked.msr}    
 \alias{is.marked.psp}    
 \alias{is.marked.quad}
 \alias{is.mppm}
+\alias{is.multitype.mppm}    
 \alias{is.multitype.msr}    
 \alias{is.multitype.quad}    
 \alias{is.multitype.default}    
@@ -1062,11 +1064,13 @@ is.imlist(x)
 is.infline(x)
 is.interact(x)
 \method{is.marked}{default}(\dots)  
+\method{is.marked}{mppm}(X, \dots)
 \method{is.marked}{msr}(X, \dots)
 \method{is.marked}{psp}(X, \dots)
 \method{is.marked}{quad}(X, na.action="warn", \dots)
 is.mppm(x)
 \method{is.multitype}{default}(X, \dots)  
+\method{is.multitype}{mppm}(X, \dots)
 \method{is.multitype}{msr}(X, \dots)
 \method{is.multitype}{quad}(X, na.action="warn", \dots)
 \method{is.poisson}{mppm}(x)

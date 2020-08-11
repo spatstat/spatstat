@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.64-1.024
+        CHANGES IN spatstat VERSION 1.64-1.025
 
 OVERVIEW
 
@@ -7,6 +7,8 @@ OVERVIEW
     
     o Changed default value of 'stringsAsFactors'.
 
+    o predict.mppm now works for multitype point process models.
+    
     o Bug fixes and minor improvements.
 
     o version nickname: 'Warm Machine Wash'
@@ -29,6 +31,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
     to conform to changes in R. (The actual default value is TRUE for R < 4.1.0
     and FALSE for R >= 4.1.0)
 
+    o predict.mppm
+    Now supports multitype point process models.
+    
     o densityHeat
     Default behaviour has changed slightly.
     New argument 'finespacing'.

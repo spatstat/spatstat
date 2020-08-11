@@ -50,8 +50,9 @@
 }
 \details{
   This function computes the spatial trend and the conditional
-  intensity of a fitted multiple spatial point process model. See Baddeley
-  and Turner (2000) and Baddeley et al (2007) for explanation and examples.
+  intensity of a spatial point process model that has been fitted to
+  several spatial point patterns. See Chapter 16 of
+  Baddeley, Rubak and Turner (2015) for explanation and examples.
   
   Note that by ``spatial trend'' we mean the (exponentiated) first
   order potential and not the intensity of the process. [For example
@@ -71,12 +72,18 @@
 
   If \code{locations} is given, then it should be a list of point
   patterns (objects of class \code{"ppp"}). Predictions are performed at these
-  points. The result is a hyperframe containing a column of 
-  marked point patterns where the locations 
-  each point. 
+  points, and the results are returned as mark values attached to the
+  \code{locations}. The result is a hyperframe containing columns
+  called \code{trend} and/or \code{cif}. The column called \code{trend}
+  contains marked point patterns in which the point locations are
+  the \code{locations} and the mark value is the predicted trend.
+  The column called \code{cif}
+  contains marked point patterns in which the point locations are
+  the \code{locations} and the mark value is the predicted conditional
+  intensity.
 }
 \value{
-  A hyperframe with columns named \code{trend} and \code{cif}.
+  A hyperframe with columns named \code{trend} and/or \code{cif}.
 
   If  \code{locations=NULL}, the entries of the hyperframe are
   pixel images.
@@ -103,13 +110,7 @@
 \author{
   \adrian, Ida-Maria Sintorn and Leanne Bischoff.
   Implemented by 
-  \adrian
-  
-  
-  \rolf
-  
-  and \ege
-  
+  \spatstatAuthors.
 }
 \seealso{
   \code{\link{mppm}},
