@@ -81,8 +81,16 @@
   distribution of the deviance difference.
   The meaning of the other options is explained in
   \code{\link{anova.glm}}.
-  For random effects models, only \code{"Chisq"} is
-  available, and again gives the likelihood ratio test.
+}
+\section{Random effects models are currently not supported}{
+  For models with random effects
+  (i.e. where the call to \code{\link{mppm}}
+  included the argument \code{random}),
+  %% only \code{"Chisq"} is
+  %%  available, and again gives the likelihood ratio test.
+  analysis of deviance is currently not supported,
+  due to changes in the \pkg{nlme} package.
+  We will try to find a solution.
 }
 \section{Error messages}{
   An error message that reports

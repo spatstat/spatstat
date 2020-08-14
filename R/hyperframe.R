@@ -1,7 +1,7 @@
 #
 #  hyperframe.R
 #
-# $Revision: 1.73 $  $Date: 2020/04/29 12:37:48 $
+# $Revision: 1.74 $  $Date: 2020/08/14 03:02:19 $
 #
 
 hyperframe <- local({
@@ -443,10 +443,8 @@ cbind.hyperframe <- function(...) {
   ## tack on row names
   rona <- lapply(aarg, row.names)
   good <- (lengths(rona) == nrow(result))
-  if(any(good)) {
-    rona <- rona[[min(which(good))]]
-    row.names(result) <- make.names(rona, unique=TRUE)
-  }
+  if(any(good)) 
+    row.names(result) <- rona[[min(which(good))]]
   return(result)
 }
 

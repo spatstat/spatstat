@@ -1,7 +1,7 @@
 #
 # anova.mppm.R
 #
-# $Revision: 1.17 $ $Date: 2020/05/17 04:59:58 $
+# $Revision: 1.18 $ $Date: 2020/08/14 03:38:46 $
 #
 
 anova.mppm <- local({
@@ -72,17 +72,18 @@ anova.mppm <- local({
 
     ## Choice of test
     if(fitter == "glmmPQL") {
-      ## anova.lme requires different format of `test' argument
-      ## and does not recognise 'dispersion'
-      if(is.null(test))
-        test <- FALSE
-      else {
-        test <- match.arg(test, tests.choices)
-        if(!(test %in% tests.random))
-          stop(paste("Test", dQuote(test),
-                     "is not implemented for random effects models"))
-        test <- TRUE
-      }
+      stop("Sorry, analysis of deviance is currently not supported for models with random effects, due to changes in the nlme package", call.=FALSE)
+      ## ## anova.lme requires different format of `test' argument
+      ## ## and does not recognise 'dispersion'
+      ## if(is.null(test))
+      ##   test <- FALSE
+      ## else {
+      ##   test <- match.arg(test, tests.choices)
+      ##   if(!(test %in% tests.random))
+      ##     stop(paste("Test", dQuote(test),
+      ##                "is not implemented for random effects models"))
+      ##   test <- TRUE
+      ## }
     } else if(!is.null(test)) {
       test <- match.arg(test, tests.choices)
       if(!(test %in% tests.avail))
@@ -109,15 +110,15 @@ anova.mppm <- local({
 
     ## Finally do the appropriate ANOVA
     opt <- list(test=test)
-    if(fitter == "glmmPQL") {
-      ## HACK: anova.lme forbids other classes
-      ##       and does not recognise 'dispersion'
-      fitz <- lapply(fitz, drop1class)
-      warning("anova is not strictly valid for penalised quasi-likelihood fits")
-    } else {
+    ## if(fitter == "glmmPQL") {
+    ##   ## HACK: anova.lme forbids other classes
+    ##   ##       and does not recognise 'dispersion'
+    ##   fitz <- lapply(fitz, drop1class)
+    ##   warning("anova is not strictly valid for penalised quasi-likelihood fits")
+    ## } else {
       ## normal case
       opt <- append(opt, list(dispersion=1))
-    }
+    ## }
     result <- try(do.call(anova, append(fitz, opt)))
     if(inherits(result, "try-error"))
       stop("anova failed")

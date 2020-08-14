@@ -618,3 +618,20 @@ Change log from spatstat 1.64-1 to spatstat 1.64-2
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
 
+14 aug 2020
+
+   hyperframe.R
+	cbind.hyperframe no longer uses 'make.names' to process the row names.
+
+   anova.mppm.R
+   anova.mppm.Rd
+	random-effects models are currently not supported
+   
+   DESCRIPTION
+   NEWS
+	Version 1.64-1.026
+
+------------- passed R-4.0.0 CMD check ---------------
+(with environment variable SPATSTAT_TEST defined/undefined)
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
