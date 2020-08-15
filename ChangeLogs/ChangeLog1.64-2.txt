@@ -635,3 +635,25 @@ Change log from spatstat 1.64-1 to spatstat 1.64-2
 (with environment variable SPATSTAT_TEST defined/undefined)
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
+
+15 aug 2020
+
+   hackglmm.R
+	If spatstat.options('developer') = TRUE, the log likelihood
+	will not be reset to NA. 
+	
+   anova.mppm.R
+	If spatstat.options('developer') = TRUE,
+	anova.mppm will accept models with random effects
+	(by hacking everything to override the safety features)
+
+   DESCRIPTION
+   NEWS
+	Version 1.64-1.027
+
+------------- passed R-4.0.0 CMD check ---------------
+(with environment variable SPATSTAT_TEST defined/undefined)
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+
+
