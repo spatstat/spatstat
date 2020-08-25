@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.64-1.027
+        CHANGES IN spatstat VERSION 1.64-1.028
 
 OVERVIEW
 
@@ -15,7 +15,7 @@ OVERVIEW
 
     o version nickname: 'Warm Machine Wash'
 
-    o We thank Corey Anderson, Kurt Hornik, Yonatan Rosen
+    o We thank Corey Anderson, Kurt Hornik, Gopalan Nair, Yonatan Rosen
     and Rasmus Waagepetersen for contributions.
 
 SIGNIFICANT USER-VISIBLE CHANGES
@@ -71,6 +71,12 @@ SIGNIFICANT USER-VISIBLE CHANGES
     Analysis of deviance is currently not supported for random-effects models
     (models fitted using the argument 'random') because of changes in
     the nlme package. We will try to find a solution.
+
+    o Gest
+    If correction="rs" or correction="km", then both the reduced-sample
+    (border correction) and Kaplan-Meier corrected estimates were calculated.
+    [Spotted by Gopalan Nair.]
+    Fixed.
     
 BUG FIXES
 

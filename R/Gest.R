@@ -3,7 +3,7 @@
 #
 #	Compute estimates of nearest neighbour distance distribution function G
 #
-#	$Revision: 4.31 $	$Date: 2015/10/21 09:06:57 $
+#	$Revision: 4.32 $	$Date: 2020/08/25 06:13:10 $
 #
 ################################################################################
 #
@@ -102,26 +102,30 @@ function(X, r=NULL, breaks=NULL, ..., correction=c("rs", "km", "han"),
   }
 
   if(any(correction %in% c("rs", "km"))) {
-    ## calculate Kaplan-Meier and border correction (Reduced Sample) estimators
-    if(npts == 0)
-      result <- data.frame(rs=zeroes, km=zeroes, hazard=zeroes, theohaz=zeroes)
-    else {
-      result <- km.rs(o, bdry, d, breaks)
-      result$theohaz <- 2 * pi * lambda * rvals
-      result <- as.data.frame(result[c("rs", "km", "hazard", "theohaz")])
+    ## calculate Kaplan-Meier and border correction (Reduced Sample) estimates
+    want.rs <- "rs" %in% correction
+    want.km <- "km" %in% correction
+    if(npts == 0) {
+      result <- list(rs=zeroes, km=zeroes, hazard=zeroes, theohaz=zeroes)
+    } else {
+      result <- km.rs.opt(o, bdry, d, breaks, KM=want.km, RS=want.rs)
+      if(want.km) 
+        result$theohaz <- 2 * pi * lambda * rvals
     }
+    wanted <- c(want.rs, rep(want.km, 3L))
+    wantednames <- c("rs", "km", "hazard", "theohaz")[wanted]
+    result <- as.data.frame(result[wantednames])
     ## add to fv object
     Z <- bind.fv(Z, result,
                  c("hat(%s)[bord](r)", "hat(%s)[km](r)",
-                   "hat(h)[km](r)", "h[pois](r)"),
+                   "hat(h)[km](r)", "h[pois](r)")[wanted],
                  c("border corrected estimate of %s",
                    "Kaplan-Meier estimate of %s",
                    "Kaplan-Meier estimate of hazard function h(r)",
-                   "theoretical Poisson hazard function h(r)"),
-                 "km")
-    
+                   "theoretical Poisson hazard function h(r)")[wanted],
+                 if(want.km) "km" else "rs")
     ## modify recommended plot range
-    attr(Z, "alim") <- range(rvals[result$km <= 0.9])
+    attr(Z, "alim") <- with(Z, range(.x[.y <= 0.9]))
   }
   nama <- names(Z)
   fvnames(Z, ".") <- rev(setdiff(nama, c("r", "hazard", "theohaz")))
