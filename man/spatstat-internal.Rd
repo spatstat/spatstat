@@ -159,6 +159,7 @@
 \alias{extractAIC.slrm}
 \alias{extractAtomicQtests}
 \alias{fakemaintitle}
+\alias{fakeNeyScot}
 \alias{family.vblogit} 
 \alias{f3engine}
 \alias{f3Cengine}
@@ -968,6 +969,7 @@ ExpSmoothLog(X, \dots, at, weights)
 \method{extractAIC}{slrm}(fit, scale = 0, k = 2, \dots)
 extractAtomicQtests(x)
 fakemaintitle(bb, main, \dots)
+fakeNeyScot(Y, lambda, win, saveLambda, saveparents)
 \method{family}{vblogit}(object, \dots)
 f3engine(x, y, z, box, vside, range, nval, correction)
 f3Cengine(x, y, z, box, vside, rmax, nrval)

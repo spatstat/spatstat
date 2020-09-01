@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.64-1.028
+        CHANGES IN spatstat VERSION 1.64-1.029
 
 OVERVIEW
 
@@ -72,12 +72,6 @@ SIGNIFICANT USER-VISIBLE CHANGES
     (models fitted using the argument 'random') because of changes in
     the nlme package. We will try to find a solution.
 
-    o Gest
-    If correction="rs" or correction="km", then both the reduced-sample
-    (border correction) and Kaplan-Meier corrected estimates were calculated.
-    [Spotted by Gopalan Nair.]
-    Fixed.
-    
 BUG FIXES
 
     o deviance.lppm, pseudoR2.lppm
@@ -89,11 +83,23 @@ BUG FIXES
     colour map, the wrong number of NA's was sometimes produced.
     Fixed.
 
+    o Gest
+    If correction="rs" or correction="km", then both the reduced-sample
+    (border correction) and Kaplan-Meier corrected estimates were calculated.
+    [Spotted by Gopalan Nair.]
+    Fixed.
+    
     o Lcross.inhom, Kcross.inhom, Kmulti.inhom
     The option 'correction="none"' was accepted but ignored.
     [Spotted by Corey Anderson.]
     Fixed.
 
+    o rMatClust, rThomas, rCauchy, rVarGamma
+    In cases where the model was degenerate (effectively a Poisson process)
+    the result did not have attributes 'Lambda' and 'parents'
+    even when the user requested them.
+    Fixed.
+    
     o model.matrix.mppm
     Crashed with random-effects models.
     Fixed.

@@ -3,7 +3,7 @@
 ##
 ##   simulating from Neyman-Scott processes
 ##
-##   $Revision: 1.26 $  $Date: 2019/03/19 08:32:39 $
+##   $Revision: 1.27 $  $Date: 2020/09/01 10:10:26 $
 ##
 ##    Original code for rCauchy and rVarGamma by Abdollah Jalilian
 ##    Other code and modifications by Adrian Baddeley
@@ -141,6 +141,25 @@ rNeymanScott <-
   return(result)
 }  
 
+fakeNeyScot <- function(Y, lambda, win, saveLambda, saveparents) {
+  ## Y is a ppp or ppplist obtained from rpoispp
+  ## which will be returned as the realisation of a Neyman-Scott process
+  ## when the process is degenerately close to Poisson.
+  if(saveLambda || saveparents) {
+    if(saveLambda && !is.im(lambda)) lambda <- as.im(lambda, W=win)
+    if(saveparents) parents <- ppp(window=win) # empty pattern
+    if(isSingle <- is.ppp(Y)) Y <- solist(Y)
+    for(i in seq_along(Y)) {
+      Yi <- Y[[i]]
+      if(saveLambda) attr(Yi, "lambda") <- lambda
+      if(saveparents) attr(Yi, "parents") <- parents
+      Y[[i]] <- Yi
+    }
+    if(isSingle) Y <- Y[[1L]]
+  }
+  return(Y)
+}
+
 rMatClust <- local({
   
   ## like runifdisc but returns only the coordinates
@@ -172,6 +191,7 @@ rMatClust <- local({
     if(1/(pi * kappamax * scale^2) < poisthresh) {
       kapmu <- mu * (if(kok) kappa else kim)
       result <- rpoispp(kapmu, win=win, nsim=nsim, drop=drop, warnwin=FALSE)
+      result <- fakeNeyScot(result, kapmu, win, saveLambda, saveparents)
       return(result)
     }
 
@@ -224,6 +244,7 @@ rThomas <- local({
       if(1/(4*pi * kappamax * scale^2) < poisthresh) {
         kapmu <- mu * (if(kok) kappa else kim)
         result <- rpoispp(kapmu, win=win, nsim=nsim, drop=drop, warnwin=FALSE)
+        result <- fakeNeyScot(result, kapmu, win, saveLambda, saveparents)
         return(result)
       }
       
@@ -293,6 +314,7 @@ rCauchy <- local({
     if(1/(pi * kappamax * scale^2) < poisthresh) {
       kapmu <- mu * (if(kok) kappa else kim)
       result <- rpoispp(kapmu, win=win, nsim=nsim, drop=drop, warnwin=FALSE)
+      result <- fakeNeyScot(result, kapmu, win, saveLambda, saveparents)
       return(result)
     }
     
@@ -375,6 +397,7 @@ rVarGamma <- local({
     if(1/(4 * pi * kappamax * scale^2) < poisthresh) {
       kapmu <- mu * (if(kok) kappa else kim)
       result <- rpoispp(kapmu, win=win, nsim=nsim, drop=drop, warnwin=FALSE)
+      result <- fakeNeyScot(result, kapmu, win, saveLambda, saveparents)
       return(result)
     }
     
