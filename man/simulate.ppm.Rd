@@ -10,7 +10,8 @@
                          singlerun = FALSE,
                          start = NULL,
                          control = default.rmhcontrol(object, w=w),
-                         w = NULL, 
+                         w = window, 
+                         window = NULL, 
                          project=TRUE, new.coef=NULL,
                          verbose=FALSE, progress=(nsim > 1),
                          drop=FALSE)
@@ -40,7 +41,7 @@
     the Metropolis-Hastings algorithm.  See \code{\link{rmhcontrol}}
     for description of these arguments.
   }
-  \item{w}{
+  \item{w, window}{
     Optional. The window in which the model is defined.
     An object of class \code{"owin"}.
   }
@@ -114,10 +115,7 @@
   \code{\link[stats]{simulate}}
 }
 \author{\adrian
-  
-  
   and \rolf
-  
 }
 \keyword{spatial}
 \keyword{models}

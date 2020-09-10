@@ -686,4 +686,18 @@ Change log from spatstat 1.64-1 to spatstat 1.64-2
 (with environment variable SPATSTAT_TEST defined/undefined)
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
-  
+
+10 sep 2020
+
+   rmh.ppm.R
+   simulate.ppm.Rd
+	simulate.ppm now recognises argument 'window'
+
+   DESCRIPTION
+   NEWS
+	Version 1.64-1.030
+
+------------- passed R-4.0.0 CMD check ---------------
+(with environment variable SPATSTAT_TEST defined/undefined)
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------

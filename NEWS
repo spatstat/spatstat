@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.64-1.029
+        CHANGES IN spatstat VERSION 1.64-1.030
 
 OVERVIEW
 
@@ -67,12 +67,15 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o cbind.hyperframe
     Row names are not altered (previously they were altered using 'make.names')
 
+    o simulate.ppm
+    Now recognises the argument 'window' as an alternative to 'w'.
+
+BUG FIXES
+
     o anova.mppm
     Analysis of deviance is currently not supported for random-effects models
     (models fitted using the argument 'random') because of changes in
     the nlme package. We will try to find a solution.
-
-BUG FIXES
 
     o deviance.lppm, pseudoR2.lppm
     Results were completely incorrect, due to a coding error.

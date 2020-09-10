@@ -1,7 +1,7 @@
 #
 # simulation of FITTED model
 #
-#  $Revision: 1.36 $ $Date: 2019/10/22 02:31:58 $
+#  $Revision: 1.37 $ $Date: 2020/09/10 06:14:36 $
 #
 #
 rmh.ppm <- function(model, start = NULL,
@@ -52,7 +52,8 @@ simulate.ppm <- function(object, nsim=1, ...,
                          singlerun=FALSE,
                          start = NULL,
                          control = default.rmhcontrol(object, w=w),
-                         w = NULL,
+                         w = window,
+                         window = NULL, 
                          project=TRUE,
                          new.coef=NULL,
                          verbose=FALSE,
