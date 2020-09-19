@@ -701,3 +701,18 @@ Change log from spatstat 1.64-1 to spatstat 1.64-2
 (with environment variable SPATSTAT_TEST defined/undefined)
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
+
+19 sep 2020
+
+++++++++++++++ installed R-4.0.2 ++++++++++++++++++++++++++
+
+   DESCRIPTION
+   NEWS
+	Version 1.64-1.031
+
+------------- passed R-4.0.2 CMD check ---------------
+(with environment variable SPATSTAT_TEST defined/undefined)
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+
+   
