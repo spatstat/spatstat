@@ -10,7 +10,8 @@ mincontrast(observed, theoretical, startpar, \dots,
           ctrl=list(q = 1/4, p = 2, rmin=NULL, rmax=NULL),
           fvlab=list(label=NULL, desc="minimum contrast fit"),
           explain=list(dataname=NULL, modelname=NULL, fname=NULL),
-	  adjustment=NULL)
+          action.bad.values=c("warn", "stop", "silent"),
+          adjustment=NULL)
 }
 \arguments{
   \item{observed}{
@@ -39,6 +40,16 @@ mincontrast(observed, theoretical, startpar, \dots,
   \item{explain}{
     Optional. List containing strings that give a human-readable description
     of the model, the data and the summary statistic.
+  }
+  \item{action.bad.values}{
+    String (partially matched) specifying what to do if
+    values of the summary statistic are \code{NA}, \code{NaN} or infinite.
+    If \code{action.bad.values="stop"}, or if all of the values are bad,
+    then a fatal error occurs.
+    Otherwise, the domain of the summary function is shortened
+    to avoid the bad values. A warning is issued if
+    \code{action.bad.values="warn"} (the default)
+    and no warning is issued if \code{action.bad.values="silent"}.
   }
   \item{adjustment}{
     Internal use only.

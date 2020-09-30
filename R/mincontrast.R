@@ -38,10 +38,12 @@ mincontrast <- local({
                           ctrl=list(q = 1/4, p = 2, rmin=NULL, rmax=NULL),
                           fvlab=list(label=NULL, desc="minimum contrast fit"),
                           explain=list(dataname=NULL,
-                            modelname=NULL, fname=NULL),
+                                       modelname=NULL, fname=NULL),
+                          action.bad.values=c("warn", "stop", "silent"),
 			  adjustment=NULL) {
     verifyclass(observed, "fv")
-
+    action.bad.values <- match.arg(action.bad.values)
+    
     stopifnot(is.function(theoretical))
     if(!any("par" %in% names(formals(theoretical))))
       stop(paste("Theoretical function does not include an argument called",
@@ -79,28 +81,39 @@ mincontrast <- local({
     if(max(rvals) < rmax)
       stop(paste("rmax=", signif(rmax,4),
                  "exceeds the range of available data",
-                 "= [", signif(min(rvals),4), ",", signif(max(rvals),4), "]"))
+                 "= [", signif(min(rvals),4), ",", signif(max(rvals),4), "]"),
+           call.=FALSE)
     sub <- (rvals >= rmin) & (rvals <= rmax)
     rvals <- rvals[sub]
     obs <- obs[sub]
     ## sanity clause
     if(!all(ok <- is.finite(obs))) {
-      whinge <- paste("Some values of the empirical function",
+      doomed <- !any(ok)
+      whinge <- paste(if(doomed) "All" else "Some",
+                      "values of the empirical function",
                       sQuote(explain$fname),
-                      "were infinite or NA.")
+                      "were infinite, NA or NaN.")
+      if(doomed || action.bad.values == "stop")
+        stop(whinge, call.=FALSE)
+      ## trim each end of domain
       iMAX <- max(which(ok))
       iMIN <- min(which(!ok)) + 1
       if(iMAX > iMIN && all(ok[iMIN:iMAX])) {
+        ## success - accept trimmed domain
         rmin <- rvals[iMIN]
         rmax <- rvals[iMAX]
         obs   <- obs[iMIN:iMAX]
         rvals <- rvals[iMIN:iMAX]
         sub[sub] <- ok
-        warning(paste(whinge,
-                      "Range of r values was reset to",
-                      prange(c(rmin, rmax))),
-                call.=FALSE)
-      } else stop(paste(whinge, "Please choose a narrower range [rmin, rmax]"),
+        if(action.bad.values == "warn") {
+          warning(paste(whinge,
+                        "Range of r values was reset to",
+                        prange(c(rmin, rmax))),
+                  call.=FALSE)
+        }
+      } else stop(paste(whinge,
+                        "Unable to recover.",
+                        "Please choose a narrower range [rmin, rmax]"),
                   call.=FALSE)
     }
     ## pack data into a list
