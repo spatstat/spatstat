@@ -1,9 +1,11 @@
 
-        CHANGES IN spatstat VERSION 1.64-1.031
+        CHANGES IN spatstat VERSION 1.64-1.032
 
 OVERVIEW
 
     o spatstat now depends on the new package 'spatstat.sparse'.
+
+    o spatstat now requires R 3.6.1 or later.
     
     o Changed default value of 'stringsAsFactors'.
 
@@ -15,8 +17,8 @@ OVERVIEW
 
     o version nickname: 'Warm Machine Wash'
 
-    o We thank Corey Anderson, Kurt Hornik, Gopalan Nair, Yonatan Rosen
-    and Rasmus Waagepetersen for contributions.
+    o We thank Corey Anderson, Andy Craig, Kurt Hornik, Gopalan Nair,
+    Yonatan Rosen and Rasmus Waagepetersen for contributions.
 
 SIGNIFICANT USER-VISIBLE CHANGES
 

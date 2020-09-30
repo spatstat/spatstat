@@ -715,4 +715,29 @@ Change log from spatstat 1.64-1 to spatstat 1.64-2
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
 
+30 sep 2020
+
+   DESCRIPTION
+   NEWS 
+	spatstat now requires R >= 3.6.1
+
+   versions.R
+	Added robust checks in versioncurrency.spatstat
+	
+   DESCRIPTION
+   NEWS
+   spatstat-package.Rd
+	Acknowledged Andy Craig.
+	
+   DESCRIPTION
+   NEWS
+	version 1.64-1.032
+
+------------- passed R-4.0.2 CMD check ---------------
+(with environment variable SPATSTAT_TEST defined/undefined)
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+
+
+
    
