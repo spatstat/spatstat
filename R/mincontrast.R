@@ -27,8 +27,12 @@ mincontrast <- local({
       }
       ##
       discrep <- (abs(theo^qq - obsq))^pp
+      ## protect C code from weird values
+      Huge <- .Machine$double.xmax
+      if(any(bad <- !is.finite(discrep) | (discrep > Huge)))
+        discrep[bad] <- Huge
+      ## 
       value <- mean(discrep)
-      value <- min(value, .Machine$double.xmax)
       return(value)
     })
   }

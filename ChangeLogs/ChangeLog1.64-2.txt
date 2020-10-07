@@ -751,6 +751,18 @@ Change log from spatstat 1.64-1 to spatstat 1.64-2
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
 
+07 oct 2020
 
+   mincontrast.R
+	Improved robustness against bad values
 
-   
+   DESCRIPTION
+   NEWS
+   Nickname.txt
+	Nickname changed to 'Mild Fantasy Themes'
+	version 1.64-1.034
+
+------------- passed R-4.0.2 CMD check ---------------
+(with environment variable SPATSTAT_TEST defined/undefined)
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------

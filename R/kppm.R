@@ -3,7 +3,7 @@
 #
 # kluster/kox point process models
 #
-# $Revision: 1.145 $ $Date: 2020/01/10 05:22:06 $
+# $Revision: 1.146 $ $Date: 2020/10/07 07:22:59 $
 #
 
 kppm <- function(X, ...) {
@@ -404,10 +404,13 @@ clusterfit <- function(X, clusters, lambda = NULL, startpar = NULL,
   if(isDPP && algorithm=="Brent" && changealgorithm)
     mcargs <- resolve.defaults(mcargs, list(lower=alg$lower, upper=alg$upper))
 
+  ## .............. FIT .......................
   if(verbose) splat("Starting minimum contrast fit")
   mcfit <- do.call(mincontrast, mcargs)
   if(verbose) splat("Returned from minimum contrast fit")
-  # extract fitted parameters and reshape
+  ## ..........................................
+  
+  ## extract fitted parameters and reshape
   if(!usecanonical) {
     optpar.canon <- NULL
     optpar.human <- mcfit$par
