@@ -5,7 +5,7 @@
 ##
 ##   The string P A C K A G E N A M E  is substituted by filepp
 ##
-## $Revision: 1.17 $  $Date: 2020/09/30 01:31:24 $
+## $Revision: 1.18 $  $Date: 2020/10/07 08:12:37 $
 ##
 #####################
 
@@ -59,9 +59,8 @@ versioncurrency.spatstat <- function(today=Sys.Date(), checkR=TRUE) {
   msg <- NULL
   if(checkR) {
     ## check version of R
-    if(!exists("getRversion") || getRversion() < "3.2.2") {
-      ## this should not happen because spatstat requires R version 3.6.1
-      msg <- "R version is out of date; please upgrade"
+    if(!exists("getRversion") || getRversion() < "3.3") {
+      msg <- "This version of R is very outdated; an upgrade is recommended"
     } else {
       rv <- R.Version()
       rdate <- try(

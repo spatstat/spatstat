@@ -1,12 +1,10 @@
 
-        CHANGES IN spatstat VERSION 1.64-1.034
+        CHANGES IN spatstat VERSION 1.64-1.035
 
 OVERVIEW
 
     o spatstat now depends on the new package 'spatstat.sparse'.
 
-    o spatstat now requires R 3.6.1 or later.
-    
     o Changed default value of 'stringsAsFactors'.
 
     o predict.mppm now works for multitype point process models.

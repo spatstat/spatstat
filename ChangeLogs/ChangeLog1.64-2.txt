@@ -766,3 +766,16 @@ Change log from spatstat 1.64-1 to spatstat 1.64-2
 (with environment variable SPATSTAT_TEST defined/undefined)
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
+
+   versions.R
+	Tweaked code for version currency.
+	      
+   DESCRIPTION
+   NEWS
+	Reverted to require R >= 3.3.0
+	version 1.64-1.035
+
+------------- passed R-4.0.2 CMD check ---------------
+(with environment variable SPATSTAT_TEST defined/undefined)
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------

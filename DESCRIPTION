@@ -1,5 +1,5 @@
 Package: spatstat
-Version: 1.64-1.034
+Version: 1.64-1.035
 Date: 2020-10-07
 Title: Spatial Point Pattern Analysis, Model-Fitting, Simulation, Tests
 Author: Adrian Baddeley <Adrian.Baddeley@curtin.edu.au>,
@@ -218,7 +218,7 @@ Author: Adrian Baddeley <Adrian.Baddeley@curtin.edu.au>,
 	and
 	A. Zeileis.
 Maintainer: Adrian Baddeley <Adrian.Baddeley@curtin.edu.au>
-Depends: R (>= 3.6.1), spatstat.data (>= 1.4-2), stats, graphics, grDevices, utils, methods, nlme, rpart
+Depends: R (>= 3.3.0), spatstat.data (>= 1.4-2), stats, graphics, grDevices, utils, methods, nlme, rpart
 Imports: spatstat.utils (>= 1.17-0), spatstat.sparse, mgcv, Matrix, deldir (>= 0.0-21), abind, tensor, polyclip (>= 1.10-0), goftest (>= 1.2-2)
 Suggests: sm, maptools (>= 0.9-9), gsl, locfit, spatial, RandomFields (>= 3.1.24.1), RandomFieldsUtils(>= 0.3.3.1), fftwtools (>= 0.9-8)
 Remotes: spatstat/spatstat.utils, spatstat/spatstat.data, spatstat/spatstat.sparse, baddstats/polyclip
