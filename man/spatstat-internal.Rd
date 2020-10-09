@@ -589,6 +589,7 @@
 \alias{rpoint.multi}
 \alias{safedeldir}
 \alias{safelookup}
+\alias{safevalue}
 \alias{scalardilate.breakpts}
 \alias{scalardilate.diagramobj}
 \alias{scalardilate.msr}
@@ -1480,6 +1481,7 @@ runifpoisppOnLines(lambda, L, nsim, drop)
 runifrect(n, win, nsim, drop)
 safedeldir(X)
 safelookup(Z, x, factor, warn)
+safevalue(x, default)
 \method{scalardilate}{breakpts}(X, f, \dots)
 \method{scalardilate}{diagramobj}(X, f, \dots)
 \method{scalardilate}{msr}(X, f, \dots)

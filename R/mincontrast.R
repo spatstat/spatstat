@@ -6,6 +6,15 @@
 
 ##################  base ################################
 
+safevalue <- function(x, default=0) {
+  ## ensure x is finite and acceptable to C routines
+  ifelse(is.finite(x),
+         pmin(.Machine$double.xmax,
+              pmax(.Machine$double.eps,
+                   x)),
+         default)
+}
+
 mincontrast <- local({
 
   ## objective function (in a format that is re-usable by other code)
@@ -25,13 +34,11 @@ mincontrast <- local({
         if(length(theo) != nrvals)
           stop("adjustment did not return the correct number of values")
       }
-      ##
+      ## integrand of discrepancy 
       discrep <- (abs(theo^qq - obsq))^pp
       ## protect C code from weird values
-      Huge <- .Machine$double.xmax
-      if(any(bad <- !is.finite(discrep) | (discrep > Huge)))
-        discrep[bad] <- Huge
-      ## 
+      discrep <- safevalue(discrep, default=.Machine$double.xmax)
+      ## rescaled integral of discrepancy
       value <- mean(discrep)
       return(value)
     })

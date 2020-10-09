@@ -3,7 +3,7 @@
 #
 # kluster/kox point process models
 #
-# $Revision: 1.146 $ $Date: 2020/10/07 07:22:59 $
+# $Revision: 1.147 $ $Date: 2020/10/09 02:20:39 $
 #
 
 kppm <- function(X, ...) {
@@ -485,7 +485,7 @@ kppmComLik <- function(X, Xname, po, clusters, control, weightfun, rmax,
   # compute weights for pairs of points
   if(is.function(weightfun)) {
     wIJ <- weightfun(dIJ)
-    sumweight <- sum(wIJ)
+    sumweight <- safevalue(sum(wIJ))
   } else {
     npairs <- length(dIJ)
     wIJ <- rep.int(1, npairs)
@@ -521,7 +521,7 @@ kppmComLik <- function(X, Xname, po, clusters, control, weightfun, rmax,
     # with density proportional to intensity function
     g <- distcdf(M, dW=lambdaM)
     # scaling constant is (integral of intensity)^2
-    gscale <- integral.im(lambdaM)^2
+    gscale <- safevalue(integral.im(lambdaM)^2, default=npoints(X)^2)
   }
 
   # Detect DPP model and change clusters and intensity correspondingly
@@ -587,10 +587,11 @@ kppmComLik <- function(X, Xname, po, clusters, control, weightfun, rmax,
     # This is the log composite likelihood minus the constant term 
     #       sum(log(lambdaIJ)) - npairs * log(gscale)
     obj <- function(par, objargs) {
-      with(objargs,
-           2*(sum(log(paco(dIJ, par)))
-             - sumweight * log(unlist(stieltjes(paco, g, par=par)))),
-           enclos=objargs$envir)
+      safevalue(with(objargs,
+                     2*(sum(log(safevalue(paco(dIJ, par))))
+                       - sumweight * log(unlist(stieltjes(paco, g, par=par)))),
+                     enclos=objargs$envir),
+                default=-.Machine$double.xmax)
     }
   } else {
     # create local function to evaluate  pair correlation(d) * weight(d)
@@ -608,10 +609,11 @@ kppmComLik <- function(X, Xname, po, clusters, control, weightfun, rmax,
     # This is the log composite likelihood minus the constant term 
     #       sum(wIJ * log(lambdaIJ)) - sumweight * log(gscale)
     obj <- function(par, objargs) {
-      with(objargs,
-           2*(sum(wIJ * log(paco(dIJ, par)))
-             - sumweight * log(unlist(stieltjes(wpaco, g, par=par)))),
-           enclos=objargs$envir)
+      safevalue(with(objargs,
+                     2*(sum(wIJ * log(safevalue(paco(dIJ, par))))
+                       - sumweight * log(unlist(stieltjes(wpaco, g, par=par)))),
+                     enclos=objargs$envir),
+                default=-.Machine$double.xmax)
     }
   }
   # arguments for optimization
@@ -710,6 +712,7 @@ kppmComLik <- function(X, Xname, po, clusters, control, weightfun, rmax,
   return(result)
 }
 
+
 kppmPalmLik <- function(X, Xname, po, clusters, control, weightfun, rmax,
                         algorithm="Nelder-Mead", DPP=NULL, ...) {
   W <- as.owin(X)
@@ -759,7 +762,8 @@ kppmPalmLik <- function(X, Xname, po, clusters, control, weightfun, rmax,
     # and a random point in W with density proportional to intensity function
     g <- distcdf(X, M, dV=lambdaM)
     # scaling constant is (integral of intensity) * (number of points)
-    gscale <- integral.im(lambdaM) * npoints(X)
+    gscale <- safevalue(integral.im(lambdaM) * npoints(X),
+                        default=npoints(X)^2)
   }
 
   # Detect DPP model and change clusters and intensity correspondingly
@@ -820,15 +824,16 @@ kppmPalmLik <- function(X, Xname, po, clusters, control, weightfun, rmax,
   if(!is.function(weightfun)) {
     # pack up necessary information
     objargs <- list(dIJ=dIJ, g=g, gscale=gscale,
-                    sumloglam=sum(log(lambdaJ)),
+                    sumloglam=safevalue(sum(log(lambdaJ))),
                     envir=environment(paco))
     # define objective function (with 'paco' in its environment)
     # This is the log Palm likelihood
     obj <- function(par, objargs) {
-      with(objargs,
-           sumloglam + sum(log(paco(dIJ, par)))
-           - gscale * unlist(stieltjes(paco, g, par=par)),
-           enclos=objargs$envir)
+      safevalue(with(objargs,
+                     sumloglam + sum(log(safevalue(paco(dIJ, par))))
+                     - gscale * unlist(stieltjes(paco, g, par=par)),
+                     enclos=objargs$envir),
+                default=-.Machine$double.xmax)
     }
   } else {
     # create local function to evaluate  pair correlation(d) * weight(d)
@@ -841,20 +846,22 @@ kppmPalmLik <- function(X, Xname, po, clusters, control, weightfun, rmax,
     }
     # pack up necessary information
     objargs <- list(dIJ=dIJ, wIJ=wIJ, g=g, gscale=gscale,
-                    wsumloglam=sum(wIJ * log(lambdaJ)),
+                    wsumloglam=safevalue(sum(wIJ * safevalue(log(lambdaJ)))),
                     envir=environment(wpaco))
     # define objective function (with 'paco', 'wpaco' in its environment)
     # This is the log Palm likelihood
     obj <- function(par, objargs) {
-      with(objargs,
-           wsumloglam + sum(wIJ * log(paco(dIJ, par)))
-           - gscale * unlist(stieltjes(wpaco, g, par=par)),
-           enclos=objargs$envir)
+      safevalue(with(objargs,
+                     wsumloglam + sum(wIJ * log(safevalue(paco(dIJ, par))))
+                     - gscale * unlist(stieltjes(wpaco, g, par=par)),
+                     enclos=objargs$envir),
+                default=-.Machine$double.xmax)
     }
   }    
   # arguments for optimization
   ctrl <- resolve.defaults(list(fnscale=-1), control, list(trace=0))
-  optargs <- list(par=startpar, fn=obj, objargs=objargs, control=ctrl, method=algorithm)
+  optargs <- list(par=startpar, fn=obj, objargs=objargs,
+                  control=ctrl, method=algorithm)
   ## DPP resolving algorithm and checking startpar
   changealgorithm <- length(startpar)==1 && algorithm=="Nelder-Mead"
   if(isDPP){
