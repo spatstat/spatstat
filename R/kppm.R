@@ -338,12 +338,17 @@ clusterfit <- function(X, clusters, lambda = NULL, startpar = NULL,
   }
 
   dots <- info$resolvedots(...)
-  # determine initial values of parameters
+  #' determine initial values of parameters
   startpar <- info$checkpar(startpar)
-  # fit
+  #' code to compute the theoretical summary function of the model
   theoret <- info[[statistic]]
+  #' explanatory text
   desc <- paste("minimum contrast fit of", info$descname)
 
+  #' ............ experimental .........................
+  strict <- !isFALSE(spatstat.options("kppm.strict"))
+  sargs <- if(strict) list() else list(strict=FALSE)
+  
   #' ............ experimental .........................
   do.adjust <- spatstat.options("kppm.adjusted")
   if(do.adjust) {
@@ -385,6 +390,7 @@ clusterfit <- function(X, clusters, lambda = NULL, startpar = NULL,
   }
   #' ...................................................
   
+  #'
   mcargs <- resolve.defaults(list(observed=Stat,
                                   theoretical=theoret,
                                   startpar=startpar,
@@ -399,7 +405,8 @@ clusterfit <- function(X, clusters, lambda = NULL, startpar = NULL,
                                   model=dots$model,
                                   funaux=info$funaux,
 				  adjustment=adjustment),
-                             list(...))
+                             list(...),
+                             sargs)
 
   if(isDPP && algorithm=="Brent" && changealgorithm)
     mcargs <- resolve.defaults(mcargs, list(lower=alg$lower, upper=alg$upper))
@@ -454,8 +461,8 @@ clusterfit <- function(X, clusters, lambda = NULL, startpar = NULL,
   }
   ## Parameter values (new format)
   mcfit$mu <- mu
-  mcfit$clustpar <- info$checkpar(mcfit$par, old=FALSE)
-  mcfit$clustargs <- info$checkclustargs(dots$margs, old=FALSE)
+  mcfit$clustpar <- info$checkpar(mcfit$par, old=FALSE, strict=strict)
+  mcfit$clustargs <- info$checkclustargs(dots$margs, old=FALSE, strict=strict)
 
   ## The old fit fun that would have been used (DO WE NEED THIS?)
   FitFun <- paste0(tolower(clusters), ".est", statistic)
@@ -556,6 +563,9 @@ kppmComLik <- function(X, Xname, po, clusters, control, weightfun, rmax,
   } else clargs <- NULL
   # determine starting parameter values
   startpar <- selfstart(X)
+  #' ............ experimental .........................
+  strict <- !isFALSE(spatstat.options("kppm.strict"))
+  if(!strict) pcfunargs <- append(pcfunargs, list(strict=FALSE))
   #' ............ experimental .........................
   usecanonical <- spatstat.options("kppm.canonical")
   if(usecanonical) {
@@ -704,8 +714,8 @@ kppmComLik <- function(X, Xname, po, clusters, control, weightfun, rmax,
                  mu         = mu,
                  par        = optpar.human,
                  par.canon  = optpar.canon,
-                 clustpar   = info$checkpar(par=optpar.human, old=FALSE),
-                 clustargs  = info$checkclustargs(clargs$margs, old=FALSE), #clargs$margs,
+                 clustpar   = info$checkpar(par=optpar.human, old=FALSE, strict=strict),
+                 clustargs  = info$checkclustargs(clargs$margs, old=FALSE, strict=strict), #clargs$margs,
                  modelpar   = modelpar,
                  covmodel   = clargs,
                  Fit        = Fit)
@@ -798,6 +808,9 @@ kppmPalmLik <- function(X, Xname, po, clusters, control, weightfun, rmax,
   } else clargs <- NULL
   # determine starting parameter values
   startpar <- selfstart(X)
+  #' ............ experimental .........................
+  strict <- !isFALSE(spatstat.options("kppm.strict"))
+  if(!strict) pcfunargs <- append(pcfunargs, list(strict=strict))
   #' ............ experimental .........................
   usecanonical <- spatstat.options("kppm.canonical")
   if(usecanonical) {
@@ -947,8 +960,8 @@ kppmPalmLik <- function(X, Xname, po, clusters, control, weightfun, rmax,
                  mu         = mu,
                  par        = optpar.human,
                  par.canon  = optpar.canon,
-                 clustpar   = info$checkpar(par=optpar.human, old=FALSE),
-                 clustargs  = info$checkclustargs(clargs$margs, old=FALSE), #clargs$margs,
+                 clustpar   = info$checkpar(par=optpar.human, old=FALSE, strict=strict),
+                 clustargs  = info$checkclustargs(clargs$margs, old=FALSE, strict=strict), #clargs$margs,
                  modelpar   = modelpar,
                  covmodel   = clargs,
                  Fit        = Fit)

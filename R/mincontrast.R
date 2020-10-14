@@ -37,14 +37,15 @@ mincontrast <- local({
       ## integrand of discrepancy 
       discrep <- (abs(theo^qq - obsq))^pp
       ## protect C code from weird values
-      discrep <- safevalue(discrep, default=.Machine$double.xmax)
+      bigvalue <- BIGVALUE + sqrt(sum(par^2))
+      discrep <- safevalue(discrep, default=bigvalue)
       ## rescaled integral of discrepancy
       value <- mean(discrep)
       ## debugger activated by spatstat.options(mincon.trace)
       if(isTRUE(TRACE)) {
-        cat("Parameters:")
+        cat("Parameters:", fill=TRUE)
         print(par)
-        splat("Value:", value)
+        splat("Discrepancy value:", value)
       }
       return(value)
     })
@@ -143,7 +144,14 @@ mincontrast <- local({
                     rmin        = rmin,
                     rmax        = rmax,
 		    adjustment  = adjustment,
-                    TRACE       = spatstat.options("mincon.trace"))
+                    TRACE       = spatstat.options("mincon.trace"),
+                    BIGVALUE    = 0)
+    ## evaluate at the starting parameter vector
+    startval <- do.call(contrast.objective,
+                        list(par=startpar, objargs=objargs, ...))
+    ## determine a suitable large number for out-of-bounds penalty
+    objargs$BIGVALUE <- min(10 * abs(startval),
+                            with(.Machine, sqrt(double.xmax) * double.eps))
     ## go
     minimum <- optim(startpar, fn=contrast.objective, objargs=objargs, ...)
     ## if convergence failed, issue a warning 
@@ -300,6 +308,8 @@ unitname.minconfit <- function(x) {
 as.fv.minconfit <- function(x) x$fit
 
 ######  convergence status of 'optim' object
+
+optimConverged <- function(x) { x$convergence == 0 }
 
 optimStatus <- function(x, call=NULL) {
   cgce <- x$convergence

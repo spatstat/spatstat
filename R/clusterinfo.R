@@ -12,10 +12,10 @@
          printmodelname = function(...) "Thomas process", # Used by print.kppm
          parnames = c("kappa", "sigma2"),
          clustargsnames = NULL,
-         checkpar = function(par, old = TRUE){
+         checkpar = function(par, old = TRUE, ..., strict=TRUE){
              if(is.null(par))
                  par <- c(kappa=1,scale=1)
-             if(any(par<=0))
+             if(strict && any(par<=0))
                  stop("par values must be positive.")
              nam <- check.named.vector(par, c("kappa","sigma2"),
                                        onError="null")
@@ -30,7 +30,7 @@
              }
              return(par)
          },
-         checkclustargs = function(margs, old = TRUE) list(),
+         checkclustargs = function(margs, old = TRUE, ...) list(),
          resolvedots = function(...){
            return(list(...))
          },
@@ -67,14 +67,14 @@
          },
          isPCP=TRUE,
          ## K-function
-         K = function(par,rvals, ...){
-           if(any(par <= 0))
+         K = function(par,rvals, ..., strict=TRUE){
+           if(strict && any(par <= 0))
              return(rep.int(Inf, length(rvals)))
            pi*rvals^2+(1-exp(-rvals^2/(4*par[2L])))/par[1L]
          },
          ## pair correlation function
-         pcf= function(par,rvals, ...){
-           if(any(par <= 0))
+         pcf= function(par,rvals, ..., strict=TRUE){
+           if(strict && any(par <= 0))
              return(rep.int(Inf, length(rvals)))
            1 + exp(-rvals^2/(4 * par[2L]))/(4 * pi * par[1L] * par[2L])
          },
@@ -115,7 +115,7 @@
          printmodelname = function(...) "Matern cluster process", # Used by print.kppm
          parnames = c("kappa", "R"),
          clustargsnames = NULL,
-         checkpar = function(par, old = TRUE){
+         checkpar = function(par, old = TRUE, ...){
              if(is.null(par))
                  par <- c(kappa=1,scale=1)
              if(any(par<=0))
@@ -146,7 +146,7 @@
                warning("Argument ", sQuote("thresh"), " is ignored for Matern Cluster model")
              return(scale)
          },
-         checkclustargs = function(margs, old = TRUE) list(),
+         checkclustargs = function(margs, old = TRUE, ...) list(),
          resolvedots = function(...){
            return(list(...))
          },
@@ -229,7 +229,7 @@
          printmodelname = function(...) "Cauchy process", # Used by print.kppm
          parnames = c("kappa", "eta2"),
          clustargsnames = NULL,
-         checkpar = function(par, old = TRUE){
+         checkpar = function(par, old = TRUE, ...){
              if(is.null(par))
                  par <- c(kappa=1,scale=1)
              if(any(par<=0))
@@ -246,7 +246,7 @@
              }
              return(par)
          },
-         checkclustargs = function(margs, old = TRUE) list(),
+         checkclustargs = function(margs, old = TRUE, ...) list(),
          resolvedots = function(...){
            return(list(...))
          },
@@ -314,7 +314,7 @@
          },
          parnames = c("kappa", "eta"),
          clustargsnames = "nu",
-         checkpar = function(par, old = TRUE){
+         checkpar = function(par, old = TRUE, ...){
              if(is.null(par))
                  par <- c(kappa=1,scale=1)
              if(any(par<=0))
@@ -327,7 +327,7 @@
              if(!old) names(par)[2L] <- "scale"
              return(par)
          },
-         checkclustargs = function(margs, old = TRUE){
+         checkclustargs = function(margs, old = TRUE, ...){
              if(!old)
                  margs <- list(nu=margs$nu.ker)
              return(margs)
@@ -488,7 +488,7 @@
          modelabbrev = "log-Gaussian Cox process", # In fitted obj.
          printmodelname = function(...) "log-Gaussian Cox process", # Used by print.kppm
          parnames = c("sigma2", "alpha"),
-         checkpar = function(par, old = TRUE){
+         checkpar = function(par, old = TRUE, ...){
              if(is.null(par))
                  par <- c(var=1,scale=1)
              if(any(par<=0))
@@ -501,7 +501,7 @@
              if(!old) names(par) <- c("var", "scale")
              return(par)
          },
-         checkclustargs = function(margs, old = TRUE) return(margs),
+         checkclustargs = function(margs, old = TRUE, ...) return(margs),
          resolvedots = function(...){
            ## resolve dots for kppm and friends allowing for old/new par syntax
            dots <- list(...)

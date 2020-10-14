@@ -9,6 +9,18 @@ summary.kppm <- function(object, ..., quick=FALSE) {
   result <- unclass(object)[!(nama %in% c("X", "po", "call", "callframe"))]
   ## handle old format
   if(is.null(result$isPCP)) result$isPCP <- TRUE
+  ## extract 'optim' object
+  Fit <- object$Fit
+  opt <- switch(Fit$method,
+                mincon = Fit$mcfit$opt,
+                clik  =,
+                clik2 = Fit$clfit,
+                palm = Fit$clfit,
+                warning(paste("Unrecognised fitting method",
+                              sQuote(Fit$method)))
+                )
+  result$optim.converged <- optimConverged(opt)
+  result$optim.status    <- optimStatus(opt)
   ## summarise trend component
   result$trend <- summary(as.ppm(object), ..., quick=quick)
   if(identical(quick, FALSE)) {
@@ -72,7 +84,7 @@ print.summary.kppm <- function(x, ...) {
                a <- attr(wtf, "selfprint") %orifnull% pasteFormula(wtf)
                splat("\tweight function:", a)
              }
-             printStatus(optimStatus(Fit$clfit))
+             printStatus(x$optimstatus)
            },
            palm = {
              splat("Fitted by maximum Palm likelihood")
@@ -81,7 +93,7 @@ print.summary.kppm <- function(x, ...) {
                a <- attr(wtf, "selfprint") %orifnull% pasteFormula(wtf)
                splat("\tweight function:", a)
              }
-             printStatus(optimStatus(Fit$clfit))
+             printStatus(x$optimstatus)
            },
            warning(paste("Unrecognised fitting method", sQuote(Fit$method)))
            )

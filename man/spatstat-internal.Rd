@@ -378,6 +378,7 @@
 \alias{numeric.columns}
 \alias{objsurfEngine}
 \alias{onecolumn}
+\alias{optimConverged}
 \alias{optimStatus}
 \alias{outdated.interact}
 \alias{oversize.quad}    
@@ -1222,6 +1223,7 @@ objsurfEngine(objfun, optpar, objargs,
               \dots, dotargs, objname,
               ngrid, ratio, verbose)
 onecolumn(m)
+optimConverged(x)
 optimStatus(x, call)
 printStatus(x, errors.only)
 printStatusList(stats)

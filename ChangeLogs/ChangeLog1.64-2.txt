@@ -811,3 +811,30 @@ Change log from spatstat 1.64-1 to spatstat 1.64-2
 (with environment variable SPATSTAT_TEST defined/undefined)
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
+
+   mincontrast.R
+	Further tweak for numerical stability
+        Improved debugger output
+	
+   mincontrast.R
+   spatstat-internal.Rd
+	New internal function 'optimConverged'
+	
+   summary.kppm.R
+	Now saves convergence status 
+
+   options.R
+   clusterinfo.R
+   kppm.R
+       Experimental expansion of domain for cluster parameters
+       Activated by spatstat.options(kppm.strict=FALSE)
+	
+   DESCRIPTION
+   NEWS
+	version 1.64-1.038
+
+------------- passed R-4.0.2 CMD check ---------------
+(with environment variable SPATSTAT_TEST defined/undefined)
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+
