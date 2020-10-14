@@ -3,7 +3,7 @@
 #
 #     Spatstat options and other internal states
 #
-#    $Revision: 1.87 $   $Date: 2020/03/26 03:10:54 $
+#    $Revision: 1.88 $   $Date: 2020/10/14 00:44:36 $
 #
 #
 
@@ -262,6 +262,12 @@ warn.once <- function(key, ...) {
          },
          valid="a single integer, greater than 1024"
        ),
+       mincon.trace = list(
+         ## tracing debugger in mincontrast
+         default=FALSE,
+         check=function(x) { is.logical(x) && length(x) == 1},
+         valid="a single logical value"
+         ),
        monochrome = list(
          ## switch for monochrome colour scheme
          default=FALSE,

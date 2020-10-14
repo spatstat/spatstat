@@ -796,4 +796,18 @@ Change log from spatstat 1.64-1 to spatstat 1.64-2
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
 
+14 oct 2020
 
+   mincontrast.R
+   options.R
+	Implemented trace debugger for mincontrast()
+	activated by spatstat.options("mincon.trace")
+
+   DESCRIPTION
+   NEWS
+	version 1.64-1.037
+
+------------- passed R-4.0.2 CMD check ---------------
+(with environment variable SPATSTAT_TEST defined/undefined)
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------

@@ -40,6 +40,12 @@ mincontrast <- local({
       discrep <- safevalue(discrep, default=.Machine$double.xmax)
       ## rescaled integral of discrepancy
       value <- mean(discrep)
+      ## debugger activated by spatstat.options(mincon.trace)
+      if(isTRUE(TRACE)) {
+        cat("Parameters:")
+        print(par)
+        splat("Value:", value)
+      }
       return(value)
     })
   }
@@ -136,7 +142,8 @@ mincontrast <- local({
                     pp          = ctrl$p,
                     rmin        = rmin,
                     rmax        = rmax,
-		    adjustment  = adjustment)
+		    adjustment  = adjustment,
+                    TRACE       = spatstat.options("mincon.trace"))
     ## go
     minimum <- optim(startpar, fn=contrast.objective, objargs=objargs, ...)
     ## if convergence failed, issue a warning 
