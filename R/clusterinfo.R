@@ -16,7 +16,7 @@
              if(is.null(par))
                  par <- c(kappa=1,scale=1)
              if(strict && any(par<=0))
-                 stop("par values must be positive.")
+                 stop("par values must be positive.", call.=FALSE)
              nam <- check.named.vector(par, c("kappa","sigma2"),
                                        onError="null")
              if(is.null(nam)) {
@@ -45,7 +45,8 @@
              # Choose the first of the possible supplied values for scale:
              scale <- c(dots$scale, dots$par[["scale"]], dots$sigma, dots$par[["sigma"]])[1L]
              if(is.null(scale))
-                 stop("Argument ", sQuote("scale"), " must be given.")
+               stop(paste("Argument ", sQuote("scale"), " must be given."),
+                    call.=FALSE)
              thresh <- dots$thresh
              if(!is.null(thresh)){
                ## The squared length of isotropic Gaussian (sigma)
@@ -119,7 +120,7 @@
              if(is.null(par))
                  par <- c(kappa=1,scale=1)
              if(any(par<=0))
-                 stop("par values must be positive.")
+                 stop("par values must be positive.", call.=FALSE)
              nam <- check.named.vector(par, c("kappa","R"), onError="null")
              if(is.null(nam)) {
                check.named.vector(par, c("kappa","scale"))
@@ -141,7 +142,8 @@
              # Choose the first of the possible supplied values for scale:
              scale <- c(dots$scale, dots$par[["scale"]], dots$R, dots$par[["R"]])[1L]
              if(is.null(scale))
-                 stop("Argument ", sQuote("scale"), " must be given.")
+               stop(paste("Argument ", sQuote("scale"), " must be given."),
+                    call.=FALSE)
            if(!is.null(dots$thresh))
                warning("Argument ", sQuote("thresh"), " is ignored for Matern Cluster model")
              return(scale)
@@ -233,7 +235,7 @@
              if(is.null(par))
                  par <- c(kappa=1,scale=1)
              if(any(par<=0))
-                 stop("par values must be positive.")
+                 stop("par values must be positive.", call.=FALSE)
              nam <- check.named.vector(par, c("kappa","eta2"), onError="null")
              if(is.null(nam)) {
                  check.named.vector(par, c("kappa","scale"))
@@ -260,7 +262,8 @@
              # Choose the first of the possible supplied values for scale:
              scale <- c(dots$scale, dots$par[["scale"]])[1L]
              if(is.null(scale))
-                 stop("Argument ", sQuote("scale"), " must be given.")
+               stop(paste("Argument ", sQuote("scale"), " must be given."),
+                    call.=FALSE)
              thresh <- dots$thresh %orifnull% 0.01
              ## integral of ddist(r) dr is 1 - (1+(r/scale)^2)^(-1/2)
              ## solve for integral = 1-thresh:
@@ -318,7 +321,7 @@
              if(is.null(par))
                  par <- c(kappa=1,scale=1)
              if(any(par<=0))
-                 stop("par values must be positive.")
+                 stop("par values must be positive.", call.=FALSE)
              nam <- check.named.vector(par, c("kappa","eta"), onError="null")
              if(is.null(nam)) {
                check.named.vector(par, c("kappa","scale"))
@@ -365,12 +368,14 @@
              # Choose the first of the possible supplied values for scale:
              scale <- c(dots$scale, dots$par[["scale"]])[1L]
              if(is.null(scale))
-                 stop("Argument ", sQuote("scale"), " must be given.")
+               stop(paste("Argument ", sQuote("scale"), " must be given."),
+                    call.=FALSE)
              # Find value of nu:
              extra <- .Spatstat.ClusterModelInfoTable$VarGamma$resolvedots(...)
              nu <- .Spatstat.ClusterModelInfoTable$VarGamma$checkclustargs(extra$margs, old=FALSE)$nu
              if(is.null(nu))
-                 stop("Argument ", sQuote("nu"), " must be given.")
+               stop(paste("Argument ", sQuote("nu"), " must be given."),
+                    call.=FALSE)
              thresh <- dots$thresh
              if(is.null(thresh))
                  thresh <- .001
@@ -390,7 +395,8 @@
              scale <- as.numeric(par[2L])
              nu <- margs$nu
              if(is.null(nu))
-                 stop("Argument ", sQuote("nu"), " is missing.")
+               stop(paste("Argument ", sQuote("nu"), " is missing."),
+                    call.=FALSE)
              numer <- ((rvals/scale)^nu) * besselK(rvals/scale, nu)
              numer[rvals==0] <- ifelse(nu>0, 2^(nu-1)*gamma(nu), Inf)
              denom <- pi * (2^(nu+1)) * scale^2 * gamma(nu + 1)
@@ -492,7 +498,7 @@
              if(is.null(par))
                  par <- c(var=1,scale=1)
              if(any(par<=0))
-                 stop("par values must be positive.")
+                 stop("par values must be positive.", call.=FALSE)
              nam <- check.named.vector(par, c("sigma2","alpha"), onError="null")
              if(is.null(nam)) {
                  check.named.vector(par, c("var","scale"))
@@ -603,7 +609,8 @@
          },
          parhandler=function(model = "exponential", ...) {
            if(!is.character(model))
-             stop("Covariance function model should be specified by name")
+             stop("Covariance function model should be specified by name",
+                  call.=FALSE)
            margs <- c(...)
            if(!identical(model, "exponential")) {
              ## get the 'model generator' 

@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.64-1.039
+        CHANGES IN spatstat VERSION 1.64-1.040
 
 OVERVIEW
 
@@ -118,6 +118,11 @@ BUG FIXES
     Crashed with random-effects models.
     Fixed.
 
+    o objsurf.kppm
+    Crashed if the model was fitted by Palm likelihood (method="palm")
+    or second order composite likelihood (method="clik2").
+    Fixed.
+    
     o MinkowskiSum
     Crashed sometimes with an error message about 'sumconnected'.
     Fixed.

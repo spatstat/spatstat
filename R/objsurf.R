@@ -3,7 +3,7 @@
 #
 #  surface of the objective function for an M-estimator
 #
-#  $Revision: 1.5 $ $Date: 2016/02/11 10:17:12 $
+#  $Revision: 1.6 $ $Date: 2020/10/15 07:48:05 $
 #
 
 objsurf <- function(x, ...) {
@@ -17,13 +17,17 @@ objsurf.kppm <- objsurf.dppm <- function(x, ..., ngrid=32, ratio=1.5, verbose=TR
            result <- objsurf(Fit$mcfit, ...,
                              ngrid=ngrid, ratio=ratio, verbose=verbose)
          },
-         clik = {
+         palm = ,
+         clik2 = {
            optpar  <- x$par
            objfun  <- Fit$objfun
            objargs <- Fit$objargs
            result  <- objsurfEngine(objfun, optpar, objargs, ...,
                                     ngrid=ngrid, ratio=ratio, verbose=verbose)
-         })
+         },
+         stop(paste("Unrecognised fitting method", dQuote(Fit$method)),
+              call.=FALSE)
+         )
   return(result)
 }
 
