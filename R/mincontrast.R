@@ -15,6 +15,16 @@ safevalue <- function(x, default=0) {
          default)
 }
 
+bigvaluerule <- function(objfun, objargs, startpar, ...) {
+  ## evaluate objective at starting parameter vector
+  startval <- do.call(objfun,  list(par=startpar, objargs=objargs, ...))
+  ## determine suitable large number for out-of-bounds penalty
+  bigvalue <- min(max(1, 10 * abs(startval)),
+                  with(.Machine, sqrt(double.xmax) * double.eps))
+  return(bigvalue)
+}
+
+
 mincontrast <- local({
 
   ## objective function (in a format that is re-usable by other code)
@@ -145,13 +155,11 @@ mincontrast <- local({
                     rmax        = rmax,
 		    adjustment  = adjustment,
                     TRACE       = spatstat.options("mincon.trace"),
-                    BIGVALUE    = 0)
-    ## evaluate at the starting parameter vector
-    startval <- do.call(contrast.objective,
-                        list(par=startpar, objargs=objargs, ...))
+                    BIGVALUE    = 1)
     ## determine a suitable large number for out-of-bounds penalty
-    objargs$BIGVALUE <- min(10 * abs(startval),
-                            with(.Machine, sqrt(double.xmax) * double.eps))
+    objargs$BIGVALUE <- bigvaluerule(contrast.objective,
+                                     objargs,
+                                     startpar, ...)
     ## go
     minimum <- optim(startpar, fn=contrast.objective, objargs=objargs, ...)
     ## if convergence failed, issue a warning 

@@ -3,7 +3,7 @@
 #
 # kluster/kox point process models
 #
-# $Revision: 1.147 $ $Date: 2020/10/09 02:20:39 $
+# $Revision: 1.151 $ $Date: 2020/10/15 06:06:37 $
 #
 
 kppm <- function(X, ...) {
@@ -479,6 +479,7 @@ clusterfit <- function(X, clusters, lambda = NULL, startpar = NULL,
   return(mcfit)
 }
 
+
 kppmComLik <- function(X, Xname, po, clusters, control, weightfun, rmax,
                        algorithm="Nelder-Mead", DPP=NULL, ...) {
   W <- as.owin(X)
@@ -588,21 +589,28 @@ kppmComLik <- function(X, Xname, po, clusters, control, weightfun, rmax,
   paco <- function(d, par) {
     do.call(pcfun, append(list(par=par, rvals=d), pcfunargs))
   }
-  # define objective function 
+  #' ..........  define objective function ......................
   if(!is.function(weightfun)) {
     # pack up necessary information
     objargs <- list(dIJ=dIJ, sumweight=sumweight, g=g, gscale=gscale, 
-                    envir=environment(paco))
+                    envir=environment(paco),
+                    BIGVALUE=1, # updated below
+                    SMALLVALUE=.Machine$double.eps)
     # define objective function (with 'paco' in its environment)
     # This is the log composite likelihood minus the constant term 
     #       sum(log(lambdaIJ)) - npairs * log(gscale)
     obj <- function(par, objargs) {
-      safevalue(with(objargs,
-                     2*(sum(log(safevalue(paco(dIJ, par))))
-                       - sumweight * log(unlist(stieltjes(paco, g, par=par)))),
-                     enclos=objargs$envir),
-                default=-.Machine$double.xmax)
+      with(objargs, {
+        logprod <- sum(log(safevalue(paco(dIJ, par))))
+        integ <- unlist(stieltjes(paco, g, par=par))
+        integ <- pmax(SMALLVALUE, integ)
+        logcl <- 2*(logprod - sumweight * log(integ))
+        safevalue(logcl, default=-BIGVALUE)
+      },
+      enclos=objargs$envir)
     }
+    ## determine a suitable large number for out-of-bounds penalty
+    objargs$BIGVALUE <- bigvaluerule(obj, objargs, startpar)
   } else {
     # create local function to evaluate  pair correlation(d) * weight(d)
     #  (with additional parameters 'pcfunargs', 'weightfun' in its environment)
@@ -614,19 +622,29 @@ kppmComLik <- function(X, Xname, po, clusters, control, weightfun, rmax,
     }
     # pack up necessary information
     objargs <- list(dIJ=dIJ, wIJ=wIJ, sumweight=sumweight, g=g, gscale=gscale, 
-                    envir=environment(wpaco))
+                    envir=environment(wpaco),
+                    BIGVALUE=1, # updated below
+                    SMALLVALUE=.Machine$double.eps)
     # define objective function (with 'paco', 'wpaco' in its environment)
     # This is the log composite likelihood minus the constant term 
     #       sum(wIJ * log(lambdaIJ)) - sumweight * log(gscale)
     obj <- function(par, objargs) {
-      safevalue(with(objargs,
-                     2*(sum(wIJ * log(safevalue(paco(dIJ, par))))
-                       - sumweight * log(unlist(stieltjes(wpaco, g, par=par)))),
-                     enclos=objargs$envir),
-                default=-.Machine$double.xmax)
+      with(objargs,
+      {
+        integ <- unlist(stieltjes(wpaco, g, par=par))
+        integ <- pmax(SMALLVALUE, integ)
+        safevalue(
+          2*(sum(wIJ * log(safevalue(paco(dIJ, par))))
+            - sumweight * log(integ)),
+          default=-BIGVALUE)
+      },
+      enclos=objargs$envir)
     }
+    ## determine a suitable large number for out-of-bounds penalty
+    objargs$BIGVALUE <- bigvaluerule(obj, objargs, startpar)
   }
-  # arguments for optimization
+  #' .........................................................
+  ## arguments for optimization
   ctrl <- resolve.defaults(list(fnscale=-1), control, list(trace=0))
   optargs <- list(par=startpar, fn=obj, objargs=objargs, control=ctrl, method=algorithm)
   ## DPP resolving algorithm and checking startpar
@@ -640,11 +658,13 @@ kppmComLik <- function(X, Xname, po, clusters, control, weightfun, rmax,
       optargs$upper <- alg$upper
     }
   }
-  # optimize it
+  ## ..........   optimize it ..............................
   opt <- do.call(optim, optargs)
-  # raise warning/error if something went wrong
+
+  ## raise warning/error if something went wrong
   signalStatus(optimStatus(opt), errors.only=TRUE)
-  # fitted parameters
+  
+  ## .......... extract fitted parameters .....................
   if(!usecanonical) {
     optpar.canon <- NULL
     optpar.human <- opt$par
@@ -657,7 +677,8 @@ kppmComLik <- function(X, Xname, po, clusters, control, weightfun, rmax,
   }
   opt$par       <- optpar.human
   opt$par.canon <- optpar.canon
-  # Finish in DPP case
+
+  ## Finish in DPP case
   if(!is.null(DPP)){
     # all info that depends on the fitting method:
     Fit <- list(method    = "clik2",
@@ -679,7 +700,8 @@ kppmComLik <- function(X, Xname, po, clusters, control, weightfun, rmax,
                    Fit        = Fit)
     return(result)
   }
-  # meaningful model parameters
+  
+  ## meaningful model parameters
   modelpar <- info$interpret(optpar.human, lambda)
   # infer parameter 'mu'
   if(isPCP) {
@@ -838,16 +860,23 @@ kppmPalmLik <- function(X, Xname, po, clusters, control, weightfun, rmax,
     # pack up necessary information
     objargs <- list(dIJ=dIJ, g=g, gscale=gscale,
                     sumloglam=safevalue(sum(log(lambdaJ))),
-                    envir=environment(paco))
+                    envir=environment(paco),
+                    BIGVALUE=1, # updated below
+                    SMALLVALUE=.Machine$double.eps)
     # define objective function (with 'paco' in its environment)
     # This is the log Palm likelihood
     obj <- function(par, objargs) {
-      safevalue(with(objargs,
-                     sumloglam + sum(log(safevalue(paco(dIJ, par))))
-                     - gscale * unlist(stieltjes(paco, g, par=par)),
-                     enclos=objargs$envir),
-                default=-.Machine$double.xmax)
+      with(objargs, {
+        integ <- unlist(stieltjes(paco, g, par=par))
+        integ <- pmax(SMALLVALUE, integ)
+        safevalue(sumloglam + sum(log(safevalue(paco(dIJ, par))))
+                  - gscale * integ,
+                  default=-BIGVALUE)
+      },
+      enclos=objargs$envir)
     }
+    ## determine a suitable large number for out-of-bounds penalty
+    objargs$BIGVALUE <- bigvaluerule(obj, objargs, startpar)
   } else {
     # create local function to evaluate  pair correlation(d) * weight(d)
     #  (with additional parameters 'pcfunargs', 'weightfun' in its environment)
@@ -860,17 +889,24 @@ kppmPalmLik <- function(X, Xname, po, clusters, control, weightfun, rmax,
     # pack up necessary information
     objargs <- list(dIJ=dIJ, wIJ=wIJ, g=g, gscale=gscale,
                     wsumloglam=safevalue(sum(wIJ * safevalue(log(lambdaJ)))),
-                    envir=environment(wpaco))
+                    envir=environment(wpaco),
+                    BIGVALUE=1, # updated below
+                    SMALLVALUE=.Machine$double.eps)
     # define objective function (with 'paco', 'wpaco' in its environment)
     # This is the log Palm likelihood
     obj <- function(par, objargs) {
-      safevalue(with(objargs,
-                     wsumloglam + sum(wIJ * log(safevalue(paco(dIJ, par))))
-                     - gscale * unlist(stieltjes(wpaco, g, par=par)),
-                     enclos=objargs$envir),
-                default=-.Machine$double.xmax)
+      with(objargs, {
+        integ <- unlist(stieltjes(wpaco, g, par=par))
+        integ <- pmax(SMALLVALUE, integ)
+        safevalue(wsumloglam + sum(wIJ * log(safevalue(paco(dIJ, par))))
+                  - gscale * integ,
+                  default=-BIGVALUE)
+      },
+      enclos=objargs$envir)
     }
-  }    
+    ## determine a suitable large number for out-of-bounds penalty
+    objargs$BIGVALUE <- bigvaluerule(obj, objargs, startpar)
+  }
   # arguments for optimization
   ctrl <- resolve.defaults(list(fnscale=-1), control, list(trace=0))
   optargs <- list(par=startpar, fn=obj, objargs=objargs,
@@ -1798,4 +1834,3 @@ psib.kppm <- function(object) {
   p <- 1 - 1/g(0)
   return(p)
 }
-

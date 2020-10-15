@@ -43,6 +43,7 @@
 \alias{bermantestCalc}
 \alias{bermantestEngine}
 \alias{bdry.mask}
+\alias{bigvaluerule}
 \alias{bind.ratfv}
 \alias{blankcoefnames}
 \alias{bounding.box3}
@@ -814,6 +815,7 @@ bermantestCalc(fram, which, alternative, \dots)
 bermantestEngine(model, covariate, which, alternative, \dots,
                  modelname, covname, dataname)
 bdry.mask(W)
+bigvaluerule(objfun, objargs, startpar, \dots)
 bind.ratfv(x, numerator, denominator, labl, desc, preferred,
            ratio, quotient)
 blankcoefnames(x)

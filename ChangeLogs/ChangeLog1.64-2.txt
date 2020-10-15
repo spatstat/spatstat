@@ -838,3 +838,20 @@ Change log from spatstat 1.64-1 to spatstat 1.64-2
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
 
+15 oct 2020
+
+   kppm.R
+   mincontrast.R
+   spatstat-internal.Rd
+	More tweaks to improve numerical stability
+
+   DESCRIPTION
+   NEWS
+	version 1.64-1.039
+
+------------- passed R-4.0.2 CMD check ---------------
+(with environment variable SPATSTAT_TEST defined/undefined)
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+
+
