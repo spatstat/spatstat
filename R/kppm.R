@@ -3,7 +3,7 @@
 #
 # kluster/kox point process models
 #
-# $Revision: 1.151 $ $Date: 2020/10/15 06:06:37 $
+# $Revision: 1.153 $ $Date: 2020/10/16 01:30:16 $
 #
 
 kppm <- function(X, ...) {
@@ -224,7 +224,8 @@ clusterfit <- function(X, clusters, lambda = NULL, startpar = NULL,
                        q=1/4, p=2, rmin=NULL, rmax=NULL, 
                        ctrl=list(q=q, p=p, rmin=rmin, rmax=rmax),
                        statistic = NULL, statargs = NULL,
-                       algorithm="Nelder-Mead", verbose=FALSE){
+                       algorithm="Nelder-Mead", verbose=FALSE,
+                       pint=NULL){
   if(verbose) splat("Fitting cluster model")
   ## If possible get dataname from dots
   dataname <- list(...)$dataname
@@ -388,6 +389,12 @@ clusterfit <- function(X, clusters, lambda = NULL, startpar = NULL,
     if(do.adjust)
       adjustment$auxdata$tohuman <- tohuman
   }
+  #' ............ experimental .........................
+  whiu <- pint$whiu
+  if(is.function(whiu) && usecanonical) {
+    whiu.human <- whiu
+    whiu <- function(par, ...) { whiu.human(tohuman(par), ...) }
+  }
   #' ...................................................
   
   #'
@@ -404,7 +411,8 @@ clusterfit <- function(X, clusters, lambda = NULL, startpar = NULL,
                                   margs=dots$margs,
                                   model=dots$model,
                                   funaux=info$funaux,
-				  adjustment=adjustment),
+				  adjustment=adjustment,
+                                  pint=list(whiu=whiu)),
                              list(...),
                              sargs)
 
@@ -481,7 +489,7 @@ clusterfit <- function(X, clusters, lambda = NULL, startpar = NULL,
 
 
 kppmComLik <- function(X, Xname, po, clusters, control, weightfun, rmax,
-                       algorithm="Nelder-Mead", DPP=NULL, ...) {
+                       algorithm="Nelder-Mead", DPP=NULL, ..., pint=NULL) {
   W <- as.owin(X)
   if(is.null(rmax))
     rmax <- rmax.rule("K", W, intensity(X))
@@ -582,7 +590,13 @@ kppmComLik <- function(X, Xname, po, clusters, control, weightfun, rmax,
     pcftheo <- pcfun
     startpar <- tocanonical(startpar)
     pcfun <- function(par, ...) { pcftheo(tohuman(par), ...) }
-  } 
+  }
+  #' ............ experimental .........................
+  whiu <- pint$whiu
+  if(is.function(whiu) && usecanonical) {
+    whiu.human <- whiu
+    whiu <- function(par, ...) { whiu.human(tohuman(par), ...) }
+  }
   # .....................................................
   # create local function to evaluate pair correlation
   #  (with additional parameters 'pcfunargs' in its environment)
@@ -594,6 +608,7 @@ kppmComLik <- function(X, Xname, po, clusters, control, weightfun, rmax,
     # pack up necessary information
     objargs <- list(dIJ=dIJ, sumweight=sumweight, g=g, gscale=gscale, 
                     envir=environment(paco),
+                    whiu=NULL,
                     BIGVALUE=1, # updated below
                     SMALLVALUE=.Machine$double.eps)
     # define objective function (with 'paco' in its environment)
@@ -605,12 +620,14 @@ kppmComLik <- function(X, Xname, po, clusters, control, weightfun, rmax,
         integ <- unlist(stieltjes(paco, g, par=par))
         integ <- pmax(SMALLVALUE, integ)
         logcl <- 2*(logprod - sumweight * log(integ))
+        if(is.function(whiu)) logcl <- whiu(par, logcl, 1)
         safevalue(logcl, default=-BIGVALUE)
       },
       enclos=objargs$envir)
     }
-    ## determine a suitable large number for out-of-bounds penalty
+    ## determine a suitable large number to replace Inf
     objargs$BIGVALUE <- bigvaluerule(obj, objargs, startpar)
+    objargs$whiu <- whiu
   } else {
     # create local function to evaluate  pair correlation(d) * weight(d)
     #  (with additional parameters 'pcfunargs', 'weightfun' in its environment)
@@ -623,6 +640,7 @@ kppmComLik <- function(X, Xname, po, clusters, control, weightfun, rmax,
     # pack up necessary information
     objargs <- list(dIJ=dIJ, wIJ=wIJ, sumweight=sumweight, g=g, gscale=gscale, 
                     envir=environment(wpaco),
+                    whiu=NULL,
                     BIGVALUE=1, # updated below
                     SMALLVALUE=.Machine$double.eps)
     # define objective function (with 'paco', 'wpaco' in its environment)
@@ -633,15 +651,18 @@ kppmComLik <- function(X, Xname, po, clusters, control, weightfun, rmax,
       {
         integ <- unlist(stieltjes(wpaco, g, par=par))
         integ <- pmax(SMALLVALUE, integ)
-        safevalue(
+        logcl <- safevalue(
           2*(sum(wIJ * log(safevalue(paco(dIJ, par))))
             - sumweight * log(integ)),
           default=-BIGVALUE)
+        if(is.function(whiu)) logcl <- whiu(par, logcl, 1)
+        return(logcl)
       },
       enclos=objargs$envir)
     }
-    ## determine a suitable large number for out-of-bounds penalty
+    ## determine a suitable large number to replace Inf
     objargs$BIGVALUE <- bigvaluerule(obj, objargs, startpar)
+    objargs$whiu <- whiu
   }
   #' .........................................................
   ## arguments for optimization
@@ -746,7 +767,7 @@ kppmComLik <- function(X, Xname, po, clusters, control, weightfun, rmax,
 
 
 kppmPalmLik <- function(X, Xname, po, clusters, control, weightfun, rmax,
-                        algorithm="Nelder-Mead", DPP=NULL, ...) {
+                        algorithm="Nelder-Mead", DPP=NULL, ..., pint=NULL) {
   W <- as.owin(X)
   if(is.null(rmax))
     rmax <- rmax.rule("K", W, intensity(X))
@@ -849,6 +870,12 @@ kppmPalmLik <- function(X, Xname, po, clusters, control, weightfun, rmax,
     startpar <- tocanonical(startpar)
     pcfun <- function(par, ...) { pcftheo(tohuman(par), ...) }
   }
+  #' ............ experimental .........................
+  whiu <- pint$whiu
+  if(is.function(whiu) && usecanonical) {
+    whiu.human <- whiu
+    whiu <- function(par, ...) { whiu.human(tohuman(par), ...) }
+  }
   # .....................................................
   # create local function to evaluate pair correlation
   #  (with additional parameters 'pcfunargs' in its environment)
@@ -861,6 +888,7 @@ kppmPalmLik <- function(X, Xname, po, clusters, control, weightfun, rmax,
     objargs <- list(dIJ=dIJ, g=g, gscale=gscale,
                     sumloglam=safevalue(sum(log(lambdaJ))),
                     envir=environment(paco),
+                    whiu=NULL,
                     BIGVALUE=1, # updated below
                     SMALLVALUE=.Machine$double.eps)
     # define objective function (with 'paco' in its environment)
@@ -869,14 +897,17 @@ kppmPalmLik <- function(X, Xname, po, clusters, control, weightfun, rmax,
       with(objargs, {
         integ <- unlist(stieltjes(paco, g, par=par))
         integ <- pmax(SMALLVALUE, integ)
-        safevalue(sumloglam + sum(log(safevalue(paco(dIJ, par))))
-                  - gscale * integ,
-                  default=-BIGVALUE)
+        logcl <- safevalue(sumloglam + sum(log(safevalue(paco(dIJ, par))))
+                           - gscale * integ,
+                           default=-BIGVALUE)
+        if(is.function(whiu)) logcl <- whiu(par, logcl, 1)
+        return(logcl)
       },
       enclos=objargs$envir)
     }
-    ## determine a suitable large number for out-of-bounds penalty
+    ## determine a suitable large number to replace Inf
     objargs$BIGVALUE <- bigvaluerule(obj, objargs, startpar)
+    objargs$whiu <- whiu
   } else {
     # create local function to evaluate  pair correlation(d) * weight(d)
     #  (with additional parameters 'pcfunargs', 'weightfun' in its environment)
@@ -890,6 +921,7 @@ kppmPalmLik <- function(X, Xname, po, clusters, control, weightfun, rmax,
     objargs <- list(dIJ=dIJ, wIJ=wIJ, g=g, gscale=gscale,
                     wsumloglam=safevalue(sum(wIJ * safevalue(log(lambdaJ)))),
                     envir=environment(wpaco),
+                    whiu=NULL,
                     BIGVALUE=1, # updated below
                     SMALLVALUE=.Machine$double.eps)
     # define objective function (with 'paco', 'wpaco' in its environment)
@@ -904,8 +936,9 @@ kppmPalmLik <- function(X, Xname, po, clusters, control, weightfun, rmax,
       },
       enclos=objargs$envir)
     }
-    ## determine a suitable large number for out-of-bounds penalty
+    ## determine a suitable large number to replace Inf
     objargs$BIGVALUE <- bigvaluerule(obj, objargs, startpar)
+    objargs$whiu <- whiu
   }
   # arguments for optimization
   ctrl <- resolve.defaults(list(fnscale=-1), control, list(trace=0))

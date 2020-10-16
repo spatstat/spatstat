@@ -11,7 +11,7 @@ mincontrast(observed, theoretical, startpar, \dots,
           fvlab=list(label=NULL, desc="minimum contrast fit"),
           explain=list(dataname=NULL, modelname=NULL, fname=NULL),
           action.bad.values=c("warn", "stop", "silent"),
-          adjustment=NULL)
+          adjustment=NULL, pint=NULL)
 }
 \arguments{
   \item{observed}{
@@ -51,8 +51,8 @@ mincontrast(observed, theoretical, startpar, \dots,
     \code{action.bad.values="warn"} (the default)
     and no warning is issued if \code{action.bad.values="silent"}.
   }
-  \item{adjustment}{
-    Internal use only.
+  \item{adjustment,pint}{
+    Do not use these arguments; they are for internal use by the package.
   }
 }
 \details{

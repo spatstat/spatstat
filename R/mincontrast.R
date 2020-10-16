@@ -18,7 +18,7 @@ safevalue <- function(x, default=0) {
 bigvaluerule <- function(objfun, objargs, startpar, ...) {
   ## evaluate objective at starting parameter vector
   startval <- do.call(objfun,  list(par=startpar, objargs=objargs, ...))
-  ## determine suitable large number for out-of-bounds penalty
+  ## determine suitable large number to replace Inf values of objective
   bigvalue <- min(max(1, 10 * abs(startval)),
                   with(.Machine, sqrt(double.xmax) * double.eps))
   return(bigvalue)
@@ -50,7 +50,8 @@ mincontrast <- local({
       bigvalue <- BIGVALUE + sqrt(sum(par^2))
       discrep <- safevalue(discrep, default=bigvalue)
       ## rescaled integral of discrepancy
-      value <- mean(discrep)
+      value <- mean(discrep) 
+      if(is.function(whiu)) value <- whiu(par, value, -1)
       ## debugger activated by spatstat.options(mincon.trace)
       if(isTRUE(TRACE)) {
         cat("Parameters:", fill=TRUE)
@@ -68,7 +69,8 @@ mincontrast <- local({
                           explain=list(dataname=NULL,
                                        modelname=NULL, fname=NULL),
                           action.bad.values=c("warn", "stop", "silent"),
-			  adjustment=NULL) {
+			  adjustment=NULL,
+                          pint=NULL) {
     verifyclass(observed, "fv")
     action.bad.values <- match.arg(action.bad.values)
     
@@ -154,9 +156,10 @@ mincontrast <- local({
                     rmin        = rmin,
                     rmax        = rmax,
 		    adjustment  = adjustment,
+                    whiu        = pint$whiu,
                     TRACE       = spatstat.options("mincon.trace"),
                     BIGVALUE    = 1)
-    ## determine a suitable large number for out-of-bounds penalty
+    ## determine a suitable large number to replace Inf values of objective
     objargs$BIGVALUE <- bigvaluerule(contrast.objective,
                                      objargs,
                                      startpar, ...)

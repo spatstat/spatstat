@@ -1101,11 +1101,11 @@ Kpcf.kppm(model, what)
 killinteraction(model)
 km.rs.opt(o, cc, d, breaks, KM, RS)
 kppmComLik(X, Xname, po, clusters, control, weightfun, rmax,
-           algorithm, DPP, \dots)
+           algorithm, DPP, \dots, pint)
 kppmMinCon(X, Xname, po, clusters, control, statistic, statargs,
            algorithm, DPP, \dots)
 kppmPalmLik(X, Xname, po, clusters, control, weightfun, rmax, 
-           algorithm, DPP, \dots)
+           algorithm, DPP, \dots, pint)
 kraever(package, fatal)
 kraeverRandomFields()
 \method{labels}{ppm}(object, \dots)
