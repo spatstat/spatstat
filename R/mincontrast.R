@@ -58,6 +58,12 @@ mincontrast <- local({
         print(par)
         splat("Discrepancy value:", value)
       }
+      if(is.environment(saveplace)) {
+        h <- get("h", envir=saveplace)
+        hplus <- as.data.frame(append(par, list(value=value)))
+        h <- rbind(h, hplus)
+        assign("h", h, envir=saveplace)
+      }
       return(value)
     })
   }
@@ -146,6 +152,12 @@ mincontrast <- local({
                         "Please choose a narrower range [rmin, rmax]"),
                   call.=FALSE)
     }
+    ## debugging
+    TRACE <- pint$trace %orifnull% spatstat.options("mincon.trace")
+    if(SAVE <- isTRUE(pint$save)) {
+      saveplace <- new.env()
+      assign("h", NULL, envir=saveplace)
+    } else saveplace <- NULL
     ## pack data into a list
     objargs <- list(theoretical = theoretical,
                     rvals       = rvals,
@@ -157,7 +169,8 @@ mincontrast <- local({
                     rmax        = rmax,
 		    adjustment  = adjustment,
                     whiu        = pint$whiu,
-                    TRACE       = spatstat.options("mincon.trace"),
+                    saveplace   = saveplace,
+                    TRACE       = TRACE,
                     BIGVALUE    = 1)
     ## determine a suitable large number to replace Inf values of objective
     objargs$BIGVALUE <- bigvaluerule(contrast.objective,
@@ -194,6 +207,7 @@ mincontrast <- local({
                    objargs  = objargs,
                    dotargs  = list(...))
     class(result) <- c("minconfit", class(result))
+    if(SAVE) attr(result, "h") <- get("h", envir=saveplace)
     return(result)
   }
 

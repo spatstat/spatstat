@@ -3,7 +3,7 @@
 #
 # kluster/kox point process models
 #
-# $Revision: 1.153 $ $Date: 2020/10/16 01:30:16 $
+# $Revision: 1.157 $ $Date: 2020/10/18 15:21:51 $
 #
 
 kppm <- function(X, ...) {
@@ -136,7 +136,8 @@ kppm.ppp <- kppm.quad <-
          palm   = kppmPalmLik(X=XX, Xname=Xname, po=po, clusters=clusters,
                              control=control, weightfun=weightfun, 
                              rmax=rmax, algorithm=algorithm, ...))
-  #
+  ##
+  h <- attr(out, "h")
   out <- append(out, list(ClusterArgs=ClusterArgs,
                           call=cl,
                           callframe=parent.frame(),
@@ -150,6 +151,8 @@ kppm.ppp <- kppm.quad <-
     out <- do.call(improve.kppm,
                    append(list(object = out, type = improve.type),
                           improve.args))
+
+  attr(out, "h") <- h
   return(out)
 }
 
@@ -216,6 +219,7 @@ kppmMinCon <- function(X, Xname, po, clusters, control, statistic, statargs,
                 covmodel   = mcfit$covmodel,
                 Fit        = Fit)
   }
+  attr(out, "h") <- attr(mcfit, "h")
   return(out)
 }
 
@@ -394,6 +398,7 @@ clusterfit <- function(X, clusters, lambda = NULL, startpar = NULL,
   if(is.function(whiu) && usecanonical) {
     whiu.human <- whiu
     whiu <- function(par, ...) { whiu.human(tohuman(par), ...) }
+    pint$whiu <- whiu
   }
   #' ...................................................
   
@@ -412,7 +417,7 @@ clusterfit <- function(X, clusters, lambda = NULL, startpar = NULL,
                                   model=dots$model,
                                   funaux=info$funaux,
 				  adjustment=adjustment,
-                                  pint=list(whiu=whiu)),
+                                  pint=pint),
                              list(...),
                              sargs)
 
@@ -591,12 +596,17 @@ kppmComLik <- function(X, Xname, po, clusters, control, weightfun, rmax,
     startpar <- tocanonical(startpar)
     pcfun <- function(par, ...) { pcftheo(tohuman(par), ...) }
   }
-  #' ............ experimental .........................
+  #' ............ experimental/debugger .........................
   whiu <- pint$whiu
   if(is.function(whiu) && usecanonical) {
     whiu.human <- whiu
     whiu <- function(par, ...) { whiu.human(tohuman(par), ...) }
   }
+  TRACE <- isTRUE(pint$trace)
+  if(SAVE <- isTRUE(pint$save)) {
+    saveplace <- new.env()
+    assign("h", NULL, envir=saveplace)
+  } else saveplace <- NULL
   # .....................................................
   # create local function to evaluate pair correlation
   #  (with additional parameters 'pcfunargs' in its environment)
@@ -608,7 +618,9 @@ kppmComLik <- function(X, Xname, po, clusters, control, weightfun, rmax,
     # pack up necessary information
     objargs <- list(dIJ=dIJ, sumweight=sumweight, g=g, gscale=gscale, 
                     envir=environment(paco),
-                    whiu=NULL,
+                    whiu=NULL,   # updated below
+                    TRACE=FALSE, # updated below
+                    saveplace=NULL, # updated below
                     BIGVALUE=1, # updated below
                     SMALLVALUE=.Machine$double.eps)
     # define objective function (with 'paco' in its environment)
@@ -621,13 +633,28 @@ kppmComLik <- function(X, Xname, po, clusters, control, weightfun, rmax,
         integ <- pmax(SMALLVALUE, integ)
         logcl <- 2*(logprod - sumweight * log(integ))
         if(is.function(whiu)) logcl <- whiu(par, logcl, 1)
-        safevalue(logcl, default=-BIGVALUE)
+        logcl <- safevalue(logcl, default=-BIGVALUE)
+        ## debugger
+        if(isTRUE(TRACE)) {
+          cat("Parameters:", fill=TRUE)
+          print(par)
+          splat("log composite likelihood:", logcl)
+        }
+        if(is.environment(saveplace)) {
+          h <- get("h", envir=saveplace)
+          hplus <- as.data.frame(append(par, list(logcl=logcl)))
+          h <- rbind(h, hplus)
+          assign("h", h, envir=saveplace)
+        }
+        return(logcl)
       },
       enclos=objargs$envir)
     }
     ## determine a suitable large number to replace Inf
     objargs$BIGVALUE <- bigvaluerule(obj, objargs, startpar)
     objargs$whiu <- whiu
+    objargs$saveplace <- saveplace
+    objargs$TRACE <- TRACE
   } else {
     # create local function to evaluate  pair correlation(d) * weight(d)
     #  (with additional parameters 'pcfunargs', 'weightfun' in its environment)
@@ -640,7 +667,9 @@ kppmComLik <- function(X, Xname, po, clusters, control, weightfun, rmax,
     # pack up necessary information
     objargs <- list(dIJ=dIJ, wIJ=wIJ, sumweight=sumweight, g=g, gscale=gscale, 
                     envir=environment(wpaco),
-                    whiu=NULL,
+                    whiu=NULL,   # updated below
+                    TRACE=FALSE, # updated below
+                    saveplace=NULL, # updated below
                     BIGVALUE=1, # updated below
                     SMALLVALUE=.Machine$double.eps)
     # define objective function (with 'paco', 'wpaco' in its environment)
@@ -656,6 +685,18 @@ kppmComLik <- function(X, Xname, po, clusters, control, weightfun, rmax,
             - sumweight * log(integ)),
           default=-BIGVALUE)
         if(is.function(whiu)) logcl <- whiu(par, logcl, 1)
+        ## debugger
+        if(isTRUE(TRACE)) {
+          cat("Parameters:", fill=TRUE)
+          print(par)
+          splat("log composite likelihood:", logcl)
+        }
+        if(is.environment(saveplace)) {
+          h <- get("h", envir=saveplace)
+          hplus <- as.data.frame(append(par, list(logcl=logcl)))
+          h <- rbind(h, hplus)
+          assign("h", h, envir=saveplace)
+        }
         return(logcl)
       },
       enclos=objargs$envir)
@@ -663,6 +704,8 @@ kppmComLik <- function(X, Xname, po, clusters, control, weightfun, rmax,
     ## determine a suitable large number to replace Inf
     objargs$BIGVALUE <- bigvaluerule(obj, objargs, startpar)
     objargs$whiu <- whiu
+    objargs$saveplace <- saveplace
+    objargs$TRACE <- TRACE
   }
   #' .........................................................
   ## arguments for optimization
@@ -719,6 +762,7 @@ kppmComLik <- function(X, Xname, po, clusters, control, weightfun, rmax,
                    po         = po,
                    lambda     = lambda,
                    Fit        = Fit)
+    if(SAVE) attr(result, "h") <- get("h", envir=saveplace)
     return(result)
   }
   
@@ -762,6 +806,7 @@ kppmComLik <- function(X, Xname, po, clusters, control, weightfun, rmax,
                  modelpar   = modelpar,
                  covmodel   = clargs,
                  Fit        = Fit)
+  if(SAVE) attr(result, "h") <- get("h", envir=saveplace)
   return(result)
 }
 
@@ -870,12 +915,17 @@ kppmPalmLik <- function(X, Xname, po, clusters, control, weightfun, rmax,
     startpar <- tocanonical(startpar)
     pcfun <- function(par, ...) { pcftheo(tohuman(par), ...) }
   }
-  #' ............ experimental .........................
+  #' ............ experimental/debugger .........................
   whiu <- pint$whiu
   if(is.function(whiu) && usecanonical) {
     whiu.human <- whiu
     whiu <- function(par, ...) { whiu.human(tohuman(par), ...) }
   }
+  TRACE <- isTRUE(pint$trace)
+  if(SAVE <- isTRUE(pint$save)) {
+    saveplace <- new.env()
+    assign("h", NULL, envir=saveplace)
+  } else saveplace <- NULL
   # .....................................................
   # create local function to evaluate pair correlation
   #  (with additional parameters 'pcfunargs' in its environment)
@@ -888,7 +938,9 @@ kppmPalmLik <- function(X, Xname, po, clusters, control, weightfun, rmax,
     objargs <- list(dIJ=dIJ, g=g, gscale=gscale,
                     sumloglam=safevalue(sum(log(lambdaJ))),
                     envir=environment(paco),
-                    whiu=NULL,
+                    whiu=NULL,   # updated below
+                    TRACE=FALSE, # updated below
+                    saveplace=NULL, # updated below
                     BIGVALUE=1, # updated below
                     SMALLVALUE=.Machine$double.eps)
     # define objective function (with 'paco' in its environment)
@@ -897,17 +949,31 @@ kppmPalmLik <- function(X, Xname, po, clusters, control, weightfun, rmax,
       with(objargs, {
         integ <- unlist(stieltjes(paco, g, par=par))
         integ <- pmax(SMALLVALUE, integ)
-        logcl <- safevalue(sumloglam + sum(log(safevalue(paco(dIJ, par))))
+        logplik <- safevalue(sumloglam + sum(log(safevalue(paco(dIJ, par))))
                            - gscale * integ,
                            default=-BIGVALUE)
-        if(is.function(whiu)) logcl <- whiu(par, logcl, 1)
-        return(logcl)
+        if(is.function(whiu)) logplik <- whiu(par, logplik, 1)
+        ## debugger
+        if(isTRUE(TRACE)) {
+          cat("Parameters:", fill=TRUE)
+          print(par)
+          splat("log Palm likelihood:", logplik)
+        }
+        if(is.environment(saveplace)) {
+          h <- get("h", envir=saveplace)
+          hplus <- as.data.frame(append(par, list(logplik=logplik)))
+          h <- rbind(h, hplus)
+          assign("h", h, envir=saveplace)
+        }
+        return(logplik)
       },
       enclos=objargs$envir)
     }
     ## determine a suitable large number to replace Inf
     objargs$BIGVALUE <- bigvaluerule(obj, objargs, startpar)
     objargs$whiu <- whiu
+    objargs$saveplace <- saveplace
+    objargs$TRACE <- TRACE
   } else {
     # create local function to evaluate  pair correlation(d) * weight(d)
     #  (with additional parameters 'pcfunargs', 'weightfun' in its environment)
@@ -921,7 +987,9 @@ kppmPalmLik <- function(X, Xname, po, clusters, control, weightfun, rmax,
     objargs <- list(dIJ=dIJ, wIJ=wIJ, g=g, gscale=gscale,
                     wsumloglam=safevalue(sum(wIJ * safevalue(log(lambdaJ)))),
                     envir=environment(wpaco),
-                    whiu=NULL,
+                    whiu=NULL,   # updated below
+                    TRACE=FALSE, # updated below
+                    saveplace=NULL, # updated below
                     BIGVALUE=1, # updated below
                     SMALLVALUE=.Machine$double.eps)
     # define objective function (with 'paco', 'wpaco' in its environment)
@@ -930,15 +998,32 @@ kppmPalmLik <- function(X, Xname, po, clusters, control, weightfun, rmax,
       with(objargs, {
         integ <- unlist(stieltjes(wpaco, g, par=par))
         integ <- pmax(SMALLVALUE, integ)
-        safevalue(wsumloglam + sum(wIJ * log(safevalue(paco(dIJ, par))))
-                  - gscale * integ,
-                  default=-BIGVALUE)
+        logplik <- safevalue(wsumloglam +
+                             sum(wIJ * log(safevalue(paco(dIJ, par))))
+                             - gscale * integ,
+                             default=-BIGVALUE)
+        ## debugger
+        if(isTRUE(TRACE)) {
+          cat("Parameters:", fill=TRUE)
+          print(par)
+          splat("log Palm likelihood:", logplik)
+        }
+        if(is.environment(saveplace)) {
+          h <- get("h", envir=saveplace)
+          hplus <- as.data.frame(append(par, list(logplik=logplik)))
+          h <- rbind(h, hplus)
+          assign("h", h, envir=saveplace)
+        }
+        return(logplik)
+        
       },
       enclos=objargs$envir)
     }
     ## determine a suitable large number to replace Inf
     objargs$BIGVALUE <- bigvaluerule(obj, objargs, startpar)
     objargs$whiu <- whiu
+    objargs$saveplace <- saveplace
+    objargs$TRACE <- TRACE
   }
   # arguments for optimization
   ctrl <- resolve.defaults(list(fnscale=-1), control, list(trace=0))
@@ -992,6 +1077,7 @@ kppmPalmLik <- function(X, Xname, po, clusters, control, weightfun, rmax,
                    po         = po,
                    lambda     = lambda,
                    Fit        = Fit)
+    if(SAVE) attr(result, "h") <- get("h", envir=saveplace)
     return(result)
   }
   # meaningful model parameters
@@ -1034,6 +1120,7 @@ kppmPalmLik <- function(X, Xname, po, clusters, control, weightfun, rmax,
                  modelpar   = modelpar,
                  covmodel   = clargs,
                  Fit        = Fit)
+  if(SAVE) attr(result, "h") <- get("h", envir=saveplace)
   return(result)
 }
 

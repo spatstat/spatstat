@@ -884,4 +884,19 @@ Change log from spatstat 1.64-1 to spatstat 1.64-2
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
 
+18 oct 2020
+
+   kppm.R
+   mincontrast.R
+	Save the history of function calls
+
+   DESCRIPTION
+   NEWS
+	version 1.64-1.042
+
+------------- passed R-4.0.2 CMD check ---------------
+(with environment variable SPATSTAT_TEST defined/undefined)
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+
 
