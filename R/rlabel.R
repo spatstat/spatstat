@@ -6,7 +6,7 @@
 #   $Revision: 1.12 $   $Date: 2019/04/25 02:59:12 $
 #
 #
-rlabel <- function(X, labels=marks(X), permute=TRUE, nsim=1, drop=TRUE) {
+rlabel <- function(X, labels=marks(X), group=NULL, permute=TRUE, nsim=1, drop=TRUE) {
   stopifnot(is.ppp(X) || is.lpp(X) || is.pp3(X) || is.ppx(X) || is.psp(X))
   if(is.null(labels))
     stop("labels not given and marks not present")
@@ -27,6 +27,16 @@ rlabel <- function(X, labels=marks(X), permute=TRUE, nsim=1, drop=TRUE) {
     Y <- replicate(nsim,
                    X %mark% labels[sample(1:nlabels, nthings, replace=!permute), ,drop=FALSE],
                    simplify=FALSE)
+    if ( !is.null(group) ) {
+      olabels <- order(labels[,group])
+      Z <- lapply(Y, FUN= function(x) { 
+        ox <- order( marks(x)[,group] )
+        sx <- marks(x)[ox,]
+        marks(x) <-sx[order(olabels),]
+        x
+      } )
+      Y <- Z
+    }
   } else stop("Format of labels argument is not understood")
   return(simulationresult(Y, nsim, drop))
 }
