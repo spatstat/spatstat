@@ -28,6 +28,8 @@ rlabel <- function(X, labels=marks(X), group=NULL, permute=TRUE, nsim=1, drop=TR
                    X %mark% labels[sample(1:nlabels, nthings, replace=!permute), ,drop=FALSE],
                    simplify=FALSE)
     if ( !is.null(group) ) {
+      if ( ! group %in% names(labels) )
+        stop(paste(group, "should be in names of marks"))
       olabels <- order(labels[,group])
       Z <- lapply(Y, FUN= function(x) { 
         ox <- order( marks(x)[,group] )
