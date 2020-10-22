@@ -1,7 +1,7 @@
 #'
 #'       summary.kppm.R
 #'
-#'   $Revision: 1.6 $  $Date: 2018/11/10 09:43:05 $
+#'   $Revision: 1.7 $  $Date: 2020/10/22 07:04:04 $
 #' 
 
 summary.kppm <- function(object, ..., quick=FALSE) {
@@ -48,6 +48,15 @@ summary.kppm <- function(object, ..., quick=FALSE) {
       }
     }
   }
+  #' clustering measures
+  #' sibling probability
+  result$psib <- mean(psib(object))
+  #' overdispersion index
+  win <- as.owin(object, from="points")
+  vac <- varcount(object, B=win)
+  Lam <- integral(predict(object, window=win))
+  result$odi <- vac/Lam
+  #'
   class(result) <- "summary.kppm"
   return(result)
 }
@@ -147,7 +156,7 @@ print.summary.kppm <- function(x, ...) {
             if(!is.im(mu)) signif(mu, digits) else "[pixel image]")
     }
   }
-  # table of coefficient estimates with SE and 95% CI
+  #' table of coefficient estimates with SE and 95% CI
   if(!is.null(cose <- x$coefs.SE.CI)) {
     parbreak()
     splat("Final standard error and CI")
@@ -156,5 +165,24 @@ print.summary.kppm <- function(x, ...) {
           "process):")
     print(cose)
   }
+
+  #' Cluster strength indices
+  psi <- x$psib
+  odi <- x$odi
+  if(!is.null(psi) || !is.null(odi)) {
+    parbreak()
+    splat("----------- cluster strength indices ---------- ")
+    if(!is.null(psi)) {
+      psi <- signif(psi, 4)
+      if(isTRUE(x$stationary)) {
+        splat("Sibling probability", psi)
+      } else splat("Mean sibling probability", psi)
+    }
+    if(!is.null(odi))
+      splat("Count overdispersion index (on original window):",
+            signif(odi, 3))
+  }
+  
+  #'
   invisible(NULL)
 }

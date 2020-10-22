@@ -34,7 +34,7 @@ clusterkernel(model, \dots)
   located at the origin.
 }
 \value{
-  A function in the \R\ language with arguments \code{x,y,\dots}.
+  A function in the \R language with arguments \code{x,y,\dots}.
 }
 \author{
 \adrian

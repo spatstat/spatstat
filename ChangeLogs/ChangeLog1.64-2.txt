@@ -888,7 +888,7 @@ Change log from spatstat 1.64-1 to spatstat 1.64-2
 
    kppm.R
    mincontrast.R
-	Save the history of function calls
+	Experimental code to save the history of function calls
 
    DESCRIPTION
    NEWS
@@ -900,3 +900,21 @@ Change log from spatstat 1.64-1 to spatstat 1.64-2
 ------------- uploaded to github       ---------------
 
 
+21 oct 2020
+
+   clusterkernel.Rd
+	Typo
+
+22 oct 2020
+
+   summary.kppm.R
+	Prints cluster strength indices
+
+   DESCRIPTION
+   NEWS
+	version 1.64-1.043
+
+------------- passed R-4.0.2 CMD check ---------------
+(with environment variable SPATSTAT_TEST defined/undefined)
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
