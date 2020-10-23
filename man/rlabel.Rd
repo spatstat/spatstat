@@ -7,7 +7,7 @@
   from the existing marks.
 }
 \usage{
-   rlabel(X, labels=marks(X), permute=TRUE, nsim=1, drop=TRUE)
+   rlabel(X, labels=marks(X), permute=TRUE, group=NULL, \dots, nsim=1, drop=TRUE)
 }
 \arguments{
   \item{X}{
@@ -23,6 +23,14 @@
     Logical value indicating whether to generate new marks
     by randomly permuting \code{labels} or
     by drawing a random sample with replacement.
+  }
+  \item{group}{
+    Optional. A factor, or other data dividing the points into groups.
+    Random relabelling will be performed separately within each group.
+    See Details.
+  }
+  \item{\dots}{Additional arguments passed to \code{\link{cut.ppp}} to
+    determine the grouping factor, when \code{group} is given.
   }
   \item{nsim}{Number of simulated realisations to be generated.}
   \item{drop}{
@@ -58,6 +66,14 @@
   The result of \code{rlabel} will be a point pattern
   with locations given by \code{X} and marks given by
   a random sample from \code{labels} (with replacement).
+
+  The argument \code{group} specifies that the points are
+  divided into several different groups, and that the random labelling
+  shall be performed separately on each group.
+  The arguments \code{group} and \code{\dots} are passed to
+  \code{\link{cut.ppp}} to determine the grouping. Thus \code{group}
+  could be a \code{factor}, or the name of a column of marks in
+  \code{X}, or a tessellation, or a factor-valued pixel image, etc.
 }
 \seealso{
   \code{\link{marks<-}} to assign arbitrary marks.
@@ -74,8 +90,11 @@
    Y <- rlabel(amacrine, permute=FALSE)
 
    # randomly allocate marks "A" and "B" with equal probability
-   data(cells)
    Y <- rlabel(cells, labels=factor(c("A", "B")), permute=FALSE)
+
+   # divide the window into tiles and 
+   # randomly permute the marks within each tile
+   Z <- rlabel(amacrine, group=quadrats(Window(amacrine), 4, 3))
 }
 \author{
   \spatstatAuthors.

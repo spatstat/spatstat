@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.64-1.043
+        CHANGES IN spatstat VERSION 1.64-1.044
 
 OVERVIEW
 
@@ -15,8 +15,9 @@ OVERVIEW
 
     o version nickname: 'Warm Machine Wash'
 
-    o We thank Corey Anderson, Andy Craig, Kurt Hornik, Gopalan Nair,
-    Yonatan Rosen and Rasmus Waagepetersen for contributions.
+    o We thank Corey Anderson, Andy Craig, Pavel Fibich,
+    Kurt Hornik, Gopalan Nair, Yonatan Rosen and Rasmus Waagepetersen
+    for contributions.
 
 SIGNIFICANT USER-VISIBLE CHANGES
 
@@ -50,6 +51,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o sessionInfo
     Output now includes a list of packages that are imported but not loaded.
 
+    o rlabel
+    New argument 'group' specifies that the points are divided into
+    several groups, and that relabelling is applied within each group.
+    
     o plot.psp
     The code for 'style="width"' has been completely rewritten,
     so that it no longer depends on plot.linim, and is much more efficient.

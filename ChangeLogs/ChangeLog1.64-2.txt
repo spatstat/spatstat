@@ -918,3 +918,19 @@ Change log from spatstat 1.64-1 to spatstat 1.64-2
 (with environment variable SPATSTAT_TEST defined/undefined)
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
+
+ 23 oct 2020
+
+    rlabel.R
+    rlabel.Rd
+	new argument 'group'
+
+   DESCRIPTION
+   NEWS
+	version 1.64-1.044
+
+------------- passed R-4.0.2 CMD check ---------------
+(with environment variable SPATSTAT_TEST defined/undefined)
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+
