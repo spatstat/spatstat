@@ -1,0 +1,37 @@
+# Adapted from https://github.com/eddelbuettel/pkgkitten/blob/master/.github/workflows/R-CMD-check.yaml
+
+name: R-CMD-check
+
+on:
+  push:
+  pull_request:
+
+env:
+  USE_BSPM: "true"
+  _R_CHECK_FORCE_SUGGESTS_: "false"
+  R_BUILD_ARGS: ""
+  R_CHECK_ARGS: "--as-cran"
+  BOOTSTRAP_LATEX: "true"
+  
+jobs:
+  build:
+    strategy:
+      matrix:
+        config:
+          - {os: ubuntu-latest}
+
+    runs-on: ${{ matrix.config.os }}
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: download
+      run: curl -OLs https://eddelbuettel.github.io/r-travis/run.sh
+    - name: mode     
+      run: chmod 0755 run.sh
+    - name: bootstrap
+      run: ./run.sh bootstrap
+    - name: dependencies
+      run: ./run.sh install_all
+    - name: test
+      run: ./run.sh run_tests
