@@ -107,6 +107,12 @@ function(X, i, j, r=NULL, breaks=NULL,
                                             correction=correction, ratio=ratio),
                                        list(rmax=NULL), ## forbidden 
                                        list(...)))
+    argu <- attr(result, "argu")
+    labl <- attr(result, "labl")
+    labl <- gsub("%s[", "{%s[%s]^{", labl, fixed = TRUE)
+    labl <- gsub("hat(%s)[", "{hat(%s)[%s]^{", labl, fixed = TRUE)
+    labl <- gsub(paste0("](",argu,")"), paste0("}}(", argu, ")"), labl, fixed = TRUE)
+    attr(result, "labl") <- labl
   } else {
     J <- (marx == j)
     if(!any(J))

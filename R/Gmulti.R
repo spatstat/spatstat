@@ -35,8 +35,15 @@ function(X, i, j, r=NULL, breaks=NULL, ..., correction=c("rs", "km", "han"))
   I <- (marx == i)
   if(sum(I) == 0) stop("No points are of type i")
         
-  if(i == j)
+  if(i == j){
     result <- Gest(X[I], r=r, breaks=breaks, ...)
+    argu <- attr(result, "argu")
+    labl <- attr(result, "labl")
+    labl <- gsub("%s[", "{%s[%s]^{", labl, fixed = TRUE)
+    labl <- gsub("hat(%s)[", "{hat(%s)[%s]^{", labl, fixed = TRUE)
+    labl <- gsub(paste0("](",argu,")"), paste0("}}(", argu, ")"), labl, fixed = TRUE)
+    attr(result, "labl") <- labl
+  }
   else {
     J <- (marx == j)
     if(sum(J) == 0) stop("No points are of type j")

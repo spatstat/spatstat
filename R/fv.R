@@ -185,7 +185,7 @@ print.fv <- local({
     ## Descriptions ..
     desc <- a$desc
     ## .. may require insertion of ylab
-    if(!is.null(ylab))
+    if(!is.null(ylab) && any(grepl("%s", desc)))
       desc <- sprintf(desc, ylab)
     ## Labels ..
     labl <- fvlabels(x, expand=TRUE)
@@ -369,7 +369,8 @@ fvlabels <- function(x, expand=FALSE) {
     if(nextra > 0) 
       fname <- c(fname, rep("", nextra))
     ## render
-    lab <- do.call(sprintf, append(list(lab), as.list(fname)))
+    if(nstrings > 0)
+      lab <- do.call(sprintf, append(list(lab), as.list(fname)))
   }
   ## remove empty space
   lab <- gsub(" ", "", lab)
