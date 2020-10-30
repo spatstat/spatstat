@@ -946,3 +946,26 @@ Change log from spatstat 1.64-1 to spatstat 1.64-2
    DESCRIPTION
    NEWS
 	version 1.64-1.045
+
+------------- passed R-4.0.2 CMD check ---------------
+(with environment variable SPATSTAT_TEST defined/undefined)
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+
+   fv.R
+   spatstat-internal.Rd
+	Improved internal functions for 'rebadging' fv objects
+	
+   Gmulti.R
+   Jmulti.R
+   Kmulti.R
+	Use internal functions to 'rebadge'
+
+   DESCRIPTION
+   NEWS
+	version 1.64-1.046
+
+------------- passed R-4.0.2 CMD check ---------------
+(with environment variable SPATSTAT_TEST defined/undefined)
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------

@@ -8,7 +8,7 @@
 #		Gdot		      G_{i\bullet}
 #		Gmulti	              (generic)
 #
-#	$Revision: 4.44 $	$Date: 2020/10/30 01:57:57 $
+#	$Revision: 4.45 $	$Date: 2020/10/30 03:59:45 $
 #
 ################################################################################
 
@@ -37,27 +37,13 @@ function(X, i, j, r=NULL, breaks=NULL, ..., correction=c("rs", "km", "han"))
         
   if(i == j){
     result <- Gest(X[I], r=r, breaks=breaks, ...)
-    argu <- attr(result, "argu")
-    labl <- attr(result, "labl")
-    labl <- gsub("%s[", "{%s[%s]^{", labl, fixed = TRUE)
-    labl <- gsub("hat(%s)[", "{hat(%s)[%s]^{", labl, fixed = TRUE)
-    labl <- gsub(paste0("](",argu,")"), paste0("}}(", argu, ")"), labl, fixed = TRUE)
-    attr(result, "labl") <- labl
-  }
-  else {
+  } else {
     J <- (marx == j)
     if(sum(J) == 0) stop("No points are of type j")
     result <- Gmulti(X, I, J, r=r, breaks=breaks, disjoint=FALSE, ...,
                      correction=correction)
   }
-  iname <- make.parseable(paste(i))
-  jname <- make.parseable(paste(j))
-  result <-
-    rebadge.fv(result,
-               substitute(G[i,j](r), list(i=iname, j=jname)),
-               c("G", paste0("list(", iname, ",", jname, ")")),
-               new.yexp=substitute(G[list(i,j)](r),
-                                   list(i=iname,j=jname)))
+  result <- rebadge.as.crossfun(result, "G", NULL, i, j)
   return(result)
 }	
 
@@ -85,11 +71,7 @@ function(X, i, r=NULL, breaks=NULL, ..., correction=c("km","rs","han")) {
 # 
   result <- Gmulti(X, I, J, r, breaks, disjoint=FALSE, ...,
                    correction=correction)
-  iname <- make.parseable(paste(i))
-  result <- rebadge.fv(result,
-                  substitute(G[i ~ dot](r), list(i=iname)),
-                  c("G", paste(iname, "~ symbol(\"\\267\")")),
-                  new.yexp=substitute(G[i ~ symbol("\267")](r), list(i=iname)))
+  result <- rebadge.as.dotfun(result, "G", NULL, i)
   return(result)
 }	
 

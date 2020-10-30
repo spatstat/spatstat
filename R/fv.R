@@ -4,7 +4,7 @@
 ##
 ##    class "fv" of function value objects
 ##
-##    $Revision: 1.160 $   $Date: 2020/10/30 01:57:57 $
+##    $Revision: 1.162 $   $Date: 2020/10/30 04:24:11 $
 ##
 ##
 ##    An "fv" object represents one or more related functions
@@ -727,23 +727,32 @@ rebadge.fv <- function(x, new.ylab, new.fname,
     attr(x, "yexp") <- new.yexp
   if(!missing(new.fname))
     attr(x, "fname") <- new.fname
-  if(!missing(tags) && !(missing(new.desc) && missing(new.labl) && missing(new.tags))) {
-    nama <- names(x)
+  if(!missing(new.desc) || !missing(new.labl) || !missing(new.tags)) {
+    ## replace (some or all entries of) the following
     desc <- attr(x, "desc")
     labl <- attr(x, "labl")
     valu <- attr(x, "valu")
-    for(i in seq_along(tags))
-    if(!is.na(m <- match(tags[i], nama))) {
-      if(!missing(new.desc)) desc[m] <- new.desc[i]
-      if(!missing(new.labl)) labl[m] <- new.labl[i]
-      if(!missing(new.tags)) {
-        names(x)[m] <- new.tags[i]
-        if(tags[i] == valu)
-          attr(x, "valu") <- new.tags[i]
-      }
+    nama <- names(x)
+    ## specified subset to be replaced
+    if(missing(tags) || is.null(tags))
+      tags <- nama
+    ## match up
+    m <- match(tags, nama)
+    ok <- !is.na(m)
+    mok <- m[ok]
+    ## replace
+    if(!missing(new.desc)) {
+      desc[mok] <- new.desc[ok]
+      attr(x, "desc") <- desc
     }
-    attr(x, "desc") <- desc
-    attr(x, "labl") <- labl
+    if(!missing(new.labl)) {
+      labl[mok] <- new.labl[ok]
+      attr(x, "labl") <- labl
+    }
+    if(!missing(new.tags)) {
+      ## rename columns (using "fvnames<-" to adjust special entries)
+      names(x)[mok] <- new.tags[ok]
+    }
   }
   if(!missing(new.dotnames))
     fvnames(x, ".") <- new.dotnames
@@ -761,31 +770,37 @@ rebadge.as.crossfun <- function(x, main, sub=NULL, i, j) {
   i <- make.parseable(i)
   j <- make.parseable(j)
   if(is.null(sub)) {
+    ## single function name like "K"
     ylab <- substitute(main[i, j](r),
                        list(main=main, i=i, j=j))
     fname <- c(main, paste0("list", paren(paste(i, j, sep=","))))
     yexp <- substitute(main[list(i, j)](r),
                        list(main=main, i=i, j=j))
   } else {
+    ## subscripted function name like "K[inhom]"
     ylab <- substitute(main[sub, i, j](r),
                        list(main=main, sub=sub, i=i, j=j))
     fname <- c(main, paste0("list", paren(paste(sub, i, j, sep=","))))
     yexp <- substitute(main[list(sub, i, j)](r),
                        list(main=main, sub=sub, i=i, j=j))
   }
-  y <- rebadge.fv(x, new.ylab=ylab, new.fname=fname, new.yexp=yexp)
+  labl <- rebadgeLabels(x, fname)
+  y <- rebadge.fv(x,
+                  new.ylab=ylab, new.fname=fname, new.yexp=yexp, new.labl=labl)
   return(y)
 }
 
 rebadge.as.dotfun <- function(x, main, sub=NULL, i) {
   i <- make.parseable(i)
   if(is.null(sub)) {
+    ## single function name like "K"
     ylab <- substitute(main[i ~ dot](r),
                        list(main=main, i=i))
     fname <- c(main, paste0(i, "~symbol(\"\\267\")"))
     yexp <- substitute(main[i ~ symbol("\267")](r),
                        list(main=main, i=i))
   } else {
+    ## subscripted function name like "K[inhom]"
     ylab <- substitute(main[sub, i ~ dot](r),
                        list(main=main, sub=sub, i=i))
     fname <- c(main, paste0("list",
@@ -794,8 +809,26 @@ rebadge.as.dotfun <- function(x, main, sub=NULL, i) {
     yexp <- substitute(main[list(sub, i ~ symbol("\267"))](r),
                        list(main=main, sub=sub, i=i))
   }
-  y <- rebadge.fv(x, new.ylab=ylab, new.fname=fname, new.yexp=yexp)
+  labl <- rebadgeLabels(x, fname)
+  y <- rebadge.fv(x, new.ylab=ylab, new.fname=fname, new.yexp=yexp,
+                  new.labl=labl)
   return(y)
+}
+
+rebadgeLabels <- function(x, new.fname) {
+  fname <- attr(x, "fname")
+  labl <- attr(x, "labl")
+  if(length(fname) == 1L && length(new.fname) == 2L) {
+    ## Existing function name is unsubscripted like "K"
+    ## New function name is subscripted like "K[inhom]"
+    ## Modify label format strings to accommodate subscripted name
+    new.labl <- gsub("%s[", "{%s[%s]^{", labl, fixed = TRUE)
+    new.labl <- gsub("hat(%s)[", "{hat(%s)[%s]^{", new.labl, fixed = TRUE)
+    argu <- attr(x, "argu")
+    new.labl <- gsub(paste0("](",argu,")"),
+                     paste0("}}(", argu, ")"), new.labl, fixed = TRUE)
+    new.labl
+  } else labl
 }
 
 ## even simpler wrapper for rebadge.fv

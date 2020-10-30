@@ -3,7 +3,7 @@
 #	Usual invocations to compute multitype J function(s)
 #	if F and G are not required 
 #
-#	$Revision: 4.44 $	$Date: 2020/10/30 01:57:57 $
+#	$Revision: 4.45 $	$Date: 2020/10/30 03:59:35 $
 #
 #
 #
@@ -36,29 +36,14 @@ function(X, i, j, eps=NULL, r=NULL, breaks=NULL, ..., correction=NULL) {
   if(i == j){
     result <- Jest(X[I], eps=eps, r=r, breaks=breaks,
                    correction=correction, checkspacing=checkspacing)
-    argu <- attr(result, "argu")
-    labl <- attr(result, "labl")
-    labl <- gsub("%s[", "{%s[%s]^{", labl, fixed = TRUE)
-    labl <- gsub("hat(%s)[", "{hat(%s)[%s]^{", labl, fixed = TRUE)
-    labl <- gsub(paste0("](",argu,")"), paste0("}}(", argu, ")"), labl, fixed = TRUE)
-    attr(result, "labl") <- labl
-  }
-  else {
+  } else {
     J <- (marx == j)
     result <- Jmulti(X, I, J,
                      eps=eps, r=r, breaks=breaks, disjoint=TRUE,
                      correction=correction, checkspacing=checkspacing)
   }
   conserve <- attr(result, "conserve")
-  iname <- make.parseable(paste(i))
-  jname <- make.parseable(paste(j))
-  result <-
-    rebadge.fv(result,
-               substitute(J[i,j](r),
-                          list(i=iname,j=jname)),
-               c("J", paste0("list(", iname, ",", jname, ")")),
-               new.yexp=substitute(J[list(i,j)](r),
-                                   list(i=iname,j=jname)))
+  result <- rebadge.as.crossfun(result, "J", NULL, i, j)
   attr(result, "conserve") <- conserve
   return(result)
 }
@@ -93,12 +78,7 @@ function(X, i, eps=NULL, r=NULL, breaks=NULL, ..., correction=NULL) {
                    eps=eps, r=r, breaks=breaks, disjoint=FALSE,
                    correction=correction, checkspacing=checkspacing)
   conserve <- attr(result, "conserve")
-  iname <- make.parseable(paste(i))
-  result <-
-    rebadge.fv(result,
-               substitute(J[i ~ dot](r), list(i=iname)),
-               c("J", paste(iname, "~ symbol(\"\\267\")")),
-               new.yexp=substitute(J[i ~ symbol("\267")](r), list(i=iname)))
+  result <- rebadge.as.dotfun(result, "J", NULL, i)
   attr(result, "conserve") <- conserve
   return(result)
 }

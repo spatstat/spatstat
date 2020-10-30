@@ -4,7 +4,7 @@
 #	Compute estimates of cross-type K functions
 #	for multitype point patterns
 #
-#	$Revision: 5.51 $	$Date: 2020/10/30 01:57:57 $
+#	$Revision: 5.52 $	$Date: 2020/10/30 03:59:52 $
 #
 #
 # -------- functions ----------------------------------------
@@ -107,12 +107,6 @@ function(X, i, j, r=NULL, breaks=NULL,
                                             correction=correction, ratio=ratio),
                                        list(rmax=NULL), ## forbidden 
                                        list(...)))
-    argu <- attr(result, "argu")
-    labl <- attr(result, "labl")
-    labl <- gsub("%s[", "{%s[%s]^{", labl, fixed = TRUE)
-    labl <- gsub("hat(%s)[", "{hat(%s)[%s]^{", labl, fixed = TRUE)
-    labl <- gsub(paste0("](",argu,")"), paste0("}}(", argu, ")"), labl, fixed = TRUE)
-    attr(result, "labl") <- labl
   } else {
     J <- (marx == j)
     if(!any(J))
@@ -121,15 +115,7 @@ function(X, i, j, r=NULL, breaks=NULL,
                      r=r, breaks=breaks,
                      correction=correction, ratio=ratio, ...)
   }
-  iname <- make.parseable(paste(i))
-  jname <- make.parseable(paste(j))
-  result <-
-    rebadge.fv(result, 
-               substitute(Kcross[i,j](r), list(i=iname,j=jname)),
-               c("K", paste0("list(", iname, ",", jname, ")")), 
-               new.yexp=substitute(K[list(i,j)](r),
-                                   list(i=iname,j=jname)))
-  return(result)
+  result <- rebadge.as.crossfun(result, "K", NULL, i, j)
 }
 
 "Kdot" <- 
@@ -154,12 +140,7 @@ function(X, i, r=NULL, breaks=NULL,
 	
   result <- Kmulti(X, I, J,
                    r=r, breaks=breaks, correction=correction, ..., ratio=ratio)
-  iname <- make.parseable(paste(i))
-  result <-
-    rebadge.fv(result,
-               substitute(K[i ~ dot](r), list(i=iname)),
-               c("K", paste0(iname, "~ symbol(\"\\267\")")),
-               new.yexp=substitute(K[i ~ symbol("\267")](r), list(i=iname)))
+  result <- rebadge.as.dotfun(result, "K", NULL, i)
   return(result)
 }
 
@@ -385,3 +366,4 @@ function(X, I, J, r=NULL, breaks=NULL,
   }
   return(K)
 }
+

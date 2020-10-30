@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.64-1.045
+        CHANGES IN spatstat VERSION 1.64-1.046
 
 OVERVIEW
 
@@ -81,6 +81,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o kppm
     Improved numerical robustness.
+
+    o Kcross, Gcross, Jcross
+    Function labels (shown on the plot legend) have been improved when i = j.
     
 BUG FIXES
 

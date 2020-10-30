@@ -502,10 +502,11 @@ plot.fv <- local({
     leglabl <- lnames0
     leglabl[keyok] <- labl[matok]
     ylab <- attr(x, "ylab")
-    if(!is.null(ylab)  && any(grepl("%s", legdesc))) {
+    if(!is.null(ylab)) {
       if(is.language(ylab)) 
         ylab <- flat.deparse(ylab)
-      legdesc <- sprintf(legdesc, ylab)
+      if(any(grepl("%s", legdesc))) 
+        legdesc <- sprintf(legdesc, ylab)
     }
     ## compute legend info
     legtxt <- key

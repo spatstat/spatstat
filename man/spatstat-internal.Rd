@@ -552,6 +552,7 @@
 \alias{rebadge.fv}
 \alias{rebadge.as.crossfun}
 \alias{rebadge.as.dotfun}
+\alias{rebadgeLabels}
 \alias{rebound}
 \alias{rebound.im}
 \alias{rebound.ppp}
@@ -1438,6 +1439,7 @@ rebadge.fv(x, new.ylab, new.fname, tags, new.desc, new.labl, new.yexp,
            new.dotnames, new.preferred, new.formula, new.tags)
 rebadge.as.crossfun(x, main, sub, i, j)
 rebadge.as.dotfun(x, main, sub, i)
+rebadgeLabels(x, new.fname)
 rebound(x, rect)
 \method{rebound}{im}(x, rect)  
 \method{rebound}{ppp}(x, rect) 
