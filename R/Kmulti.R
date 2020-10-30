@@ -4,7 +4,7 @@
 #	Compute estimates of cross-type K functions
 #	for multitype point patterns
 #
-#	$Revision: 5.50 $	$Date: 2019/10/16 03:09:01 $
+#	$Revision: 5.51 $	$Date: 2020/10/30 01:57:57 $
 #
 #
 # -------- functions ----------------------------------------

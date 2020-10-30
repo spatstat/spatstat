@@ -4,7 +4,7 @@
 ##
 ##    class "fv" of function value objects
 ##
-##    $Revision: 1.159 $   $Date: 2020/04/23 04:04:41 $
+##    $Revision: 1.160 $   $Date: 2020/10/30 01:57:57 $
 ##
 ##
 ##    An "fv" object represents one or more related functions

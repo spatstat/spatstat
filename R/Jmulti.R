@@ -3,7 +3,7 @@
 #	Usual invocations to compute multitype J function(s)
 #	if F and G are not required 
 #
-#	$Revision: 4.43 $	$Date: 2019/11/01 01:35:30 $
+#	$Revision: 4.44 $	$Date: 2020/10/30 01:57:57 $
 #
 #
 #

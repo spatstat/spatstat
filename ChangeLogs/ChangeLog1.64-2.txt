@@ -934,3 +934,15 @@ Change log from spatstat 1.64-1 to spatstat 1.64-2
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
 
+ 30 oct 2020
+
+   fv.R
+   plot.fv.R
+   Gmulti.R
+   Jmulti.R
+   Kmulti.R
+	Ege's bug fixes related to sprintf (bug arises in R-devel)
+
+   DESCRIPTION
+   NEWS
+	version 1.64-1.045
