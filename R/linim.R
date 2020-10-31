@@ -1,7 +1,7 @@
 #
 # linim.R
 #
-#  $Revision: 1.77 $   $Date: 2020/06/13 07:27:38 $
+#  $Revision: 1.78 $   $Date: 2020/10/31 05:20:11 $
 #
 #  Image/function on a linear network
 #
@@ -729,14 +729,14 @@ pairs.linim <- function(..., plot=TRUE, eps=NULL) {
   if(nim == 0) 
     stop("No images provided")
   ## separate image arguments from others
-  imlist <- argh[isim]
+  images <- argh[isim]
   rest   <- argh[!isim]
   ## identify which arguments are images on a network
-  islinim <- sapply(imlist, inherits, what="linim")
+  islinim <- sapply(images, inherits, what="linim")
   if(!any(islinim)) # shouldn't be here
     return(pairs.im(argh, plot=plot))
   ## determine image names for plotting
-  imnames <- argh$labels %orifnull% names(imlist)
+  imnames <- argh$labels %orifnull% names(images)
   if(length(imnames) != nim || !all(nzchar(imnames))) {
     #' names not given explicitly
     callednames <- paste(cl)[c(FALSE, isim, FALSE)]
@@ -748,20 +748,20 @@ pairs.linim <- function(..., plot=TRUE, eps=NULL) {
     }
     imnames <- good.names(imnames, good.names(callednames, backupnames))
   }
-  names(imlist) <- imnames
+  names(images) <- imnames
   ## choose resolution
   if(is.null(eps)) {
-    xstep <- min(sapply(imlist, getElement, name="xstep"))
-    ystep <- min(sapply(imlist, getElement, name="ystep"))
+    xstep <- min(sapply(images, getElement, name="xstep"))
+    ystep <- min(sapply(images, getElement, name="ystep"))
     eps <- min(xstep, ystep)
   }
   ## extract linear network
-  Z1 <- imlist[[min(which(islinim))]]
+  Z1 <- images[[min(which(islinim))]]
   L <- as.linnet(Z1)
   ## construct equally-spaced sample points
   X <- pointsOnLines(as.psp(L), eps=eps)
   ## sample each image
-  pixvals <- lapply(imlist, "[", i=X, drop=FALSE)
+  pixvals <- lapply(images, "[", i=X, drop=FALSE)
   pixdf <- as.data.frame(pixvals)
   ## pairs plot
   if(plot) {

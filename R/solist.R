@@ -3,11 +3,11 @@
 ##
 ## Methods for class `solist' (spatial object list)
 ##
-##      and related classes 'anylist', 'ppplist', 'imlist'
+##      and related classes 'anylist', 'ppplist', 'imlist', 'linimlist'
 ##
 ## plot.solist is defined in plot.solist.R
 ##
-## $Revision: 1.21 $ $Date: 2020/05/07 13:04:05 $
+## $Revision: 1.23 $ $Date: 2020/10/31 05:00:33 $
 
 anylist <- function(...) {
   x <- list(...)
@@ -89,12 +89,14 @@ solist <- function(..., check=TRUE, promote=TRUE, demote=FALSE, .NameBase) {
       return(as.anylist(stuff))
     stop("Some arguments of solist() are not 2D spatial objects")
   }
-  class(stuff) <- c("solist", "anylist", "listof", class(stuff))
+  class(stuff) <- unique(c("solist", "anylist", "listof", class(stuff)))
   if(promote) {
-    if(all(unlist(lapply(stuff, is.ppp)))) {
+    if(all(sapply(stuff, is.ppp))) {
       class(stuff) <- c("ppplist", class(stuff))
-    } else if(all(unlist(lapply(stuff, is.im)))) {
+    } else if(all(sapply(stuff, is.im))) {
       class(stuff) <- c("imlist", class(stuff))
+      if(all(sapply(stuff, is.linim)))
+        class(stuff) <- c("linimlist", class(stuff))
     }
   }
   return(stuff)
@@ -118,6 +120,7 @@ is.solist <- function(x) inherits(x, "solist")
 
 print.solist <- function (x, ...) {
   what <- if(inherits(x, "ppplist")) "point patterns" else
+          if(inherits(x, "linimlist")) "pixel images on a network" else
           if(inherits(x, "imlist")) "pixel images" else "spatial objects"
   splat(paste("List of", what))
   parbreak()
@@ -150,6 +153,7 @@ summary.solist <- function(object, ...) {
   x <- lapply(object, summary, ...)
   attr(x, "otype") <-
     if(inherits(object, "ppplist")) "ppp" else
+    if(inherits(object, "linimlist")) "im" else ""
     if(inherits(object, "imlist")) "im" else ""
   class(x) <- c("summary.solist", "anylist")
   x
@@ -189,12 +193,26 @@ as.imlist <- function(x, check=TRUE) {
     x <- as.solist(x, promote=TRUE, check=TRUE)
     if(!inherits(x, "imlist"))
       stop("some entries are not images")
+  } else {
+    #' just apply required classes, in required order
+    reqd <- c("imlist", "solist", "anylist", "listof")
+    class(x) <- unique(c(reqd, class(x)))
   }
-  class(x) <- unique(c("imlist", "solist", "anylist", "listof", class(x)))
   return(x)
 }
 
 is.imlist <- function(x) inherits(x, "imlist")
+
+as.linimlist <- function(x, check=TRUE) {
+  x <- as.imlist(x, check=check)
+  if(check) {
+    if(!all(sapply(x, is.linim)))
+      stop("All entries must be pixel images on a network")
+  } 
+  class(x) <- unique(c("linimlist", class(x)))
+  return(x)
+}
+
 
 # --------------- counterparts of 'lapply' --------------------
 

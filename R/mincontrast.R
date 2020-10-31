@@ -370,6 +370,7 @@ optimStatus <- function(x, call=NULL) {
 #' general code for collecting status reports
 
 signalStatus <- function(x, errors.only=FALSE) {
+  if(is.null(x)) return(invisible(NULL))
   stopifnot(inherits(x, "condition"))
   if(inherits(x, "error")) stop(x)
   if(inherits(x, "warning")) warning(x) 
@@ -378,6 +379,7 @@ signalStatus <- function(x, errors.only=FALSE) {
 }
 
 printStatus <- function(x, errors.only=FALSE) {
+  if(is.null(x)) return(invisible(NULL))
   prefix <-
     if(inherits(x, "error")) "error: " else 
     if(inherits(x, "warning")) "warning: " else NULL

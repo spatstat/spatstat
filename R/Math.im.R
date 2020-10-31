@@ -1,7 +1,7 @@
 ##
 ##   Math.im.R
 ##
-##   $Revision: 1.8 $ $Date: 2020/05/08 06:09:14 $
+##   $Revision: 1.9 $ $Date: 2020/10/31 05:06:15 $
 ##
 Math.im <- function(x, ...){
     m <- do.call(.Generic, list(x$v, ...))
@@ -24,8 +24,8 @@ Complex.im <- function(z){
     return(rslt)
 }
 
-## The following function defines what happens in Ops.im
-## but the formal 'Ops' method is now in Ops.im.R
+## The following function defines what happens in 'Ops.im'
+## but the formal 'Ops.im' method is now in Math.imlist.R
 
 imageOp <- function(e1, e2=NULL, op) {
   ## operate on an image or pair of images

@@ -1,18 +1,18 @@
 ##
-##   Math.imlist.R
+##   Math.linimlist.R
 ##
-##   $Revision: 1.7 $ $Date: 2020/10/31 05:06:19 $
+##   $Revision: 1.1 $ $Date: 2020/10/31 08:47:12 $
 ##
 
-Math.imlist <- function(x, ...){
+Math.linimlist <- function(x, ...){
   solapply(x, .Generic, ...)
 }
 
-Complex.imlist <- function(z){
+Complex.linimlist <- function(z){
   solapply(z, .Generic)
 }
 
-Summary.imlist <- function(..., na.rm=TRUE){
+Summary.linimlist <- function(..., na.rm=TRUE){
   argh <- expandSpecialLists(list(...))
   if(length(names(argh)) > 0) {
     isim <- sapply(argh, is.im)
@@ -21,22 +21,22 @@ Summary.imlist <- function(..., na.rm=TRUE){
   do.call(.Generic, c(argh, list(na.rm=na.rm)))
 }
 
-#'   Due to the dispatch mechanism, Ops.im and Ops.imlist must be identical
-#'   if we want to handle combinations of imlist and im.
-#'   (See 'Math.im.R' for the definition of 'imageOp')
+#'   Due to the dispatch mechanism, Ops.linim and Ops.linimlist must be identical
+#'   if we want to handle combinations of linimlist and im.
+#'   (See 'Math.linim.R' for the definition of 'LinimOp')
 
-Ops.imlist <- Ops.im <- function(e1,e2=NULL){ imagelistOp(e1, e2, .Generic) }
+Ops.linimlist <- Ops.linim <- function(e1,e2=NULL){ LinimListOp(e1, e2, .Generic) }
 
-imagelistOp <- function(e1, e2=NULL, op) {
+LinimListOp <- function(e1, e2=NULL, op) {
   if(is.null(e2)) {
     #' unary operation
-    result <- if(is.im(e1)) imageOp(e1, op=op) else solapply(e1, imageOp, op=op)
+    result <- if(is.im(e1)) LinimOp(e1, op=op) else solapply(e1, LinimOp, op=op)
     return(result)
   } 
   #' binary operation
-  single1 <- !inherits(e1, c("imlist", "solist"))
-  single2 <- !inherits(e2, c("imlist", "solist"))
-  if(single1 && single2) return(imageOp(e1, e2, op))
+  single1 <- !inherits(e1, c("linimlist", "solist"))
+  single2 <- !inherits(e2, c("linimlist", "solist"))
+  if(single1 && single2) return(LinimOp(e1, e2, op))
   if(single1 && !single2) {
     e1list <- rep(list(e1), length(e2))
     e2list <- e2
@@ -55,11 +55,10 @@ imagelistOp <- function(e1, e2=NULL, op) {
     outnames <- names(e1) %orifnull% names(e2)
   }
   #' compute
-  v <- mapply(imageOp, e1=unname(e1list), e2=unname(e2list),
+  v <- mapply(LinimOp, e1=unname(e1list), e2=unname(e2list),
               MoreArgs=list(op=op),
               SIMPLIFY=FALSE)
   names(v) <- outnames
   return(as.solist(v))
 }
-
 

@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.64-1.046
+        CHANGES IN spatstat VERSION 1.64-1.048
 
 OVERVIEW
 
@@ -135,7 +135,15 @@ BUG FIXES
     Crashed sometimes with an error message about 'sumconnected'.
     Fixed.
 
-
+    o simulate.rhohat
+    Crashed when applied to rhohat objects computed from data on a linear network.
+    Fixed.
+    
+    o hyperframe
+    Crashed if the argument 'row.names' was given
+    and the hyperframe had exactly one row.
+    Fixed.
+    
         CHANGES IN spatstat VERSION 1.64-1
 
 OVERVIEW

@@ -1,7 +1,7 @@
 #
 #  hyperframe.R
 #
-# $Revision: 1.74 $  $Date: 2020/08/14 03:02:19 $
+# $Revision: 1.75 $  $Date: 2020/10/31 10:06:08 $
 #
 
 hyperframe <- local({
@@ -79,16 +79,16 @@ hyperframe <- local({
   
     ## Collect the data frame columns into a data frame
     if(!any(dfcolumns))
-      df <- as.data.frame(matrix(, ncases, 0), row.names=row.names)
+      df <- as.data.frame(matrix(, ncases, 0))
     else {
       df <- do.call(data.frame,
                     append(aarg[dfcolumns],
-                           list(row.names=row.names,
-                                check.rows=check.rows,
+                           list(check.rows=check.rows,
                                 check.names=check.names,
                                 stringsAsFactors=stringsAsFactors)))
       names(df) <- nama[dfcolumns]
     }
+    if(length(row.names)) row.names(df) <- row.names
 
     ## Storage type of each variable
     vtype <- character(nvars)

@@ -1,7 +1,7 @@
 #'
 #'  rhohat.R
 #'
-#'  $Revision: 1.89 $  $Date: 2020/06/16 03:13:16 $
+#'  $Revision: 1.91 $  $Date: 2020/10/31 09:09:55 $
 #'
 #'  Non-parametric estimation of a transformation rho(z) determining
 #'  the intensity function lambda(u) of a point process in terms of a
@@ -658,10 +658,17 @@ predict.rhohat <- local({
     Z <- s$Zimage
     #' apply fun to Z
     Y <- if(is.im(Z)) evalfun(Z, fun) else solapply(Z, evalfun, f=fun)
-    #' adjust to reference baseline
     if(reference != "Lebesgue" && !relative) {
-      Lam <- s$lambdaimage # could be 'im' or 'imlist'
-      Y <- Lam * Y 
+      #' adjust to reference baseline
+      Lam <- s$lambdaimage # could be an image or a list of images
+      #' multiply Y * Lam (dispatch on 'Math' is not yet working)
+      netted <- is.linim(Y) || (is.solist(Y) && all(sapply(Y, is.linim)))
+      if(!netted) {
+        Y <- imagelistOp(Lam, Y, "*")
+      } else {
+        if(is.solist(Y)) Y <- as.linimlist(Y)
+        Y <- LinimListOp(Lam, Y, "*")
+      }
     }
     return(Y)
   }
@@ -669,10 +676,12 @@ predict.rhohat <- local({
   evalfun <- function(X, f) {
     force(f)
     force(X)
-    if(is.linim(X)) eval.linim(f(X)) else 
-    if(is.im(X)) eval.im(f(X)) else NULL
+    if(is.linim(X))
+      return(eval.linim(f(X)))
+    if(is.im(X)) return(eval.im(f(X)))
+    return(NULL)
   }
-  
+
   predict.rhohat
 })
 

@@ -969,3 +969,45 @@ Change log from spatstat 1.64-1 to spatstat 1.64-2
 (with environment variable SPATSTAT_TEST defined/undefined)
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
+
+31 oct 2020
+
+   mincontrast.R
+   summary.kppm.R
+	Bug fixes and improvements to code for signalling optimization status.
+
+   DESCRIPTION
+   NEWS
+	version 1.64-1.047
+
+------------- passed R-4.0.2 CMD check ---------------
+(with environment variable SPATSTAT_TEST defined/undefined)
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+
+   solist.R
+   spatstat-internal.Rd
+	Add minimal support for class 'linimlist'
+	New function as.linimlist
+	
+   Math.linimlist.R [New file]
+   spatstat-internal.Rd
+   	Math and Ops for linimlist
+
+   summary.mppm.R
+	Added more information to summary output
+	
+   rhohat.R
+   hyperframe.R
+   predictmppm.R
+	Bug fixes
+
+   DESCRIPTION
+   NEWS
+	version 1.64-1.048
+
+------------- passed R-4.0.2 CMD check ---------------
+(with environment variable SPATSTAT_TEST defined/undefined)
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+

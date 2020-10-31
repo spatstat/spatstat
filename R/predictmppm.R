@@ -1,7 +1,7 @@
 #
 #    predictmppm.R
 #
-#	$Revision: 1.15 $	$Date: 2020/08/11 08:52:34 $
+#	$Revision: 1.16 $	$Date: 2020/10/31 13:50:03 $
 #
 #
 # -------------------------------------------------------------------
@@ -15,7 +15,10 @@ predict.mppm <- local({
     ##
     model <- object
     verifyclass(model, "mppm")
+    ## 
     isMulti <- is.multitype(model)
+    depends.on.row <- summary(model)$depends.on.row
+    npat.old <- model$npat
     ##
     ## ......................................................................
     if(verbose)
@@ -42,6 +45,12 @@ predict.mppm <- local({
     } else {
       stopifnot(is.data.frame(newdata) || is.hyperframe(newdata))
       newdataname <- sQuote("newdata")
+      if(depends.on.row && nrow(newdata) != npat.old)
+        stop(paste("'newdata' must have the same number of rows",
+                   "as the original 'data' argument",
+                   paren(paste("namely", npat.old)),
+                   "because the model depends on the row index"),
+             call.=FALSE)
     }
     ##
     ##   Argument 'locations'
@@ -210,8 +219,8 @@ predict.mppm <- local({
     ##
     if(verbose)
       cat("Building data for prediction...")
-    sumry <- summary(newdata)
-    npat.new <- sumry$ncases
+    sumry.new <- summary(newdata)
+    npat.new <- sumry.new$ncases
     ## name of response point pattern in model
     Yname <- model$Info$Yname
     ##
@@ -220,9 +229,9 @@ predict.mppm <- local({
     ## Otherwise from the original data if appropriate
     if(verbose)
       cat("(responses)...")
-    Y <- if(Yname %in% sumry$col.names) 
+    Y <- if(Yname %in% sumry.new$col.names) 
       newdata[, Yname, drop=TRUE, strip=FALSE]
-    else if(npat.new == model$npat)
+    else if(npat.new == npat.old)
       data[, Yname, drop=TRUE, strip=FALSE]
     else NULL
     ##
@@ -280,8 +289,8 @@ predict.mppm <- local({
     ## ..........................................
 
     ## initialise hyperframe of predicted values
-    Answer <- hyperframe(id=factor(levels(MOADF$id)),
-                         row.names=sumry$row.names)
+    Answer <- newdata[,integer(0),drop=FALSE]
+    if(depends.on.row) Answer$id <- factor(levels(MOADF$id))
 
     ## Loop over possible types, or execute once:
     ## ///////////////////////////////////////////

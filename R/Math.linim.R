@@ -1,21 +1,8 @@
 ##
 ##   Math.linim.R
 ##
-##   $Revision: 1.8 $ $Date: 2020/04/09 01:59:33 $
+##   $Revision: 1.9 $ $Date: 2020/10/31 08:47:06 $
 ##
-
-Ops.linim <- function(e1,e2=NULL){
-    unary <- nargs() == 1L
-    if(unary){
-        if(!is.element(.Generic, c("!", "-", "+")))
-            stop("Unary usage is undefined for this operation for images.")
-        callstring <- paste(.Generic, "e1")
-    } else {
-        callstring <- paste("e1", .Generic, "e2")
-    }
-    expr <- parse(text = callstring)
-    return(do.call(eval.linim, list(expr = expr)))
-}
 
 Math.linim <- function(x, ...){
     m <- do.call(.Generic, list(x[,,drop=FALSE], ...))
@@ -56,3 +43,28 @@ Complex.linim <- function(z){
     rslt <- linim(L, Z, df=df, restrict=FALSE)
     return(rslt)
 }
+
+## This function defines what happens inside 'Ops.linim'
+## The formal definition of 'Ops.linim' is now in 'Math.linimlist.R'
+
+LinimOp <- function(e1, e2=NULL, op) {
+  ## operate on a linim or pair of linim with fallback to im
+  if(is.null(e2)) {
+    ## unary operation
+    if(!is.element(op, c("!", "-", "+")))
+      stop(paste("Unary operation", sQuote(op), "is undefined for images"),
+           call.=FALSE)
+    expr <- parse(text = paste(op, "e1"))
+    netted <- is.linim(e1)
+  } else {
+    expr <- parse(text = paste("e1", op, "e2"))
+    netted <- is.linim(e1) && is.linim(e2)
+  }
+  result <- if(netted) {
+              do.call(eval.linim, list(expr=expr))
+            } else {
+              do.call(eval.im, list(expr = expr))
+            }
+  return(result)
+}                  
+

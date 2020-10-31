@@ -1,7 +1,7 @@
 #'
 #'       summary.kppm.R
 #'
-#'   $Revision: 1.7 $  $Date: 2020/10/22 07:04:04 $
+#'   $Revision: 1.8 $  $Date: 2020/10/31 03:34:39 $
 #' 
 
 summary.kppm <- function(object, ..., quick=FALSE) {
@@ -93,7 +93,7 @@ print.summary.kppm <- function(x, ...) {
                a <- attr(wtf, "selfprint") %orifnull% pasteFormula(wtf)
                splat("\tweight function:", a)
              }
-             printStatus(x$optimstatus)
+             printStatus(x$optim.status)
            },
            palm = {
              splat("Fitted by maximum Palm likelihood")
@@ -102,7 +102,7 @@ print.summary.kppm <- function(x, ...) {
                a <- attr(wtf, "selfprint") %orifnull% pasteFormula(wtf)
                splat("\tweight function:", a)
              }
-             printStatus(x$optimstatus)
+             printStatus(x$optim.status)
            },
            warning(paste("Unrecognised fitting method", sQuote(Fit$method)))
            )
