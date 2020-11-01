@@ -1029,3 +1029,13 @@ Change log from spatstat 1.64-1 to spatstat 1.64-2
 
 ............. passed R-devel CMD check ...............
                 (2020-10-29 r79387)
+		
+   DESCRIPTION
+   NEWS
+	Dependence rule changed: R (>= 3.5.0)
+	version 1.64-1.050
+
+------------- passed R-4.0.3 CMD check ---------------
+(with environment variable SPATSTAT_TEST defined/undefined)
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
