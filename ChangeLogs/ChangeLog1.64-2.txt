@@ -934,6 +934,7 @@ Change log from spatstat 1.64-1 to spatstat 1.64-2
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
 
++++++++++++++ installed R-4.0.3 ++++++++++++++++++++++
  30 oct 2020
 
    fv.R
@@ -947,7 +948,7 @@ Change log from spatstat 1.64-1 to spatstat 1.64-2
    NEWS
 	version 1.64-1.045
 
-------------- passed R-4.0.2 CMD check ---------------
+------------- passed R-4.0.3 CMD check ---------------
 (with environment variable SPATSTAT_TEST defined/undefined)
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
@@ -965,7 +966,7 @@ Change log from spatstat 1.64-1 to spatstat 1.64-2
    NEWS
 	version 1.64-1.046
 
-------------- passed R-4.0.2 CMD check ---------------
+------------- passed R-4.0.3 CMD check ---------------
 (with environment variable SPATSTAT_TEST defined/undefined)
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
@@ -980,7 +981,7 @@ Change log from spatstat 1.64-1 to spatstat 1.64-2
    NEWS
 	version 1.64-1.047
 
-------------- passed R-4.0.2 CMD check ---------------
+------------- passed R-4.0.3 CMD check ---------------
 (with environment variable SPATSTAT_TEST defined/undefined)
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
@@ -1006,8 +1007,25 @@ Change log from spatstat 1.64-1 to spatstat 1.64-2
    NEWS
 	version 1.64-1.048
 
-------------- passed R-4.0.2 CMD check ---------------
+------------- passed R-4.0.3 CMD check ---------------
 (with environment variable SPATSTAT_TEST defined/undefined)
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
 
+   predictmppm.R
+   predict.mppm.Rd
+	Improved handling of 'newdata'
+	
+   DESCRIPTION
+   NEWS
+   Nickname.txt
+	Nickname changed to "My glasses! Without them I'm helpless"
+	version 1.64-1.049
+
+------------- passed R-4.0.3 CMD check ---------------
+(with environment variable SPATSTAT_TEST defined/undefined)
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+
+............. passed R-devel CMD check ...............
+                (2020-10-29 r79387)

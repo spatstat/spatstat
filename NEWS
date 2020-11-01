@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.64-1.048
+        CHANGES IN spatstat VERSION 1.64-1.049
 
 OVERVIEW
 
@@ -9,11 +9,13 @@ OVERVIEW
 
     o predict.mppm now works for multitype point process models.
 
+    o improved handling of 'newdata' in predict.mppm.
+
     o anova.mppm currently does not support random-effects models.
     
     o Bug fixes and minor improvements.
 
-    o version nickname: 'Warm Machine Wash'
+    o version nickname: "My glasses! Without them I'm helpless"
 
     o We thank Corey Anderson, Andy Craig, Pavel Fibich,
     Kurt Hornik, Gopalan Nair, Yonatan Rosen and Rasmus Waagepetersen
@@ -36,6 +38,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o predict.mppm
     Now supports multitype point process models.
+
+    o predict.mppm
+    Improved handling of argument 'newdata'
     
     o densityHeat
     Default behaviour has changed slightly.
@@ -136,7 +141,8 @@ BUG FIXES
     Fixed.
 
     o simulate.rhohat
-    Crashed when applied to rhohat objects computed from data on a linear network.
+    Crashed when applied to rhohat objects computed from data
+    on a linear network.
     Fixed.
     
     o hyperframe

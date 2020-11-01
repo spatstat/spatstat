@@ -1,7 +1,7 @@
 #
 #    predictmppm.R
 #
-#	$Revision: 1.16 $	$Date: 2020/10/31 13:50:03 $
+#	$Revision: 1.17 $	$Date: 2020/11/01 00:36:17 $
 #
 #
 # -------------------------------------------------------------------
@@ -17,8 +17,10 @@ predict.mppm <- local({
     verifyclass(model, "mppm")
     ## 
     isMulti <- is.multitype(model)
-    depends.on.row <- summary(model)$depends.on.row
-    npat.old <- model$npat
+    modelsumry <- summary(model)
+    depends.on.row <- modelsumry$depends.on.row
+    fixedinteraction <- modelsumry$ikind$fixedinteraction
+    ndata.old <- model$npat
     ##
     ## ......................................................................
     if(verbose)
@@ -42,15 +44,38 @@ predict.mppm <- local({
     if(use.olddata) {
       newdata <- model$data
       newdataname <- "Original data"
+      ndata.new <- ndata.old
+      new.id <- NULL
     } else {
       stopifnot(is.data.frame(newdata) || is.hyperframe(newdata))
       newdataname <- sQuote("newdata")
-      if(depends.on.row && nrow(newdata) != npat.old)
-        stop(paste("'newdata' must have the same number of rows",
-                   "as the original 'data' argument",
-                   paren(paste("namely", npat.old)),
-                   "because the model depends on the row index"),
-             call.=FALSE)
+      ndata.new <- nrow(newdata)
+      new.id <- NULL
+      if(depends.on.row) {
+        #' require row serial numbers 'id' 
+        new.id <- newdata$id
+        if(is.null(new.id)) {
+          #' no serial numbers given
+          #' implicitly use the old serial numbers
+          if(ndata.new != ndata.old)
+            stop(paste("'newdata' must have the same number of rows",
+                       "as the original 'data' argument",
+                       paren(paste("namely", ndata.old)),
+                       "because the model depends on the row index"),
+                 call.=FALSE)
+        } else {
+          #' serial numbers given
+          #' validate them
+          if(!is.factor(new.id) && !is.integer(new.id))
+            stop("newdata$id should be a factor or integer vector", call.=FALSE)
+          if(is.integer(new.id)) {
+            new.id <- factor(new.id, levels=1:ndata.old)
+          } else if(!identical(levels(new.id), as.character(1:ndata.old))) {
+            stop(paste0("Levels of newdata$id must be 1:", ndata.old),
+                 call.=FALSE)
+          }
+        }
+      } 
     }
     ##
     ##   Argument 'locations'
@@ -101,11 +126,10 @@ predict.mppm <- local({
       if(is.hyperframe(newdata)) {
         ## check consistency between locations and newdata
         nloc <- length(locations)
-        nnew <- summary(newdata)$ncases
-        if(nloc != nnew)
+        if(nloc != ndata.new)
           stop(paste("Length of argument", sQuote("locations"), paren(nloc),
                      "does not match number of rows in",
-                     newdataname, paren(nnew)))
+                     newdataname, paren(ndata.new)))
       } else {
         ## newdata is a data frame
         if(!is.data.frame(locations)) 
@@ -147,14 +171,24 @@ predict.mppm <- local({
     
     ## determine which interaction is applicable on each row
     interactions <- model$Inter$interaction
-    ninter <- if(is.hyperframe(interactions)) nrow(interactions) else 1
-    nnew <- nrow(newdata)
-    if(ninter != nnew && ninter != 1) {
-      if(!all(model$Inter$constant))
-        stop(paste("Number of rows of newdata", paren(nnew),
-                   "does not match number of interactions in model",
-                   paren(ninter)))
-      interactions <- interactions[1, ]
+    hyperinter <- is.hyperframe(interactions)
+    ninter <- if(hyperinter) nrow(interactions) else 1L
+    if(hyperinter && ninter > 1) {
+      if(fixedinteraction) {
+        interactions <- interactions[1L, ]
+      } else {
+        ## interaction depends on row
+        if(!is.null(new.id)) {
+          ## row sequence specified; extract the relevant rows
+          interactions <- interactions[as.integer(new.id), ]
+        } else {
+          ## rows of newdata implicitly correspond to rows of original data
+          if(ninter != ndata.new)
+            stop(paste("Number of rows of newdata", paren(ndata.new),
+                       "does not match number of interactions in model",
+                       paren(ninter)))
+        }
+      }
     }
 
     ## extract possible types, if model is multitype
@@ -220,7 +254,7 @@ predict.mppm <- local({
     if(verbose)
       cat("Building data for prediction...")
     sumry.new <- summary(newdata)
-    npat.new <- sumry.new$ncases
+    ndata.new <- sumry.new$ncases
     ## name of response point pattern in model
     Yname <- model$Info$Yname
     ##
@@ -231,7 +265,7 @@ predict.mppm <- local({
       cat("(responses)...")
     Y <- if(Yname %in% sumry.new$col.names) 
       newdata[, Yname, drop=TRUE, strip=FALSE]
-    else if(npat.new == npat.old)
+    else if(ndata.new == ndata.old)
       data[, Yname, drop=TRUE, strip=FALSE]
     else NULL
     ##
@@ -359,7 +393,7 @@ predict.mppm <- local({
         if(verbose)
           cat("(marked point patterns)...")
         ## values become marks attached to locations
-        for(i in seq(npat.new)) {
+        for(i in seq(ndata.new)) {
           Val <- values[[i]]
           Loc <- Dummies[[i]]
           isdum <- !is.data(Quads[[i]])
@@ -375,7 +409,7 @@ predict.mppm <- local({
         if(verbose)
           cat("(pixel images)...")
         ## assign values to pixel images
-        for(i in seq(npat.new)) {
+        for(i in seq(ndata.new)) {
           values.i <- values[[i]]
           Q.i <- Quads[[i]]
           values.i <- values.i[!is.data(Q.i), ]
