@@ -31,7 +31,9 @@ local({
 ##   Tests of psp class and related code
 ##                      [SEE ALSO: tests/xysegment.R]
 ##
-##  $Revision: 1.28 $  $Date: 2020/06/13 11:33:54 $
+##  $Revision: 1.29 $  $Date: 2020/11/02 07:05:19 $
+
+#%^!ifdef CORE
 
 local({
   if(ALWAYS) { # depends on platform
@@ -60,14 +62,6 @@ local({
     #' misc
     PX <- periodify(X, 2)
   }
-
-#%^!ifdef LINEARNETWORKS  
-  if(FULLTEST) {
-    ## more tests of lppm code
-    fit <- lppm(unmark(chicago) ~ polynom(x,y,2))
-    Z <- predict(fit)
-  }
-#%^!endif
 
   if(ALWAYS) { # C code
     ## tests of pixellate.psp -> seg2pixL
@@ -260,6 +254,19 @@ local({
 })
 
 reset.spatstat.options()
+
+#%^!endif
+
+#%^!ifdef LINEARNETWORKS  
+if(FULLTEST) {
+  local({
+    ## more tests of lppm code
+    fit <- lppm(unmark(chicago) ~ polynom(x,y,2))
+    Z <- predict(fit)
+  })
+}
+#%^!endif
+
 #
 ## tests/sigtraceprogress.R
 #

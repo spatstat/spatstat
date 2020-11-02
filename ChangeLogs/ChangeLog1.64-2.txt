@@ -1039,3 +1039,35 @@ Change log from spatstat 1.64-1 to spatstat 1.64-2
 (with environment variable SPATSTAT_TEST defined/undefined)
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
+
+02 nov 2020
+
+   rhohat.R
+   auc.R
+	Tweaks to filepp commands to facilitate the breakup into sub-packages
+	
+   tests/aucroc.R
+   tests/cdf.test.R
+   tests/cluck.R
+   tests/disconnected.R
+   tests/envelopes.R
+   tests/func.R
+   tests/hypotests.R
+   tests/imageops.R
+   tests/lppmodels.R
+   tests/lppstuff.R
+   tests/segments.R
+   tests/undoc.R
+   tests/updateppm.R
+   tests/xysegment.R
+	Tweaks to filepp commands to facilitate the breakup into sub-packages
+
+   DESCRIPTION
+   NEWS
+	version 1.64-1.051
+
+------------- passed R-4.0.3 CMD check ---------------
+(with environment variable SPATSTAT_TEST defined/undefined)
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+   

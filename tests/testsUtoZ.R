@@ -15,10 +15,11 @@ cat(paste("--------- Executing",
 #
 #  tests/undoc.R
 #
-#   $Revision: 1.15 $   $Date: 2020/06/12 00:38:25 $
+#   $Revision: 1.16 $   $Date: 2020/11/02 07:06:49 $
 #
 #  Test undocumented hacks, experimental code, etc
 
+#%^!ifdef CORE
 local({
   if(FULLTEST) {
     ## cases of 'pickoption'
@@ -33,12 +34,6 @@ local({
     ## test parts of 'rmhsnoop' that don't require interaction with user
     rmhSnoopEnv(cells, Window(cells), 0.1)
   }
-#%^!ifdef LINEARNETWORKS    
-  if(FULLTEST) {
-    ## linim helper functions
-    df <- pointsAlongNetwork(simplenet, 0.2)
-  }
-#%^!endif
   if(FULLTEST) {
     ## Berman-Turner frame
     A <- bt.frame(quadscheme(cells), ~x, Strauss(0.07), rbord=0.07)
@@ -114,15 +109,27 @@ local({
     B <- Ord(gradual, "gradual Ord process")
   }
 })
+  
+#%^!endif
+
+#%^!ifdef LINEARNETWORKS    
+if(FULLTEST) {
+  local({
+    ## linim helper functions
+    df <- pointsAlongNetwork(simplenet, 0.2)
+  })
+}
+  
+#%^!endif
 ##
 ##  tests/updateppm.R
 ##
 ##  Check validity of update.ppm
 ##
-##  $Revision: 1.6 $ $Date: 2020/06/12 00:39:22 $
+##  $Revision: 1.7 $ $Date: 2020/11/02 07:07:42 $
 
 local({
-
+#%^!ifdef CORE
   if(ALWAYS) {
     require(spatstat.utils)
     h <- function(m1, m2) {
@@ -210,7 +217,8 @@ local({
     fut0 <- step(fut, trace=0)
     cat("OK\n")
   }
-
+#%^!endif
+  
 #%^!ifdef LINEARNETWORKS  
   if(ALWAYS) {
     ## test update.lppm
@@ -539,8 +547,10 @@ reset.spatstat.options()
 ##
 ##    Test weird problems and boundary cases for line segment code
 ##
-##    $Version$ $Date: 2020/06/12 00:42:24 $ 
+##    $Version$ $Date: 2020/11/02 07:11:48 $ 
 ##
+
+#%^!ifdef CORE  
 local({
   if(FULLTEST) {
     ## segment of length zero
@@ -555,15 +565,16 @@ local({
     Y <- selfcut.psp(X)
     marks(X) <- data.frame(A=1:10, B=factor(letters[1:10]))
     Z <- selfcut.psp(X)
-
     #' psp class support
-#%^!ifdef LINEARNETWORKS    
-    S <- as.psp(simplenet)
-#%^!else    
     S <- unmark(X)
-#%^!endif
     marks(S) <- sample(factor(c("A","B")), nobjects(S), replace=TRUE)
     intensity(S)
     intensity(S, weights=runif(nsegments(S)))
   }
 })
+#%^!endif
+
+#%^!ifdef LINEARNETWORKS    
+if(FULLTEST) local({ S <- as.psp(simplenet) })
+#%^!endif
+

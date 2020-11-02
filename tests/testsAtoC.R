@@ -16,21 +16,25 @@ cat(paste("--------- Executing",
 #'
 #'  AUC and ROC code
 #'
-#'  $Revision: 1.4 $ $Date: 2020/04/28 12:58:26 $
+#'  $Revision: 1.6 $ $Date: 2020/11/02 06:26:45 $
 
 local({
   if(FULLTEST) {
-    A <- roc(spiders, "x")
-    B <- auc(spiders, "y")
+#%^!ifdef CORE
     fit <- kppm(redwood ~ I(y-x))
     a <- roc(fit)
     b <- auc(fit)
     fet <- ppm(amacrine~x+y+marks)
     d <- roc(fet)
     e <- auc(fet)
+#%^!endif
+#%^!ifdef LINEARNETWORKS    
+    A <- roc(spiders, "x")
+    B <- auc(spiders, "y")
     fut <- lppm(spiders ~ I(y-x))
     f <- roc(fut)
     g <- auc(fut)
+#%^!endif
   }
 })
 ## badwindowcheck.R
@@ -63,6 +67,7 @@ local({
 ## tests/cdf.test.R
 
 local({
+#%^!ifdef CORE  
   AC <- split(ants, un=FALSE)$Cataglyphis
   AM <- split(ants, un=FALSE)$Messor
   DM <- distmap(AM)
@@ -90,6 +95,7 @@ local({
     Z <- distmap(japanesepines)
     cdf.test(fut, Z)
   }
+#%^!endif
 #%^!ifdef LINEARNETWORKS  
   if(ALWAYS) {
     ## (3) linear networks
@@ -341,9 +347,10 @@ reset.spatstat.options()
 #'   Tests of "click*" functions
 #'   using queueing feature of spatstatLocator
 #'
-#'   $Revision: 1.6 $ $Date: 2020/06/12 06:10:26 $
+#'   $Revision: 1.7 $ $Date: 2020/11/02 06:53:30 $
 
 local({
+#%^!ifdef CORE
   #' clickppp
   if(ALWAYS) {
     spatstat.utils::queueSpatstatLocator(runif(5), runif(5))
@@ -384,6 +391,7 @@ local({
     spatstat.utils::queueSpatstatLocator(runifpoint(2, Window(cells)))
     TZ <- transect.im(Z, click=TRUE)
   }
+#%^!endif
 #%^!ifdef LINEARNETWORKS  
   Y <- coords(runiflpp(6, simplenet))
   if(FULLTEST) {

@@ -108,17 +108,18 @@ local({
 #'     tests/hypotests.R
 #'     Hypothesis tests
 #' 
-#'  $Revision: 1.7 $ $Date: 2020/06/12 01:11:49 $
+#'  $Revision: 1.9 $ $Date: 2020/11/02 06:39:23 $
 
 if(FULLTEST) {
 local({
-  hopskel.test(redwood, method="MonteCarlo", nsim=5)
-  
-  berman.test(spiders, "x")
 #%^!ifdef LINEARNETWORKS  
+  berman.test(spiders, "x")
   berman.test(lppm(spiders ~ x), "y")
 #%^!endif
 
+#%^!ifdef CORE
+  hopskel.test(redwood, method="MonteCarlo", nsim=5)
+  
   #' quadrat test - spatial methods
   a <- quadrat.test(redwood, 3)
   domain(a)
@@ -149,13 +150,17 @@ local({
             method="poisson", baseline=fit, alternative="less")
   scan.test(cells, rr, nsim=5,
             method="poisson", baseline=lam, alternative="less")
+  
+#%^!endif
 })
 }
 #
 #  tests/imageops.R
 #
-#   $Revision: 1.30 $   $Date: 2020/06/12 00:21:52 $
+#   $Revision: 1.31 $   $Date: 2020/11/02 07:03:26 $
 #
+
+#%^!ifdef CORE
 
 if(FULLTEST) {
 local({
@@ -242,11 +247,6 @@ local({
   fff <- f[cells]
   fff <- f[cells, drop=FALSE]
   fff <- f[Empty]
-#%^!ifdef LINEARNETWORKS
-  ## linear networks
-  ee  <- d[simplenet, drop=FALSE]
-  eev <- d[simplenet]
-#%^!endif
   
   ## ...........  cases of "[<-.im"  .......................
   d[,] <- d[] + 1
@@ -386,7 +386,18 @@ if(ALWAYS) {
         stop("Equal, but not identical, results in nearest.valid.pixel")
   })
 }
+#%^!endif
 
+#%^!ifdef LINEARNETWORKS
+if(FULLTEST) {
+  local({
+    d <- distmap(cells, dimyx=32)
+    ## linear networks
+    ee  <- d[simplenet, drop=FALSE]
+    eev <- d[simplenet]
+  })
+}
+#%^!endif
 #'
 #'  tests/interact.R
 #'

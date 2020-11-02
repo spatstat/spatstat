@@ -3,7 +3,7 @@
 ##
 ##  Calculate ROC curve or area under it
 ##
-## $Revision: 1.7 $ $Date: 2020/06/12 01:53:12 $
+## $Revision: 1.8 $ $Date: 2020/11/02 06:09:34 $
 
 roc <- function(X, ...) { UseMethod("roc") }
 
@@ -13,13 +13,11 @@ roc.ppp <- function(X, covariate, ..., high=TRUE) {
   return(result)
 }
 
-#%^!ifdef LINEARNETWORKS
 roc.lpp <- function(X, covariate, ..., high=TRUE) {
   nullmodel <- lppm(X)
   result <- rocData(covariate, nullmodel, ..., high=high)
   return(result)
 }
-#%^!endif
 
 rocData <- function(covariate, nullmodel, ..., high=TRUE) {
   d <- spatialCDFframe(nullmodel, covariate, ...)
@@ -59,7 +57,6 @@ roc.kppm <- function(X, ...) {
   return(result)
 }
 
-#%^!ifdef LINEARNETWORKS
 roc.lppm <- function(X, ...) {
   stopifnot(is.lppm(X))
   model <- X
@@ -69,7 +66,6 @@ roc.lppm <- function(X, ...) {
   result <- rocModel(lambda, nullmodel, ...)
   return(result)
 }
-#%^!endif
 
 rocModel <- function(lambda, nullmodel, ..., high) {
   if(!missing(high))
@@ -113,7 +109,6 @@ auc.ppp <- function(X, covariate, ..., high=TRUE) {
   return(result)
 }
 
-#%^!ifdef LINEARNETWORKS
 auc.lpp <- function(X, covariate, ..., high=TRUE) {
   d <- spatialCDFframe(lppm(X), covariate, ...)
   U <- d$values$U
@@ -121,7 +116,6 @@ auc.lpp <- function(X, covariate, ..., high=TRUE) {
   result <- if(high) EU else (1 - EU) 
   return(result)
 }
-#%^!endif
 
 auc.kppm <- function(X, ...) { auc(as.ppm(X), ...) }
 
@@ -148,7 +142,6 @@ auc.ppm <- function(X, ...) {
   return(result)
 }
 
-#%^!ifdef LINEARNETWORKS
 auc.lppm <- function(X, ...) {
   stopifnot(inherits(X, "lppm"))
   model <- X
@@ -168,5 +161,4 @@ auc.lppm <- function(X, ...) {
   names(result) <- c("obs", "theo")
   return(result)
 }
-#%^!endif
 
