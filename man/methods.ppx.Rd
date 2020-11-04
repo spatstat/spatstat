@@ -5,6 +5,7 @@
 \alias{plot.ppx}
 \alias{unitname.ppx}
 \alias{unitname<-.ppx}
+\alias{scale.ppx}
 \title{
   Methods for Multidimensional Space-Time Point Patterns
 }
@@ -17,6 +18,7 @@
 \method{plot}{ppx}(x, ...)
 \method{unitname}{ppx}(x)
 \method{unitname}{ppx}(x) <- value
+\method{scale}{ppx}(x, center=TRUE, scale=TRUE)
 }
 \arguments{
   \item{x}{
@@ -28,11 +30,16 @@
   \item{value}{
     Name of the unit of length. See \code{\link{unitname}}.
   }
+  \item{center,scale}{
+    Arguments passed to \code{\link[base]{scale.default}}
+    to determine the rescaling.
+  }
 }
 \details{
   These are methods for the generic functions
   \code{\link{print}}, \code{\link{plot}},
-  \code{\link{unitname}} and  \code{\link{unitname<-}}
+  \code{\link{unitname}},  \code{\link{unitname<-}}
+  and \code{\link[base]{scale}}
   for the class \code{"ppx"} of multidimensional point patterns.
   
   The \code{print} method prints a description
@@ -41,16 +48,17 @@
   The \code{unitname} method extracts the name of the unit of
   length in which the point coordinates are expressed.
   The \code{unitname<-} method assigns the name of the unit of length.
+
+  The \code{scale} method rescales each spatial coordinate of \code{x}.
 }
 \value{
-  For \code{print.ppx} the value is \code{NULL}.
-  For \code{unitname.ppx} an object of class \code{"units"}.
+  For \code{print.ppx} and \code{plot.ppx} the value is \code{NULL}.
+  For \code{unitname.ppx} the value is an object of class \code{"units"}.
+  For \code{unitname<-.ppx} and \code{scale.ppx}
+  the value is another object of class \code{"ppx"}.
 }
-\author{\adrian
-  
-  
-  and \rolf
-  
+\author{
+  \spatstatAuthors.
 }
 \seealso{
   \code{\link{ppx}},

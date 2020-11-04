@@ -3,7 +3,7 @@
 #
 #  class of general point patterns in any dimension
 #
-#  $Revision: 1.63 $  $Date: 2019/07/21 06:33:14 $
+#  $Revision: 1.66 $  $Date: 2020/11/04 04:26:04 $
 #
 
 ppx <- local({
@@ -653,15 +653,26 @@ shift.ppx <- function(X, vec = 0,  ..., spatial = TRUE, temporal = TRUE, local =
 }
 
 # Scale a boxx and ppx like base::scale()
-scale.boxx <- function(x, center, scale){
-  x$ranges <- as.data.frame(scale(x$ranges, center, scale))
+scale.boxx <- function(x, center=TRUE, scale=TRUE){
+  newranges <- scale(x$ranges, center, scale)
+  x$ranges <- as.data.frame(newranges)
+  attr(x, "scaled:center") <- attr(newranges, "scaled:center")
+  attr(x, "scaled:scale")  <- attr(newranges, "scaled:scale")
   return(x)
 }
 
-scale.ppx <- function(x, center, scale){
-  coords(x) <- scale(coords(x), center, scale)
+scale.ppx <- function(x, center=TRUE, scale=TRUE){
   if(!is.null(domain(x))){
-    x$domain <- scale(domain(x), center, scale)
+    x$domain <- newdomain <- scale(domain(x), center, scale) 
+    newcenter <- attr(newdomain, "scaled:center")
+    newscale  <- attr(newdomain, "scaled:scale")
+    if(!is.null(newcenter) && !is.null(newscale)) {
+      center <- newcenter
+      scale <- newscale
+    }
   }
+  coords(x) <- newcoords <- scale(coords(x), center, scale)
+  attr(x, "scaled:center") <- attr(newcoords, "scaled:center")
+  attr(x, "scaled:scale")  <- attr(newcoords, "scaled:scale")
   return(x)
 }

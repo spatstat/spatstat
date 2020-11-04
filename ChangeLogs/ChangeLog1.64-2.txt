@@ -1117,3 +1117,30 @@ Change log from spatstat 1.64-1 to spatstat 1.64-2
 (with environment variable SPATSTAT_TEST defined/undefined)
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
+
+   ppx.R
+   Extract.ppx.Rd
+   inside.boxx.Rd
+   intersect.boxx.Rd [New file]
+   methods.boxx.Rd
+   shift.ppx.Rd [New file]
+   tests/ppx.R
+   spatstat-internal.Rd
+   	New ppx support by Ege
+
+   DESCRIPTION
+   NEWS
+	version 1.64-1.054
+
+------------- passed R-4.0.3 CMD check ---------------
+(with environment variable SPATSTAT_TEST defined/undefined)
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
+
+............. passed 'make bookcheck'  ...............
+
+>>>>>>>>>>   passed R-devel CMD check <<<<<<<<<<<<<<<<
+	     (2020-11-03 r79399)
+
+:::::::::::  tested scripts for package split-up ::::::::::::::
+  (built and tested sub-packages 'spatstat.core', 'spatstat.linnet')

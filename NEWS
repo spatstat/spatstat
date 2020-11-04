@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.64-1.053
+        CHANGES IN spatstat VERSION 1.64-1.054
 
 OVERVIEW
 
@@ -13,6 +13,8 @@ OVERVIEW
 
     o improved handling of 'newdata' in predict.mppm.
 
+    o More support for multi-dimensional patterns.
+    
     o Bug fixes and minor improvements.
 
     o version nickname: "My glasses! Without them I'm helpless"
@@ -21,6 +23,20 @@ OVERVIEW
     Pavel Fibich, Kurt Hornik, Gopalan Nair, Yonatan Rosen
     and Rasmus Waagepetersen for contributions.
 
+NEW FUNCTIONS
+
+    o intersect.boxx
+    Compute intersection of boxes in multi-dimensional space
+
+    o scale.boxx, scale.ppx
+    Methods for 'scale' for boxes and patterns in multi-dimensional space
+
+    o shift.boxx, shift.ppx
+    Methods for 'shift' for boxes and patterns in multi-dimensional space
+
+    o is.boxx
+    Determine whether an object is a multidimensional box
+    
 SIGNIFICANT USER-VISIBLE CHANGES
 
     o package structure
@@ -94,6 +110,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
     Issues a warning when applied to random-effects models
     (models fitted using the argument 'random').
 
+    o [.ppx
+    New argument 'clip'
+    
 BUG FIXES
 
     o deviance.lppm, pseudoR2.lppm
