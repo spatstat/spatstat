@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.64-1.054
+        CHANGES IN spatstat VERSION 1.64-2
 
 OVERVIEW
 
@@ -11,13 +11,13 @@ OVERVIEW
 
     o predict.mppm now works for multitype point process models.
 
-    o improved handling of 'newdata' in predict.mppm.
+    o Improved handling of 'newdata' in predict.mppm.
 
     o More support for multi-dimensional patterns.
     
     o Bug fixes and minor improvements.
 
-    o version nickname: "My glasses! Without them I'm helpless"
+    o Version nickname: "Keeping up with the K-functions"
 
     o We thank Corey Anderson, Andy Craig, Marcelino de la Cruz,
     Pavel Fibich, Kurt Hornik, Gopalan Nair, Yonatan Rosen

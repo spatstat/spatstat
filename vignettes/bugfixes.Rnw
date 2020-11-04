@@ -207,6 +207,11 @@ are immediately obvious.
  \subsection{Serious Bugs, Often Completely Wrong, Moderate Impact}
 
  \begin{itemize}
+  \item \texttt{deviance.lppm}, \texttt{pseudoR2.lppm}:
+    Results were completely incorrect, due to a coding error.
+   \bugger{1.44-0}{december 2015}{1.64-2}{november 2020}   
+
+
  \item \texttt{bw.pcf}:
    Results were totally incorrect due to a typo.
    \bugger{1.51-0}{may 2017}{1.52-0}{august 2017}   
