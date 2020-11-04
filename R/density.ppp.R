@@ -3,7 +3,7 @@
 #
 #  Method for 'density' for point patterns
 #
-#  $Revision: 1.110 $    $Date: 2020/05/09 04:02:00 $
+#  $Revision: 1.111 $    $Date: 2020/11/04 01:15:53 $
 #
 
 # ksmooth.ppp <- function(x, sigma, ..., edge=TRUE) {
@@ -283,8 +283,8 @@ densitypointsEngine <- function(x, sigma=NULL, ...,
                                 scalekernel=is.character(kernel),
                                 weights=NULL, edge=TRUE, varcov=NULL,
                                 leaveoneout=TRUE, diggle=FALSE,
-                                sorted=FALSE, spill=FALSE, cutoff=NULL) {
-  debugging <- spatstat.options("developer")
+                                sorted=FALSE, spill=FALSE, cutoff=NULL,
+                                debug=FALSE) {
   stopifnot(is.logical(leaveoneout))
 
   validate2Dkernel(kernel)
@@ -333,14 +333,14 @@ densitypointsEngine <- function(x, sigma=NULL, ...,
                            scalekernel=scalekernel, cutoff=cutoff,
                            fatal=TRUE)
   ## cutoff is now an absolute distance
-  if(debugging)
+  if(debug)
     cat(paste("cutoff=", cutoff, "\n"))
 
   if(leaveoneout && npoints(x) > 1) {
     ## ensure each point has its closest neighbours within the cutoff
     nndmax <- maxnndist(x)
     cutoff <- max(2 * nndmax, cutoff)
-    if(debugging)
+    if(debug)
       cat(paste("adjusted cutoff=", cutoff, "\n"))
   }
   # validate weights
@@ -391,7 +391,7 @@ densitypointsEngine <- function(x, sigma=NULL, ...,
   if(isgauss &&
      spatstat.options("densityTransform") && spatstat.options("densityC")) {
     ## .................. experimental C code .....................
-    if(debugging)
+    if(debug)
       cat('Using experimental code!\n')
     npts <- npoints(x)
     result <- if(k == 1L) numeric(npts) else matrix(, npts, k)
@@ -456,7 +456,7 @@ densitypointsEngine <- function(x, sigma=NULL, ...,
     }
   } else if(isgauss && spatstat.options("densityC")) {
     # .................. C code ...........................
-    if(debugging)
+    if(debug)
       cat('Using standard code.\n')
     npts <- npoints(x)
     result <- if(k == 1L) numeric(npts) else matrix(, npts, k)

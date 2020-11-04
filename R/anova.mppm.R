@@ -1,7 +1,7 @@
 #
 # anova.mppm.R
 #
-# $Revision: 1.19 $ $Date: 2020/08/15 04:31:27 $
+# $Revision: 1.20 $ $Date: 2020/11/04 00:23:37 $
 #
 
 anova.mppm <- local({
@@ -81,9 +81,9 @@ anova.mppm <- local({
 
     ## Choice of test
     if(fitter == "glmmPQL") {
-      HACK <- spatstat.options("developer")
-      if(!HACK) 
-        stop("Sorry, analysis of deviance is currently not supported for models with random effects, due to changes in the nlme package", call.=FALSE)
+#      HACK <- spatstat.options("developer")
+#      if(!HACK) 
+#        stop("Sorry, analysis of deviance is currently not supported for models with random effects, due to changes in the nlme package", call.=FALSE)
       ## anova.lme requires different format of `test' argument
       ## and does not recognise 'dispersion'
       if(is.null(test))

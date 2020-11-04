@@ -903,7 +903,8 @@ densitycrossEngine(Xdata, Xquery, sigma, \dots,
 densitypointsEngine(x, sigma, \dots,
                     kernel, scalekernel,
                     weights, edge, varcov,
-                    leaveoneout, diggle, sorted, spill, cutoff)
+                    leaveoneout, diggle, sorted, spill, cutoff,
+                    debug)
 diagnose.ppm.engine(object, \dots, type, typename, opt,
                          sigma, rbord, compute.sd, compute.cts,
                          envelope, nsim, nrank,
@@ -1506,7 +1507,7 @@ scanBinomLRTS(nZ, nG, muZ, muG, alternative)
 second.moment.calc(x, sigma, edge, what, \dots,
                    varcov, expand, obswin, npts, debug)
 second.moment.engine(x, sigma, edge, what, \dots,
-      kernel, scalekernel, obswin, varcov, npts, debug)
+      kernel, scalekernel, obswin, varcov, npts, debug, fastgauss)
 sewpcf(d, w, denargs, lambda2area, divisor)
 sewsmod(d, ff, wt, Ef, rvals, method="smrep", \dots, nwtsteps=500)
 \method{shift}{diagramobj}(X, \dots)
@@ -1530,7 +1531,7 @@ smoothcrossEngine(Xdata, Xquery, values, sigma, \dots,
                     kernel, scalekernel, sorted, cutoff)
 smoothpointsEngine(x, values, sigma, \dots,
                    kernel, scalekernel,
-                   weights, varcov, leaveoneout, sorted, cutoff)
+                   weights, varcov, leaveoneout, sorted, cutoff, debug)
 smudge(X)
 \method{sort}{im}(x, \dots)
 spatstat.deldir.setopt(use.trigrafS, use.trigraf, debug.delaunay)

@@ -1,5 +1,5 @@
 # hackglmm.R
-#  $Revision: 1.7 $ $Date: 2020/08/15 04:32:44 $
+#  $Revision: 1.8 $ $Date: 2020/11/04 00:27:07 $
 
 hackglmmPQL <- 
 function (fixed, random, family, data, correlation, weights,
@@ -95,10 +95,10 @@ function (fixed, random, family, data, correlation, weights,
     }
     fit$call <- Call
     fit$family <- family
-    if(!spatstat.options("developer")) {
-      attributes(fit$logLik) <- NULL
-      fit$logLik <- as.numeric(NA)
-    }
+#    if(!spatstat.options("developer")) {
+#      attributes(fit$logLik) <- NULL
+#      fit$logLik <- as.numeric(NA)
+#    }
     oldClass(fit) <- c("glmmPQL", oldClass(fit))
     fit
 }

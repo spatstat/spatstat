@@ -147,7 +147,7 @@ local({
 #
 # Basic tests of mppm
 #
-# $Revision: 1.18 $ $Date: 2020/06/12 06:11:01 $
+# $Revision: 1.19 $ $Date: 2020/11/04 00:24:03 $
 # 
 
 local({
@@ -345,6 +345,10 @@ local({
     anova(mod0S, modxyS, test="Chi")
     anova(modxy, test="Chi")
     anova(modxyS, test="Chi")
+    #' models with random effects (example from Marcelino de la Cruz)
+    mod0r <- mppm(X~1, data=H, Poisson(), random = ~1|id)
+    modxr <- mppm(X~x, data=H, Poisson(), random = ~1|id)
+    anova(mod0r, modxr, test="Chi")
   }
 })
 

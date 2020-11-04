@@ -1,7 +1,7 @@
 #
 #           Kmeasure.R
 #
-#           $Revision: 1.71 $    $Date: 2020/04/26 10:09:16 $
+#           $Revision: 1.72 $    $Date: 2020/11/04 01:09:44 $
 #
 #     Kmeasure()         compute an estimate of the second order moment measure
 #
@@ -155,7 +155,7 @@ second.moment.engine <-
            kernel="gaussian",
            scalekernel=is.character(kernel),
            obswin = as.owin(x), varcov=NULL,
-           npts=NULL, debug=FALSE)
+           npts=NULL, debug=FALSE, fastgauss=FALSE)
 {
   what <- match.arg(what)
   validate2Dkernel(kernel)
@@ -212,16 +212,16 @@ second.moment.engine <-
   xcol.pad <- X$xcol[1] + xstep * (0:(2*nc-1))
   yrow.pad <- X$yrow[1] + ystep * (0:(2*nr-1))
   # compute kernel and its Fourier transform
-  if(!needs.kernel && 
+  if(fastgauss && !needs.kernel && 
      identical(kernel, "gaussian") &&
-     is.numeric(sigma) && (length(sigma) == 1) &&
-     spatstat.options('developer')) {
-    # compute Fourier transform of kernel directly (*experimental*)
+     is.numeric(sigma) && (length(sigma) == 1)) {
+    #' compute Fourier transform of kernel directly (*experimental*)
     ii <- c(0:(nr-1), nr:1)
     jj <- c(0:(nc-1), nc:1)
-    zz <- -sigma^2 * pi^2/2
-    uu <- exp(zz * ii^2)
-    vv <- exp(zz * jj^2)
+    cc <- -(sigma^2 * pi^2)/2
+    ww <- sidelengths(Frame(X))^2
+    uu <- exp(ii^2 * cc/ww[2])
+    vv <- exp(jj^2 * cc/ww[1])
     fK <- outer(uu, vv, "*")
   } else {
     # set up kernel

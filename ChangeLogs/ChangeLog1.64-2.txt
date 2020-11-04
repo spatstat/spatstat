@@ -1070,4 +1070,35 @@ Change log from spatstat 1.64-1 to spatstat 1.64-2
 (with environment variable SPATSTAT_TEST defined/undefined)
 ------------- installed on laptop      ---------------
 ------------- uploaded to github       ---------------
+
+04 nov 2020
+
+   tests/mppm.R
+	Added example of anova for models with random effects
+	(from Marcelino de la Cruz)
+
+   anova.mppm.R
+   hackglmm.R
+	Removed dependence on spatstat.options('developer')
+	so that the hack (developer=TRUE) is now executed
+
+   Kmeasure.R
+   spatstat-internal.Rd
+	Dependence on spatstat.options('developer')
+	replaced by an internal argument 'fastgauss'
+
+   density.ppp.R
+   smooth.ppp.R
+   spatstat-internal.Rd
+	Dependence on spatstat.options('developer')
+	replaced by internal argument 'debug'
+	
+   DESCRIPTION
+   NEWS
+	version 1.64-1.052
+
+------------- passed R-4.0.3 CMD check ---------------
+(with environment variable SPATSTAT_TEST defined/undefined)
+------------- installed on laptop      ---------------
+------------- uploaded to github       ---------------
    

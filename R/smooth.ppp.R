@@ -3,7 +3,7 @@
 #
 #  Smooth the marks of a point pattern
 # 
-#  $Revision: 1.74 $  $Date: 2020/02/04 01:55:03 $
+#  $Revision: 1.75 $  $Date: 2020/11/04 01:15:37 $
 #
 
 # smooth.ppp <- function(X, ..., weights=rep(1, npoints(X)), at="pixels") {
@@ -360,8 +360,8 @@ smoothpointsEngine <- function(x, values, sigma, ...,
                                scalekernel=is.character(kernel),
                                weights=NULL, varcov=NULL,
                                leaveoneout=TRUE,
-                               sorted=FALSE, cutoff=NULL) {
-  debugging <- spatstat.options("developer")
+                               sorted=FALSE, cutoff=NULL,
+                               debug=FALSE) {
   stopifnot(is.logical(leaveoneout))
 
   if(!is.null(dim(values)))
@@ -409,7 +409,7 @@ smoothpointsEngine <- function(x, values, sigma, ...,
                            scalekernel=scalekernel, cutoff=cutoff,
                            fatal=TRUE)
   ## cutoff is now an absolute distance
-  if(debugging)
+  if(debug)
     cat(paste("cutoff=", cutoff, "\n"))
   
   # detect very small bandwidth
@@ -440,7 +440,7 @@ smoothpointsEngine <- function(x, values, sigma, ...,
      spatstat.options("densityTransform") &&
      spatstat.options("densityC")) {
     ## .................. experimental C code .....................
-    if(debugging)
+    if(debug)
       cat('Using experimental code!\n')
     npts <- npoints(x)
     result <- numeric(npts)
@@ -500,7 +500,7 @@ smoothpointsEngine <- function(x, values, sigma, ...,
     }
   } else if(isgauss && spatstat.options("densityC")) {
     # .................. C code ...........................
-    if(debugging)
+    if(debug)
       cat('Using standard code.\n')
     npts <- npoints(x)
     result <- numeric(npts)
