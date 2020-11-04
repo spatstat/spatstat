@@ -1,7 +1,7 @@
 #
 # anova.mppm.R
 #
-# $Revision: 1.20 $ $Date: 2020/11/04 00:23:37 $
+# $Revision: 1.21 $ $Date: 2020/11/04 02:45:48 $
 #
 
 anova.mppm <- local({
@@ -33,13 +33,6 @@ anova.mppm <- local({
     ## list of models
     objex <- append(list(object), argh)
 
-    ## short names of models
-    argnames <- names(thecall) %orifnull% rep("", length(thecall))
-    retain <- is.na(match(argnames,
-                          c("test", "adjust", "fine", "warn", "override")))
-    shortcall <- thecall[retain]
-    modelnames <- vapply(as.list(shortcall[-1L]), short.deparse, "")
-      
     ## Check each model is an mppm object
     if(!all(sapply(objex, is.mppm)))
       stop(paste("Arguments must all be", sQuote("mppm"), "objects"))
@@ -48,9 +41,19 @@ anova.mppm <- local({
     pois <- all(sapply(objex, is.poisson.mppm))
     gibbs <- !pois
 
-    ## handle anova for a single object
+    ## single/multiple objects given
+    singleobject <- (length(objex) == 1L)
     expandedfrom1 <- FALSE
-    if(length(objex) == 1 && gibbs) {
+    if(!singleobject) {
+      ## several objects given
+      ## require short names of models for output
+      argnames <- names(thecall) %orifnull% rep("", length(thecall))
+      retain <- is.na(match(argnames,
+                            c("test", "adjust", "fine", "warn", "override")))
+      shortcall <- thecall[retain]
+      modelnames <- vapply(as.list(shortcall[-1L]), short.deparse, "")
+    } else if(gibbs) {
+      ## single Gibbs model given.
       ## we can't rely on anova.glm in this case
       ## so we have to re-fit explicitly
       Terms <- drop.scope(object)
@@ -139,7 +142,8 @@ anova.mppm <- local({
     result <- try(do.call(anova, append(fitz, opt)))
     if(inherits(result, "try-error"))
       stop("anova failed")
-    if(fitter == "glmmPQL")
+    if(fitter == "glmmPQL" &&
+       !singleobject && length(modelnames) == nrow(result))
       row.names(result) <- modelnames
   
     ## Remove approximation-dependent columns if present

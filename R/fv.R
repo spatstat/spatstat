@@ -4,7 +4,7 @@
 ##
 ##    class "fv" of function value objects
 ##
-##    $Revision: 1.162 $   $Date: 2020/10/30 04:24:11 $
+##    $Revision: 1.163 $   $Date: 2020/11/04 02:21:05 $
 ##
 ##
 ##    An "fv" object represents one or more related functions
@@ -731,7 +731,6 @@ rebadge.fv <- function(x, new.ylab, new.fname,
     ## replace (some or all entries of) the following
     desc <- attr(x, "desc")
     labl <- attr(x, "labl")
-    valu <- attr(x, "valu")
     nama <- names(x)
     ## specified subset to be replaced
     if(missing(tags) || is.null(tags))

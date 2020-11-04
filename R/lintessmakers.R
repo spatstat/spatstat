@@ -4,7 +4,7 @@
 #'   Creation of linear tessellations
 #'   and intersections between lintess objects
 #'
-#'   $Revision: 1.3 $  $Date: 2020/06/17 05:39:30 $
+#'   $Revision: 1.4 $  $Date: 2020/11/04 02:19:04 $
 #' 
 
 divide.linnet <- local({
@@ -48,7 +48,6 @@ divide.linnet <- local({
         iedge <- c(iedge, joined[-njoin])
       jedge <- c(jedge, joined[-1L])
     }
-    nedge <- length(iedge)
     lab0 <- cocoEngine(nbits, iedge - 1L, jedge - 1L)
     lab <- lab0 + 1L
     lab <- as.integer(factor(lab))
