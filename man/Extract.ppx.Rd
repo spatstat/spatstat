@@ -5,7 +5,7 @@
   Extract a subset of a multidimensional point pattern.
 }
 \usage{
-  \method{[}{ppx}(x, i, drop=FALSE, ...)
+  \method{[}{ppx}(x, i, drop=FALSE, clip=FALSE, ...)
 }
 \arguments{
   \item{x}{
@@ -19,6 +19,14 @@
   \item{drop}{
     Logical value indicating whether to remove unused levels
     of the marks, if the marks are a factor.
+  }
+  \item{clip}{
+    Logical value indicating how to form the domain of the resulting
+    point pattern, when \code{i} is a box (object of class \code{"boxx"}). 
+    If \code{clip=FALSE} (the default), the result has domain
+    equal to \code{i}. If \code{clip=TRUE}, the resulting domain
+    is the intersection between the domain of \code{x} and the
+    domain \code{i}.
   }
   \item{\dots}{
     Ignored. 
@@ -63,6 +71,10 @@
    df <- data.frame(x=runif(4),y=runif(4),z=runif(4))
    X <- ppx(data=df, coord.type=c("s","s","t"))
    X[-2]
+   Y <- ppx(coords(cells), domain = boxx(c(0,1),c(0,1)))
+   dom <- shift(domain(Y), vec = c(.5,.5))
+   Y[dom]
+   Y[dom, clip=TRUE]
 }
 \author{
   \spatstatAuthors

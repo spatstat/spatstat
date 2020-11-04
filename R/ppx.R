@@ -160,13 +160,90 @@ plot.ppx <- function(x, ...) {
   return(invisible(NULL))
 }
 
-"[.ppx" <- function (x, i, drop=FALSE, ...) {
+is.boxx <- function(x){
+  inherits(x, "boxx")
+}
+
+intersect.boxx <- function(..., fatal = FALSE){
+  argh <- list(...)
+  ## look for NULL arguments (empty boxx) and return NULL
+  if(any(sapply(argh, is.null))){
+    if(fatal) stop("There is a NULL boxx in the intersection.")
+    return(NULL)
+  }
+  ## look for boxx arguments
+  isboxx <- sapply(argh, is.boxx)
+  if(any(!isboxx))
+    warning("Some arguments were not boxx objects")
+  argh <- argh[isboxx]
+  nboxx <- length(argh)
+
+  if(nboxx == 0) {
+    warning("No non-NULL boxx objects were given")
+    if(fatal) stop("The intersection of boxx objects is NULL.")
+    return(NULL)
+  }
+
+  ## at least one boxx
+  A <- argh[[1L]]
+  if(nboxx == 1) return(A)
+
+  ## at least two non-empty boxx objects
+  B <- argh[[2L]]
+
+  if(nboxx > 2) {
+    ## handle union of more than two windows
+    windows <- argh[-c(1,2)]
+    ## absorb all windows into B
+    for(i in seq_along(windows)) {
+      B <- do.call(intersect.boxx, list(B, windows[[i]], fatal=fatal))
+      if(is.null(B)){
+        if(fatal) stop("The intersection of boxx objects is NULL.")
+        return(NULL)
+      }
+    }
+  }
+
+  ## There are now only two windows, which are not empty.
+  if(identical(A, B)){
+    return(A)
+  }
+
+  # check dim and units
+  if(spatdim(A)!=spatdim(B)){
+    stop("Not all boxx objects have same spatial dimension.")
+  }
+  if(!compatible(unitname(A), unitname(B)))
+    warning("The two windows have incompatible units of length")
+  uname <- harmonise(unitname(A), unitname(B), single=TRUE)
+
+  # determine intersection of ranges
+  rA <- A$ranges
+  rB <- B$ranges
+  r1 <- pmax(rA[1,], rB[1,])
+  r2 <- pmin(rA[2,], rB[2,])
+  if(any(r1>=r2)){
+    if(fatal) stop("The intersection of boxx objects is NULL.")
+    return(NULL)
+  }
+  return(boxx(rbind(r1,r2)))
+}
+
+"[.ppx" <- function (x, i, drop=FALSE, clip=FALSE, ...) {
   da <- x$data
   dom <- x$domain
   if(!missing(i)) {
     if(inherits(i, c("boxx", "box3"))) {
-      dom <- i
-      i <- inside.boxx(da, w=i)
+      if(clip){
+        dom <- intersect.boxx(dom, i)
+      } else{
+        dom <- i
+      }
+      if(is.null(dom)){
+        i <- rep(FALSE, nrow(da))
+      } else{
+        i <- inside.boxx(da, w=i)
+      }
     }
     da <- da[i, , drop=FALSE]
   }
@@ -519,7 +596,7 @@ inside.boxx <- function(..., w = NULL){
     dat1 <- dat[[1]]
     if(inherits(dat1, "ppx"))
       dat <- coords(dat1)
-    if(inherits(dat1, "hyperframe"))
+    if(inherits(dat1, c("hyperframe", "data.frame", "matrix")))
       dat <- as.data.frame(dat1)
   }
   ra <- w$ranges
@@ -546,4 +623,45 @@ spatdim <- function(X, intrinsic=FALSE) {
   if(inherits(X, "box3")) 3L else
   if(inherits(X, "boxx")) length(X$ranges) else 
   if(is.ppx(X)) as.integer(sum(X$ctype == "spatial")) else NA_integer_
+}
+
+shift.boxx <- function(X, vec = 0, ...){
+  ra <- X$ranges
+  if(length(vec)==1){
+    vec <- rep(vec, ncol(ra))
+  }
+  stopifnot(length(vec)==ncol(ra))
+  X$ranges <- ra + matrix(vec, 2L, ncol(ra), byrow = TRUE)
+  attr(X, "lastshift") <- vec
+  return(X)
+}
+
+shift.ppx <- function(X, vec = 0,  ..., spatial = TRUE, temporal = TRUE, local = TRUE){
+  ctype <- X$ctype
+  chosen <- (ctype == "spatial" & spatial) | 
+    (ctype == "temporal" & temporal) | 
+    (ctype == "local" & local)
+  dat <- as.data.frame(X$data[, chosen, drop=FALSE])
+  if(length(vec)==1){
+    vec <- rep(vec, ncol(dat))
+  }
+  stopifnot(length(vec)==ncol(dat))
+  X$data[,chosen] <- dat + matrix(vec, nrow(dat), ncol(dat), byrow = TRUE)
+  X$domain <- shift(X$domain, vec = vec)
+  attr(X, "lastshift") <- vec
+  return(X)
+}
+
+# Scale a boxx and ppx like base::scale()
+scale.boxx <- function(x, center, scale){
+  x$ranges <- as.data.frame(scale(x$ranges, center, scale))
+  return(x)
+}
+
+scale.ppx <- function(x, center, scale){
+  coords(x) <- scale(coords(x), center, scale)
+  if(!is.null(domain(x))){
+    x$domain <- scale(domain(x), center, scale)
+  }
+  return(x)
 }
