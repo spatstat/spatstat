@@ -94,7 +94,7 @@
   For information on converting your data into \pkg{spatstat} format,
   read Chapter 3 of Baddeley, Rubak and Turner (2015).
   This chapter is available free online, as one of the sample chapters
-  at the book companion website, \url{https://spatstat.github.io/book}.
+  at the book companion website, \url{http://book.spatstat.org}.
 
   For information about handling data in \bold{shapefiles},
   see Chapter 3, or the Vignette
@@ -1728,7 +1728,7 @@
   Baddeley, A., Turner, R., Mateu, J. and Bevan, A. (2013)
   Hybrids of Gibbs point process models and their implementation.
   \emph{Journal of Statistical Software} \bold{55}:11, 1--43.
-  \url{http://www.jstatsoft.org/v55/i11/}
+  \url{https://www.jstatsoft.org/v55/i11/}
 
   Diggle, P.J. (2003)
   \emph{Statistical analysis of spatial point patterns},

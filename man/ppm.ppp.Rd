@@ -613,7 +613,7 @@
   Rajala T. (2014)
   \emph{A note on Bayesian logistic regression for spatial exponential family
   Gibbs point processes},
-  Preprint on ArXiv.org. \url{http://arxiv.org/abs/1411.0539}
+  Preprint on ArXiv.org. \url{https://arxiv.org/abs/1411.0539}
 
 }
 

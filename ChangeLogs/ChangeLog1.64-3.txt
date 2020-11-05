@@ -1,0 +1,32 @@
+Change log from spatstat 1.64-2 to spatstat 1.64-3
+==================================================
+
+04 nov 2020
+
+   DESCRIPTION
+   NEWS
+	Version 1.64-2.001
+	Nickname not changed
+
+05 nov 2020
+
+   CITATION
+   DESCRIPTION
+   BadGey.Rd
+   Hybrid.Rd
+   is.hybrid.Rd
+   ppm.ppp.Rd
+   rmhmodel.default.Rd
+   spatstat-package.Rd
+	Tweaked URLs to satisfy CRAN.
+	Honestly this is getting ridiculous.
+
+   DESCRIPTION
+   NEWS
+	Version 1.64-3
+
+------------- passed R-4.0.3 CMD check ---------------
+(with environment variable SPATSTAT_TEST defined/undefined)
+------------- installed on laptop      ---------------
+
+

@@ -1,6 +1,6 @@
 Package: spatstat
-Version: 1.64-2
-Date: 2020-11-04
+Version: 1.64-3
+Date: 2020-11-05
 Title: Spatial Point Pattern Analysis, Model-Fitting, Simulation, Tests
 Author: Adrian Baddeley <Adrian.Baddeley@curtin.edu.au>,
 	Rolf Turner <r.turner@auckland.ac.nz> 
@@ -230,7 +230,7 @@ Description: Comprehensive open-source toolbox for analysing Spatial Point Patte
 	A model can be fitted to a list of point patterns (replicated point pattern data) using the function mppm(). The model can include random effects and fixed effects depending on the experimental design, in addition to all the features listed above.
 	Fitted point process models can be simulated, automatically. Formal hypothesis tests of a fitted model are supported (likelihood ratio test, analysis of deviance, Monte Carlo tests) along with basic tools for model selection (stepwise(), AIC()) and variable selection (sdr). Tools for validating the fitted model include simulation envelopes, residuals, residual plots and Q-Q plots, leverage and influence diagnostics, partial residuals, and added variable plots.
 License: GPL (>= 2)
-URL: http://www.spatstat.org
+URL: http://spatstat.org/
 LazyData: true
 NeedsCompilation: yes
 ByteCompile: true
