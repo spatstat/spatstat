@@ -97,8 +97,8 @@ jobs:
           _R_CHECK_CRAN_INCOMING_: false
         run: |
           cd ..
-          R CMD build --no-build-vignettes --no-manual spatstat
-          R CMD check --no-manual --as-cran spatstat*.tar.gz
+          R CMD build spatstat
+          R CMD check --as-cran spatstat*.tar.gz
 
       - name: Build and check Windows
         if: runner.os == 'Windows'
@@ -106,5 +106,5 @@ jobs:
           _R_CHECK_CRAN_INCOMING_: false
         run: |
           cd ..
-          R.exe CMD build --no-build-vignettes --no-manual spatstat
-          R.exe CMD check --no-manual --as-cran spatstat*.tar.gz
+          R.exe CMD build spatstat
+          R.exe CMD check --as-cran spatstat*.tar.gz
