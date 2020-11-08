@@ -90,11 +90,14 @@ jobs:
           pkgs <- installed.packages()[, "Package"]
           sessioninfo::session_info(pkgs, include_base = TRUE)
         shell: Rscript {0}
-
+        
       - name: Check
         env:
           _R_CHECK_CRAN_INCOMING_: false
-        run: rcmdcheck::rcmdcheck(args = c("--no-manual", "--as-cran"), error_on = "warning", check_dir = "check")
+        run: |
+          setwd("..")
+          system2(ifelse(.Platform$OS.type=="windows", "R.exe", "R"), args = "CMD build spatstat")
+          rcmdcheck::rcmdcheck(list.files(".", "spatstat_.*.tar.gz"), args = c("--no-manual", "--as-cran"), error_on = "warning", check_dir = "check")
         shell: Rscript {0}
 
       - name: Upload check results
