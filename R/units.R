@@ -1,7 +1,7 @@
 #
 # Functions for extracting and setting the name of the unit of length
 #
-#   $Revision: 1.29 $   $Date: 2019/02/20 03:34:50 $
+#   $Revision: 1.31 $   $Date: 2020/11/09 02:37:35 $
 #
 #
 
@@ -78,6 +78,7 @@ makeunitname <- function(sing="unit", plur="units", mul = 1) {
   
 as.unitname <- function(s) {
   if(inherits(s, "unitname")) return(s)
+  if(inherits(s, "units")) s <- unclass(s) ## another package
   s <- as.list(s)
   n <- length(s)
   if(n > 3)

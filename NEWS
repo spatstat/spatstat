@@ -1,12 +1,23 @@
 
-        CHANGES IN spatstat VERSION 1.64-3.001
+        CHANGES IN spatstat VERSION 1.64-3.002
 
 OVERVIEW
 
-    o Nothing yet.
+    o Bug fixes.
 
     o Version nickname: "All Over Bar the Shouting"
     
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o None yet.
+    
+BUG FIXES
+
+    o unitname
+    Spatial datasets with incorrect internal format
+    (or using an out-of-date version of the spatstat format)
+    caused an error if the 'units' package was loaded.
+    Fixed.
 
         CHANGES IN spatstat VERSION 1.64-3
 

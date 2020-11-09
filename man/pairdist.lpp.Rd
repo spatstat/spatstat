@@ -43,12 +43,12 @@
   representation described in \code{\link{linnet}},
   then pairwise distances are computed using the matrix of path distances
   between vertices of the network, using \R code if
-  \code{method = "interpreted"}, or using \proglang{C} code if 
+  \code{method = "interpreted"}, or using C code if 
   \code{method="C"} (the default).
   
   For networks stored in the sparse representation,
   the argument \code{method} has no effect, and the distances are
-  computed using an efficient \proglang{C} algorithm.
+  computed using an efficient C algorithm.
 }
 \value{
   A symmetric matrix, whose values are nonnegative numbers or infinity
