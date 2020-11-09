@@ -31,7 +31,7 @@ local({
 ##   Tests of psp class and related code
 ##                      [SEE ALSO: tests/xysegment.R]
 ##
-##  $Revision: 1.29 $  $Date: 2020/11/02 07:05:19 $
+##  $Revision: 1.30 $  $Date: 2020/11/09 09:01:13 $
 
 #%^!ifdef CORE
 
@@ -213,8 +213,18 @@ local({
     A <- selfcrossing.psp(X)
     B <- selfcrossing.psp(Z)
     D <- crossing.psp(X,Y,details=TRUE)
+    reset.spatstat.options()
   }
 
+  if(FULLTEST) {
+    #' segment clipping in window (bug found by Rolf)
+    set.seed(42)
+    X <- runifpoint(50, letterR)
+    SP <- dirichletEdges(X) #' clip to polygonal window
+    Window(X) <- as.mask(Window(X))
+    SM <- dirichletEdges(X) #' clip to mask window
+  }
+  
   if(FULLTEST) {
     #' test rshift.psp and append.psp with marks (Ute Hahn)
     m <- data.frame(A=1:10, B=letters[1:10])

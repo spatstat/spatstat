@@ -11,11 +11,15 @@
 \usage{
 dirichletVertices(X)
 
-dirichletEdges(X)
+dirichletEdges(X, clip=TRUE)
 }
 \arguments{
   \item{X}{
     Point pattern (object of class \code{"ppp"}).
+  }
+  \item{clip}{
+    Logical value specifying whether to clip the tile edges to the
+    window. See Details.
   }
 }
 \details{
@@ -38,6 +42,12 @@ dirichletEdges(X)
   lies on the boundary of the window of \code{X} is deleted.
   The remaining vertices are returned, as a point pattern,
   without duplicated entries.
+
+  For \code{dirichletEdges}, the edges are initially computed
+  inside the rectangle \code{Frame(X)}.
+  Then if \code{clip=TRUE} (the default), these edges are intersected
+  with \code{Window(X)}, which may cause an edge to be broken into
+  several pieces.
 }
 \value{
   \code{dirichletVertices}
@@ -58,13 +68,8 @@ dirichletEdges(X)
 
   ed <- dirichletEdges(cells)
 }
-\author{\adrian
-  
-  
-  \rolf
-  
-  and \ege
-  
+\author{
+  \spatstatAuthors.
 }
 \keyword{spatial}
 \keyword{math}

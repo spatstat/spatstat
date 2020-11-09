@@ -1,7 +1,7 @@
 #
 #	affine.R
 #
-#	$Revision: 1.53 $	$Date: 2019/02/22 10:36:51 $
+#	$Revision: 1.54 $	$Date: 2020/11/09 08:34:32 $
 #
 
 affinexy <- function(X, mat=diag(c(1,1)), vec=c(0,0), invert=FALSE) {
@@ -71,16 +71,60 @@ affinexypolygon <- function(p, mat=diag(c(1,1)), vec=c(0,0),
            return(W)
          },
          mask={
-           # binary mask
+           #' binary mask
            if(sqrt(abs(det(mat))) < .Machine$double.eps)
              stop("Matrix of linear transformation is singular")
-           newframe <- boundingbox(affinexy(corners(X), mat, vec))
-           W <- if(length(list(...)) > 0) as.mask(newframe, ...) else 
-                   as.mask(newframe, eps=with(X, min(xstep, ystep)))
-           pixelxy <- rasterxy.mask(W)
-           xybefore <- affinexy(pixelxy, mat, vec, invert=TRUE)
-           W$m[] <- with(xybefore, inside.owin(x, y, X))
-           W <- intersect.owin(W, boundingbox(W))
+           newpixels <- (length(list(...)) > 0) &&
+                        any(dim(X) != rev(spatstat.options("npixel")))
+           if(diagonalmatrix && !newpixels) {
+             #' diagonal matrix: apply map to row and column locations
+             m      <- X$m
+             d      <- X$dim
+             newbox <- affine(Frame(X), mat=mat, vec=vec)
+             xscale <- diag(mat)[1L]
+             yscale <- diag(mat)[2L]
+             xcol <- xscale * X$xcol + vec[1L]
+             yrow <- yscale * X$yrow + vec[2L]
+             if(xscale < 0) {
+               #' x scale is negative
+               xcol <- rev(xcol)
+               m <- m[, (d[2L]:1)]
+             }
+             if(yscale < 0) {
+               ## y scale is negative
+               yrow <- rev(yrow)
+               m <- m[(d[1L]:1), ]
+             }
+             W <- owin(mask=m,
+                       xy=list(x=xcol, y=yrow),
+                       xrange=newbox$xrange, yrange=newbox$yrange,
+                       unitname=newunits)
+           } else {
+             #' general case
+             #' create box containing transformed window
+             newframe <- boundingbox(affinexy(corners(X), mat, vec))
+             if(newpixels) {
+               W <- as.mask(newframe, ...)
+             } else {
+               #' determine pixel size
+               mp <- mat %*% cbind(c(X$xstep, 0), c(0, X$ystep))
+               len <- sqrt(colSums(mp^2))
+               xcos <- abs(mp[1,1])/len[1]
+               ycos <- abs(mp[1,2])/len[2]
+               if(xcos > ycos) {
+                 newxstep <- len[1]
+                 newystep <- len[2]
+               } else {
+                 newxstep <- len[2]
+                 newystep <- len[1]
+               }
+               W <- as.mask(newframe, eps=c(newxstep, newystep))
+             }
+             pixelxy <- rasterxy.mask(W)
+             xybefore <- affinexy(pixelxy, mat, vec, invert=TRUE)
+             W$m[] <- with(xybefore, inside.owin(x, y, X))
+             W <- intersect.owin(W, boundingbox(W))
+           }
            if(rescue)
              W <- rescue.rectangle(W)
            return(W)
@@ -110,7 +154,8 @@ affinexypolygon <- function(p, mat=diag(c(1,1)), vec=c(0,0),
   diagonalmatrix <- all(mat == diag(diag(mat)))
   scaletransform <- diagonalmatrix && (length(unique(diag(mat))) == 1L)
   newunits <- if(scaletransform) unitname(X) else as.unitname(NULL)
-  newpixels <- (length(list(...)) > 0)
+  newpixels <- (length(list(...)) > 0) &&
+               any(dim(X) != rev(spatstat.options("npixel")))
   #
   if(diagonalmatrix && !newpixels) {
     # diagonal matrix: apply map to row and column locations
@@ -138,8 +183,23 @@ affinexypolygon <- function(p, mat=diag(c(1,1)), vec=c(0,0),
     # general case
     # create box containing transformed image
     newframe <- boundingbox(affinexy(corners(X), mat, vec))
-    W <- if(length(list(...)) > 0) as.mask(newframe, ...) else 
-    as.mask(newframe, eps=with(X, min(xstep, ystep)))
+    if(newpixels) {
+      W <- as.mask(newframe, ...)
+    } else {
+      #' determine pixel size
+      mp <- mat %*% cbind(c(X$xstep, 0), c(0, X$ystep))
+      len <- sqrt(colSums(mp^2))
+      xcos <- abs(mp[1,1])/len[1]
+      ycos <- abs(mp[1,2])/len[2]
+      if(xcos > ycos) {
+        newxstep <- len[1]
+        newystep <- len[2]
+      } else {
+        newxstep <- len[2]
+        newystep <- len[1]
+      }
+      W <- as.mask(newframe, eps=c(newxstep, newystep))
+    }
     unitname(W) <- newunits
     # raster for transformed image
     naval <- switch(X$type,

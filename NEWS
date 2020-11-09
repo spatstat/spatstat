@@ -1,17 +1,32 @@
 
-        CHANGES IN spatstat VERSION 1.64-3.002
+        CHANGES IN spatstat VERSION 1.64-3.003
 
 OVERVIEW
 
-    o Bug fixes.
+    o Bug fixes and minor improvements.
 
     o Version nickname: "All Over Bar the Shouting"
     
 SIGNIFICANT USER-VISIBLE CHANGES
 
-    o None yet.
+    o dirichletEdges
+    New argument 'clip'.
     
 BUG FIXES
+
+    o affine.owin
+    For mask windows, the pixel resolution of the result
+    was too fine, leading to very large datasets.
+    Fixed.
+
+    o affine.im
+    If the transformation matrix was not diagonal, the pixel resolution
+    of the result was too fine, leading to very large datasets.
+    Fixed.
+
+    o dirichletEdges
+    Crashed if any edges crossed the boundary of the window.
+    Fixed.
 
     o unitname
     Spatial datasets with incorrect internal format

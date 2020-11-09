@@ -325,7 +325,7 @@ dirichletAreas <- function(X) {
   return(oldw)
 }
 
-dirichletEdges <- function(X) {
+dirichletEdges <- function(X, clip=TRUE) {
   stopifnot(is.ppp(X))
   X <- unique(X, rule="deldir")
   nX <- npoints(X)
@@ -335,7 +335,10 @@ dirichletEdges <- function(X) {
   dd <- safedeldir(X)
   if(is.null(dd))
     return(edges(W))
-  return(as.psp(dd$dirsgs[,1:4], window=W))
+  Z <- as.psp(dd$dirsgs[,1:4], window=Frame(W), check=FALSE)
+  if(clip && !is.rectangle(W))
+    Z <- Z[W, fragments=TRUE]
+  return(Z)
 }
 
 
