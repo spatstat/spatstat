@@ -51,3 +51,19 @@ Change log from spatstat 1.64-3 to spatstat 1.64-4
 (with environment variable SPATSTAT_TEST defined/undefined)
 ------------- installed on laptop      ---------------
 ------------- uploaded to GitHub       ---------------
+
+10 nov 2020
+
+   cdftest.R
+	Experimental improvement to idiom involving resolve.defaults
+
+   DESCRIPTION
+   NEWS
+   Nickname.txt
+	Nickname changed to 'Big Boy Pants'
+	Version 1.64-3.004
+
+------------- passed R-4.0.3 CMD check ---------------
+(with environment variable SPATSTAT_TEST defined/undefined)
+------------- installed on laptop      ---------------
+------------- uploaded to GitHub       ---------------
