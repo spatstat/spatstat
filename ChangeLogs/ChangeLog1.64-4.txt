@@ -67,3 +67,30 @@ Change log from spatstat 1.64-3 to spatstat 1.64-4
 (with environment variable SPATSTAT_TEST defined/undefined)
 ------------- installed on laptop      ---------------
 ------------- uploaded to GitHub       ---------------
+
+11 nov 2020
+
+   gordon.Rd
+	Tweaked URL (psigh)
+
+   addvar.R
+   alltypes.R
+   areainter.R
+   bermanlpp.R
+   bermantest.R
+   bw.optim.R
+   cdftestlpp.R
+   cdftest.R
+	Experimental improvement to idiom involving resolve.defaults
+	(applied to all files beginning with a-c)
+   
+
+   DESCRIPTION
+   NEWS
+	Version 1.64-3.005
+
+------------- passed R-4.0.3 CMD check ---------------
+(with environment variable SPATSTAT_TEST defined/undefined)
+------------- installed on laptop      ---------------
+------------- uploaded to GitHub       ---------------
+

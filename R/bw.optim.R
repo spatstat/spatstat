@@ -105,7 +105,7 @@ plot.bw.optim <- function(x, ...,
   xfv <- as.fv(x)
   # plot cross-validation criterion
   out <- do.call(plot.fv,
-                 resolve.defaults(list(x=xfv),
+                 resolve.defaults(list(x=quote(xfv)),
                                   list(...),
                                   list(main=xname)))
   # Turn off 'showopt' if the x-variable is not the bandwidth

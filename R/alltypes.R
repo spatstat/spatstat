@@ -88,7 +88,7 @@ alltypes <- function(X, fun="K", ...,
   if(envelope && reuse) {
     L <- do.call(spatstat::envelope,
                  resolve.defaults(
-                                  list(X, fun=estimator),
+                                  list(quote(X), fun=estimator),
                                   list(internal=list(eject="patterns")),
                                   list(...),
 				  switch(1L+indices.expected,
@@ -119,7 +119,7 @@ alltypes <- function(X, fun="K", ...,
         else
           do.call(spatstat::envelope,
                   resolve.defaults(
-                                   list(Y, estimator),
+                                   list(quote(Y), estimator),
                                    list(simulate=L, internal=intern),
                                    list(verbose=FALSE),
                                    list(...),

@@ -59,7 +59,9 @@ cdf.test.ppm <-
   if(is.poisson(model) && is.stationary(model))
     modelname <- "CSR"
   do.call(spatialCDFtest,
-          resolve.defaults(list(model, covariate, test=test),
+          resolve.defaults(list(model=quote(model), 
+				covariate=quote(covariate), 
+				test=test),
                            list(interpolate=interpolate, jitter=jitter,
                                 nsim=nsim, verbose=verbose),
                            list(...),
@@ -99,7 +101,9 @@ cdf.test.lpp <-
       modelname <- "CSR"
     }
     do.call(spatialCDFtest,
-            resolve.defaults(list(model, covariate, test=test),
+            resolve.defaults(list(model=quote(model), 
+				  covariate=quote(covariate), 
+				  test=test),
                              list(interpolate=interpolate, jitter=jitter),
                              list(...),
                              list(modelname=modelname,
@@ -118,7 +122,9 @@ cdf.test.lppm <- function(model, covariate,
   if(is.poisson(model) && is.stationary(model))
     modelname <- "CSR"
   do.call(spatialCDFtest,
-          resolve.defaults(list(model, covariate, test=test),
+          resolve.defaults(list(model=quote(model), 
+				covariate=quote(covariate), 
+				test=test),
                            list(interpolate=interpolate, jitter=jitter,
                                 nsim=nsim, verbose=verbose),
                            list(...),

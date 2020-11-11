@@ -345,7 +345,7 @@ print.addvar <- function(x, ...) {
 }
 
 plot.addvar <- function(x, ..., do.points=FALSE) {
-  xname <- deparse(substitute(x))
+  xname <- short.deparse(substitute(x))
   s <- attr(x, "stuff")
 #  covname <- s$covname
   xresid <- s$xresid
@@ -353,7 +353,7 @@ plot.addvar <- function(x, ..., do.points=FALSE) {
   # adjust y limits if intending to plot points as well
   ylimcover <- if(do.points) range(yresid, finite=TRUE) else NULL
   #
-  do.call(plot.fv, resolve.defaults(list(x), list(...),
+  do.call(plot.fv, resolve.defaults(list(quote(x)), list(...),
                                       list(main=xname,
                                            shade=c("hi", "lo"),
                                            legend=FALSE,

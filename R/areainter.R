@@ -114,7 +114,7 @@ AreaInter <- local({
                      unitname=unitz)
            if(plotit)
              do.call(plot.fv,
-                     resolve.defaults(list(fun),
+                     resolve.defaults(list(quote(fun)),
                                       list(...),
                                       list(ylim=range(0,1,y))))
            return(invisible(fun))
