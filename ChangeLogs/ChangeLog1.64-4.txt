@@ -94,3 +94,18 @@ Change log from spatstat 1.64-3 to spatstat 1.64-4
 ------------- installed on laptop      ---------------
 ------------- uploaded to GitHub       ---------------
 
+12 nov 2020
+
+   plot.ppp.R
+	Bug fix in plot.ppp
+	spotted by Rolf
+
+   DESCRIPTION
+   NEWS
+	Version 1.64-3.006
+
+------------- passed R-4.0.3 CMD check ---------------
+(with environment variable SPATSTAT_TEST defined/undefined)
+------------- installed on laptop      ---------------
+------------- uploaded to GitHub       ---------------
+

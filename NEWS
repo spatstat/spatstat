@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.64-3.005
+        CHANGES IN spatstat VERSION 1.64-3.006
 
 OVERVIEW
 
@@ -24,6 +24,12 @@ BUG FIXES
     of the result was too fine, leading to very large datasets.
     Fixed.
 
+    o plot.ppp
+    For a point pattern in a binary mask window,
+    if both arguments 'col' and 'cols' were given,
+    the points were coloured according to 'col', which was incorrect.
+    Fixed.
+    
     o dirichletEdges
     Crashed if any edges crossed the boundary of the window.
     Fixed.

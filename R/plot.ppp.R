@@ -1,33 +1,34 @@
 #
 #	plot.ppp.R
 #
-#	$Revision: 1.96 $	$Date: 2020/02/25 05:33:46 $
+#	$Revision: 1.97 $	$Date: 2020/11/12 04:34:11 $
 #
 #
 #--------------------------------------------------------------------------
 
 plot.ppp <- local({
 
-  transparencyfun <- function(n) {
+  default.transparency <- function(n) {
     if(n <= 100) 1 else (0.2 + 0.8 * exp(-(n-100)/1000))
   }
   
   ## determine symbol map for marks of points
   default.symap.points <- function(x, ..., 
-                                  chars=NULL, cols=NULL, 
+                                  chars=NULL, cols=NULL, col=NULL, 
                                   maxsize=NULL, meansize=NULL, markscale=NULL,
                                   markrange=NULL, marklevels=NULL) {
     marx <- marks(x)
     if(is.null(marx)) {
       ## null or constant symbol map
       ## consider using transparent colours
-      if(is.null(cols) &&
-         !any(c("col", "fg", "bg") %in% names(list(...))) &&
+      if(is.null(cols) && is.null(col) && 
+         !any(c("fg", "bg") %in% names(list(...))) &&
          (nx <- npoints(x)) > 100 &&
          identical(dev.capabilities()$semiTransparency, TRUE) &&
          spatstat.options("transparent"))
-        cols <- rgb(0,0,0,transparencyfun(nx))
-      return(symbolmap(..., chars=chars, cols=cols))
+        cols <- rgb(0,0,0, default.transparency(nx))
+      if(!is.null(cols) && !is.null(col)) col <- NULL
+      return(symbolmap(..., chars=chars, cols=cols, col=col))
     }
     if(!is.null(dim(marx)))
       stop("Internal error: multivariate marks in default.symap.points")
