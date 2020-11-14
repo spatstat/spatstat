@@ -53,7 +53,7 @@ envelopeArray <- function(X, fun, ...,
   if(reuse) {
     L <- do.call(spatstat::envelope,
                  resolve.defaults(
-                                  list(X, fun=ijfun),
+                                  list(quote(X), fun=ijfun),
                                   list(internal=list(eject="patterns")),
                                   list(...),
                                   list(verbose=verb)))
@@ -70,7 +70,7 @@ envelopeArray <- function(X, fun, ...,
       currentfv <- 
         do.call(spatstat::envelope,
                 resolve.defaults(
-                                 list(X, ijfun),
+                                 list(quote(X), ijfun),
                                  list(simulate=L, internal=intern),
                                  list(verbose=FALSE),
                                  list(...),

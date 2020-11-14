@@ -42,7 +42,7 @@ densityAdaptiveKernel.ppp <- function(X, bw, ...,
   ## determine bandwidth for each data point
   if(missing(bw) || is.null(bw)) {
     bw <- do.call.matched(bw.abram,
-                          resolve.defaults(list(X=X, at="points"),
+                          resolve.defaults(list(X=quote(X), at="points"),
                                            list(...)),
                           extrargs=names(args(as.mask)))
   } else if(is.numeric(bw)) {

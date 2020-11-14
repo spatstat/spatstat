@@ -661,9 +661,10 @@ resolve.2D.kernel <- function(..., sigma=NULL, varcov=NULL, x, mindist=NULL,
     sigma <- NULL
   }
   if(is.null(sigma) && is.null(varcov) && !is.null(bwfun)) {
-    # call bandwidth selection function
-    bw <- do.call.matched(bwfun, resolve.defaults(list(X=x), list(...)))
-    # interpret the result as either sigma or varcov
+    #' call bandwidth selection function
+    force(x)
+    bw <- do.call.matched(bwfun, resolve.defaults(list(X=quote(x)), list(...)))
+    #' interpret the result as either sigma or varcov
     if(!is.numeric(bw))
       stop("bandwidth selector returned a non-numeric result")
     if(length(bw) %in% c(1L,2L)) {

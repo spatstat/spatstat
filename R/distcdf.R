@@ -107,7 +107,7 @@ plot.bw.frac <- function(x, ...) {
   f <- attr(x, "f")
   ropt <- as.numeric(x)
   do.call(plot,
-          resolve.defaults(list(g),
+          resolve.defaults(list(quote(g)),
                              list(...),
                              list(main=xname)))
   abline(v=ropt, lty=3)

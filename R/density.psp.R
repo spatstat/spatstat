@@ -21,10 +21,10 @@ density.psp <- function(x, sigma, ..., edge=TRUE,
   #' determine locations for evaluation of density
   if(is.null(at)) {
     atype <- "window"
-    w <- do.call.matched(as.mask, resolve.defaults(list(w=w, ...)))
+    w <- do.call.matched(as.mask, resolve.defaults(list(w=quote(w), ...)))
   } else if(is.owin(at)) {
     atype <- "window"
-    w <- do.call.matched(as.mask, resolve.defaults(list(w=at, ...)))
+    w <- do.call.matched(as.mask, resolve.defaults(list(w=quote(at), ...)))
   } else {  
     atype <- "points"
     atY <- try(as.ppp(at, W=w))

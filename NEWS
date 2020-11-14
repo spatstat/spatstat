@@ -1,9 +1,11 @@
 
-        CHANGES IN spatstat VERSION 1.64-3.006
+        CHANGES IN spatstat VERSION 1.64-3.007
 
 OVERVIEW
 
     o Bug fixes and minor improvements.
+
+    o spatstat now requires spatstat.utils version >= 1.18-0.
 
     o Version nickname: "Big Boy Pants"
     

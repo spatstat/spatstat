@@ -3,7 +3,7 @@
 ##
 ## Exact 'funxy' counterpart of density.ppp
 ##
-##  $Revision: 1.10 $ $Date: 2020/04/03 03:18:27 $
+##  $Revision: 1.11 $ $Date: 2020/11/14 04:09:51 $
 
 
 densityfun <- function(X, ...) {
@@ -67,7 +67,8 @@ as.im.densityfun <- function(X, W=Window(X), ..., approx=TRUE) {
     otherstuff <- stuff[names(stuff) != "Xdata"]
     if(!missing(W)) Xdata <- Xdata[W]
     result <- do.call(density,
-                      resolve.defaults(list(x=Xdata), list(...), otherstuff))
+                      resolve.defaults(list(x=quote(Xdata)),
+                                       list(...), otherstuff))
   }
   return(result)
 }

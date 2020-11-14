@@ -556,7 +556,7 @@ envelopeEngine <-
   Xarg <- if(!clipdata) X else X[clipwin]
   corrx <- if(usecorrection) list(correction="best") else NULL
   funX <- do.call(fun,
-                  resolve.defaults(list(Xarg),
+                  resolve.defaults(list(quote(Xarg)),
                                    list(...),
                                    funYargs,
                                    corrx))
@@ -1796,7 +1796,7 @@ envelope.envelope <- function(Y, fun=NULL, ...,
     }
     ## compute new envelope
     result <- do.call(envelope,
-                      resolve.defaults(list(Y=X, fun=fun, simulate=sp),
+                      resolve.defaults(list(Y=quote(X), fun=fun, simulate=sp),
                                        aargh,
                                        list(transform=transform,
                                             global=global,
@@ -1849,8 +1849,9 @@ envelope.envelope <- function(Y, fun=NULL, ...,
 
     # interface with 'envelope.matrix'
     etype <- if(global) "global" else if(VARIANCE) "variance" else "pointwise"
+    dfm <- as.matrix(df)
     result <- do.call(envelope.matrix,
-                      resolve.defaults(list(Y=as.matrix(df)),
+                      resolve.defaults(list(Y=quote(dfm)),
                                        aargh,
                                        list(type=etype,
                                             csr=csr,
