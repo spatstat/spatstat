@@ -102,6 +102,8 @@ that are supplied with the current installation of \sdat:
             cause, size, date & 
             \shortstack[c]{elevation, orientation,\\ slope, land use}  
             & \irregpoly \\
+{\tt concrete} & air bubbles in concrete & 
+             \nomarks & \nocov & \irregpoly  \\
 {\tt copper} & copper deposits & 
              \nomarks & fault lines & \recto  \\
 {\tt demopat} & artificial data & 
@@ -436,6 +438,18 @@ named \texttt{elevation}, \texttt{orientation},
 <<fig=TRUE>>=
 plot(clmfires.extra$clmcov100$elevation, main="Elevation")
 @ %$ 
+
+\subsubsection*{\texttt{concrete}: Air bubbles in concrete}
+
+Prof.\ Shin-ichi Igarashi's data:  a point pattern of the locations
+of centroids of air bubbles seen in a cross-section of concrete.
+Air bubbles are present in the matrix of cement paste
+which surrounds the particles of aggregate. The outline of the aggregate,
+and the locations of the centroids of the bubble profiles, are recorded.
+
+<<fig=TRUE>>=
+plot(concrete,chars="+",cols="blue",col="yellow")
+@ 
 
 \subsubsection*{\texttt{copper}: Queensland copper data}
 

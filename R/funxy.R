@@ -3,7 +3,7 @@
 #
 #   Class of functions of x,y location with a spatial domain
 #
-#   $Revision: 1.19 $   $Date: 2018/02/26 01:41:27 $
+#   $Revision: 1.20 $   $Date: 2020/11/16 01:32:06 $
 #
 
 spatstat.xy.coords <- function(x,y) {
@@ -121,9 +121,10 @@ domain.funxy <- Window.funxy <- function(X, ...) { as.owin(X) }
 
 plot.funxy <- function(x, ...) {
   xname <- short.deparse(substitute(x))
+  force(x)
   W <- as.owin(x)
   do.call(do.as.im,
-          resolve.defaults(list(x, action="plot"),
+          resolve.defaults(list(quote(x), action="plot"),
                            list(...),
                            list(main=xname, W=W)))
   invisible(NULL)
@@ -131,9 +132,10 @@ plot.funxy <- function(x, ...) {
 
 contour.funxy <- function(x, ...) {
   xname <- deparse(substitute(x))
+  force(x)
   W <- as.owin(x)
   do.call(do.as.im,
-          resolve.defaults(list(x, action="contour"),
+          resolve.defaults(list(quote(x), action="contour"),
                            list(...),
                            list(main=xname, W=W)))
   invisible(NULL)
@@ -142,9 +144,10 @@ contour.funxy <- function(x, ...) {
 persp.funxy <- function(x, ...) {
   xname <- deparse(substitute(x))
   zlab <- substitute(expression(f(x,y)), list(f=as.name(xname)))
+  force(x)
   W <- as.rectangle(as.owin(x))
   do.call(do.as.im,
-          resolve.defaults(list(x, action="persp"),
+          resolve.defaults(list(quote(x), action="persp"),
                            list(...),
                            list(main=xname, W=W, zlab=zlab)))
   invisible(NULL)

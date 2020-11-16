@@ -1,7 +1,7 @@
 #
 #       images.R
 #
-#      $Revision: 1.160 $     $Date: 2020/07/23 03:10:16 $
+#      $Revision: 1.161 $     $Date: 2020/11/16 01:32:06 $
 #
 #      The class "im" of raster images
 #
@@ -812,7 +812,7 @@ as.matrix.im <- function(x, ...) {
 
 as.array.im <- function(x, ...) {
   m <- as.matrix(x)
-  a <- do.call(array, resolve.defaults(list(m),
+  a <- do.call(array, resolve.defaults(list(quote(m)),
                                        list(...),
                                        list(dim=c(dim(m), 1))))
   return(a)
@@ -938,7 +938,7 @@ hist.im <- function(x, ..., probability=FALSE, xname) {
     if(plotit) {
       ylab <- if(probability) "Probability density" else "Number of pixels"
       out <- do.call(hist.default,
-                     resolve.defaults(list(values),
+                     resolve.defaults(list(quote(values)),
                                       list(...),
                                       list(freq=!probability,
                                            xlab="Pixel value",
@@ -948,7 +948,7 @@ hist.im <- function(x, ..., probability=FALSE, xname) {
     } else {
       # plot.default whinges if `probability' given when plot=FALSE
       out <- do.call(hist.default,
-                   resolve.defaults(list(values),
+                   resolve.defaults(list(quote(values)),
                                     list(...)))
       # hack!
       out$xname <- xname
@@ -979,8 +979,9 @@ cut.im <- function(x, ...) {
 
 quantile.im <- function(x, ...) {
   verifyclass(x, "im")
+  x <- as.numeric(as.matrix(x))
   q <- do.call(quantile,
-               resolve.defaults(list(as.numeric(as.matrix(x))),
+               resolve.defaults(list(quote(x)),
                                 list(...),
                                 list(na.rm=TRUE)))
   return(q)

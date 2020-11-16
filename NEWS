@@ -1,18 +1,37 @@
 
-        CHANGES IN spatstat VERSION 1.64-3.007
+        CHANGES IN spatstat VERSION 1.64-3.008
 
 OVERVIEW
 
+    o We thank Professor Shin-ichi Igarashi for contributions.
+
+    o New dataset 'concrete'
+    
     o Bug fixes and minor improvements.
 
-    o spatstat now requires spatstat.utils version >= 1.18-0.
+    o Experimental tweak to increase speed.
+    
+    o spatstat now requires spatstat.utils version >= 1.18-0
+
+    o spatstat now requires spatstat.data version >= 1.6-0
 
     o Version nickname: "Big Boy Pants"
+
+NEW DATASETS
+
+    o concrete
+    Air bubbles in concrete.
+    Kindly contributed by Professor Shin-ichi Igarashi.
     
 SIGNIFICANT USER-VISIBLE CHANGES
 
     o dirichletEdges
     New argument 'clip'.
+
+    o computation speed
+    An experimental tweak to the internals of spatstat
+    is being implemented. It may accelerate computations
+    involving large objects.
     
 BUG FIXES
 

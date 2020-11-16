@@ -218,6 +218,8 @@ the News and Release Notes for each update.
     
   \item Add new vertices to a linear network.
     
+  \item New dataset \texttt{concrete}.
+
    \item Function \texttt{lengths.psp} has been renamed \verb!lengths_psp!.
 
    \item Tessellations on a linear network can now have marks.
@@ -499,6 +501,7 @@ The following datasets have been added to the package.
    represented as polygonal regions forming a tessellation.
  \item \texttt{redwood3}: a more accurate version of the \texttt{redwood} data.
  \item \texttt{cetaceans}: point patterns of whale and dolphin sightings.
+ \item \texttt{concrete}: air bubbles in concrete.
 \end{itemize}
 
 \section{New classes}

@@ -283,6 +283,7 @@
 	\code{\link[spatstat.data]{chicago}} \tab Chicago crimes \cr
 	\code{\link[spatstat.data]{chorley}} \tab Chorley-Ribble cancer data \cr
 	\code{\link[spatstat.data]{clmfires}} \tab Castilla-La Mancha forest fires \cr
+	\code{\link[spatstat.data]{concrete}} \tab Igarashi data: air bubbles in concrete \cr
 	\code{\link[spatstat.data]{copper}} \tab Berman-Huntington copper deposits data \cr
 	\code{\link[spatstat.data]{dendrite}} \tab Dendritic spines \cr
 	\code{\link[spatstat.data]{demohyper}} \tab Synthetic point patterns\cr
@@ -1861,6 +1862,7 @@
   Kurt Hornik,
   Philipp Hunziker,
   Jack Hywood,
+  Shin-ichi Igarashi,
   Ross Ihaka,
   \ifelse{latex}{\out{\u{C}enk I\c{c}\"{o}s}}{Cenk Icos},
   Aruna Jammalamadaka,

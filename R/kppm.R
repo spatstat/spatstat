@@ -3,7 +3,7 @@
 #
 # kluster/kox point process models
 #
-# $Revision: 1.157 $ $Date: 2020/10/18 15:21:51 $
+# $Revision: 1.158 $ $Date: 2020/11/16 01:32:06 $
 #
 
 kppm <- function(X, ...) {
@@ -279,7 +279,7 @@ clusterfit <- function(X, clusters, lambda = NULL, startpar = NULL,
           StatName <-
               if(statistic == "K") "K-function" else "pair correlation function"
           Stat <- do.call(StatFun,
-                          resolve.defaults(list(X=X),
+                          resolve.defaults(list(X=quote(X)),
                                            statargs,
                                            list(correction="best")))
       } else {
@@ -287,7 +287,7 @@ clusterfit <- function(X, clusters, lambda = NULL, startpar = NULL,
           StatName <- if(statistic == "K") "inhomogeneous K-function" else
           "inhomogeneous pair correlation function"
           Stat <- do.call(StatFun,
-                          resolve.defaults(list(X=X, lambda=lambda),
+                          resolve.defaults(list(X=quote(X), lambda=lambda),
                                            statargs,
                                            list(correction="best")))
       }

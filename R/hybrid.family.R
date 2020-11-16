@@ -1,7 +1,7 @@
 #
 #   hybrid.family.R
 #
-#    $Revision: 1.13 $	$Date: 2018/03/15 08:47:20 $
+#    $Revision: 1.14 $	$Date: 2020/11/16 01:32:06 $
 #
 #    Hybrid interactions
 #
@@ -84,7 +84,7 @@ hybrid.family <-
          if(separate) {
            if(plotit) {
              main0 <- "Pairwise interaction components"
-             do.call(plot, resolve.defaults(list(results),
+             do.call(plot, resolve.defaults(list(quote(results)),
                                               list(...),
                                               list(main=main0)))
            }
@@ -102,7 +102,7 @@ hybrid.family <-
          }
          main0 <- "Resultant pairwise interaction"
          if(plotit)
-           do.call(plot, resolve.defaults(list(ans),
+           do.call(plot, resolve.defaults(list(quote(ans)),
                                             list(...),
                                             list(main=main0)))
          return(invisible(ans))

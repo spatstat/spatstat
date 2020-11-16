@@ -1,7 +1,7 @@
 #
 #  hyperframe.R
 #
-# $Revision: 1.75 $  $Date: 2020/10/31 10:06:08 $
+# $Revision: 1.78 $  $Date: 2020/11/16 02:30:29 $
 #
 
 hyperframe <- local({
@@ -287,12 +287,16 @@ as.hyperframe.hyperframe <- function(x, ...) {
 }
 
 as.hyperframe.data.frame <- function(x, ..., stringsAsFactors=FALSE) {
-  xlist <- if(missing(x)) NULL else as.list(x)
+  if(missing(x) || is.null(x)) {
+    xlist <- rona <- NULL
+  } else {
+    rona <- row.names(x)
+    xlist <- as.list(x)
+  }
   do.call(hyperframe,
-          resolve.defaults(
-                           xlist,
+          resolve.defaults(xlist,
                            list(...),
-                           list(row.names=rownames(x),
+                           list(row.names=rona,
                                 stringsAsFactors=stringsAsFactors),
                            .StripNull=TRUE))
 }
@@ -308,7 +312,6 @@ as.hyperframe.listof <- function(x, ...) {
           resolve.defaults(
                            xlist,
                            list(...),
-                           list(row.names=rownames(x)),
                            .StripNull=TRUE))
 }
 

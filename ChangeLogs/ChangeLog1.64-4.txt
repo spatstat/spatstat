@@ -133,4 +133,35 @@ Change log from spatstat 1.64-3 to spatstat 1.64-4
 (with environment variable SPATSTAT_TEST defined/undefined)
 ------------- installed on laptop      ---------------
 ------------- uploaded to GitHub       ---------------
-   
+
+16 nov 2020
+
+   fryplot.R
+   funxy.R
+   hierpair.family.R
+   hybrid.family.R
+   hyperframe.R
+   images.R
+   ippm.R
+   kppm.R
+	Experimental improvement to idiom involving resolve.defaults
+	(now applied to all files beginning with a-k)
+
+   DESCRIPTION
+   NEWS
+        Requires spatstat.data >= 1.6-0
+	Acknowledged Shin-ichi Igarashi
+
+   datasets.Rnw
+   updates.Rnw
+   spatstat-package.Rd
+	Mentioned new dataset 'concrete'.
+	
+   DESCRIPTION
+   NEWS
+	Version 1.64-3.008
+
+------------- passed R-4.0.3 CMD check ---------------
+(with environment variable SPATSTAT_TEST defined/undefined)
+------------- installed on laptop      ---------------
+------------- uploaded to GitHub       ---------------
