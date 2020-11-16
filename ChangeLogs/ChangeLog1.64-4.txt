@@ -165,3 +165,17 @@ Change log from spatstat 1.64-3 to spatstat 1.64-4
 (with environment variable SPATSTAT_TEST defined/undefined)
 ------------- installed on laptop      ---------------
 ------------- uploaded to GitHub       ---------------
+
+   random.R
+	Accelerated rSSI
+
+   DESCRIPTION
+   NEWS
+	Version 1.64-3.009
+
+------------- passed R-4.0.3 CMD check ---------------
+(with environment variable SPATSTAT_TEST defined/undefined)
+------------- installed on laptop      ---------------
+------------- uploaded to GitHub       ---------------
+
+

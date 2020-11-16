@@ -3,7 +3,7 @@
 ##
 ##    Functions for generating random point patterns
 ##
-##    $Revision: 4.97 $   $Date: 2019/04/05 03:41:12 $
+##    $Revision: 4.100 $   $Date: 2020/11/16 04:35:00 $
 ##
 ##
 ##    runifpoint()      n i.i.d. uniform random points ("binomial process")
@@ -602,35 +602,68 @@ rSSI <- function(r, n=Inf, win = square(1),
       return(result)
     }
   }
-  #' validate radius
+  #' validate radius and 'n' 
   r2 <- r^2
-  if(!is.infinite(n) && (n * pi * r2/4  > area(win)))
+  winArea <- area(win)
+  discarea <- pi * r2/4
+  nmelt <- floor(winArea/discarea)
+  packdensity <- pi * sqrt(3)/6
+  npack <- floor(packdensity * winArea/discarea)
+  if(is.finite(n)) {
+    if(n > nmelt) {
       warning(paste("Window is too small to fit", n, "points",
-                    "at minimum separation", r))
+                    "at minimum separation", r,
+                    paren(paste("absolute maximum number is", nmelt))))
+    } else if(n > npack) {
+      warning(paste("Window is probably too small to fit", n, "points",
+                    "at minimum separation", r,
+                    paren(paste("packing limit is", nmelt))))
+    }
+  }
+
   #' start simulation 		    
   pstate <- list()
   for(isim in 1:nsim) {
     if(nsim > 1) pstate <- progressreport(isim, nsim, state=pstate)
     ## Simple Sequential Inhibition process
     ## fixed number of points
+    xx <- coords(x.init)$x
+    yy <- coords(x.init)$y
+    nn <- npoints(x.init)
     ## Naive implementation, proposals are uniform
-    X <- x.init
+    xprop <- yprop <- numeric(0)
+    nblock <- if(is.finite(n)) n else min(1024, nmelt)
     ntries <- 0
     while(ntries < giveup) {
       ntries <- ntries + 1
-      qq <- if(is.null(f)) runifpoint(1, win) else rpoint(1, f, fmax, win)
-      dx <- qq$x[1] - X$x
-      dy <- qq$y[1] - X$y
-      if(all(dx^2 + dy^2 > r2)) {
-        X <- superimpose(X, qq, W=win, check=FALSE)
+      if(length(xprop) == 0) {
+        ## generate some more proposal points
+        prop <- if(is.null(f)) runifpoint(nblock, win) else
+                               rpoint(nblock, f, fmax, win)
+        xprop <- coords(prop)$x
+        yprop <- coords(prop)$y
+      }
+      ## extract next proposal
+      xnew <- xprop[1L]
+      ynew <- yprop[1L]
+      xprop <- xprop[-1L]
+      yprop <- yprop[-1L]
+      ## check hard core constraint
+      dx <- xnew - xx
+      dy <- ynew - yy
+      if(!any(dx^2 + dy^2 <= r2)) {
+        xx <- c(xx, xnew)
+        yy <- c(yy, ynew)
+        nn <- nn + 1L
         ntries <- 0
       }
-      if(X$n >= n)
+      if(nn >= n)
         break
     }
-    if(must.reach.n && X$n < n)
+    if(must.reach.n && nn < n)
       warning(paste("Gave up after", giveup,
-                    "attempts with only", X$n, "points placed out of", n))
+                    "attempts with only", nn, "points placed out of", n))
+    X <- ppp(xx, yy, window=win)
     result[[isim]] <- X
   }
   result <- simulationresult(result, nsim, drop)
