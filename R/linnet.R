@@ -199,7 +199,7 @@ plot.linnet <- function(x, ..., main=NULL, add=FALSE,
   }
   # plot segments and (optionally) vertices
   do.call(plot,
-          resolve.defaults(list(x=lines,
+          resolve.defaults(list(x=quote(lines),
                                 show.all=FALSE, add=TRUE,
                                 main=main),
                            list(...)))

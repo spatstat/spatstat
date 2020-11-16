@@ -124,7 +124,7 @@ lurking.mppm <- local({
       #' separate lurking variable plots for each row
       if(plot.it) {
         do.call(plot,
-                resolve.defaults(list(x=lurks),
+                resolve.defaults(list(x=quote(lurks)),
                                  list(...),
                                  list(main=main,
                                       mar.panel=c(5,4,2,3))))

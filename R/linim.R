@@ -159,6 +159,7 @@ plot.linim <- local({
     style <- match.arg(style)
     leg.side <- match.arg(leg.side)
     check.1.real(leg.scale)
+    force(x)
 
     if(!missing(fatten)) {
       check.1.real(fatten)
@@ -194,7 +195,7 @@ plot.linim <- local({
         x <- nearestValue(x)[fatwin, drop=FALSE]
       }
       return(do.call(plot.im,
-                     resolve.defaults(list(x),
+                     resolve.defaults(list(quote(x)),
                                       list(...),
                                       ribstuff,
                                       zliminfo, 
@@ -220,7 +221,7 @@ plot.linim <- local({
     if(legend) {
       #' use layout procedure in plot.im
       z <- do.call(plot.im,
-                   resolve.defaults(list(x, do.plot=FALSE, ribbon=TRUE),
+                   resolve.defaults(list(quote(x), do.plot=FALSE, ribbon=TRUE),
                                     list(...),
                                     ribstuff,
                                     list(main=xname, valuesAreColours=FALSE)))
@@ -241,7 +242,7 @@ plot.linim <- local({
     }
     #' initialise plot
     bb <- do.call.matched(plot.owin,
-                          resolve.defaults(list(x=bb.all, type="n"),
+                          resolve.defaults(list(x=quote(bb.all), type="n"),
                                            list(...), list(main=xname)),
                           extrargs="type")
     if(box)
@@ -766,15 +767,16 @@ pairs.linim <- function(..., plot=TRUE, eps=NULL) {
   ## pairs plot
   if(plot) {
     if(nim > 1) {
-      do.call(pairs.default, resolve.defaults(list(x=pixdf),
+      do.call(pairs.default, resolve.defaults(list(x=quote(pixdf)),
                                               rest,
                                               list(labels=imnames, pch=".")))
       labels <- resolve.defaults(rest, list(labels=imnames))$labels
       colnames(pixdf) <- labels
     } else {
       xname <- imnames[1L]
+      pixdf1 <- pixdf[,1L]
       do.call(hist.default,
-              resolve.defaults(list(x=pixdf[,1L]),
+              resolve.defaults(list(x=quote(pixdf1)),
                                rest,
                                list(main=paste("Histogram of", xname),
                                     xlab=xname)))

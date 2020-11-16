@@ -31,8 +31,9 @@
     Ikey <- make.parseable(paste(from))
     if(from == to) {
       ## use Kest
+      XI <- X[I]
       result <- do.call(localK,
-                        resolve.defaults(list(X=X[I],
+                        resolve.defaults(list(X=quote(XI),
                                               rmax=rmax,
                                               correction=correction,
                                               verbose=verbose,

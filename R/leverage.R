@@ -923,8 +923,9 @@ plot.leverage.ppm <- function(x, ...,
 
   if(what == "exact") {
     #' plot exact quadrature locations and leverage values
+    yval <- y$val
     z <- do.call(plot,
-                 resolve.defaults(list(x=y$val, multiplot=multiplot),
+                 resolve.defaults(list(x=quote(yval), multiplot=multiplot),
                                   list(...),
                                   list(main=defaultmain)))
     return(invisible(z))
@@ -946,13 +947,13 @@ plot.leverage.ppm <- function(x, ...,
                   args.contour=args.contour)
   if(is.im(smo)) {
     do.call(plot.im,
-            resolve.defaults(list(smo),
+            resolve.defaults(list(quote(smo)),
                              cutinfo,
                              list(...),
                              list(main=defaultmain)))
   } else if(inherits(smo, "imlist")) {
     do.call(plot.solist,
-            resolve.defaults(list(smo),
+            resolve.defaults(list(quote(smo)),
                              cutinfo,
                              list(...),
                              list(main=defaultmain)))
@@ -1039,7 +1040,7 @@ plot.influence.ppm <- function(x, ..., multiplot=TRUE) {
     }
   }
   do.call(plot,
-          resolve.defaults(list(y),
+          resolve.defaults(list(quote(y)),
                            list(...),
                            list(main=defaultmain,
                                 multiplot=multiplot,

@@ -147,7 +147,7 @@ plot.lpp <- function(x, ..., main, add=FALSE,
   if(show.network) {
     L <- as.linnet(x)
     do.call.matched(plot.linnet,
-                    resolve.defaults(list(x=L, add=TRUE),
+                    resolve.defaults(list(x=quote(L), add=TRUE),
                                      list(...)),
                     extrargs=c("lty", "lwd", "col"))
   }

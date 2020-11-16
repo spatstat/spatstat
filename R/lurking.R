@@ -511,18 +511,18 @@ plot.lurk <- function(x, ..., shade="grey") {
         xx <- c(xx,    rev(xx))
         yy <- c(Upper, rev(Lower))
         do.call.matched(polygon,
-                        resolve.defaults(list(x=xx, y=yy),
+                        resolve.defaults(list(x=quote(xx), y=quote(yy)),
                                          list(...),
                                          list(border=shadecol, col=shadecol)))
       } else {
         do.call(lines,
                 resolve.defaults(
-                  list(x = xx, y=Upper),
+                  list(x = quote(xx), y=quote(Upper)),
                   list(...),
                   list(lty=3)))
         do.call(lines,
                 resolve.defaults(
-                  list(x = xx, y = Lower),
+                  list(x = quote(xx), y = quote(Lower)),
                   list(...),
                   list(lty=3)))
       }
@@ -532,7 +532,7 @@ plot.lurk <- function(x, ..., shade="grey") {
     ## Theoretical mean
     do.call(lines,
             resolve.defaults(
-              list(mean ~ covariate, theoretical),
+              list(mean ~ covariate, quote(theoretical)),
               list(...),
               list(lty=2)))
   })

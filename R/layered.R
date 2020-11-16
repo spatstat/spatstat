@@ -150,7 +150,7 @@ plotEachLayer <- function(x, ..., main,
         mplf <-
           if(inherits(xi, c("ppp", "lpp"))) list(multiplot=FALSE) else list()
         out[[i]] <- outi <- do.call(plot,
-                                    resolve.defaults(list(x=xi,
+                                    resolve.defaults(list(x=quote(xi),
                                                           add=add.i,
                                                           do.plot=do.plot),
                                                      list(...),
@@ -168,7 +168,7 @@ plotEachLayer <- function(x, ..., main,
             pla.i <- pla.i[names(pla.i) != ".plot"]
           }
           out[[i]] <- outi <- do.call(plotfun,
-                                      resolve.defaults(list(x=xi,
+                                      resolve.defaults(list(x=quote(xi),
                                                             add=add.i),
                                                        list(...),
                                                        pla.i,

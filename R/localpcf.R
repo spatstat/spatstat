@@ -163,9 +163,10 @@ print.localpcfmatrix <- function(x, ...) {
 
 plot.localpcfmatrix <- function(x, ...) {
   xname <- short.deparse(substitute(x))
+  force(x)
   rval <- attr(x, "r")
   do.call(matplot,
-          resolve.defaults(list(rval, x),
+          resolve.defaults(list(rval, quote(x)),
                            list(...),
                            list(type="l", main=xname,
                                 xlab="r", ylab="pair correlation")))

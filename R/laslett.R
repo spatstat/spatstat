@@ -207,7 +207,7 @@ plot.laslett <- function(x, ...,
     argh <- argh[!bad]
 
   do.call(plot,
-          resolve.defaults(list(x=Display),
+          resolve.defaults(list(x=quote(Display)),
                            argh,
                            list(main="", mar.panel=0, hsep=1,
                                 equal.scales=TRUE)))

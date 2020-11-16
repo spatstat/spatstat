@@ -174,7 +174,7 @@ summary.lppm <- function(object, ...) {
 plot.lppm <- function(x, ..., type="trend") {
   xname <- short.deparse(substitute(x))
   y <- predict(x, type=type)
-  do.call(plot, resolve.defaults(list(y),
+  do.call(plot, resolve.defaults(list(quote(y)),
                                    list(...),
                                    list(main=xname)))
 }

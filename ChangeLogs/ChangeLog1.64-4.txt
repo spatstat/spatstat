@@ -178,4 +178,26 @@ Change log from spatstat 1.64-3 to spatstat 1.64-4
 ------------- installed on laptop      ---------------
 ------------- uploaded to GitHub       ---------------
 
+    laslett.R
+    layered.R
+    leverage.R
+    linim.R
+    linnet.R
+    localKcross.R
+    localpcf.R
+    lppm.R
+    lpp.R
+    lurking.R
+    lurkmppm.R
+	Experimental improvement to idiom involving resolve.defaults
+	(now applied to all files beginning with a-l)
+
+   DESCRIPTION
+   NEWS
+	Version 1.64-3.010
+
+------------- passed R-4.0.3 CMD check ---------------
+(with environment variable SPATSTAT_TEST defined/undefined)
+------------- installed on laptop      ---------------
+------------- uploaded to GitHub       ---------------
 
