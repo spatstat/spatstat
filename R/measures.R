@@ -3,7 +3,7 @@
 #
 #  signed/vector valued measures with atomic and diffuse components
 #
-#  $Revision: 1.90 $  $Date: 2020/01/11 10:41:21 $
+#  $Revision: 1.91 $  $Date: 2020/11/17 01:29:06 $
 #
 msr <- function(qscheme, discrete, density, check=TRUE) {
   if(!is.quad(qscheme))
@@ -273,24 +273,28 @@ augment.msr <- function(x, ..., sigma, recompute=FALSE) {
   varble <- apply(as.matrix(ra), 2, diff) > sqrt(.Machine$double.eps)
   ##
   if(d == 1) {
-    smo <- if(!varble) as.im(mean(xdensity), W=W) else
-           do.call(Smooth,
-                   resolve.defaults(list(X=xloc %mark% xdensity),
-                                    list(...),
-                                    list(sigma=sigma)))
+    if(!varble) {
+      smo <- as.im(mean(xdensity), W=W)
+    } else {
+      xmd <- xloc %mark% xdensity
+      smo <- do.call(Smooth,
+                     resolve.defaults(list(X=quote(xmd)),
+                                      list(...),
+                                      list(sigma=sigma)))
+    }
   } else {
     smo <- vector(mode="list", length=d)
     names(smo) <- colnames(x)
-    if(any(varble)) 
-      smo[varble] <-
-        do.call(Smooth,
-                resolve.defaults(list(X=xloc %mark% xdensity[,varble, drop=FALSE]),
-                                 list(...),
-                                 list(sigma=sigma)))
+    if(any(varble)) {
+      xmdv <- xloc %mark% xdensity[,varble, drop=FALSE]
+      smo[varble] <- do.call(Smooth,
+                             resolve.defaults(list(X=quote(xmdv)),
+                                              list(...),
+                                              list(sigma=sigma)))
+    }
     if(any(!varble)) 
-      smo[!varble] <- lapply(apply(xdensity[, !varble, drop=FALSE], 2, mean),
-                             as.im, W=W)
-    smo <- as.solist(smo)
+      smo[!varble] <- solapply(apply(xdensity[, !varble, drop=FALSE], 2, mean),
+                               as.im, W=W)
   }
   attr(smo, "sigma") <- sigma
   attr(x, "smoothdensity") <- smo
@@ -376,7 +380,7 @@ plot.msr <- function(x, ..., add=FALSE,
     } 
     ## go
     result <- do.call(plot.solist,
-                      resolve.defaults(list(y),
+                      resolve.defaults(list(quote(y)),
                                        userarg,
                                        rowcol,
                                        scaleinfo,
@@ -407,7 +411,7 @@ plot.msr <- function(x, ..., add=FALSE,
   do.contour <-  how %in% c("contour", "imagecontour")
   ## allocate space for plot and legend using do.plot=FALSE mechanism
   pdata <- do.call.matched(plot.ppp,
-                           resolve.defaults(list(x=xatomic,
+                           resolve.defaults(list(x=quote(xatomic),
                                                  do.plot=FALSE,
                                                  main=main),
                                             list(...),
@@ -417,7 +421,7 @@ plot.msr <- function(x, ..., add=FALSE,
   bb <- attr(pdata, "bbox")
   if(do.image) {
     idata <- do.call.matched(plot.im,
-                             resolve.defaults(list(x=smo,
+                             resolve.defaults(list(x=quote(smo),
                                                    main=main,
                                                    do.plot=FALSE),
                                               list(...)),
@@ -433,20 +437,22 @@ plot.msr <- function(x, ..., add=FALSE,
       blankmain <- prepareTitle(main)$blank
       ## initialise plot
       do.call.matched(plot.owin,
-                      resolve.defaults(list(x=bb, type="n", main=blankmain),
+                      resolve.defaults(list(x=quote(bb),
+                                            type="n",
+                                            main=blankmain),
                                        list(...)),
                       extrargs=xtra.ow)
     }
     ## display density
     if(do.image) 
       do.call.matched(plot.im,
-                      resolve.defaults(list(x=smo, add=TRUE),
+                      resolve.defaults(list(x=quote(smo), add=TRUE),
                                        list(...),
                                        list(main=main, show.all=TRUE)),
                       extrargs=xtra.im)
     if(do.contour) 
       do.call.matched(contour.im,
-                      resolve.defaults(list(x=smo, add=TRUE),
+                      resolve.defaults(list(x=quote(smo), add=TRUE),
                                        list(...),
                                        list(main=main,
                                             axes=FALSE, show.all=!do.image)),
@@ -456,7 +462,7 @@ plot.msr <- function(x, ..., add=FALSE,
                         "claim.title.space"))
     ## display atoms
     do.call.matched(plot.ppp,
-                    resolve.defaults(list(x=xatomic, add=TRUE, main=""),
+                    resolve.defaults(list(x=quote(xatomic), add=TRUE, main=""),
                                      list(...),
                                      list(show.all=TRUE)),
                     extrargs=xtra.pp)

@@ -201,3 +201,29 @@ Change log from spatstat 1.64-3 to spatstat 1.64-4
 ------------- installed on laptop      ---------------
 ------------- uploaded to GitHub       ---------------
 
+............. passed 'make bookcheck'  ................
+
+
+17 nov 2020
+
+   measures.R
+   mincontrast.R
+   morishita.R
+   morisita.R
+   mpl.R
+   mppm.R
+   nnclean.R
+   nndistlpp.R
+   nnmap.R
+	Experimental improvement to idiom involving resolve.defaults
+	(now applied to all files beginning with a-n)
+
+   DESCRIPTION
+   NEWS
+	Version 1.64-3.011
+
+------------- passed R-4.0.3 CMD check ---------------
+(with environment variable SPATSTAT_TEST defined/undefined)
+------------- installed on laptop      ---------------
+------------- uploaded to GitHub       ---------------
+

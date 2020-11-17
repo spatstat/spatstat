@@ -1,7 +1,7 @@
 #
 # mppm.R
 #
-#  $Revision: 1.99 $   $Date: 2020/08/11 06:56:20 $
+#  $Revision: 1.100 $   $Date: 2020/11/17 01:30:18 $
 #
 
 mppm <- local({
@@ -650,8 +650,9 @@ simulate.mppm <- function(object, nsim=1, ..., verbose=TRUE) {
     state <- list()
   }
   for(irow in seq_len(nr)) {
+    model.i <- subs[[irow]]
     sims[[irow]] <- do.call(simulate,
-                            resolve.defaults(list(object=subs[[irow]],
+                            resolve.defaults(list(object=quote(model.i),
                                                   nsim=nsim, drop=FALSE),
                                              list(...),
                                              list(progress=FALSE)))

@@ -1,7 +1,7 @@
 #
 # morisita.R
 #
-#  $Revision: 1.2 $  $Date: 2016/02/11 10:17:12 $
+#  $Revision: 1.3 $  $Date: 2020/11/17 01:30:18 $
 #
 
 miplot <- function(X, ...) {
@@ -29,7 +29,7 @@ miplot <- function(X, ...) {
   
   unitinfo <- summary(unitname(W))$axis
   do.call(plot.default,
-          resolve.defaults(list(quadsize, mindex),
+          resolve.defaults(list(quote(quadsize), quote(mindex)),
                            list(...),
                            list(xlim=c(0,max(quadsize)),
                                 ylim=c(0,max(1, mindex)),

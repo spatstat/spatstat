@@ -6,7 +6,7 @@
 # Adapted from statlib file NNclean.q
 # Authors: Simon Byers and Adrian Raftery
 #
-#  $Revision: 1.16 $   $Date: 2016/02/11 10:17:12 $
+#  $Revision: 1.17 $   $Date: 2020/11/17 01:30:18 $
 #
 
 nnclean <- function(X, k, ...) {
@@ -30,7 +30,7 @@ nnclean.pp3 <- function(X, k, ...,
   
   # apply classification algorithm
   em <- do.call(nncleanEngine,
-                resolve.defaults(list(kthNND, k=k),
+                resolve.defaults(list(quote(kthNND), k=k),
                                  list(...),
                                  list(d=3, tol=convergence, plothist=plothist,
                                       verbose=verbose, maxit=maxit,
@@ -78,7 +78,7 @@ nnclean.ppp <-
 
   # apply classification algorithm
   em <- do.call(nncleanEngine,
-                resolve.defaults(list(kthNND, k=k),
+                resolve.defaults(list(quote(kthNND), k=k),
                                  list(...),
                                  list(d=2, tol=convergence, plothist=plothist,
                                       verbose=verbose, maxit=maxit,
@@ -187,7 +187,9 @@ nncleanEngine <-
     ## compute plot limits to include both histogram and density
     xlim <- c(0, max(kthNND))
     H <- do.call(hist,
-                 resolve.defaults(list(kthNND, plot=FALSE, warn.unused=FALSE),
+                 resolve.defaults(list(quote(kthNND), 
+				       plot=FALSE, 
+				       warn.unused=FALSE),
                                   dotargs,
                                   list(nclass=40)))
     barheights <- H$density
@@ -199,7 +201,7 @@ nncleanEngine <-
     ## now plot it (unless overridden by plot=FALSE)
     reallyplot <- resolve.1.default("plot", list(...), list(plot=TRUE))
     H <- do.call(hist,
-                 resolve.defaults(list(kthNND, probability=TRUE),
+                 resolve.defaults(list(quote(kthNND), probability=TRUE),
                                   dotargs,
                                   list(plot=TRUE,
                                        warn.unused=reallyplot,
