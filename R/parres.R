@@ -3,7 +3,7 @@
 #
 # code to plot transformation diagnostic
 #
-#   $Revision: 1.15 $  $Date: 2020/02/21 08:47:50 $
+#   $Revision: 1.16 $  $Date: 2020/11/17 03:47:24 $
 #
 
 parres <- function(model, covariate, ...,
@@ -573,8 +573,9 @@ print.parres <- function(x, ...) {
 }
 
 plot.parres <- function(x, ...) {
-  xname <- deparse(substitute(x))
-  do.call(plot.fv, resolve.defaults(list(x), list(...),
+  xname <- short.deparse(substitute(x))
+  force(x)
+  do.call(plot.fv, resolve.defaults(list(quote(x)), list(...),
                                       list(main=xname, shade=c("hi", "lo"))))
 }
 

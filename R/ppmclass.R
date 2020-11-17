@@ -4,7 +4,7 @@
 #	Class 'ppm' representing fitted point process models.
 #
 #
-#	$Revision: 2.147 $	$Date: 2020/03/04 04:25:22 $
+#	$Revision: 2.148 $	$Date: 2020/11/17 03:47:24 $
 #
 #       An object of class 'ppm' contains the following:
 #
@@ -568,6 +568,7 @@ emend.ppm <- project.ppm <- local({
 # more methods
 
 deviance.ppm <- function(object, ...) {
+  force(object)
   satlogpl <- object$satlogpl
   if(is.null(satlogpl)) {
     object <- update(object, forcefit=TRUE)
@@ -576,7 +577,7 @@ deviance.ppm <- function(object, ...) {
   if(is.null(satlogpl) || !is.finite(satlogpl))
     return(NA)
   ll <- do.call(logLik,
-                resolve.defaults(list(object=object, absolute=FALSE),
+                resolve.defaults(list(object=quote(object), absolute=FALSE),
                                  list(...)))
   ll <- as.numeric(ll)
   2 * (satlogpl - ll)
@@ -721,7 +722,7 @@ model.frame.ppm <- function(formula, ...) {
     object <- update(object, forcefit=TRUE)
     gf <- getglmfit(object)
   }
-  argh <- resolve.defaults(list(formula=gf),
+  argh <- resolve.defaults(list(formula=quote(gf)),
                            list(...),
                            list(data = getglmdata(object),
                                 subset = TRUE))

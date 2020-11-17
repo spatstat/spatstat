@@ -3,7 +3,7 @@
 #
 #  surface of the objective function for an M-estimator
 #
-#  $Revision: 1.6 $ $Date: 2020/10/15 07:48:05 $
+#  $Revision: 1.7 $ $Date: 2020/11/17 03:01:19 $
 #
 
 objsurf <- function(x, ...) {
@@ -88,8 +88,9 @@ image.objsurf <- plot.objsurf <- function(x, ...) {
   xname <- short.deparse(substitute(x))
   optpar <- attr(x, "optpar")
   nama <- names(optpar)
+  xx <- unclass(x)
   do.call(image,
-          resolve.defaults(list(x=unclass(x)),
+          resolve.defaults(list(x=quote(xx)), 
                            list(...),
                            list(xlab=nama[1], ylab=nama[2], main=xname)))
   abline(v=optpar[1], lty=3)
@@ -101,8 +102,9 @@ contour.objsurf <- function(x, ...) {
   xname <- short.deparse(substitute(x))
   optpar <- attr(x, "optpar")
   nama <- names(optpar)
+  xx <- unclass(x)
   do.call(contour,
-          resolve.defaults(list(x=unclass(x)),
+          resolve.defaults(list(x=quote(xx)), 
                            list(...),
                            list(xlab=nama[1], ylab=nama[2], main=xname)))
   abline(v=optpar[1], lty=3)
@@ -116,8 +118,11 @@ persp.objsurf <- function(x, ...) {
   optpar <- attr(x, "optpar")
   objname <- attr(x, "objname")
   nama <- names(optpar)
+  xx <- x$x
+  yy <- x$y
+  zz <- x$z
   r <- do.call(persp,
-               resolve.defaults(list(x=x$x, y=x$y, z=x$z),
+               resolve.defaults(list(x=quote(xx), y=quote(yy), z=quote(zz)),
                                 list(...),
                                 list(xlab=nama[1], ylab=nama[2],
                                      zlab=objname, main=xname)))

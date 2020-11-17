@@ -2,7 +2,7 @@
 #
 #    pairwise.family.S
 #
-#    $Revision: 1.71 $	$Date: 2018/04/06 08:55:03 $
+#    $Revision: 1.72 $	$Date: 2020/11/17 03:47:24 $
 #
 #    The pairwise interaction family of point process models
 #
@@ -78,7 +78,7 @@ pairwise.family <-
                      unitname=unitz)
            if(plotit)
              do.call(plot.fv,
-                     resolve.defaults(list(fun),
+                     resolve.defaults(list(quote(fun)),
                                       list(...),
                                       list(ylim=ylim)))
            return(invisible(fun))
@@ -127,7 +127,7 @@ pairwise.family <-
                         rowNames=paste(types), colNames=paste(types))
            if(plotit)
              do.call(plot.fasp,
-                     resolve.defaults(list(funz),
+                     resolve.defaults(list(quote(funz)),
                                       list(...),
                                       list(ylim=ylim)))
            return(invisible(funz))

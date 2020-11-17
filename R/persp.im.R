@@ -4,7 +4,7 @@
 ##  'persp' method for image objects
 ##      plus annotation
 ##  
-##  $Revision: 1.20 $ $Date: 2016/09/01 05:49:42 $
+##  $Revision: 1.21 $ $Date: 2020/11/17 03:47:24 $
 ##
 
 persp.im <- local({
@@ -129,7 +129,10 @@ persp.im <- local({
     if(spatstat.options("monochrome"))
       dotargs <- col.args.to.grey(dotargs)
     
-    yargh <- resolve.defaults(list(x=x$xcol, y=x$yrow, z=t(x$v)),
+    xcol <- x$xcol
+    yrow <- x$yrow
+    zmat <- t(x$v)
+    yargh <- resolve.defaults(list(x=quote(xcol), y=quote(yrow), z=quote(zmat)),
                               dotargs,
                               pop,
                               colinfo,

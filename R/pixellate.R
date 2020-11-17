@@ -1,7 +1,7 @@
 #
 #           pixellate.R
 #
-#           $Revision: 1.25 $    $Date: 2017/11/15 07:23:16 $
+#           $Revision: 1.26 $    $Date: 2020/11/17 03:47:24 $
 #
 #     pixellate            convert an object to a pixel image
 #
@@ -29,7 +29,7 @@ pixellate.ppp <- function(x, W=NULL, ..., weights=NULL, padzero=FALSE,
   
   W <- do.call.matched(as.mask,
                        resolve.defaults(list(...),
-                                        list(w=W)))
+                                        list(w=quote(W))))
 
   nx <- npoints(x)
   
@@ -186,7 +186,7 @@ pixellate.owin <- function(x, W=NULL, ..., DivideByPixelArea=FALSE) {
   
   W <- do.call.matched(as.mask,
                        resolve.defaults(list(...),
-                                        list(w=W)))
+                                        list(w=quote(W))))
   ## compute
   Zmat <- polytileareaEngine(P, W$xrange, W$yrange, nx=W$dim[2L], ny=W$dim[1L],
                              DivideByPixelArea)

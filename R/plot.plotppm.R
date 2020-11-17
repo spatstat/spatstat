@@ -3,7 +3,7 @@
 #
 # engine of plot method for ppm
 #
-# $Revision: 1.20 $  $Date: 2016/12/30 01:44:07 $
+# $Revision: 1.21 $  $Date: 2020/11/17 03:47:24 $
 #
 #
 
@@ -60,6 +60,7 @@ plot.plotppm <- function(x,data=NULL,trend=TRUE,cif=TRUE,se=TRUE,
   for(ttt in surftypes) {
     xs <- x[[ttt]]
     for (i in seq_along(mrkvals)) {
+      xsi <- xs[[i]]
       level <- mrkvals[i]
       main <- paste(if(ttt == "se") "Estimated" else "Fitted",
                     ttt, 
@@ -68,29 +69,31 @@ plot.plotppm <- function(x,data=NULL,trend=TRUE,cif=TRUE,se=TRUE,
         switch(style,
                persp = {
                  do.call(persp,
-                         resolve.defaults(list(xs[[i]]),
+                         resolve.defaults(list(quote(xsi)),
                                           list(...), 
                                           spatstat.options("par.persp"),
                                           list(xlab="x", zlab=ttt, main=main)))
                },
                image = {
                  do.call(image,
-                         resolve.defaults(list(xs[[i]]),
+                         resolve.defaults(list(quote(xsi)),
                                           list(...),
                                           list(main=main)))
                  if(superimposed) {
                    X <- if(marked) data[data.marks == level] else data
-                   do.call(plot.ppp, append(list(x=X, add=TRUE), pppargs))
+                   do.call(plot.ppp, append(list(x=quote(X), add=TRUE), 
+					    pppargs))
                  }
                },
                contour = {
                  do.call(contour,
-                         resolve.defaults(list(xs[[i]]),
+                         resolve.defaults(list(quote(xsi)),
                                           list(...),
                                           list(main=main)))
                  if(superimposed) {
                    X <- if(marked) data[data.marks == level] else data
-                   do.call(plot.ppp, append(list(x=X, add=TRUE), pppargs))
+                   do.call(plot.ppp, append(list(x=quote(X), add=TRUE), 
+					    pppargs))
                  }
                },
                {

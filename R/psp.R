@@ -1,7 +1,7 @@
 #
 #  psp.R
 #
-#  $Revision: 1.107 $ $Date: 2020/06/13 08:14:28 $
+#  $Revision: 1.108 $ $Date: 2020/11/17 03:47:24 $
 #
 # Class "psp" of planar line segment patterns
 #
@@ -79,8 +79,13 @@ as.psp <- function(x, ..., from=NULL, to=NULL) {
       stop(paste("The point patterns", sQuote("from"), "and", sQuote("to"),
                  "have different numbers of points.\n"))
     uni <- union.owin(from$window, to$window)
+    fromx <- from$x
+    fromy <- from$y
+    tox <- to$x
+    toy <- to$y
     Y <- do.call(psp,
-                 resolve.defaults(list(from$x, from$y, to$x, to$y),
+                 resolve.defaults(list(quote(fromx), quote(fromy),
+					quote(tox), quote(toy)),
                                   list(...),
                                   list(window=uni)))
     return(Y)
@@ -597,8 +602,12 @@ identify.psp <- function(x, ..., labels=seq_len(nsegments(x)),
         mi <- mids[ident]
         li <- labels[ident]
         po <- poz[ident]
+        mix <- mi$x
+        miy <- mi$y
         do.call.matched(graphics::text.default,
-                        resolve.defaults(list(x=mi$x, y=mi$y, labels=li),
+                        resolve.defaults(list(x=quote(mix), 
+					      y=quote(miy), 
+				              labels=quote(li)),
                                          list(...),
                                          list(pos=po)))
       }
@@ -642,8 +651,10 @@ edit.psp <- function(name, ...) {
 text.psp <- function(x, ...) {
   mids <- midpoints.psp(x)
   poz <- c(1, 2,4, 3)[(floor(angles.psp(x)/(pi/4)) %% 4) + 1L]
+  midx <- mids$x
+  midy <- mids$y
   do.call.matched(graphics::text.default,
-                  resolve.defaults(list(x=mids$x, y=mids$y),
+                  resolve.defaults(list(x=quote(midx), y=quote(midy)),
                                    list(...),
                                    list(pos=poz),
                                    .StripNull=TRUE))

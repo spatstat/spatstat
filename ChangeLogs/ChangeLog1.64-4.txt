@@ -227,3 +227,42 @@ Change log from spatstat 1.64-3 to spatstat 1.64-4
 ------------- installed on laptop      ---------------
 ------------- uploaded to GitHub       ---------------
 
+   colourtools.R
+   spatstat-internal.Rd
+	do.call.plotfun has new argument 'envir'
+	By default, evaluation now occurs in the environment
+	where do.call.plotfun was called.
+	
+   Kmulti.R
+   objsurf.R
+   pairs.im.R
+   pairwise.family.R
+   pairwise.R
+   parres.R
+   persp.im.R
+   pixellate.R
+   plot.anylist.R
+   plot.fasp.R
+   plot.im.R
+   plot.mppm.R
+   plot.owin.R
+   plot.plotppm.R
+   plot.ppp.R
+   plot.psp.R
+   pp3.R
+   ppmclass.R
+   ppx.R
+   profilepl.R
+   psp2pix.R
+   psp.R
+	Experimental improvement to idiom involving resolve.defaults
+	(now applied to all files beginning with a-p and A-P)
+
+   DESCRIPTION
+   NEWS
+	Version 1.64-3.012
+
+------------- passed R-4.0.3 CMD check ---------------
+(with environment variable SPATSTAT_TEST defined/undefined)
+------------- installed on laptop      ---------------
+------------- uploaded to GitHub       ---------------

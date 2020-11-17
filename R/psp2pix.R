@@ -1,7 +1,7 @@
 #
 # psp2pix.R
 #
-#  $Revision: 1.12 $  $Date: 2017/11/15 07:21:21 $
+#  $Revision: 1.13 $  $Date: 2020/11/17 03:47:24 $
 #
 #
 
@@ -14,7 +14,7 @@ as.mask.psp <- function(x, W=NULL, ...) {
 
   W <- do.call.matched(as.mask,
                        resolve.defaults(list(...),
-                                        list(w=W)))
+                                        list(w=quote(W))))
 
   ends <- L$ends
   nseg <- nrow(ends)
@@ -61,7 +61,7 @@ pixellate.psp <- function(x, W=NULL, ..., weights=NULL,
 
   W <- do.call.matched(as.mask,
                          resolve.defaults(list(...),
-                                          list(w=W)))
+                                          list(w=quote(W))))
 
   Z <- as.im(W)
 

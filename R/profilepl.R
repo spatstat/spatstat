@@ -1,7 +1,7 @@
 #
 # profilepl.R
 #
-#  $Revision: 1.46 $  $Date: 2020/01/10 03:27:35 $
+#  $Revision: 1.47 $  $Date: 2020/11/17 03:47:24 $
 #
 #  computes profile log pseudolikelihood
 #
@@ -312,7 +312,8 @@ plot.profilepl <- local({
     if(npara == 1) {
       ## single curve
       do.call.matched(lines.default,
-                      resolve.defaults(list(x=xvalues, y=yvalues, ...),
+                      resolve.defaults(list(x=quote(xvalues), 
+					    y=quote(yvalues), ...),
                                        spatstat.options("par.fv")),
                       extrargs=linepars)
     } else {
@@ -348,7 +349,7 @@ plot.profilepl <- local({
     if(length(col) == n) col <- unique(col[z])[1]
     if(length(lwd) == n) lwd <- unique(lwd[z])[1]
     do.call.matched(lines.default,
-                    resolve.defaults(list(x=fz, y=pz,
+                    resolve.defaults(list(x=quote(fz), y=quote(pz),
                                           col=col, lwd=lwd, lty=lty),
                                      list(...)),
                     extrargs=lineargs)

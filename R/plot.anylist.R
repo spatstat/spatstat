@@ -4,7 +4,7 @@
 ##  Plotting functions for 'solist', 'anylist', 'imlist'
 ##       and legacy class 'listof'
 ##
-##  $Revision: 1.29 $ $Date: 2019/09/11 11:52:28 $
+##  $Revision: 1.30 $ $Date: 2020/11/17 03:47:24 $
 ##
 
 plot.anylist <- plot.solist <- plot.listof <-
@@ -50,7 +50,8 @@ plot.anylist <- plot.solist <- plot.listof <-
                        if(add) list(add=TRUE) else NULL,
                        if(has.multiplot(cmd)) list(multiplot=FALSE) else NULL)
     if(is.function(cmd)) {
-      do.call(cmd, resolve.defaults(list(i, xi), argh))
+      force(xi)
+      do.call(cmd, resolve.defaults(list(i, quote(xi)), argh))
     } else {
       do.call(plot, resolve.defaults(list(cmd), argh))
     }
@@ -66,10 +67,11 @@ plot.anylist <- plot.solist <- plot.listof <-
                        if(add) list(add=TRUE) else NULL,
                        if(has.multiplot(cmd)) list(multiplot=FALSE) else NULL)
     if(is.function(cmd)) {
-      do.call(cmd, resolve.defaults(list(i, xi), argh))
+      force(xi)
+      do.call(cmd, resolve.defaults(list(i, quote(xi)), argh))
     } else {
       cmd <- shift(cmd, vec)
-      do.call(plot, resolve.defaults(list(cmd), argh))
+      do.call(plot, resolve.defaults(list(quote(cmd)), argh))
     }
   }
 
@@ -109,7 +111,8 @@ plot.anylist <- plot.solist <- plot.listof <-
     for(i in seq_len(n)) {
       pai <- if(is.function(panel.args)) panel.args(i) else list()
       argh <- resolve.defaults(pai, userargs, extrargs)
-      result[[i]] <- do.call(getplotbox, append(list(x=xlist[[i]]), argh))
+      xxi <- xlist[[i]]
+      result[[i]] <- do.call(getplotbox, append(list(x=quote(xxi)), argh))
     }
     return(result)
   }
@@ -480,8 +483,9 @@ plot.anylist <- plot.solist <- plot.listof <-
 
 contour.imlist <- contour.listof <- function(x, ...) {
   xname <- short.deparse(substitute(x))
+  force(x)
   do.call(plot.solist,
-          resolve.defaults(list(x=x, plotcommand="contour"),
+          resolve.defaults(list(x=quote(x), plotcommand="contour"),
                            list(...),
                            list(main=xname)))
 }
@@ -491,6 +495,7 @@ plot.imlist <- local({
   plot.imlist <- function(x, ..., plotcommand="image",
                           equal.ribbon = FALSE, ribmar=NULL) {
     xname <- short.deparse(substitute(x))
+    force(x)
     if(missing(plotcommand) &&
        any(sapply(x, inherits, what=c("linim", "linfun"))))
       plotcommand <- "plot"
@@ -499,7 +504,7 @@ plot.imlist <- local({
       out <- imagecommon(x, ..., xname=xname, ribmar=ribmar)
     } else {
       out <- do.call(plot.solist,
-                     resolve.defaults(list(x=x, plotcommand=plotcommand), 
+                     resolve.defaults(list(x=quote(x), plotcommand=plotcommand), 
                                       list(...),
                                       list(main=xname)))
     }
@@ -516,6 +521,7 @@ plot.imlist <- local({
                           ribmar = NULL, mar.panel = c(2,1,1,2)) {
     if(missing(xname))
       xname <- short.deparse(substitute(x))
+    force(x)
     ribside <- match.arg(ribside)
     stopifnot(is.list(ribargs))
     if(!is.null(ribsep))
@@ -524,7 +530,7 @@ plot.imlist <- local({
     if(is.null(zlim))
       zlim <- range(unlist(lapply(x, range)))
     ## determine common colour map
-    imcolmap <- plot.im(x[[1]], do.plot=FALSE, zlim=zlim, ..., ribn=ribn)
+    imcolmap <- plot.im(x[[1L]], do.plot=FALSE, zlim=zlim, ..., ribn=ribn)
     ## plot ribbon?
     if(!ribbon) {
       ribadorn <- list()
@@ -563,7 +569,7 @@ plot.imlist <- local({
     }
     ##
     result <- do.call(plot.solist,
-                      resolve.defaults(list(x=x, plotcommand="image"),
+                      resolve.defaults(list(x=quote(x), plotcommand="image"),
                                        list(...),
                                        list(mar.panel=mar.panel,
                                             main=xname,

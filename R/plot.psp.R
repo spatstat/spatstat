@@ -3,7 +3,7 @@
 #'
 #'  plot method for segment patterns
 #'
-#'  $Revision: 1.3 $ $Date: 2020/06/13 08:11:21 $
+#'  $Revision: 1.4 $ $Date: 2020/11/17 03:47:24 $
 
 plot.psp <- function(x, ..., main, add=FALSE,
                      show.all=!add, 
@@ -63,15 +63,17 @@ plot.psp <- function(x, ..., main, add=FALSE,
   if(!do.ribbon) {
     ## window of x only
     bb.all <- as.rectangle(as.owin(x))
-    if(do.plot && (!add || show.window))
+    if(do.plot && (!add || show.window)) {
+      xwindow <- x$window
       do.call.plotfun(plot.owin, 
-                      resolve.defaults(list(x=x$window,
+                      resolve.defaults(list(x=quote(xwindow),
 		                            main=if(show.all) main else "",
                                             add=add,
                                             type = if(show.window) "w" else "n",
                                             show.all=show.all),
                                        list(...)),
                       extrargs=owinpars)
+    }
   } else {
     ## enlarged window with room for colour ribbon
     ## x at left, ribbon at right
@@ -87,7 +89,7 @@ plot.psp <- function(x, ..., main, add=FALSE,
       ## establish coordinate system
       if(!add)
       do.call.plotfun(plot.owin,
-                      resolve.defaults(list(x=bb.all,
+                      resolve.defaults(list(x=quote(bb.all),
                                             type="n",
                                             main=pt$blank),
                                        list(...)),
@@ -95,8 +97,9 @@ plot.psp <- function(x, ..., main, add=FALSE,
       ## now plot window of x
       ## with title centred on this window
       if(show.window) {
+	xwindow <- x$window
         do.call.plotfun(plot.owin, 
-                        resolve.defaults(list(x=x$window,
+                        resolve.defaults(list(x=quote(xwindow),
                                               add=TRUE,
                                               main=main,
                                               show.all=TRUE),
@@ -216,7 +219,8 @@ thickSegments <- local({
       #' use layout procedure in plot.im
       px <- pixellate(x)
       z <- do.call(plot.im,
-                   resolve.defaults(list(px, do.plot=FALSE, ribbon=TRUE),
+                   resolve.defaults(list(quote(px), 
+					do.plot=FALSE, ribbon=TRUE),
                                     list(...),
                                     list(ribside  = leg.side,
                                          ribsep   = leg.sep,
@@ -242,7 +246,7 @@ thickSegments <- local({
     }
     #' initialise plot
     bb <- do.call.matched(plot.owin,
-                          resolve.defaults(list(x=bb.all, type="n"),
+                          resolve.defaults(list(x=quote(bb.all), type="n"),
                                            list(...), list(main=main)),
                           extrargs="type")
     if(box)

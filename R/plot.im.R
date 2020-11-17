@@ -1,7 +1,7 @@
 #
 #   plot.im.R
 #
-#  $Revision: 1.137 $   $Date: 2020/02/21 08:45:54 $
+#  $Revision: 1.138 $   $Date: 2020/11/17 03:47:24 $
 #
 #  Plotting code for pixel images
 #
@@ -27,8 +27,9 @@ plot.im <- local({
     if(add && show.all) {
       ## set up the window space *with* the main title
       ## using the same code as plot.owin, for consistency
+      force(W)
       do.call.matched(plot.owin,
-                      resolve.defaults(list(x=W, type="n"), aarg), 
+                      resolve.defaults(list(x=quote(W), type="n"), aarg), 
                       extrargs=graphicsPars("owin"))
     }
     if(workaround && identical(aarg$useRaster, TRUE)) {
@@ -621,7 +622,7 @@ plot.im <- local({
     if(!add) {
       ## establish coordinate system
       do.call.plotfun(plot.owin,
-                      resolve.defaults(list(x=bb.all,
+                      resolve.defaults(list(x=quote(bb.all),
                                             type="n",
                                             main=pt$blank),
                                        dotargs),
@@ -630,7 +631,7 @@ plot.im <- local({
     if(show.all) {
       ## plot title centred over main image area 'bb'
       do.call.plotfun(plot.owin,
-                      resolve.defaults(list(x=bb,
+                      resolve.defaults(list(x=quote(bb),
                                             type="n",
                                             main=main,
                                             add=TRUE,
@@ -853,7 +854,7 @@ contour.im <- function (x, ..., main, axes=FALSE, add=FALSE,
     } else {
       #' plot invisible bounding box
       do.call.plotfun(plot.owin,
-                      resolve.defaults(list(x=bb,
+                      resolve.defaults(list(x=quote(bb),
                                             type="n",
                                             main=pt$blank),
                                        dotargs),
@@ -863,7 +864,7 @@ contour.im <- function (x, ..., main, axes=FALSE, add=FALSE,
   if(show.all && !axes) {
     ## plot title centred over contour region
     do.call.plotfun(plot.owin,
-                    resolve.defaults(list(x=bb,
+                    resolve.defaults(list(x=quote(bb),
                                           main=main,
                                           add=TRUE,
                                           show.all=TRUE),
@@ -872,14 +873,21 @@ contour.im <- function (x, ..., main, axes=FALSE, add=FALSE,
                     extrargs=graphicsPars("owin"))
   }
   #' plot contour lines
+  xcol <- x$xcol
+  yrow <- x$yrow
+  zmat <- t(x$v)
   if(!inherits(col, "colourmap")) {
     do.call.plotfun(contour.default,
-                    resolve.defaults(list(x=x$xcol, y=x$yrow, z=t(x$v)),
+                    resolve.defaults(list(x=quote(xcol), 
+					  y=quote(yrow), 
+					  z=quote(zmat)),
                                      list(add=TRUE, col=col),
                                      list(...)))
   } else {
     clin <- do.call.matched(contourLines,
-                            append(list(x=x$xcol, y=x$yrow, z=t(x$v)),
+                            append(list(x=quote(xcol), 
+					y=quote(yrow), 
+					z=quote(zmat)),
                                    list(...)))
     linpar <- graphicsPars("lines")
     for(i in seq_along(clin)) {

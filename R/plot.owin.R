@@ -3,7 +3,7 @@
 #
 #	The 'plot' method for observation windows (class "owin")
 #
-#	$Revision: 1.60 $	$Date: 2020/02/18 03:33:02 $
+#	$Revision: 1.61 $	$Date: 2020/11/17 03:47:24 $
 #
 #
 #
@@ -115,7 +115,7 @@ plot.owin <- function(x, main, add=FALSE, ..., box, edge=0.04,
            Wpoly <- as.polygonal(W)
            po <- Wpoly$bdry[[1]]
            do.call.plotfun(polygon,
-                           resolve.defaults(list(x=po),
+                           resolve.defaults(list(x=quote(po)),
                                             list(...)),
                            extrargs="lwd")
            if(hatch)
@@ -143,12 +143,14 @@ plot.owin <- function(x, main, add=FALSE, ..., box, edge=0.04,
            if(!triangulate) {
              # No triangulation required;
              # simply plot the polygons
-             for(i in seq_along(p))
+             for(i in seq_along(p)) {
+	       p.i <- p[[i]]
                do.call.plotfun(polygon,
                                resolve.defaults(
-                                                list(x=p[[i]]),
+                                                list(x=quote(p.i)),
                                                 list(...)),
                                extrargs="lwd")
+	      }	
            } else {
               # Try using polypath():
              if(use.polypath &&
@@ -166,21 +168,25 @@ plot.owin <- function(x, main, add=FALSE, ..., box, edge=0.04,
                } else {
                  # Fill pieces with colour (and draw border in same colour)
                  pp <- broken$bdry
-                 for(i in seq_len(length(pp)))
+                 for(i in seq_len(length(pp))) {
+                   ppi <- pp[[i]]
                    do.call.plotfun(polygon,
-                                   resolve.defaults(list(x=pp[[i]],
+                                   resolve.defaults(list(x=quote(ppi),
                                                          border=col.poly),
                                                     list(...)))
+		}
                }
              }
              # Now draw polygon boundaries
-             for(i in seq_along(p))
+             for(i in seq_along(p)) {
+               p.i <- p[[i]]
                do.call.plotfun(polygon,
                                resolve.defaults(
-                                                list(x=p[[i]]),
+                                                list(x=quote(p.i)),
                                                 list(density=0, col=NA),
                                                 list(...)),
                                extrargs="lwd")
+		}
            }
            if(hatch)
              do.call(add.texture, append(list(W=W), hatchargs))
@@ -205,9 +211,15 @@ plot.owin <- function(x, main, add=FALSE, ..., box, edge=0.04,
            if(spatstat.options("monochrome"))
              col <- to.grey(col)
            
+	   xcol <- W$xcol
+           yrow <- W$yrow
+           zmat <- t(W$m)
            do.call.matched(image.default,
                            resolve.defaults(
-                           list(x=W$xcol, y=W$yrow, z=t(W$m), add=TRUE),
+                           list(x=quote(xcol), 
+				y=quote(yrow), 
+				z=quote(zmat), 
+				add=TRUE),
                            list(col=col),       
                            list(...),
                            spatstat.options("par.binary"),

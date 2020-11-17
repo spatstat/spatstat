@@ -1,7 +1,7 @@
 #
 #   plot.fasp.R
 #
-#   $Revision: 1.29 $   $Date: 2016/02/11 10:17:12 $
+#   $Revision: 1.30 $   $Date: 2020/11/17 03:47:24 $
 #
 plot.fasp <- function(x, formule=NULL, ..., subset=NULL,
                       title=NULL, banner=TRUE,
@@ -129,9 +129,10 @@ plot.fasp <- function(x, formule=NULL, ..., subset=NULL,
   for(i in 1:nrows) {
     for(j in 1:ncols) {
       k <- which[i,j]
-      if(is.na(k)) plot(0,0,type='n',xlim=c(0,1),
+      if(is.na(k)) {
+        plot(0,0,type='n',xlim=c(0,1),
                         ylim=c(0,1),axes=FALSE,xlab='',ylab='', ...)
-      else {
+      } else {
         fun <- as.fv(x$fns[[k]])
         fmla <- if(!defaultplot) formule[k] else NULL
         sub <- if(msub) subset[[k]] else subset
@@ -140,7 +141,9 @@ plot.fasp <- function(x, formule=NULL, ..., subset=NULL,
                 if(ncols == 1) rowNames[i] else 
                 paren(paste(rowNames[i], colNames[j], sep=","))
         do.call(plot,
-                resolve.defaults(list(x=fun, fmla=fmla, subset=sub),
+                resolve.defaults(list(x=quote(fun), 
+				      fmla=quote(fmla), 
+				      subset=quote(sub)),
                                  list(...),
                                  list(xlim=xlim, ylim=ylim,
                                       main=main, legend=legend),

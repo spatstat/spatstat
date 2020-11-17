@@ -3,7 +3,7 @@
 #
 #  class of general point patterns in any dimension
 #
-#  $Revision: 1.66 $  $Date: 2020/11/04 04:26:04 $
+#  $Revision: 1.67 $  $Date: 2020/11/17 03:47:24 $
 #
 
 ppx <- local({
@@ -113,7 +113,7 @@ plot.ppx <- function(x, ...) {
     ran <- diff(range(coo))
     ylim <- c(-1,1) * ran/20
     do.call(plot.default,
-            resolve.defaults(list(coo, numeric(length(coo))),
+            resolve.defaults(list(quote(coo), numeric(length(coo))),
                              list(...),
                              list(asp=1, ylim=ylim,
                                   axes=FALSE, xlab="", ylab="")))
@@ -122,16 +122,18 @@ plot.ppx <- function(x, ...) {
     if(is.null(dom)) {
       # plot x, y coordinates only
       nama <- names(coo)
+      xx <- coo[,1L]
+      yy <- coo[,2L]
       do.call.matched(plot.default,
-                      resolve.defaults(list(x=coo[,1], y=coo[,2], asp=1),
+                      resolve.defaults(list(x=quote(xx), y=quote(yy), asp=1),
                                        list(...),
                                        list(main=xname),
-                                       list(xlab=nama[1], ylab=nama[2])))
+                                       list(xlab=nama[1L], ylab=nama[2L])))
     } else {
       add <- resolve.defaults(list(...), list(add=FALSE))$add
       if(!add) {
         # plot domain, whatever it is
-        do.call(plot, resolve.defaults(list(dom),
+        do.call(plot, resolve.defaults(list(quote(dom)),
                                        list(...),
                                        list(main=xname)))
       }
@@ -139,7 +141,7 @@ plot.ppx <- function(x, ...) {
       x2 <- ppp(coo[,1], coo[,2], window=as.owin(dom),
                 marks=as.data.frame(marks(x)), check=FALSE)
       # invoke plot.ppp
-      return(do.call(plot, resolve.defaults(list(x2),
+      return(do.call(plot, resolve.defaults(list(quote(x2)),
                                               list(add=TRUE),
                                               list(...))))
     }
@@ -151,7 +153,7 @@ plot.ppx <- function(x, ...) {
     # invoke plot.pp3
     nama <- names(coo)
     do.call(plot,
-            resolve.defaults(list(x3),
+            resolve.defaults(list(quote(x3)),
                              list(...),
                              list(main=xname),
                              list(xlab=nama[1], ylab=nama[2], zlab=nama[3])))

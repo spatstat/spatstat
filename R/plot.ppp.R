@@ -1,7 +1,7 @@
 #
 #	plot.ppp.R
 #
-#	$Revision: 1.97 $	$Date: 2020/11/12 04:34:11 $
+#	$Revision: 1.98 $	$Date: 2020/11/17 03:47:24 $
 #
 #
 #--------------------------------------------------------------------------
@@ -216,7 +216,7 @@ plot.ppp <- local({
 #    xwindow <- x$window
 #    if(do.plot) 
 #      do.call(plot.owin,
-#              resolve.defaults(list(xwindow),
+#              resolve.defaults(list(quote(xwindow)),
 #                               list(...),
 #                               list(main=main, invert=TRUE, add=add,
 #                                    type=if(show.window) "w" else "n")))
@@ -237,7 +237,7 @@ plot.ppp <- local({
       ## generate one plot for each column of marks
       y <- solapply(mx, setmarks, x=x)
       out <- do.call(plot,
-                     resolve.defaults(list(x=y, main=main,
+                     resolve.defaults(list(x=quote(y), main=main,
                                            show.window=show.window && !clipped,
                                            do.plot=do.plot,
                                            type=type),
@@ -362,7 +362,7 @@ plot.ppp <- local({
                ann=FALSE, axes=FALSE, xlab="", ylab="")
   rez <- resolve.defaults(list(...), dflt)[names(dflt)]
   do.call(plot.owin,
-          append(list(x=BB, type="n", add=add,
+          append(list(x=quote(BB), type="n", add=add,
                       main=blankmain, show.all=show.all),
                  rez))
   if(sick) {
@@ -377,8 +377,9 @@ plot.ppp <- local({
       }
       ## plot window of main pattern
       if(!clipped) {
+        xwindow <- x$window
         do.call(plot.owin,
-                resolve.defaults(list(x$window, add=TRUE),
+                resolve.defaults(list(quote(xwindow), add=TRUE),
                                  list(...),
                                  list(invert=TRUE)))
       } else plot(clippy, add=TRUE, ...)
@@ -398,7 +399,7 @@ plot.ppp <- local({
 
   ## Plot observation window (or at least the main title)
   do.call(plot.owin,
-          resolve.defaults(list(x=xwindow,
+          resolve.defaults(list(x=quote(xwindow),
                                 add=TRUE,
                                 main=main,
                                 type=if(show.window && !clipped) "w" else "n",

@@ -101,9 +101,11 @@ function(X, i, j, r=NULL, breaks=NULL,
 
   if(i == j) {
     ## use Kest
+    XI <- X[I]
     result <- do.call(Kest,
-                      resolve.defaults(list(X=X[I],
-                                            r=r, breaks=breaks,
+                      resolve.defaults(list(X=quote(XI),
+                                            r=quote(r),
+                                            breaks=quote(breaks),
                                             correction=correction, ratio=ratio),
                                        list(rmax=NULL), ## forbidden 
                                        list(...)))

@@ -3,7 +3,7 @@
 #
 #  class of three-dimensional point patterns in rectangular boxes
 #
-#  $Revision: 1.30 $  $Date: 2019/01/23 02:41:43 $
+#  $Revision: 1.31 $  $Date: 2020/11/17 03:47:24 $
 #
 
 box3 <- function(xrange=c(0,1), yrange=xrange, zrange=yrange, unitname=NULL) {
@@ -199,7 +199,7 @@ plot.pp3 <- function(x, ..., eye=NULL, org=NULL, theta=25, phi=15,
   deefolts <- spatstat.options('par.pp3')
   ## determine default eye position and centre of view
   do.call(plot3Dpoints,
-          resolve.defaults(list(xyz=coo, eye=eye, org=org, type=type),
+          resolve.defaults(list(xyz=quote(coo), eye=eye, org=org, type=type),
                            argh,
                            deefolts,
                            formaldefaults,

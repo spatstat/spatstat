@@ -181,7 +181,7 @@ hsvNA <- function(h, s, v, alpha=NULL) {
 ## This function traps the colour arguments
 ## and converts to greyscale if required.
 
-do.call.plotfun <- function(fun, arglist, ...) {
+do.call.plotfun <- function(fun, arglist, ..., envir=parent.frame()) {
   if(spatstat.options("monochrome")) {
     keys <- names(arglist)
     if(!is.null(keys)) {
@@ -191,7 +191,7 @@ do.call.plotfun <- function(fun, arglist, ...) {
         arglist[cols] <- lapply(arglist[cols], to.grey)
     }
   }
-  do.call.matched(fun, arglist, ...)
+  do.call.matched(fun, arglist, ..., envir=envir)
 }
 
 gammabreaks <- function(ra, n, gamma=1) {
