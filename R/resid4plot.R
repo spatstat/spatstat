@@ -5,7 +5,7 @@
 #         resid1plot       one or more unrelated individual plots 
 #         resid1panel      one panel of resid1plot
 #
-#   $Revision: 1.37 $    $Date: 2019/12/15 05:26:58 $
+#   $Revision: 1.38 $    $Date: 2020/11/18 03:07:14 $
 #
 #
 
@@ -29,8 +29,10 @@ resid4plot <- local({
   }
 
   do.lines <- function(x, y, defaulty=1, ...) {
+    force(x)
+    force(y)
     do.call(lines,
-            resolve.defaults(list(x, y),
+            resolve.defaults(list(quote(x), quote(y)),
                              list(...),
                              list(lty=defaulty)))
   }
@@ -125,7 +127,7 @@ resid4plot <- local({
            Yms <- shift(Ymass, vec)
            Contour(Yds, add=TRUE, ...)
            do.call(plot,
-                   resolve.defaults(list(x=Yms, add=TRUE),
+                   resolve.defaults(list(x=quote(Yms), add=TRUE),
                                     list(...), 
                                     list(use.marks=showscale,
                                          leg.side="left", show.all=TRUE,
@@ -148,7 +150,7 @@ resid4plot <- local({
              Contour(Yds, add=TRUE, ...)
            ## plot positive masses at atoms
            do.call(plot,
-                   resolve.defaults(list(x=Yms, add=TRUE),
+                   resolve.defaults(list(x=quote(Yms), add=TRUE),
                                     list(...),
                                     list(use.marks=showscale,
                                          leg.side="left", show.all=TRUE,
@@ -212,13 +214,17 @@ resid4plot <- local({
   rr <- range(c(0, observedV, theoreticalV, pV))
   yscale <- function(y) { high * (y - rr[1])/diff(rr) }
   xscale <- function(x) { x - W$xrange[1] }
-  if(!is.null(theoreticalHI)) 
+  if(!is.null(theoreticalHI)) {
+    ## shaded confidence bands
+    xp <- xscale( c(theoreticalX, rev(theoreticalX)) )
+    yp <- yscale( c(theoreticalHI, rev(theoreticalLO)) )
     do.call.matched(polygon,
                     resolve.defaults(
-                      list(x=xscale(c(theoreticalX, rev(theoreticalX))),
-                           y=yscale(c(theoreticalHI, rev(theoreticalLO)))),
+                      list(x=quote(xp),
+                           y=quote(yp)),
                       list(...),
                       list(col="grey", border=NA)))
+  }
   do.clean(do.lines, xscale(observedX), yscale(observedV), 1, ...)
   do.clean(do.lines, xscale(theoreticalX), yscale(theoreticalV), 2, ...)
   if(!is.null(theoreticalSD)) {
@@ -449,7 +455,7 @@ resid1plot <- local({
              showscale <- (type != "raw")
              ## plot positive masses at atoms
              z <- do.call(plot,
-                          resolve.defaults(list(x=Ymass, add=TRUE),
+                          resolve.defaults(list(x=quote(Ymass), add=TRUE),
                                            list(...),
                                            list(use.marks=showscale,
                                                 do.plot=do.plot)))

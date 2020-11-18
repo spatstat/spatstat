@@ -46,13 +46,13 @@ unnormdensity <- function(x, ..., weights=NULL) {
     bw <- dabs$bw
     # compute densities for positive and negative masses separately
     outpos <- do.call.matched(density.default,
-                      resolve.defaults(list(x=x),
+                      resolve.defaults(list(x=quote(x)),
                                        list(bw=bw, adjust=1),
                                        list(weights=wpos/sum(wpos)),
                                        list(...),
                                        .StripNull=TRUE))
     outneg <- do.call.matched(density.default,
-                      resolve.defaults(list(x=x),
+                      resolve.defaults(list(x=quote(x)),
                                        list(bw=bw, adjust=1),
                                        list(weights=wneg/sum(wneg)),
                                        list(...),

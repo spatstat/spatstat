@@ -250,7 +250,7 @@ plot.tess <- local({
       y <- as.im(as.function(x, values=values))
       result <- do.call(plot.im,
                         resolve.defaults(
-                          list(x=y,
+                          list(x=quote(y),
                                do.plot=FALSE,
                                show.all=show.all, add=add, main=main,
                                col=col, ribargs=ribargs),
@@ -275,7 +275,7 @@ plot.tess <- local({
            rect={
              win <- x$window
              z <- do.call.matched(plot.owin,
-                                  resolve.defaults(list(x=win,
+                                  resolve.defaults(list(x=quote(win),
                                                         main=main,
                                                         add=add,
                                                         show.all=show.all,
@@ -314,8 +314,9 @@ plot.tess <- local({
              }
            },
            tiled={
+             xwin <- x$window
              z <- do.call.matched(plot.owin,
-                                  resolve.defaults(list(x=x$window,
+                                  resolve.defaults(list(x=quote(xwin),
                                                         main=main,
                                                         add=add,
                                                         show.all=show.all,
@@ -341,7 +342,7 @@ plot.tess <- local({
              if(is.null(y)) y <- x$image
              result <-
                do.call(plot,
-                       resolve.defaults(list(y, add=add, main=main,
+                       resolve.defaults(list(quote(y), add=add, main=main,
                                              show.all=show.all,
                                              do.plot=do.plot,
                                              col=col, ribargs=ribargs),
@@ -368,7 +369,7 @@ plot.tess <- local({
       sidecode <- attr(colmap, "side.legend")
       vertical <- sidecode %in% c(2,4)
       do.call(plot.colourmap,
-              resolve.defaults(list(x=colmap,
+              resolve.defaults(list(x=quote(colmap),
                                     add=TRUE, main="",
                                     xlim=xlim, ylim=ylim,
                                     side=sidecode, vertical=vertical),

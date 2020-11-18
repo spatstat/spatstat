@@ -3,7 +3,7 @@
 #' 
 #'  Recursive Partitioning for Point Process Models
 #'
-#'  $Revision: 1.12 $  $Date: 2017/06/05 10:31:58 $
+#'  $Revision: 1.13 $  $Date: 2020/11/18 03:07:14 $
 
 rppm <- function(..., rpargs=list()) {
   ## do the equivalent of ppm(...)
@@ -70,7 +70,7 @@ plot.rppm <- local({
            spatial = {
              p <- predict(x)
              out <- do.call("plot",
-                            resolve.defaults(list(x=p),
+                            resolve.defaults(list(x=quote(p)),
                                              list(...),
                                              list(main=xname)))
            })

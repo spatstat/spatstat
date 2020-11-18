@@ -8,8 +8,9 @@ stienen <- function(X, ..., bg="grey", border=list(bg=NULL)) {
   Xname <- short.deparse(substitute(X))
   stopifnot(is.ppp(X))
   if(npoints(X) <= 1) {
+    W <- Window(X)
     do.call(plot,
-            resolve.defaults(list(x=Window(X)),
+            resolve.defaults(list(x=quote(W)),
                              list(...),
                              list(main=Xname)))
     return(invisible(NULL))
@@ -17,9 +18,11 @@ stienen <- function(X, ..., bg="grey", border=list(bg=NULL)) {
   d <- nndist(X)
   b <- bdist.points(X)
   Y <- X %mark% d
+  observed <- (b >= d)
+  Yobserved <- Y[observed]
   gp <- union(graphicsPars("symbols"), "lwd")
   do.call.plotfun(plot.ppp,
-                  resolve.defaults(list(x=Y[b >= d],
+                  resolve.defaults(list(x=quote(Yobserved),
                                         markscale=1),
                                    list(...),
                                    list(bg=bg),
@@ -27,8 +30,9 @@ stienen <- function(X, ..., bg="grey", border=list(bg=NULL)) {
                   extrargs=gp)
   if(!identical(border, FALSE)) {
     if(!is.list(border)) border <- list()
+    Ycensored <- Y[!observed]
     do.call.plotfun(plot.ppp,
-                    resolve.defaults(list(x=Y[b < d],
+                    resolve.defaults(list(x=quote(Ycensored),
                                           markscale=1,
                                           add=TRUE),
                                      border,

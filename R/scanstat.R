@@ -297,7 +297,7 @@ plot.scan.test <- function(x, ..., what=c("statistic", "radius"),
   xname <- short.deparse(substitute(x))
   what <- match.arg(what)
   Z <- as.im(x, what=what)
-  do.call(plot, resolve.defaults(list(x=Z), list(...), list(main=xname)))
+  do.call(plot, resolve.defaults(list(x=quote(Z)), list(...), list(main=xname)))
   if(do.window) {
     X <- attr(x, "X")
     plot(as.owin(X), add=TRUE, invert=TRUE)

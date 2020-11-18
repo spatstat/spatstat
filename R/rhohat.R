@@ -1,7 +1,7 @@
 #'
 #'  rhohat.R
 #'
-#'  $Revision: 1.92 $  $Date: 2020/11/02 10:18:22 $
+#'  $Revision: 1.93 $  $Date: 2020/11/18 03:07:14 $
 #'
 #'  Non-parametric estimation of a transformation rho(z) determining
 #'  the intensity function lambda(u) of a point process in terms of a
@@ -593,13 +593,14 @@ print.rhohat <- function(x, ...) {
 
 plot.rhohat <- function(x, ..., do.rug=TRUE) {
   xname <- short.deparse(substitute(x))
+  force(x)
   s <- attr(x, "stuff")
   covname <- s$covname
   asked.rug <- !missing(do.rug) && identical(rug, TRUE)
   snam <- intersect(c("hi", "lo"), names(x))
   if(length(snam) == 0) snam <- NULL
   out <- do.call(plot.fv,
-                 resolve.defaults(list(x=x), list(...),
+                 resolve.defaults(list(x=quote(x)), list(...),
                                   list(main=xname, shade=snam)))
   if(identical(list(...)$limitsonly, TRUE))
     return(out)

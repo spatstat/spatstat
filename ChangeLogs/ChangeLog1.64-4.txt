@@ -266,3 +266,38 @@ Change log from spatstat 1.64-3 to spatstat 1.64-4
 (with environment variable SPATSTAT_TEST defined/undefined)
 ------------- installed on laptop      ---------------
 ------------- uploaded to GitHub       ---------------
+
+18 nov 2020
+
+   qqplotppm.R
+   quadclass.R
+   quadratcount.R
+   quadrattest.R
+   quadscheme.R
+   quantess.R
+   resid4plot.R
+   rho2hat.R
+   rhohat.R
+   rose.R
+   rppm.R
+   scanstat.R
+   slrm.R
+   smooth.ppp.R
+   split.ppp.R
+   ssf.R
+   stienen.R
+   symbolmap.R
+   tess.R
+   texture.R
+   unnormdensity.R
+	Experimental improvement to idiom involving resolve.defaults
+	(now applied to all files in spatstat/R)
+
+   DESCRIPTION
+   NEWS
+	Version 1.64-3.013
+
+------------- passed R-4.0.3 CMD check ---------------
+(with environment variable SPATSTAT_TEST defined/undefined)
+------------- installed on laptop      ---------------
+------------- uploaded to GitHub       ---------------

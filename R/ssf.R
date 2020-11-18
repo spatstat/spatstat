@@ -57,7 +57,7 @@ print.summary.ssf <- function(x, ...) {
 }
 
 image.ssf <- function(x, ...) {
-  do.call("plot", resolve.defaults(list(x, how="smoothed"), list(...)))
+  do.call("plot", resolve.defaults(list(quote(x), how="smoothed"), list(...)))
 }
 
 as.im.ssf <- function(X, ...) nnmark(X, ...)
@@ -104,7 +104,8 @@ plot.ssf <- function(x, ..., how=c("smoothed", "nearest", "points"),
   # points plot
   if(how == "points") {
     out <- do.call("plot",
-                   resolve.defaults(list(y), otherargs,
+                   resolve.defaults(list(quote(y)), 
+				    otherargs,
                                     list(main=xname)))
     if(is.null(out)) return(invisible(NULL))
     return(out)
@@ -113,23 +114,26 @@ plot.ssf <- function(x, ..., how=c("smoothed", "nearest", "points"),
   switch(style,
          image = {
            out <- do.call("plot",
-                          resolve.defaults(list(y), otherargs,
+                          resolve.defaults(list(quote(y)), 
+					   otherargs,
                                            list(main=xname)))
          },
          contour = {
+           xwin <- as.owin(x)
            do.call("plot",
-                   resolve.defaults(list(as.owin(x)),
-                                    otherargs, list(main=xname)))
+                   resolve.defaults(list(quote(xwin)),
+                                    otherargs, 
+				    list(main=xname)))
            do.call("contour",
-                   resolve.defaults(list(y, add=TRUE), contourargs))
+                   resolve.defaults(list(quote(y), add=TRUE), contourargs))
            out <- NULL
          },
          imagecontour = {
            out <- do.call("plot",
-                          resolve.defaults(list(y), otherargs,
+                          resolve.defaults(list(quote(y)), otherargs,
                                            list(main=xname)))
            do.call("contour",
-                   resolve.defaults(list(y, add=TRUE), contourargs))
+                   resolve.defaults(list(quote(y), add=TRUE), contourargs))
          })
   return(invisible(out))
 }
@@ -152,7 +156,7 @@ Smooth.ssf <- function(X, ...) {
   sigma0 <- if(any(c("sigma", "varcov") %in% names(nonnularg)))
             NULL else 1.4 * max(nndist(X))
   Z <- do.call("Smooth.ppp",
-               resolve.defaults(list(X = Y),
+               resolve.defaults(list(X = quote(Y)),
                                 list(...),
                                 list(sigma=sigma0),
                                 .MatchNull=FALSE))

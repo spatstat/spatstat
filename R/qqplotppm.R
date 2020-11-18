@@ -3,7 +3,7 @@
 #
 #  qqplot.ppm()       QQ plot (including simulation)
 #
-#  $Revision: 1.30 $   $Date: 2016/04/25 02:34:40 $
+#  $Revision: 1.31 $   $Date: 2020/11/18 03:07:14 $
 #
 
 qqplot.ppm <- local({
@@ -277,7 +277,7 @@ plot.qqppm <- local({
     stopifnot(inherits(x, "qqppm"))
     default.type <- if(length(x$x) > 150) "l" else "p"
     do.call(myplot,
-            resolve.defaults(list(x, ..., type=default.type,
+            resolve.defaults(list(quote(x), ..., type=default.type,
                                   limits=limits, limcol=limcol)))
     return(invisible(x))
   }

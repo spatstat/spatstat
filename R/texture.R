@@ -12,7 +12,7 @@ add.texture <- function(W, texture=4, spacing=NULL, ...) {
   if(is.data.frame(texture)) {
     ## texture = f(x) where f is a texturemap
     out <- do.call(add.texture,
-                   resolve.defaults(list(W=W, spacing=spacing),
+                   resolve.defaults(list(W=quote(W), spacing=spacing),
                                     list(...),
                                     as.list(texture)))
     return(out)
@@ -65,18 +65,18 @@ add.texture <- function(W, texture=4, spacing=NULL, ...) {
            H <- hextess(W, spacing, offset=runifpoint(1, W))
            H <- intersect.tess(H, W)
            do.call.matched(plot.tess,
-                           resolve.defaults(list(x=H, add=TRUE),
+                           resolve.defaults(list(x=quote(H), add=TRUE),
                                             list(...)))
          })
   if(!is.null(P))
     do.call.matched(plot.ppp,
-                    resolve.defaults(list(x=P, add=TRUE),
+                    resolve.defaults(list(x=quote(P), add=TRUE),
                                      list(...),
                                      list(chars=3, cex=0.2)),
                     extrargs=c("lwd", "col", "cols", "pch"))
   if(!is.null(L))
     do.call.matched(plot.psp,
-                    resolve.defaults(list(x=L, add=TRUE),
+                    resolve.defaults(list(x=quote(L), add=TRUE),
                                      list(...)),
                     extrargs=c("lwd","lty","col"))
   return(invisible(NULL))
@@ -348,7 +348,7 @@ textureplot <- local({
       vertical <- leg.side %in% c("left", "right")
       if(legend)
         do.call(plot.texturemap,
-                resolve.defaults(list(x=tmap, add=TRUE,
+                resolve.defaults(list(x=quote(tmap), add=TRUE,
                                       vertical=vertical,
                                       side=iside,
                                       xlim=bb.leg$xrange,

@@ -4,7 +4,7 @@
 #	Class 'quad' to define quadrature schemes
 #	in (rectangular) windows in two dimensions.
 #
-#	$Revision: 4.28 $	$Date: 2019/01/14 06:44:41 $
+#	$Revision: 4.29 $	$Date: 2020/11/18 03:07:14 $
 #
 # An object of class 'quad' contains the following entries:
 #
@@ -251,7 +251,7 @@ plot.quad <- function(x, ..., main, add=FALSE, dum=list(), tiles=FALSE) {
     }
   }
   pixeltiles <- !is.null(tt) && tt$type == "image"
-  tileargs <- resolve.defaults(list(x=tt, main=main, add=add),
+  tileargs <- resolve.defaults(list(x=quote(tt), main=main, add=add),
                                list(...),
                                if(!pixeltiles) list(col="grey") else NULL)
   if(!is.marked(data)) {

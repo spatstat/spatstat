@@ -331,7 +331,7 @@ density.splitppp <- function(x, ..., weights=NULL, se=FALSE) {
 plot.splitppp <- function(x, ..., main) {
   if(missing(main)) main <- short.deparse(substitute(x))
   do.call(plot.solist,
-          resolve.defaults(list(x=x, main=main),
+          resolve.defaults(list(x=quote(x), main=main),
                            list(...),
                            list(equal.scales=TRUE)))
 }

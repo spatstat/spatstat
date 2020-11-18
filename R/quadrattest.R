@@ -1,7 +1,7 @@
 #
 #   quadrattest.R
 #
-#   $Revision: 1.62 $  $Date: 2019/08/31 05:07:15 $
+#   $Revision: 1.63 $  $Date: 2020/11/18 03:07:14 $
 #
 
 quadrat.test <- function(X, ...) {
@@ -22,7 +22,7 @@ quadrat.test.ppp <-
    method <- match.arg(method)
    alternative <- match.arg(alternative)
    do.call(quadrat.testEngine,
-          resolve.defaults(list(X, nx=nx, ny=ny,
+          resolve.defaults(list(quote(X), nx=nx, ny=ny,
                                 alternative=alternative,
                                 method=method,
                                 conditional=conditional,
@@ -60,8 +60,9 @@ quadrat.test.ppm <-
     stop("Test is only defined for Poisson point process models")
    if(is.marked(X))
     stop("Sorry, not yet implemented for marked point process models")
+   Xdata <- data.ppm(X)
    do.call(quadrat.testEngine,
-          resolve.defaults(list(data.ppm(X), nx=nx, ny=ny,
+          resolve.defaults(list(quote(Xdata), nx=nx, ny=ny,
                                 alternative=alternative,
                                 method=method,
                                 conditional=conditional, CR=CR,
@@ -330,8 +331,9 @@ print.quadrattest <- function(x, ...) {
      } else {
        splat("Quadrats of component tests:")
      }
+     x <- as.tess(x)
      do.call(print,
-             resolve.defaults(list(x=as.tess(x)),
+             resolve.defaults(list(x=quote(x)),
                               list(...),
                               list(brief=TRUE)))
    }
@@ -347,7 +349,7 @@ plot.quadrattest <- local({
       # pooled test - plot the original tests
       tests <- extractAtomicQtests(x)
       do.call(plot,
-              resolve.defaults(list(x=tests),
+              resolve.defaults(list(x=quote(tests)),
                                list(...),
                                list(main=xname)))
       return(invisible(NULL))
@@ -357,7 +359,7 @@ plot.quadrattest <- local({
     # plot tessellation
     tess  <- as.tess(Xcount)
     do.call(plot.tess,
-            resolve.defaults(list(tess),
+            resolve.defaults(list(quote(tess)),
                              list(...),
                              list(main=xname)))
     # compute locations for text
@@ -388,8 +390,10 @@ plot.quadrattest <- local({
   }
  
   dotext <- function(dx, dy, values, x0, y0, ra, textargs, ...) {
+    xx <- x0 + dx * ra
+    yy <- y0 + dy * ra
     do.call.matched(text.default,
-                    resolve.defaults(list(x=x0 + dx * ra, y = y0 + dy * ra),
+                    resolve.defaults(list(x=quote(xx), y = quote(yy)),
                                      list(labels=paste(as.vector(values))),
                                      textargs, 
                                      list(...)),

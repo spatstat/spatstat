@@ -3,7 +3,7 @@
 #'
 #'   Rose diagrams
 #'
-#'   $Revision: 1.9 $  $Date: 2015/08/25 08:19:19 $
+#'   $Revision: 1.10 $  $Date: 2020/11/18 03:07:14 $
 #'
 
 rose <- function(x, ...) UseMethod("rose")
@@ -124,13 +124,14 @@ rose.histogram <- function(x, ...,
   R <- (1+insideclearance) * ymax
   DD <- disc(R)
   Rout <- (1 + outsidespace) * R
+  disco <- disc(Rout)
   result <- do.call.matched(plot.owin,
-                            resolve.defaults(list(x=disc(Rout),
+                            resolve.defaults(list(x=quote(disco),
                                                   main=main,
                                                   type="n"), 
                                              list(...)))
   do.call.matched(plot.owin,
-                  resolve.defaults(list(x=DD,
+                  resolve.defaults(list(x=quote(DD),
                                         hatch=FALSE,
                                         add=TRUE),
                                    list(...)),
@@ -205,13 +206,14 @@ roseContinuous <- function(ang, rad, unit, ...,
   R <- (1+insideclearance) * rmax
   DD <- disc(R)
   Rout <- (1 + outsidespace) * R
+  disco <- disc(Rout)
   result <- do.call.matched(plot.owin,
-                            resolve.defaults(list(x=disc(Rout),
+                            resolve.defaults(list(x=quote(disco),
                                                   main=main,
                                                   type="n"), 
                                              list(...)))
   do.call.matched(plot.owin,
-                  resolve.defaults(list(x=DD,
+                  resolve.defaults(list(x=quote(DD),
                                         add=TRUE,
                                         hatch=FALSE),
                                    list(...)),

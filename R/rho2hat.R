@@ -3,7 +3,7 @@
 #
 #   Relative risk for pairs of covariate values
 #
-#   $Revision: 1.25 $   $Date: 2016/07/15 10:21:12 $
+#   $Revision: 1.26 $   $Date: 2020/11/18 03:07:14 $
 #
 
 rho2hat <- function(object, cov1, cov2, ..., method=c("ratio", "reweight")) {
@@ -135,7 +135,8 @@ rho2hat <- function(object, cov1, cov2, ..., method=c("ratio", "reweight")) {
              sigma <- attr(fhat, "sigma")
              varcov <- attr(fhat, "varcov")
              ghat <- do.call(density.ppp,
-                             resolve.defaults(list(Z12pixels, weights=wts),
+                             resolve.defaults(list(x=quote(Z12pixels), 
+						   weights=quote(wts)),
                                               list(...),
                                               list(sigma=sigma,
                                                    varcov=varcov)))
@@ -179,7 +180,7 @@ plot.rho2hat <- function(x, ..., do.points=FALSE) {
   # plot image
   plotparams <- graphicsPars("plot")
   do.call.matched(plot.im,
-                  resolve.defaults(list(x=x, axes=FALSE),
+                  resolve.defaults(list(x=quote(x), axes=FALSE),
                                    list(...),
                                    list(main=xname, ribargs=list(axes=TRUE))),
                   extrargs=c(plotparams, "add", "zlim", "breaks"))
@@ -210,8 +211,9 @@ plot.rho2hat <- function(x, ..., do.points=FALSE) {
     title(ylab=rd$ylab)
   }
   if(do.points) {
+    poy <- s$Z12points
     do.call.matched(plot.ppp,
-                    resolve.defaults(list(x=s$Z12points, add=TRUE),
+                    resolve.defaults(list(x=quote(poy), add=TRUE),
                                      list(...)),
                     extrargs=c("pch", "col", "cols", "bg", "cex", "lwd", "lty"))
   }

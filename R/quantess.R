@@ -2,7 +2,7 @@
 #' 
 #'     Quantile Tessellation
 #'
-#'   $Revision: 1.22 $  $Date: 2019/10/17 01:49:01 $
+#'   $Revision: 1.23 $  $Date: 2020/11/18 03:07:14 $
 
 quantess <- function(M, Z, n, ...) {
   UseMethod("quantess")
@@ -185,19 +185,19 @@ MinimalTess <- function(W, ...) {
     if(any(recognised)) {
       if(any(c("nx", "ny") %in% nama)) {
         v <- do.call(quadrats,
-                     resolve.defaults(list(X=W),
+                     resolve.defaults(list(X=quote(W)),
                                       argh[recognised],
                                       list(nx=1, ny=1)))
       } else if(any(c("xbreaks", "ybreaks") %in% nama)) {
         v <- do.call(quadrats,
-                     resolve.defaults(list(X=W),
+                     resolve.defaults(list(X=quote(W)),
                                       argh[recognised],
                                       list(xbreaks=W$xrange,
                                            ybreaks=W$yrange)))
       } else {
         v <- do.call(tess,
                      resolve.defaults(argh[recognised],
-                                      list(window=W,
+                                      list(window=quote(W),
                                            keepempty=TRUE)))
       }
     }
