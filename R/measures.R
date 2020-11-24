@@ -3,7 +3,7 @@
 #
 #  signed/vector valued measures with atomic and diffuse components
 #
-#  $Revision: 1.91 $  $Date: 2020/11/17 01:29:06 $
+#  $Revision: 1.92 $  $Date: 2020/11/24 00:46:47 $
 #
 msr <- function(qscheme, discrete, density, check=TRUE) {
   if(!is.quad(qscheme))
@@ -91,9 +91,6 @@ msr <- function(qscheme, discrete, density, check=TRUE) {
               wt = wt)
   class(out) <- "msr"
   return(out)
-}
-
-weed.msr <- function(x) {
 }
 
 # Translation table for usage of measures

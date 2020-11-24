@@ -2,20 +2,20 @@
 \alias{Window.ppm}
 \alias{Window.kppm}
 \alias{Window.dppm}
-\alias{Window.lpp}
-\alias{Window.lppm}
+\alias{Window.quadrattest}
+\alias{Window.rmhmodel}
+\alias{Window.leverage.ppm}
+\alias{Window.influence.ppm}
 \alias{Window.msr}
 \alias{Window.quad}
 \alias{Window.quadratcount}
-\alias{Window.quadrattest}
 \alias{Window.tess}
 \alias{Window.layered}
 \alias{Window.distfun}
 \alias{Window.nnfun}
 \alias{Window.funxy}
-\alias{Window.rmhmodel}
-\alias{Window.leverage.ppm}
-\alias{Window.influence.ppm}
+\alias{Window.lpp}
+\alias{Window.lppm}
 \title{Extract Window of Spatial Object}
 \description{
   Given a spatial object (such as a point pattern or pixel image)
@@ -29,17 +29,19 @@
 
  \method{Window}{dppm}(X, \dots, from=c("points", "covariates"))
 
- \method{Window}{lpp}(X, \dots)
+ \method{Window}{quadrattest}(X, \dots)
 
- \method{Window}{lppm}(X, \dots)
+ \method{Window}{rmhmodel}(X, \dots)
+
+ \method{Window}{leverage.ppm}(X, \dots)
+
+ \method{Window}{influence.ppm}(X, \dots)
 
  \method{Window}{msr}(X, \dots)
 
  \method{Window}{quad}(X, \dots)
 
  \method{Window}{quadratcount}(X, \dots)
-
- \method{Window}{quadrattest}(X, \dots)
 
  \method{Window}{tess}(X, \dots)
 
@@ -51,11 +53,9 @@
 
  \method{Window}{funxy}(X, \dots)
 
- \method{Window}{rmhmodel}(X, \dots)
+ \method{Window}{lpp}(X, \dots)
 
- \method{Window}{leverage.ppm}(X, \dots)
-
- \method{Window}{influence.ppm}(X, \dots)
+ \method{Window}{lppm}(X, \dots)
 }
 \arguments{
   \item{X}{A spatial object.}
@@ -70,7 +70,6 @@
   These are methods for the generic function \code{\link{Window}}
   which extract the spatial window in which the object \code{X}
   is defined. 
-
   The argument \code{from} applies when \code{X} is a fitted 
   two-dimensional point process model
   (object of class \code{"ppm"}, \code{"kppm"} or \code{"dppm"}).

@@ -301,3 +301,34 @@ Change log from spatstat 1.64-3 to spatstat 1.64-4
 (with environment variable SPATSTAT_TEST defined/undefined)
 ------------- installed on laptop      ---------------
 ------------- uploaded to GitHub       ---------------
+
+............. passed 'make bookcheck'  ...............
+
+24 nov 2020
+
+   intensity.R 
+   intensity.ppm.R   [NEW FILE]
+      Split 'intensity.R' into two files in preparation for package splitup.
+
+   fasp.R
+   pool.R
+	Moved pool.fasp() to pool.R in preparation for package splitup.
+	
+   otherpackages.R   [DELETED]
+   fft.R             [NEW FILE]
+   pkgRandomFields.R [NEW FILE]
+      Split 'otherpackages.R' into two files in preparation for splitup.
+
+   as.owin.Rd
+   WindowOnly.Rd
+	Inserted filepp directives in preparation for splitup.
+	
+   DESCRIPTION
+   NEWS
+	Version 1.64-3.014
+
+------------- passed R-4.0.3 CMD check ---------------
+(with environment variable SPATSTAT_TEST defined/undefined)
+------------- installed on laptop      ---------------
+------------- uploaded to GitHub       ---------------
+

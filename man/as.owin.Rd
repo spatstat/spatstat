@@ -1,17 +1,12 @@
 \name{as.owin}
 \alias{as.owin}
+\alias{as.owin.default}
 \alias{as.owin.owin}
 \alias{as.owin.ppp}
-\alias{as.owin.ppm}
-\alias{as.owin.kppm}
-\alias{as.owin.dppm}
-\alias{as.owin.lpp}
-\alias{as.owin.lppm}
-\alias{as.owin.msr}
 \alias{as.owin.psp}
+\alias{as.owin.msr}
 \alias{as.owin.quad}
 \alias{as.owin.quadratcount}
-\alias{as.owin.quadrattest}
 \alias{as.owin.tess}
 \alias{as.owin.im}
 \alias{as.owin.layered}
@@ -20,10 +15,15 @@
 \alias{as.owin.nnfun}
 \alias{as.owin.funxy}
 \alias{as.owin.boxx}
+\alias{as.owin.ppm}
+\alias{as.owin.kppm}
+\alias{as.owin.dppm}
+\alias{as.owin.quadrattest}
 \alias{as.owin.rmhmodel}
 \alias{as.owin.leverage.ppm}
 \alias{as.owin.influence.ppm}
-\alias{as.owin.default}
+\alias{as.owin.lpp}
+\alias{as.owin.lppm}
 \title{Convert Data To Class owin}
 \description{
 Converts data specifying an observation window
@@ -32,29 +32,19 @@ in any of several formats, into an object of class \code{"owin"}.
 \usage{
  as.owin(W, \dots, fatal=TRUE)
 
+ \method{as.owin}{default}(W, \dots, fatal=TRUE)
+
  \method{as.owin}{owin}(W, \dots, fatal=TRUE)
 
  \method{as.owin}{ppp}(W, \dots, fatal=TRUE)
 
- \method{as.owin}{ppm}(W, \dots, from=c("points", "covariates"), fatal=TRUE)
-
- \method{as.owin}{kppm}(W, \dots, from=c("points", "covariates"), fatal=TRUE)
-
- \method{as.owin}{dppm}(W, \dots, from=c("points", "covariates"), fatal=TRUE)
-
- \method{as.owin}{lpp}(W, \dots, fatal=TRUE)
-
- \method{as.owin}{lppm}(W, \dots, fatal=TRUE)
+ \method{as.owin}{psp}(W, \dots, fatal=TRUE)
 
  \method{as.owin}{msr}(W, \dots, fatal=TRUE)
-
- \method{as.owin}{psp}(W, \dots, fatal=TRUE)
 
  \method{as.owin}{quad}(W, \dots, fatal=TRUE)
 
  \method{as.owin}{quadratcount}(W, \dots, fatal=TRUE)
-
- \method{as.owin}{quadrattest}(W, \dots, fatal=TRUE)
 
  \method{as.owin}{tess}(W, \dots, fatal=TRUE)
 
@@ -72,13 +62,26 @@ in any of several formats, into an object of class \code{"owin"}.
 
  \method{as.owin}{boxx}(W, \dots, fatal=TRUE)
 
+
+
+ \method{as.owin}{ppm}(W, \dots, from=c("points", "covariates"), fatal=TRUE)
+
+ \method{as.owin}{kppm}(W, \dots, from=c("points", "covariates"), fatal=TRUE)
+
+ \method{as.owin}{dppm}(W, \dots, from=c("points", "covariates"), fatal=TRUE)
+
+ \method{as.owin}{quadrattest}(W, \dots, fatal=TRUE)
+
  \method{as.owin}{rmhmodel}(W, \dots, fatal=FALSE)
 
  \method{as.owin}{leverage.ppm}(W, \dots, fatal=TRUE)
 
  \method{as.owin}{influence.ppm}(W, \dots, fatal=TRUE)
 
- \method{as.owin}{default}(W, \dots, fatal=TRUE)
+ \method{as.owin}{lpp}(W, \dots, fatal=TRUE)
+
+ \method{as.owin}{lppm}(W, \dots, fatal=TRUE)
+
 }
 \arguments{
   \item{W}{
@@ -106,7 +109,7 @@ in any of several formats, into an object of class \code{"owin"}.
   The class \code{"owin"} is a way of specifying the observation window
   for a point pattern. See \code{\link{owin.object}} for an overview.
  
-  The function \code{as.owin} converts data in any of several formats 
+  The generic function \code{as.owin} converts data in any of several formats 
   into an object of class \code{"owin"} for use by the \pkg{spatstat}
   package. The function \code{as.owin} is generic, with methods
   for different classes of objects, and a default method.

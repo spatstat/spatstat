@@ -1,7 +1,11 @@
 #'
 #'     pool.R
 #'
-#'  $Revision: 1.5 $  $Date: 2017/06/05 10:31:58 $
+#'     pool      Generic
+#'     pool.fv
+#'     pool.fasp
+#' 
+#'  $Revision: 1.6 $  $Date: 2020/11/24 01:37:59 $
 
 pool <- function(...) {
   UseMethod("pool")
@@ -95,5 +99,71 @@ pool.fv <- local({
   pool.fv
 })
 
+
+##
+
+pool.fasp <- local({
+
+  pool.fasp <- function(...) {
+    Alist <- list(...)
+    Yname <- short.deparse(sys.call())
+    if(nchar(Yname) > 60) Yname <- paste(substr(Yname, 1L, 40L), "[..]")
+    nA <-  length(Alist)
+    if(nA == 0) return(NULL)
+    ## validate....
+    ## All arguments must be fasp objects
+    notfasp <- !unlist(lapply(Alist, inherits, what="fasp"))
+    if(any(notfasp)) {
+      n <- sum(notfasp)
+      why <- paste(ngettext(n, "Argument", "Arguments"),
+                   commasep(which(notfasp)),
+                   ngettext(n, "does not", "do not"),
+                   "belong to the class",
+                   dQuote("fasp"))
+      stop(why)
+    }
+    ## All arguments must have envelopes
+    notenv <- !unlist(lapply(Alist, has.env))
+    if(any(notenv)) {
+      n <- sum(notenv)
+      why <- paste(ngettext(n, "Argument", "Arguments"),
+                   commasep(which(notenv)),
+                   ngettext(n, "does not", "do not"),
+                   "contain envelope data")
+      stop(why)
+    }
+  
+    if(nA == 1L) return(Alist[[1L]])
+  
+    ## All arguments must have the same dimensions
+    witches <- lapply(Alist, getElement, name="which")
+    witch1 <- witches[[1L]]
+    same <- unlist(lapply(witches, identical, y=witch1))
+    if(!all(same))
+      stop("Function arrays do not have the same array dimensions")
+  
+    ## OK.
+    ## Pool envelopes at each position
+    result <- Alist[[1L]]
+    fns <- result$fns
+    for(k in seq_along(fns)) {
+      funks <- lapply(Alist, extractfun, k=k)
+      fnk <- do.call(pool.envelope, funks)
+      attr(fnk, "einfo")$Yname <- Yname
+      fns[[k]] <- fnk
+    }
+    result$fns <- fns
+    return(result)
+  }
+
+  has.env <- function(z) {
+    all(unlist(lapply(z$fns, inherits, what="envelope")))
+  }
+
+  extractfun <- function(z, k) { z$fns[[k]] }
+  
+  pool.fasp
+  
+})
 
   
