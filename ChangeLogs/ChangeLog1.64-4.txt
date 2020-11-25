@@ -332,3 +332,22 @@ Change log from spatstat 1.64-3 to spatstat 1.64-4
 ------------- installed on laptop      ---------------
 ------------- uploaded to GitHub       ---------------
 
+25 nov 2020
+
+   markcorr.R
+	Bug fix in Vmark (spotted by Pavel Fibich)
+
+   tests/markcor.R
+	Added test of bug
+
+   DESCRIPTION
+   NEWS
+	Version 1.64-3.015
+
+------------- passed R-4.0.3 CMD check ---------------
+(with environment variable SPATSTAT_TEST defined/undefined)
+------------- installed on laptop      ---------------
+------------- uploaded to GitHub       ---------------
+   
+
+   

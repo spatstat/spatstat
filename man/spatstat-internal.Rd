@@ -1,11 +1,11 @@
 \name{spatstat-internal} 
 \title{Internal spatstat functions}
+\alias{[.diagramobj}
 \alias{[.pp3}
-\alias{[.localpcfmatrix}
 \alias{[.rat}
 \alias{[.splitppx}
-\alias{[.diagramobj}
 \alias{[<-.splitppx}
+\alias{[.localpcfmatrix}
 \alias{accumulateStatus}
 \alias{acedist.show}
 \alias{acedist.noshow}
@@ -778,10 +778,10 @@
   Internal spatstat functions.
 }
 \usage{
-\method{[}{splitppx}(x, \dots)
-\method{[}{splitppx}(x, \dots) <- value
 \method{[}{diagramobj}(x, \dots)
 \method{[}{rat}(x, \dots)
+\method{[}{splitppx}(x, \dots)
+\method{[}{splitppx}(x, \dots) <- value
 accumulateStatus(x, stats)
 acedist.show(X, Y, n, d, timelag)
 acedist.noshow(X, Y, n, d)

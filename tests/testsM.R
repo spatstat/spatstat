@@ -41,7 +41,7 @@ local({
 ##
 ##   Tests of mark correlation code (etc)
 ##
-## $Revision: 1.6 $ $Date: 2020/04/30 02:18:23 $
+## $Revision: 1.7 $ $Date: 2020/11/25 01:23:32 $
 
 local({
   if(ALWAYS) {
@@ -85,6 +85,10 @@ local({
     if(require(sm)) {
       b <- markcrosscorr(betacells, method="sm")
     }
+
+    ## Vmark with normalisation
+    v <- Vmark(spruces, normalise=TRUE)
+    v <- Vmark(finpines, normalise=TRUE)
   }
 })
 #' tests/mctests.R

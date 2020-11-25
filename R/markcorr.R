@@ -2,7 +2,7 @@
 ##
 ##     markcorr.R
 ##
-##     $Revision: 1.84 $ $Date: 2020/02/21 08:46:31 $
+##     $Revision: 1.85 $ $Date: 2020/11/25 01:23:42 $
 ##
 ##    Estimate the mark correlation function
 ##    and related functions 
@@ -133,8 +133,10 @@ Vmark <- local({
     E2 <- markcorr(X, f2, r=E$r,
                    correction=correction, method=method,
                    ..., normalise=FALSE)
-    if(normalise) 
+    if(normalise) {
       sig2 <- var(marks(X))
+      if(is.matrix(sig2)) sig2 <- diag(sig2)
+    }
     if(is.fv(E)) {
       E <- list(E)
       E2 <- list(E2)
@@ -145,7 +147,7 @@ Vmark <- local({
       E2i <- E2[[i]]
       Vi <- eval.fv(E2i - Ei^2)
       if(normalise) 
-        Vi <- eval.fv(Vi/sig2[i,i])
+        Vi <- eval.fv(Vi/sig2[i])
       Vi <- rebadge.fv(Vi, quote(V(r)), "V")
       attr(Vi, "labl") <- attr(Ei, "labl")
       V[[i]] <- Vi

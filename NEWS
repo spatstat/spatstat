@@ -1,15 +1,15 @@
 
-        CHANGES IN spatstat VERSION 1.64-3.014
+        CHANGES IN spatstat VERSION 1.64-3.015
 
 OVERVIEW
 
-    o We thank Professor Shin-ichi Igarashi for contributions.
+    o We thank Pavel Fibich and Professor Shin-ichi Igarashi for contributions.
 
     o New dataset 'concrete'
     
     o Bug fixes and minor improvements.
 
-    o Experimental tweak to increase speed.
+    o Experimental tweak to increase speed for large datasets.
 
     o spatstat now requires spatstat.utils version >= 1.18-0
 
@@ -32,9 +32,8 @@ SIGNIFICANT USER-VISIBLE CHANGES
     Accelerated.
     
     o overall speed
-    An experimental tweak to the internals of spatstat
-    is being implemented. It may accelerate computations
-    involving large objects.
+    We have made an experimental change to the internals of spatstat
+    which may accelerate computations involving large datasets.
     
 BUG FIXES
 
@@ -58,6 +57,11 @@ BUG FIXES
     Crashed if any edges crossed the boundary of the window.
     Fixed.
 
+    o Vmark
+    Crashed if normalise=TRUE when there was only one column of marks.
+    (Spotted by Pavel Fibich.)
+    Fixed.
+    
     o unitname
     Spatial datasets with incorrect internal format
     (or using an out-of-date version of the spatstat format)
