@@ -232,8 +232,6 @@
 \alias{inpoint}
 \alias{inside.arc}
 \alias{instantiate.interact}
-\alias{integral.leverage.ppm}
-\alias{integral.influence.ppm}
 \alias{interactionfamilyname}
 \alias{intermaker}
 \alias{interpretAsOrigin}
@@ -349,7 +347,6 @@
 \alias{match.kernel}
 \alias{maxflow}
 \alias{mctestSigtraceEngine}
-\alias{mean.leverage.ppm}
 \alias{meanlistfv}
 \alias{meanX.owin}
 \alias{meanY.owin}
@@ -620,8 +617,6 @@
 \alias{slr.prepare}
 \alias{slrAssemblePixelData}
 \alias{Smooth.solist}
-\alias{Smooth.leverage.ppm}
-\alias{Smooth.influence.ppm}
 \alias{smoothcrossEngine}              
 \alias{smoothpointsEngine}
 \alias{smudge}
@@ -1056,8 +1051,6 @@ impliedcoefficients(object, tag)
 inpoint(W)
 inside.arc(theta, arc)
 instantiate.interact(x, par)
-\method{integral}{leverage.ppm}(f, domain, \dots)
-\method{integral}{influence.ppm}(f, domain, \dots)
 interactionfamilyname(x)
 intermaker(f, blank)
 interpretAsOrigin(x, W)
@@ -1189,7 +1182,6 @@ match.kernel(kernel)
 maxflow(costm)
 mctestSigtraceEngine(R, devdata, devsim, \dots,
      interpolate, confint, alpha, exponent, unitname)
-\method{mean}{leverage.ppm}(x, ...)
 meanlistfv(z, \dots)
 meanX.owin(w)            
 meanY.owin(w)
@@ -1524,8 +1516,6 @@ simulrecipe(type, expr, envir, csr, pois, constraints)
 slr.prepare(CallInfo, envir, data, dataAtPoints, splitby, clip)
 slrAssemblePixelData(Y, Yname, W, covimages, dataAtPoints, pixelarea)
 \method{Smooth}{solist}(X, \dots)
-\method{Smooth}{leverage.ppm}(X, \dots)
-\method{Smooth}{influence.ppm}(X, \dots)
 smoothcrossEngine(Xdata, Xquery, values, sigma, \dots,
                     weights, varcov,
                     kernel, scalekernel, sorted, cutoff)

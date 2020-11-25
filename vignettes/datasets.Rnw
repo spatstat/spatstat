@@ -70,6 +70,7 @@ that are supplied with the current installation of \sdat:
 
 \newcommand{\recto}{\framebox{\hphantom{re}\vphantom{re}}}
 \newcommand{\irregpoly}{\includegraphics*[width=6mm]{irregpoly}}
+\newcommand{\masque}{\includegraphics*[width=6mm]{mask}}
 \newcommand{\convpoly}{\includegraphics*[width=4mm]{hexagon}}
 \newcommand{\disc}{$\bigcirc$}
 \newcommand{\nomarks}{$\cdot$}
@@ -103,7 +104,7 @@ that are supplied with the current installation of \sdat:
             \shortstack[c]{elevation, orientation,\\ slope, land use}  
             & \irregpoly \\
 {\tt concrete} & air bubbles in concrete & 
-             \nomarks & \nocov & \irregpoly  \\
+             \nomarks & \nocov & \masque  \\
 {\tt copper} & copper deposits & 
              \nomarks & fault lines & \recto  \\
 {\tt demopat} & artificial data & 
@@ -153,7 +154,8 @@ that are supplied with the current installation of \sdat:
 \noindent
 The shape of the window containing the point pattern
 is indicated by the symbols \recto\ (rectangle), 
-\disc\ (disc), \convpoly\ (convex polygon) and \irregpoly\ (irregular polygon).
+\disc\ (disc), \convpoly\ (convex polygon), \irregpoly\ (irregular polygon)
+and \masque (binary mask).
 
 Additional information about the data set \texttt{\em name}
 may be stored in a separate list \texttt{{\em name}.extra}.

@@ -19,8 +19,6 @@
 \alias{domain.nnfun}
 \alias{domain.funxy}
 \alias{domain.rmhmodel}
-\alias{domain.leverage.ppm}
-\alias{domain.influence.ppm}
 \alias{domain.lpp}
 \alias{domain.lppm}
 \alias{domain.linfun}
@@ -80,10 +78,6 @@
  \method{domain}{funxy}(X, \dots)
 
  \method{domain}{rmhmodel}(X, \dots)
-
- \method{domain}{leverage.ppm}(X, \dots)
-
- \method{domain}{influence.ppm}(X, \dots)
 }
 \arguments{
   \item{X}{

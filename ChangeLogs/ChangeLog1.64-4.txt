@@ -348,6 +348,37 @@ Change log from spatstat 1.64-3 to spatstat 1.64-4
 (with environment variable SPATSTAT_TEST defined/undefined)
 ------------- installed on laptop      ---------------
 ------------- uploaded to GitHub       ---------------
-   
 
+   datasets.Rnw
+   doc/mask.eps [New file]
+   doc/mask.pdf [New file]
+   	Added a symbol for a binary mask,
+	used in the table of datasets.
+
+   methods.influence.ppm.Rd [New file]
+   spatstat-internal.Rd
+   as.ppp.Rd
+   as.owin.Rd
+   domain.Rd
+	Collected methods for 'influence.ppm' in separate file
+
+   methods.leverage.ppm.Rd [New file]
+   spatstat-internal.Rd
+   as.im.Rd
+   as.owin.Rd
+   domain.Rd
+	Collected methods for 'leverage.ppm' in separate file
+
+   DESCRIPTION
+   NEWS
+	Version 1.64-3.016
+
+------------- passed R-4.0.3 CMD check ---------------
+(with environment variable SPATSTAT_TEST defined/undefined)
+------------- installed on laptop      ---------------
+------------- uploaded to GitHub       ---------------
+
+
+   
+   
    

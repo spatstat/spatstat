@@ -42,13 +42,8 @@ circdensity(x, sigma = "nrd0", \dots,
   \code{\link[stats]{density.default}}) which can be plotted
   by \code{plot} or by \code{\link{rose}}.
 }
-\author{\adrian
-  
-  
-  \rolf
-  
-  and \ege
-  
+\author{
+  \spatstatAuthors.
 }
 \seealso{
   \code{\link[stats]{density.default}}),

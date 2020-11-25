@@ -20,8 +20,6 @@
 \alias{as.owin.dppm}
 \alias{as.owin.quadrattest}
 \alias{as.owin.rmhmodel}
-\alias{as.owin.leverage.ppm}
-\alias{as.owin.influence.ppm}
 \alias{as.owin.lpp}
 \alias{as.owin.lppm}
 \title{Convert Data To Class owin}
@@ -74,9 +72,6 @@ in any of several formats, into an object of class \code{"owin"}.
 
  \method{as.owin}{rmhmodel}(W, \dots, fatal=FALSE)
 
- \method{as.owin}{leverage.ppm}(W, \dots, fatal=TRUE)
-
- \method{as.owin}{influence.ppm}(W, \dots, fatal=TRUE)
 
  \method{as.owin}{lpp}(W, \dots, fatal=TRUE)
 

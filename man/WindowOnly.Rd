@@ -4,8 +4,6 @@
 \alias{Window.dppm}
 \alias{Window.quadrattest}
 \alias{Window.rmhmodel}
-\alias{Window.leverage.ppm}
-\alias{Window.influence.ppm}
 \alias{Window.msr}
 \alias{Window.quad}
 \alias{Window.quadratcount}
@@ -32,10 +30,6 @@
  \method{Window}{quadrattest}(X, \dots)
 
  \method{Window}{rmhmodel}(X, \dots)
-
- \method{Window}{leverage.ppm}(X, \dots)
-
- \method{Window}{influence.ppm}(X, \dots)
 
  \method{Window}{msr}(X, \dots)
 

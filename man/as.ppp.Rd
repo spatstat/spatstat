@@ -5,7 +5,6 @@
 \alias{as.ppp.quad}
 \alias{as.ppp.matrix}
 \alias{as.ppp.data.frame}
-\alias{as.ppp.influence.ppm}
 \alias{as.ppp.default}
 \title{Convert Data To Class ppp}
 \description{
@@ -25,8 +24,6 @@
   \method{as.ppp}{matrix}(X, W=NULL, \dots, fatal=TRUE)
 
   \method{as.ppp}{data.frame}(X, W=NULL, \dots, fatal=TRUE)
-
-  \method{as.ppp}{influence.ppm}(X, \dots)
 
   \method{as.ppp}{default}(X, W=NULL, \dots, fatal=TRUE)
 }
@@ -125,10 +122,16 @@
 
   Point pattern datasets can also be created by the function
   \code{\link{ppp}}.
+
+  Methods for \code{as.ppp} exist for some other classes of data;
+  they are listed by \code{methods(as.ppp)}.
 }
 \seealso{
   \code{\link{ppp}}, \code{\link{ppp.object}}, \code{\link{as.owin}},
-  \code{\link{owin.object}}
+  \code{\link{owin.object}}.
+
+  Methods for \code{as.ppp} exist for some other classes of data;
+  they are listed by \code{methods(as.ppp)}.
 }
 \examples{
  xy <- matrix(runif(40), ncol=2)

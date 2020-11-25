@@ -1,7 +1,6 @@
 \name{as.im}  
 \alias{as.im}
 \alias{as.im.im}
-\alias{as.im.leverage.ppm}
 \alias{as.im.owin}
 \alias{as.im.matrix}
 \alias{as.im.tess}
@@ -56,8 +55,6 @@
   \method{as.im}{densityfun}(X, W=Window(X), \dots, approx=TRUE)
 
   \method{as.im}{Smoothfun}(X, W=Window(X), \dots, approx=TRUE)
-
-  \method{as.im}{leverage.ppm}(X, \dots, what=c("smooth", "nearest"))
 
   \method{as.im}{data.frame}(X, \dots, step, fatal=TRUE, drop=TRUE)
 
@@ -122,11 +119,6 @@
   \item{approx}{
    Logical value indicating whether to compute an approximate result
    at faster speed.
- }
- \item{what}{
-   Character string (partially matched) specifying which image data
-   should be extracted. See \code{\link{plot.leverage.ppm}} for
-   explanation.
  }
 }
 \details{
