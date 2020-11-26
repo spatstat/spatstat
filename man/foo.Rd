@@ -42,13 +42,8 @@ foo()
 \value{
   Null.
 }
-\author{\adrian
-  
-  
-  \rolf
-  
-  and \ege
-  
+\author{
+  \spatstatAuthors.
 }
 \seealso{
   \code{\link{beginner}}

@@ -378,7 +378,16 @@ Change log from spatstat 1.64-3 to spatstat 1.64-4
 ------------- installed on laptop      ---------------
 ------------- uploaded to GitHub       ---------------
 
+26 nov 2020
 
-   
-   
-   
+   domain.Rd
+	Added filepp directives in preparation for breakup.
+
+   DESCRIPTION
+   NEWS
+	Version 1.64-3.017
+
+------------- passed R-4.0.3 CMD check ---------------
+(with environment variable SPATSTAT_TEST defined/undefined)
+------------- installed on laptop      ---------------
+------------- uploaded to GitHub       ---------------
