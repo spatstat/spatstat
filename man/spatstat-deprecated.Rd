@@ -1,9 +1,9 @@
 \name{spatstat-deprecated}
 \alias{as.psp.owin}
-\alias{which.max.im}
 \alias{circumradius}
 \alias{circumradius.owin}
 \alias{circumradius.ppp}
+\alias{which.max.im}
 \alias{circumradius.linnet}
 \title{Deprecated spatstat functions}
 \description{
@@ -12,10 +12,10 @@
 \usage{
 \method{as.psp}{owin}(x, \dots, window=NULL, 
        check=spatstat.options("checksegments"), fatal=TRUE)
-which.max.im(x)
 circumradius(x, \dots)
 \method{circumradius}{owin}(x, \dots)
 \method{circumradius}{ppp}(x, \dots)
+which.max.im(x)
 \method{circumradius}{linnet}(x, \dots)
 }
 

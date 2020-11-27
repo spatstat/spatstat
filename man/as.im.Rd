@@ -1,4 +1,4 @@
-\name{as.im}  
+\name{as.im}
 \alias{as.im}
 \alias{as.im.im}
 \alias{as.im.owin}
@@ -9,10 +9,10 @@
 \alias{as.im.expression}
 \alias{as.im.distfun}
 \alias{as.im.nnfun}
-\alias{as.im.densityfun}
-\alias{as.im.Smoothfun}
 \alias{as.im.data.frame}
 \alias{as.im.default}
+\alias{as.im.densityfun}
+\alias{as.im.Smoothfun}
 \title{Convert to Pixel Image}
 \description{
   Converts various kinds of data to a pixel image
@@ -52,15 +52,16 @@
         eps=NULL, dimyx=NULL, xy=NULL,
         na.replace=NULL, approx=TRUE)
 
-  \method{as.im}{densityfun}(X, W=Window(X), \dots, approx=TRUE)
-
-  \method{as.im}{Smoothfun}(X, W=Window(X), \dots, approx=TRUE)
-
   \method{as.im}{data.frame}(X, \dots, step, fatal=TRUE, drop=TRUE)
 
   \method{as.im}{default}(X, W=NULL, \dots,
         eps=NULL, dimyx=NULL, xy=NULL,
         na.replace=NULL)
+
+  \method{as.im}{densityfun}(X, W=Window(X), \dots, approx=TRUE)
+
+  \method{as.im}{Smoothfun}(X, W=Window(X), \dots, approx=TRUE)
+
 }
 \arguments{
   \item{X}{Data to be converted to a pixel image.}

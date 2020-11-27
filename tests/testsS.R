@@ -33,9 +33,10 @@ local({
 ##
 ##  $Revision: 1.30 $  $Date: 2020/11/09 09:01:13 $
 
-#%^!ifdef CORE
+#%^!ifdef GEOM
 
 local({
+
   if(ALWAYS) { # depends on platform
     ## pointed out by Jeff Laake
     W <- owin()
@@ -125,27 +126,6 @@ local({
     B <- as.psp(matrix(runif(40), 10, 4), window=owin())
     superimpose(A, B, W=ripras)
     superimpose(A, B, W="convex")
-  }
-
-  if(ALWAYS) { # C code
-    #' tests of density.psp
-    Y <- edges(letterR)
-    Window(Y) <- grow.rectangle(Frame(Y), 0.4)
-    YC <- density(Y, 0.2, method="C", edge=FALSE, dimyx=64)
-    YI <- density(Y, 0.2, method="interpreted", edge=FALSE, dimyx=64)
-    YF <- density(Y, 0.2, method="FFT", edge=FALSE, dimyx=64)
-    xCI <- max(abs(YC/YI - 1))
-    xFI <- max(abs(YF/YI - 1))
-    cat(paste("xCI =", xCI, "\txFI =", signif(xFI, 5)), fill=TRUE)
-    if(xCI > 0.01) stop(paste("density.psp C algorithm relative error =", xCI))
-    if(xFI > 0.1) stop(paste("density.psp FFT algorithm relative error =", xFI))
-
-    B <- square(0.3)
-    density(Y, 0.2, at=B)
-    density(Y, 0.2, at=B, edge=TRUE, method="C")
-    Z <- runifpoint(3, B)
-    density(Y, 0.2, at=Z)
-    density(Y, 0.2, at=Z, edge=TRUE, method="C")
   }
 
   if(FULLTEST) {
@@ -266,6 +246,32 @@ local({
 reset.spatstat.options()
 
 #%^!endif
+
+#%^!ifdef CORE
+local({
+  if(ALWAYS) { # C code
+    #' tests of density.psp
+    Y <- edges(letterR)
+    Window(Y) <- grow.rectangle(Frame(Y), 0.4)
+    YC <- density(Y, 0.2, method="C", edge=FALSE, dimyx=64)
+    YI <- density(Y, 0.2, method="interpreted", edge=FALSE, dimyx=64)
+    YF <- density(Y, 0.2, method="FFT", edge=FALSE, dimyx=64)
+    xCI <- max(abs(YC/YI - 1))
+    xFI <- max(abs(YF/YI - 1))
+    cat(paste("xCI =", xCI, "\txFI =", signif(xFI, 5)), fill=TRUE)
+    if(xCI > 0.01) stop(paste("density.psp C algorithm relative error =", xCI))
+    if(xFI > 0.1) stop(paste("density.psp FFT algorithm relative error =", xFI))
+
+    B <- square(0.3)
+    density(Y, 0.2, at=B)
+    density(Y, 0.2, at=B, edge=TRUE, method="C")
+    Z <- runifpoint(3, B)
+    density(Y, 0.2, at=Z)
+    density(Y, 0.2, at=Z, edge=TRUE, method="C")
+  }
+})
+#%^!endif
+
 
 #%^!ifdef LINEARNETWORKS  
 if(FULLTEST) {

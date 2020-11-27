@@ -375,20 +375,25 @@ local({
 #'
 #'     tests/msr.R
 #'
-#'     $Revision: 1.3 $ $Date: 2020/04/30 05:23:52 $
+#'     $Revision: 1.4 $ $Date: 2020/11/27 01:26:15 $
 #'
 #'     Tests of code for measures
 #'
 
 if(FULLTEST) {
 local({
+    
+#%^!ifdef GEOM
+
   ## cases of 'msr'
   Q <- quadscheme(cells)
   nQ <- n.quad(Q)
   nX <- npoints(cells)
   A <- matrix(nX * 3, nX, 3)
   B <- matrix(nQ * 3, nQ, 3)
-  M <- msr(Q, A, B)
+
+  m <- msr(Q, A, B)
+
   M <- msr(Q, A, 1)
   M <- msr(Q, 1, B)
   M <- msr(Q, A, B[,1])
@@ -397,21 +402,23 @@ local({
   M <- msr(Q, A[,1,drop=FALSE], B)
 
   ## methods
-  rr <- residuals(ppm(cells ~ x))
-
-  a <- summary(rr)
-  b <- is.marked(rr)
-  w <- as.owin(rr)
-  z <- domain(rr)
-  ss <- scalardilate(rr, 2)
-  tt <- rescale(rr, 2)
-  ee <- rotate(rr, pi/4)
-  aa <- affine(rr, mat=diag(c(1,2)), vec=c(0,1))
-  ff <- flipxy(rr)
+  a <- summary(m)
+  b <- is.marked(m)
+  w <- as.owin(m)
+  z <- domain(m)
+  ss <- scalardilate(m, 2)
+  tt <- rescale(m, 2)
+  ee <- rotate(m, pi/4)
+  aa <- affine(m, mat=diag(c(1,2)), vec=c(0,1))
+  ff <- flipxy(m)
   
-  rrr <- augment.msr(rr, sigma=0.08)
-  uuu <- update(rrr)
+  am <- augment.msr(m, sigma=0.08)
+  ua <- update(am)
+  
+#%^!endif
 
+#%^!ifdef CORE
+  rr <- residuals(ppm(cells ~ x))
   mm <- residuals(ppm(amacrine ~ x))
   ss <- residuals(ppm(amacrine ~ x), type="score")
   gg <- rescale(ss, 1/662, c("micron", "microns"))
@@ -421,5 +428,6 @@ local({
   plot(mm, equal.markscale=TRUE, equal.ribbon=TRUE)
   plot(ss)
   plot(ss, multiplot=FALSE)
+#%^!endif
 })
 }

@@ -4,8 +4,8 @@
 \alias{as.tess.im}
 \alias{as.tess.owin}
 \alias{as.tess.quadratcount}
-\alias{as.tess.quadrattest}
 \alias{as.tess.list}
+\alias{as.tess.quadrattest}
 \title{Convert Data To Tessellation}
 \description{
 Converts data specifying a tessellation,
@@ -17,8 +17,8 @@ in any of several formats, into an object of class \code{"tess"}.
  \method{as.tess}{im}(X)
  \method{as.tess}{owin}(X)
  \method{as.tess}{quadratcount}(X)
- \method{as.tess}{quadrattest}(X)
  \method{as.tess}{list}(X)
+ \method{as.tess}{quadrattest}(X)
 }
 \arguments{
   \item{X}{Data to be converted to a tessellation.}

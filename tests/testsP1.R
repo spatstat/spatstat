@@ -68,6 +68,7 @@ local({
 
 if(FULLTEST) {
 local({
+#%^!ifdef CORE
   ## From Philipp Hunziker: bug in rNeymanScott (etc)
   ## Create an irregular window
   PM <- matrix(c(1,0,0.5,1,0,0), 3, 2, byrow=TRUE)
@@ -82,12 +83,15 @@ local({
   ## Covariates: Simulation fails
   fit1 <- kppm(X ~ distorigin, clusters="MatClust")
   Y1 <- simulate(fit1, retry=0)
+#%^!endif
 
+#%^!ifdef GEOM  
   ## pixellate.ppp includes mapping from (x,y) to (row, col)
   Z <- pixellate(cells, savemap=TRUE)
   ind <- attr(Z, "map")
   m <- (as.matrix(Z))[ind]
   if(!all(m == 1)) stop("Coordinate mismatch in pixellate.ppp")
+#%^!endif
 })
 }
 ## 

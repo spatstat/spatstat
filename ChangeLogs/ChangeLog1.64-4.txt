@@ -391,3 +391,30 @@ Change log from spatstat 1.64-3 to spatstat 1.64-4
 (with environment variable SPATSTAT_TEST defined/undefined)
 ------------- installed on laptop      ---------------
 ------------- uploaded to GitHub       ---------------
+
+    logistic.R 
+    logiquad.R [New file]
+       Split code in preparation for package breakup
+       
+    as.function.fv.Rd
+    as.function.rhohat.Rd [New file]
+    closepairs.Rd 
+    closepaircounts.Rd [New file]
+       Split help files in preparation for package breakup
+
+    spatstat-deprecated.Rd
+    as.fv.Rd
+    as.im.Rd
+    as.tess.Rd
+    unitname.Rd
+       Inserted filepp directives in preparation for package breakup
+
+   DESCRIPTION
+   NEWS
+	Version 1.64-3.018
+
+------------- passed R-4.0.3 CMD check ---------------
+(with environment variable SPATSTAT_TEST defined/undefined)
+------------- installed on laptop      ---------------
+------------- uploaded to GitHub       ---------------
+

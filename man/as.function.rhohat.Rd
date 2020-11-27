@@ -1,17 +1,18 @@
-\name{as.function.fv}
-\alias{as.function.fv}
+\name{as.function.rhohat}
+\alias{as.function.rhohat}
 \title{
-  Convert Function Value Table to Function
+  Convert Function Table to Function
 }
 \description{
-  Converts an object of class \code{"fv"} to an \R language function.
+  Converts an object of class \code{"rhohat"} to an \R language function.
 }
 \usage{
-  \method{as.function}{fv}(x, ..., value=".y", extrapolate=FALSE)
+  \method{as.function}{rhohat}(x, ..., value=".y", extrapolate=TRUE)
 }
 \arguments{
   \item{x}{
-    Object of class \code{"fv"} or \code{"rhohat"}.
+    Object of class \code{"rhohat"},
+    produced by the function \code{\link{rhohat}}.
 }
   \item{\dots}{
     Ignored.
@@ -27,19 +28,18 @@
   }
 }
 \details{
-  A function value table (object of class \code{"fv"})
-  is a convenient way of storing and plotting
-  several different estimates of the same function.
-  Objects of this class are returned 
-  by many commands in \pkg{spatstat}, such as \code{\link{Kest}}
-  which returns an estimate of Ripley's \eqn{K}-function
-  for a point pattern dataset.
-
+  An object of class \code{"rhohat"} is essentially a data frame
+  of estimated values of the function \eqn{rho(x)}
+  as described in the help file for \code{\link{rhohat}}. 
+  
   Sometimes it is useful to convert the function value table
   to a \code{function} in the \R language. This is done by
-  \code{as.function.fv}. It converts an object \code{x} of class \code{"fv"}
-  to an \R function \code{f}.
+  \code{as.function.rhohat}. It converts an object \code{x}
+  of class \code{"rhohat"} to an \R function \code{f}.
 
+  The command \code{as.function.rhohat} is a method for the generic command
+  \code{\link{as.function}} for the class \code{"rhohat"}.
+  
   If \code{f <- as.function(x)} then \code{f} is an \R function
   that accepts a numeric argument and returns a corresponding value
   for the summary function by linear interpolation between the values
@@ -80,8 +80,6 @@
   of \code{what} are the entries of the original vector \code{value};
   the default value of \code{what} is the first entry of \code{value}.
   
-  The command \code{as.function.fv} is a method for the generic command
-  \code{\link{as.function}}. 
 }
 \value{
   A \code{function(r)} or \code{function(r,what)}
@@ -92,21 +90,15 @@
   and \rolf
 }
 \seealso{
-   \code{\link{as.function.rhohat}}, 
-   \code{\link{fv}}, 
-   \code{\link{fv.object}}, 
-   \code{\link{fvnames}}, 
-   \code{\link{plot.fv}}, 
-   \code{\link{Kest}}
+   \code{\link{rhohat}}, 
+   \code{\link{methods.rhohat}},
+   \code{\link{as.function.fv}}. 
 }
 \examples{
-  K <- Kest(cells)
-  f <- as.function(K)
+  g <- rhohat(cells, "x")
+  f <- as.function(g)
   f
   f(0.1)
-  g <- as.function(K, value=c("iso", "trans"))
-  g
-  g(0.1, "trans")
 }
 \keyword{spatial}
 \keyword{methods}

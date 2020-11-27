@@ -1,28 +1,28 @@
 \name{unitname}  
 \alias{unitname}
-\alias{unitname.dppm}
 \alias{unitname.im}
-\alias{unitname.kppm}
-\alias{unitname.minconfit}
 \alias{unitname.owin}
 \alias{unitname.ppp}
-\alias{unitname.ppm}
 \alias{unitname.psp}
 \alias{unitname.quad}
-\alias{unitname.slrm}
 \alias{unitname.tess}
+\alias{unitname.dppm}
+\alias{unitname.kppm}
+\alias{unitname.minconfit}
+\alias{unitname.ppm}
+\alias{unitname.slrm}
 \alias{unitname<-}
-\alias{unitname<-.dppm}
 \alias{unitname<-.im}
-\alias{unitname<-.kppm}
-\alias{unitname<-.minconfit}
 \alias{unitname<-.owin}
 \alias{unitname<-.ppp}
-\alias{unitname<-.ppm}
 \alias{unitname<-.psp}
 \alias{unitname<-.quad}
-\alias{unitname<-.slrm}
 \alias{unitname<-.tess}
+\alias{unitname<-.dppm}
+\alias{unitname<-.kppm}
+\alias{unitname<-.minconfit}
+\alias{unitname<-.ppm}
+\alias{unitname<-.slrm}
 \title{Name for Unit of Length}
 \description{
   Inspect or change the name of the unit of length
@@ -30,29 +30,29 @@
 }
 \usage{
 unitname(x)
-\method{unitname}{dppm}(x)
+unitname(x) <- value
 \method{unitname}{im}(x)
-\method{unitname}{kppm}(x)
-\method{unitname}{minconfit}(x)
 \method{unitname}{owin}(x)
-\method{unitname}{ppm}(x)
 \method{unitname}{ppp}(x)
 \method{unitname}{psp}(x)
 \method{unitname}{quad}(x)
-\method{unitname}{slrm}(x)
 \method{unitname}{tess}(x)
-unitname(x) <- value
-\method{unitname}{dppm}(x) <- value
+\method{unitname}{dppm}(x)
+\method{unitname}{kppm}(x)
+\method{unitname}{minconfit}(x)
+\method{unitname}{ppm}(x)
+\method{unitname}{slrm}(x)
 \method{unitname}{im}(x) <- value
-\method{unitname}{kppm}(x) <- value
-\method{unitname}{minconfit}(x) <- value
 \method{unitname}{owin}(x) <- value
-\method{unitname}{ppm}(x) <- value
 \method{unitname}{ppp}(x) <- value
 \method{unitname}{psp}(x) <- value
 \method{unitname}{quad}(x) <- value
-\method{unitname}{slrm}(x) <- value
 \method{unitname}{tess}(x) <- value
+\method{unitname}{dppm}(x) <- value
+\method{unitname}{kppm}(x) <- value
+\method{unitname}{minconfit}(x) <- value
+\method{unitname}{ppm}(x) <- value
+\method{unitname}{slrm}(x) <- value
 }
 \arguments{
   \item{x}{A spatial dataset.

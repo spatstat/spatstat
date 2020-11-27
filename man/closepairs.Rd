@@ -3,8 +3,6 @@
 \alias{crosspairs}
 \alias{closepairs.ppp}
 \alias{crosspairs.ppp}
-\alias{closepaircounts}
-\alias{crosspaircounts}
 \title{
   Close Pairs of Points
 }
@@ -12,10 +10,6 @@
   Low-level functions to find all close pairs of points.
 }
 \usage{
-closepaircounts(X, r)
-
-crosspaircounts(X, Y, r)
-
 closepairs(X, rmax, \dots)
 
 \method{closepairs}{ppp}(X, rmax, twice=TRUE,
@@ -31,7 +25,7 @@ crosspairs(X, Y, rmax, \dots)
   \item{X,Y}{
     Point patterns (objects of class \code{"ppp"}).
   }
-  \item{r,rmax}{
+  \item{rmax}{
     Maximum distance between pairs of points to be counted as close pairs.
   }
   \item{twice}{
@@ -74,24 +68,9 @@ crosspairs(X, Y, rmax, \dots)
   to find all close pairs of points in a point pattern
   or all close pairs between two point patterns. 
 
-  \code{closepaircounts(X,r)} counts the number of neighbours for
-  each point in the pattern \code{X}. That is, for each point
-  \code{X[i]}, it counts the number of other points \code{X[j]}
-  with \code{j != i} such that \code{d(X[i],X[j]) <= r} where
-  \code{d} denotes Euclidean distance. The result is an integer vector
-  \code{v} such that \code{v[i]} is the number of neighbours of
-  \code{X[i]}.
-
-  \code{crosspaircounts(X,Y,r)} counts, for each point 
-  in the pattern \code{X}, the number of neighbours in the pattern
-  \code{Y}. That is, for each point
-  \code{X[i]}, it counts the number of points \code{Y[j]}
-  such that \code{d(X[i],X[j]) <= r}. The result is an integer vector
-  \code{v} such that \code{v[i]} is the number of neighbours of
-  \code{X[i]} in the pattern \code{Y}.
-
-  \code{closepairs(X,rmax)} identifies all pairs of distinct neighbours 
-  in the pattern \code{X} and returns them. The result is
+  \code{closepairs(X,rmax)} finds all pairs of distinct points
+  in the pattern \code{X} which lie at a distance less than or equal to
+  \code{rmax} apart, and returns them. The result is
   a list with the following components:
   \describe{
     \item{i}{Integer vector of indices of the first point in each pair.}
@@ -129,18 +108,12 @@ crosspairs(X, Y, rmax, \dots)
   the result may be incorrect.
 }
 \value{
-  For \code{closepaircounts} and \code{crosspaircounts}, an integer
-  vector of length equal to the number of points in \code{X}.
-
-  For \code{closepairs} and \code{crosspairs}, 
-  a list with components \code{i} and \code{j},
+  A list with components \code{i} and \code{j},
   and possibly other components as described under Details.
 }
-\author{\adrian
-  
-  
+\author{
+  \adrian
   and \rolf
-  
 }
 \seealso{
   \code{\link{closepairs.pp3}} for the corresponding
@@ -152,13 +125,10 @@ crosspairs(X, Y, rmax, \dots)
   for functions which use these capabilities.
 }
 \examples{
-   a <- closepaircounts(cells, 0.1)
-   sum(a)
+   d <- closepairs(cells, 0.1)
+   head(as.data.frame(d))
 
    Y <- split(amacrine)
-   b <- crosspaircounts(Y$on, Y$off, 0.1)
-
-   d <- closepairs(cells, 0.1)
    e <- crosspairs(Y$on, Y$off, 0.1)
 }
 \keyword{spatial}

@@ -1,4 +1,4 @@
-\name{as.fv} 
+\name{as.fv}
 \alias{as.fv}
 \alias{as.fv.fv}
 \alias{as.fv.fasp}
@@ -22,7 +22,6 @@
   \method{as.fv}{matrix}(x)
 
   \method{as.fv}{fasp}(x)
-
   \method{as.fv}{minconfit}(x)
 
   \method{as.fv}{dppm}(x)
