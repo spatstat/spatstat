@@ -5,20 +5,21 @@
 \alias{[.rat}
 \alias{[.splitppx}
 \alias{[<-.splitppx}
-\alias{[.localpcfmatrix}
-\alias{accumulateStatus}
 \alias{acedist.show}
 \alias{acedist.noshow}
-\alias{active.interactions}
-\alias{adaptcoef}
 \alias{adjust.ratfv}
 \alias{affinexy}
 \alias{affinexypolygon}
 \alias{affine.msr}
-\alias{ang2rad}
 \alias{anycrossing.psp}
 \alias{applytolayers}
 \alias{applyPolyclipArgs}
+\alias{[.localpcfmatrix}
+\alias{accumulateStatus}
+\alias{active.interactions}
+\alias{adaptcoef}
+\alias{ang2rad}
+%% up to here
 \alias{areadelta2}
 \alias{areaGain.diri}       
 \alias{areaGain.grid}       
@@ -774,22 +775,25 @@
 }
 \usage{
 \method{[}{diagramobj}(x, \dots)
+\method{[}{pp3}(x, i, drop, \dots)
 \method{[}{rat}(x, \dots)
 \method{[}{splitppx}(x, \dots)
 \method{[}{splitppx}(x, \dots) <- value
-accumulateStatus(x, stats)
 acedist.show(X, Y, n, d, timelag)
 acedist.noshow(X, Y, n, d)
-active.interactions(object)
-adaptcoef(new.coef, fitcoef, drop)
 adjust.ratfv(f, columns, numfactor, denfactor)
 affinexy(X, mat, vec, invert)
 affinexypolygon(p, mat, vec, detmat)
 \method{affine}{msr}(X, mat, vec, \dots)
-ang2rad(ang, unit, start, clockwise)
 anycrossing.psp(A,B)
 applytolayers(L, FUN, \dots)
 applyPolyclipArgs(x, p)
+\method{[}{localpcfmatrix}(x, i, \dots)
+accumulateStatus(x, stats)
+active.interactions(object)
+adaptcoef(new.coef, fitcoef, drop)
+ang2rad(ang, unit, start, clockwise)
+%% up to here
 areadelta2(X, r, \dots, sparseOK)
 areaGain.diri(u, X, r, \dots, W, verbose)
 areaGain.grid(u, X, r, \dots, W, ngrid)
@@ -1151,8 +1155,6 @@ PPMmodelmatrix(object, data, \dots, subset, Q, keepNA, irregular,
 \method{print}{localpcfmatrix}(x, \dots)
 \method{plot}{localpcfmatrix}(x, \dots)
 putSpatstatVariable(name, value)
-\method{[}{localpcfmatrix}(x, i, \dots)
-\method{[}{pp3}(x, i, drop, \dots)
 lookup.im(Z, x, y, naok, strict)
 lookup2DkernelInfo(kernel)
 majorminorversion(v)

@@ -3,7 +3,7 @@
 #'
 #'  Quadrature schemes for logistic method
 #'
-#'  $Revision: 1.1 $  $Date: 2020/11/27 03:02:33 $
+#'  $Revision: 1.3 $  $Date: 2020/11/29 08:59:00 $
 
 logi.dummy <- function(X, dummytype = "stratrand", nd = NULL, mark.repeat = FALSE, ...){
   ## Resolving nd inspired by default.n.tiling
@@ -25,7 +25,8 @@ logi.dummy <- function(X, dummytype = "stratrand", nd = NULL, mark.repeat = FALS
   W <- as.owin(X)
   type <- match.arg(dummytype, c("stratrand", "binomial", "poisson", "grid", "transgrid"))
   B <- boundingbox(W)
-  rho <- nd[1L]*nd[2L]/area(B)
+  ndumB <- nd[1L] * nd[2L]
+  rho <- ndumB/area(B)
   Dinfo <- list(nd=nd, rho=rho, how=type)
   ## Repeating dummy process for each mark type 1:N (only once if unmarked or mark.repeat = FALSE)
   for(i in 1:N){
@@ -37,11 +38,12 @@ logi.dummy <- function(X, dummytype = "stratrand", nd = NULL, mark.repeat = FALS
              inD <- paste(i,inD,sep="_")
            },
            binomial={
-             D <- runifpoint(nd[1L]*nd[2L], win=B)
+             D <- runifrect(ndumB, win=B)
              D <- D[W]
            },
            poisson={
-             D <- rpoispp(rho, win = W)
+             D <- runifrect(rpois(1, ndumB), win=B)
+             D <- D[W]
            },
            grid={
              D <- as.ppp(gridcenters(B, nd[1L], nd[2L]), W = B)

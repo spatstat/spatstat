@@ -3,7 +3,7 @@
 #
 #  leverage and influence
 #
-#  $Revision: 1.119 $ $Date: 2020/05/02 09:32:54 $
+#  $Revision: 1.120 $ $Date: 2020/11/29 07:50:49 $
 #
 
 leverage <- function(model, ...) {
@@ -77,8 +77,6 @@ ppmInfluence <- function(fit,
 leverage.ppmInfluence <- function(model, ...) { model$leverage }
 influence.ppmInfluence <- function(model, ...) { model$influence }
 dfbetas.ppmInfluence <- function(model, ...) { model$dfbetas }
-
-avenndist <- function(X) mean(nndist(unique(X)))
 
 ## ...............  main workhorse ....................................
 
@@ -1172,7 +1170,7 @@ Smooth.leverage.ppm <- function(X, ...) Smooth(X$lev$val, ...)
 
 Smooth.influence.ppm <- function(X, ...) Smooth(as.ppp(X), ...)
 
-## >>>>>>>>>>>>>>>>  GEOMETRICAL OPERATIONS <<<<<<<<<<<<<<<<<<<<<
+## >>>>>>>>>>>>>>>>  ETRICAL OPERATIONS <<<<<<<<<<<<<<<<<<<<<
 
 shift.leverage.ppm <- function(X, ...) {
   vec <- getlastshift(shift(as.owin(X), ...))

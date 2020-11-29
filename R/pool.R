@@ -167,3 +167,7 @@ pool.fasp <- local({
 })
 
   
+pool.anylist <- function(x, ...) {
+  do.call(pool, append(x, list(...)))
+}
+

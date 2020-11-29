@@ -3,7 +3,7 @@
 ##
 ## Fast versions of min(nndist(X)), max(nndist(X))
 ##
-##  $Revision: 1.8 $  $Date: 2020/01/05 01:26:42 $
+##  $Revision: 1.9 $  $Date: 2020/11/29 07:50:38 $
 
 minnndist <- function(X, positive=FALSE, by=NULL) {
   stopifnot(is.ppp(X))
@@ -82,4 +82,6 @@ maxnndist <- function(X, positive=FALSE, by=NULL) {
   }
   return(sqrt(z$result))
 }
+
+avenndist <- function(X) mean(nndist(unique(X)))
 

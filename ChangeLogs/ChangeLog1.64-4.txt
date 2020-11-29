@@ -418,3 +418,45 @@ Change log from spatstat 1.64-3 to spatstat 1.64-4
 ------------- installed on laptop      ---------------
 ------------- uploaded to GitHub       ---------------
 
+29 nov 2020
+
+   split.ppp.R
+   density.ppp.R
+	density.splitppp moved to density.ppp.R
+	in preparation for package breakup
+
+   metricPdt.R
+   metriccontact.R [New file]
+	split in preparation for package breakup
+
+   solist.R
+   pool.R
+	Moved 'pool.anylist' to pool.R
+	in preparation for package breakup
+
+   leverage.R
+   minnndist.R
+	Moved 'avenndist' to minnndist.R
+	in preparation for package breakup
+
+   measures.R
+   augment.msr.R [New file]
+   	augment.msr moved to new file
+	in preparation for package breakup
+
+   logiquad.R
+	tweak to avoid calling rpoispp
+	in preparation for package breakup
+
+   random.R
+   randombasic.R [New file]
+   	split random.R in preparation for package breakup
+
+   DESCRIPTION
+   NEWS
+	Version 1.64-3.019
+
+------------- passed R-4.0.3 CMD check ---------------
+(with environment variable SPATSTAT_TEST defined/undefined)
+------------- installed on laptop      ---------------
+------------- uploaded to GitHub       ---------------

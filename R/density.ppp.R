@@ -3,7 +3,7 @@
 #
 #  Method for 'density' for point patterns
 #
-#  $Revision: 1.111 $    $Date: 2020/11/04 01:15:53 $
+#  $Revision: 1.112 $    $Date: 2020/11/29 07:35:59 $
 #
 
 # ksmooth.ppp <- function(x, sigma, ..., edge=TRUE) {
@@ -975,3 +975,19 @@ bandwidth.is.infinite <- function(sigma) {
   sigma <- as.numeric(sigma)
   return((length(sigma) > 0) && all(sigma == Inf))
 }
+
+density.ppplist <- 
+density.splitppp <- function(x, ..., weights=NULL, se=FALSE) {
+  if(is.null(weights) || is.im(weights) || is.expression(weights))
+    weights <- rep(list(weights), length(x))
+  y <- mapply(density.ppp, x=x, weights=weights,
+              MoreArgs=list(se=se, ...),
+              SIMPLIFY=FALSE)
+  if(!se) return(as.solist(y, demote=TRUE))
+  y.est <- lapply(y, getElement, name="estimate")
+  y.se  <- lapply(y, getElement, name="SE")
+  z <- list(estimate = as.solist(y.est, demote=TRUE),
+            SE       = as.solist(y.se,  demote=TRUE))
+  return(z)
+}
+
