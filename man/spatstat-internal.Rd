@@ -10,80 +10,45 @@
 \alias{adjust.ratfv}
 \alias{affinexy}
 \alias{affinexypolygon}
-\alias{affine.msr}
+\alias{allElementsIdentical}
 \alias{anycrossing.psp}
 \alias{applytolayers}
 \alias{applyPolyclipArgs}
-\alias{[.localpcfmatrix}
-\alias{accumulateStatus}
-\alias{active.interactions}
-\alias{adaptcoef}
-\alias{ang2rad}
-%% up to here
-\alias{areadelta2}
-\alias{areaGain.diri}       
-\alias{areaGain.grid}       
-\alias{areaLoss.diri}       
-\alias{areaLoss.grid}
-\alias{areaLoss.poly}
 \alias{assemble.plot.objects}       
 \alias{AsymmDistance.psp}
 \alias{as.breakpts}
 \alias{as.character.unitname}
-\alias{as.data.frame.bw.optim}
 \alias{as.data.frame.fv}
 \alias{as.double.im}
+\alias{as.imlist}
+\alias{as.linimlist}
 \alias{as.list.hyperframe}
 \alias{as.listof}
+\alias{as.ppplist}
 \alias{as.unitname}
-\alias{augment.msr}
 \alias{avenndist}
-\alias{bandwidth.is.infinite}
-\alias{BartCalc}
 \alias{bbEngine}
-\alias{bermantestCalc}
-\alias{bermantestEngine}
 \alias{bdry.mask}
-\alias{bigvaluerule}
 \alias{bind.ratfv}
-\alias{blankcoefnames}
 \alias{bounding.box3}
 \alias{break.holes}
 \alias{breakpts}
 \alias{breakpts.from.r}
-\alias{bt.frame}
-\alias{bw.optim}
-\alias{calc.DR}
-\alias{calc.NNIR}
-\alias{calc.SAVE}
-\alias{calc.SIR}
-\alias{calc.TSE}
-\alias{cannot.update}
 \alias{cartesian}
 \alias{cellmiddles}
-\alias{censtimeCDFest}
-\alias{change.default.expand}          
 \alias{checkbigmatrix}          
 \alias{checkfields}          
 \alias{check.arc}
 \alias{check.finespacing}
 \alias{check.hist.lengths}
-\alias{check.separable}
-\alias{check.testfun}
-\alias{circticks}
 \alias{circunion}
-\alias{clarkevansCalc}
 \alias{clip.psp}
 \alias{cliprect.psp}
 \alias{clippoly.psp}
 \alias{closethresh}
 \alias{cocoEngine}
-\alias{coef.summary.kppm}
-\alias{coef.summary.ppm}
-\alias{coef.vblogit} 
 \alias{coerce.marks.numeric}
 \alias{compatible.rat}
-\alias{compileCDF}
 \alias{conform.ratfv}
 \alias{crosspairquad}
 \alias{cobble.xy}
@@ -92,92 +57,42 @@
 \alias{commonPolyclipArgs}
 \alias{conform.imagelist}
 \alias{countingweights}
-\alias{CressieReadStatistic}
-\alias{CressieReadSymbol}
-\alias{CressieReadName}
-\alias{cutoff2Dkernel}
-\alias{CVforPCF}
-\alias{damaged.ppm}
-\alias{data.mppm}
-\alias{datagen.runifpointOnLines}
-\alias{datagen.runifpoisppOnLines}
-\alias{datagen.rpoisppOnLines}
-\alias{default.clipwindow}
 \alias{default.n.tiling}
 \alias{default.ntile}
-\alias{deltasuffstat}
 \alias{dimnames.hyperframe}
 \alias{dimnames<-.hyperframe}
-\alias{Deviation}
-\alias{dfbetas.ppmInfluence}
 \alias{dflt.redraw}
-\alias{densitycrossEngine}
-\alias{densitypointsEngine}
-\alias{diagnose.ppm.engine}
 \alias{diagramobj}
-\alias{digestCovariates}
-\alias{digital.volume}
 \alias{dim.fasp}               
 \alias{dim.hyperframe}               
 \alias{dim.im}               
-\alias{dim.msr}
 \alias{dim.owin}
 \alias{dimnames.fasp}               
 \alias{dimnames<-.fasp}
-\alias{dimnames.msr}
 \alias{distributecbind}
 \alias{dist2dpath}
 \alias{do.as.im}
 \alias{do.call.plotfun}
-\alias{doMultiStraussHard}
-\alias{dppmFixAlgorithm}
-\alias{dppmFixIntensity}
 \alias{drawSignedPoly}
 \alias{emptywindow}
-\alias{envelopeEngine}
-\alias{envelopeProgressData}
-\alias{envelopeTest}
-\alias{envelope.hasenvelope}
-\alias{envelope.matrix}
-\alias{equalpairs}          
 \alias{equalpairs.quad}          
 \alias{equals.quad}          
 \alias{equalsfun.quad}          
 \alias{erodemask}
-\alias{evalCovar}
-\alias{evalCovar.ppm}
-\alias{evalCovariate}
-\alias{evalInteraction}
-\alias{evalInterEngine}
-\alias{evalPairPotential}
-\alias{evaluate2Dkernel}
 \alias{even.breaks.owin}
 \alias{exactdt}              
 \alias{exactPdt}
 \alias{existsSpatstatVariable}
 \alias{expandSpecialLists}
-\alias{expandwinPerfect}
-\alias{ExpSmoothLog}
-\alias{extractAIC.slrm}
-\alias{extractAtomicQtests}
 \alias{fakemaintitle}
-\alias{fakeNeyScot}
-\alias{family.vblogit} 
-\alias{f3engine}
-\alias{f3Cengine}
 \alias{fasp}
 \alias{fft2D}
 \alias{fftwAvailable}
-\alias{fill.coefs}
 \alias{findbestlegendpos}
-\alias{findCovariate}
 \alias{findcbind}
-\alias{fii}
 \alias{fillNA}
 \alias{flatfname}
 \alias{flipxypolygon}
-\alias{flipxy.msr}
-\alias{forbid.logi}
 \alias{format.numberwithunit}
 \alias{FormatFaspFormulae}
 \alias{framebottomleft}
@@ -187,138 +102,63 @@
 \alias{fvlabelmap}
 \alias{fvlegend}
 \alias{gammabreaks}
-\alias{g3engine}
-\alias{g3Cengine}
 \alias{genericNNdistBy}
-\alias{getdataname}
 \alias{getfields}
-\alias{getglmdata}
-\alias{getglmfit}
-\alias{getglmsubset}
 \alias{getlastshift}
-\alias{getppmdatasubset}
-\alias{getppmOriginalCovariates}
-\alias{getRandomFieldsModelGen}
 \alias{getSpatstatVariable}
-\alias{getSumFun}
-\alias{geyercounts}
-\alias{geyerdelta2}
-\alias{GLMpredict}
-\alias{good.correction.K}
-%\alias{gridadjacencymatrix} %DoNotExport
 \alias{gridindex}            
 \alias{grid1index}
 \alias{grow.mask}
-\alias{hackglmmPQL}
-\alias{hasenvelope}
-\alias{hasglmfit}
-\alias{HermiteCoefs}
 \alias{handle.r.b.args}
-\alias{handle.rshift.args}
 \alias{head.hyperframe}
-\alias{hierarchicalordering}
-\alias{hiermat}
-\alias{ho.engine}
 \alias{hsvNA}
 \alias{IdenticalRowPair}
 \alias{IdenticalRows}
 \alias{idorempty}
-\alias{illegal.iformula}
 \alias{imageOp}
 \alias{imagelistOp}
-\alias{implemented.for.K}
-\alias{impliedpresence}
-\alias{impliedcoefficients}
-\alias{influence.ppmInfluence}
 \alias{inpoint}
 \alias{inside.arc}
-\alias{instantiate.interact}
-\alias{interactionfamilyname}
-\alias{intermaker}
 \alias{interpretAsOrigin}
 \alias{intX.owin}     
 \alias{intX.xypolygon}     
 \alias{intY.owin}     
 \alias{intY.xypolygon}
 \alias{invokeColourmapRule}
-\alias{is.atomicQtest}
-\alias{is.cadlag}
 \alias{is.col.argname}
 \alias{is.data}
-\alias{is.expandable}
-\alias{is.expandable.ppm}
-\alias{is.expandable.rmhmodel}
 \alias{is.fv}
 \alias{is.hyperframe}
 \alias{is.imlist}
 \alias{is.infline}
-\alias{is.interact}
 \alias{is.marked.default}    
-\alias{is.marked.mppm}    
-\alias{is.marked.msr}    
 \alias{is.marked.psp}    
 \alias{is.marked.quad}
-\alias{is.mppm}
-\alias{is.multitype.mppm}    
-\alias{is.multitype.msr}    
 \alias{is.multitype.quad}    
 \alias{is.multitype.default}    
-\alias{is.poisson.mppm}
 \alias{is.ppplist}
 \alias{is.pp3}
 \alias{is.ppx}
 \alias{is.psp}
 \alias{is.quad}
-\alias{is.scov}
 \alias{is.sob}
 \alias{is.solist}
 \alias{is.tess}
 \alias{is.vanilla}
-\alias{k3engine}
-\alias{Kborder.engine}
-\alias{Knone.engine}
-\alias{Krect.engine}
-\alias{Kount}
-\alias{Kwtsum}               
-\alias{Kpcf.kppm}               
-\alias{killinteraction}
-\alias{km.rs.opt}
-\alias{kppmComLik}
-\alias{kppmMinCon}
-\alias{kppmPalmLik}
-\alias{kraever}
-\alias{kraeverRandomFields}
-\alias{labels.ppm}
 \alias{levels.im}
 \alias{levels<-.im}
 \alias{levelsAsFactor}
-\alias{leverage.ppmInfluence}
 \alias{listof}
-\alias{localKengine}
-\alias{localKmultiEngine}
-\alias{localpcfengine}
-\alias{localpcfmatrix}
 \alias{logi.dummy}
-\alias{logi.engine}
-\alias{logLik.vblogit}
 \alias{markvaluetype}
 \alias{maskLaslett}
-\alias{match2DkernelName}
 \alias{packupNNdata}
 \alias{parbreak}
-\alias{PairPotentialType}
 \alias{plan.legend.layout}
-\alias{pointweights}
-\alias{PoisSaddle}
-\alias{PoisSaddleArea}
-\alias{PoisSaddleGeyer}
-\alias{PoisSaddlePairwise}
 \alias{polyLaslett}
 \alias{polytileareaEngine}
-\alias{PPMmodelmatrix}
 \alias{putSpatstatVariable}
 \alias{lookup.im}
-\alias{lookup2DkernelInfo}
 \alias{majorminorversion}
 \alias{make.even.breaks}
 \alias{makefvlabel}
@@ -345,140 +185,60 @@
 \alias{\%msub\%} %DoNotExport
 %NAMESPACE export("%msub%")
 \alias{mask2df}
-\alias{match.kernel}
 \alias{maxflow}
-\alias{mctestSigtraceEngine}
-\alias{meanlistfv}
 \alias{meanX.owin}
 \alias{meanY.owin}
-\alias{model.se.image}
-\alias{modelFrameGam}
-\alias{mpl.engine}
-\alias{mpl.get.covariates}
-\alias{mpl.prepare}
-\alias{mpl.usable}
 \alias{MinimalTess}
-\alias{MultiPair.checkmatrix}
-\alias{multiply.only.finite.entries}
 \alias{multiplicityNumeric}
+\alias{multiply.only.finite.entries}
 \alias{na.handle.im}
 \alias{names.hyperframe}
 \alias{names<-.fv}
 \alias{names<-.hyperframe}
 \alias{nearest.pixel}
 \alias{nearest.valid.pixel}
-\alias{newformula}
-\alias{newstyle.coeff.handling}
-\alias{nncleanEngine}
-\alias{nndcumfun}
-\alias{no.trend.ppm}
 \alias{n.quad}
 \alias{numberwithunit}
 \alias{numeric.columns}
-\alias{objsurfEngine}
 \alias{onecolumn}
-\alias{optimConverged}
-\alias{optimStatus}
-\alias{outdated.interact}
-\alias{oversize.quad}    
 \alias{owinpolycheck}
 \alias{owinpoly2mask}
 \alias{owin2polypath}
-\alias{pairs.listof}
-\alias{pairs.solist}
 \alias{param.quad}
-\alias{partialModelMatrix}
-\alias{pcf3engine}
-\alias{pcfmulti.inhom}
 \alias{pickoption}
 \alias{plotEachLayer}
-\alias{ploterodewin}
-\alias{ploterodeimage}
 \alias{plot3Dpoints}
 \alias{plotPolygonBdry}
 \alias{plotWidthMap}
-\alias{plot.addvar}
 \alias{plot.barplotdata}
-\alias{plot.bw.frac}
-\alias{plot.bw.optim}
 \alias{plot.indicfun}
-\alias{plot.localpcfmatrix}
-\alias{plot.lurk}
-\alias{plot.minconfit}
-\alias{plot.parres}
-\alias{plot.plotpairsim}
-\alias{plot.qqppm}
-\alias{plot.spatialcdf}
 \alias{ppllengine}
-\alias{ppm.default}
-\alias{ppmCovariates}
-\alias{ppmDerivatives}
-\alias{ppmInfluenceEngine}
 \alias{pppdist.mat}
 \alias{pppdist.prohorov}
 \alias{ppsubset}
-\alias{predict.vblogit}
 \alias{prefixfv}
 \alias{prepareTitle}
-\alias{printStatus}
-\alias{printStatusList}
-\alias{print.addvar}    
 \alias{print.anylist}    
-\alias{print.autoexec}    
-\alias{print.bt.frame}
-\alias{print.bugtable}
-\alias{print.bw.frac}
-\alias{print.bw.optim}
 \alias{print.colourmap}
-\alias{print.diagppm}
-\alias{print.densityfun}
 \alias{print.distfun}
-\alias{print.detpointprocfamily}
-\alias{print.detpointprocfamilyfun}
-\alias{print.envelope}
 \alias{print.ewcdf}
 \alias{print.fasp}       
+\alias{print.funxy}       
 \alias{print.fv}       
 \alias{print.fvfun}       
-\alias{print.funxy}       
-\alias{print.hasenvelope}       
-\alias{print.hierarchicalordering}
 \alias{print.hyperframe}
 \alias{print.indicfun}       
-\alias{print.influence.ppm}       
-\alias{print.interact}       
-\alias{print.intermaker}       
-\alias{print.isf}
 \alias{print.laslett}
 \alias{print.layered}
-\alias{print.leverage.ppm}
-\alias{print.localpcfmatrix}
-\alias{print.lurk}
 \alias{print.lut}
-\alias{print.minconfit}
-\alias{print.mppm}
-\alias{print.msr}
 \alias{print.nnfun}
 \alias{print.numberwithunit}
 \alias{print.onearrow}
-\alias{print.parres}
-\alias{print.plotpairsim}
-\alias{print.plotppm}
 \alias{print.pppmatching}
-\alias{print.profilepl}
-\alias{print.quadrattest}
-\alias{print.qqppm}
 \alias{print.rat}
-\alias{print.rmhcontrol}
-\alias{print.rmhexpand}
-\alias{print.rmhmodel}
-\alias{print.rmhstart}
-\alias{print.rmhInfoList}
-\alias{print.rppm}
-\alias{print.splitppp}
 \alias{print.simplepanel}
-\alias{print.Smoothfun}       
 \alias{print.solist}
+\alias{print.splitppp}
 \alias{print.splitppx}
 \alias{print.summary.distfun}
 \alias{print.summary.funxy}
@@ -486,12 +246,9 @@
 \alias{print.summary.listof}
 \alias{print.summary.logiquad}
 \alias{print.summary.lut}
-\alias{print.summary.mppm}
 \alias{print.summary.owin}
 \alias{print.summary.ppp}
 \alias{print.summary.psp}
-\alias{print.summary.rmhexpand}
-\alias{print.summary.ssf}
 \alias{print.summary.solist}
 \alias{print.summary.splitppp}
 \alias{print.summary.splitppx}
@@ -501,42 +258,20 @@
 \alias{print.texturemap}
 \alias{print.tess}
 \alias{print.timed}
-\alias{print.vblogit}
 \alias{print.yardstick}
 \alias{project3Dhom}
 \alias{putlastshift}
 \alias{qtPrepareCoordinate}
 \alias{quad}
-\alias{quad.mppm}
-\alias{quadBlockSizes}
-\alias{RandomFieldsSafe}
 \alias{rasterfilter}
 \alias{ratfv}
 \alias{recognise.spatstat.type}
 \alias{rectquadrat.breaks}
 \alias{rectquadrat.countEngine}
-\alias{reduceformula}
-\alias{reheat}
-\alias{RelevantDeviation}
 \alias{repair.image.xycoords}
-\alias{rescale.msr}
-\alias{resolveEinfo}
-\alias{resolve.foxall.window}
-\alias{resolve.lambda}
-\alias{resolve.lambda.cross}
 \alias{resolve.stringsAsFactors}
-\alias{resolve.vargamma.shape}
 \alias{rgbNA}
-\alias{rhohatEngine}
-\alias{rhohatCalc}
-\alias{rMaternInhibition}
-\alias{RmhExpandRule}
-\alias{rmhsnoop}
-\alias{rocData}
-\alias{rocModel}
-\alias{roseContinuous}
 \alias{ruletextline}
-\alias{quadrat.testEngine}
 \alias{quadscheme.replicated}
 \alias{quadscheme.spatial}
 \alias{pointgrid}
@@ -559,23 +294,342 @@
 \alias{reconcile.fv}
 \alias{rename.fv}
 \alias{repair.old.factor.image}
-\alias{reincarnate.interact}
-\alias{resid4plot}
-\alias{resid1plot}
-\alias{resid1panel}
-\alias{resolve.2D.kernel}
 \alias{restrict.mask}
 \alias{reversePolyclipArgs}
-\alias{rmax.Rigid}
-\alias{rmax.rule}
-\alias{rotate.msr}
 \alias{rotxy}
 \alias{rotxypolygon}
 \alias{row.names.hyperframe}
 \alias{row.names<-.hyperframe}
-\alias{runifpoispp}          
-\alias{runifpoisppOnLines}          
 \alias{runifrect}
+\alias{safedeldir}
+\alias{scalardilate.breakpts}
+\alias{scalardilate.diagramobj}
+\alias{shift.diagramobj}              
+\alias{shift.quadratcount}              
+\alias{shiftxy}              
+\alias{shiftxypolygon}              
+\alias{simulationresult}
+\alias{sort.im}
+\alias{spatstatDiagnostic}
+\alias{spatstat.deldir.setopt}
+\alias{spatstat.xy.coords}
+\alias{store.versionstring.spatstat}
+\alias{str.hyperframe}
+\alias{summary.hyperframe}
+\alias{summary.logiquad}
+\alias{summary.lut}
+\alias{summary.pppmatching}
+\alias{summary.ppx}
+\alias{summary.splitppx}
+\alias{superimposeMarks}
+\alias{symbolmapdomain}
+\alias{symbolmaptype}
+\alias{tail.hyperframe}
+\alias{thickSegments}
+\alias{tilecentroids}        
+\alias{trianglediameters}
+\alias{trim.mask}
+\alias{tweak.closepairs}
+\alias{tweak.fv.entry}
+\alias{tweak.ratfv.entry}
+\alias{\%unit\%} %DoNotExport
+%NAMESPACE export("%unit%")
+\alias{unitname.default}
+\alias{unitname<-.default}
+\alias{unstackFilter}
+\alias{update.im}
+\alias{validradius}
+\alias{validate.mask}        
+\alias{validate.quad}        
+\alias{vanilla.fv}
+\alias{versioncurrency.spatstat}
+\alias{versionstring.spatstat}
+\alias{verifyclass}
+\alias{veryunique}
+\alias{warn.once}
+\alias{waxlyrical}
+\alias{w.quad}               
+\alias{x.quad}
+\alias{y.quad}
+\alias{xy.grid}
+\alias{xtfrm.im}
+\alias{xypolygon2psp}
+\alias{xypolyselfint}
+\alias{ZeroValue}
+\alias{ZeroValue.im}
+\alias{[.localpcfmatrix}
+\alias{accumulateStatus}
+\alias{active.interactions}
+\alias{adaptcoef}
+\alias{affine.msr}
+\alias{ang2rad}
+\alias{areadelta2}
+\alias{areaGain.diri}       
+\alias{areaGain.grid}       
+\alias{areaLoss.diri}       
+\alias{areaLoss.grid}
+\alias{areaLoss.poly}
+\alias{as.data.frame.bw.optim}
+\alias{augment.msr}
+\alias{bandwidth.is.infinite}
+\alias{BartCalc}
+\alias{bermantestCalc}
+\alias{bermantestEngine}
+\alias{bigvaluerule}
+\alias{blankcoefnames}
+\alias{bt.frame}
+\alias{bw.optim}
+\alias{calc.DR}
+\alias{calc.NNIR}
+\alias{calc.SAVE}
+\alias{calc.SIR}
+\alias{calc.TSE}
+\alias{cannot.update}
+\alias{censtimeCDFest}
+\alias{change.default.expand}          
+\alias{check.separable}
+\alias{check.testfun}
+\alias{circticks}
+\alias{clarkevansCalc}
+\alias{coef.summary.kppm}
+\alias{coef.summary.ppm}
+\alias{coef.vblogit} 
+\alias{compileCDF}
+\alias{CressieReadStatistic}
+\alias{CressieReadSymbol}
+\alias{CressieReadName}
+\alias{cutoff2Dkernel}
+\alias{CVforPCF}
+\alias{damaged.ppm}
+\alias{data.mppm}
+\alias{datagen.runifpointOnLines}
+\alias{datagen.runifpoisppOnLines}
+\alias{datagen.rpoisppOnLines}
+\alias{default.clipwindow}
+\alias{deltasuffstat}
+\alias{Deviation}
+\alias{dfbetas.ppmInfluence}
+\alias{densitycrossEngine}
+\alias{densitypointsEngine}
+\alias{diagnose.ppm.engine}
+\alias{digestCovariates}
+\alias{digital.volume}
+\alias{dim.msr}
+\alias{dimnames.msr}
+\alias{doMultiStraussHard}
+\alias{dppmFixAlgorithm}
+\alias{dppmFixIntensity}
+\alias{envelopeEngine}
+\alias{envelopeProgressData}
+\alias{envelopeTest}
+\alias{envelope.hasenvelope}
+\alias{envelope.matrix}
+\alias{equalpairs}          
+\alias{evalCovar}
+\alias{evalCovar.ppm}
+\alias{evalCovariate}
+\alias{evalInteraction}
+\alias{evalInterEngine}
+\alias{evalPairPotential}
+\alias{evaluate2Dkernel}
+\alias{expandwinPerfect}
+\alias{ExpSmoothLog}
+\alias{extractAIC.slrm}
+\alias{extractAtomicQtests}
+\alias{fakeNeyScot}
+\alias{family.vblogit} 
+\alias{f3engine}
+\alias{f3Cengine}
+\alias{fill.coefs}
+\alias{findCovariate}
+\alias{fii}
+\alias{flipxy.msr}
+\alias{forbid.logi}
+\alias{g3engine}
+\alias{g3Cengine}
+\alias{getdataname}
+\alias{getglmdata}
+\alias{getglmfit}
+\alias{getglmsubset}
+\alias{getppmdatasubset}
+\alias{getppmOriginalCovariates}
+\alias{getRandomFieldsModelGen}
+\alias{getSumFun}
+\alias{geyercounts}
+\alias{geyerdelta2}
+\alias{GLMpredict}
+\alias{good.correction.K}
+%\alias{gridadjacencymatrix} %DoNotExport
+\alias{hackglmmPQL}
+\alias{hasenvelope}
+\alias{hasglmfit}
+\alias{HermiteCoefs}
+\alias{handle.rshift.args}
+\alias{hierarchicalordering}
+\alias{hiermat}
+\alias{ho.engine}
+\alias{illegal.iformula}
+\alias{implemented.for.K}
+\alias{impliedpresence}
+\alias{impliedcoefficients}
+\alias{influence.ppmInfluence}
+\alias{instantiate.interact}
+\alias{interactionfamilyname}
+\alias{intermaker}
+\alias{is.atomicQtest}
+\alias{is.cadlag}
+\alias{is.expandable}
+\alias{is.expandable.ppm}
+\alias{is.expandable.rmhmodel}
+\alias{is.interact}
+\alias{is.marked.mppm}    
+\alias{is.marked.msr}    
+\alias{is.mppm}
+\alias{is.multitype.mppm}    
+\alias{is.multitype.msr}    
+\alias{is.poisson.mppm}
+\alias{is.scov}
+\alias{k3engine}
+\alias{Kborder.engine}
+\alias{Knone.engine}
+\alias{Krect.engine}
+\alias{Kount}
+\alias{Kwtsum}               
+\alias{Kpcf.kppm}               
+\alias{killinteraction}
+\alias{km.rs.opt}
+\alias{kppmComLik}
+\alias{kppmMinCon}
+\alias{kppmPalmLik}
+\alias{kraever}
+\alias{kraeverRandomFields}
+\alias{labels.ppm}
+\alias{leverage.ppmInfluence}
+\alias{localKengine}
+\alias{localKmultiEngine}
+\alias{localpcfengine}
+\alias{localpcfmatrix}
+\alias{logi.engine}
+\alias{logLik.vblogit}
+\alias{lookup2DkernelInfo}
+\alias{match2DkernelName}
+\alias{match.kernel}
+\alias{mctestSigtraceEngine}
+\alias{meanlistfv}
+\alias{model.se.image}
+\alias{modelFrameGam}
+\alias{mpl.engine}
+\alias{mpl.get.covariates}
+\alias{mpl.prepare}
+\alias{mpl.usable}
+\alias{MultiPair.checkmatrix}
+\alias{newformula}
+\alias{newstyle.coeff.handling}
+\alias{nncleanEngine}
+\alias{nndcumfun}
+\alias{no.trend.ppm}
+\alias{objsurfEngine}
+\alias{optimConverged}
+\alias{optimStatus}
+\alias{outdated.interact}
+\alias{oversize.quad}    
+\alias{pairs.listof}
+\alias{pairs.solist}
+\alias{PairPotentialType}
+\alias{partialModelMatrix}
+\alias{pcf3engine}
+\alias{pcfmulti.inhom}
+\alias{ploterodewin}
+\alias{ploterodeimage}
+\alias{plot.addvar}
+\alias{plot.bw.frac}
+\alias{plot.bw.optim}
+\alias{plot.localpcfmatrix}
+\alias{plot.lurk}
+\alias{plot.minconfit}
+\alias{plot.parres}
+\alias{plot.plotpairsim}
+\alias{plot.qqppm}
+\alias{plot.spatialcdf}
+\alias{pointweights}
+\alias{PoisSaddle}
+\alias{PoisSaddleArea}
+\alias{PoisSaddleGeyer}
+\alias{PoisSaddlePairwise}
+\alias{PPMmodelmatrix}
+\alias{ppm.default}
+\alias{ppmCovariates}
+\alias{ppmDerivatives}
+\alias{ppmInfluenceEngine}
+\alias{predict.profilepl}
+\alias{predict.vblogit}
+\alias{printStatus}
+\alias{printStatusList}
+\alias{print.addvar}    
+\alias{print.autoexec}    
+\alias{print.bt.frame}
+\alias{print.bugtable}
+\alias{print.bw.frac}
+\alias{print.bw.optim}
+\alias{print.diagppm}
+\alias{print.densityfun}
+\alias{print.detpointprocfamily}
+\alias{print.detpointprocfamilyfun}
+\alias{print.envelope}
+\alias{print.hasenvelope}       
+\alias{print.hierarchicalordering}
+\alias{print.influence.ppm}       
+\alias{print.interact}       
+\alias{print.intermaker}       
+\alias{print.isf}
+\alias{print.leverage.ppm}
+\alias{print.localpcfmatrix}
+\alias{print.lurk}
+\alias{print.minconfit}
+\alias{print.mppm}
+\alias{print.msr}
+\alias{print.parres}
+\alias{print.plotpairsim}
+\alias{print.plotppm}
+\alias{print.profilepl}
+\alias{print.quadrattest}
+\alias{print.qqppm}
+\alias{print.rmhcontrol}
+\alias{print.rmhexpand}
+\alias{print.rmhmodel}
+\alias{print.rmhstart}
+\alias{print.rmhInfoList}
+\alias{print.rppm}
+\alias{print.Smoothfun}       
+\alias{print.summary.mppm}
+\alias{print.summary.rmhexpand}
+\alias{print.summary.ssf}
+\alias{print.vblogit}
+\alias{quad.mppm}
+\alias{quadBlockSizes}
+\alias{quadrat.testEngine}
+\alias{RandomFieldsSafe}
+\alias{reduceformula}
+\alias{reheat}
+\alias{reincarnate.interact}
+\alias{RelevantDeviation}
+\alias{rescale.msr}
+\alias{resid4plot}
+\alias{resid1plot}
+\alias{resid1panel}
+\alias{resolve.2D.kernel}
+\alias{resolveEinfo}
+\alias{resolve.foxall.window}
+\alias{resolve.lambda}
+\alias{resolve.lambda.cross}
+\alias{resolve.vargamma.shape}
+\alias{rhohatEngine}
+\alias{rhohatCalc}
+\alias{rMaternInhibition}
+\alias{rmax.Rigid}
+\alias{rmax.rule}
+\alias{RmhExpandRule}
+\alias{rmhsnoop}
 \alias{rmhResolveControl}
 \alias{rmhResolveExpansion}
 \alias{rmhResolveTypes}
@@ -587,12 +641,15 @@
 \alias{rmhstart.rmhstart}
 \alias{rmhstart.list}
 \alias{rmpoint.I.allim}
+\alias{rocData}
+\alias{rocModel}
+\alias{roseContinuous}
+\alias{rotate.msr}
 \alias{rpoint.multi}
-\alias{safedeldir}
+\alias{runifpoispp}          
+\alias{runifpoisppOnLines}          
 \alias{safelookup}
 \alias{safevalue}
-\alias{scalardilate.breakpts}
-\alias{scalardilate.diagramobj}
 \alias{scalardilate.msr}
 \alias{scanmeasure}
 \alias{scanmeasure.ppp}
@@ -603,17 +660,12 @@
 \alias{second.moment.engine}
 \alias{sewpcf}
 \alias{sewsmod}
-\alias{shift.diagramobj}              
 \alias{shift.influence.ppm}              
 \alias{shift.leverage.ppm}              
-\alias{shift.msr}              
-\alias{shift.quadratcount}              
 \alias{shift.quadrattest}              
-\alias{shiftxy}              
-\alias{shiftxypolygon}              
+\alias{shift.msr}              
 \alias{signalStatus}
 \alias{simulate.profilepl}
-\alias{simulationresult}
 \alias{simulrecipe}              
 \alias{slr.prepare}
 \alias{slrAssemblePixelData}
@@ -621,104 +673,47 @@
 \alias{smoothcrossEngine}              
 \alias{smoothpointsEngine}
 \alias{smudge}
-\alias{sort.im}
-\alias{spatstat.deldir.setopt}
-\alias{spatstat.xy.coords}
 \alias{spatstatClusterModelInfo}
 \alias{spatstatDPPModelInfo}
 \alias{spatstatRmhInfo}
 \alias{spatialCDFframe}
 \alias{spatialCDFtest}
 \alias{spatialCDFtestCalc}
+\alias{sphere.volume}
 \alias{splitHybridInteraction}
 \alias{sp.foundclass}
 \alias{sp.foundclasses}
-\alias{sphere.volume}
-\alias{store.versionstring.spatstat}
-\alias{str.hyperframe}
 \alias{strausscounts}
 \alias{suffloc}
 \alias{suffstat.generic}
 \alias{suffstat.poisson}
 \alias{summarise.trend}
 \alias{summary.envelope}
-\alias{summary.hyperframe}
-\alias{summary.logiquad}
-\alias{summary.lut}
 \alias{summary.mppm}
 \alias{summary.msr}
 \alias{summary.profilepl}
-\alias{summary.pppmatching}
-\alias{summary.ppx}
-\alias{summary.splitppx}
 \alias{summary.rmhexpand}
 \alias{summary.vblogit}
-\alias{superimposeMarks}
-\alias{symbolmapdomain}
-\alias{symbolmaptype}
-\alias{tail.hyperframe}
-\alias{thickSegments}
 \alias{thinjump}
-\alias{tilecentroids}        
-\alias{trianglediameters}
-\alias{trim.mask}
-\alias{tweak.closepairs}
-\alias{tweak.fv.entry}
-\alias{tweak.ratfv.entry}
 \alias{tweak.coefs}
 \alias{twostage.test}
 \alias{twostage.envelope}
-\alias{\%unit\%} %DoNotExport
-%NAMESPACE export("%unit%")
-\alias{unitname.default}
-\alias{unitname<-.default}
 \alias{unitname.msr}
 \alias{unitname<-.msr}
-\alias{unstackFilter}
-\alias{update.im}
 \alias{update.ippm}
 \alias{update.msr}
 \alias{update.rmhstart}
-\alias{validradius}
 \alias{validate2Dkernel}
 \alias{validate.angles}        
-\alias{validate.mask}        
-\alias{validate.quad}        
 \alias{validate.weights}        
-\alias{vanilla.fv}
 \alias{varcountEngine}
 %\alias{vblogit} %DoNotExport
 %\alias{vblogit.fmla} %DoNotExport
-\alias{versioncurrency.spatstat}
 \alias{versionstring.interact}
 \alias{versionstring.ppm}
-\alias{versionstring.spatstat}
-\alias{verifyclass}
-\alias{veryunique}
-\alias{warn.once}
-\alias{waxlyrical}
 \alias{weightedclosepairs}
 \alias{windows.mppm}
-\alias{w.quad}               
-\alias{x.quad}
-\alias{y.quad}
-\alias{xy.grid}
 \alias{X2testEngine}
-\alias{xtfrm.im}
-\alias{xypolygon2psp}
-\alias{xypolyselfint}
-\alias{ZeroValue}
-\alias{ZeroValue.im}
-%%%%
-\alias{spatstatDiagnostic}
-%%
-\alias{as.ppplist}
-\alias{as.imlist}
-\alias{as.linimlist}
-\alias{allElementsIdentical}
-%%
-\alias{as.ppm.rppm}
-\alias{predict.profilepl}
 
 %% Linear networks code is corralled here
 \alias{ApplyConnected}
@@ -748,6 +743,7 @@
 \alias{looVoronoiLPP}
 \alias{validate.lpp.coords}
 \alias{as.ppm.lppm}
+\alias{as.ppm.rppm}
 \alias{pointsAlongNetwork}
 \alias{linearKengine}
 \alias{linearKmulti}
@@ -784,16 +780,370 @@ acedist.noshow(X, Y, n, d)
 adjust.ratfv(f, columns, numfactor, denfactor)
 affinexy(X, mat, vec, invert)
 affinexypolygon(p, mat, vec, detmat)
-\method{affine}{msr}(X, mat, vec, \dots)
+allElementsIdentical(x, entry)
 anycrossing.psp(A,B)
 applytolayers(L, FUN, \dots)
 applyPolyclipArgs(x, p)
+assemble.plot.objects(xlim, ylim, \dots, lines, polygon)
+AsymmDistance.psp(X, Y, metric, method)
+as.breakpts(\dots)
+\method{as.character}{unitname}(x, \dots)
+\method{as.data.frame}{fv}(x, \dots)
+\method{as.double}{im}(x, \dots)
+as.imlist(x, check)
+as.linimlist(x, check)
+\method{as.list}{hyperframe}(x, \dots)
+as.listof(x)
+as.ppplist(x, check)
+as.unitname(s)
+avenndist(X)
+bbEngine(\dots)
+bdry.mask(W)
+bind.ratfv(x, numerator, denominator, labl, desc, preferred,
+           ratio, quotient)
+bounding.box3(\dots)
+break.holes(x, splitby, depth, maxdepth)
+breakpts(val, maxi, even = FALSE, npos = NULL, step = NULL)
+breakpts.from.r(r)
+cartesian(pp, markset, fac = TRUE)
+cellmiddles(W, nx, ny, npix, distances)
+checkbigmatrix(n, m, fatal, silent)
+checkfields(X,L)
+check.arc(arc, fatal)
+check.finespacing(r, eps, win, rmaxdefault, context, action, rname)
+check.hist.lengths(hist,breaks)
+circunion(arcs)
+clip.psp(x, window, check, fragments)
+cliprect.psp(x, window, fragments)
+clippoly.psp(s, window, fragments)
+closethresh(X,R,S,twice,\dots)
+cocoEngine(nv, ie, je, algoname)
+coerce.marks.numeric(X, warn)
+\method{compatible}{rat}(A, B, \dots) 
+conform.ratfv(x)
+crosspairquad(Q,rmax,what)
+cobble.xy(x, y, f, fatal, \dots)
+codetime(x, hms, what)
+col.args.to.grey(x, \dots)
+commonPolyclipArgs(\dots, p)
+conform.imagelist(X, Zlist)
+countingweights(id, areas, check = TRUE)
+default.n.tiling(X, nd, ntile, npix, eps, random, quasi, verbose)
+default.ntile(X)
+\method{dimnames}{hyperframe}(x)
+\method{dimnames}{hyperframe}(x) <- value
+dflt.redraw(button, name, env)
+diagramobj(X, \dots)
+\method{dim}{fasp}(x)
+\method{dim}{hyperframe}(x)
+\method{dim}{im}(x)
+\method{dim}{owin}(x)
+\method{dimnames}{fasp}(x)
+\method{dimnames}{fasp}(x) <- value
+distributecbind(x)
+dist2dpath(dist, method="C")
+do.as.im(x, action, \dots, W, eps, dimyx, xy, na.replace)
+do.call.plotfun(fun, arglist, \dots, envir)
+drawSignedPoly(x,y,pars,sgn)
+emptywindow(w)
+equalpairs.quad(Q)
+equals.quad(Q)          
+equalsfun.quad(Q)
+erodemask(w,r,strict)
+even.breaks.owin(w)
+exactdt(X, \dots)              
+exactPdt(w)
+existsSpatstatVariable(name)
+expandSpecialLists(x, special)
+fakemaintitle(bb, main, \dots)
+fasp(fns, which, formulae, dataname, title, rowNames, colNames, checkfv)
+fft2D(z, inverse, west)
+fftwAvailable()
+findbestlegendpos(\dots)
+findcbind(root, depth, maxdepth)
+fillNA(x, value)
+flatfname(x)
+flipxypolygon(p)
+\method{format}{numberwithunit}(x, \dots, collapse, modifier)
+FormatFaspFormulae(f, argname)
+framebottomleft(w)
+fvexprmap(x)
+fvlabels(x, expand=FALSE)
+fvlabels(x) <- value
+fvlabelmap(x, dot=TRUE)
+fvlegend(object, elang)
+gammabreaks(ra, n, gamma)
+genericNNdistBy(X, by, k)
+getfields(X, L, fatal = TRUE)
+getlastshift(X)
+getSpatstatVariable(name)
+gridindex(x, y, xrange, yrange, nx, ny)            
+grid1index(x, xrange, nx)
+grow.mask(M, xmargin=0, ymargin=xmargin)
+handle.r.b.args(r = NULL, breaks = NULL, window, pixeps = NULL, rmaxdefault)
+\method{head}{hyperframe}(x,n,\dots)
+hsvNA(h, s, v, alpha)
+IdenticalRowPair(i,j,a,b)
+IdenticalRows(i,j,a,b)
+idorempty(w, r, caller)
+imageOp(e1, e2, op)
+imagelistOp(e1, e2, op)
+inpoint(W)
+inside.arc(theta, arc)
+interpretAsOrigin(x, W)
+intX.owin(w)
+intX.xypolygon(polly)
+intY.owin(w)
+intY.xypolygon(polly)
+invokeColourmapRule(colfun, x, \dots, zlim, colargs)
+is.col.argname(x)
+is.data(Q)
+is.fv(x)
+is.hyperframe(x)
+is.imlist(x)
+is.infline(x)
+\method{is.marked}{default}(\dots)  
+\method{is.marked}{psp}(X, \dots)
+\method{is.marked}{quad}(X, na.action="warn", \dots)
+\method{is.multitype}{default}(X, \dots)  
+\method{is.multitype}{quad}(X, na.action="warn", \dots)
+is.ppplist(x)
+is.pp3(x)
+is.ppx(x)
+is.psp(x)
+is.quad(x)
+is.solist(x)
+is.sob(x)
+is.tess(x)
+is.vanilla(u)
+\method{levels}{im}(x)
+\method{levels}{im}(x) <- value
+levelsAsFactor(x)
+listof(\dots)
+logi.dummy(X, dummytype, nd, mark.repeat, \dots)
+maskLaslett(X, \dots, eps, dimyx, xy, oldX, verbose, plotit)
+markvaluetype(x)
+packupNNdata(NND, NNW, what, k)
+parbreak(terse)
+plan.legend.layout(B, \dots, side, sep, size, sep.frac, size.frac,
+                   started, map)
+polyLaslett(X, \dots, oldX, verbose, plotit)
+polytileareaEngine(P, xrange, yrange, nx, ny, DivideByPixelArea)
+putSpatstatVariable(name, value)
+lookup.im(Z, x, y, naok, strict)
+majorminorversion(v)
+make.even.breaks(bmax, npos, bstep)
+makefvlabel(op, accent, fname, sub, argname)
+makeunitname(sing, plur, mul)
+markappend(\dots)
+markcbind(\dots)
+markformat(x)
+\method{markformat}{ppp}(x) 
+\method{markformat}{ppx}(x) 
+\method{markformat}{psp}(x) 
+\method{markformat}{default}(x) 
+mark.scale.default(marx, w, \dots, markscale, maxsize, meansize, characters)
+markspace.integral(X)
+\method{marks}{default}(x, \dots)
+\method{marks}{quad}(x, dfok=FALSE, \dots)
+markappendop(x, y)
+x \%mapp\% y
+marksubset(x, index, format)
+marksubsetop(x, i)
+x \%msub\% i
+markreplicateop(x, n)
+x \%mrep\% n
+mask2df(w)
+maxflow(costm)
+meanX.owin(w)            
+meanY.owin(w)
+MinimalTess(W, \dots)
+multiplicityNumeric(x)
+multiply.only.finite.entries(x, a)
+na.handle.im(X, na.replace)
+\method{names}{fv}(x) <- value
+\method{names}{hyperframe}(x)
+\method{names}{hyperframe}(x) <- value
+nearest.pixel(x, y, Z)
+nearest.valid.pixel(x, y, Z, method, nsearch)
+n.quad(Q)
+numberwithunit(x, u)
+numeric.columns(M, logical, others)
+onecolumn(m)
+owinpolycheck(W, verbose=TRUE)
+owinpoly2mask(w, rasta, check=TRUE)
+owin2polypath(w)
+param.quad(Q)
+pickoption(what="option", key, keymap, \dots,
+           exact=FALSE, list.on.err=TRUE, die=TRUE, multi=FALSE,
+           allow.all=TRUE)
+plotEachLayer(x, \dots, main, plotargs, add, show.all, do.plot)
+plot3Dpoints(xyz, eye, org,
+             \dots,
+             type, xlim, ylim, zlim,
+             add, box, main, cex, box.back, box.front)
+plotPolygonBdry(x, \dots)
+plotWidthMap(bb.leg, zlim, phys.scale, leg.scale, leg.side, leg.args, grafpar)
+\method{plot}{barplotdata}(x, \dots)
+\method{plot}{indicfun}(x, W, \dots, main)
+ppllengine(X, Y, action="project", check=FALSE)
+pppdist.mat(X, Y, cutoff = 1, q = 1, matching = TRUE,
+            precision = 9, approximation = 10)
+pppdist.prohorov(X, Y, n, dfix, type, cutoff, matching,
+            ccode, auction, precision, approximation) 
+ppsubset(X, I, Iname, fatal)
+prefixfv(x, tagprefix, descprefix, lablprefix, whichtags)
+prepareTitle(main)
+\method{print}{anylist}(x, \dots)
+\method{print}{colourmap}(x, \dots)
+\method{print}{distfun}(x, \dots)
+\method{print}{ewcdf}(x, digits, \dots)
+\method{print}{fasp}(x, \dots)
+\method{print}{funxy}(x, \dots)
+\method{print}{fv}(x, \dots, tight)
+\method{print}{fvfun}(x, \dots)
+\method{print}{hyperframe}(x, \dots)
+\method{print}{indicfun}(x, \dots)
+\method{print}{laslett}(x, \dots)
+\method{print}{layered}(x, \dots)
+\method{print}{lut}(x, \dots)
+\method{print}{nnfun}(x, \dots)
+\method{print}{numberwithunit}(x, \dots)
+\method{print}{onearrow}(x, \dots)
+\method{print}{pppmatching}(x, \dots)
+\method{print}{rat}(x, \dots)
+\method{print}{simplepanel}(x, \dots)
+\method{print}{solist}(x, \dots)
+\method{print}{splitppp}(x, \dots)
+\method{print}{splitppx}(x, \dots)
+\method{print}{summary.distfun}(x, \dots)
+\method{print}{summary.funxy}(x, \dots)
+\method{print}{summary.hyperframe}(x, \dots)
+\method{print}{summary.listof}(x, \dots)
+\method{print}{summary.logiquad}(x, \dots, dp=3)
+\method{print}{summary.lut}(x, \dots)
+\method{print}{summary.owin}(x, \dots)
+\method{print}{summary.ppp}(x, \dots, dp)
+\method{print}{summary.psp}(x, \dots)
+\method{print}{summary.splitppp}(x, \dots)
+\method{print}{summary.solist}(x, \dots)
+\method{print}{summary.splitppx}(x, \dots)
+\method{print}{summary.unitname}(x, \dots)
+\method{print}{symbolmap}(x, \dots)
+\method{print}{textstring}(x, \dots)
+\method{print}{texturemap}(x, \dots)
+\method{print}{tess}(x, \dots, brief=FALSE)
+\method{print}{timed}(x, \dots)
+\method{print}{yardstick}(x, \dots)
+project3Dhom(xyz, eye, org, vert)
+putlastshift(X, vec)
+qtPrepareCoordinate(covname, W, origin)
+quad(data, dummy, w, param)
+rasterfilter(X, f)
+ratfv(df, numer, denom, \dots, ratio)
+recognise.spatstat.type(x)
+rectquadrat.breaks(xr, yr, nx = 5, ny = nx, xbreaks = NULL, ybreaks = NULL)
+rectquadrat.countEngine(x, y, xbreaks, ybreaks, weights)
+repair.image.xycoords(x)
+resolve.stringsAsFactors(stringsAsFactors)
+rgbNA(red, green, blue, alpha, maxColorValue)
+ruletextline(ch, n, terse)
+quadscheme.replicated(data, dummy, method, \dots)
+quadscheme.spatial(data, dummy, method, \dots)
+pointgrid(W, ngrid)
+rastersample(X, Y)
+rasterx.mask(w, drop)
+rastery.mask(w, drop)
+rasterxy.mask(w, drop)
+rasterx.im(x)
+rastery.im(x)
+rasterxy.im(x, drop)
+rebadge.fv(x, new.ylab, new.fname, tags, new.desc, new.labl, new.yexp,
+           new.dotnames, new.preferred, new.formula, new.tags)
+rebadge.as.crossfun(x, main, sub, i, j)
+rebadge.as.dotfun(x, main, sub, i)
+rebadgeLabels(x, new.fname)
+rebound(x, rect)
+\method{rebound}{im}(x, rect)  
+\method{rebound}{ppp}(x, rect) 
+\method{rebound}{psp}(x, rect) 
+\method{rebound}{owin}(x, rect)
+reconcile.fv(\dots)
+rename.fv(x, fname, ylab, yexp)
+repair.old.factor.image(x)
+restrict.mask(M, W)
+reversePolyclipArgs(x, p)
+rotxy(X, angle = pi/2)
+rotxypolygon(p, angle = pi/2)
+\method{row.names}{hyperframe}(x)
+\method{row.names}{hyperframe}(x) <- value
+runifrect(n, win, nsim, drop)
+safedeldir(X)
+\method{scalardilate}{breakpts}(X, f, \dots)
+\method{scalardilate}{diagramobj}(X, f, \dots)
+\method{shift}{diagramobj}(X, \dots)
+\method{shift}{quadratcount}(X, \dots)
+shiftxy(X, vec = c(0, 0))
+shiftxypolygon(p, vec = c(0, 0))
+simulationresult(resultlist, nsim, drop, NameBase)
+\method{sort}{im}(x, \dots)
+spatstatDiagnostic(msg)
+spatstat.deldir.setopt(use.trigrafS, use.trigraf, debug.delaunay)
+spatstat.xy.coords(x, y)
+store.versionstring.spatstat()
+\method{str}{hyperframe}(object, \dots)
+\method{summary}{hyperframe}(object, \dots, brief=FALSE)
+\method{summary}{logiquad}(object, \dots, checkdup=FALSE)
+\method{summary}{lut}(object, \dots)
+\method{summary}{pppmatching}(object, \dots)
+\method{summary}{ppx}(object, \dots)
+\method{summary}{splitppx}(object, \dots)
+superimposeMarks(arglist, nobj)
+symbolmapdomain(x)
+symbolmaptype(x)
+\method{tail}{hyperframe}(x,n,\dots)
+thickSegments(x, widths, \dots,
+             add, main, do.plot, show.all, show.window,
+             scale, adjust, negative.args,
+             legend, leg.side, leg.sep, leg.wid, leg.args, leg.scale,
+             zlim, box)
+tilecentroids(W, nx, ny)
+trianglediameters(iedge, jedge, edgelength, \dots,
+                  nvert, dmax, check)
+trim.mask(M, R, tolerant)
+tweak.closepairs(cl, rmax, i, deltax, deltay, deltaz)
+tweak.fv.entry(x, current.tag, new.labl, new.desc, new.tag)
+tweak.ratfv.entry(x, \dots)
+x \%unit\% u
+\method{unitname}{default}(x) 
+\method{unitname}{default}(x) <- value 
+unstackFilter(x)
+\method{update}{im}(object, \dots) 
+validradius(r, caller)
+validate.mask(w, fatal=TRUE)        
+validate.quad(Q, fatal, repair, announce)
+vanilla.fv(x)
+versioncurrency.spatstat(today, checkR)
+versionstring.spatstat()
+veryunique(z)
+verifyclass(X, C, N = deparse(substitute(X)), fatal = TRUE)
+warn.once(key, \dots)
+waxlyrical(type, terse)
+w.quad(Q)               
+x.quad(Q)
+y.quad(Q)
+xy.grid(xr, yr, nx, ny, dx, dy)
+\method{xtfrm}{im}(x)
+xypolyselfint(p, eps, proper, yesorno, checkinternal)
+xypolygon2psp(p, w, check)
+ZeroValue(x)
+\method{ZeroValue}{im}
 \method{[}{localpcfmatrix}(x, i, \dots)
 accumulateStatus(x, stats)
 active.interactions(object)
 adaptcoef(new.coef, fitcoef, drop)
+\method{affine}{msr}(X, mat, vec, \dots)
 ang2rad(ang, unit, start, clockwise)
-%% up to here
 areadelta2(X, r, \dots, sparseOK)
 areaGain.diri(u, X, r, \dots, W, verbose)
 areaGain.grid(u, X, r, \dots, W, ngrid)
@@ -803,33 +1153,15 @@ areaLoss.grid(X, r, \dots, W, subset,
                          ngrid = spatstat.options("ngrid.disc"),
                          exact = FALSE)
 areaLoss.poly(X, r, \dots, W, subset, splitem)
-assemble.plot.objects(xlim, ylim, \dots, lines, polygon)
-AsymmDistance.psp(X, Y, metric, method)
-as.breakpts(\dots)
-\method{as.character}{unitname}(x, \dots)
 \method{as.data.frame}{bw.optim}(x, \dots)
-\method{as.data.frame}{fv}(x, \dots)
-\method{as.double}{im}(x, \dots)
-\method{as.list}{hyperframe}(x, \dots)
-as.listof(x)
-as.unitname(s)
 augment.msr(x, \dots, sigma, recompute)
-avenndist(X)
 bandwidth.is.infinite(sigma)
 BartCalc(fY, fK)
-bbEngine(\dots)
 bermantestCalc(fram, which, alternative, \dots)
 bermantestEngine(model, covariate, which, alternative, \dots,
                  modelname, covname, dataname)
-bdry.mask(W)
 bigvaluerule(objfun, objargs, startpar, \dots)
-bind.ratfv(x, numerator, denominator, labl, desc, preferred,
-           ratio, quotient)
 blankcoefnames(x)
-bounding.box3(\dots)
-break.holes(x, splitby, depth, maxdepth)
-breakpts(val, maxi, even = FALSE, npos = NULL, step = NULL)
-breakpts.from.r(r)
 bt.frame(Q, trend, interaction, \dots, covariates,
          correction, rbord, use.gam, allcovar)
 bw.optim(cv, h, iopt, \dots, cvname, hname, criterion,
@@ -840,40 +1172,17 @@ calc.SAVE(COV, z, Dim)
 calc.SIR(COV, z)
 calc.TSE(COV, z, pos, Dim1, Dim2)
 cannot.update(\dots)
-cartesian(pp, markset, fac = TRUE)
-cellmiddles(W, nx, ny, npix, distances)
 censtimeCDFest(o, cc, d, breaks, \dots,
      KM, RS, HAN, RAW, han.denom, tt, pmax)
 change.default.expand(x, newdefault)
-checkbigmatrix(n, m, fatal, silent)
-checkfields(X,L)
-check.arc(arc, fatal)
-check.finespacing(r, eps, win, rmaxdefault, context, action, rname)
-check.hist.lengths(hist,breaks)
 check.separable(dmat, covname, isconstant, fatal)
 check.testfun(f, f1, X)
 circticks(R, at, unit, start, clockwise, labels)
-circunion(arcs)
 clarkevansCalc(X, correction, clipregion, working)
-clip.psp(x, window, check, fragments)
-cliprect.psp(x, window, fragments)
-clippoly.psp(s, window, fragments)
-closethresh(X,R,S,twice,\dots)
-cocoEngine(nv, ie, je, algoname)
 \method{coef}{summary.kppm}(object, \dots)
 \method{coef}{summary.ppm}(object, \dots)
 \method{coef}{vblogit}(object, \dots) 
-coerce.marks.numeric(X, warn)
-\method{compatible}{rat}(A, B, \dots) 
 compileCDF(D, B, r, \dots, han.denom, check)
-conform.ratfv(x)
-crosspairquad(Q,rmax,what)
-cobble.xy(x, y, f, fatal, \dots)
-codetime(x, hms, what)
-col.args.to.grey(x, \dots)
-commonPolyclipArgs(\dots, p)
-conform.imagelist(X, Zlist)
-countingweights(id, areas, check = TRUE)
 CressieReadStatistic(OBS,EXP,lambda,normalise,named)
 CressieReadSymbol(lambda)
 CressieReadName(lambda)
@@ -885,16 +1194,11 @@ datagen.runifpointOnLines(n, L)
 datagen.runifpoisppOnLines(lambda, L)
 datagen.rpoisppOnLines(lambda, L, lmax, \dots, check)
 default.clipwindow(object, epsilon)
-default.n.tiling(X, nd, ntile, npix, eps, random, quasi, verbose)
-default.ntile(X)
 deltasuffstat(model, \dots,
               restrict, dataonly, sparseOK, quadsub,
               force, warn.forced, verbose, use.special)
-\method{dimnames}{hyperframe}(x)
-\method{dimnames}{hyperframe}(x) <- value
 Deviation(x, ref, leaveout, n, xi)
 \method{dfbetas}{ppmInfluence}(model, \dots)
-dflt.redraw(button, name, env)
 densitycrossEngine(Xdata, Xquery, sigma, \dots,
                     kernel, scalekernel,
                     weights, edge, varcov,
@@ -908,26 +1212,13 @@ diagnose.ppm.engine(object, \dots, type, typename, opt,
                          sigma, rbord, compute.sd, compute.cts,
                          envelope, nsim, nrank,
                          rv, oldstyle, splineargs, verbose)
-diagramobj(X, \dots)
 digestCovariates(\dots, W)
 digital.volume(range, nval, vside)
-\method{dim}{fasp}(x)
-\method{dim}{hyperframe}(x)
-\method{dim}{im}(x)
 \method{dim}{msr}(x)
-\method{dim}{owin}(x)
-\method{dimnames}{fasp}(x)
-\method{dimnames}{fasp}(x) <- value
 \method{dimnames}{msr}(x)
-distributecbind(x)
-dist2dpath(dist, method="C")
-do.as.im(x, action, \dots, W, eps, dimyx, xy, na.replace)
-do.call.plotfun(fun, arglist, \dots, envir)
 doMultiStraussHard(iradii, hradii, types)
 dppmFixIntensity(DPP, lambda, po)
 dppmFixAlgorithm(algorithm, changealgorithm, clusters, startpar)
-drawSignedPoly(x,y,pars,sgn)
-emptywindow(w)
 envelopeEngine(X, fun, simul,
            nsim, nrank, \dots, funargs, funYargs,
            verbose, clipdata, 
@@ -956,10 +1247,6 @@ envelopeTest(X, \dots, exponent, alternative,
   type, alternative, scale, clamp, csr, use.theory, nrank, ginterval, nSD,
   savefuns, check, Yname, do.pwrong, weights, precomputed, gaveup)
 equalpairs(U, X, marked=FALSE)
-equalpairs.quad(Q)
-equals.quad(Q)          
-equalsfun.quad(Q)
-erodemask(w,r,strict)
 evalCovar(model, covariate, \dots)
 \method{evalCovar}{ppm}(model, covariate, \dots, lambdatype,
           dimyx, eps, interpolate, jitter, modelname, covname, dataname,
@@ -971,131 +1258,65 @@ evalInterEngine(X,P,E,interaction,correction,splitInf,\dots,
                 Reach,precomputed,savecomputed)
 evalPairPotential(X,P,E,pairpot,potpars,R)
 evaluate2Dkernel(kernel, x, y, sigma, varcov, \dots, scalekernel)
-even.breaks.owin(w)
-exactdt(X, \dots)              
-exactPdt(w)
-existsSpatstatVariable(name)
-expandSpecialLists(x, special)
 expandwinPerfect(W, expand, amount)
 ExpSmoothLog(X, \dots, at, weights)
 \method{extractAIC}{slrm}(fit, scale = 0, k = 2, \dots)
 extractAtomicQtests(x)
-fakemaintitle(bb, main, \dots)
 fakeNeyScot(Y, lambda, win, saveLambda, saveparents)
 \method{family}{vblogit}(object, \dots)
 f3engine(x, y, z, box, vside, range, nval, correction)
 f3Cengine(x, y, z, box, vside, rmax, nrval)
-fasp(fns, which, formulae, dataname, title, rowNames, colNames, checkfv)
-fft2D(z, inverse, west)
-fftwAvailable()
 fill.coefs(coefs, required)
-findbestlegendpos(\dots)
 findCovariate(covname, scope, scopename=NULL)
-findcbind(root, depth, maxdepth)
 fii(interaction, coefs, Vnames, IsOffset, vnameprefix)
-fillNA(x, value)
-flatfname(x)
-flipxypolygon(p)
 \method{flipxy}{msr}(X)
 forbid.logi(object)
-\method{format}{numberwithunit}(x, \dots, collapse, modifier)
-FormatFaspFormulae(f, argname)
-framebottomleft(w)
-fvexprmap(x)
-fvlabels(x, expand=FALSE)
-fvlabels(x) <- value
-fvlabelmap(x, dot=TRUE)
-fvlegend(object, elang)
-gammabreaks(ra, n, gamma)
 g3engine(x, y, z, box, rmax, nrval, correction)
 g3Cengine(x, y, z, box, rmax, nrval)
-genericNNdistBy(X, by, k)
 getdataname(defaultvalue, \dots, dataname)
-getfields(X, L, fatal = TRUE)
 getglmdata(object, drop=FALSE)
 getglmfit(object)
 getglmsubset(object)
-getlastshift(X)
 getppmdatasubset(object)
 getppmOriginalCovariates(object)
 getRandomFieldsModelGen(model)
-getSpatstatVariable(name)
 getSumFun(abbreviation, classname, ismarked, fatal)
 geyercounts(U,X,r,sat,Xcounts,EqualPairs)
 geyerdelta2(X,r,sat,\dots,sparseOK, correction)
 GLMpredict(fit, data, coefs, changecoef, type)
 good.correction.K(X)
 %gridadjacencymatrix(dims)
-gridindex(x, y, xrange, yrange, nx, ny)            
-grid1index(x, xrange, nx)
-grow.mask(M, xmargin=0, ymargin=xmargin)
 hackglmmPQL(fixed, random, family, data, correlation, weights,
             control, niter, verbose, subset, \dots, reltol)
 hasenvelope(X, E)
 hasglmfit(object)
 HermiteCoefs(order)
-handle.r.b.args(r = NULL, breaks = NULL, window, pixeps = NULL, rmaxdefault)
-handle.rshift.args(W, \dots, radius, width, height, edge, clip,
-edgedefault)
-\method{head}{hyperframe}(x,n,\dots)
+handle.rshift.args(W, \dots, radius, width, height,
+                   edge, clip, edgedefault)
 hierarchicalordering(i, s)
 hiermat(x, h)
 ho.engine(model, \dots, nsim, nrmh, start, control, verb)
-hsvNA(h, s, v, alpha)
-IdenticalRowPair(i,j,a,b)
-IdenticalRows(i,j,a,b)
-idorempty(w, r, caller)
 illegal.iformula(ifmla, itags, dfvarnames)
-imageOp(e1, e2, op)
-imagelistOp(e1, e2, op)
 implemented.for.K(correction, windowtype, explicit)
 impliedpresence(tags, formula, df, extranames=character(0))
 impliedcoefficients(object, tag)
 \method{influence}{ppmInfluence}(model, \dots)
-inpoint(W)
-inside.arc(theta, arc)
 instantiate.interact(x, par)
 interactionfamilyname(x)
 intermaker(f, blank)
-interpretAsOrigin(x, W)
-intX.owin(w)
-intX.xypolygon(polly)
-intY.owin(w)
-intY.xypolygon(polly)
-invokeColourmapRule(colfun, x, \dots, zlim, colargs)
 is.atomicQtest(x)
 is.cadlag(s)
-is.col.argname(x)
-is.data(Q)
 is.expandable(x)
 \method{is.expandable}{ppm}(x)  
 \method{is.expandable}{rmhmodel}(x) 
-is.fv(x)
-is.hyperframe(x)
-is.imlist(x)
-is.infline(x)
 is.interact(x)
-\method{is.marked}{default}(\dots)  
 \method{is.marked}{mppm}(X, \dots)
 \method{is.marked}{msr}(X, \dots)
-\method{is.marked}{psp}(X, \dots)
-\method{is.marked}{quad}(X, na.action="warn", \dots)
 is.mppm(x)
-\method{is.multitype}{default}(X, \dots)  
 \method{is.multitype}{mppm}(X, \dots)
 \method{is.multitype}{msr}(X, \dots)
-\method{is.multitype}{quad}(X, na.action="warn", \dots)
 \method{is.poisson}{mppm}(x)
-is.ppplist(x)
-is.pp3(x)
-is.ppx(x)
-is.psp(x)
-is.quad(x)
 is.scov(x)
-is.solist(x)
-is.sob(x)
-is.tess(x)
-is.vanilla(u)
 k3engine(x, y, z, box, rmax, nrval, correction)
 Kborder.engine(X, rmax, nr, correction, weights, ratio)
 Knone.engine(X, rmax, nr, weights, ratio)
@@ -1115,11 +1336,7 @@ kppmPalmLik(X, Xname, po, clusters, control, weightfun, rmax,
 kraever(package, fatal)
 kraeverRandomFields()
 \method{labels}{ppm}(object, \dots)
-\method{levels}{im}(x)
-\method{levels}{im}(x) <- value
-levelsAsFactor(x)
 \method{leverage}{ppmInfluence}(model, \dots)
-listof(\dots)
 localKengine(X, \dots, wantL, lambda, rmax, correction, verbose, rvalue)
 localKmultiEngine(X, from, to,
            lambdaFrom, lambdaTo, \dots, rmax, wantL,
@@ -1128,65 +1345,18 @@ localKmultiEngine(X, from, to,
            Iexplain, Jexplain, Ikey, Jkey, miss.update, miss.leave)
 localpcfengine(X, \dots, delta, rmax, nr, stoyan, lambda)
 localpcfmatrix(X, i, \dots, lambda, delta, rmax, nr, stoyan)
-logi.dummy(X, dummytype, nd, mark.repeat, \dots)
 logi.engine(Q, trend, interaction, \dots, 
             covariates, subsetexpr, clipwin,
             correction, rbord, covfunargs, allcovar, 
             vnamebase, vnameprefix, justQ, savecomputed, precomputed,
             VB)
 \method{logLik}{vblogit}(object, \dots)
-maskLaslett(X, \dots, eps, dimyx, xy, oldX, verbose, plotit)
-markvaluetype(x)
-match2DkernelName(kernel)
-packupNNdata(NND, NNW, what, k)
-parbreak(terse)
-plan.legend.layout(B, \dots, side, sep, size, sep.frac, size.frac,
-                   started, map)
-PairPotentialType(pairpot)
-pointweights(X, \dots, weights, parent)
-PoisSaddle(beta, fi)
-PoisSaddleArea(beta, fi)
-PoisSaddleGeyer(beta, fi)
-PoisSaddlePairwise(beta, fi)
-polyLaslett(X, \dots, oldX, verbose, plotit)
-polytileareaEngine(P, xrange, yrange, nx, ny, DivideByPixelArea)
-PPMmodelmatrix(object, data, \dots, subset, Q, keepNA, irregular,
-               splitInf)
-\method{print}{localpcfmatrix}(x, \dots)
-\method{plot}{localpcfmatrix}(x, \dots)
-putSpatstatVariable(name, value)
-lookup.im(Z, x, y, naok, strict)
 lookup2DkernelInfo(kernel)
-majorminorversion(v)
-make.even.breaks(bmax, npos, bstep)
-makefvlabel(op, accent, fname, sub, argname)
-makeunitname(sing, plur, mul)
-markappend(\dots)
-markcbind(\dots)
-markformat(x)
-\method{markformat}{ppp}(x) 
-\method{markformat}{ppx}(x) 
-\method{markformat}{psp}(x) 
-\method{markformat}{default}(x) 
-mark.scale.default(marx, w, \dots, markscale, maxsize, meansize, characters)
-markspace.integral(X)
-\method{marks}{default}(x, \dots)
-\method{marks}{quad}(x, dfok=FALSE, \dots)
-markappendop(x, y)
-x \%mapp\% y
-marksubset(x, index, format)
-marksubsetop(x, i)
-x \%msub\% i
-markreplicateop(x, n)
-x \%mrep\% n
-mask2df(w)
 match.kernel(kernel)
-maxflow(costm)
+match2DkernelName(kernel)
 mctestSigtraceEngine(R, devdata, devsim, \dots,
      interpolate, confint, alpha, exponent, unitname)
 meanlistfv(z, \dots)
-meanX.owin(w)            
-meanY.owin(w)
 model.se.image(fit, W, \dots, what)
 modelFrameGam(formula, \dots)
 mpl.engine(Q, trend, interaction, \dots,
@@ -1205,42 +1375,33 @@ mpl.prepare(Q, X, P, trend, interaction, covariates,
             vnamebase, vnameprefix, warn.illegal, warn.unidentifiable,
             weightfactor, skip.border, clip.interaction, splitInf)
 mpl.usable(x)
-MinimalTess(W, \dots)
 MultiPair.checkmatrix(mat, n, matname, naok, zerook, asymmok)
-multiplicityNumeric(x)
-multiply.only.finite.entries(x, a)
-na.handle.im(X, na.replace)
-\method{names}{fv}(x) <- value
-\method{names}{hyperframe}(x)
-\method{names}{hyperframe}(x) <- value
-nearest.pixel(x, y, Z)
-nearest.valid.pixel(x, y, Z, method, nsearch)
-newformula(old, change, eold, enew)
+newformula(old, change, eold, enew, expandpoly)
 newstyle.coeff.handling(object)
 nncleanEngine(kthNND, k, d, \dots, tol, maxit,
               plothist, lineargs, verbose, Xname)
 nndcumfun(X, \dots, r)
 no.trend.ppm(x)
-n.quad(Q)
-numberwithunit(x, u)
-numeric.columns(M, logical, others)
 objsurfEngine(objfun, optpar, objargs,
               \dots, dotargs, objname,
               ngrid, ratio, verbose)
-onecolumn(m)
 optimConverged(x)
 optimStatus(x, call)
-printStatus(x, errors.only)
-printStatusList(stats)
-signalStatus(x, errors.only)
 outdated.interact(object)
 oversize.quad(Q, \dots, nU, nX, p)
-owinpolycheck(W, verbose=TRUE)
-owinpoly2mask(w, rasta, check=TRUE)
-owin2polypath(w)
+PairPotentialType(pairpot)
 \method{pairs}{listof}(\dots, plot=TRUE)
 \method{pairs}{solist}(\dots, plot=TRUE)
-param.quad(Q)
+\method{plot}{localpcfmatrix}(x, \dots)
+PoisSaddle(beta, fi)
+PoisSaddleArea(beta, fi)
+PoisSaddleGeyer(beta, fi)
+PoisSaddlePairwise(beta, fi)
+\method{print}{localpcfmatrix}(x, \dots)
+PPMmodelmatrix(object, data, \dots, subset, Q, keepNA, irregular,
+               splitInf)
+printStatus(x, errors.only)
+printStatusList(stats)
 partialModelMatrix(X,D,model,callstring,\dots)
 pcf3engine(x, y, z, box, rmax, nrval, correction, delta)
 pcfmulti.inhom(X, I, J, lambdaI = NULL, lambdaJ = NULL, \dots,
@@ -1250,23 +1411,11 @@ pcfmulti.inhom(X, I, J, lambdaI = NULL, lambdaJ = NULL, \dots,
                sigma = NULL, varcov = NULL,
                Iname = "points satisfying condition I",
                Jname = "points satisfying condition J")
-pickoption(what="option", key, keymap, \dots,
-           exact=FALSE, list.on.err=TRUE, die=TRUE, multi=FALSE,
-           allow.all=TRUE)
-plotEachLayer(x, \dots, main, plotargs, add, show.all, do.plot)
 ploterodewin(W1, W2, col.edge, col.inside, do.plot, \dots)
 ploterodeimage(W, Z, \dots, Wcol, rangeZ, colsZ, do.plot)
-plot3Dpoints(xyz, eye, org,
-             \dots,
-             type, xlim, ylim, zlim,
-             add, box, main, cex, box.back, box.front)
-plotPolygonBdry(x, \dots)
-plotWidthMap(bb.leg, zlim, phys.scale, leg.scale, leg.side, leg.args, grafpar)
 \method{plot}{addvar}(x, \dots, do.points=FALSE)
-\method{plot}{barplotdata}(x, \dots)
 \method{plot}{bw.frac}(x, \dots)
 \method{plot}{bw.optim}(x, \dots, showopt, optargs)
-\method{plot}{indicfun}(x, W, \dots, main)
 \method{plot}{lurk}(x, \dots, shade)
 \method{plot}{minconfit}(x, \dots)
 \method{plot}{parres}(x, \dots)
@@ -1275,7 +1424,7 @@ plotWidthMap(bb.leg, zlim, phys.scale, leg.scale, leg.side, leg.args, grafpar)
            monochrome=spatstat.options('monochrome'),
            limcol=if(monochrome) "black" else "red")
 \method{plot}{spatialcdf}(x, \dots, xlab, ylab)
-ppllengine(X, Y, action="project", check=FALSE)
+pointweights(X, \dots, weights, parent)
 \method{ppm}{default}(Q, trend, interaction,
        \dots, covariates, data, covfunargs, subset, clipwin,
        correction, rbord, use.gam, method, forcefit, emend, project,
@@ -1289,111 +1438,54 @@ ppmInfluenceEngine(fit, what, \dots, iScore, iHessian, iArgs,
               fitname, multitypeOK, entrywise, matrix.action,
               dimyx, eps,
               geomsmooth)
-pppdist.mat(X, Y, cutoff = 1, q = 1, matching = TRUE,
-            precision = 9, approximation = 10)
-pppdist.prohorov(X, Y, n, dfix, type, cutoff, matching,
-            ccode, auction, precision, approximation) 
-ppsubset(X, I, Iname, fatal)
 \method{predict}{vblogit}(object, newdata, type, se.fit, dispersion,
                           terms, na.action, \dots)
-prefixfv(x, tagprefix, descprefix, lablprefix, whichtags)
-prepareTitle(main)
+\method{predict}{profilepl}(object, \dots)
 \method{print}{addvar}(x, \dots)
-\method{print}{anylist}(x, \dots)
 \method{print}{autoexec}(x, \dots)
 \method{print}{bt.frame}(x, \dots)
 \method{print}{bugtable}(x, \dots)
 \method{print}{bw.frac}(x, \dots)
 \method{print}{bw.optim}(x, \dots)
-\method{print}{colourmap}(x, \dots)
 \method{print}{densityfun}(x, \dots)
 \method{print}{diagppm}(x, \dots)
-\method{print}{distfun}(x, \dots)
 \method{print}{detpointprocfamily}(x, \dots)
 \method{print}{detpointprocfamilyfun}(x, \dots)
 \method{print}{envelope}(x, \dots)
-\method{print}{ewcdf}(x, digits, \dots)
-\method{print}{fasp}(x, \dots)
-\method{print}{funxy}(x, \dots)
-\method{print}{fv}(x, \dots, tight)
-\method{print}{fvfun}(x, \dots)
 \method{print}{hasenvelope}(x, \dots)
 \method{print}{hierarchicalordering}(x, \dots)
-\method{print}{hyperframe}(x, \dots)
-\method{print}{indicfun}(x, \dots)
 \method{print}{influence.ppm}(x, \dots)
 \method{print}{interact}(x, \dots, family, brief, banner)       
 \method{print}{intermaker}(x, \dots)
 \method{print}{isf}(x, \dots)
-\method{print}{laslett}(x, \dots)
-\method{print}{layered}(x, \dots)
 \method{print}{leverage.ppm}(x, \dots)
 \method{print}{lurk}(x, \dots)
-\method{print}{lut}(x, \dots)
 \method{print}{minconfit}(x, \dots)
 \method{print}{mppm}(x, \dots)
 \method{print}{msr}(x, \dots)
-\method{print}{nnfun}(x, \dots)
-\method{print}{numberwithunit}(x, \dots)
-\method{print}{onearrow}(x, \dots)
 \method{print}{parres}(x, \dots)
 \method{print}{plotppm}(x, \dots)
 \method{print}{plotpairsim}(x, \dots)
-\method{print}{pppmatching}(x, \dots)
 \method{print}{profilepl}(x, \dots)
 \method{print}{quadrattest}(x, \dots)
 \method{print}{qqppm}(x, \dots)
-\method{print}{rat}(x, \dots)
 \method{print}{rmhcontrol}(x, \dots)
 \method{print}{rmhexpand}(x, \dots, prefix=TRUE)
 \method{print}{rmhmodel}(x, \dots)
 \method{print}{rmhstart}(x, \dots)
 \method{print}{rmhInfoList}(x, \dots)
 \method{print}{rppm}(x, \dots)
-\method{print}{simplepanel}(x, \dots)
 \method{print}{Smoothfun}(x, \dots)
-\method{print}{solist}(x, \dots)
-\method{print}{splitppp}(x, \dots)
-\method{print}{splitppx}(x, \dots)
-\method{print}{summary.distfun}(x, \dots)
-\method{print}{summary.funxy}(x, \dots)
-\method{print}{summary.hyperframe}(x, \dots)
-\method{print}{summary.listof}(x, \dots)
-\method{print}{summary.logiquad}(x, \dots, dp=3)
-\method{print}{summary.lut}(x, \dots)
 \method{print}{summary.mppm}(x, \dots, brief)
-\method{print}{summary.owin}(x, \dots)
-\method{print}{summary.ppp}(x, \dots, dp)
-\method{print}{summary.psp}(x, \dots)
 \method{print}{summary.rmhexpand}(x, \dots)
 \method{print}{summary.ssf}(x, \dots)
-\method{print}{summary.splitppp}(x, \dots)
-\method{print}{summary.solist}(x, \dots)
-\method{print}{summary.splitppx}(x, \dots)
-\method{print}{summary.unitname}(x, \dots)
-\method{print}{symbolmap}(x, \dots)
-\method{print}{textstring}(x, \dots)
-\method{print}{texturemap}(x, \dots)
-\method{print}{tess}(x, \dots, brief=FALSE)
-\method{print}{timed}(x, \dots)
 \method{print}{vblogit}(x, \dots)
-\method{print}{yardstick}(x, \dots)
-project3Dhom(xyz, eye, org, vert)
-putlastshift(X, vec)
-qtPrepareCoordinate(covname, W, origin)
-quad(data, dummy, w, param)
 quad.mppm(x)
 quadBlockSizes(nX, nD, p, nMAX, announce)
 RandomFieldsSafe()
-rasterfilter(X, f)
-ratfv(df, numer, denom, \dots, ratio)
-recognise.spatstat.type(x)
-rectquadrat.breaks(xr, yr, nx = 5, ny = nx, xbreaks = NULL, ybreaks = NULL)
-rectquadrat.countEngine(x, y, xbreaks, ybreaks, weights)
 reduceformula(fmla, deletevar, verbose)
 reheat(model, invtemp)
 RelevantDeviation(x, alternative, clamp, scaling)
-repair.image.xycoords(x)
 \method{rescale}{msr}(X, s, unitname)
 resolveEinfo(x, what, fallback, warn, atomic)
 resolve.foxall.window(X, Y, W, warn.trim)
@@ -1402,54 +1494,12 @@ resolve.lambda.cross(X, I, J, lambdaI, lambdaJ, \dots, lambdaX,
                      sigma, varcov, leaveoneout, update, lambdaIJ,
                      Iexplain, Jexplain, miss.update, miss.leave,
                      caller)
-resolve.stringsAsFactors(stringsAsFactors)
 resolve.vargamma.shape(\dots, nu.ker, nu.pcf, default)
-rgbNA(red, green, blue, alpha, maxColorValue)
-rhohatEngine(model, covariate, reference, volume, \dots,
-               subset, weights, method, horvitz, smoother, resolution, 
-               n, bw, adjust, from, to, 
-               bwref, covname, covunits, confidence, modelcall, callstring)
-rhohatCalc(ZX, Zvalues, lambda, denom, \dots,
-           weights, lambdaX,
-           method, horvitz, smoother,
-           n, bw, adjust, from, to, 
-           bwref, covname, confidence, positiveCI, markovCI,
-           covunits, modelcall, callstring, savestuff)
-rMaternInhibition(type, kappa, r, win, stationary, \dots, nsim, drop)
-RmhExpandRule(nama)
-rocData(covariate, nullmodel, \dots, high)
-rocModel(lambda, nullmodel, \dots, high)
-rmhsnoop(\dots, Wsim, Wclip, R, xcoords, ycoords, mlevels, mcodes, irep, itype, 
-     proptype, proplocn, propmark, propindx, numerator, denominator,
-     panel.only)
 roseContinuous(ang, rad, unit, \dots,
                start, clockwise, main, labels, at, do.plot)
-ruletextline(ch, n, terse)
+\method{rotate}{msr}(X, angle, \dots, centre)
 quadrat.testEngine(X, nx, ny, alternative, method, conditional, CR, 
      \dots, nsim, Xcount, xbreaks, ybreaks, tess, fit, df.est, Xname, fitname)
-quadscheme.replicated(data, dummy, method, \dots)
-quadscheme.spatial(data, dummy, method, \dots)
-pointgrid(W, ngrid)
-rastersample(X, Y)
-rasterx.mask(w, drop)
-rastery.mask(w, drop)
-rasterxy.mask(w, drop)
-rasterx.im(x)
-rastery.im(x)
-rasterxy.im(x, drop)
-rebadge.fv(x, new.ylab, new.fname, tags, new.desc, new.labl, new.yexp,
-           new.dotnames, new.preferred, new.formula, new.tags)
-rebadge.as.crossfun(x, main, sub, i, j)
-rebadge.as.dotfun(x, main, sub, i)
-rebadgeLabels(x, new.fname)
-rebound(x, rect)
-\method{rebound}{im}(x, rect)  
-\method{rebound}{ppp}(x, rect) 
-\method{rebound}{psp}(x, rect) 
-\method{rebound}{owin}(x, rect)
-reconcile.fv(\dots)
-rename.fv(x, fname, ylab, yexp)
-repair.old.factor.image(x)
 reincarnate.interact(object)
 resid4plot(RES, plot.neg, plot.smooth,
            spacing, outer, srange, monochrome, main,
@@ -1462,36 +1512,42 @@ resid1panel(observedX, observedV,
             xlab,ylab, \dots, do.plot)
 resolve.2D.kernel(\dots,
             sigma, varcov, x, mindist, adjust, bwfun, allow.zero)
-restrict.mask(M, W)
-reversePolyclipArgs(x, p)
+rhohatEngine(model, covariate, reference, volume, \dots,
+               subset, weights, method, horvitz, smoother, resolution, 
+               n, bw, adjust, from, to, 
+               bwref, covname, covunits, confidence, modelcall, callstring)
+rhohatCalc(ZX, Zvalues, lambda, denom, \dots,
+           weights, lambdaX,
+           method, horvitz, smoother,
+           n, bw, adjust, from, to, 
+           bwref, covname, confidence, positiveCI, markovCI,
+           covunits, modelcall, callstring, savestuff)
+rMaternInhibition(type, kappa, r, win, stationary, \dots, nsim, drop)
 rmax.Rigid(X, g)
 rmax.rule(fun, W, lambda)
-\method{rotate}{msr}(X, angle, \dots, centre)
-rotxy(X, angle = pi/2)
-rotxypolygon(p, angle = pi/2)
-rmhResolveControl(control, model)
-rmhResolveExpansion(win, control, imagelist, itype)
-rmhResolveTypes(model, start, control)
-rmhSnoopEnv(Xinit, Wclip, R)
 \method{rmhcontrol}{rmhcontrol}(\dots) 
 \method{rmhcontrol}{list}(\dots) 
 rmhEngine(InfoList, \dots, verbose, kitchensink, preponly, snoop,
                            overrideXstart, overrideclip) 
+RmhExpandRule(nama)
+rmhResolveControl(control, model)
+rmhResolveExpansion(win, control, imagelist, itype)
+rmhResolveTypes(model, start, control)
+rmhsnoop(\dots, Wsim, Wclip, R, xcoords, ycoords, mlevels, mcodes, irep, itype, 
+     proptype, proplocn, propmark, propindx, numerator, denominator,
+     panel.only)
+rmhSnoopEnv(Xinit, Wclip, R)
 \method{rmhmodel}{rmhmodel}(model, \dots) 
 \method{rmhstart}{rmhstart}(start, \dots) 
 \method{rmhstart}{list}(start, \dots) 
 rmpoint.I.allim(n, f, types)
-\method{row.names}{hyperframe}(x)
-\method{row.names}{hyperframe}(x) <- value
+rocData(covariate, nullmodel, \dots, high)
+rocModel(lambda, nullmodel, \dots, high)
 rpoint.multi(n, f, fmax, marks, win, giveup, verbose, warn, nsim, drop)
 runifpoispp(lambda, win, \dots, nsim, drop)
 runifpoisppOnLines(lambda, L, nsim, drop)
-runifrect(n, win, nsim, drop)
-safedeldir(X)
 safelookup(Z, x, factor, warn)
 safevalue(x, default)
-\method{scalardilate}{breakpts}(X, f, \dots)
-\method{scalardilate}{diagramobj}(X, f, \dots)
 \method{scalardilate}{msr}(X, f, \dots)
 scanmeasure(X, \dots)
 \method{scanmeasure}{ppp}(X, r, \dots, method) 
@@ -1504,16 +1560,12 @@ second.moment.engine(x, sigma, edge, what, \dots,
       kernel, scalekernel, obswin, varcov, npts, debug, fastgauss)
 sewpcf(d, w, denargs, lambda2area, divisor)
 sewsmod(d, ff, wt, Ef, rvals, method="smrep", \dots, nwtsteps=500)
-\method{shift}{diagramobj}(X, \dots)
 \method{shift}{influence.ppm}(X, \dots)
 \method{shift}{leverage.ppm}(X, \dots)
 \method{shift}{msr}(X, \dots)
-\method{shift}{quadratcount}(X, \dots)
 \method{shift}{quadrattest}(X, \dots)
-shiftxy(X, vec = c(0, 0))
-shiftxypolygon(p, vec = c(0, 0))
+signalStatus(x, errors.only)
 \method{simulate}{profilepl}(object, \dots)
-simulationresult(resultlist, nsim, drop, NameBase)
 simulrecipe(type, expr, envir, csr, pois, constraints)
 slr.prepare(CallInfo, envir, data, dataAtPoints, splitby, clip)
 slrAssemblePixelData(Y, Yname, W, covimages, dataAtPoints, pixelarea)
@@ -1525,9 +1577,6 @@ smoothpointsEngine(x, values, sigma, \dots,
                    kernel, scalekernel,
                    weights, varcov, leaveoneout, sorted, cutoff, debug)
 smudge(X)
-\method{sort}{im}(x, \dots)
-spatstat.deldir.setopt(use.trigrafS, use.trigraf, debug.delaunay)
-spatstat.xy.coords(x, y)
 spatstatClusterModelInfo(name, onlyPCP)
 spatstatDPPModelInfo(model)
 spatstatRmhInfo(cifname)
@@ -1540,42 +1589,18 @@ sphere.volume(range, nval = 10)
 splitHybridInteraction(coeffs, inte)
 sp.foundclass(cname, inlist, formalname, argsgiven)             
 sp.foundclasses(cnames, inlist, formalname, argsgiven)
-store.versionstring.spatstat()
-\method{str}{hyperframe}(object, \dots)
 strausscounts(U,X,r,EqualPairs)
 suffloc(object)
 suffstat.generic(model, X, callstring)
 suffstat.poisson(model, X, callstring)
 summarise.trend(trend, w, a)
 \method{summary}{envelope}(object,\dots)
-\method{summary}{hyperframe}(object, \dots, brief=FALSE)
-\method{summary}{logiquad}(object, \dots, checkdup=FALSE)
-\method{summary}{lut}(object, \dots)
 \method{summary}{mppm}(object, \dots, brief=FALSE)
 \method{summary}{msr}(object, \dots)
 \method{summary}{profilepl}(object, \dots)
-\method{summary}{pppmatching}(object, \dots)
-\method{summary}{ppx}(object, \dots)
 \method{summary}{rmhexpand}(object, \dots)
-\method{summary}{splitppx}(object, \dots)
 \method{summary}{vblogit}(object, \dots)
-superimposeMarks(arglist, nobj)
-symbolmapdomain(x)
-symbolmaptype(x)
-\method{tail}{hyperframe}(x,n,\dots)
-thickSegments(x, widths, \dots,
-             add, main, do.plot, show.all, show.window,
-             scale, adjust, negative.args,
-             legend, leg.side, leg.sep, leg.wid, leg.args, leg.scale,
-             zlim, box)
 thinjump(n, p)
-tilecentroids(W, nx, ny)
-trianglediameters(iedge, jedge, edgelength, \dots,
-                  nvert, dmax, check)
-trim.mask(M, R, tolerant)
-tweak.closepairs(cl, rmax, i, deltax, deltay, deltaz)
-tweak.fv.entry(x, current.tag, new.labl, new.desc, new.tag)
-tweak.ratfv.entry(x, \dots)
 tweak.coefs(model, new.coef)
 twostage.test(X, \dots, exponent, nsim, nsimsub,
               alternative, reuse, leaveout, interpolate,
@@ -1583,57 +1608,23 @@ twostage.test(X, \dots, exponent, nsim, nsimsub,
 twostage.envelope(X, \dots, nsim, nsimsub, nrank,
                   alternative, reuse, leaveout, interpolate,
                   savefuns, savepatterns, verbose, badXfatal, testlabel)
-x \%unit\% u
-\method{unitname}{default}(x) 
-\method{unitname}{default}(x) <- value 
 \method{unitname}{msr}(x) 
 \method{unitname}{msr}(x) <- value 
-unstackFilter(x)
-\method{update}{im}(object, \dots) 
 \method{update}{ippm}(object, \dots, envir) 
 \method{update}{msr}(object, \dots) 
 \method{update}{rmhstart}(object, \dots)
-validradius(r, caller)
 validate2Dkernel(kernel, fatal)
 validate.angles(angles, unit, guess)
-validate.mask(w, fatal=TRUE)        
-validate.quad(Q, fatal, repair, announce)
 validate.weights(x, recip, how, allowzero, allowinf)
-vanilla.fv(x)
 varcountEngine(g, B, lambdaB, f)
 %vblogit(y, X, offset, eps, m0, S0, S0i, xi0, verb, maxiter, \dots)
 %vblogit.fmla(formula, offset, data, subset, weights, verbose, epsilon, \dots)
-versioncurrency.spatstat(today, checkR)
 versionstring.interact(object)
 versionstring.ppm(object)
-versionstring.spatstat()
-veryunique(z)
-verifyclass(X, C, N = deparse(substitute(X)), fatal = TRUE)
-warn.once(key, \dots)
-waxlyrical(type, terse)
 weightedclosepairs(X, r, correction, what)
 windows.mppm(x)
-w.quad(Q)               
-x.quad(Q)
-y.quad(Q)
-xy.grid(xr, yr, nx, ny, dx, dy)
 X2testEngine(OBS, EXP, \dots, method, CR, df, nsim,
      conditional, alternative, testname, dataname)
-\method{xtfrm}{im}(x)
-xypolyselfint(p, eps, proper, yesorno, checkinternal)
-xypolygon2psp(p, w, check)
-ZeroValue(x)
-\method{ZeroValue}{im}
-%%
-spatstatDiagnostic(msg)
-%%
-as.ppplist(x, check)
-as.imlist(x, check)
-as.linimlist(x, check)
-allElementsIdentical(x, entry)
-%%
-\method{as.ppm}{rppm}(object)
-\method{predict}{profilepl}(object, \dots)
 
 %% Linear networks code is corralled here
 ApplyConnected(X, Engine, r, \dots, rule, auxdata)
@@ -1670,6 +1661,7 @@ looHeatLPP(U0, Amatrix, npts, niter, nsave,
 looVoronoiLPP(X)
 validate.lpp.coords(X, fatal, context)
 \method{as.ppm}{lppm}(object)
+\method{as.ppm}{rppm}(object)
 pointsAlongNetwork(L, delta)
 linearKengine(X, \dots, r, reweight, denom, correction,
               ratio, showworking)

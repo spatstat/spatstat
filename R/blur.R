@@ -3,15 +3,8 @@
 #
 # apply Gaussian blur to an image
 #
-#    $Revision: 1.23 $   $Date: 2020/02/04 07:05:28 $
+#    $Revision: 1.25 $   $Date: 2020/11/30 07:16:06 $
 #
-fillNA <- function(x, value=0) {
-  stopifnot(is.im(x))
-  v <- x$v
-  v[is.na(v)] <- value
-  x$v <- v
-  return(x)
-}
 
 Smooth.im <- function(X, sigma=NULL, ..., kernel="gaussian",
                       normalise=FALSE, bleed=TRUE, varcov=NULL) {
@@ -70,88 +63,3 @@ blur <- function(x, sigma=NULL, ..., kernel="gaussian",
   return(Z)
 }
   
-safelookup <- function(Z, x, factor=2, warn=TRUE) {
-  #' x is a ppp
-  #' evaluates Z[x], replacing any NA's by blur(Z)[x]
-  Zvals <- Z[x, drop=FALSE]
-  isna <- is.na(Zvals)
-  if(!any(isna))
-     return(Zvals)
-  #' First pass - look up values at neighbouring pixels if valid
-  Xbad <- x[isna]
-  rc <- nearest.valid.pixel(Xbad$x, Xbad$y, Z)
-  Nvals <- Z$v[cbind(rc$row, rc$col)]
-  fixed <- !is.na(Nvals)
-  Zvals[isna] <- Nvals
-  if(all(fixed))
-    return(Zvals)
-  isna[isna] <- !fixed
-  #' Second pass 
-  Xbad <- x[isna]
-  #' expand domain of Z 
-  RX <- as.rectangle(x)
-  RZ <- as.rectangle(Z)
-  bb <- boundingbox(RX, RZ)
-  pixdiam <- sqrt(Z$xstep^2 + Z$ystep^2)
-  big <- grow.rectangle(bb, 2 * pixdiam)
-  Z <- rebound.im(Z, big)
-  #'
-  isfac <- (Z$type == "factor")
-  if(!isfac) {
-    #' Numerical extrapolation: blur by a few pixels
-    Zblur <- blur(Z, factor * pixdiam, bleed=TRUE, normalise=TRUE)
-    Bvals <- Zblur[Xbad, drop=FALSE]
-    Zvals[isna] <- Bvals
-    fixed <- !is.na(Bvals)
-    if(warn && any(fixed))
-      warning(paste("Values for", sum(fixed), 
-                    "points lying slightly outside the pixel image domain",
-                    "were estimated by convolution"),
-              call.=FALSE)
-    if(all(fixed))
-      return(Zvals)
-    isna[isna] <- notfixed <- !fixed
-    Xbad <- Xbad[notfixed]
-  }
-  #' Third pass
-  #' last resort: project to nearest pixel at any distance
-  W <- as.mask(Z)
-  eW <- exactPdt(W)
-  ## discretise points of Xbad
-  Gbad <- nearest.raster.point(Xbad$x, Xbad$y, W)
-  ijGbad <- cbind(Gbad$row, Gbad$col)
-  ## find nearest pixels inside domain
-  iclosest <- eW$row[ijGbad]
-  jclosest <- eW$col[ijGbad]
-  ## look up values of Z
-  Cvals <- Z$v[cbind(iclosest, jclosest)]
-  fixed <- !is.na(Cvals)
-  Zvals[isna] <- Cvals
-  if(warn && any(fixed)) 
-    warning(paste(if(isfac) "Categorical values" else "Values",
-                  "for", sum(fixed), "points lying",
-                  if(isfac) "outside" else "far outside",
-                  "the pixel image domain",
-                  "were estimated by projection to the nearest pixel"),
-            call.=FALSE)
-  if(!all(fixed))
-    stop(paste("Internal error:", sum(!fixed),
-               "pixel values were NA, even after projection"),
-         call.=FALSE)
-  return(Zvals)
-}
-
-nearestValue <- function(X) {
-  #' for each raster location, look up the nearest defined pixel value
-  X <- as.im(X)
-  if(!anyNA(X)) return(X)
-  Y <- X ## copy dimensions, value type, units etc etc
-  W <- as.mask(X)
-  eW <- exactPdt(W)
-  iclosest <- as.vector(eW$row)
-  jclosest <- as.vector(eW$col)
-  ## look up values of Z
-  Y$v[] <- X$v[cbind(iclosest, jclosest)]
-  return(Y)
-}
-

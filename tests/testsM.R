@@ -375,7 +375,7 @@ local({
 #'
 #'     tests/msr.R
 #'
-#'     $Revision: 1.4 $ $Date: 2020/11/27 01:26:15 $
+#'     $Revision: 1.5 $ $Date: 2020/11/30 07:27:44 $
 #'
 #'     Tests of code for measures
 #'
@@ -383,8 +383,6 @@ local({
 if(FULLTEST) {
 local({
     
-#%^!ifdef GEOM
-
   ## cases of 'msr'
   Q <- quadscheme(cells)
   nQ <- n.quad(Q)
@@ -415,9 +413,6 @@ local({
   am <- augment.msr(m, sigma=0.08)
   ua <- update(am)
   
-#%^!endif
-
-#%^!ifdef CORE
   rr <- residuals(ppm(cells ~ x))
   mm <- residuals(ppm(amacrine ~ x))
   ss <- residuals(ppm(amacrine ~ x), type="score")
@@ -428,6 +423,5 @@ local({
   plot(mm, equal.markscale=TRUE, equal.ribbon=TRUE)
   plot(ss)
   plot(ss, multiplot=FALSE)
-#%^!endif
 })
 }

@@ -4,7 +4,6 @@
 \alias{as.owin.owin}
 \alias{as.owin.ppp}
 \alias{as.owin.psp}
-\alias{as.owin.msr}
 \alias{as.owin.quad}
 \alias{as.owin.quadratcount}
 \alias{as.owin.tess}
@@ -18,6 +17,7 @@
 \alias{as.owin.ppm}
 \alias{as.owin.kppm}
 \alias{as.owin.dppm}
+\alias{as.owin.msr}
 \alias{as.owin.quadrattest}
 \alias{as.owin.rmhmodel}
 \alias{as.owin.lpp}
@@ -37,8 +37,6 @@ in any of several formats, into an object of class \code{"owin"}.
  \method{as.owin}{ppp}(W, \dots, fatal=TRUE)
 
  \method{as.owin}{psp}(W, \dots, fatal=TRUE)
-
- \method{as.owin}{msr}(W, \dots, fatal=TRUE)
 
  \method{as.owin}{quad}(W, \dots, fatal=TRUE)
 
@@ -67,6 +65,8 @@ in any of several formats, into an object of class \code{"owin"}.
  \method{as.owin}{kppm}(W, \dots, from=c("points", "covariates"), fatal=TRUE)
 
  \method{as.owin}{dppm}(W, \dots, from=c("points", "covariates"), fatal=TRUE)
+
+ \method{as.owin}{msr}(W, \dots, fatal=TRUE)
 
  \method{as.owin}{quadrattest}(W, \dots, fatal=TRUE)
 

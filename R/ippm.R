@@ -1,7 +1,7 @@
 #
 # ippm.R
 #
-#   $Revision: 2.26 $   $Date: 2020/11/16 01:32:06 $
+#   $Revision: 2.27 $   $Date: 2020/11/30 05:03:29 $
 #
 # Fisher scoring algorithm for irregular parameters in ppm trend
 #
@@ -180,14 +180,6 @@ ippm <- local({
 
 update.ippm <- local({
 
-  newformula <- function(old, change, eold, enew) {
-    old <- eval(old, eold)
-    change <- eval(change, enew)
-    old <- as.formula(old, env=eold)
-    change <- as.formula(change, env=enew)
-    update.formula(old, change)
-  }
-
   update.ippm <- function(object, ..., envir=environment(terms(object))) {
 #    call <- match.call()
     new.call <- old.call <- object$call
@@ -207,10 +199,12 @@ update.ippm <- local({
           f[[3L]] <- new.fmla[[2L]]
           new.fmla <- f
         }
-        new.call$Q <- newformula(Qold, new.fmla, old.callframe, envir)
+        new.call$Q <- newformula(Qold, new.fmla, old.callframe, envir,
+                                 expandpoly=FALSE)
       } else if(inherits(Qold, c("ppp", "quad"))) {
         ## formula will replace 'trend' and may replace 'Q'
-        new.fmla <- newformula(formula(object), new.fmla, old.callframe, envir)
+        new.fmla <- newformula(formula(object), new.fmla, old.callframe, envir,
+                               expandpoly=FALSE)
         if(!is.null(lhs <- lhs.of.formula(new.fmla))) {
           newQ <- eval(eval(substitute(substitute(l, list("."=Q)),
                                        list(l=lhs,

@@ -7,7 +7,7 @@
 #'    rsyst()           systematic random (randomly-displaced grid)
 #'    rjitter()         random perturbation
 #'
-#'   $Revision: 1.3 $  $Date: 2020/11/29 09:07:00 $
+#'   $Revision: 1.5 $  $Date: 2020/11/30 08:05:10 $
 
 
 simulationresult <- function(resultlist, nsim, drop, NameBase="Simulation") {
@@ -109,16 +109,20 @@ rjitter <- function(X, radius, retry=TRUE, giveup=10000, ...,
     return(result)
   }
   W <- X$window
-  if(missing(radius) || is.null(radius))
-    radius <- min(bw.stoyan(X), shortside(Frame(W)))
+  if(missing(radius) || is.null(radius)) {
+    ## Stoyan rule of thumb
+    bws <- 0.15/sqrt(5 * nX/area(W))
+    radius <- min(bws, shortside(Frame(W)))
+  }
   
   result <- vector(mode="list", length=nsim)
   for(isim in 1:nsim) {
     if(!retry) {
       ## points outside window are lost
-      D <- runifdisc(nX, radius=radius)
-      xnew <- X$x + D$x
-      ynew <- X$y + D$y
+      rD <- sqrt(runif(nX, max=radius^2))
+      aD <- runif(nX, max= 2 * pi)
+      xnew <- X$x + rD * cos(aD)
+      ynew <- X$y + rD * sin(aD)
       ok <- inside.owin(xnew, ynew, W)
       result[[isim]] <- ppp(xnew[ok], ynew[ok], window=W, check=FALSE)
     } else {
@@ -131,9 +135,11 @@ rjitter <- function(X, radius, retry=TRUE, giveup=10000, ...,
         if(triesleft <= 0) 
 	  break
         Y <- Xshift[undone]
-        D <- runifdisc(Y$n, radius=radius)
-        xnew <- Y$x + D$x
-        ynew <- Y$y + D$y
+        nY <- npoints(Y)
+        rD <- sqrt(runif(nY, max=radius^2))
+        aD <- runif(nY, max= 2 * pi)
+        xnew <- Y$x + rD * cos(aD)
+        ynew <- Y$y + rD * sin(aD)
         ok <- inside.owin(xnew, ynew, W)
         if(any(ok)) {
           changed <- which(undone)[ok]

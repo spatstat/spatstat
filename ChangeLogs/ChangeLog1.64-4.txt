@@ -460,3 +460,41 @@ Change log from spatstat 1.64-3 to spatstat 1.64-4
 (with environment variable SPATSTAT_TEST defined/undefined)
 ------------- installed on laptop      ---------------
 ------------- uploaded to GitHub       ---------------
+
+30 nov 2020
+
+   blur.R
+   images.R
+	Moved fillNA() from blur.R into images.R
+	in preparation for package breakup
+	Modified safelookup()
+
+   is.cadlag.R
+	New argument 'expandpoly'
+
+   randomseg.R
+	Inserted filepp directives
+	in preparation for package breakup
+
+   as.layered.Rd
+   as.layered.msr.Rd [New file]
+   	split documentation in preparation for package breakup
+
+   spatstat-internal.Rd
+   	rearranged and inserted filepp directives
+	in preparation for package breakup
+
+   WindowOnly.Rd
+   as.owin.Rd
+   domain.Rd
+	tweaked filepp directives
+
+   DESCRIPTION
+   NEWS
+	Version 1.64-3.020
+
+------------- passed R-4.0.3 CMD check ---------------
+(with environment variable SPATSTAT_TEST defined/undefined)
+------------- installed on laptop      ---------------
+------------- uploaded to GitHub       ---------------
+

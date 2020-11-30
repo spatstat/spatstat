@@ -1,8 +1,9 @@
 #
 # randomseg.R
 #
-# $Revision: 1.12 $ $Date: 2016/12/01 09:32:41 $
+# $Revision: 1.13 $ $Date: 2020/11/30 07:58:27 $
 #
+
 
 rpoisline <- function(lambda, win=owin()) {
   win <- as.owin(win)
@@ -50,6 +51,7 @@ rpoisline <- function(lambda, win=owin()) {
   return(X)
 }
 
+
 rlinegrid <- function(angle=45, spacing=0.1, win=owin()) {
   win <- as.owin(win)
   # determine circumcircle
@@ -78,3 +80,4 @@ rlinegrid <- function(angle=45, spacing=0.1, win=owin()) {
   X <- X[win]
   return(X)
 }
+

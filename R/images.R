@@ -1,7 +1,7 @@
 #
 #       images.R
 #
-#      $Revision: 1.161 $     $Date: 2020/11/16 01:32:06 $
+#      $Revision: 1.163 $     $Date: 2020/11/30 07:15:55 $
 #
 #      The class "im" of raster images
 #
@@ -619,7 +619,7 @@ nearest.valid.pixel <- function(x, y, Z,
            miss <- !inside[cbind(rr, cc)]
            if(!any(miss))
              return(rc)
-           #' for offending pixels, explore 3 x 3 neighbourhood
+           #' for offending pixels, explore 3 x 3 neighbourhood (if nsearch=1)
            nr <- Z$dim[1L]
            nc <- Z$dim[2L]
            xcol <- Z$xcol
@@ -680,8 +680,10 @@ nearest.valid.pixel <- function(x, y, Z,
 }
   
 
-# This function is a generalisation of inside.owin()
-# to images other than binary-valued images.
+## ................ IMAGE LOOKUP ................................
+
+##  lookup.im() is a generalisation of inside.owin()
+##              to images other than binary-valued images.
 
 lookup.im <- function(Z, x, y, naok=FALSE, strict=TRUE) {
   verifyclass(Z, "im")
@@ -739,9 +741,69 @@ lookup.im <- function(Z, x, y, naok=FALSE, strict=TRUE) {
 
   return(value)
 }
-  
 
-## low level
+## safelookup() ensures that a finite value is obtained for each query location
+
+safelookup <- function(Z, x, factor=2, warn=TRUE) {
+  #' x is a ppp giving the query points.
+  #' Evaluates Z[x], replacing any NA's by values at nearby pixels
+  #' First pass - look up pixel values at query locations
+  Zvals <- Z[x, drop=FALSE]
+  isna <- is.na(Zvals)
+  if(!any(isna))
+     return(Zvals)
+  #' Second pass - look up values at neighbouring pixels if valid
+  Xbad <- x[isna]
+  rc <- nearest.valid.pixel(Xbad$x, Xbad$y, Z, nsearch=ceiling(factor))
+  Nvals <- Z$v[cbind(rc$row, rc$col)]
+  fixed <- !is.na(Nvals)
+  Zvals[isna] <- Nvals
+  if(all(fixed))
+    return(Zvals)
+  isna[isna] <- !fixed
+  #' Third pass - project to nearest pixel at any distance
+  W <- as.mask(Z)
+  eW <- exactPdt(W)
+  ## discretise points of Xbad
+  Gbad <- nearest.raster.point(Xbad$x, Xbad$y, W)
+  ijGbad <- cbind(Gbad$row, Gbad$col)
+  ## find nearest pixels inside domain
+  iclosest <- eW$row[ijGbad]
+  jclosest <- eW$col[ijGbad]
+  ## look up values of Z
+  Cvals <- Z$v[cbind(iclosest, jclosest)]
+  fixed <- !is.na(Cvals)
+  Zvals[isna] <- Cvals
+  nfixed <- sum(fixed)
+  if(warn && nfixed > 0)
+    warning(paste("Values for", nfixed, "query", 
+                  ngettext(nfixed, "point", "points"),
+                  "lying outside the pixel image domain",
+                  "were estimated by projection to the nearest pixel"),
+            call.=FALSE)
+  if(!all(fixed))
+    stop(paste("Internal error:", sum(!fixed),
+               "pixel values were NA, even after projection"),
+         call.=FALSE)
+  return(Zvals)
+}
+
+nearestValue <- function(X) {
+  #' For EACH raster location, look up the nearest defined pixel value
+  #' regardless of how far away it is. Return an image.
+  X <- as.im(X)
+  if(!anyNA(X)) return(X)
+  Y <- X ## copy dimensions, value type, units etc etc
+  W <- as.mask(X)
+  eW <- exactPdt(W)
+  iclosest <- as.vector(eW$row)
+  jclosest <- as.vector(eW$col)
+  ## look up values of Z
+  Y$v[] <- X$v[cbind(iclosest, jclosest)]
+  return(Y)
+}
+
+## .............. low level ...................................
 
 rasterx.im <- function(x) {
   verifyclass(x, "im")
@@ -1252,4 +1314,14 @@ ZeroValue.im <- function(x) {
               character = character(1L),
               x$v[!is.na(x$v),drop=TRUE][1])
   return(z)
+}
+
+## replace 'NA' pixel values with a specified value
+
+fillNA <- function(x, value=0) {
+  stopifnot(is.im(x))
+  v <- x$v
+  v[is.na(v)] <- value
+  x$v <- v
+  return(x)
 }

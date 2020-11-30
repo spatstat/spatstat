@@ -2,9 +2,9 @@
 \alias{Window.ppm}
 \alias{Window.kppm}
 \alias{Window.dppm}
+\alias{Window.msr}
 \alias{Window.quadrattest}
 \alias{Window.rmhmodel}
-\alias{Window.msr}
 \alias{Window.quad}
 \alias{Window.quadratcount}
 \alias{Window.tess}
@@ -27,11 +27,11 @@
 
  \method{Window}{dppm}(X, \dots, from=c("points", "covariates"))
 
+ \method{Window}{msr}(X, \dots)
+
  \method{Window}{quadrattest}(X, \dots)
 
  \method{Window}{rmhmodel}(X, \dots)
-
- \method{Window}{msr}(X, \dots)
 
  \method{Window}{quad}(X, \dots)
 

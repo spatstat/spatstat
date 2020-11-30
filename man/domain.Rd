@@ -5,7 +5,6 @@
 \alias{domain.im}
 \alias{domain.ppx}
 \alias{domain.pp3}
-\alias{domain.msr}
 \alias{domain.quad}
 \alias{domain.quadratcount}
 \alias{domain.tess}
@@ -16,6 +15,7 @@
 \alias{domain.ppm}
 \alias{domain.kppm}
 \alias{domain.dppm}
+\alias{domain.msr}
 \alias{domain.quadrattest}
 \alias{domain.rmhmodel}
 \alias{domain.lpp}
@@ -42,8 +42,6 @@
 
    \method{domain}{pp3}(X, \dots)
 
- \method{domain}{msr}(X, \dots)
-
  \method{domain}{quad}(X, \dots)
 
  \method{domain}{quadratcount}(X, \dots)
@@ -64,6 +62,8 @@
  \method{domain}{kppm}(X, \dots, from=c("points", "covariates"))
 
  \method{domain}{dppm}(X, \dots, from=c("points", "covariates"))
+
+ \method{domain}{msr}(X, \dots)
 
  \method{domain}{quadrattest}(X, \dots)
 

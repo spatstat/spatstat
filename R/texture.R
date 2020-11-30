@@ -34,36 +34,35 @@ add.texture <- function(W, texture=4, spacing=NULL, ...) {
          },
          {
            ## texture 2: vertical lines
-           L <- rlinegrid(90, spacing, W)[W]
+           L <- rlinegrid(90, spacing, W)
          },
          {
            ## texture 3: horizontal lines
-           L <- rlinegrid(0, spacing, W)[W]
+           L <- rlinegrid(0, spacing, W)
          },
          {
            ## texture 4: forward slashes
-           L <- rlinegrid(45, spacing, W)[W]
+           L <- rlinegrid(45, spacing, W)
          },
          {
            ## texture 5: back slashes
-           L <- rlinegrid(135, spacing, W)[W]
+           L <- rlinegrid(135, spacing, W)
          },
          {
            ## texture 6: horiz/vert grid
-           L0 <- rlinegrid(0, spacing, W)[W]
-           L90 <- rlinegrid(90, spacing, W)[W]
+           L0 <- rlinegrid(0, spacing, W)
+           L90 <- rlinegrid(90, spacing, W)
            L <- superimpose(L0, L90, W=W, check=FALSE)
          },
          {
            ## texture 7: diagonal grid
-           L45 <- rlinegrid(45, spacing, W)[W]
-           L135 <- rlinegrid(135, spacing, W)[W]
+           L45 <- rlinegrid(45, spacing, W)
+           L135 <- rlinegrid(135, spacing, W)
            L <- superimpose(L45, L135, W=W, check=FALSE)
          },
          {
            ## texture 8: hexagons
-           H <- hextess(W, spacing, offset=runifpoint(1, W))
-           H <- intersect.tess(H, W)
+           H <- hextess(W, spacing, offset=runifrect(1, Frame(W)), trim=TRUE)
            do.call.matched(plot.tess,
                            resolve.defaults(list(x=quote(H), add=TRUE),
                                             list(...)))

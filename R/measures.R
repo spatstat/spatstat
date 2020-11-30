@@ -3,7 +3,7 @@
 #
 #  signed/vector valued measures with atomic and diffuse components
 #
-#  $Revision: 1.93 $  $Date: 2020/11/29 07:57:59 $
+#  $Revision: 1.95 $  $Date: 2020/11/30 07:43:29 $
 #
 msr <- function(qscheme, discrete, density, check=TRUE) {
   if(!is.quad(qscheme))
@@ -226,9 +226,7 @@ integral.msr <- function(f, domain=NULL, ...) {
 
 update.msr <- function(object, ...) {
   #' reconcile internal data
-  if(
-    !is.null(smo <- attr(object, "smoothdensity"))
-    ) {
+  if(!is.null(smo <- attr(object, "smoothdensity"))) {
     sigma <- attr(smo, "sigma")
     object <- augment.msr(object, ..., sigma=sigma, recompute=TRUE)
   }

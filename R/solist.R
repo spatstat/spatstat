@@ -7,7 +7,7 @@
 ##
 ## plot.solist is defined in plot.solist.R
 ##
-## $Revision: 1.23 $ $Date: 2020/10/31 05:00:33 $
+## $Revision: 1.24 $ $Date: 2020/11/29 10:08:34 $
 
 anylist <- function(...) {
   x <- list(...)
@@ -56,10 +56,6 @@ as.anylist <- function(x) {
 
 summary.anylist <- function(object, ...) {
   as.anylist(lapply(object, summary, ...))
-}
-
-pool.anylist <- function(x, ...) {
-  do.call(pool, append(x, list(...)))
 }
 
 ## .................... solist .............................

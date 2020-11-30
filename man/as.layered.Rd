@@ -5,7 +5,6 @@
 \alias{as.layered.splitppp}
 \alias{as.layered.solist}
 \alias{as.layered.listof}
-\alias{as.layered.msr}
 \title{Convert Data To Layered Object}
 \description{
   Converts spatial data into a layered object.
@@ -22,8 +21,6 @@
  \method{as.layered}{solist}(X)
 
  \method{as.layered}{listof}(X)
-
- \method{as.layered}{msr}(X)
 }
 \arguments{
   \item{X}{
@@ -60,25 +57,16 @@
   }
 }
 \seealso{
+  \code{\link{as.layered.msr}},
   \code{\link{layered}},
   \code{\link{split.ppp}}
 }
 \examples{
    as.layered(cells)
    as.layered(amacrine)
-
-   P <- rpoispp(100)
-   fit <- ppm(P ~ x+y)
-   rs <- residuals(fit, type="score")
-   as.layered(rs)
 }
-\author{\adrian
-  
-  
-  \rolf
-  
-  and \ege
-  
+\author{
+  \spatstatAuthors.
 }
 \keyword{spatial}
 \keyword{manip}
