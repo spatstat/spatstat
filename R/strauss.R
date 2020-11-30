@@ -2,7 +2,7 @@
 #
 #    strauss.R
 #
-#    $Revision: 2.43 $	$Date: 2018/03/15 07:37:41 $
+#    $Revision: 2.45 $	$Date: 2020/11/30 10:48:23 $
 #
 #    The Strauss process
 #
@@ -133,6 +133,28 @@ strausscounts <- function(U, X, r, EqualPairs=NULL) {
   return(answer)
 }
 
+closepaircounts <- function(X, r) {
+  stopifnot(is.ppp(X))
+  stopifnot(is.numeric(r) && length(r) == 1)
+  stopifnot(is.finite(r))
+  stopifnot(r >= 0)
+  # sort in increasing order of x coordinate
+  oX <- fave.order(X$x)
+  Xsort <- X[oX]
+  nX <- npoints(X)
+  # call C routine (defined in Estrauss.c)
+  out <- .C("Cclosepaircounts",
+            nxy    = as.integer(nX),
+            x      = as.double(Xsort$x),
+            y      = as.double(Xsort$y),
+            rmaxi  = as.double(r),
+            counts = as.integer(integer(nX)),
+            PACKAGE = "spatstat")
+  answer <- integer(nX)
+  answer[oX] <- out$counts
+  return(answer)
+}
+
 crosspaircounts <- function(X, Y, r) {
   stopifnot(is.ppp(X))
   stopifnot(is.numeric(r) && length(r) == 1)
@@ -145,7 +167,7 @@ crosspaircounts <- function(X, Y, r) {
   Ysort <- Y[oY]
   nX <- npoints(X)
   nY <- npoints(Y)
-  # call C routine
+  # call C routine (defined in Estrauss.c)
   out <- .C("Ccrosspaircounts",
             nnsource = as.integer(nX),
             xsource  = as.double(Xsort$x),
@@ -155,28 +177,6 @@ crosspaircounts <- function(X, Y, r) {
             ytarget  = as.double(Ysort$y),
             rrmax    = as.double(r),
             counts   = as.integer(integer(nX)),
-            PACKAGE = "spatstat")
-  answer <- integer(nX)
-  answer[oX] <- out$counts
-  return(answer)
-}
-
-closepaircounts <- function(X, r) {
-  stopifnot(is.ppp(X))
-  stopifnot(is.numeric(r) && length(r) == 1)
-  stopifnot(is.finite(r))
-  stopifnot(r >= 0)
-  # sort in increasing order of x coordinate
-  oX <- fave.order(X$x)
-  Xsort <- X[oX]
-  nX <- npoints(X)
-  # call C routine
-  out <- .C("Cclosepaircounts",
-            nxy    = as.integer(nX),
-            x      = as.double(Xsort$x),
-            y      = as.double(Xsort$y),
-            rmaxi  = as.double(r),
-            counts = as.integer(integer(nX)),
             PACKAGE = "spatstat")
   answer <- integer(nX)
   answer[oX] <- out$counts

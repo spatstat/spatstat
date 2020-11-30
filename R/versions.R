@@ -5,29 +5,14 @@
 ##
 ##   The string P A C K A G E N A M E  is substituted by filepp
 ##
-## $Revision: 1.18 $  $Date: 2020/10/07 08:12:37 $
+## $Revision: 1.20 $  $Date: 2020/11/30 10:20:24 $
 ##
 #####################
 
+## see also:
+##     versionstring.interact()      interact.R
+##     versionstring.ppm()           ppmclass.R
 
-# Extract version string from ppm object
-
-versionstring.ppm <- function(object) {
-  verifyclass(object, "ppm")
-  v <- object$version
-  if(is.null(v) || !is.list(v))
-    v <- list(major=1, minor=3, release=4)
-  vs <- paste(v$major, ".", v$minor, "-", v$release, sep="")
-  return(vs)
-}
-
-# Extract version string from interact object
-
-versionstring.interact <- function(object) {
-  verifyclass(object, "interact")
-  v <- object$version
-  return(v)  # NULL before 1.11-0
-}
 
 # Get version number of current spatstat installation
 # This is now saved in the spatstat cache environment
@@ -104,8 +89,4 @@ versioncurrency.spatstat <- function(today=Sys.Date(), checkR=TRUE) {
   }
   return(msg)
 }
-
-# legacy function
-
-RandomFieldsSafe <- function() { TRUE }
 

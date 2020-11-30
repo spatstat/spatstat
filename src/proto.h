@@ -190,8 +190,8 @@ void crsmoopt(int *, double *, double *, int *, double *, double *, double *, do
 void wtcrsmoopt(int *, double *, double *, int *, double *, double *, double *, double *, double *, double *, double *); 
 void acrsmoopt(int *, double *, double *, int *, double *, double *, double *, double *, double *, double *); 
 void awtcrsmoopt(int *, double *, double *, int *, double *, double *, double *, double *, double *, double *, double *);
-void Ccrosspaircounts(int *, double *, double *, int *, double *, double *, double *, int *); 
-void Cclosepaircounts(int *, double *, double *, double *, int *);
+void Cclosepaircounts(int *, double *, double *, double *, int *); 
+void Ccrosspaircounts(int *, double *, double *, int *, double *, double *, double *, int *);
 void uniqmapxy(int *, double *, double *, int *); 
 void uniqmap2M(int *, double *, double *, int *, int *);
 void anydupxy(int *, double *, double *, int *);

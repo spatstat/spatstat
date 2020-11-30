@@ -3,7 +3,7 @@
 #'
 #' cdf of |X1-X2| when X1,X2 are iid uniform in W, etc
 #'
-#'  $Revision: 1.10 $  $Date: 2016/02/11 10:17:12 $
+#'  $Revision: 1.11 $  $Date: 2020/11/30 09:45:59 $
 #'
 
 distcdf <- function(W, V=W, ..., dW=1, dV=dW, nr=1024, regularise=TRUE) {
@@ -82,36 +82,5 @@ distcdf <- function(W, V=W, ..., dW=1, dV=dW, nr=1024, regularise=TRUE) {
                c("Interpoint distance","Cumulative probability"),
                fname="CDF")
   return(result)
-}
-
-bw.frac <- function(X, ..., f=1/4) {
-  X <- as.owin(X)
-  g <- distcdf(X, ...)
-  r <- with(g, .x)
-  Fr <- with(g, .y)
-  iopt <- min(which(Fr >= f))
-  ropt <- r[iopt]
-  attr(ropt, "f") <- f
-  attr(ropt, "g") <- g
-  class(ropt) <- c("bw.frac", class(ropt))
-  return(ropt)
-}
-
-print.bw.frac <- function(x, ...) {
-  print(as.numeric(x), ...)
-}
-
-plot.bw.frac <- function(x, ...) {
-  xname <- short.deparse(substitute(x))
-  g <- attr(x, "g")
-  f <- attr(x, "f")
-  ropt <- as.numeric(x)
-  do.call(plot,
-          resolve.defaults(list(quote(g)),
-                             list(...),
-                             list(main=xname)))
-  abline(v=ropt, lty=3)
-  abline(h=f, lty=3)
-  invisible(NULL)
 }
 

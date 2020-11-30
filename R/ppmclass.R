@@ -229,6 +229,19 @@ function(x, ...,
   return(invisible(NULL))
 }
 
+# Extract version string from ppm object
+
+versionstring.ppm <- function(object) {
+  verifyclass(object, "ppm")
+  v <- object$version
+  if(is.null(v) || !is.list(v))
+    v <- list(major=1, minor=3, release=4)
+  vs <- paste(v$major, ".", v$minor, "-", v$release, sep="")
+  return(vs)
+}
+
+# Extract quadrature scheme
+
 quad.ppm <- function(object, drop=FALSE, clip=FALSE) {
   if(!is.ppm(object)) {
     if(is.kppm(object)) object <- object$po else

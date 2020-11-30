@@ -2,7 +2,7 @@
 #	interact.S
 #
 #
-#	$Revision: 1.29 $	$Date: 2020/01/26 04:25:08 $
+#	$Revision: 1.30 $	$Date: 2020/11/30 10:19:35 $
 #
 #	Class 'interact' representing the interpoint interaction
 #               of a point process model
@@ -315,7 +315,16 @@ interactionfamilyname <- function(x) {
   x <- as.interact(x)
   return(x$family$name)
 }
-                                      
+
+# Extract version string from interact object
+
+versionstring.interact <- function(object) {
+  verifyclass(object, "interact")
+  v <- object$version
+  return(v)  # NULL before 1.11-0
+}
+
+
 #### internal code for streamlining initialisation of interactions
 #
 #    x should be a partially-completed 'interact' object

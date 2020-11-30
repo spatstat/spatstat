@@ -3,7 +3,7 @@
 #' 
 #'    Dealing with the Random Fields package
 #' 
-#'    $Revision: 1.2 $  $Date: 2020/11/24 01:10:37 $
+#'    $Revision: 1.3 $  $Date: 2020/11/30 10:14:04 $
 
 kraeverRandomFields <- function() {
   kraever("RandomFieldsUtils")
@@ -68,4 +68,8 @@ getRandomFieldsModelGen <- function(model) {
     stop(paste0("Unable to retrieve RandomFields::RM", model))
   return(f)
 }
+
+# legacy function
+
+RandomFieldsSafe <- function() { TRUE }
 

@@ -3,21 +3,9 @@
 #
 #     Spatstat options and other internal states
 #
-#    $Revision: 1.89 $   $Date: 2020/10/14 02:20:30 $
+#    $Revision: 1.90 $   $Date: 2020/11/30 13:08:13 $
 #
 #
-
-.spEnv <- new.env()
-
-putSpatstatVariable <- function(name, value) {
-  assign(name, value, envir=.spEnv)
-}
-getSpatstatVariable <- function(name) {
-  get(name, envir=.spEnv)
-}
-existsSpatstatVariable <- function(name) {
-  exists(name, envir=.spEnv)
-}
 
 putSpatstatVariable("Spatstat.Options", list())
 putSpatstatVariable("Spatstat.ProgressBar", NULL)

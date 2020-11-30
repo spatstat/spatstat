@@ -4,7 +4,7 @@
 ##
 ##    class "fv" of function value objects
 ##
-##    $Revision: 1.163 $   $Date: 2020/11/04 02:21:05 $
+##    $Revision: 1.164 $   $Date: 2020/11/30 13:11:54 $
 ##
 ##
 ##    An "fv" object represents one or more related functions
@@ -117,6 +117,8 @@ fv <- function(x, argu="r", ylab=NULL, valu, fmla=NULL,
                         "fname",
                         "dotnames",
                         "shade")
+
+putSpatstatVariable("FvAttrib", .Spatstat.FvAttrib)
 
 as.data.frame.fv <- function(x, ...) {
   stopifnot(is.fv(x))
@@ -258,6 +260,8 @@ print.fv <- local({
                         ".",
                         "*",
                         ".a")
+
+putSpatstatVariable("FvAbbrev", .Spatstat.FvAbbrev)
 
 fvnames <- function(X, a=".") {
   verifyclass(X, "fv")

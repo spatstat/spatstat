@@ -3,7 +3,7 @@
 #'
 #'   Methods for generic 'unstack'
 #' 
-#'   $Revision: 1.5 $  $Date: 2019/09/12 04:05:58 $
+#'   $Revision: 1.6 $  $Date: 2020/11/30 09:40:56 $
 
 unstack.ppp <- unstack.psp <-
   unstack.lpp <-
@@ -19,23 +19,6 @@ unstack.ppp <- unstack.psp <-
   return(as.solist(y))
 }
 
-
-unstack.msr <- function(x, ...) {
-  trap.extra.arguments(...)
-  d <- dim(x)
-  if(is.null(d)) return(solist(x))
-  smo <- attr(x, "smoothdensity")
-  if(!inherits(smo, "imlist")) smo <- NULL
-  nc <- d[2]
-  y <- vector(mode="list", length=nc)
-  for(j in seq_len(nc)) {
-    xj <- x[,j,drop=FALSE]
-    if(!is.null(smo)) attr(xj, "smoothdensity") <- smo[[j]]
-    y[[j]] <- xj
-  }
-  names(y) <- colnames(x)
-  return(as.solist(y))
-}
 
 unstackFilter <- function(x) {
   ## deal with a whole swag of classes that do not need to be unstacked

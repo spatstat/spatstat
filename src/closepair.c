@@ -2,7 +2,7 @@
 
   closepair.c
 
-  $Revision: 1.34 $     $Date: 2018/12/18 02:43:11 $
+  $Revision: 1.35 $     $Date: 2020/11/30 10:59:58 $
 
   Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2018
   Licence: GNU Public Licence >= 2
@@ -11,12 +11,10 @@
 
   paircount()    count the total number of pairs (i, j) with distance < rmax
 
-  Cclosepaircounts
-                count for each i the number of j with distance < rmax
+  crosscount()   count total number of close pairs in two patterns
 
-  crosscount()   count number of close pairs in two patterns
-
-  (note: Ccrosspaircounts is defined in Estrauss.c)
+  [To count number of neighbours for each point,
+   see Cclosepaircounts, Ccrosspaircounts defined in Estrauss.c]
 
   duplicatedxy() find duplicated (x,y) pairs
 
@@ -120,73 +118,6 @@ void paircount(nxy, x, y, rmaxi, count)
   } 
 
   *count = counted;
-}
-
-/* count for each i the number of j closer than distance r */
-
-void Cclosepaircounts(nxy, x, y, rmaxi, counts) 
-     /* inputs */
-     int *nxy;         /* number of (x,y) points */
-     double *x, *y;    /* (x,y) coordinates */
-     double *rmaxi;    /* maximum distance */
-     /* output VECTOR, assumed initialised to 0 */
-     int *counts;
-{
-  int n, maxchunk, i, j;
-  double xi, yi, rmax, r2max, dx, dy, a;
-
-  n = *nxy;
-  rmax = *rmaxi;
-  r2max = rmax * rmax;
-
-  if(n == 0) 
-    return;
-
-  /* loop in chunks of 2^16 */
-
-  i = 0; maxchunk = 0; 
-
-  while(i < n) {
-
-    R_CheckUserInterrupt();
-
-    maxchunk += 65536; 
-    if(maxchunk > n) maxchunk = n;
-
-    for(; i < maxchunk; i++) {
-
-      xi = x[i];
-      yi = y[i];
-
-      if(i > 0) { 
-	/* scan backwards from i */
-	for(j = i - 1; j >= 0; j--) {
-	  dx = x[j] - xi;
-	  a = r2max - dx * dx;
-	  if(a < 0) 
-	    break;
-	  dy = y[j] - yi;
-	  a -= dy * dy;
-	  if(a >= 0)
-	    (counts[i])++;
-	}
-      }
-      if(i + 1 < n) {
-	/* scan forwards from i */
-	for(j = i + 1; j < n; j++) {
-	  dx = x[j] - xi;
-	  a = r2max - dx * dx;
-	  if(a < 0) 
-	    break;
-	  dy = y[j] - yi;
-	  a -= dy * dy;
-	  if(a >= 0)
-	    (counts[i])++;
-	}
-      } 
-      /* end loop over i */
-    }
-  } 
 }
 
 

@@ -498,3 +498,83 @@ Change log from spatstat 1.64-3 to spatstat 1.64-4
 ------------- installed on laptop      ---------------
 ------------- uploaded to GitHub       ---------------
 
+   unstack.R
+   measures.R
+	Moved 'unstack.msr' to measures.R
+	in preparation for package breakup
+	
+   rat.R
+   pool.R
+	Moved 'pool.rat' to pool.R
+	in preparation for package breakup
+	
+   distcdf.R
+   bw.frac.R [New file]
+   	Excised bw.frac to separate file
+	in preparation for package breakup
+	
+   DESCRIPTION
+   NEWS
+	Version 1.64-3.021
+
+------------- passed R-4.0.3 CMD check ---------------
+(with environment variable SPATSTAT_TEST defined/undefined)
+------------- installed on laptop      ---------------
+------------- uploaded to GitHub       ---------------
+
+   versions.R
+   pkgRandomFields.R
+   ppmclass.R
+   interact.R
+	Redistributed version-tracking code 
+	in preparation for package breakup
+
+   DESCRIPTION
+   NEWS
+	Version 1.64-3.022
+
+------------- passed R-4.0.3 CMD check ---------------
+(with environment variable SPATSTAT_TEST defined/undefined)
+------------- installed on laptop      ---------------
+------------- uploaded to GitHub       ---------------
+
+   exactdt.R
+   raster.c [New file]
+	Redistributed support code for raster images
+	in preparation for package breakup
+
+   pp3.R
+   ppx.R
+   randompp3.R [New file]
+   randomppx.R [New file]
+	Separated code for random point patterns
+	in preparation for package breakup
+
+   aaa.R [New file]
+   options.R
+	Moved the 'SpatstatVariable' code to aaa.R so that it is
+	accessible from all files.
+
+   fv.R
+	Assigned internal data to spatstat variables
+	to make them accessible from all files.
+	
+   smoothfv.R
+   varblock.R
+	use spatstat variables
+	
+   DESCRIPTION
+   NEWS
+	Version 1.64-3.023
+
+------------- passed R-4.0.3 CMD check ---------------
+(with environment variable SPATSTAT_TEST defined/undefined)
+------------- installed on laptop      ---------------
+------------- uploaded to GitHub       ---------------
+
+
+
+
+
+
+ 

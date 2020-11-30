@@ -3,7 +3,7 @@
 #
 #   Variance estimation using block subdivision
 #
-#   $Revision: 1.20 $  $Date: 2016/12/30 01:44:50 $
+#   $Revision: 1.21 $  $Date: 2020/11/30 13:11:20 $
 #
 
 varblock <- local({
@@ -97,7 +97,7 @@ varblock <- local({
     lower <- eval.fv(m + zcrit[1] * sem, dotonly=FALSE)
     upper <- eval.fv(m + zcrit[2] * sem, dotonly=FALSE)
     ## rebadge
-    fva <- .Spatstat.FvAttrib
+    fva <- getSpatstatVariable("FvAttrib")
     fva <- fva[fva %in% names(attributes(fX))]
     attributes(m)[fva] <- attributes(v)[fva] <- attributes(sd)[fva] <- 
         attributes(upper)[fva] <- attributes(lower)[fva] <- attributes(fX)[fva]

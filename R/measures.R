@@ -3,7 +3,7 @@
 #
 #  signed/vector valued measures with atomic and diffuse components
 #
-#  $Revision: 1.95 $  $Date: 2020/11/30 07:43:29 $
+#  $Revision: 1.96 $  $Date: 2020/11/30 09:40:48 $
 #
 msr <- function(qscheme, discrete, density, check=TRUE) {
   if(!is.quad(qscheme))
@@ -762,3 +762,21 @@ harmonise.msr <- local({
 
   harmonise.msr
 })
+
+unstack.msr <- function(x, ...) {
+  trap.extra.arguments(...)
+  d <- dim(x)
+  if(is.null(d)) return(solist(x))
+  smo <- attr(x, "smoothdensity")
+  if(!inherits(smo, "imlist")) smo <- NULL
+  nc <- d[2]
+  y <- vector(mode="list", length=nc)
+  for(j in seq_len(nc)) {
+    xj <- x[,j,drop=FALSE]
+    if(!is.null(smo)) attr(xj, "smoothdensity") <- smo[[j]]
+    y[[j]] <- xj
+  }
+  names(y) <- colnames(x)
+  return(as.solist(y))
+}
+

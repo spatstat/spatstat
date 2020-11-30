@@ -1,7 +1,7 @@
 #
 #  smoothfv.R
 #
-#   $Revision: 1.14 $   $Date: 2017/12/30 05:14:18 $
+#   $Revision: 1.15 $   $Date: 2020/11/30 13:11:33 $
 #
   
 # smooth.fv <- function(x, which="*", ..., 
@@ -19,8 +19,9 @@ Smooth.fv <- function(X, which="*", ...,
   stopifnot(is.character(which))
   method <- match.arg(method)
   if(!is.null(xinterval))
-    check.range(xinterval) 
-  if(length(which) == 1 && which %in% .Spatstat.FvAbbrev) {
+    check.range(xinterval)
+  fvab <- getSpatstatVariable("FvAbbrev")
+  if(length(which) == 1 && which %in% fvab) {
     if(which == ".x")
       stop("Cannot smooth the function argument")
     which <- fvnames(x, which)

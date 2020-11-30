@@ -1,7 +1,7 @@
 #
 # closepairs.R
 #
-#   $Revision: 1.44 $   $Date: 2019/10/28 08:48:47 $
+#   $Revision: 1.46 $   $Date: 2020/11/30 10:48:30 $
 #
 #  simply extract the r-close pairs from a dataset
 # 
@@ -763,3 +763,4 @@ tweak.closepairs <- function(cl, rmax, i, deltax, deltay, deltaz) {
   }
   return(cl)
 }
+

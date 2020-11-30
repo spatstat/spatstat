@@ -3,8 +3,8 @@
 #'
 #'   Code that must be read before the rest of the R code in spatstat
 #' 
-#'    $Revision: 1.4 $  $Date: 2014/12/10 10:34:53 $
-
+#'    $Revision: 1.6 $  $Date: 2020/11/30 13:17:22 $
+#' 
 #' ...................................................................
 #'   intermaker:
 #'   Class structure for functions like 'Strauss'

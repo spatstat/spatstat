@@ -155,6 +155,7 @@
 \alias{packupNNdata}
 \alias{parbreak}
 \alias{plan.legend.layout}
+\alias{pointweights}
 \alias{polyLaslett}
 \alias{polytileareaEngine}
 \alias{putSpatstatVariable}
@@ -302,6 +303,7 @@
 \alias{row.names<-.hyperframe}
 \alias{runifrect}
 \alias{safedeldir}
+\alias{safelookup}
 \alias{scalardilate.breakpts}
 \alias{scalardilate.diagramobj}
 \alias{shift.diagramobj}              
@@ -309,6 +311,7 @@
 \alias{shiftxy}              
 \alias{shiftxypolygon}              
 \alias{simulationresult}
+\alias{smudge}
 \alias{sort.im}
 \alias{spatstatDiagnostic}
 \alias{spatstat.deldir.setopt}
@@ -551,7 +554,6 @@
 \alias{plot.plotpairsim}
 \alias{plot.qqppm}
 \alias{plot.spatialcdf}
-\alias{pointweights}
 \alias{PoisSaddle}
 \alias{PoisSaddleArea}
 \alias{PoisSaddleGeyer}
@@ -648,7 +650,6 @@
 \alias{rpoint.multi}
 \alias{runifpoispp}          
 \alias{runifpoisppOnLines}          
-\alias{safelookup}
 \alias{safevalue}
 \alias{scalardilate.msr}
 \alias{scanmeasure}
@@ -672,7 +673,6 @@
 \alias{Smooth.solist}
 \alias{smoothcrossEngine}              
 \alias{smoothpointsEngine}
-\alias{smudge}
 \alias{spatstatClusterModelInfo}
 \alias{spatstatDPPModelInfo}
 \alias{spatstatRmhInfo}
@@ -927,6 +927,7 @@ packupNNdata(NND, NNW, what, k)
 parbreak(terse)
 plan.legend.layout(B, \dots, side, sep, size, sep.frac, size.frac,
                    started, map)
+pointweights(X, \dots, weights, parent)
 polyLaslett(X, \dots, oldX, verbose, plotit)
 polytileareaEngine(P, xrange, yrange, nx, ny, DivideByPixelArea)
 putSpatstatVariable(name, value)
@@ -1079,6 +1080,7 @@ rotxypolygon(p, angle = pi/2)
 \method{row.names}{hyperframe}(x) <- value
 runifrect(n, win, nsim, drop)
 safedeldir(X)
+safelookup(Z, x, factor, warn)
 \method{scalardilate}{breakpts}(X, f, \dots)
 \method{scalardilate}{diagramobj}(X, f, \dots)
 \method{shift}{diagramobj}(X, \dots)
@@ -1086,6 +1088,7 @@ safedeldir(X)
 shiftxy(X, vec = c(0, 0))
 shiftxypolygon(p, vec = c(0, 0))
 simulationresult(resultlist, nsim, drop, NameBase)
+smudge(X)
 \method{sort}{im}(x, \dots)
 spatstatDiagnostic(msg)
 spatstat.deldir.setopt(use.trigrafS, use.trigraf, debug.delaunay)
@@ -1424,7 +1427,6 @@ ploterodeimage(W, Z, \dots, Wcol, rangeZ, colsZ, do.plot)
            monochrome=spatstat.options('monochrome'),
            limcol=if(monochrome) "black" else "red")
 \method{plot}{spatialcdf}(x, \dots, xlab, ylab)
-pointweights(X, \dots, weights, parent)
 \method{ppm}{default}(Q, trend, interaction,
        \dots, covariates, data, covfunargs, subset, clipwin,
        correction, rbord, use.gam, method, forcefit, emend, project,
@@ -1546,7 +1548,6 @@ rocModel(lambda, nullmodel, \dots, high)
 rpoint.multi(n, f, fmax, marks, win, giveup, verbose, warn, nsim, drop)
 runifpoispp(lambda, win, \dots, nsim, drop)
 runifpoisppOnLines(lambda, L, nsim, drop)
-safelookup(Z, x, factor, warn)
 safevalue(x, default)
 \method{scalardilate}{msr}(X, f, \dots)
 scanmeasure(X, \dots)
@@ -1576,7 +1577,6 @@ smoothcrossEngine(Xdata, Xquery, values, sigma, \dots,
 smoothpointsEngine(x, values, sigma, \dots,
                    kernel, scalekernel,
                    weights, varcov, leaveoneout, sorted, cutoff, debug)
-smudge(X)
 spatstatClusterModelInfo(name, onlyPCP)
 spatstatDPPModelInfo(model)
 spatstatRmhInfo(cifname)

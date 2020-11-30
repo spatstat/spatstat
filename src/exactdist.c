@@ -4,7 +4,7 @@
        Exact distance transform of a point pattern
        (used to estimate the empty space function F)
        
-       $Revision: 1.13 $ $Date: 2018/12/18 02:43:11 $
+       $Revision: 1.14 $ $Date: 2020/11/30 11:19:48 $
 
   Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2018
   Licence: GNU Public Licence >= 2
@@ -38,36 +38,7 @@
 #include <R.h>
 #endif
 
-void 
-shape_raster(ras,data,xmin,ymin,xmax,ymax,nrow,ncol,mrow,mcol)
-     Raster          *ras;           /* the raster structure to be initialised */
-     void		*data;
-     int 	        nrow, ncol;  /* absolute dimensions of storage array */
-     int 		mrow, mcol;  /* margins clipped off */
-	                             /* e.g. valid width is ncol - 2*mcol columns */
-     double		xmin, ymin,	/* image dimensions in R^2 after clipping */
-		        xmax, ymax;     
-{
-	ras->data	= data;
-	ras->nrow 	= nrow;
-	ras->ncol 	= ncol;
-	ras->length 	= nrow * ncol;
-	ras->rmin	= mrow;
-	ras->rmax	= nrow - mrow - 1;
-	ras->cmin	= mcol;
-	ras->cmax	= ncol - mcol - 1;
-	ras->x0		= 
-	ras->xmin	= xmin;
-	ras->x1 	=
-	ras->xmax	= xmax;
-	ras->y0		=
-	ras->ymin	= ymin;
-	ras->y1		=
-	ras->ymax	= ymax;
-	ras->xstep	= (xmax-xmin)/(ncol - 2 * mcol - 1);
-	ras->ystep	= (ymax-ymin)/(nrow - 2 * mrow - 1);
-	/* Rprintf("xstep,ystep = %lf,%lf\n", ras->xstep,ras->ystep);  */
-}
+void shape_raster();
 
 void
 exact_dt(x, y, npt, dist, index)
