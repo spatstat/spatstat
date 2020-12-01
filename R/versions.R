@@ -63,8 +63,15 @@ versioncurrency.spatstat <- function(today=Sys.Date(), checkR=TRUE) {
   if(is.null(msg)) {
     ## check version of spatstat
     descfile <- system.file("DESCRIPTION", package="spatstat")
-    packdate <- as.Date(read.dcf(file=descfile, fields="Date"))
-    elapsed <- today - packdate
+    ap <- available.packages()
+    cran_version <- ap[ap[, 1] == "spatstat", 2]
+    local_version <- as.character(read.dcf(file=descfile, fields="Version"))
+    if (identical(cran_version, local_version)) {
+        elapsed <- 0
+    } else {
+        packdate <- as.Date(read.dcf(file=descfile, fields="Date"))
+        elapsed <- today - packdate
+    }
     if(elapsed > 75) {
       if(elapsed > 365) {
         n <- floor(elapsed/365)
