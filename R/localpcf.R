@@ -1,38 +1,47 @@
 #
 #   localpcf.R
 #
-#  $Revision: 1.23 $  $Date: 2019/06/23 06:38:19 $
+#  $Revision: 1.25 $  $Date: 2020/12/02 01:53:02 $
 #
 #
 
-localpcf <- function(X, ..., delta=NULL, rmax=NULL, nr=512, stoyan=0.15) {
+localpcf <- function(X, ..., delta=NULL, rmax=NULL, nr=512, stoyan=0.15,
+                     rvalue=NULL) {
   if(length(list(...)) > 0)
     warning("Additional arguments ignored")
   stopifnot(is.ppp(X))
-  localpcfengine(X, delta=delta, rmax=rmax, nr=nr, stoyan=stoyan)
+  localpcfengine(X, delta=delta, rmax=rmax, nr=nr, stoyan=stoyan, rvalue=rvalue)
 }
 
 localpcfinhom <- function(X, ..., delta=NULL, rmax=NULL, nr=512, stoyan=0.15,
                           lambda=NULL, sigma=NULL, varcov=NULL,
-                          update=TRUE, leaveoneout=TRUE) {
+                          update=TRUE, leaveoneout=TRUE,
+                          rvalue=NULL) {
   stopifnot(is.ppp(X))
   a <- resolve.lambda(X, lambda, ...,
                       sigma=sigma, varcov=varcov,
                       update=update, leaveoneout=leaveoneout)
   result <- localpcfengine(X, ...,
                            delta=delta, rmax=rmax, nr=nr, stoyan=stoyan,
-                           lambda=a$lambda)
-  if(a$danger)
+                           lambda=a$lambda, rvalue=rvalue)
+  if(is.null(rvalue) && a$danger)
     attr(result, "dangerous") <- a$dangerous
   return(result)
 }
  
 localpcfengine <- function(X, ...,
                            delta=NULL, rmax=NULL, nr=512, stoyan=0.15,
-                           lambda=NULL) {
+                           lambda=NULL, rvalue=NULL) {
+  if(!is.null(rvalue)) rmax <- rvalue
   m <- localpcfmatrix(X, delta=delta, rmax=rmax, nr=nr, stoyan=stoyan,
                       lambda=lambda)
   r <- attr(m, "r")
+  if(!is.null(rvalue)) {
+    nr <- length(r)
+    if(r[nr] != rvalue)
+      stop("Internal error - rvalue not attained")
+    return(as.numeric(m[nr,]))
+  }
   delta <- attr(m, "delta")
   nX <- npoints(X)
   if(nX == 0) {

@@ -7,10 +7,11 @@
   pair correlation function from each data point.
 }
 \usage{
-  localpcf(X, ..., delta=NULL, rmax=NULL, nr=512, stoyan=0.15)
+  localpcf(X, ..., delta=NULL, rmax=NULL, nr=512, stoyan=0.15, rvalue=NULL)
+
   localpcfinhom(X, ..., delta=NULL, rmax=NULL, nr=512, stoyan=0.15,
          lambda=NULL, sigma=NULL, varcov=NULL,
-         update=TRUE, leaveoneout=TRUE)
+         update=TRUE, leaveoneout=TRUE, rvalue=NULL)
 }
 \arguments{
   \item{X}{A point pattern (object of class \code{"ppp"}).}
@@ -62,6 +63,9 @@
     before the fitted intensity is computed.
     If \code{update=FALSE}, the fitted intensity of the
     model will be computed without re-fitting it to \code{X}.
+  }
+  \item{rvalue}{Optional. A \emph{single} value of the distance argument
+    \eqn{r} at which the local pair correlation should be computed.
   }
 }
 \details{
@@ -119,6 +123,11 @@
   If \code{lambda} is not given, then it will be estimated
   using a leave-one-out kernel density smoother as described
   in \code{\link{pcfinhom}}.
+
+  Alternatively, if the argument \code{rvalue} is given, and it is a
+  single number, then the function will only be computed for this value
+  of \eqn{r}, and the results will be returned as a numeric vector,
+  with one entry of the vector for each point of the pattern \code{X}.
 }
 \value{
   An object of class \code{"fv"}, see \code{\link{fv.object}},
@@ -142,7 +151,6 @@
   \code{\link{pcfinhom}}
 }
 \examples{
-  data(ponderosa)
   X <- ponderosa
 
   g <- localpcf(X, stoyan=0.5)
@@ -153,16 +161,20 @@
   # plot only the local pair correlation function for point number 7
   plot(g, est007 ~ r)
 
+  # Extract the local pair correlation at distance 15 metres, for each point
+  g15 <- localpcf(X, rvalue=15, stoyan=0.5)
+  g15[1:10]
+  # Check that the value for point 7 agrees with the curve for point 7:
+  points(15, g15[7], col="red") 
+
+  # Inhomogeneous 
   gi <- localpcfinhom(X, stoyan=0.5)
   a <- plot(gi, main=c("inhomogeneous local pair correlation functions",
                        "Ponderosa pines"),
                 legend=FALSE, col=colo, lty=1)
 }
-\author{\adrian
-  
-  
-  and \rolf
-  
+\author{
+  \spatstatAuthors.
 }
 \keyword{spatial}
 \keyword{nonparametric}

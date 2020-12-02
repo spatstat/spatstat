@@ -1346,7 +1346,7 @@ localKmultiEngine(X, from, to,
            correction, verbose, rvalue, sigma, varcov,
            lambdaX, update, leaveoneout,
            Iexplain, Jexplain, Ikey, Jkey, miss.update, miss.leave)
-localpcfengine(X, \dots, delta, rmax, nr, stoyan, lambda)
+localpcfengine(X, \dots, delta, rmax, nr, stoyan, lambda, rvalue)
 localpcfmatrix(X, i, \dots, lambda, delta, rmax, nr, stoyan)
 logi.engine(Q, trend, interaction, \dots, 
             covariates, subsetexpr, clipwin,

@@ -78,9 +78,16 @@
   are added. Then if the window is not rectangular, any dummy points
   lying outside it are deleted. 
   
-  If \code{nd} is missing, 
-  a default value (depending on the
-  data pattern \code{X}) is computed by \code{default.ngrid}.
+  If \code{nd} is missing, a default value is computed by
+  the undocumented internal function \code{\link{default.n.tiling}},
+  using information about the data pattern \code{X},
+  and other arguments and settings.
+  The default value of \code{nd} is always greater than or equal to
+  \code{spatstat.options("ndummy.min")}
+  and greater than or equal to \code{10 * ceiling(2 * sqrt(npoints(X))/10)},
+  and satisfies some other constraints. 
+  The default is designed so that model-fitting is relatively fast and stable,
+  rather than highly accurate.
 
   Alternative functions for creating dummy patterns
   include \code{\link{corners}},

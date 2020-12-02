@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.64-3.023
+        CHANGES IN spatstat VERSION 1.64-3.024
 
 OVERVIEW
 
@@ -34,6 +34,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o overall speed
     We have made an experimental change to the internals of spatstat
     which may accelerate computations involving large datasets.
+
+    o localpcf, localpcfinhom
+    New argument 'rvalue'.
     
 BUG FIXES
 
