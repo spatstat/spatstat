@@ -235,7 +235,7 @@
 }
 \seealso{
   \code{\link{fv.object}},
-  \code{\link[PKGNAME]{Kest}}
+  \code{\link[spatstat]{Kest}}
 }
 \author{\adrian
   

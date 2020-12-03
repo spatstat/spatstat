@@ -44,7 +44,7 @@
 }
 \seealso{
   \code{\link{is.marked}},
-  \code{\link[PKGNAME]{is.marked.ppm}}
+  \code{\link[spatstat]{is.marked.ppm}}
 }
 \examples{
    data(cells)

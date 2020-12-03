@@ -58,7 +58,7 @@ rat(ratio, numerator, denominator, check = TRUE)
 }
 \seealso{
   \code{\link{compatible}}, 
-  \code{\link[PKGNAME]{pool}}
+  \code{\link[spatstat]{pool}}
 }
 \keyword{spatial}
 \keyword{manip}

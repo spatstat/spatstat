@@ -69,7 +69,7 @@
 
   Many other classes of spatial object have a method
   for \code{Window}, but not \code{Window<-}.
-  See \code{\link[PKGNAME]{Window.ppm}}.
+  See \code{\link[spatstat]{Window.ppm}}.
 }
 \value{
   The result of \code{Window} is a window (object of class
@@ -82,7 +82,7 @@
   \spatstatAuthors.
 }
 \seealso{
-  \code{\link[PKGNAME]{Window.ppm}}
+  \code{\link[spatstat]{Window.ppm}}
 }
 \examples{
    ## point patterns

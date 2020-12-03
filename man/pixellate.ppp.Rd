@@ -114,7 +114,7 @@
 \seealso{
   \code{\link{pixellate}},
   \code{\link{im}}, \code{\link{as.im}},
-  \code{\link[PKGNAME]{density.ppp}}, \code{\link[PKGNAME]{Smooth.ppp}}.
+  \code{\link[spatstat]{density.ppp}}, \code{\link[spatstat]{Smooth.ppp}}.
 }
 \examples{
   plot(pixellate(humberside))

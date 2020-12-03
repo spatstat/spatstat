@@ -61,7 +61,7 @@
 \seealso{
   \code{\link[utils]{unstack}}
 
-  \code{\link[PKGNAME]{unstack.msr}}
+  \code{\link[spatstat]{unstack.msr}}
 
   See also methods for the generic \code{\link[base]{split}} such as
   \code{\link{split.ppp}}.

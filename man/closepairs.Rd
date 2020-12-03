@@ -119,7 +119,7 @@ crosspairs(X, Y, rmax, \dots)
   \code{\link{closepairs.pp3}} for the corresponding
   functions for 3D point patterns.
   
-  \code{\link[PKGNAME]{Kest}}, \code{\link[PKGNAME]{Kcross}},
+  \code{\link[spatstat]{Kest}}, \code{\link[spatstat]{Kcross}},
   \code{\link{nndist}}, \code{\link{nncross}},
   \code{\link{applynbd}}, \code{\link{markstat}}
   for functions which use these capabilities.

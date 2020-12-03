@@ -50,7 +50,7 @@
   midpoints of the bars in the barplot). 
 }
 \seealso{
-  \code{\link[PKGNAME]{spatialcdf}} for the cumulative distribution function
+  \code{\link[spatstat]{spatialcdf}} for the cumulative distribution function
   of an image.
 
   \code{\link{hist}},

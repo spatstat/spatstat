@@ -49,7 +49,7 @@ venn.tess(\dots, window = NULL)
   \code{\link{quadrats}}, \code{\link{hextess}},
   \code{\link{polartess}},
   \code{\link{dirichlet}}, \code{\link{delaunay}}, \code{\link{quantess}}
-  and \code{\link[PKGNAME]{rpoislinetess}}.
+  and \code{\link[spatstat]{rpoislinetess}}.
 }
 \examples{
    V <- venn.tess(A=square(1),

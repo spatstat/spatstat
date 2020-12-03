@@ -65,8 +65,8 @@
   random point patterns.
 }
 \seealso{
-  \code{\link[PKGNAME]{rstrat}},
-  \code{\link[PKGNAME]{runifpoint}},
+  \code{\link[spatstat]{rstrat}},
+  \code{\link[spatstat]{runifpoint}},
   \code{\link{quadscheme}}
 }
 \examples{

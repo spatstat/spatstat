@@ -60,7 +60,7 @@
 \seealso{
   \code{\link{pairdist}},
   \code{\link{nndist}},
-  \code{\link[PKGNAME]{Gest}}
+  \code{\link[spatstat]{Gest}}
 }
 \examples{
    L1 <- psp(runif(5), runif(5), runif(5), runif(5), owin())

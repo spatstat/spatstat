@@ -80,7 +80,7 @@
 \seealso{
   \code{\link{crossdist}},
   \code{\link{nndist}},
-  \code{\link[PKGNAME]{Kest}},
+  \code{\link[spatstat]{Kest}},
   \code{\link{closepairs}}
 }
 \examples{

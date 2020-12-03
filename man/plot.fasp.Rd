@@ -84,7 +84,7 @@
   an array of summary functions, usually associated with a point
   pattern. See \code{\link{fasp.object}} for details.
   Such an object is created, for example, 
-  by \code{\link[PKGNAME]{alltypes}}.
+  by \code{\link[spatstat]{alltypes}}.
 
   The function \code{plot.fasp} is
   a method for \code{plot}.  It calls \code{\link{plot.fv}} to plot the
@@ -126,7 +126,7 @@
 }
 
 \seealso{
-  \code{\link[PKGNAME]{alltypes}},
+  \code{\link[spatstat]{alltypes}},
   \code{\link{plot.fv}},
   \code{\link{fasp.object}}
 }

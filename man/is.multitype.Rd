@@ -45,7 +45,7 @@
 }
 \seealso{
   \code{\link{is.multitype.ppp}},
-  \code{\link[PKGNAME]{is.multitype.ppm}}
+  \code{\link[spatstat]{is.multitype.ppm}}
 }
 \author{\adrian
   

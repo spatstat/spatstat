@@ -46,7 +46,7 @@
   plotted.
 }
 \seealso{
-  \code{\link[PKGNAME]{spatialcdf}} for the cumulative distribution function
+  \code{\link[spatstat]{spatialcdf}} for the cumulative distribution function
   of an image or function.
 
   \code{\link{hist}},

@@ -57,7 +57,7 @@
   }
 }
 \seealso{
-  \code{\link[PKGNAME]{as.layered.msr}},
+  \code{\link[spatstat]{as.layered.msr}},
   \code{\link{layered}},
   \code{\link{split.ppp}}
 }

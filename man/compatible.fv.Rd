@@ -21,7 +21,7 @@
 \details{
   An object of class \code{"fv"} is essentially a data frame
   containing several different statistical estimates of the same
-  function. Such objects are returned by \code{\link[PKGNAME]{Kest}} and its
+  function. Such objects are returned by \code{\link[spatstat]{Kest}} and its
   relatives.
 
   This command tests whether such objects are compatible

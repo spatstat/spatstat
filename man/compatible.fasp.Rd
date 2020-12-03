@@ -14,7 +14,7 @@
 \details{
   An object of class \code{"fasp"} can be regarded as an array
   of functions. Such objects are returned by the
-  command \code{\link[PKGNAME]{alltypes}}.
+  command \code{\link[spatstat]{alltypes}}.
 
   This command tests whether such objects are compatible
   (so that, for example, they could be added or subtracted).

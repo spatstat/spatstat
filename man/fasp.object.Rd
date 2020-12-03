@@ -23,10 +23,10 @@
   for each possible pair of types \eqn{(i,j)}.
   This produces an \eqn{m \times m}{m *  m} array of functions.
 
-  For multitype point patterns the command \code{\link[PKGNAME]{alltypes}}
+  For multitype point patterns the command \code{\link[spatstat]{alltypes}}
   will compute arrays of summary functions for each possible
   type or for each possible pair of types.
-  The function \code{\link[PKGNAME]{alltypes}} 
+  The function \code{\link[spatstat]{alltypes}} 
   returns an object of class \code{"fasp"}.
 
   An object of class \code{"fasp"} is a list containing at least the
@@ -69,7 +69,7 @@
   and to combine two arrays.
 }
 \seealso{
-  \code{\link[PKGNAME]{alltypes}},
+  \code{\link[spatstat]{alltypes}},
   \code{\link{plot.fasp}},
   \code{\link{[.fasp}},
   \code{\link{eval.fasp}}

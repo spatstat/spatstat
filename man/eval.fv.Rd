@@ -32,7 +32,7 @@
 
   An object of class \code{"fv"} is essentially a data frame
   containing several different statistical estimates of the same
-  function. Such objects are returned by \code{\link[PKGNAME]{Kest}} and its
+  function. Such objects are returned by \code{\link[spatstat]{Kest}} and its
   relatives.
 
   For example, suppose \code{X} is an object of class \code{"fv"}
@@ -70,7 +70,7 @@
   values of the derivative of the function, the hazard rate, etc).
   If \code{dotonly=FALSE}, the expression will be evaluated for all columns.
 
-  For example the result of \code{\link[PKGNAME]{Fest}} includes several columns
+  For example the result of \code{\link[spatstat]{Fest}} includes several columns
   containing estimates of the empty space function \eqn{F(r)},
   but also includes an estimate of the
   \emph{hazard} \eqn{h(r)} of \eqn{F(r)}. Transformations that are valid
@@ -106,7 +106,7 @@
 }
 \seealso{
   \code{\link{fv.object}},
-  \code{\link[PKGNAME]{Kest}}
+  \code{\link[spatstat]{Kest}}
 }
 \examples{
   # manipulating the K function

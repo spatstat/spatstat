@@ -41,7 +41,7 @@ pointsOnLines(X, eps = NULL, np = 1000, shortok=TRUE)
 \seealso{
   \code{\link{psp}},
   \code{\link{ppp}},
-  \code{\link[PKGNAME]{runifpointOnLines}}
+  \code{\link[spatstat]{runifpointOnLines}}
 }
 \examples{
   X <- psp(runif(20), runif(20), runif(20), runif(20),  window=owin())

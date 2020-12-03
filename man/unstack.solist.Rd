@@ -53,7 +53,7 @@
 \seealso{
   \code{\link[utils]{unstack}}
 
-  \code{\link[PKGNAME]{unstack.msr}},
+  \code{\link[spatstat]{unstack.msr}},
   \code{\link{unstack.ppp}},
   \code{\link{unstack.lpp}},
   \code{\link{unstack.psp}}

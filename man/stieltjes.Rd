@@ -40,9 +40,9 @@ stieltjes(f, M, ...)
   (object of class \code{"fv"}, see \code{\link{fv.object}}).
   Objects of class \code{"stepfun"} are returned by
   \code{\link[stats]{ecdf}}, \code{\link{ewcdf}},
-  \code{\link[PKGNAME]{spatialcdf}} and other utilities.
+  \code{\link[spatstat]{spatialcdf}} and other utilities.
   Objects of class \code{"fv"} are returned
-  by the commands \code{\link[PKGNAME]{Kest}}, \code{\link[PKGNAME]{Gest}}, etc.
+  by the commands \code{\link[spatstat]{Kest}}, \code{\link[spatstat]{Gest}}, etc.
 }
 \value{
   A list containing the value of the Stieltjes integral
@@ -50,7 +50,7 @@ stieltjes(f, M, ...)
 }
 \seealso{
   \code{\link{fv.object}},
-  \code{\link[PKGNAME]{Gest}}
+  \code{\link[spatstat]{Gest}}
 }
 \examples{
   # estimate cdf of nearest neighbour distance in redwood data

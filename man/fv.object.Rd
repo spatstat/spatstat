@@ -16,13 +16,13 @@
   this class.
   
   Objects of class \code{"fv"} are returned by
-  \code{\link[PKGNAME]{Fest}}, \code{\link[PKGNAME]{Gest}},\code{\link[PKGNAME]{Jest}},
-  and \code{\link[PKGNAME]{Kest}} along with many other functions.
+  \code{\link[spatstat]{Fest}}, \code{\link[spatstat]{Gest}},\code{\link[spatstat]{Jest}},
+  and \code{\link[spatstat]{Kest}} along with many other functions.
 }
 \seealso{
   Objects of class \code{"fv"} are returned by
-  \code{\link[PKGNAME]{Fest}}, \code{\link[PKGNAME]{Gest}},\code{\link[PKGNAME]{Jest}},
-  and \code{\link[PKGNAME]{Kest}} along with many other functions.
+  \code{\link[spatstat]{Fest}}, \code{\link[spatstat]{Gest}},\code{\link[spatstat]{Jest}},
+  and \code{\link[spatstat]{Kest}} along with many other functions.
   
   See \code{\link{plot.fv}} for plotting an \code{"fv"} object.
 

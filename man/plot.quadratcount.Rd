@@ -69,7 +69,7 @@
   \code{\link{quadratcount}},
   \code{\link{plot.tess}},
   \code{\link[graphics]{text.default}},
-  \code{\link[PKGNAME]{plot.quadrattest}}.
+  \code{\link[spatstat]{plot.quadrattest}}.
 }
 \examples{
    plot(quadratcount(swedishpines, 5))

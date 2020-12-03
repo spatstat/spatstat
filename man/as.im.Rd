@@ -189,15 +189,15 @@
       \item
       an object of class \code{"densityfun"} representing a kernel
       estimate of intensity (created by
-      the command \code{\link[PKGNAME]{densityfun}}).
+      the command \code{\link[spatstat]{densityfun}}).
       The fast approximation is the Fast Fourier Transform
-      algorithm in \code{\link[PKGNAME]{density.ppp}}.
+      algorithm in \code{\link[spatstat]{density.ppp}}.
       \item
       an object of class \code{"Smoothfun"} 
       representing kernel-smoothed values
-      (created by the command \code{\link[PKGNAME]{Smoothfun}}).
+      (created by the command \code{\link[spatstat]{Smoothfun}}).
       The fast approximation is the Fast Fourier Transform
-      algorithm in \code{\link[PKGNAME]{Smooth.ppp}}.
+      algorithm in \code{\link[spatstat]{Smooth.ppp}}.
     }
     \item
     An \code{expression} involving the variables \code{x} and \code{y}
