@@ -32,7 +32,7 @@
 \value{
   An object of class \code{"quad"} describing the quadrature scheme
   (data points, dummy points, and quadrature weights)
-  suitable as the argument \code{Q} of the function \code{\link{ppm}()} for
+  suitable as the argument \code{Q} of the function \code{\link[PKGNAME]{ppm}()} for
   fitting a point process model.
 
   The quadrature scheme can be inspected using the
@@ -41,9 +41,9 @@
 }
 \details{
   This is the primary method for producing a quadrature schemes
-  for use by \code{\link{ppm}}.
+  for use by \code{\link[PKGNAME]{ppm}}.
   
-  The function \code{\link{ppm}} fits a point process model to an
+  The function \code{\link[PKGNAME]{ppm}} fits a point process model to an
   observed point pattern using 
   the Berman-Turner quadrature approximation (Berman and Turner, 1992;
   Baddeley and Turner, 2000) to the pseudolikelihood of the model. 
@@ -115,7 +115,7 @@
   \emph{Applied Statistics} \bold{41} (1992) 31--38.
 }
 \seealso{
-  \code{\link{ppm}},
+  \code{\link[PKGNAME]{ppm}},
   \code{\link{as.ppp}},
   \code{\link{quad.object}},
   \code{\link{gridweights}},

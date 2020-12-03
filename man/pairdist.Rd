@@ -42,7 +42,7 @@
   \code{\link{pairdist.default}},
   \code{\link{crossdist}},
   \code{\link{nndist}},
-  \code{\link{Kest}}
+  \code{\link[PKGNAME]{Kest}}
 }
 \author{Pavel Grabarnik
   \email{pavel.grabar@issp.serpukhov.su}

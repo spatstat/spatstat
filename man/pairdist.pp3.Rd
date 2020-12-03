@@ -50,7 +50,7 @@
   \code{\link{pairdist}},
   \code{\link{crossdist}},
   \code{\link{nndist}},
-  \code{\link{K3est}}
+  \code{\link[PKGNAME]{K3est}}
 }
 \examples{
    X <- runifpoint3(20)

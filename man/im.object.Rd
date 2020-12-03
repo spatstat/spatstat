@@ -31,7 +31,7 @@
   may be created by the functions
   \code{\link{im}} and \code{\link{as.im}}.
   Image objects are also returned by various functions including
-  \code{\link{distmap}}, \code{\link{Kmeasure}}, \code{\link{setcov}}, 
+  \code{\link{distmap}}, \code{\link[PKGNAME]{Kmeasure}}, \code{\link{setcov}}, 
   \code{\link{eval.im}} and \code{\link{cut.im}}.
 
   Image objects may be displayed using the methods

@@ -55,7 +55,7 @@ in any of several formats, into an object of class \code{"tess"}.
     tessellation.
     \item
     a quadrat test (object of class \code{"quadrattest"})
-    returned by the command \code{\link{quadrat.test}}. 
+    returned by the command \code{\link[PKGNAME]{quadrat.test}}. 
     The quadrats
     used to perform the test will be extracted and returned as a
     tessellation.

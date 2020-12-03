@@ -30,7 +30,8 @@
   and evaluates them at given \eqn{x,y} locations.
   It can be used in model formulas (for example in
   the model-fitting functions
-  \code{\link{lm},\link{glm},\link{gam}} and \code{\link{ppm}}) to specify a
+  \code{\link[stats]{lm},\link[stats]{glm},\link[mgcv]{gam}} and 
+  \code{\link[PKGNAME]{ppm}}) to specify a
   linear predictor which is a harmonic function.
 
   A function \eqn{f(x,y)} is harmonic if
@@ -44,8 +45,8 @@
   for fitting nonstationary spatial trend to point process models.
 }
 \seealso{
-  \code{\link{ppm}},
-  \code{\link{polynom}}
+  \code{\link[PKGNAME]{ppm}},
+  \code{\link[PKGNAME]{polynom}}
 }
 \examples{
    # inhomogeneous point pattern

@@ -53,7 +53,7 @@
 }
 \seealso{
   \code{\link{is.multitype}},
-  \code{\link{is.multitype.ppm}}
+  \code{\link[PKGNAME]{is.multitype.ppm}}
 }
 \examples{
    is.multitype(cells)  #FALSE - no marks

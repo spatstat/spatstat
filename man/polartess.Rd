@@ -95,7 +95,7 @@ polartess(W, \dots, nradial = NULL, nangular = NULL,
   \code{\link{quadrats}}, \code{\link{hextess}},
   \code{\link{venn.tess}},
   \code{\link{dirichlet}}, \code{\link{delaunay}}, \code{\link{quantess}}
-  and \code{\link{rpoislinetess}}.
+  and \code{\link[PKGNAME]{rpoislinetess}}.
   
 }
 \examples{

@@ -144,13 +144,13 @@
   See \code{\link{markstat}} for a common use of this function.
 
   To simply tabulate the marks in every \code{R}-neighbourhood, use
-  \code{\link{marktable}}.
+  \code{\link[PKGNAME]{marktable}}.
 }
 \seealso{
   \code{\link{ppp.object}},
   \code{\link{apply}},
   \code{\link{markstat}},
-  \code{\link{marktable}}
+  \code{\link[PKGNAME]{marktable}}
 }
 \examples{
   redwood

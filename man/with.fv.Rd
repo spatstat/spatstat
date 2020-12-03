@@ -86,7 +86,7 @@
   \code{\link{with}},
   \code{\link{fv.object}},
   \code{\link{eval.fv}},
-  \code{\link{Kest}}
+  \code{\link[PKGNAME]{Kest}}
 }
 \examples{
   # compute 4 estimates of the K function

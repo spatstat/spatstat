@@ -31,7 +31,8 @@
   is a convenient way of storing and plotting
   several different estimates of the same function.
   Objects of this class are returned 
-  by many commands in \pkg{spatstat}, such as \code{\link{Kest}}
+  by many commands in \pkg{spatstat},
+  such as \code{\link[PKGNAME]{Kest}},
   which returns an estimate of Ripley's \eqn{K}-function
   for a point pattern dataset.
 
@@ -92,12 +93,12 @@
   and \rolf
 }
 \seealso{
-   \code{\link{as.function.rhohat}}, 
+   \code{\link[PKGNAME]{as.function.rhohat}}, 
    \code{\link{fv}}, 
    \code{\link{fv.object}}, 
    \code{\link{fvnames}}, 
    \code{\link{plot.fv}}, 
-   \code{\link{Kest}}
+   \code{\link[PKGNAME]{Kest}}
 }
 \examples{
   K <- Kest(cells)

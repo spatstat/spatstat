@@ -98,8 +98,8 @@ nnmark(X, \dots, k = 1, at=c("pixels", "points"))
   
 }
 \seealso{
-  \code{\link{Smooth.ppp}},
-  \code{\link{marktable}},
+  \code{\link[PKGNAME]{Smooth.ppp}},
+  \code{\link[PKGNAME]{marktable}},
   \code{\link{nnwhich}}
 }
 \examples{

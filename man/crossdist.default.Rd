@@ -71,7 +71,7 @@
   \code{\link{crossdist.psp}},
   \code{\link{pairdist}},
   \code{\link{nndist}},
-  \code{\link{Gest}}
+  \code{\link[PKGNAME]{Gest}}
 }
 \examples{
    d <- crossdist(runif(7), runif(7), runif(12), runif(12))

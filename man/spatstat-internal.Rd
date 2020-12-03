@@ -1140,7 +1140,7 @@ xy.grid(xr, yr, nx, ny, dx, dy)
 xypolyselfint(p, eps, proper, yesorno, checkinternal)
 xypolygon2psp(p, w, check)
 ZeroValue(x)
-\method{ZeroValue}{im}
+\method{ZeroValue}{im}(x)
 \method{[}{localpcfmatrix}(x, i, \dots)
 accumulateStatus(x, stats)
 active.interactions(object)

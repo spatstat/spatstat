@@ -165,10 +165,33 @@ local({
 })
 
   
+#'
+#'   tests/closecore.R
+#'
+#' check 'closepairs/crosspairs' code
+#' invoked in core package
+#'
+#' $Revision: 1.1 $ $Date: 2020/12/03 02:04:00 $
+#' 
+#' ------- All this code must be run on every hardware -------
+#'
+
+local({
+  #' weightedclosepairs is currently in strauss.R
+  wi <- weightedclosepairs(redwood, 0.05, "isotropic")
+  wt <- weightedclosepairs(redwood, 0.05, "translate")
+  wp <- weightedclosepairs(redwood, 0.05, "periodic")
+  #' markmarkscatter uses closepairs.pp3
+  X <- runifpoint3(100)
+  marks(X) <- runif(100)
+  markmarkscatter(X, 0.2)
+  markmarkscatter(X[FALSE], 0.2)
+})
+
 ##  tests/closeshave.R
 ## check 'closepairs/crosspairs' code
 ## validity and memory allocation
-## $Revision: 1.23 $ $Date: 2020/04/28 12:58:26 $
+## $Revision: 1.26 $ $Date: 2020/12/03 02:32:09 $
 
 ## ------- All this code must be run on every hardware -------
 local({
@@ -283,7 +306,7 @@ local({
   u <- closepairs(cells, 0.09, periodic=TRUE, what="all")
   v <- closepairs(cells, 0.07, twice=FALSE, neat=TRUE)
   #' tight cluster - guess count does not work
-  Xc <- runifpoint(100, square(0.01))
+  Xc <- runifrect(100, square(0.01))
   Window(Xc) <- square(1)
   z <- closepairs(Xc, 0.02, what="indices", distinct=FALSE)
   z <- closepairs(Xc, 0.02, what="ijd",     distinct=FALSE)
@@ -294,11 +317,17 @@ local({
   z <- closepairs(Xc, 0.02, what="ijd",     distinct=FALSE)
   z <- closepairs(Xc, 0.02, what="all",     distinct=FALSE)
   spatstat.options(aop)
+
+  #' experimental
+  r <- 0.08
+  a <- closepairs(redwood, r)
+  b <- tweak.closepairs(a, r, 26, 0.1, 0.1)
 })
 
 local({
   #' Three-dimensional
-  X <- runifpoint3(100)
+  ##          X <- runifpoint3(100)
+  X <- pp3(runif(100), runif(100), runif(100), box3(c(0,1)))
   cl <- closepairs(X, 0.2, what="indices")
   cl <- closepairs(X, 0.2, what="ijd")
   cl <- closepairs(X, 0.2, distinct=FALSE)
@@ -310,30 +339,13 @@ local({
   #' trap obsolete usage
   cl <- closepairs(X, 0.2, ordered=FALSE)
   #' crosspairs
-  Y <- runifpoint3(100)
+  ##      Y <- runifpoint3(100)
+  Y <- pp3(runif(100), runif(100), runif(100), box3(c(0,1)))
   cr <- crosspairs(X, Y, 0.2, what="indices")
   cr <- crosspairs(X, Y, 0.2, what="ijd")
   #' Test memory overflow code
   cr <- crosspairs(X, Y, 0.2, what="ijd", nsize=2)
-  #' markmarkscatter uses closepairs.pp3
-  marks(X) <- runif(npoints(X))
-  markmarkscatter(X, 0.2)
-  markmarkscatter(X[FALSE], 0.2)
-})
-
-local({
-  #' weightedclosepairs is currently in strauss.R
-  wi <- weightedclosepairs(redwood, 0.05, "isotropic")
-  wt <- weightedclosepairs(redwood, 0.05, "translate")
-  wp <- weightedclosepairs(redwood, 0.05, "periodic")
-})
-
-local({
   #' experimental
-  r <- 0.08
-  a <- closepairs(redwood, r)
-  b <- tweak.closepairs(a, r, 26, 0.1, 0.1)
-  X <- runifpoint3(30)
   rr <- 0.2
   cl <- closepairs(X, rr)
   ii <- cl$i[[1]]
@@ -551,7 +563,7 @@ local({
 # tests/correctC.R
 # check for agreement between C and interpreted code
 # for interpoint distances etc.
-# $Revision: 1.7 $ $Date: 2020/04/28 12:58:26 $
+# $Revision: 1.8 $ $Date: 2020/12/03 03:06:04 $
 
 if(ALWAYS) { # depends on hardware
 local({
@@ -567,7 +579,8 @@ local({
 
   ## pairdist.ppp
   set.seed(190901)
-  X <- rpoispp(42)
+  ## X <- rpoispp(42)
+  X <- runifrect(max(2, rpois(1, 42)))
   dC <- pairdist(X, method="C")
   dR <- pairdist(X, method="interpreted")
   checkagree(dC, dR, "pairdist()")
@@ -581,7 +594,8 @@ local({
   checkagree(dCp2, dRp2, "pairdist(periodic=TRUE, squared=TRUE)")
 
   ## crossdist.ppp
-  Y <- rpoispp(42)
+  ## Y <- rpoispp(42)
+  Y <- runifrect(max(2, rpois(1, 42)))
   dC <- crossdist(X, Y, method="C")
   dR <- crossdist(X, Y, method="interpreted")
   checkagree(dC, dR, "crossdist()")

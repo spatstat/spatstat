@@ -57,7 +57,7 @@
   }
 }
 \seealso{
-  \code{\link{as.layered.msr}},
+  \code{\link[PKGNAME]{as.layered.msr}},
   \code{\link{layered}},
   \code{\link{split.ppp}}
 }

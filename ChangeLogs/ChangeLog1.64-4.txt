@@ -590,4 +590,93 @@ Change log from spatstat 1.64-3 to spatstat 1.64-4
 (with environment variable SPATSTAT_TEST defined/undefined)
 ------------- installed on laptop      ---------------
 ------------- uploaded to GitHub       ---------------
-   
+
+03 dec 2020
+
+   Window.Rd
+   applynbd.Rd
+   as.function.fv.Rd
+   as.fv.Rd
+   as.im.Rd
+   as.layered.Rd
+   as.tess.Rd
+   closepairs.Rd
+   closetriples.Rd
+   compatible.fasp.Rd
+   compatible.fv.Rd
+   crossdist.default.Rd
+   crossdist.pp3.Rd
+   crossdist.ppp.Rd
+   crossdist.psp.Rd
+   eval.fasp.Rd
+   eval.fv.Rd
+   fasp.object.Rd
+   fv.object.Rd
+   harmonic.Rd
+   hist.funxy.Rd
+   im.object.Rd
+   intensity.Rd
+   intensity.ppp.Rd
+   is.marked.Rd
+   is.marked.ppp.Rd
+   is.multitype.Rd
+   is.multitype.ppp.Rd
+   is.ppp.Rd
+   markstat.Rd
+   nearestValue.Rd
+   nndist.Rd
+   nndist.pp3.Rd
+   nnmark.Rd
+   hist.im.Rd
+   pairdist.Rd
+   pairdist.default.Rd
+   pairdist.pp3.Rd
+   pairdist.ppp.Rd
+   pixellate.ppp.Rd
+   pixelquad.Rd
+   plot.anylist.Rd
+   plot.fasp.Rd
+   plot.fv.Rd
+   plot.listof.Rd
+   plot.quadratcount.Rd
+   plot.solist.Rd
+   pointsOnLines.Rd
+   polartess.Rd
+   ppp.object.Rd
+   quad.object.Rd
+   quadratcount.Rd
+   quadrats.Rd
+   quadscheme.Rd
+   quadscheme.logi.Rd
+   rat.Rd
+   rlinegrid.Rd
+   rsyst.Rd
+   spatstat.options.Rd
+   stieltjes.Rd
+   summary.ppp.Rd
+   tess.Rd
+   unstack.ppp.Rd
+   unstack.solist.Rd
+   venn.tess.Rd
+   with.fv.Rd
+	Insert filepp directives in preparation for package breakup.
+
+   tests/closeshave.R
+   tests/closecore.R [New file]
+   	Split test code in preparation for package breakup.
+
+   tests/correctC.R
+   tests/dominic.R
+   tests/factorbugs.R
+   tests/hyperframe.R
+	Avoid using 'core' code, in preparation for package breakup.
+	
+   DESCRIPTION
+   NEWS
+	Version 1.64-3.025
+
+------------- passed R-4.0.3 CMD check ---------------
+(with environment variable SPATSTAT_TEST defined/undefined)
+------------- installed on laptop      ---------------
+------------- uploaded to GitHub       ---------------
+

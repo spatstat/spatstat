@@ -69,15 +69,15 @@
   of the data.
   
   Patterns may be generated at random by
-   \code{\link{runifpoint}},
-   \code{\link{rpoispp}},
-   \code{\link{rMaternI}},
-   \code{\link{rMaternII}},
-   \code{\link{rSSI}},
-   \code{\link{rNeymanScott}},
-   \code{\link{rMatClust}},
+   \code{\link[PKGNAME]{runifpoint}},
+   \code{\link[PKGNAME]{rpoispp}},
+   \code{\link[PKGNAME]{rMaternI}},
+   \code{\link[PKGNAME]{rMaternII}},
+   \code{\link[PKGNAME]{rSSI}},
+   \code{\link[PKGNAME]{rNeymanScott}},
+   \code{\link[PKGNAME]{rMatClust}},
    and
-   \code{\link{rThomas}}.
+   \code{\link[PKGNAME]{rThomas}}.
 
    Most functions which are intended to operate on a window
    (of class \code{\link{owin}})

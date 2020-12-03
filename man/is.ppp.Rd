@@ -14,7 +14,7 @@ is.ppp(x)
 \details{
   This function tests whether the object \code{x}
   is a point pattern object of class
-  \code{"ppp"}. See \code{\link{ppm.object}} for details
+  \code{"ppp"}. See \code{\link{ppp.object}} for details
   of this class.
 
   The result is determined to be \code{TRUE} if \code{x}

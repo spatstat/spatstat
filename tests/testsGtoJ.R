@@ -56,13 +56,13 @@ local({
 #
 # test "[.hyperframe" etc
 #
-#  $Revision: 1.8 $  $Date: 2020/04/28 12:58:26 $
+#  $Revision: 1.9 $  $Date: 2020/12/03 03:32:13 $
 #
 
 if(FULLTEST) {
 local({
   lambda <- runif(4, min=50, max=100)
-  X <- lapply(as.list(lambda), function(x) { rpoispp(x) })
+  X <- lapply(as.list(lambda), function(x) { runifrect(rpois(1, x)) })
   h <- hyperframe(lambda=lambda, X=X)
   h$lambda2 <- lambda^2
   h[, "lambda3"] <- lambda^3
@@ -89,7 +89,7 @@ local({
   dimnames(h)[[1]][2] <- "second"
 
   #' hyperframe with a hyperatom
-  H <- hyperframe(A=runif(3), B=1:3, D=runifpoint(10))
+  H <- hyperframe(A=runif(3), B=1:3, D=runifrect(10))
   H[,3]
   H[,3,drop=TRUE]
   #' special cases of [<-

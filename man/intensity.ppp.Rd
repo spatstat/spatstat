@@ -64,7 +64,7 @@
 }
 \seealso{
   \code{\link{intensity}}, 
-  \code{\link{intensity.ppm}}
+  \code{\link[PKGNAME]{intensity.ppm}}
 }
 \examples{
   japanesepines

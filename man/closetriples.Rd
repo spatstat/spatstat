@@ -32,7 +32,7 @@ closetriples(X, rmax)
 }
 \seealso{
   \code{\link{closepairs}},
-  \code{\link{Tstat}}.
+  \code{\link[PKGNAME]{Tstat}}.
 }
 \examples{
    closetriples(redwoodfull, 0.02)

@@ -751,12 +751,12 @@ local({
 #'
 #'   Additional tests for Dominic Schuhmacher's code
 #'
-#'   $Revision: 1.4 $  $Date: 2020/04/28 12:58:26 $
+#'   $Revision: 1.5 $  $Date: 2020/12/03 03:23:25 $
 
 if(ALWAYS) {   # tests C code
 local({
-  X <- runifpoint(10)
-  Y <- runifpoint(10)
+  X <- runifrect(10)
+  Y <- runifrect(10)
 
   d  <- pppdist(X, Y, type="ace", show.rprimal=TRUE)
   a <- matchingdist(d, type="ace")

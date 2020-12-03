@@ -114,7 +114,7 @@
   \code{\link{venn.tess}},
   \code{\link{polartess}},
   \code{\link{quantess}}
-  and \code{\link{rpoislinetess}}.
+  and \code{\link[PKGNAME]{rpoislinetess}}.
 }
 \value{
   An object of class \code{"tess"} representing the tessellation.
@@ -138,7 +138,7 @@
   \code{\link{venn.tess}},
   \code{\link{polartess}},
   \code{\link{dirichlet}}, \code{\link{delaunay}}, \code{\link{quantess}}
-  and \code{\link{rpoislinetess}}.
+  and \code{\link[PKGNAME]{rpoislinetess}}.
 
   To divide space into pieces containing equal
   amounts of stuff, use \code{\link{quantess}}.

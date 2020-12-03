@@ -44,7 +44,7 @@
   An object of class \code{"logiquad"} inheriting from \code{"quad"}
   describing the quadrature scheme 
   (data points, dummy points, and quadrature weights)
-  suitable as the argument \code{Q} of the function \code{\link{ppm}()} for
+  suitable as the argument \code{Q} of the function \code{\link[PKGNAME]{ppm}()} for
   fitting a point process model.
 
   The quadrature scheme can be inspected using the
@@ -53,11 +53,11 @@
 }
 \details{
   This is the primary method for producing a quadrature schemes
-  for use by \code{\link{ppm}} when the logistic regression
+  for use by \code{\link[PKGNAME]{ppm}} when the logistic regression
   approximation (Baddeley et al. 2013) to the pseudolikelihood of the
-  model is applied (i.e. when \code{method="logi"} in \code{\link{ppm}}).
+  model is applied (i.e. when \code{method="logi"} in \code{\link[PKGNAME]{ppm}}).
   
-  The function \code{\link{ppm}} fits a point process model to an
+  The function \code{\link[PKGNAME]{ppm}} fits a point process model to an
   observed point pattern. When used with the option \code{method="logi"}
   it requires a quadrature scheme consisting of 
   the original data point pattern and an additional pattern of dummy points.
@@ -123,7 +123,7 @@ weights are never used and only appear to be compatible with the class
   \emph{Biometrika} \bold{101} (2) 377--392.
 }
 \seealso{
-  \code{\link{ppm}},
+  \code{\link[PKGNAME]{ppm}},
   \code{\link{as.ppp}}
 }
 \examples{

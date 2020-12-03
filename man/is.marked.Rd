@@ -39,7 +39,7 @@
 }
 \seealso{
   \code{\link{is.marked.ppp}},
-  \code{\link{is.marked.ppm}}
+  \code{\link[PKGNAME]{is.marked.ppm}}
 }
 \author{\adrian
   

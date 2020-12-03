@@ -205,7 +205,7 @@
 \seealso{
   \code{\link{contour.listof}},
   \code{\link{image.listof}},
-  \code{\link{density.splitppp}}
+  \code{\link[PKGNAME]{density.splitppp}}
 }
 \section{Error messages}{
   If the error message \sQuote{Figure margins too large}

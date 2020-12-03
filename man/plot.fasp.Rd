@@ -83,7 +83,8 @@
   An object of class \code{"fasp"} represents
   an array of summary functions, usually associated with a point
   pattern. See \code{\link{fasp.object}} for details.
-  Such an object is created, for example, by \code{\link{alltypes}}.
+  Such an object is created, for example, 
+  by \code{\link[PKGNAME]{alltypes}}.
 
   The function \code{plot.fasp} is
   a method for \code{plot}.  It calls \code{\link{plot.fv}} to plot the
@@ -125,7 +126,7 @@
 }
 
 \seealso{
-  \code{\link{alltypes}},
+  \code{\link[PKGNAME]{alltypes}},
   \code{\link{plot.fv}},
   \code{\link{fasp.object}}
 }

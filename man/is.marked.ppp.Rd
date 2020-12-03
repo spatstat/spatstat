@@ -44,7 +44,7 @@
 }
 \seealso{
   \code{\link{is.marked}},
-  \code{\link{is.marked.ppm}}
+  \code{\link[PKGNAME]{is.marked.ppm}}
 }
 \examples{
    data(cells)
