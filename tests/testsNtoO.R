@@ -50,9 +50,7 @@ local({
 #
 # Also test whether minnndist(X) == min(nndist(X))
 #
-# Also test nnorient()
-#
-#   $Revision: 1.33 $  $Date: 2020/04/30 05:23:52 $
+#   $Revision: 1.36 $  $Date: 2020/12/04 03:45:59 $
 #
 
 
@@ -63,7 +61,7 @@ local({
 
   ## .......  Two dimensions ................
   if(ALWAYS) {
-    X <- runifpoint(24)
+    X <- runifrect(24)
 
     nn <- nndist(X)
     nnP <- f(pairdist(X), 1)
@@ -102,7 +100,7 @@ local({
 
   if(ALWAYS) {
     ## nncross.ppp without options
-    Y <- runifpoint(30)
+    Y <- runifrect(30)
     Y <- Y[nndist(Y) > 0.02]
     nc <- nncross(X,Y)
     ncd <- nc$dist
@@ -157,7 +155,7 @@ local({
 
   if(ALWAYS) {
     #' cover some C code blocks
-    Z <- runifpoint(50)
+    Z <- runifrect(50)
     X <- Z[1:30]
     Y <- Z[20:50]
     iX <- 1:30
@@ -184,8 +182,9 @@ local({
   ## .......  Three dimensions ................
 
   if(ALWAYS) {
-    X <- runifpoint3(42)
-
+    rthree <- function(n) { pp3(runif(n), runif(n), runif(n), box3(c(0,1))) }
+    ## X <- runifpoint3(42)
+    X <- rthree(42)
     nn <- nndist(X)
     nnP <- f(pairdist(X), 1)
     if(any(abs(nn - nnP) > eps))
@@ -209,7 +208,7 @@ local({
     ff <- function(mat,k) { apply(mat, 1, function(z,n) { sort(z)[n]  }, n=k) }
     gg <- function(mat,k) { apply(mat, 1, function(z,n) { order(z)[n] }, n=k) }
 
-    Y <- runifpoint3(20)
+    Y <- rthree(20)
     Y <- Y[nndist(Y) > 0.02]
     DXY <- crossdist(X,Y)
     a <- nncross(X,Y)
@@ -261,9 +260,16 @@ local({
   ## .......  m dimensions ................
 
   if(ALWAYS) {
-    B <- boxx(c(0,1),c(0,1),c(0,1),c(0,1))
-    X <- runifpointx(42, B)
-    Y <- runifpointx(50, B)
+    rx <- function(n) {
+      B <- boxx(c(0,1),c(0,1),c(0,1),c(0,1))
+      df <- replicate(4, runif(n), simplify=FALSE)
+      names(df) <- letters[23:26]
+      ppx(as.data.frame(df), B)
+    }
+    ## X <- runifpointx(42, B)
+    ## Y <- runifpointx(50, B)
+    X <- rx(42)
+    Y <- rx(50)
     Y <- Y[nndist(Y) > 0.02]
     DXY <- crossdist(X,Y)
   
@@ -383,6 +389,34 @@ local({
   }
 
   if(FULLTEST) {
+      ## nnfun.ppp
+    h <- nnfun(cells)
+    Z <- as.im(h)
+    d <- domain(h)
+    h <- nnfun(amacrine, value="mark")
+    d <- domain(h)
+    Z <- as.im(h)
+    h <- nnfun(longleaf, value="mark")
+    d <- domain(h)
+    Z <- as.im(h)
+  }
+
+})
+
+#
+#    tests/nnstat.R
+#
+# Check code that uses nndist/nnwhich
+#
+# nnorient()
+# stienen()
+#
+#   $Revision: 1.1 $  $Date: 2020/12/04 03:45:44 $
+#
+
+
+local({
+  if(FULLTEST) {
     #' test nnorient
     nnorient(cells, domain=erosion(Window(cells), 0.1))
     #' degenerate case
@@ -399,18 +433,8 @@ local({
     #' other cases
     U <- stienen(cells[1])
     V <- stienenSet(cells, edge=FALSE)
-
-    ## nnfun.ppp
-    f <- nnfun(cells)
-    Z <- as.im(f)
-    d <- domain(f)
-    f <- nnfun(amacrine, value="mark")
-    d <- domain(f)
-    Z <- as.im(f)
-    f <- nnfun(longleaf, value="mark")
-    d <- domain(f)
-    Z <- as.im(f)
   }
-
 })
 
+
+  

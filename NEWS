@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.64-3.025
+        CHANGES IN spatstat VERSION 1.64-3.026
 
 OVERVIEW
 
@@ -13,7 +13,7 @@ OVERVIEW
 
     o spatstat now requires spatstat.utils version >= 1.18-0
 
-    o spatstat now requires spatstat.data version >= 1.6-0
+    o spatstat now requires spatstat.data version >= 1.6-1
 
     o Version nickname: "Big Boy Pants"
 
@@ -40,6 +40,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
     
 BUG FIXES
 
+    o crossdist.pp3
+    Results with periodic=TRUE were partially incorrect.
+    Fixed.
+    
     o affine.owin
     For mask windows, the pixel resolution of the result
     was too fine, leading to very large datasets.

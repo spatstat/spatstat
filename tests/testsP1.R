@@ -40,13 +40,13 @@ local({
 #'
 #'   Check persp.im handling of NA, etc
 #' 
-#'   $Revision: 1.2 $  $Date: 2020/04/30 05:23:52 $
+#'   $Revision: 1.3 $  $Date: 2020/12/04 04:05:54 $
 
 if(FULLTEST) {
 local({
   set.seed(42)
   Z <- distmap(letterR, invert=TRUE)[letterR, drop=FALSE]
-  X <- runifpoint(100, Frame(Z))
+  X <- runifrect(100, Frame(Z))
   M <- persp(Z, colin=Z, visible=TRUE, phi=50)
   perspPoints(X, Z=Z, M=M)
   P <- psp(c(2.360, 3.079, 2.211),

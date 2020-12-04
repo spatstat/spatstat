@@ -44,7 +44,7 @@
   f
   f(5000, 4500)
   f(123456, 78910)
-  X <- runifpoint(5, Frame(humberside))
+  X <- runifrect(5, Frame(humberside))
   f(X)
   plot(f)
 }

@@ -40,7 +40,7 @@ bounding.box.xy(x, y=NULL)
   plot(w, add=TRUE)
   points(x,y)
 
-  X <- rpoispp(30)
+  X <- runifrect(30)
   plot(X, main="bounding.box.xy(X)")
   plot(bounding.box.xy(X), add=TRUE)
 }

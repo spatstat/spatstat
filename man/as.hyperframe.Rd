@@ -86,8 +86,7 @@ as.hyperframe(x, \dots)
    df <- data.frame(x=runif(4),y=letters[1:4])
    as.hyperframe(df)
 
-   sims <- list()
-   for(i in 1:3) sims[[i]] <- rpoispp(42)
+   sims <- replicate(3, runifrect(10), simplify=FALSE)
    as.hyperframe(as.listof(sims))
    as.hyperframe(as.solist(sims))
 }

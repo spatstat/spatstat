@@ -50,7 +50,7 @@
   a tessellation.
 }
 \examples{
-  X <- runifpoint(7)
+  X <- runifrect(7)
   V <- dirichlet(X)
   f <- as.function(V)
   f(0.1, 0.4)

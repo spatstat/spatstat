@@ -161,7 +161,7 @@ Whether it gets used or not, column named \code{marks} is
                  length=rep(0.1, 10),
                  angle=runif(10, 0, 2 * pi))
    a <- as.psp(stuff, window=owin())
-   b <- as.psp(from=runifpoint(10), to=runifpoint(10))
+   b <- as.psp(from=runifrect(10), to=runifrect(10))
 }
 \author{
   \spatstatAuthors.

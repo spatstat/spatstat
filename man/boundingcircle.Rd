@@ -77,7 +77,7 @@ boundingcircle(x, \dots)
   plot(boundingcircle(letterR), add=TRUE, border="green", lwd=2)
   plot(boundingcentre(letterR), pch="+", cex=2, col="blue", add=TRUE)
 
-  X <- runifpoint(5)
+  X <- runifrect(5)
   plot(X)
   plot(boundingcircle(X), add=TRUE)
   plot(boundingcentre(X), pch="+", cex=2, col="blue", add=TRUE)

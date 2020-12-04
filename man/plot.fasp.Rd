@@ -133,23 +133,14 @@
 
 \examples{
    \dontrun{
-   # Bramble Canes data.
-   data(bramblecanes)
-
-   X.G <- alltypes(bramblecanes,"G",dataname="Bramblecanes",verb=TRUE)
+   X.G <- demofuns[["alltypes(amacrine, 'G')"]]
+   ## equivalent to:  X.G <- alltypes(amacrine,"G")
    plot(X.G)
    plot(X.G,subset="r<=0.2")
    plot(X.G,formule=asin(sqrt(cbind(km,theo))) ~ asin(sqrt(theo)))
-   plot(X.G,fo=cbind(km,theo) - theo~r,subset="r<=0.2")
-
-   # Simulated data.
-   pp <- runifpoint(350, owin(c(0,1),c(0,1)))
-   pp <- pp \%mark\% factor(c(rep(1,50),rep(2,100),rep(3,200)))
-   X.K <- alltypes(pp,"K",verb=TRUE,dataname="Fake Data")
-   plot(X.K,fo=cbind(border,theo)~theo,subset="theo<=0.75")
+   plot(X.G,fo=cbind(km,theo) - theo~r, subset="theo<=0.9")
    }
 }
-
 \author{\adrian
   
   

@@ -188,14 +188,18 @@
  oak <- subset(lan, marks \%in\% oaknames, drop=TRUE)
 
  # To clip or not to clip
- X <- runifpoint(25, letterR)
- B <- owin(c(2.2, 3.9), c(2, 3.5))
+ X <- unmark(demopat)
+ B <- owin(c(5500, 9000), c(2500, 7400))
  opa <- par(mfrow=c(1,2))
  plot(X, main="X[B]")
- plot(X[B], border="red", cols="red", add=TRUE, show.all=TRUE, main="")
+ plot(X[B], add=TRUE,
+      cols="blue", col="pink", border="blue",
+      show.all=TRUE, main="")
+ plot(Window(X), add=TRUE)
  plot(X, main="X[B, clip=TRUE]")
  plot(B, add=TRUE, lty=2)
- plot(X[B, clip=TRUE], border="blue", cols="blue", add=TRUE,
+ plot(X[B, clip=TRUE], add=TRUE,
+      cols="blue", col="pink", border="blue", 
       show.all=TRUE, main="")
  par(opa)
 }

@@ -17,7 +17,7 @@ cat(paste("--------- Executing",
 #'
 #'    Quadrature schemes, dummy points etc
 #' 
-#'   $Revision: 1.7 $ $Date: 2020/05/01 02:42:58 $
+#'   $Revision: 1.8 $ $Date: 2020/12/04 04:56:26 $
 #'
 
 if(FULLTEST) {
@@ -48,7 +48,8 @@ local({
   n <- default.n.tiling(cells, ntile=4, quasi=TRUE)
 
   ## quadrature weights - special cases
-  X <- runifpoint(10, as.mask(letterR))
+  ## X <- runifpoint(10, as.mask(letterR))
+  X <- runifrect(10, Frame(letterR))[as.mask(letterR)]
   gr <- gridweights(X, ntile=12, npix=7) # causes warnings about zero digital area
   
   ## plot.quad 

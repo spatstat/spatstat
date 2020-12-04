@@ -4,7 +4,7 @@
 
   Distances between pairs of 3D points
 
-  $Revision: 1.4 $     $Date: 2018/12/18 02:43:11 $
+  $Revision: 1.5 $     $Date: 2020/12/04 08:53:52 $
 
   D3pairdist      Pairwise distances
   D3pair2dist     Pairwise distances squared
@@ -406,7 +406,7 @@ void D3crossP1dist(nfrom, xfrom, yfrom, zfrom,
 	if(dz2 < dz2p) dz2p = dz2;
 	dx2 = (dx + wide) * (dx + wide);
 	dy2 = (dy + high) * (dy + high);
-	dz2 = (dy + deep) * (dz + deep);
+	dz2 = (dz + deep) * (dz + deep);
 	if(dx2 < dx2p) dx2p = dx2;
 	if(dy2 < dy2p) dy2p = dy2;
 	if(dz2 < dz2p) dz2p = dz2;
@@ -454,7 +454,7 @@ void D3crossP2dist(nfrom, xfrom, yfrom, zfrom, nto, xto, yto, zto, xwidth, yheig
 	if(dz2 < dz2p) dz2p = dz2;
 	dx2 = (dx + wide) * (dx + wide);
 	dy2 = (dy + high) * (dy + high);
-	dz2 = (dy + deep) * (dz + deep);
+	dz2 = (dz + deep) * (dz + deep);
 	if(dx2 < dx2p) dx2p = dx2;
 	if(dy2 < dy2p) dy2p = dy2;
 	if(dz2 < dz2p) dz2p = dz2;

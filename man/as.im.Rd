@@ -347,9 +347,9 @@
   plot(solist(approx=Zapprox, exact=Zexact), main="")
 
   # pixellate the Dirichlet tessellation
-  Di <- dirichlet(runifpoint(10))
+  Di <- dirichlet(redwood)
   plot(as.im(Di))
-  plot(Di, add=TRUE)
+  plot(Di, add=TRUE, border="white")
 
   # as.im.data.frame is the reverse of as.data.frame.im
   grad <- bei.extra$grad

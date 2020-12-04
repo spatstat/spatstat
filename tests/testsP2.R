@@ -77,7 +77,7 @@ local({
 #'
 #'   Class support for ppm
 #'
-#'   $Revision: 1.7 $ $Date: 2020/04/30 05:23:52 $
+#'   $Revision: 1.8 $ $Date: 2020/12/04 08:24:43 $
 
 if(FULLTEST) {
 local({
@@ -136,11 +136,16 @@ local({
   fit0 <- update(fitZ, . ~ 1)
   anova(fit0, fitZ, override=TRUE)
 
+  #' (5) miscellaneous
+  
   ## example from Robert Aue - handling offsets
   X <- demohyper$Points[[1]]
   GH <- Hybrid(G=Geyer(r=0.1, sat=3), H=Hardcore(0.01))
   fit <- ppm(X ~ 1, GH)
   valid.ppm(fit)
+
+  #' case of boundingbox
+  boundingbox(cells, ppm(cells ~ 1))
 })
 
 reset.spatstat.options()
@@ -412,14 +417,18 @@ reset.spatstat.options()
 #'
 #'   tests/ppp.R
 #'
-#'   $Revision: 1.11 $ $Date: 2020/05/11 01:25:17 $
+#'   $Revision: 1.12 $ $Date: 2020/12/04 04:43:33 $
 #'
 #'  Untested cases in ppp() or associated code
 
 local({
-  X <- runifpoint(10, letterR)
-  Y <- runifpoint(10, complement.owin(letterR))
-
+  ## X <- runifpoint(10, letterR)
+  ## Y <- runifpoint(10, complement.owin(letterR))
+  Bin  <- owin(c(2.15, 2.45), c(0.85, 3.0))
+  Bout <- owin(c(2.75, 2.92), c(0.85, 1.4))
+  X <- runifrect(10, Bin)[letterR]
+  Y <- runifrect(10, Bout)[complement.owin(letterR)]
+  
   if(FULLTEST) {
     #' test handling of points out-of-bounds
     df <- rbind(as.data.frame(X), as.data.frame(Y))
@@ -464,36 +473,14 @@ local({
     set.seed(999)
     X <- cells
     B <- square(0.2)
-    X[B] <- runifpoint(3, B)
+    X[B] <- runifrect(3, B)
     #' checking 'value'
     Y <- flipxy(X)
     X[B] <- Y[square(0.3)]
     ## deprecated use of second argument
-    X[,1:4] <- runifpoint(3)  # deprecated
-    X[,B] <- runifpoint(3, B) # deprecated 
-    X[1:3, B] <- runifpoint(3, B) # deprecated but does not crash
-  
-    #' test as.ppp for spatial package if it is not installed
-    FR <- Frame(letterR)
-    as.ppp(list(x=X$x, y=X$y,
-                xl=FR$xrange[1], xu=FR$xrange[2],
-                yl=FR$yrange[1], yu=FR$yrange[2]))
-
-    #' various utilities
-    periodify(cells, 2)
-    periodify(demopat, 2)
-  }
-
-  if(ALWAYS) {  # involves C code
-    a <- multiplicity(finpines)
-    a <- multiplicity(longleaf)
-  }
-
-  if(FULLTEST) {
-    ## ppsubset
-    aa <- ppsubset(cells, square(0.1))
-    ## superimpose.ppp, extra cases
-    X <- runifpoint(20)
+    X[,1:4] <- runifrect(3)  # deprecated
+    X[,B] <- runifrect(3, B) # deprecated 
+    X[1:3, B] <- runifrect(20)
     A <- superimpose(cells, X, W="convex")
     A <- superimpose(cells, X, W=ripras)
     B <- superimpose(concatxy(cells), concatxy(X), W=NULL)
@@ -521,7 +508,7 @@ local({
 #
 # Test operations for ppx objects
 #
-#  $Revision: 1.8 $ $Date: 2020/11/04 05:07:53 $
+#  $Revision: 1.9 $ $Date: 2020/12/04 04:49:40 $
 #
 
 local({
@@ -587,11 +574,6 @@ local({
     M <- as.matrix(X)
     marks(X) <- df[,1]
     marks(X) <- df[,integer(0)]
-
-    #' trivial cases of random generators
-    B4 <- boxx(0:1, 0:1, 0:1, 0:1)
-    Z0 <- runifpointx(0, domain=B4, nsim=2)
-    Z1 <- runifpointx(1, domain=B4, nsim=2)
   }
 
   if(FULLTEST) {

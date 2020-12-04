@@ -349,7 +349,7 @@ local({
 #
 # Tests of owin geometry code
 #
-#  $Revision: 1.16 $  $Date: 2020/05/02 01:32:58 $
+#  $Revision: 1.17 $  $Date: 2020/12/04 08:24:51 $
 
 local({
   if(ALWAYS) { # C code
@@ -425,7 +425,6 @@ local({
   
     boundingbox(letterR)
     boundingbox(letterR, NULL)
-    boundingbox(cells, ppm(cells ~ 1))
     boundingbox(solist(letterR))
 
   }

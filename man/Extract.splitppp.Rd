@@ -40,11 +40,10 @@
   \code{\link{summary.splitppp}}
 }
 \examples{
-  data(amacrine)  # multitype point pattern
   y <- split(amacrine)
-  y[1]
-  y["off"]
-  y[1] <- list(runifpoint(42, Window(amacrine)))
+  y[[1]]
+  y[["off"]]
+  y[[1]] <- rsyst(Window(amacrine), 4, 3)
  }
 \author{
   \adrian

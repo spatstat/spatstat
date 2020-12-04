@@ -125,8 +125,7 @@
  plot(X)
 
  # a point pattern
- P <- rpoispp(20)
- X[P] <- 10
+ X[cells] <- 10
  plot(X)
 
  # change pixel value at a specific location

@@ -115,7 +115,7 @@
   \code{\link{solapply}} for a wrapper for \code{\link[base]{lapply}}.
 }
 \examples{
-  a <- Smooth(finpines, 2)
+  a <- solist(A=setcov(square(1)), B=setcov(square(2)))
   log(a)/2 - sqrt(a)
   range(a)
 }

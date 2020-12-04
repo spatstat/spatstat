@@ -37,16 +37,11 @@ as.solist(x, \dots)
   \code{\link{solapply}}.
 }
 \examples{
-  x <- list(cells, density(cells))
+  x <- list(cells, Window(cells), setcov(Window(cells)))
   y <- as.solist(x)
 }
-\author{\adrian
-  
-  
-  \rolf
-  
-  and \ege
-  
+\author{
+  \spatstatAuthors.
 }
 \keyword{spatial}
 \keyword{list}

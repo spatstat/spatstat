@@ -42,7 +42,7 @@ and \ege
   \code{\link{[.im}}
 }
 \examples{
-  d <- density(cells)
+  d <- setcov(square(1))
   f <- as.function(d)
   f(0.1, 0.3)
 }

@@ -14,7 +14,7 @@ cat(paste("--------- Executing",
           "test code -----------\n"))
 #'  tests/randoms.R
 #'   Further tests of random generation code
-#'  $Revision: 1.12 $ $Date: 2020/05/01 02:42:58 $
+#'  $Revision: 1.13 $ $Date: 2020/12/04 04:49:31 $
 
 
 local({
@@ -105,6 +105,11 @@ local({
   if(FULLTEST) {
     #' perfect simulation code infrastructure
     expandwinPerfect(letterR, 2, 3)
+
+    #' trivial cases of random generators for ppx
+    B4 <- boxx(0:1, 0:1, 0:1, 0:1)
+    Z0 <- runifpointx(0, domain=B4, nsim=2)
+    Z1 <- runifpointx(1, domain=B4, nsim=2)
   }
 
 })

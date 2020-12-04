@@ -84,9 +84,9 @@ bind.fv(x, y, labl = NULL, desc = NULL, preferred = NULL, clip=FALSE)
   \spatstatAuthors.
 }
 \examples{
-   data(cells)
    K1 <- Kest(cells, correction="border")
    K2 <- Kest(cells, correction="iso")
+
    # remove column 'theo' to avoid duplication
    K2 <- K2[, names(K2) != "theo"]
 

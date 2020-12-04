@@ -30,7 +30,7 @@
   \code{\link{bdist.pixels}}
 }
 \examples{
-  P <- runifpoint(15)
+  P <- runifrect(15)
   X <- dirichlet(P)
   plot(X, col="red")
   B <- bdist.tiles(X)

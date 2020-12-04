@@ -45,7 +45,7 @@
 \examples{
   W <- square(1)
   X <- as.im(function(x,y){sqrt(x^2+y^2)}, W)
-  Y <- dirichlet(runifpoint(12, W))
+  Y <- dirichlet(runifrect(12, W))
   # mean pixel value in each subset
   unlist(by(X, Y, mean))
   # trimmed mean

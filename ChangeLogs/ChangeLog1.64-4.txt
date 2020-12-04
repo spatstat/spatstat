@@ -680,3 +680,35 @@ Change log from spatstat 1.64-3 to spatstat 1.64-4
 ------------- installed on laptop      ---------------
 ------------- uploaded to GitHub       ---------------
 
+04 dec 2020
+
+   DESCRIPTION
+   NEWS
+	spatstat depends on spatstat.data 1.6-1
+	
+   *.Rd
+	Example code in help files destined for spatstat.geom
+	avoids using functionality of spatstat.core (where it is not relevant).
+	Uses the object 'demofuns' in spatstat.data 1.6-1
+	instead of evaluating summary functions.
+
+   tests/nndist.R
+   tests/nnstat.R [New file]
+   	Split test code according to destination
+
+   distan3.c
+	BUG FIX in C code for crossdist.pp3(X, Y, periodic=TRUE)
+
+   DESCRIPTION
+   NEWS
+	Version 1.64-3.026
+
+------------- passed R-4.0.3 CMD check ---------------
+(with environment variable SPATSTAT_TEST defined/undefined)
+------------- installed on laptop      ---------------
+------------- uploaded to GitHub       ---------------
+
+	
+   
+   
+	

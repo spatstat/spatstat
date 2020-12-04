@@ -69,10 +69,15 @@
    df <- data.frame(x=runif(4),y=runif(4),t=runif(4))
    X <- ppx(data=df, coord.type=c("s","s","t"))
    as.data.frame(X)
-   val <- runif(4)
-   E <- lapply(val, function(s) { rpoispp(s) })
+
+   # ppx with marks which are point patterns
+   val <- runif(4, max=10)
+   num <- sapply(val, rpois, n=1)
+   E <- lapply(num, runifrect)
    hf <- hyperframe(t=val, e=as.listof(E))
-   Z <- ppx(data=hf, domain=c(0,1))
+   Z <- ppx(data=hf, domain=c(0,10))
+
+   # convert ppx to a hyperframe
    as.hyperframe(Z)
    as.data.frame(Z)
 }

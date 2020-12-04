@@ -14,13 +14,13 @@ cat(paste("--------- Executing",
           "test code -----------\n"))
 #'   tests/tessera.R
 #'   Tessellation code, not elsewhere tested
-#'   $Revision: 1.8 $ $Date: 2020/05/02 01:32:58 $
+#'   $Revision: 1.9 $ $Date: 2020/12/04 08:04:38 $
 #'
 if(FULLTEST) {
 local({
   W <- owin()
   Wsub <- square(0.5)
-  X <- runifpoint(7, W)
+  X <- runifrect(7, W)
   A <- dirichlet(X)
   marks(A) <- 1:nobjects(A)
   Z <- distmap(letterR, invert=TRUE)[letterR, drop=FALSE]
@@ -63,7 +63,7 @@ local({
   #'
   Pe <- intersect.tess(A, Wsub, keepmarks=TRUE)
   Pm <- intersect.tess(A, as.mask(Wsub), keepmarks=TRUE)
-  H <- dirichlet(runifpoint(4, W))
+  H <- dirichlet(runifrect(4, W))
   AxH <- intersect.tess(A, H, keepmarks=TRUE) # A is marked, H is not
   HxA <- intersect.tess(H, A, keepmarks=TRUE) # A is marked, H is not
   
@@ -80,7 +80,7 @@ local({
   WH <- chop.tess(W, H)
   WV <- chop.tess(W, V)
   #'     polygonal tessellation
-  D <- dirichlet(runifpoint(4))
+  D <- dirichlet(runifrect(4))
   DH <- chop.tess(D, H)
   DV <- chop.tess(D, V)
   #'     image-based tessellation
@@ -119,8 +119,9 @@ local({
   if(anyDuplicated(tilenames(tes)))
     stop("quantess produced non-unique tilenames")
   ## 
-  ## 
-  da <- dirichletAreas(discretise(runifpoint(15, letterR)))
+  ##
+  XR <- runifrect(40, Frame(letterR))[letterR]
+  da <- dirichletAreas(discretise(XR))
 })
 }
 #

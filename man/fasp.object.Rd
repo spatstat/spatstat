@@ -75,9 +75,9 @@
   \code{\link{eval.fasp}}
 }
 \examples{
-  # multitype point pattern
-  data(amacrine)
-  GG <- alltypes(amacrine, "G")
+  GG <- demofuns[["alltypes(amacrine, 'G')"]]
+  ##   equivalent to evaluating GG <- alltypes(amacrine, 'G')
+
   plot(GG)
 
   # select the row corresponding to cells of type "on"

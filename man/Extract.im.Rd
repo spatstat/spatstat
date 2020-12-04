@@ -191,8 +191,7 @@
  plot(X[R, drop=FALSE, tight=TRUE])
 
  # a point pattern
- P <- rpoispp(20)
- Y <- X[P]
+ Y <- X[cells]
 
  # look up a specified location
  X[list(x=0.1,y=0.2)]

@@ -40,7 +40,7 @@ convexhull.xy(x, y=NULL)
   plot(w, add=TRUE)
   points(x,y)
 
-  X <- rpoispp(30)
+  X <- runifrect(30)
   plot(X, main="convexhull.xy(X)")
   plot(convexhull.xy(X), add=TRUE)
 }
