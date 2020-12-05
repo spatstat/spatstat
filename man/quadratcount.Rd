@@ -142,7 +142,7 @@
   John Wiley and Sons.
 } 
 \examples{
- X <- runifpoint(50)
+ X <- runifrect(50)
  quadratcount(X)
  quadratcount(X, 4, 5)
  quadratcount(X, xbreaks=c(0, 0.3, 1), ybreaks=c(0, 0.4, 0.8, 1))
@@ -162,7 +162,7 @@
  plot(quadratcount(split(humberside), 2, 3))
  
  # quadrats determined by tessellation:
- B <- dirichlet(runifpoint(6))
+ B <- dirichlet(runifrect(6))
  qX <- quadratcount(X, tess=B)
  plot(X, pch="+")
  plot(qX, add=TRUE, col="red", cex=1.5, lty=2)

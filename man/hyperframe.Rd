@@ -111,7 +111,7 @@
     stringsAsFactors=FALSE)
 
   lambda <- runif(4, min=50, max=100)
-  X <- lapply(as.list(lambda), function(x) { rpoispp(x) })
+  X <- lapply(as.list(lambda), rpoispp)
   h <- hyperframe(lambda=lambda, X=X)
   h
 

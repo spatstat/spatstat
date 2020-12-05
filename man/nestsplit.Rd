@@ -70,7 +70,7 @@
 
   # two tessellations
   Tx <- quantess(redwood, "x", 4)
-  Td <- dirichlet(runifpoint(5, Window(redwood)))
+  Td <- dirichlet(runifrect(5, Window(redwood)))
   Ntt <- nestsplit(redwood, Td, Tx)
   Ntt2 <- nestsplit(redwood, Td, ny=3)
 }

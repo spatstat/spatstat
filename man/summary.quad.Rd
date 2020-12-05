@@ -40,7 +40,7 @@
 }
 \examples{
   # make a quadrature scheme
-  Q <- quadscheme(rpoispp(42))
+  Q <- quadscheme(runifrect(42))
   # summarize it
   summary(Q)
   # save the summary

@@ -55,7 +55,7 @@
 \examples{
   W <- square(1)
   X <- as.im(function(x,y){sqrt(x^2+y^2)}, W)
-  Y <- dirichlet(runifpoint(12, W))
+  Y <- dirichlet(runifrect(12, W))
   plot(split(X,Y))
 }
 \author{\adrian

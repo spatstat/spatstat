@@ -65,7 +65,7 @@ invoke.symbolmap(map, values, x=NULL, y = NULL, \dots, add = FALSE,
                    size=function(x) sqrt(ifelse(x > 0, x/pi, -x))/15,
                    bg=function(x) ifelse(x > 0, "green", "red"))
   plot(square(1), main="")
-  a <- invoke.symbolmap(g, runif(10, -1, 1), runifpoint(10), add=TRUE)
+  a <- invoke.symbolmap(g, runif(10, -1, 1), runifrect(10), add=TRUE)
   a 
 }
 \keyword{spatial}

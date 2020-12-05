@@ -87,7 +87,6 @@
   \code{\link{plot.funxy}}
 }
 \examples{
-   data(letterR)
    f <- distfun(letterR)
    f
    plot(f)

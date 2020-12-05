@@ -71,7 +71,6 @@
   \code{\link{distmap.psp}}
 }
 \examples{
-  data(letterR)
   U <- distmap(letterR)
   \dontrun{
   plot(U)

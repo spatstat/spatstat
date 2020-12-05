@@ -119,7 +119,6 @@
  plot(X)
 
  # a polygonal subset
- data(letterR)
  R <- affine(letterR, diag(c(1,1)/2), c(-2,-0.7))
  X[R] <- 3
  plot(X)

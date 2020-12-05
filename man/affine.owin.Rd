@@ -51,7 +51,6 @@
   \dontrun{
   plot(X)
   }
-  data(letterR)
   affine(letterR, shear, c(0, 0.5))
   affine(as.mask(letterR), shear, c(0, 0.5))
 }

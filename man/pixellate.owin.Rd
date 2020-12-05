@@ -73,7 +73,6 @@
   \code{\link{as.im}}
 }
 \examples{
-   data(letterR)
    plot(pixellate(letterR, dimyx=15))
    W <- grow.rectangle(as.rectangle(letterR), 0.2)
    plot(pixellate(letterR, W, dimyx=15))

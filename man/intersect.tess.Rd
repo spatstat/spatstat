@@ -62,15 +62,14 @@
 \examples{
   opa <- par(mfrow=c(1,3))
 # polygon
-  data(letterR)
   plot(letterR)
 # tessellation of rectangles
   X <- tess(xgrid=seq(2, 4, length=10), ygrid=seq(0, 3.5, length=8))
   plot(X)
   plot(intersect.tess(X, letterR))
 
-  A <- runifpoint(10)
-  B <- runifpoint(10)
+  A <- runifrect(10)
+  B <- runifrect(10)
   plot(DA <- dirichlet(A))
   plot(DB <- dirichlet(B))
   plot(intersect.tess(DA, DB))

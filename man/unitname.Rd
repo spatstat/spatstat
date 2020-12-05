@@ -110,7 +110,7 @@ unitname(x) <- value
 }
 
 \examples{
-  X <- runifpoint(20)
+  X <- runifrect(20)
 
   # if the unit of length is 1 metre:
   unitname(X) <- c("metre", "metres")

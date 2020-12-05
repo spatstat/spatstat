@@ -195,8 +195,8 @@ m
 plot(m)}
   
 # differing cardinalities
-X <- runifpoint(14)
-Y <- runifpoint(10)
+X <- runifrect(14)
+Y <- runifrect(10)
 m1 <- pppdist(X, Y, type="spa")
 m2 <- pppdist(X, Y, type="ace")
 m3 <- pppdist(X, Y, type="mat", auction=FALSE)
@@ -209,8 +209,8 @@ m2$matrix
 m3$matrix}
 
 # q = Inf
-X <- runifpoint(10)
-Y <- runifpoint(10)
+X <- runifrect(10)
+Y <- runifrect(10)
 mx1 <- pppdist(X, Y, q=Inf, matching=FALSE)
 mx2 <- pppdist(X, Y, q=Inf, matching=FALSE, ccode=FALSE, approximation=50)
 mx3 <- pppdist(X, Y, q=Inf, matching=FALSE, approximation=Inf)

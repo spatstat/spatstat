@@ -41,7 +41,6 @@
   \code{\link{owin.object}}.
 }
 \examples{
-  data(letterR)
   vert <- vertices(letterR)
 
   plot(letterR, main="Polygonal vertices")

@@ -95,8 +95,8 @@ deltametric(A, B, p = 2, c = Inf, ...)
   \code{\link{distmap}}
 }
 \examples{
-  X <- runifpoint(20)
-  Y <- runifpoint(10)
+  X <- runifrect(20)
+  Y <- runifrect(10)
   deltametric(X, Y, p=1,c=0.1)
 }
 \keyword{spatial}

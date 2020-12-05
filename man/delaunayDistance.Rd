@@ -36,7 +36,7 @@ delaunayDistance(X)
   \code{\link{delaunayNetwork}}.
 }
 \examples{
-  X <- runifpoint(20)
+  X <- runifrect(20)
   M <- delaunayDistance(X)
   plot(delaunay(X), lty=3)
   text(X, labels=M[1, ], cex=2)

@@ -708,7 +708,25 @@ Change log from spatstat 1.64-3 to spatstat 1.64-4
 ------------- installed on laptop      ---------------
 ------------- uploaded to GitHub       ---------------
 
-	
-   
+05 dec 2020
+
+   runifrect.Rd [New file]
+   spatstat-internal.Rd
+	Exposed 'runifrect' as a user level function
+	in preparation for breakup
+
+   *Rd
+	tweaks to examples in numerous files
+	in preparation for breakup
+
+   DESCRIPTION
+   NEWS
+	Version 1.64-3.027
+
+------------- passed R-4.0.3 CMD check ---------------
+(with environment variable SPATSTAT_TEST defined/undefined)
+------------- installed on laptop      ---------------
+------------- uploaded to GitHub       ---------------
+
    
 	

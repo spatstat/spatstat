@@ -53,7 +53,7 @@ uniquemap(x)
   \code{\link{uniquemap.default}}
 }
 \examples{
-  Y <- runifpoint(4)
+  Y <- runifrect(4)
   X <- Y[c(1,2,3,4,2,1)]
   uniquemap(X)
 }

@@ -44,7 +44,7 @@ dirichlet(X)
   \code{\link{dirichletVertices}}
 }
 \examples{
-  X <- runifpoint(42)
+  X <- runifrect(42)
   plot(dirichlet(X))
   plot(X, add=TRUE)
 }

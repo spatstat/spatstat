@@ -49,7 +49,7 @@ tileindex(x, y, Z)
   value is the tile index.
 }
 \examples{
-  X <- runifpoint(7)
+  X <- runifrect(7)
   V <- dirichlet(X)
   tileindex(0.1, 0.4, V)
   tileindex(list(x=0.1, y=0.4), Z=V)

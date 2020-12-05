@@ -115,7 +115,6 @@
  X <- rpoint(100, function(x,y) { x^2 + y^2})
 
  # irregular window
- data(letterR)
  X <- rpoint(100, function(x,y) { x^2 + y^2}, win=letterR)
 
  # make a pixel image 

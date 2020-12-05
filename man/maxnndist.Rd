@@ -57,7 +57,7 @@ maxnndist(X, positive=FALSE, by=NULL)
   minnndist(lansing, positive=TRUE)
 
   if(interactive()) {
-     X <- rpoispp(1e6)
+     X <- runifrect(1e6)
      system.time(min(nndist(X)))
      system.time(minnndist(X))
   }

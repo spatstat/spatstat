@@ -71,7 +71,6 @@ quadrats(X, nx = 5, ny = nx, xbreaks = NULL, ybreaks = NULL, keepempty=FALSE)
  Z <- quadrats(W, 4, 5)
  plot(Z)
 
- data(letterR)
  plot(quadrats(letterR, 5, 7))
 }
 \seealso{

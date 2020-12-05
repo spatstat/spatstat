@@ -22,7 +22,6 @@
   \code{\link{summary.im}}
 }
 \examples{
-  data(letterR)
   U <- as.im(letterR)
   U
 }

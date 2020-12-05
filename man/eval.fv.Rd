@@ -110,14 +110,14 @@
 }
 \examples{
   # manipulating the K function
-  X <- rpoispp(42)
+  X <- runifrect(42)
   Ks <- Kest(X)
 
   eval.fv(Ks + 3)
   Ls <- eval.fv(sqrt(Ks/pi))
 
   # manipulating two K functions
-  Y <- rpoispp(20)
+  Y <- runifrect(20)
   Kr <- Kest(Y)
   
   Kdif <- eval.fv(Ks - Kr)

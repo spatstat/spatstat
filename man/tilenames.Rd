@@ -45,7 +45,7 @@ tilenames(x) <- value
   \code{\link{tiles}}
 }
 \examples{
-  D <- dirichlet(runifpoint(10))
+  D <- dirichlet(runifrect(10))
   tilenames(D)
   tilenames(D) <- paste("Cell", 1:10)
   tilenames(D)

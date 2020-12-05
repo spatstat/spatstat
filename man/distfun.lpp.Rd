@@ -68,7 +68,6 @@
   \code{\link{nnfun.lpp}}.
 }
 \examples{
-   data(letterR)
    X <- runiflpp(3, simplenet)
    f <- distfun(X)
    f

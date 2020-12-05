@@ -106,7 +106,7 @@ textureplot(x, \dots,
   Z <- setcov(owin(), dimyx=nd)
   Zcut <- cut(Z, 3, labels=c("Lo", "Med", "Hi"))
   textureplot(Zcut)
-  textureplot(dirichlet(runifpoint(6)))
+  textureplot(dirichlet(runifrect(6)))
 }
 \keyword{spatial}
 \keyword{hplot}

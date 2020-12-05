@@ -34,7 +34,7 @@ delaunay(X)
   \code{\link{delaunayNetwork}}.
 }
 \examples{
-  X <- runifpoint(42)
+  X <- runifrect(42)
   plot(delaunay(X))
   plot(X, add=TRUE)
 }

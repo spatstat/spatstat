@@ -159,7 +159,7 @@
 # Scramble the locations of the 'on' cells
  X <- amacrine
  u <- split(X)
- u$on <- runifpoint(ex=amon)
+ u$on <- runifrect(npoints(amon), Window(amon))
  split(X) <- u
 
 # Point pattern with continuous marks

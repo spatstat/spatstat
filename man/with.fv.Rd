@@ -90,7 +90,7 @@
 }
 \examples{
   # compute 4 estimates of the K function
-  X <- rpoispp(42)
+  X <- runifrect(42)
   K <- Kest(X)
   plot(K)
 

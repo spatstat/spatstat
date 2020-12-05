@@ -74,7 +74,6 @@
   plot(X)
 
   # polygonal boundary
-  data(letterR)
   X <- rsyst(letterR, 5, 10)
   plot(X)
 }

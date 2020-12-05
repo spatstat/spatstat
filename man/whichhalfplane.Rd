@@ -38,7 +38,7 @@ whichhalfplane(L, x, y = NULL)
 }
 \examples{
   L <- infline(p=runif(3), theta=runif(3, max=2*pi))
-  X <- runifpoint(4)
+  X <- runifrect(4)
   whichhalfplane(L, X)
 }
 \keyword{spatial}

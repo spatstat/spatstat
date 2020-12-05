@@ -85,7 +85,8 @@
   \code{\link{layered}}
 }
 \examples{
-  L <- layered(letterR, runifpoint(20, letterR))
+  B <- owin(c(5500, 9000), c(2500, 7400))
+  L <- layered(Window(demopat), unmark(demopat)[B])
   plot(L)
   plot(rotate(L, pi/4))
 }

@@ -70,8 +70,8 @@
 }
 \examples{
   # an optimal matching
-  X <- runifpoint(20)
-  Y <- runifpoint(20)
+  X <- runifrect(20)
+  Y <- runifrect(20)
   m.opt <- pppdist(X, Y)
   summary(m.opt)
   matchingdist(m.opt)

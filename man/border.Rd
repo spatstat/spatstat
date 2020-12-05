@@ -57,7 +57,6 @@ border(w, r, outside=FALSE, ...)
    border(u, 0.1, outside=TRUE)
 # polygon
    \testonly{opa <- spatstat.options(npixel=32)}
-   data(letterR)
    plot(letterR)
    plot(border(letterR, 0.1), add=TRUE)
    plot(border(letterR, 0.1, outside=TRUE), add=TRUE)

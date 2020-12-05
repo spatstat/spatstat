@@ -67,7 +67,7 @@ pixelquad(X, W = as.owin(X))
 }
 \examples{
   W <- owin(c(0,1),c(0,1))
-  X <- runifpoint(42, W)
+  X <- runifrect(42, W)
   W <- as.mask(W,dimyx=128)
   pixelquad(X,W)
 }

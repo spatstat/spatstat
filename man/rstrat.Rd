@@ -61,7 +61,6 @@
   plot(X)
 
   # polygonal boundary
-  data(letterR)
   X <- rstrat(letterR, 5, 10, k=3)
   plot(X)
 }

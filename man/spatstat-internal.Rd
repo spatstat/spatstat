@@ -301,7 +301,6 @@
 \alias{rotxypolygon}
 \alias{row.names.hyperframe}
 \alias{row.names<-.hyperframe}
-\alias{runifrect}
 \alias{safedeldir}
 \alias{safelookup}
 \alias{scalardilate.breakpts}
@@ -1078,7 +1077,6 @@ rotxy(X, angle = pi/2)
 rotxypolygon(p, angle = pi/2)
 \method{row.names}{hyperframe}(x)
 \method{row.names}{hyperframe}(x) <- value
-runifrect(n, win, nsim, drop)
 safedeldir(X)
 safelookup(Z, x, factor, warn)
 \method{scalardilate}{breakpts}(X, f, \dots)

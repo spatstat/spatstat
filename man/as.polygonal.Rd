@@ -57,7 +57,6 @@ as.polygonal(W, repair=FALSE)
   \code{\link{simplify.owin}}
 }
 \examples{
-   data(letterR)
    m <- as.mask(letterR, dimyx=32)
    p <- as.polygonal(m)
    if(interactive()) {

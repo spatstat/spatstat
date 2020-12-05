@@ -141,7 +141,7 @@
 
   # random dummy pattern
   \dontrun{
-  D <- runifpoint(250, Window(simdat))
+  D <- runifrect(250, Window(simdat))
   Q <- quadscheme(simdat, D, method="dirichlet", exact=FALSE)
   }
 

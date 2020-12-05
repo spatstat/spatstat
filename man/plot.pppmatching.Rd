@@ -66,8 +66,8 @@
   \code{\link{pppmatching.object}}
 }
 \examples{
-  X <- runifpoint(7)
-  Y <- runifpoint(7)
+  X <- runifrect(7)
+  Y <- runifrect(7)
   am <- r2dtable(1, rep(10,7), rep(10,7))[[1]]/10
   m2 <- pppmatching(X, Y, am)
   plot(m2, adjust=0.3)

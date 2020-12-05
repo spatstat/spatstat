@@ -36,7 +36,6 @@ perimeter(w)
 }
 \examples{
   perimeter(square(3))
-  data(letterR)
   perimeter(letterR)
   if(interactive()) print(perimeter(as.mask(letterR)))
 }

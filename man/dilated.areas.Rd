@@ -69,7 +69,7 @@
   \code{\link{eroded.areas}}
 }
 \examples{
-  X <- runifpoint(10)
+  X <- runifrect(10)
   a <- dilated.areas(X, c(0.1,0.2), W=square(1), exact=TRUE)
 }
 \author{\adrian

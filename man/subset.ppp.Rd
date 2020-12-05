@@ -139,6 +139,7 @@
  vv <- subset(chicago, x + y > 1100 & marks == "assault", drop=TRUE)
 
  a <- subset(rpoispp3(40), z > 0.5)
+
 }
 \keyword{spatial}
 \keyword{manip}

@@ -150,7 +150,6 @@
  pp <- rmpoispp(c(30,70))
 
  # works in any window
- data(letterR)
  pp <- rmpoispp(c(30,70), win=letterR, types=c("A","B"))
 
  # inhomogeneous lambda(x,y,m)

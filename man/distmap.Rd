@@ -46,7 +46,6 @@
 \examples{
   data(cells)
   U <- distmap(cells)
-  data(letterR)
   V <- distmap(letterR)
   \dontrun{
   plot(U)

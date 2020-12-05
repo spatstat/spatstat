@@ -76,7 +76,7 @@
   plot(w, add=TRUE)
   points(x,y)
 
-  X <- rpoispp(15)
+  X <- runifrect(15)
   plot(X, main="ripras(X)")
   plot(ripras(X), add=TRUE)
 

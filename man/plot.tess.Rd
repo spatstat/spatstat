@@ -107,7 +107,7 @@
 }
 \examples{
   Rect <- tess(xgrid=0:4,ygrid=0:4)
-  Diri <- dirichlet(runifpoint(7))
+  Diri <- dirichlet(runifrect(7))
   plot(Diri)
   plot(Rect, border="blue", lwd=2, lty=2)
   plot(Rect, do.col=TRUE, border="white")

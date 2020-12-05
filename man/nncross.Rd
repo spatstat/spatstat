@@ -152,8 +152,8 @@
 }
 \examples{
   # two different point patterns
-  X <- runifpoint(15)
-  Y <- runifpoint(20)
+  X <- runifrect(15)
+  Y <- runifrect(20)
   N <- nncross(X,Y)$which
   # note that length(N) = 15
   plot(superimpose(X=X,Y=Y), main="nncross", cols=c("red","blue"))
@@ -167,7 +167,7 @@
   NXY[1:3,]
 
   # two patterns with some points in common
-  Z <- runifpoint(50)
+  Z <- runifrect(50)
   X <- Z[1:30]
   Y <- Z[20:50]
   iX <- 1:30
@@ -178,16 +178,13 @@
   arrows(X$x, X$y, Y[N]$x, Y[N]$y, length=0.15)
 
   # point pattern and line segment pattern
-  X <- runifpoint(15)
+  X <- runifrect(15)
   Y <- rpoisline(10)
   N <- nncross(X,Y)
 }
 \author{
-  \adrian
-  
-  ,
-  \rolf
-  ,
+  \adrian,
+  \rolf,
   and Jens Oehlschlaegel
 }
 \keyword{spatial}

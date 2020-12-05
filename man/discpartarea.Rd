@@ -60,15 +60,12 @@ discpartarea(X, r, W=as.owin(X))
   \code{\link{disc}}
 }
 \examples{
-  data(letterR)
-  X <- runifpoint(3, letterR)
+  X <- unmark(demopat)[1:3]
   discpartarea(X, 0.2)
 }
-\author{\adrian
-  
-  
+\author{
+  \adrian
   and \rolf
-  
 }
 \keyword{spatial}
 \keyword{math}

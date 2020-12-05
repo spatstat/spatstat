@@ -69,9 +69,9 @@
   \code{\link[spatstat]{Gest}}
 }
 \examples{
-   data(cells)
-   d <- crossdist(cells, runifpoint(6))
-   d <- crossdist(cells, runifpoint(6), periodic=TRUE)
+   Y <- runifrect(6, Window(cells))
+   d <- crossdist(cells, Y)
+   d <- crossdist(cells, Y, periodic=TRUE)
 }
 \author{Pavel Grabarnik
   \email{pavel.grabar@issp.serpukhov.su}

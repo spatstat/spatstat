@@ -42,7 +42,7 @@ nearestsegment(X, Y)
   identify the nearest line segment for each pixel in a grid.
 }
 \examples{
-  X <- runifpoint(3)
+  X <- runifrect(3)
   Y <- as.psp(matrix(runif(20), 5, 4), window=owin())
   v <- nearestsegment(X,Y)
   plot(Y)
