@@ -58,10 +58,7 @@ formula(x, \dots) <- value
 }
 \author{
   \adrian
-  
-  
   and \rolf
-  
 }
 \seealso{
   \code{\link{fv}},  

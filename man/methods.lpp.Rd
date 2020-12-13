@@ -59,15 +59,15 @@
 }
 \details{
   These are methods for the generic functions
-  \code{\link{as.ppp}},
-  \code{\link{as.psp}},
-  \code{\link{marks<-}},
-  \code{\link{nsegments}},
-  \code{\link{print}},
-  \code{\link{summary}},
-  \code{\link{unitname}}, 
-  \code{\link{unitname<-}} and
-  \code{\link{unmark}}
+  \code{\link[spatstat.geom]{as.ppp}},
+  \code{\link[spatstat.geom]{as.psp}},
+  \code{\link[spatstat.geom]{marks<-}},
+  \code{\link[spatstat.geom]{nsegments}},
+  \code{\link[base]{print}},
+  \code{\link[base]{summary}},
+  \code{\link[spatstat.geom]{unitname}}, 
+  \code{\link[spatstat.geom]{unitname<-}} and
+  \code{\link[spatstat.geom]{unmark}}
   for objects of the class \code{"lpp"}.
 
   For \code{"marks<-.lpp"} the replacement \code{value}
@@ -77,12 +77,12 @@
   
   For \code{"unitname<-.lpp"} the replacement \code{value}
   should be a valid name for the unit of length, as
-  described in \code{\link{unitname}}.
+  described in \code{\link[spatstat.geom]{unitname}}.
 }
 \section{Other methods}{
   An object of class \code{"lpp"} also inherits the class
   \code{"ppx"} for which many other methods are available.
-  See \code{\link[spatstat:methods.ppx]{methods.ppx}}.
+  See \code{\link[spatstat.geom:methods.ppx]{methods.ppx}}.
 }
 \value{
   See the documentation on the corresponding generic function.
@@ -93,7 +93,7 @@
 \seealso{
   \code{\link{lpp}},
   \code{\link{intensity.lpp}},
-  \code{\link[spatstat:methods.ppx]{methods.ppx}}
+  \code{\link[spatstat.geom:methods.ppx]{methods.ppx}}
 }
 \examples{
   X <- runiflpp(10, simplenet)

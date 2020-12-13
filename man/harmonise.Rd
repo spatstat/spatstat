@@ -21,7 +21,7 @@ harmonize(\dots)
   of \code{\link{compatible}} so that they can be combined or compared.
 
   There are methods for the classes \code{"fv"}
-  (\code{\link{harmonise.fv}})
+  (\code{\link[spatstat]{harmonise.fv}})
   and \code{"im"} (\code{\link{harmonise.im}}).
   
   All arguments \code{\dots} must be objects of the same class.
@@ -37,16 +37,12 @@ harmonize(\dots)
   If the arguments were named (\code{name=value}) then the return value
   also carries these names.
 }
-\author{\adrian
-  
-  ,
-  \rolf
-  
-  and \ege.
+\author{
+  \spatstatAuthors.
 }
 \seealso{
   \code{\link{compatible}},
-  \code{\link{harmonise.fv}},
+  \code{\link[spatstat]{harmonise.fv}},
   \code{\link{harmonise.im}}
 }
 \keyword{spatial}

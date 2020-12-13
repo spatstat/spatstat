@@ -119,12 +119,12 @@
   # manipulating two K functions
   Y <- runifrect(20)
   Kr <- Kest(Y)
-  
+
   Kdif <- eval.fv(Ks - Kr)
   Z <- eval.fv(sqrt(Ks/pi) - sqrt(Kr/pi))
 
   ## Use of 'envir'
-  U <- eval.fv(sqrt(K), list(K=Kest(cells)))
+  U <- eval.fv(sqrt(K), list(K=Ks))
 
   ## Use of 'equiv'
   Fc <- Fest(cells)
@@ -132,11 +132,9 @@
   # Hanisch and Chiu-Stoyan estimators are cognate
   Dc <- eval.fv(Fc - Gc, equiv=list(cs="han"))
 }
-\author{\adrian
-  
-  
+\author{
+  \adrian
   and \rolf
-  
 }
 \keyword{spatial}
 \keyword{manip}

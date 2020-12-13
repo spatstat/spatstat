@@ -179,7 +179,7 @@
 
   # point pattern and line segment pattern
   X <- runifrect(15)
-  Y <- rpoisline(10)
+  Y <- psp(runif(10), runif(10), runif(10), runif(10), square(1))
   N <- nncross(X,Y)
 }
 \author{

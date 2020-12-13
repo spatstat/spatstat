@@ -134,7 +134,7 @@ densityAdaptiveKernel(X, \dots)
   \code{\link{density.ppp}},
   \code{\link{adaptive.density}},
   \code{\link{densityVoronoi}},
-  \code{\link{im.object}}.
+  \code{\link[spatstat]{im.object}}.
 
   See the function \code{bivariate.density} in the \pkg{sparr} package
   for a more flexible implementation, and

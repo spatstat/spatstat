@@ -39,11 +39,9 @@ commonGrid(\dots)
 \value{
   A binary mask (object of class \code{"owin"} and type \code{"mask"}).
 }
-\author{\adrian
-  
-  
+\author{
+  \adrian
   and \rolf
-  
 }
 \examples{
    A <- setcov(square(1))

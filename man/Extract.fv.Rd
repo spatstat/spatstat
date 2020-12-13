@@ -87,8 +87,7 @@
   \code{\link{fv.object}}
 }
 \examples{
- K <- demofuns[["Kest(cells)"]]
- ## equivalent to:  K <- Kest(cells)
+ K <- Kest(cells)
 
  # discard the estimates of K(r) for r  > 0.1
  Ksub <- K[K$r <= 0.1, ]

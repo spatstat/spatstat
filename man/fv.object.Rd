@@ -38,9 +38,7 @@
   \code{tweak.fv.entry} and \code{rebadge.fv}.
 }
 \examples{
-    data(cells)
     K <- Kest(cells)
-
     class(K)
 
     K  # prints a sensible summary

@@ -68,7 +68,7 @@
   values will be kernel-smoothed using \code{\link{Smooth.ppp}}
   and displayed as a pixel image.
   If \code{how="nearest"} the values will be interpolated
-  by nearest neighbour interpolation using \code{\link{nnmark}}
+  by nearest neighbour interpolation using \code{\link[spatstat]{nnmark}}
   and displayed as a pixel image.
 
   For \code{image.ssf} and \code{contour.ssf} the values are

@@ -8,7 +8,7 @@
 #        harmonise.im()       Harmonise images
 #        commonGrid()
 #
-#     $Revision: 1.54 $     $Date: 2019/04/21 11:42:27 $
+#     $Revision: 1.55 $     $Date: 2020/12/06 03:58:18 $
 #
 
 eval.im <- local({
@@ -107,6 +107,10 @@ compatible.im <- function(A, B, ..., tol=1e-6) {
 
 ## force a list of images to be compatible
 
+harmonize <- harmonise <- function(...) {
+  UseMethod("harmonise")
+}
+
 harmonize.im <- harmonise.im <- function(...) {
   argz <- list(...)
   n <- length(argz)
@@ -149,6 +153,7 @@ harmonize.im <- harmonise.im <- function(...) {
   if(any(notim <- !isim)) 
     result[notim] <- lapply(argz[notim], as.im, W=as.mask(Wtemplate))
   names(result) <- names(argz)
+  result <- as.solist(result)
   return(result)
 }
 

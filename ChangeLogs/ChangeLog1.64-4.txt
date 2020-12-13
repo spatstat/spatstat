@@ -728,5 +728,54 @@ Change log from spatstat 1.64-3 to spatstat 1.64-4
 ------------- installed on laptop      ---------------
 ------------- uploaded to GitHub       ---------------
 
-   
+06 dec 2020
+
+   *.R
+   *.Rd
+	Numerous tweaks in preparation for breakup
+
+   DESCRIPTION
+   NEWS
+	Version 1.64-3.028
+
+------------- passed R-4.0.3 CMD check ---------------
+(with environment variable SPATSTAT_TEST defined/undefined)
+------------- installed on laptop      ---------------
+------------- uploaded to GitHub       ---------------
+
+   updates.Rnw
+	Bug fix in code that summarises package history
+
+   DESCRIPTION
+   NEWS
+	Version 1.64-3.029
+
+------------- passed R-4.0.3 CMD check ---------------
+(with environment variable SPATSTAT_TEST defined/undefined)
+------------- installed on laptop      ---------------
+------------- uploaded to GitHub       ---------------
+
+13 dec 2020
+
+   deldir.R
+	Use "deldir::" for all calls to deldir package
+
+   areaGain.Rd
+   areaLoss.Rd
+   spatstat-internal.Rd
+	Tweaked filepp directives in preparation for package breakup.
+
+   updates.Rnw
+	Inserted filepp directives in preparation for package breakup.
 	
+   DESCRIPTION
+   NEWS
+	Version 1.64-3.030
+
+------------- passed R-4.0.3 CMD check ---------------
+(with environment variable SPATSTAT_TEST defined/undefined)
+------------- installed on laptop      ---------------
+------------- uploaded to GitHub       ---------------
+
+
+   

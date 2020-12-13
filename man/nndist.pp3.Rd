@@ -94,7 +94,7 @@
   \code{\link{nnwhich}}
 }
 \examples{
-   X <- runifpoint3(40)
+   X <- pp3(runif(40), runif(40), runif(40), box3(c(0,1)))
 
    # nearest neighbours
    d <- nndist(X)

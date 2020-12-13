@@ -3,7 +3,7 @@
 #'
 #' Interface to deldir package
 #'
-#'  $Revision: 1.34 $ $Date: 2020/06/14 10:34:23 $
+#'  $Revision: 1.35 $ $Date: 2020/12/13 03:51:25 $
 #'
 
 #' ..............................................
@@ -37,7 +37,8 @@ dirichlet <- local({
     if(nX == 1) return(as.tess(w))
     dd <- safedeldir(X)
     if(is.null(dd)) return(NULL)
-    pp <- lapply(tile.list(dd), df2poly)
+    tt <- deldir::tile.list(dd)
+    pp <- lapply(tt, df2poly)
     if(length(pp) == npoints(X))
       names(pp) <- seq_len(npoints(X))
     dir <- tess(tiles=pp, window=as.rectangle(w))

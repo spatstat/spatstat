@@ -97,17 +97,18 @@
   distances in a single point pattern.
 }
 \examples{
-  B <- boxx(c(0,1), c(0,1), c(0,1), c(0,1))
+  XYZ <- ppx(matrix(runif(80), 20, 4),
+            boxx(c(0,1), c(0,1), c(0,1), c(0,1)))
+
   ## two different point patterns
-  X <- runifpointx(5, B)
-  Y <- runifpointx(10, B)
+  X <- XYZ[1:5]
+  Y <- XYZ[10:20]
   nncross(X,Y)
   N23 <- nncross(X,Y, k=2:3)
 
   ## two patterns with some points in common
-  Z <- runifpointx(20, B)
-  X <- Z[1:15]
-  Y <- Z[10:20]
+  X <- XYZ[1:15]
+  Y <- XYZ[10:20]
   iX <- 1:15
   iY <- 10:20
   N <- nncross(X,Y, iX, iY, what="which")

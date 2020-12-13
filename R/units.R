@@ -1,7 +1,7 @@
 #
 # Functions for extracting and setting the name of the unit of length
 #
-#   $Revision: 1.31 $   $Date: 2020/11/09 02:37:35 $
+#   $Revision: 1.32 $   $Date: 2020/12/06 02:32:01 $
 #
 #
 
@@ -154,6 +154,10 @@ print.summary.unitname <- function(x, ...) {
   else
     cat(paste(x$legend, "\n"))
   invisible(NULL)
+}
+
+compatible <- function(A, B, ...) {
+  UseMethod("compatible")
 }
 
 compatible.unitname <- function(A, B, ..., coerce=TRUE) {

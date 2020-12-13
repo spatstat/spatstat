@@ -42,16 +42,12 @@
   \code{\link{contour.im}}
 }
 \examples{
-# Multitype point pattern
- contour(D <- density(split(amacrine)))
+# bei.extra is a named list of covariate images
+ contour(bei.extra,
+         main="Barro Colorado: covariates")
 }
-\author{\adrian
-  
-  
-  \rolf
-  
-  and \ege
-  
+\author{
+  \spatstatAuthors.
 }
 \keyword{spatial}
 \keyword{hplot}

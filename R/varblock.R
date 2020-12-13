@@ -97,7 +97,7 @@ varblock <- local({
     lower <- eval.fv(m + zcrit[1] * sem, dotonly=FALSE)
     upper <- eval.fv(m + zcrit[2] * sem, dotonly=FALSE)
     ## rebadge
-    fva <- getSpatstatVariable("FvAttrib")
+    fva <- .Spatstat.FvAttrib
     fva <- fva[fva %in% names(attributes(fX))]
     attributes(m)[fva] <- attributes(v)[fva] <- attributes(sd)[fva] <- 
         attributes(upper)[fva] <- attributes(lower)[fva] <- attributes(fX)[fva]

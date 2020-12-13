@@ -54,7 +54,7 @@
   \code{\link{dirichletWeights}}
 }
 \examples{
-  Q <- quadscheme(runifpoispp(10))
+  Q <- quadscheme(runifrect(15))
   X <- as.ppp(Q) # data and dummy points together
   w <- gridweights(X, 10)
   w <- gridweights(X, c(10, 10))

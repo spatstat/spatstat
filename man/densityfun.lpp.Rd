@@ -48,7 +48,7 @@
   and evaluated at any location. 
   
   This is a method for the generic function
-  \code{\link[spatstat]{densityfun}} for the class
+  \code{\link[spatstat.core]{densityfun}} for the class
   \code{"lpp"} of point patterns on a linear network.
 }
 \value{
@@ -85,10 +85,10 @@
   Greg McSwiggan, with tweaks by \adrian.
 }
 \seealso{
-  \code{\link[spatstat]{density.lpp}} which returns a pixel image
+  \code{\link{density.lpp}} which returns a pixel image
   on the linear network.
   
-  \code{\link[spatstat]{methods.linfun}} for methods applicable to
+  \code{\link{methods.linfun}} for methods applicable to
   \code{"linfun"} objects.
 }
 \examples{

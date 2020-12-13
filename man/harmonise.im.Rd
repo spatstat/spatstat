@@ -46,17 +46,17 @@
   of length equal to the number of arguments \code{\dots},
   whose entries are pixel images.
 }
-\author{\adrian
-  
-  
+\author{
+  \adrian
   and \rolf
-  
 }
 \examples{
-   A <- setcov(square(1))
-   B <- function(x,y) { x }
-   G <- density(runifpoint(42))
-   harmonise(X=A, Y=B, Z=G)
+   Image1 <- setcov(square(1), dimyx=32)
+   Image2 <- setcov(square(1), dimyx=16)
+   Function1 <- function(x,y) { x }
+   Window1 <- shift(letterR, c(-2, -1))
+   h <- harmonise(X=Image1, Y=Image2, Z=Function1, W=Window1)
+   plot(h, main="")
 }
 \seealso{
   \code{\link{commonGrid}},

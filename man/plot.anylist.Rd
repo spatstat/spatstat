@@ -228,13 +228,8 @@
  plot(ape1, main.panel="", mar.panel=0.1, hsep=0.7, vsep=1,
       cex=1.5, pch=21, bg='white')
 }
-\author{\adrian
-  
-  
-  \rolf
-  
-  and \ege
-  
+\author{
+  \spatstatAuthors.
 }
 \keyword{spatial}
 \keyword{hplot}

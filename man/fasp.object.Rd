@@ -75,8 +75,7 @@
   \code{\link{eval.fasp}}
 }
 \examples{
-  GG <- demofuns[["alltypes(amacrine, 'G')"]]
-  ##   equivalent to evaluating GG <- alltypes(amacrine, 'G')
+  GG <- alltypes(amacrine, 'G')
 
   plot(GG)
 

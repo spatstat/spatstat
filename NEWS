@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.64-3.027
+        CHANGES IN spatstat VERSION 1.64-3.030
 
 OVERVIEW
 
@@ -37,6 +37,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o localpcf, localpcfinhom
     New argument 'rvalue'.
+
+    o harmonise.im
+    The result belongs to class 'solist' and 'imlist'
+    so that it can be plotted.
     
 BUG FIXES
 

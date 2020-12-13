@@ -133,8 +133,7 @@
 
 \examples{
    \dontrun{
-   X.G <- demofuns[["alltypes(amacrine, 'G')"]]
-   ## equivalent to:  X.G <- alltypes(amacrine,"G")
+   X.G <- alltypes(amacrine,"G")
    plot(X.G)
    plot(X.G,subset="r<=0.2")
    plot(X.G,formule=asin(sqrt(cbind(km,theo))) ~ asin(sqrt(theo)))
@@ -142,10 +141,7 @@
    }
 }
 \author{\adrian
-  
-  
   and \rolf
-  
-  }
+}
 \keyword{spatial}
 \keyword{hplot}

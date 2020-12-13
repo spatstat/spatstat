@@ -19,15 +19,16 @@
   What is meant by \sQuote{compatible} depends on the class of object.
 
   There are methods for the classes \code{"fv"}, \code{"fasp"},
-  \code{"im"} and \code{"unitname"}.
+  \code{"im"} and \code{"unitname"}. See the documentation for these
+  methods for further information.
 }
 \value{
   Logical value: \code{TRUE} if the objects are compatible, and \code{FALSE}
   if they are not.
 }
 \seealso{
-  \code{\link{compatible.fv}},
-  \code{\link{compatible.fasp}},
+  \code{\link[spatstat]{compatible.fv}},
+  \code{\link[spatstat]{compatible.fasp}},
   \code{\link{compatible.im}},
   \code{\link{compatible.unitname}} 
 }

@@ -62,7 +62,7 @@ project2segment(X, Y)
   which segment is closest to each point.
 }
 \examples{
-  X <- rstrat(square(1), 5)
+  X <- rsyst(square(1), nx=5)
   Y <- as.psp(matrix(runif(20), 5, 4), window=owin())
   plot(Y, lwd=3, col="green")
   plot(X, add=TRUE, col="red", pch=16)

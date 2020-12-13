@@ -45,11 +45,9 @@ interp.colourmap(m, n = 512)
   co <- colourmap(inputs=c(0, 0.5, 1), c("black", "red", "white"))
   plot(interp.colourmap(co))
 }
-\author{\adrian
-  
-  
+\author{
+  \adrian
   and \rolf
-  
 }
 \keyword{spatial}
 \keyword{color}

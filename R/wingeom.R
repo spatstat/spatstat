@@ -1131,6 +1131,8 @@ discs <- function(centres, radii=marks(centres)/2, ...,
   return(W)
 }
 
+## force a list of windows to have compatible pixel rasters
+
 harmonise.owin <- harmonize.owin <- function(...) {
   argz <- list(...)
   wins <- solapply(argz, as.owin)

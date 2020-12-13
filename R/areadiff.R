@@ -1,7 +1,7 @@
 #
 # areadiff.R
 #
-#  $Revision: 1.38 $  $Date: 2019/01/20 08:46:55 $
+#  $Revision: 1.39 $  $Date: 2020/12/13 03:55:34 $
 #
 # Computes sufficient statistic for area-interaction process
 #
@@ -113,7 +113,7 @@ areaLoss.diri <- function(X, r, ..., W=as.owin(X), subset=NULL) {
   newserial <- cumsum(retain)
   # dirichlet neighbour relation in entire pattern 
   w <- X$window
-  dd <- deldir(uX$x, uX$y, rw=c(w$xrange, w$yrange))
+  dd <- deldir::deldir(uX$x, uX$y, rw=c(w$xrange, w$yrange))
   a <- dd$delsgs[,5L]
   b <- dd$delsgs[,6L]
   pir2 <- pi * r^2

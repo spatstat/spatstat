@@ -53,7 +53,8 @@
 \examples{
   He <- heather$fine[owin(c(2.8, 7.4), c(4.0, 7.8))]
   plot(He, main="project2set")
-  X <- runifpoint(4, erosion(complement.owin(He), 0.2))
+  W <- erosion(complement.owin(He), 0.2)
+  X <- runifpoint(4, W)
   points(X, col="red")
   Y <- project2set(X, He)
   points(Y, col="green")

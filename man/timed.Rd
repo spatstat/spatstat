@@ -73,9 +73,7 @@ timed(x, ..., starttime = NULL, timetaken = NULL)
   An object inheriting the class \code{"timed"}.
 }
 \examples{
-  timed(clarkevans(cells))
-
-  timed(Kest(cells))
+  timed(minnndist(cells))
 
   answer <- timed(42, timetaken=4.1e17)
   answer

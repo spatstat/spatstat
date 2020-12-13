@@ -69,7 +69,7 @@ linnet(vertices, m, edges, sparse=FALSE, warn=TRUE)
 \seealso{
   \code{\link[spatstat.data]{simplenet}} for an example of a linear network.
 
-  \code{\link[spatstat:methods.linnet]{methods.linnet}} for
+  \code{\link{methods.linnet}} for
   methods applicable to \code{linnet} objects.
 
   Special tools: \code{\link{thinNetwork}},
@@ -80,8 +80,8 @@ linnet(vertices, m, edges, sparse=FALSE, warn=TRUE)
   \code{\link{delaunayNetwork}} for the Delaunay triangulation
   as a network.
   
-  \code{\link{ppp}},
-  \code{\link{psp}}.
+  \code{\link[spatstat.geom]{ppp}},
+  \code{\link[spatstat.geom]{psp}}.
 }
 \examples{
   # letter 'A' specified by adjacency matrix

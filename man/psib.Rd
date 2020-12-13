@@ -51,7 +51,7 @@
   \adrian.
 }
 \seealso{
-  \code{\link[spatstat]{kppm}}
+  \code{\link{kppm}}
 }
 \examples{
   fit <- kppm(redwood ~1, "Thomas")

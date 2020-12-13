@@ -6,7 +6,7 @@
 #
 #        compatible.fv()       Check whether two fv objects are compatible
 #
-#     $Revision: 1.40 $     $Date: 2019/12/10 00:20:22 $
+#     $Revision: 1.41 $     $Date: 2020/12/06 02:32:12 $
 #
 
 eval.fv <- local({
@@ -174,10 +174,6 @@ eval.fv <- local({
   eval.fv
 })
     
-compatible <- function(A, B, ...) {
-  UseMethod("compatible")
-}
-
 compatible.fv <- local({
 
   approx.equal <- function(x, y) { max(abs(x-y)) <= .Machine$double.eps }
@@ -218,11 +214,7 @@ compatible.fv <- local({
 })
 
 
-# force a list of images to be compatible with regard to 'x' values
-
-harmonize <- harmonise <- function(...) {
-  UseMethod("harmonise")
-}
+# force a list of functions to be compatible with regard to 'x' values
 
 harmonize.fv <- harmonise.fv <- local({
 

@@ -33,8 +33,8 @@ timeTaken(..., warn=TRUE)
   An object inheriting the class \code{"timed"}.
 }
 \examples{
-  A <- timed(Kest(cells))
-  B <- timed(Gest(cells))
+  A <- timed(minnndist(bei))
+  B <- timed(minnndist(redwood))
   A
   B
   timeTaken(A,B)

@@ -90,10 +90,13 @@ ppx(data, domain=NULL, coord.type=NULL, simplify=FALSE)
    X <- ppx(data=df, coord.type=c("s","s","t","m","m"))
    X
 
-   val <- 20 * runif(4)
-   E <- lapply(val, function(s) { rpoispp(s) })
-   hf <- hyperframe(t=val, e=as.listof(E))
-   Z <- ppx(data=hf, domain=c(0,1))
+   #' one-dimensional points
+   #' with marks which are two-dimensional point patterns
+   val <- sample(10:20, 4)
+   E <- lapply(val, runifrect)
+   E
+   hf <- hyperframe(num=val, e=as.listof(E))
+   Z <- ppx(data=hf, domain=c(10,20))
    Z
 }
 \keyword{spatial}

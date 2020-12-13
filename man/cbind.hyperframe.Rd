@@ -41,11 +41,8 @@
 \value{
   Another hyperframe.
 }
-\author{\adrian
-  
-  
-  and \rolf
-  
+\author{
+  \spatstatAuthors.
 }
 \seealso{
   \code{\link{hyperframe}},

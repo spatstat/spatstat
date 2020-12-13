@@ -20,8 +20,7 @@ Smooth.fv <- function(X, which="*", ...,
   method <- match.arg(method)
   if(!is.null(xinterval))
     check.range(xinterval)
-  fvab <- getSpatstatVariable("FvAbbrev")
-  if(length(which) == 1 && which %in% fvab) {
+  if(length(which) == 1 && which %in% .Spatstat.FvAbbrev) {
     if(which == ".x")
       stop("Cannot smooth the function argument")
     which <- fvnames(x, which)

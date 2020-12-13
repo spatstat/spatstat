@@ -187,8 +187,8 @@
 \examples{
 # equal cardinalities
 set.seed(140627)
-X <- runifpoint(500)
-Y <- runifpoint(500)
+X <- runifrect(500)
+Y <- runifrect(500)
 m <- pppdist(X, Y)
 m
 \dontrun{

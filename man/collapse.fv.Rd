@@ -88,11 +88,9 @@
   K <- collapse(Klist, same="theo", different="iso")
   K
 }
-\author{\adrian
-  
-  
+\author{
+  \adrian
   and \rolf
-  
 }
 \keyword{spatial}
 \keyword{manip}

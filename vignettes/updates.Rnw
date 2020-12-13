@@ -56,8 +56,9 @@ mergeSizeTables <- function(a, b) {
       a[i,counts] <- a[i,counts] + b[max(j), counts]
   }
   if(any(after <- (b$date > max(a$date)))) {
+    #' some entries in 'b' are later than the last entry in 'a'
     lastA <- a[nrow(a), ,drop=FALSE]
-    newB <- B[after, , drop=FALSE]
+    newB <- b[after, , drop=FALSE]
     newB[,counts] <- newB[,counts] + lastA[,counts]
     newB$version <- lastA$version
     a <- rbind(a, newB)
@@ -67,8 +68,10 @@ mergeSizeTables <- function(a, b) {
 z <- getSizeTable()
 ## handle the case where spatstat is the umbrella package
 if(isTRUE(getSpatstatVariable("Spatstat.Is.Umbrella"))) {
+  zgeom <- getSizeTable("spatstat.geom")
+  z <- mergeSizeTables(z, zgeom)
   zcore <- getSizeTable("spatstat.core")
-  z <- mergeSizeTables(zcore, z)
+  z <- mergeSizeTables(z, zcore)
 } 
 ## sub-packages- access via the sub-package
 zutils <- getSizeTable("spatstat.utils")
@@ -133,26 +136,54 @@ text(as.Date("2015-01-01"), 60, "R code")
 
 \newpage
 
+%#%^!ifdef ANTEDILUVIAN
+
 \section{\pkg{spatstat} is splitting into parts}
 
-    \pkg{spatstat} is being split into sub-packages, to satisfy
-    the requirements of CRAN. This should not affect the user:
-    existing code will continue to work in the same way.
-
-    Typing \code{library(spatstat)} will load the familiar
-    \pkg{spatstat} package which can be used as before.
-
-    \subsection{The parts of \pkg{spatstat}}
+\pkg{spatstat} is being split into sub-packages, to satisfy
+the requirements of CRAN. 
     
-    Currently there are four sub-packages, called 
+%#%^!else
+\section{\pkg{spatstat} has been split into parts}
+
+The original \pkg{spatstat} package has been split into sub-packages, to satisfy
+the requirements of CRAN. 
+%#%^!endif
+
+This should not affect the user:
+existing code will continue to work in the same way.
+
+Typing \code{library(spatstat)} will load the familiar
+\pkg{spatstat} package which can be used as before.
+
+\subsection{The parts of \pkg{spatstat}}
+
+    Currently there are 
+%#%^!ifdef ANTEDILUVIAN
+    four
+%#%^!else
+    six
+%#%^!endif
+    sub-packages, called 
     \pkg{spatstat.utils},
     \pkg{spatstat.data},
     \pkg{spatstat.sparse},
+%#%^!ifndef ANTEDILUVIAN
+    \pkg{spatstat.geom},
+    \pkg{spatstat.core},
+%#%^!endif
     and \pkg{spatstat}.
 
     \begin{itemize}
     \item 
-      The \code{spatstat} package contains the main code.
+      The \code{spatstat} package contains
+%#%^!ifdef ANTEDILUVIAN
+      the main code.
+%#%^!else
+      only documentation and introductory material.
+      It provides beginner's introductions, vignettes, interactive demonstration
+      scripts, and a few help files summarising the package.
+%#%^!endif
     \item 
       The \pkg{spatstat.data} package now contains all the datasets
       for \pkg{spatstat}.
@@ -163,13 +194,28 @@ text(as.Date("2015-01-01"), 60, "R code")
       The \pkg{spatstat.sparse} package
       contains functions for manipulating sparse arrays
       and performing linear algebra.
+%#%^!ifndef ANTEDILUVIAN
+    \item
+      The \pkg{spatstat.geom} package
+      contains definitions of spatial objects (such as point patterns, windows
+      and pixel images) and code which performs geometrical operations.
+    \item
+      The \pkg{spatstat.core} package
+      contains the main code for statistical analysis of spatial point patterns
+      and other spatial data.
+%#%^!endif
     \end{itemize}
     
     Typing \code{library(spatstat)} 
-    will automatically load \pkg{spatstat.data}
-    and silently \textbf{``import''}
-    \pkg{spatstat.utils} and \pkg{spatstat.sparse}.
-
+    will automatically load 
+%#%^!ifdef ANTEDILUVIAN
+    \pkg{spatstat.data}.
+%#%^!else
+    \pkg{spatstat.data}, \pkg{spatstat.geom} and \pkg{spatstat.core}.
+%#%^!endif 
+    
+    Typing \code{library(spatstat)} also \textbf{``imports''}
+    \pkg{spatstat.utils} and \pkg{spatstat.sparse} (without reporting this).
     To access the functions in \pkg{spatstat.utils} directly, you would need to
     type \code{library(spatstat.utils)}. Similarly for \pkg{spatstat.sparse}.
 
@@ -198,18 +244,23 @@ the News and Release Notes for each update.
 
 \begin{itemize}
 
-  \item \spst\ now Imports the package \pkg{spatstat.sparse}.
-    
+%#%^!ifndef ANTEDILUVIAN
+  \item \spst\ now requires the packages \pkg{spatstat.core} 
+    and \pkg{spatstat.geom}.
+%#%^!endif
+
   \item The interactive graphics functions \texttt{iplot} and \texttt{istat}
     have been removed from \spst\ into a new package \pkg{spatstat.gui}.
 
   \item The packages \pkg{tcltk} and \pkg{rpanel} are no longer 
     Suggested by \spst.
     
+  \item \spst\ now Imports the package \pkg{spatstat.sparse}.
+    
   \item \spst\ now Imports the package \pkg{spatstat.utils}.
 
   \item \spst\ now requires the package \pkg{spatstat.data} which contains the datasets.
-
+    
   \item \spst\ now suggests the package \pkg{fftwtools}.
 
   \item Relative risk estimation on a network.

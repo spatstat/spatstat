@@ -22,6 +22,7 @@
   \method{as.fv}{matrix}(x)
 
   \method{as.fv}{fasp}(x)
+
   \method{as.fv}{minconfit}(x)
 
   \method{as.fv}{dppm}(x)

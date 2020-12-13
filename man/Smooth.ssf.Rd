@@ -34,7 +34,7 @@
 }
 \seealso{
   \code{\link{ssf}},
-  \code{\link{Smooth.ppp}}
+  \code{\link[spatstat]{Smooth.ppp}}
 }
 \examples{
    f <- ssf(redwood, nndist(redwood))

@@ -84,11 +84,9 @@ beachcolourmap(range, ...)
 \examples{
   plot(beachcolourmap(c(-2,2)))
 }
-\author{\adrian
-  
-  
+\author{
+  \adrian
   and \rolf
-  
 }
 \keyword{spatial}
 \keyword{color}

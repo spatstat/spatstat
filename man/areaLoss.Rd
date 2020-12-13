@@ -50,25 +50,22 @@
   other discs of radius \code{r} centred at the points \code{X[j]}
   for \code{j} not equal to \code{i}.
   This area is important in some calculations related to
-  the area-interaction model \code{\link{AreaInter}}.
+  the area-interaction model \code{\link[spatstat]{AreaInter}}.
 
   The result is a matrix, with one row for each point in \code{X}
   and one column for each entry of \code{r}. 
 }
 \seealso{
-  \code{\link{AreaInter}},
+  \code{\link[spatstat]{AreaInter}},
   \code{\link{areaGain}},
   \code{\link{dilated.areas}}
 }
 \examples{
-   data(cells)
    areaLoss(cells, 0.1)
 }
-\author{\adrian
-  
-  
+\author{
+  \adrian
   and \rolf
-  
 }
 \keyword{spatial}
 \keyword{math}

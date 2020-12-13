@@ -25,8 +25,8 @@ bw.abram(X, h0,
   }
   \item{\dots}{
     Additional arguments passed to
-    \code{\link{as.im}} to control the pixel resolution,
-    or passed to \code{\link[spatstat]{density.ppp}} or \code{smoother}
+    \code{\link[spatstat]{as.im}} to control the pixel resolution,
+    or passed to \code{\link{density.ppp}} or \code{smoother}
     to control the type of smoothing, when computing the pilot estimate.
   }
   \item{at}{

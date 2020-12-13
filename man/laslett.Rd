@@ -143,7 +143,11 @@ laslett(X, \dots, verbose = FALSE, plotit = TRUE, discretise = FALSE,
 }
 \examples{
 a <- laslett(heather$coarse)
+transformedHeather <- with(a, Window(TanNew))
+plot(transformedHeather, invert=TRUE)
+
 with(a, clarkevans.test(TanNew[Rect], correction="D", nsim=39))
+
 X <- discs(runifrect(15) \%mark\% 0.2, npoly=16)
 b <- laslett(X, type="left")
 b

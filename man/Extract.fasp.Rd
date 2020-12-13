@@ -47,8 +47,7 @@
 }
 \examples{
  # Lansing woods data - multitype points with 6 types
- a <- demofuns[["alltypes(lansing, 'K')"]]
- #   equivalent to evaluating a <- alltypes(lansing, 'K')
+ a <- alltypes(lansing, 'K')
 
  # extract first three marks only
  b <- a[1:3,1:3]

@@ -118,7 +118,7 @@ fv <- function(x, argu="r", ylab=NULL, valu, fmla=NULL,
                         "dotnames",
                         "shade")
 
-putSpatstatVariable("FvAttrib", .Spatstat.FvAttrib)
+## putSpatstatVariable("FvAttrib", .Spatstat.FvAttrib)
 
 as.data.frame.fv <- function(x, ...) {
   stopifnot(is.fv(x))
@@ -261,7 +261,7 @@ print.fv <- local({
                         "*",
                         ".a")
 
-putSpatstatVariable("FvAbbrev", .Spatstat.FvAbbrev)
+## putSpatstatVariable("FvAbbrev", .Spatstat.FvAbbrev)
 
 fvnames <- function(X, a=".") {
   verifyclass(X, "fv")

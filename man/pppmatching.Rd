@@ -54,8 +54,8 @@
 }
 \examples{
   # a random unweighted complete matching
-  X <- runifpoint(10)
-  Y <- runifpoint(10)
+  X <- runifrect(10)
+  Y <- runifrect(10)
   am <- r2dtable(1, rep(1,10), rep(1,10))[[1]]
         # generates a random permutation matrix
   m <- pppmatching(X, Y, am)
@@ -64,8 +64,8 @@
   plot(m)
 
   # a random weighted complete matching
-  X <- runifpoint(7)
-  Y <- runifpoint(7)
+  X <- runifrect(7)
+  Y <- runifrect(7)
   am <- r2dtable(1, rep(10,7), rep(10,7))[[1]]/10
         # generates a random doubly stochastic matrix
   m2 <- pppmatching(X, Y, am)
