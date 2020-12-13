@@ -50,20 +50,30 @@ counts <- c("nhelpfiles", "nobjects", "ndatasets", "Rlines", "srclines")
 mergeSizeTables <- function(a, b) {
   #' a is the running total for spatstat; b is a sub-package
   if(is.null(b)) return(a)
-  for(i in seq_len(nrow(a))) {
-    j <- which(b$date <= a$date[i])
-    if(length(j) > 0) 
-      a[i,counts] <- a[i,counts] + b[max(j), counts]
+  adates <- a$date
+  bdates <- b$date
+  alldates <- sort(unique(c(adates,bdates)))
+  #' functions to determine, for any given date,
+  #' the relevant (latest) row of the table
+  aok <- rev(!duplicated(rev(adates)))
+  arowfun <- approxfun(adates[aok], seq_along(adates)[aok], 
+                       method="constant", f=0, rule=2, yleft=0)
+  bok <- rev(!duplicated(rev(bdates)))
+  browfun <- approxfun(bdates[bok], seq_along(bdates)[bok], 
+                       method="constant", f=0, rule=2, yleft=0)
+  result <- NULL
+  for(thedate in alldates) {
+    i <- arowfun(thedate)
+    j <- browfun(thedate)
+    #' i > 0 because spatstat's founding date is earlier than any sub-package
+    nextrow <- a[i, ]
+    if(j > 0) {
+      #' add contribution from 'b'
+      nextrow[, counts] <- nextrow[, counts] + b[j, counts]
+      }
+    result <- rbind(result, nextrow)
   }
-  if(any(after <- (b$date > max(a$date)))) {
-    #' some entries in 'b' are later than the last entry in 'a'
-    lastA <- a[nrow(a), ,drop=FALSE]
-    newB <- b[after, , drop=FALSE]
-    newB[,counts] <- newB[,counts] + lastA[,counts]
-    newB$version <- lastA$version
-    a <- rbind(a, newB)
-  }
-  return(a)
+  return(result)
 }
 z <- getSizeTable()
 ## handle the case where spatstat is the umbrella package
@@ -72,6 +82,8 @@ if(isTRUE(getSpatstatVariable("Spatstat.Is.Umbrella"))) {
   z <- mergeSizeTables(z, zgeom)
   zcore <- getSizeTable("spatstat.core")
   z <- mergeSizeTables(z, zcore)
+  zlin <- getSizeTable("spatstat.linnet")
+  z <- mergeSizeTables(z, zlin)
 } 
 ## sub-packages- access via the sub-package
 zutils <- getSizeTable("spatstat.utils")

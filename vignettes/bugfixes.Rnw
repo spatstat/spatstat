@@ -47,8 +47,8 @@ nbugssince <- nrow(news(Version > "1.42-0" & grepl("^BUG", Category),
 \pagebreak
 \section{Bug history}
 
-Thousands of bugs have been detected and fixed in \spst\ during its
-25-year history. We started recording the bug history in 2010.
+Thousands of bugs have been detected and fixed in \spst\ since it was
+first released in 2001. We started recording the bug history in 2010.
 
 Bugs that may have affected the user are listed in the 
 package \texttt{NEWS} file, and can be searched
