@@ -80,8 +80,8 @@ linnet(vertices, m, edges, sparse=FALSE, warn=TRUE)
   \code{\link{delaunayNetwork}} for the Delaunay triangulation
   as a network.
   
-  \code{\link[spatstat.geom]{ppp}},
-  \code{\link[spatstat.geom]{psp}}.
+  \code{\link[spatstat]{ppp}},
+  \code{\link[spatstat]{psp}}.
 }
 \examples{
   # letter 'A' specified by adjacency matrix

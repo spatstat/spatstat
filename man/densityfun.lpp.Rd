@@ -48,7 +48,7 @@
   and evaluated at any location. 
   
   This is a method for the generic function
-  \code{\link[spatstat.core]{densityfun}} for the class
+  \code{\link[spatstat]{densityfun}} for the class
   \code{"lpp"} of point patterns on a linear network.
 }
 \value{

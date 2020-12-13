@@ -774,8 +774,8 @@ Change log from spatstat 1.64-3 to spatstat 1.64-4
 
 ------------- passed R-4.0.3 CMD check ---------------
 (with environment variable SPATSTAT_TEST defined/undefined)
-------------- installed on laptop      ---------------
+!!!!!!!!!!!!  This version of spatstat is no longer  !!!!!!!!!!!!!!!!!!
+!!!!!!!!!!!!  installed on my laptop                 !!!!!!!!!!!!!!!!!!
 ------------- uploaded to GitHub       ---------------
-
 
    

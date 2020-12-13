@@ -162,7 +162,7 @@ Typing \code{library(spatstat)} will load the familiar
 %#%^!ifdef ANTEDILUVIAN
     four
 %#%^!else
-    six
+    seven
 %#%^!endif
     sub-packages, called 
     \pkg{spatstat.utils},
@@ -171,15 +171,17 @@ Typing \code{library(spatstat)} will load the familiar
 %#%^!ifndef ANTEDILUVIAN
     \pkg{spatstat.geom},
     \pkg{spatstat.core},
+    \pkg{spatstat.linnet},
 %#%^!endif
     and \pkg{spatstat}.
 
     \begin{itemize}
     \item 
-      The \code{spatstat} package contains
 %#%^!ifdef ANTEDILUVIAN
+      The \code{spatstat} package contains
       the main code.
 %#%^!else
+      The \code{spatstat} package now contains
       only documentation and introductory material.
       It provides beginner's introductions, vignettes, interactive demonstration
       scripts, and a few help files summarising the package.
@@ -203,19 +205,29 @@ Typing \code{library(spatstat)} will load the familiar
       The \pkg{spatstat.core} package
       contains the main code for statistical analysis of spatial point patterns
       and other spatial data.
+    \item
+      The \pkg{spatstat.linnet} package
+      defines spatial data on a linear network,
+      and performs geometrical operations 
+      and statistical analysis on such data.
 %#%^!endif
     \end{itemize}
+
+    \noindent\textbf{Installing:}
+    If you install \pkg{spatstat}, then the system will install all the 
+    other sub-packages listed above.
     
-    Typing \code{library(spatstat)} 
-    will automatically load 
+    \noindent\textbf{Running:}
+    If you type \code{library(spatstat)} in an \textsf{R} session,
+    the system will automatically load 
 %#%^!ifdef ANTEDILUVIAN
     \pkg{spatstat.data}.
 %#%^!else
-    \pkg{spatstat.data}, \pkg{spatstat.geom} and \pkg{spatstat.core}.
+    \pkg{spatstat.data}, \pkg{spatstat.geom},
+    \pkg{spatstat.core} and \pkg{spatstat.linnet}.
 %#%^!endif 
-    
-    Typing \code{library(spatstat)} also \textbf{``imports''}
-    \pkg{spatstat.utils} and \pkg{spatstat.sparse} (without reporting this).
+    It will also silently \textbf{``import''}
+    \pkg{spatstat.utils} and \pkg{spatstat.sparse}.
     To access the functions in \pkg{spatstat.utils} directly, you would need to
     type \code{library(spatstat.utils)}. Similarly for \pkg{spatstat.sparse}.
 
@@ -227,15 +239,15 @@ Typing \code{library(spatstat)} will load the familiar
     
     \begin{itemize}
     \item \pkg{spatstat.local} for local model-fitting, 
-    \item \pkg{spatstat.Knet} for analysing point patterns
-      on a network.
+    \item \pkg{spatstat.Knet} provides additional code for
+      analysing point patterns on a network.
     \item \pkg{spatstat.gui} containing interactive graphics
       functions,
     \item \pkg{spatstat.sphere} for analysing point patterns on a sphere
       (under development!)
     \end{itemize}
 
-\pagebreak
+%\pagebreak
 
 \section{Precis of all changes}
 
