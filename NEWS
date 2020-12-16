@@ -1,11 +1,14 @@
 
-        CHANGES IN spatstat VERSION 1.64-3.030
+        CHANGES IN spatstat VERSION 1.64-3.033
 
 OVERVIEW
 
-    o We thank Pavel Fibich and Professor Shin-ichi Igarashi for contributions.
+    o We thank Tilman Davies, Pavel Fibich and
+    Professor Shin-ichi Igarashi for contributions.
 
     o New dataset 'concrete'
+
+    o Important bug fix in simulation of log-Gaussian Cox processes.
     
     o Bug fixes and minor improvements.
 
@@ -41,9 +44,18 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o harmonise.im
     The result belongs to class 'solist' and 'imlist'
     so that it can be plotted.
-    
+
 BUG FIXES
 
+    o rLGCP, simulate.kppm
+    Simulation results for log-Gaussian Cox processes were incorrect
+    unless the pixel dimensions and pixel spacings were identical
+    on the horizontal and vertical axes. (If pixel dimensions were not
+    specified, then the results were incorrect whenever the Frame of the
+    simulation window was not a square.) 
+    [Spotted by Tilman Davies.]
+    Fixed.
+    
     o crossdist.pp3
     Results with periodic=TRUE were partially incorrect.
     Fixed.
@@ -79,6 +91,10 @@ BUG FIXES
     caused an error if the 'units' package was loaded.
     Fixed.
 
+    o nnclean
+    Crashed if k >= npoints(X).
+    Fixed.
+    
         CHANGES IN spatstat VERSION 1.64-3
 
 OVERVIEW

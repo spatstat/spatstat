@@ -5,7 +5,7 @@
 #
 #   original code by Abdollah Jalilian
 #
-#  $Revision: 1.21 $    $Date: 2019/07/09 09:52:18 $
+#  $Revision: 1.22 $    $Date: 2020/12/16 03:46:49 $
 #
 
 rLGCP <- local({
@@ -77,8 +77,15 @@ rLGCP <- local({
     if(spc) RandomFields::RFoptions(spConform=FALSE)
     z <- RandomFields::RFsimulate(rfmodel, xcol, yrow, grid = TRUE, n=nsim)
     if(spc) RandomFields::RFoptions(spConform=TRUE)
+    if(is.null(dim(z)))
+      stop("RFsimulate did not return a matrix or array", call.=FALSE)
     ## ensure 3D array
     if(length(dim(z)) == 2) z <- array(z, dim=c(dim(z), 1))
+    ## transform to spatstat convention 
+    z <- aperm(z, c(2,1,3))
+    ## safety checks
+    if(!all(dim(z)[1:2] == dim(Lambda))) 
+      stop("Internal error: wrong matrix dimensions in rLGCP", call.=FALSE)
 
     ## generate realisations of LGCP
     result <- vector(mode="list", length=nsim)

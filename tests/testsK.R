@@ -310,7 +310,7 @@ local({
 #
 # tests/kppm.R
 #
-# $Revision: 1.33 $ $Date: 2020/04/28 12:58:26 $
+# $Revision: 1.34 $ $Date: 2020/12/16 03:58:13 $
 #
 # Test functionality of kppm that depends on RandomFields
 # Test update.kppm for old style kppm objects
@@ -450,6 +450,10 @@ local({
   hut <- kppm(redwood ~ x, method="palm", weightfun=NULL)
   mut <- kppm(redwood)
   nut <- update(mut, Y)
+  #' Bug in rLGCP spotted by Tilman Davies
+  X <- rLGCP("matern", function(x,y) { 1 - 0.4* y },
+             var=2, scale=0.7, nu=0.5, win = square(10),
+             dimyx=c(32,64))
 })
 }
 

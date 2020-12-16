@@ -778,4 +778,44 @@ Change log from spatstat 1.64-3 to spatstat 1.64-4
 !!!!!!!!!!!!  installed on my laptop                 !!!!!!!!!!!!!!!!!!
 ------------- uploaded to GitHub       ---------------
 
-   
+   segtest.R
+	Tweak
+	
+   DESCRIPTION
+   NEWS
+	Version 1.64-3.031
+
+------------- passed R-4.0.3 CMD check ---------------
+(with environment variable SPATSTAT_TEST defined/undefined)
+------------- uploaded to GitHub       ---------------
+
+   nnclean.R
+	Bug fix.
+
+   DESCRIPTION
+   NEWS
+	Version 1.64-3.032
+
+
+16 dec 2020
+
+   nnclean.R
+	Buglet fix.
+
+   rLGCP.R
+	Fixed bug spotted by Tilman Davies.
+
+   tests/kppm.R
+	Add test of bug in rLGCP
+
+   bugfixes.Rnw
+	Noted the bug in rLGCP
+	
+   DESCRIPTION
+   NEWS
+	Version 1.64-3.033
+
+
+------------- passed R-4.0.3 CMD check ---------------
+(with environment variable SPATSTAT_TEST defined/undefined)
+------------- uploaded to GitHub       ---------------

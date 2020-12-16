@@ -6,7 +6,7 @@
 # Adapted from statlib file NNclean.q
 # Authors: Simon Byers and Adrian Raftery
 #
-#  $Revision: 1.17 $   $Date: 2020/11/17 01:30:18 $
+#  $Revision: 1.19 $   $Date: 2020/12/16 03:53:00 $
 #
 
 nnclean <- function(X, k, ...) {
@@ -120,6 +120,22 @@ nncleanEngine <-
   ## Adapted for spatstat by Adrian Baddeley
   
   n <- length(kthNND)
+
+  ## Error handler by Adrian
+  if(k >= n) {
+    if(verbose)
+      cat(paste("Cannot compute neighbours of order k =", k,
+                "for a pattern of", n, "data points;",
+                "treating all points as noise"),
+          call.=FALSE)
+    return(list(z = rep(0, n),
+                probs = rep(0, n),
+                lambda1 = NA, lambda2 = NA, p = 0,
+                kthNND = kthNND, d=d, n=n, k=k,
+                niter = 0, maxit = maxit,
+                converged = TRUE,
+                hist=NULL))
+  }
 
   ## Undocumented extension by Adrian Baddeley 2014
   ## Allow different dimensions in feature and noise.
