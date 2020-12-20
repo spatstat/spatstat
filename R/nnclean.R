@@ -6,7 +6,7 @@
 # Adapted from statlib file NNclean.q
 # Authors: Simon Byers and Adrian Raftery
 #
-#  $Revision: 1.19 $   $Date: 2020/12/16 03:53:00 $
+#  $Revision: 1.20 $   $Date: 2020/12/19 05:25:06 $
 #
 
 nnclean <- function(X, k, ...) {
@@ -27,6 +27,7 @@ nnclean.pp3 <- function(X, k, ...,
   validposint(k, "nnclean.pp3")
 
   kthNND <- nndist(X, k=k)  
+  dont.complain.about(kthNND)
   
   # apply classification algorithm
   em <- do.call(nncleanEngine,
@@ -75,6 +76,7 @@ nnclean.ppp <-
     Xpand <- Xpand[W]
     kthNND <- nndist(Xpand, k=k)
   }
+  dont.complain.about(kthNND)
 
   # apply classification algorithm
   em <- do.call(nncleanEngine,

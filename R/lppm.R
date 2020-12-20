@@ -3,7 +3,7 @@
 #
 #  Point process models on a linear network
 #
-#  $Revision: 1.45 $   $Date: 2020/06/16 02:54:55 $
+#  $Revision: 1.46 $   $Date: 2020/12/19 05:25:06 $
 #
 
 lppm <- function(X, ...) {
@@ -174,6 +174,7 @@ summary.lppm <- function(object, ...) {
 plot.lppm <- function(x, ..., type="trend") {
   xname <- short.deparse(substitute(x))
   y <- predict(x, type=type)
+  dont.complain.about(y)
   do.call(plot, resolve.defaults(list(quote(y)),
                                    list(...),
                                    list(main=xname)))

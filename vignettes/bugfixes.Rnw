@@ -493,6 +493,10 @@ are immediately obvious.
  \subsection{Partially Incorrect}
  \begin{itemize}
    
+  \item \texttt{crossdist.pp3}:
+    Results with \texttt{periodic=TRUE} were partially incorrect.
+    \bugger{1.34-1}{dec 2013}{1.65-0}{dec 2020}
+    
  \item \texttt{mppm}:
    Internal data were malformed if the interaction was \texttt{Hardcore}
     or \texttt{MultiHard} or a hybrid involving these interactions.

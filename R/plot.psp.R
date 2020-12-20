@@ -3,7 +3,7 @@
 #'
 #'  plot method for segment patterns
 #'
-#'  $Revision: 1.4 $ $Date: 2020/11/17 03:47:24 $
+#'  $Revision: 1.5 $ $Date: 2020/12/19 05:25:06 $
 
 plot.psp <- function(x, ..., main, add=FALSE,
                      show.all=!add, 
@@ -65,6 +65,7 @@ plot.psp <- function(x, ..., main, add=FALSE,
     bb.all <- as.rectangle(as.owin(x))
     if(do.plot && (!add || show.window)) {
       xwindow <- x$window
+      dont.complain.about(xwindow)
       do.call.plotfun(plot.owin, 
                       resolve.defaults(list(x=quote(xwindow),
 		                            main=if(show.all) main else "",
@@ -98,6 +99,7 @@ plot.psp <- function(x, ..., main, add=FALSE,
       ## with title centred on this window
       if(show.window) {
 	xwindow <- x$window
+        dont.complain.about(xwindow)
         do.call.plotfun(plot.owin, 
                         resolve.defaults(list(x=quote(xwindow),
                                               add=TRUE,
@@ -218,6 +220,7 @@ thickSegments <- local({
     if(legend) {
       #' use layout procedure in plot.im
       px <- pixellate(x)
+      dont.complain.about(px)
       z <- do.call(plot.im,
                    resolve.defaults(list(quote(px), 
 					do.plot=FALSE, ribbon=TRUE),

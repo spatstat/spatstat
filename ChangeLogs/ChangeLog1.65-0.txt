@@ -1,0 +1,894 @@
+Change log from spatstat 1.64-3 to spatstat 1.65-0
+==================================================
+
+05 nov 2020
+
+   DESCRIPTION
+   NEWS
+   Nickname.txt
+	Nickname changed to 'All Over Bar the Shouting'
+	Version 1.64-3.001
+
+------------- passed R-4.0.3 CMD check ---------------
+(with environment variable SPATSTAT_TEST defined/undefined)
+------------- installed on laptop      ---------------
+------------- uploaded to GitHub       ---------------
+
+09 nov 2020
+
+   units.R
+	Added 'defensive' code to avoid collision with 'units' package
+
+   crossdist.lpp.Rd
+   pairdist.lpp.Rd
+	Avoid use of 'proglang'
+	
+   DESCRIPTION
+   NEWS
+	Version 1.64-3.002
+
+------------- passed R-4.0.3 CMD check ---------------
+(with environment variable SPATSTAT_TEST defined/undefined)
+------------- installed on laptop      ---------------
+------------- uploaded to GitHub       ---------------
+
+   affine.R
+	Bug fixes in affine.owin related to
+	a poor choice of default pixel resolution.
+
+   deldir.R
+   dirichletEdges.Rd
+	dirichletEdges has new argument 'clip'
+
+   tests/segments.R
+	Added check of bug found by Rolf
+	
+   DESCRIPTION
+   NEWS
+	Version 1.64-3.003
+
+------------- passed R-4.0.3 CMD check ---------------
+(with environment variable SPATSTAT_TEST defined/undefined)
+------------- installed on laptop      ---------------
+------------- uploaded to GitHub       ---------------
+
+10 nov 2020
+
+   cdftest.R
+	Experimental improvement to idiom involving resolve.defaults
+
+   DESCRIPTION
+   NEWS
+   Nickname.txt
+	Nickname changed to 'Big Boy Pants'
+	Version 1.64-3.004
+
+------------- passed R-4.0.3 CMD check ---------------
+(with environment variable SPATSTAT_TEST defined/undefined)
+------------- installed on laptop      ---------------
+------------- uploaded to GitHub       ---------------
+
+11 nov 2020
+
+   gordon.Rd
+	Tweaked URL (psigh)
+
+   addvar.R
+   alltypes.R
+   areainter.R
+   bermanlpp.R
+   bermantest.R
+   bw.optim.R
+   cdftestlpp.R
+   cdftest.R
+	Experimental improvement to idiom involving resolve.defaults
+	(applied to all files beginning with a-c)
+   
+
+   DESCRIPTION
+   NEWS
+	Version 1.64-3.005
+
+------------- passed R-4.0.3 CMD check ---------------
+(with environment variable SPATSTAT_TEST defined/undefined)
+------------- installed on laptop      ---------------
+------------- uploaded to GitHub       ---------------
+
+12 nov 2020
+
+   plot.ppp.R
+	Bug fix in plot.ppp
+	spotted by Rolf
+
+   DESCRIPTION
+   NEWS
+	Version 1.64-3.006
+
+------------- passed R-4.0.3 CMD check ---------------
+(with environment variable SPATSTAT_TEST defined/undefined)
+------------- installed on laptop      ---------------
+------------- uploaded to GitHub       ---------------
+
+14 nov 2020
+
+   densityAdaptive.R
+   densityfun.R   
+   density.ppp.R
+   density.psp.R
+   distcdf.R
+   envelopeArray.R
+   envelope.R
+	Experimental improvement to idiom involving resolve.defaults
+	(applied to all files beginning with a-e)
+   
+   DESCRIPTION
+   NEWS
+	Now requires spatstat.utils 1.18-0
+
+   DESCRIPTION
+   NEWS
+	Version 1.64-3.007
+
+------------- passed R-4.0.3 CMD check ---------------
+(with environment variable SPATSTAT_TEST defined/undefined)
+------------- installed on laptop      ---------------
+------------- uploaded to GitHub       ---------------
+
+16 nov 2020
+
+   fryplot.R
+   funxy.R
+   hierpair.family.R
+   hybrid.family.R
+   hyperframe.R
+   images.R
+   ippm.R
+   kppm.R
+	Experimental improvement to idiom involving resolve.defaults
+	(now applied to all files beginning with a-k)
+
+   DESCRIPTION
+   NEWS
+        Requires spatstat.data >= 1.6-0
+	Acknowledged Shin-ichi Igarashi
+
+   datasets.Rnw
+   updates.Rnw
+   spatstat-package.Rd
+	Mentioned new dataset 'concrete'.
+	
+   DESCRIPTION
+   NEWS
+	Version 1.64-3.008
+
+------------- passed R-4.0.3 CMD check ---------------
+(with environment variable SPATSTAT_TEST defined/undefined)
+------------- installed on laptop      ---------------
+------------- uploaded to GitHub       ---------------
+
+   random.R
+	Accelerated rSSI
+
+   DESCRIPTION
+   NEWS
+	Version 1.64-3.009
+
+------------- passed R-4.0.3 CMD check ---------------
+(with environment variable SPATSTAT_TEST defined/undefined)
+------------- installed on laptop      ---------------
+------------- uploaded to GitHub       ---------------
+
+    laslett.R
+    layered.R
+    leverage.R
+    linim.R
+    linnet.R
+    localKcross.R
+    localpcf.R
+    lppm.R
+    lpp.R
+    lurking.R
+    lurkmppm.R
+	Experimental improvement to idiom involving resolve.defaults
+	(now applied to all files beginning with a-l)
+
+   DESCRIPTION
+   NEWS
+	Version 1.64-3.010
+
+------------- passed R-4.0.3 CMD check ---------------
+(with environment variable SPATSTAT_TEST defined/undefined)
+------------- installed on laptop      ---------------
+------------- uploaded to GitHub       ---------------
+
+............. passed 'make bookcheck'  ................
+
+
+17 nov 2020
+
+   measures.R
+   mincontrast.R
+   morishita.R
+   morisita.R
+   mpl.R
+   mppm.R
+   nnclean.R
+   nndistlpp.R
+   nnmap.R
+	Experimental improvement to idiom involving resolve.defaults
+	(now applied to all files beginning with a-n)
+
+   DESCRIPTION
+   NEWS
+	Version 1.64-3.011
+
+------------- passed R-4.0.3 CMD check ---------------
+(with environment variable SPATSTAT_TEST defined/undefined)
+------------- installed on laptop      ---------------
+------------- uploaded to GitHub       ---------------
+
+   colourtools.R
+   spatstat-internal.Rd
+	do.call.plotfun has new argument 'envir'
+	By default, evaluation now occurs in the environment
+	where do.call.plotfun was called.
+	
+   Kmulti.R
+   objsurf.R
+   pairs.im.R
+   pairwise.family.R
+   pairwise.R
+   parres.R
+   persp.im.R
+   pixellate.R
+   plot.anylist.R
+   plot.fasp.R
+   plot.im.R
+   plot.mppm.R
+   plot.owin.R
+   plot.plotppm.R
+   plot.ppp.R
+   plot.psp.R
+   pp3.R
+   ppmclass.R
+   ppx.R
+   profilepl.R
+   psp2pix.R
+   psp.R
+	Experimental improvement to idiom involving resolve.defaults
+	(now applied to all files beginning with a-p and A-P)
+
+   DESCRIPTION
+   NEWS
+	Version 1.64-3.012
+
+------------- passed R-4.0.3 CMD check ---------------
+(with environment variable SPATSTAT_TEST defined/undefined)
+------------- installed on laptop      ---------------
+------------- uploaded to GitHub       ---------------
+
+18 nov 2020
+
+   qqplotppm.R
+   quadclass.R
+   quadratcount.R
+   quadrattest.R
+   quadscheme.R
+   quantess.R
+   resid4plot.R
+   rho2hat.R
+   rhohat.R
+   rose.R
+   rppm.R
+   scanstat.R
+   slrm.R
+   smooth.ppp.R
+   split.ppp.R
+   ssf.R
+   stienen.R
+   symbolmap.R
+   tess.R
+   texture.R
+   unnormdensity.R
+	Experimental improvement to idiom involving resolve.defaults
+	(now applied to all files in spatstat/R)
+
+   DESCRIPTION
+   NEWS
+	Version 1.64-3.013
+
+------------- passed R-4.0.3 CMD check ---------------
+(with environment variable SPATSTAT_TEST defined/undefined)
+------------- installed on laptop      ---------------
+------------- uploaded to GitHub       ---------------
+
+............. passed 'make bookcheck'  ...............
+
+24 nov 2020
+
+   intensity.R 
+   intensity.ppm.R   [NEW FILE]
+      Split 'intensity.R' into two files in preparation for package splitup.
+
+   fasp.R
+   pool.R
+	Moved pool.fasp() to pool.R in preparation for package splitup.
+	
+   otherpackages.R   [DELETED]
+   fft.R             [NEW FILE]
+   pkgRandomFields.R [NEW FILE]
+      Split 'otherpackages.R' into two files in preparation for splitup.
+
+   as.owin.Rd
+   WindowOnly.Rd
+	Inserted filepp directives in preparation for splitup.
+	
+   DESCRIPTION
+   NEWS
+	Version 1.64-3.014
+
+------------- passed R-4.0.3 CMD check ---------------
+(with environment variable SPATSTAT_TEST defined/undefined)
+------------- installed on laptop      ---------------
+------------- uploaded to GitHub       ---------------
+
+25 nov 2020
+
+   markcorr.R
+	Bug fix in Vmark (spotted by Pavel Fibich)
+
+   tests/markcor.R
+	Added test of bug
+
+   DESCRIPTION
+   NEWS
+	Version 1.64-3.015
+
+------------- passed R-4.0.3 CMD check ---------------
+(with environment variable SPATSTAT_TEST defined/undefined)
+------------- installed on laptop      ---------------
+------------- uploaded to GitHub       ---------------
+
+   datasets.Rnw
+   doc/mask.eps [New file]
+   doc/mask.pdf [New file]
+   	Added a symbol for a binary mask,
+	used in the table of datasets.
+
+   methods.influence.ppm.Rd [New file]
+   spatstat-internal.Rd
+   as.ppp.Rd
+   as.owin.Rd
+   domain.Rd
+	Collected methods for 'influence.ppm' in separate file
+
+   methods.leverage.ppm.Rd [New file]
+   spatstat-internal.Rd
+   as.im.Rd
+   as.owin.Rd
+   domain.Rd
+	Collected methods for 'leverage.ppm' in separate file
+
+   DESCRIPTION
+   NEWS
+	Version 1.64-3.016
+
+------------- passed R-4.0.3 CMD check ---------------
+(with environment variable SPATSTAT_TEST defined/undefined)
+------------- installed on laptop      ---------------
+------------- uploaded to GitHub       ---------------
+
+26 nov 2020
+
+   domain.Rd
+	Added filepp directives in preparation for breakup.
+
+   DESCRIPTION
+   NEWS
+	Version 1.64-3.017
+
+------------- passed R-4.0.3 CMD check ---------------
+(with environment variable SPATSTAT_TEST defined/undefined)
+------------- installed on laptop      ---------------
+------------- uploaded to GitHub       ---------------
+
+    logistic.R 
+    logiquad.R [New file]
+       Split code in preparation for package breakup
+       
+    as.function.fv.Rd
+    as.function.rhohat.Rd [New file]
+    closepairs.Rd 
+    closepaircounts.Rd [New file]
+       Split help files in preparation for package breakup
+
+    spatstat-deprecated.Rd
+    as.fv.Rd
+    as.im.Rd
+    as.tess.Rd
+    unitname.Rd
+       Inserted filepp directives in preparation for package breakup
+
+   DESCRIPTION
+   NEWS
+	Version 1.64-3.018
+
+------------- passed R-4.0.3 CMD check ---------------
+(with environment variable SPATSTAT_TEST defined/undefined)
+------------- installed on laptop      ---------------
+------------- uploaded to GitHub       ---------------
+
+29 nov 2020
+
+   split.ppp.R
+   density.ppp.R
+	density.splitppp moved to density.ppp.R
+	in preparation for package breakup
+
+   metricPdt.R
+   metriccontact.R [New file]
+	split in preparation for package breakup
+
+   solist.R
+   pool.R
+	Moved 'pool.anylist' to pool.R
+	in preparation for package breakup
+
+   leverage.R
+   minnndist.R
+	Moved 'avenndist' to minnndist.R
+	in preparation for package breakup
+
+   measures.R
+   augment.msr.R [New file]
+   	augment.msr moved to new file
+	in preparation for package breakup
+
+   logiquad.R
+	tweak to avoid calling rpoispp
+	in preparation for package breakup
+
+   random.R
+   randombasic.R [New file]
+   	split random.R in preparation for package breakup
+
+   DESCRIPTION
+   NEWS
+	Version 1.64-3.019
+
+------------- passed R-4.0.3 CMD check ---------------
+(with environment variable SPATSTAT_TEST defined/undefined)
+------------- installed on laptop      ---------------
+------------- uploaded to GitHub       ---------------
+
+30 nov 2020
+
+   blur.R
+   images.R
+	Moved fillNA() from blur.R into images.R
+	in preparation for package breakup
+	Modified safelookup()
+
+   is.cadlag.R
+	New argument 'expandpoly'
+
+   randomseg.R
+	Inserted filepp directives
+	in preparation for package breakup
+
+   as.layered.Rd
+   as.layered.msr.Rd [New file]
+   	split documentation in preparation for package breakup
+
+   spatstat-internal.Rd
+   	rearranged and inserted filepp directives
+	in preparation for package breakup
+
+   WindowOnly.Rd
+   as.owin.Rd
+   domain.Rd
+	tweaked filepp directives
+
+   DESCRIPTION
+   NEWS
+	Version 1.64-3.020
+
+------------- passed R-4.0.3 CMD check ---------------
+(with environment variable SPATSTAT_TEST defined/undefined)
+------------- installed on laptop      ---------------
+------------- uploaded to GitHub       ---------------
+
+   unstack.R
+   measures.R
+	Moved 'unstack.msr' to measures.R
+	in preparation for package breakup
+	
+   rat.R
+   pool.R
+	Moved 'pool.rat' to pool.R
+	in preparation for package breakup
+	
+   distcdf.R
+   bw.frac.R [New file]
+   	Excised bw.frac to separate file
+	in preparation for package breakup
+	
+   DESCRIPTION
+   NEWS
+	Version 1.64-3.021
+
+------------- passed R-4.0.3 CMD check ---------------
+(with environment variable SPATSTAT_TEST defined/undefined)
+------------- installed on laptop      ---------------
+------------- uploaded to GitHub       ---------------
+
+   versions.R
+   pkgRandomFields.R
+   ppmclass.R
+   interact.R
+	Redistributed version-tracking code 
+	in preparation for package breakup
+
+   DESCRIPTION
+   NEWS
+	Version 1.64-3.022
+
+------------- passed R-4.0.3 CMD check ---------------
+(with environment variable SPATSTAT_TEST defined/undefined)
+------------- installed on laptop      ---------------
+------------- uploaded to GitHub       ---------------
+
+   exactdt.R
+   raster.c [New file]
+	Redistributed support code for raster images
+	in preparation for package breakup
+
+   pp3.R
+   ppx.R
+   randompp3.R [New file]
+   randomppx.R [New file]
+	Separated code for random point patterns
+	in preparation for package breakup
+
+   aaa.R [New file]
+   options.R
+	Moved the 'SpatstatVariable' code to aaa.R so that it is
+	accessible from all files.
+
+   fv.R
+	Assigned internal data to spatstat variables
+	to make them accessible from all files.
+	
+   smoothfv.R
+   varblock.R
+	use spatstat variables
+	
+   DESCRIPTION
+   NEWS
+	Version 1.64-3.023
+
+------------- passed R-4.0.3 CMD check ---------------
+(with environment variable SPATSTAT_TEST defined/undefined)
+------------- installed on laptop      ---------------
+------------- uploaded to GitHub       ---------------
+
+02 dec 2020
+
+   localpcf.R
+   localpcf.Rd
+   spatstat-internal.Rd
+	New argument 'rvalue'.
+
+   default.dummy.Rd
+	Added more information about the default for 'nd'.
+
+   DESCRIPTION
+   NEWS
+	Version 1.64-3.024
+
+------------- passed R-4.0.3 CMD check ---------------
+(with environment variable SPATSTAT_TEST defined/undefined)
+------------- installed on laptop      ---------------
+------------- uploaded to GitHub       ---------------
+
+03 dec 2020
+
+   Window.Rd
+   applynbd.Rd
+   as.function.fv.Rd
+   as.fv.Rd
+   as.im.Rd
+   as.layered.Rd
+   as.tess.Rd
+   closepairs.Rd
+   closetriples.Rd
+   compatible.fasp.Rd
+   compatible.fv.Rd
+   crossdist.default.Rd
+   crossdist.pp3.Rd
+   crossdist.ppp.Rd
+   crossdist.psp.Rd
+   eval.fasp.Rd
+   eval.fv.Rd
+   fasp.object.Rd
+   fv.object.Rd
+   harmonic.Rd
+   hist.funxy.Rd
+   im.object.Rd
+   intensity.Rd
+   intensity.ppp.Rd
+   is.marked.Rd
+   is.marked.ppp.Rd
+   is.multitype.Rd
+   is.multitype.ppp.Rd
+   is.ppp.Rd
+   markstat.Rd
+   nearestValue.Rd
+   nndist.Rd
+   nndist.pp3.Rd
+   nnmark.Rd
+   hist.im.Rd
+   pairdist.Rd
+   pairdist.default.Rd
+   pairdist.pp3.Rd
+   pairdist.ppp.Rd
+   pixellate.ppp.Rd
+   pixelquad.Rd
+   plot.anylist.Rd
+   plot.fasp.Rd
+   plot.fv.Rd
+   plot.listof.Rd
+   plot.quadratcount.Rd
+   plot.solist.Rd
+   pointsOnLines.Rd
+   polartess.Rd
+   ppp.object.Rd
+   quad.object.Rd
+   quadratcount.Rd
+   quadrats.Rd
+   quadscheme.Rd
+   quadscheme.logi.Rd
+   rat.Rd
+   rlinegrid.Rd
+   rsyst.Rd
+   spatstat.options.Rd
+   stieltjes.Rd
+   summary.ppp.Rd
+   tess.Rd
+   unstack.ppp.Rd
+   unstack.solist.Rd
+   venn.tess.Rd
+   with.fv.Rd
+	Insert filepp directives in preparation for package breakup.
+
+   tests/closeshave.R
+   tests/closecore.R [New file]
+   	Split test code in preparation for package breakup.
+
+   tests/correctC.R
+   tests/dominic.R
+   tests/factorbugs.R
+   tests/hyperframe.R
+	Avoid using 'core' code, in preparation for package breakup.
+	
+   DESCRIPTION
+   NEWS
+	Version 1.64-3.025
+
+------------- passed R-4.0.3 CMD check ---------------
+(with environment variable SPATSTAT_TEST defined/undefined)
+------------- installed on laptop      ---------------
+------------- uploaded to GitHub       ---------------
+
+04 dec 2020
+
+   DESCRIPTION
+   NEWS
+	spatstat depends on spatstat.data 1.6-1
+	
+   *.Rd
+	Example code in help files destined for spatstat.geom
+	avoids using functionality of spatstat.core (where it is not relevant).
+	Uses the object 'demofuns' in spatstat.data 1.6-1
+	instead of evaluating summary functions.
+
+   tests/nndist.R
+   tests/nnstat.R [New file]
+   	Split test code according to destination
+
+   distan3.c
+	BUG FIX in C code for crossdist.pp3(X, Y, periodic=TRUE)
+
+   DESCRIPTION
+   NEWS
+	Version 1.64-3.026
+
+------------- passed R-4.0.3 CMD check ---------------
+(with environment variable SPATSTAT_TEST defined/undefined)
+------------- installed on laptop      ---------------
+------------- uploaded to GitHub       ---------------
+
+05 dec 2020
+
+   runifrect.Rd [New file]
+   spatstat-internal.Rd
+	Exposed 'runifrect' as a user level function
+	in preparation for breakup
+
+   *Rd
+	tweaks to examples in numerous files
+	in preparation for breakup
+
+   DESCRIPTION
+   NEWS
+	Version 1.64-3.027
+
+------------- passed R-4.0.3 CMD check ---------------
+(with environment variable SPATSTAT_TEST defined/undefined)
+------------- installed on laptop      ---------------
+------------- uploaded to GitHub       ---------------
+
+06 dec 2020
+
+   *.R
+   *.Rd
+	Numerous tweaks in preparation for breakup
+
+   DESCRIPTION
+   NEWS
+	Version 1.64-3.028
+
+------------- passed R-4.0.3 CMD check ---------------
+(with environment variable SPATSTAT_TEST defined/undefined)
+------------- installed on laptop      ---------------
+------------- uploaded to GitHub       ---------------
+
+   updates.Rnw
+	Bug fix in code that summarises package history
+
+   DESCRIPTION
+   NEWS
+	Version 1.64-3.029
+
+------------- passed R-4.0.3 CMD check ---------------
+(with environment variable SPATSTAT_TEST defined/undefined)
+------------- installed on laptop      ---------------
+------------- uploaded to GitHub       ---------------
+
+13 dec 2020
+
+   deldir.R
+	Use "deldir::" for all calls to deldir package
+
+   areaGain.Rd
+   areaLoss.Rd
+   spatstat-internal.Rd
+	Tweaked filepp directives in preparation for package breakup.
+
+   updates.Rnw
+	Inserted filepp directives in preparation for package breakup.
+	
+   DESCRIPTION
+   NEWS
+	Version 1.64-3.030
+
+------------- passed R-4.0.3 CMD check ---------------
+(with environment variable SPATSTAT_TEST defined/undefined)
+!!!!!!!!!!!!  This version of spatstat is no longer  !!!!!!!!!!!!!!!!!!
+!!!!!!!!!!!!  installed on my laptop                 !!!!!!!!!!!!!!!!!!
+------------- uploaded to GitHub       ---------------
+
+   segtest.R
+	Tweak
+	
+   DESCRIPTION
+   NEWS
+	Version 1.64-3.031
+
+------------- passed R-4.0.3 CMD check ---------------
+(with environment variable SPATSTAT_TEST defined/undefined)
+------------- uploaded to GitHub       ---------------
+
+   nnclean.R
+	Bug fix.
+
+   DESCRIPTION
+   NEWS
+	Version 1.64-3.032
+
+
+16 dec 2020
+
+   nnclean.R
+	Buglet fix.
+
+   rLGCP.R
+	Fixed bug spotted by Tilman Davies.
+
+   tests/kppm.R
+	Add test of bug in rLGCP
+
+   bugfixes.Rnw
+	Noted the bug in rLGCP
+	
+   DESCRIPTION
+   NEWS
+	Version 1.64-3.033
+
+
+------------- passed R-4.0.3 CMD check ---------------
+(with environment variable SPATSTAT_TEST defined/undefined)
+------------- uploaded to GitHub       ---------------
+
+19 dec 2020
+
+   ppx.R
+	Buglet fix in unitname in intersect.boxx
+	
+   updates.Rnw
+   bugfixes.Rnw
+	Updated to cover all the above.
+
+   augment.msr.R
+   bermantest.R
+   bw.frac.R
+   cdftest.R
+   cdftestlpp.R
+   envelope.R
+   fryplot.R
+   ippm.R
+   Kmulti.R
+   laslett.R
+   leverage.R
+   linim.R
+   lpp.R
+   lppm.R
+   localKcross.R
+   lurking.R
+   mincontrast.R
+   mppm.R
+   nnclean.R
+   objsurf.R
+   pairs.im.R
+   persp.im.R
+   plot.im.R
+   plot.mppm.R
+   plot.owin.R
+   plot.plotppm.R
+   plot.ppp.R
+   plot.psp.R
+   pp3.R
+   ppx.R
+   psp.R
+   quadratcount.R
+   quadrattest.R
+   resid4plot.R
+   rho2hat.R
+   rose.R
+   rppm.R
+   scanstat.R
+   smooth.ppp.R
+   ssf.R
+   stienen.R
+   tess.R
+   texture.R
+	Tweak to avoid complaints from codetools coverage check
+	
+   DESCRIPTION
+   NEWS
+   Nickname.txt
+	Nickname changed to 'Famous Last Words'
+	Version 1.65-0
+
+20 dec 2020
+
+   demo/spatstat.R
+	Tweak.
+
+   DESCRIPTION
+	Incremented date 
+
+------------- passed R-4.0.3 CMD check ---------------
+(with environment variable SPATSTAT_TEST defined/undefined)
+------------- installed on laptop TEMPORARILY FOR TESTS -------
+------------- uploaded to GitHub ------------------------------

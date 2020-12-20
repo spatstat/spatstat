@@ -3,7 +3,7 @@
 #' Adapted by Adrian Baddeley
 #' Copyright (C) 2016 Kassel Hingee and Adrian Baddeley
 
-# $Revision: 1.9 $  $Date: 2020/03/16 10:28:51 $
+# $Revision: 1.10 $  $Date: 2020/12/19 05:25:06 $
 
 laslett <- function(X, ...,
                     verbose=FALSE, plotit=TRUE,
@@ -206,6 +206,7 @@ plot.laslett <- function(x, ...,
   if(any(bad <- names(argh) %in% c("eps", "dimyx", "xy")))
     argh <- argh[!bad]
 
+  dont.complain.about(Display)
   do.call(plot,
           resolve.defaults(list(x=quote(Display)),
                            argh,

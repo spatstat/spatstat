@@ -1,7 +1,7 @@
 #
 #  cdftest.R
 #
-#  $Revision: 2.23 $  $Date: 2020/11/10 01:48:23 $
+#  $Revision: 2.24 $  $Date: 2020/12/19 05:25:06 $
 #
 #
 
@@ -39,6 +39,7 @@ cdf.test.ppp <-
       model <- ppm(X)
       modelname <- "CSR"
     }
+    dont.complain.about(model)
     do.call(spatialCDFtest,
             resolve.defaults(list(model=quote(model),
                                   covariate=quote(covariate), test=test),
@@ -100,6 +101,7 @@ cdf.test.lpp <-
       model <- lppm(X)
       modelname <- "CSR"
     }
+    dont.complain.about(model)
     do.call(spatialCDFtest,
             resolve.defaults(list(model=quote(model), 
 				  covariate=quote(covariate), 

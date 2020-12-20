@@ -3,7 +3,7 @@
 #
 #  class of general point patterns in any dimension
 #
-#  $Revision: 1.68 $  $Date: 2020/11/30 11:45:00 $
+#  $Revision: 1.70 $  $Date: 2020/12/19 05:25:06 $
 #
 
 ppx <- local({
@@ -124,6 +124,7 @@ plot.ppx <- function(x, ...) {
       nama <- names(coo)
       xx <- coo[,1L]
       yy <- coo[,2L]
+      dont.complain.about(xx, yy)
       do.call.matched(plot.default,
                       resolve.defaults(list(x=quote(xx), y=quote(yy), asp=1),
                                        list(...),
@@ -137,10 +138,11 @@ plot.ppx <- function(x, ...) {
                                        list(...),
                                        list(main=xname)))
       }
-      # convert to ppp
+      ## convert to ppp
       x2 <- ppp(coo[,1], coo[,2], window=as.owin(dom),
                 marks=as.data.frame(marks(x)), check=FALSE)
-      # invoke plot.ppp
+      ## invoke plot.ppp
+      dont.complain.about(x2)
       return(do.call(plot, resolve.defaults(list(quote(x2)),
                                               list(add=TRUE),
                                               list(...))))
@@ -152,6 +154,7 @@ plot.ppx <- function(x, ...) {
     x3 <- pp3(coo[,1], coo[,2], coo[,3], dom)
     # invoke plot.pp3
     nama <- names(coo)
+    dont.complain.about(x3)
     do.call(plot,
             resolve.defaults(list(quote(x3)),
                              list(...),
@@ -228,7 +231,7 @@ intersect.boxx <- function(..., fatal = FALSE){
     if(fatal) stop("The intersection of boxx objects is NULL.")
     return(NULL)
   }
-  return(boxx(rbind(r1,r2)))
+  return(boxx(rbind(r1,r2), unitname=uname))
 }
 
 "[.ppx" <- function (x, i, drop=FALSE, clip=FALSE, ...) {

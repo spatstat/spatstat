@@ -3,7 +3,7 @@
 #
 #  Smooth the marks of a point pattern
 # 
-#  $Revision: 1.75 $  $Date: 2020/11/04 01:15:37 $
+#  $Revision: 1.76 $  $Date: 2020/12/19 05:25:06 $
 #
 
 # smooth.ppp <- function(X, ..., weights=rep(1, npoints(X)), at="pixels") {
@@ -188,6 +188,7 @@ Smooth.ppp <- function(X, sigma=NULL, ...,
              },
              pixels={
                values.weights <- if(weightsgiven) values * weights else values
+               dont.complain.about(values.weights)
                numerator <-
                  do.call(density.ppp,
                          resolve.defaults(list(x=quote(X),
@@ -259,6 +260,7 @@ Smooth.ppp <- function(X, sigma=NULL, ...,
                                  list(...)))
       ## compute numerator for each column of marks
       marx.weights <- if(weightsgiven) marx * weights else marx
+      dont.complain.about(marx.weights)
       numerators <-
         do.call(density.ppp,
                 resolve.defaults(list(x=quote(X),
@@ -609,7 +611,8 @@ smoothpointsEngine <- function(x, values, sigma, ...,
                                               list(...),
                                               list(edge=FALSE)))
     } else {
-	values.weights <- values * weights
+      values.weights <- values * weights
+      dont.complain.about(values.weights)
       numerator <- do.call(density.ppp,
                            resolve.defaults(list(x=quote(x), at="points",
                                                  weights = quote(values.weights),

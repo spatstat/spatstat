@@ -1,7 +1,7 @@
 #
 # lpp.R
 #
-#  $Revision: 1.70 $   $Date: 2020/06/17 05:41:24 $
+#  $Revision: 1.71 $   $Date: 2020/12/19 05:25:06 $
 #
 # Class "lpp" of point patterns on linear networks
 
@@ -146,6 +146,7 @@ plot.lpp <- function(x, ..., main, add=FALSE,
   ## plot linear network
   if(show.network) {
     L <- as.linnet(x)
+    dont.complain.about(L)
     do.call.matched(plot.linnet,
                     resolve.defaults(list(x=quote(L), add=TRUE),
                                      list(...)),

@@ -1,7 +1,7 @@
 # Lurking variable plot for arbitrary covariate.
 #
 #
-# $Revision: 1.64 $ $Date: 2019/01/10 00:21:28 $
+# $Revision: 1.65 $ $Date: 2020/12/19 05:25:06 $
 #
 
 lurking <- function(object, ...) {
@@ -510,6 +510,7 @@ plot.lurk <- function(x, ..., shade="grey") {
         shadecol <- if(is.colour(shade)) shade else "grey"
         xx <- c(xx,    rev(xx))
         yy <- c(Upper, rev(Lower))
+        dont.complain.about(yy)
         do.call.matched(polygon,
                         resolve.defaults(list(x=quote(xx), y=quote(yy)),
                                          list(...),

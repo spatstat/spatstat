@@ -3,7 +3,7 @@
 #'
 #'     original by Ege Rubak
 #' 
-#'     $Revision: 1.14 $ $Date: 2019/09/12 04:51:07 $
+#'     $Revision: 1.15 $ $Date: 2020/12/19 05:25:06 $
 
 "localLcross" <- function(X, from, to, ..., rmax = NULL, correction = "Ripley") {
   localKcross(X, from, to, ..., rmax = rmax, correction = correction, wantL = TRUE)
@@ -32,6 +32,7 @@
     if(from == to) {
       ## use Kest
       XI <- X[I]
+      dont.complain.about(XI)
       result <- do.call(localK,
                         resolve.defaults(list(X=quote(XI),
                                               rmax=rmax,

@@ -1,7 +1,7 @@
 #'
 #'    bw.frac.R
 #'
-#'   $Revision: 1.1 $  $Date: 2020/11/30 09:45:50 $
+#'   $Revision: 1.2 $  $Date: 2020/12/19 05:25:06 $
 
 bw.frac <- function(X, ..., f=1/4) {
   X <- as.owin(X)
@@ -25,6 +25,7 @@ plot.bw.frac <- function(x, ...) {
   g <- attr(x, "g")
   f <- attr(x, "f")
   ropt <- as.numeric(x)
+  dont.complain.about(g)
   do.call(plot,
           resolve.defaults(list(quote(g)),
                              list(...),

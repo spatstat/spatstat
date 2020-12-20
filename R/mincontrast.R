@@ -316,6 +316,7 @@ print.minconfit <- function(x, ...) {
 plot.minconfit <- function(x, ...) {
   xname <- short.deparse(substitute(x))
   xf <- x$fit
+  dont.complain.about(xf)
   do.call(plot.fv,
           resolve.defaults(list(quote(xf)),
                            list(...),

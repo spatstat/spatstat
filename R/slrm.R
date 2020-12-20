@@ -443,6 +443,7 @@ predict.slrm <- function(object, ..., type="intensity",
 plot.slrm <- function(x, ..., type="intensity") {
   xname <- short.deparse(substitute(x))
   y <- predict(x, type=type)
+  dont.complain.about(y)
   do.call(plot.im, resolve.defaults(list(x=quote(y)), 
 				    list(...), 
 				    list(main=xname)))

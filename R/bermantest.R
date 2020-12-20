@@ -3,7 +3,7 @@
 #
 # Test statistics from Berman (1986)
 #
-#  $Revision: 1.22 $  $Date: 2020/06/12 05:55:11 $
+#  $Revision: 1.23 $  $Date: 2020/12/19 05:25:06 $
 #
 #
 
@@ -18,12 +18,18 @@ berman.test.ppp <-
            ...) {
     Xname <- short.deparse(substitute(X))
     covname <- short.deparse(substitute(covariate))
+    force(covariate)
     if(is.character(covariate)) covname <- covariate
     which <- match.arg(which)
     alternative <- match.arg(alternative)
 
+    fitcsr <- ppm(X)
+    dont.complain.about(fitcsr)
+    
     do.call(bermantestEngine,
-            resolve.defaults(list(ppm(X), covariate, which, alternative),
+            resolve.defaults(list(quote(fitcsr),
+                                  quote(covariate),
+                                  which, alternative),
                              list(...),
                              list(modelname="CSR",
                                   covname=covname, dataname=Xname)))
@@ -35,6 +41,8 @@ berman.test.ppm <- function(model, covariate,
                            ...) {
   modelname <- short.deparse(substitute(model))
   covname <- short.deparse(substitute(covariate))
+  force(model)
+  force(covariate)
   if(is.character(covariate)) covname <- covariate
   verifyclass(model, "ppm")
   which <- match.arg(which)
@@ -58,12 +66,18 @@ berman.test.lpp <-
            ...) {
     Xname <- short.deparse(substitute(X))
     covname <- short.deparse(substitute(covariate))
+    force(covariate)
     if(is.character(covariate)) covname <- covariate
     which <- match.arg(which)
     alternative <- match.arg(alternative)
 
+    model <- lppm(X)
+    dont.complain.about(model)
+    
     do.call(bermantestEngine,
-            resolve.defaults(list(lppm(X), covariate, which, alternative),
+            resolve.defaults(list(quote(model),
+                                  quote(covariate),
+                                  which, alternative),
                              list(...),
                              list(modelname="CSR",
                                   covname=covname, dataname=Xname)))
@@ -75,6 +89,8 @@ berman.test.lppm <- function(model, covariate,
                            ...) {
   modelname <- short.deparse(substitute(model))
   covname <- short.deparse(substitute(covariate))
+  force(model)
+  force(covariate)
   if(is.character(covariate)) covname <- covariate
   verifyclass(model, "lppm")
   which <- match.arg(which)
@@ -273,6 +289,7 @@ plot.bermantest <-
                            sQuote(info$covname)),
                      paste("Z2 statistic =", signif(x$statistic, 4)),
                      paste("p-value=", signif(x$p.value, 4)))
+           dont.complain.about(cdfU)
            do.call(plot.ecdf,
                    resolve.defaults(
                                     list(quote(cdfU)),

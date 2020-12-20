@@ -3,7 +3,7 @@
 #
 #   Relative risk for pairs of covariate values
 #
-#   $Revision: 1.26 $   $Date: 2020/11/18 03:07:14 $
+#   $Revision: 1.27 $   $Date: 2020/12/19 05:25:06 $
 #
 
 rho2hat <- function(object, cov1, cov2, ..., method=c("ratio", "reweight")) {
@@ -68,9 +68,9 @@ rho2hat <- function(object, cov1, cov2, ..., method=c("ratio", "reweight")) {
                             })
            },
            reweight = {
-             # smoothed point pattern with weights = 1/reference
-             W <- do.call.matched(as.mask,
-                                  append(list(w=as.owin(X)), list(...)))
+             ## smoothed point pattern with weights = 1/reference
+             W <- as.owin(X)
+             W <- do.call.matched(as.mask, list(w=quote(W), ...))
              if(!needflip) {
                lambda <- predict(model, locations=W)
              } else {
@@ -128,6 +128,7 @@ rho2hat <- function(object, cov1, cov2, ..., method=c("ratio", "reweight")) {
     pixelarea <- areaW/npixel
     baseline <- if(reference == "area") rep.int(1, npixel) else lambda
     wts <- baseline * pixelarea
+    dont.complain.about(Z12pixels)
     switch(method,
            ratio = {
              # estimate intensities
@@ -212,6 +213,7 @@ plot.rho2hat <- function(x, ..., do.points=FALSE) {
   }
   if(do.points) {
     poy <- s$Z12points
+    dont.complain.about(poy)
     do.call.matched(plot.ppp,
                     resolve.defaults(list(x=quote(poy), add=TRUE),
                                      list(...)),

@@ -3,7 +3,7 @@
 #
 #   computes simulation envelopes 
 #
-#   $Revision: 2.107 $  $Date: 2019/12/14 01:58:20 $
+#   $Revision: 2.108 $  $Date: 2020/12/19 05:25:06 $
 #
 
 envelope <- function(Y, fun, ...) {
@@ -555,6 +555,7 @@ envelopeEngine <-
   # ------------------------------------------------------------------
   Xarg <- if(!clipdata) X else X[clipwin]
   corrx <- if(usecorrection) list(correction="best") else NULL
+  dont.complain.about(Xarg)
   funX <- do.call(fun,
                   resolve.defaults(list(quote(Xarg)),
                                    list(...),
@@ -1850,6 +1851,7 @@ envelope.envelope <- function(Y, fun=NULL, ...,
     # interface with 'envelope.matrix'
     etype <- if(global) "global" else if(VARIANCE) "variance" else "pointwise"
     dfm <- as.matrix(df)
+    dont.complain.about(dfm)
     result <- do.call(envelope.matrix,
                       resolve.defaults(list(Y=quote(dfm)),
                                        aargh,

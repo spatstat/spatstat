@@ -1,7 +1,7 @@
 #
 #	plot.ppp.R
 #
-#	$Revision: 1.98 $	$Date: 2020/11/17 03:47:24 $
+#	$Revision: 1.99 $	$Date: 2020/12/19 05:25:06 $
 #
 #
 #--------------------------------------------------------------------------
@@ -341,7 +341,7 @@ plot.ppp <- local({
     leg.args <- append(list(side=leg.side, vertical=vertical), leg.args)
     ## draw up layout
     legbox <- do.call.matched(plan.legend.layout,
-                              append(list(B=BB, size = sizeguess,
+                              append(list(B=quote(BB), size = sizeguess,
                                           started=FALSE, map=symap),
                                      leg.args))
     ## bounding box for everything
@@ -373,11 +373,13 @@ plot.ppp <- local({
         rwinpardefault <- list(lty=2,lwd=1,border=1)
         rwinpars <-
           resolve.defaults(par.rejects, rwinpardefault)[names(rwinpardefault)]
-        do.call(plot.owin, append(list(rwin, add=TRUE), rwinpars))
+        dont.complain.about(rwin)
+        do.call(plot.owin, append(list(quote(rwin), add=TRUE), rwinpars))
       }
       ## plot window of main pattern
       if(!clipped) {
         xwindow <- x$window
+        dont.complain.about(xwindow)
         do.call(plot.owin,
                 resolve.defaults(list(quote(xwindow), add=TRUE),
                                  list(...),
@@ -386,7 +388,7 @@ plot.ppp <- local({
     }
     if(type != "n") {
       ## plot reject points
-      do.call(plot.ppp, append(list(rejects, add=TRUE), par.all))
+      do.call(plot.ppp, append(list(quote(rejects), add=TRUE), par.all))
       warning(paste(rejects$n, "illegal points also plotted"))
     }
     ## the rest is added
@@ -398,6 +400,7 @@ plot.ppp <- local({
   xwindow <- x$window
 
   ## Plot observation window (or at least the main title)
+  dont.complain.about(xwindow)
   do.call(plot.owin,
           resolve.defaults(list(x=quote(xwindow),
                                 add=TRUE,
@@ -420,9 +423,10 @@ plot.ppp <- local({
   if(legend) {
     b <- legbox$b
     legendmap <- if(length(leg.args) == 0) symap else 
-                 do.call(update, append(list(object=symap), leg.args))
+                 do.call(update, append(list(object=quote(symap)), leg.args))
+    dont.complain.about(legendmap)
     do.call(plot,
-            append(list(x=legendmap, main="", add=TRUE,
+            append(list(x=quote(legendmap), main="", add=TRUE,
                         xlim=b$xrange, ylim=b$yrange),
                    leg.args))
   }

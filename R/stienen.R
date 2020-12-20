@@ -2,13 +2,14 @@
 ##
 ##  Stienen diagram with border correction
 ##
-##  $Revision: 1.8 $ $Date: 2015/10/21 09:06:57 $
+##  $Revision: 1.9 $ $Date: 2020/12/19 05:25:06 $
 
 stienen <- function(X, ..., bg="grey", border=list(bg=NULL)) {
   Xname <- short.deparse(substitute(X))
   stopifnot(is.ppp(X))
   if(npoints(X) <= 1) {
     W <- Window(X)
+    dont.complain.about(W)
     do.call(plot,
             resolve.defaults(list(x=quote(W)),
                              list(...),
@@ -21,6 +22,7 @@ stienen <- function(X, ..., bg="grey", border=list(bg=NULL)) {
   observed <- (b >= d)
   Yobserved <- Y[observed]
   gp <- union(graphicsPars("symbols"), "lwd")
+  dont.complain.about(Yobserved)
   do.call.plotfun(plot.ppp,
                   resolve.defaults(list(x=quote(Yobserved),
                                         markscale=1),
@@ -31,6 +33,7 @@ stienen <- function(X, ..., bg="grey", border=list(bg=NULL)) {
   if(!identical(border, FALSE)) {
     if(!is.list(border)) border <- list()
     Ycensored <- Y[!observed]
+    dont.complain.about(Ycensored)
     do.call.plotfun(plot.ppp,
                     resolve.defaults(list(x=quote(Ycensored),
                                           markscale=1,

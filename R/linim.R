@@ -1,7 +1,7 @@
 #
 # linim.R
 #
-#  $Revision: 1.78 $   $Date: 2020/10/31 05:20:11 $
+#  $Revision: 1.79 $   $Date: 2020/12/19 05:25:06 $
 #
 #  Image/function on a linear network
 #
@@ -764,6 +764,7 @@ pairs.linim <- function(..., plot=TRUE, eps=NULL) {
   ## sample each image
   pixvals <- lapply(images, "[", i=X, drop=FALSE)
   pixdf <- as.data.frame(pixvals)
+  dont.complain.about(pixdf)
   ## pairs plot
   if(plot) {
     if(nim > 1) {
@@ -775,6 +776,7 @@ pairs.linim <- function(..., plot=TRUE, eps=NULL) {
     } else {
       xname <- imnames[1L]
       pixdf1 <- pixdf[,1L]
+      dont.complain.about(pixdf1)
       do.call(hist.default,
               resolve.defaults(list(x=quote(pixdf1)),
                                rest,

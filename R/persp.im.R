@@ -4,7 +4,7 @@
 ##  'persp' method for image objects
 ##      plus annotation
 ##  
-##  $Revision: 1.21 $ $Date: 2020/11/17 03:47:24 $
+##  $Revision: 1.22 $ $Date: 2020/12/19 05:25:06 $
 ##
 
 persp.im <- local({
@@ -132,6 +132,7 @@ persp.im <- local({
     xcol <- x$xcol
     yrow <- x$yrow
     zmat <- t(x$v)
+    dont.complain.about(xcol, yrow, zmat)
     yargh <- resolve.defaults(list(x=quote(xcol), y=quote(yrow), z=quote(zmat)),
                               dotargs,
                               pop,

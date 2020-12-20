@@ -1,7 +1,7 @@
 #
 # ippm.R
 #
-#   $Revision: 2.27 $   $Date: 2020/11/30 05:03:29 $
+#   $Revision: 2.28 $   $Date: 2020/12/19 05:25:06 $
 #
 # Fisher scoring algorithm for irregular parameters in ppm trend
 #
@@ -102,6 +102,7 @@ ippm <- local({
     startvec <- unlist(start)
     typsize <- abs(startvec)
     typsize <- pmax(typsize, min(typsize[typsize > 0]))
+    dont.complain.about(fdata)
     g <- do.call(nlm,
                  resolve.defaults(list(f=quote(objectivefun),
                                        p=startvec,

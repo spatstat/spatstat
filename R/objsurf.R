@@ -3,7 +3,7 @@
 #
 #  surface of the objective function for an M-estimator
 #
-#  $Revision: 1.7 $ $Date: 2020/11/17 03:01:19 $
+#  $Revision: 1.8 $ $Date: 2020/12/19 05:25:06 $
 #
 
 objsurf <- function(x, ...) {
@@ -89,6 +89,7 @@ image.objsurf <- plot.objsurf <- function(x, ...) {
   optpar <- attr(x, "optpar")
   nama <- names(optpar)
   xx <- unclass(x)
+  dont.complain.about(xx)
   do.call(image,
           resolve.defaults(list(x=quote(xx)), 
                            list(...),
@@ -103,6 +104,7 @@ contour.objsurf <- function(x, ...) {
   optpar <- attr(x, "optpar")
   nama <- names(optpar)
   xx <- unclass(x)
+  dont.complain.about(xx)
   do.call(contour,
           resolve.defaults(list(x=quote(xx)), 
                            list(...),
@@ -121,6 +123,7 @@ persp.objsurf <- function(x, ...) {
   xx <- x$x
   yy <- x$y
   zz <- x$z
+  dont.complain.about(xx, yy, zz)
   r <- do.call(persp,
                resolve.defaults(list(x=quote(xx), y=quote(yy), z=quote(zz)),
                                 list(...),

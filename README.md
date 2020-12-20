@@ -109,9 +109,9 @@ from github is through the `remotes` package. Start `R` and type
 
 ```R
 require(remotes)
-install_github('spatstat/spatstat.utils')
-install_github('spatstat/spatstat.data')
-install_github('spatstat/spatstat')
+install_github('spatstat/spatstat.utils', ref='master')
+install_github('spatstat/spatstat.data', ref='master')
+install_github('spatstat/spatstat', ref='master')
 ```
 
 If you don't have `remotes` installed you should first run

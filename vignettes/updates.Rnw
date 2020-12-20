@@ -292,6 +292,8 @@ the News and Release Notes for each update.
     
   \item \spst\ now suggests the package \pkg{fftwtools}.
 
+  \item Increased speed for large datasets.
+    
   \item Relative risk estimation on a network.
     
   \item Leave-one-out density estimation on a network.
@@ -574,7 +576,8 @@ the News and Release Notes for each update.
    
 \section{New datasets}  
 
-The following datasets have been added to the package.
+The following new datasets have been added.
+These are now provided in the sub-package \pkg{spatstat.data}.
 
 \begin{itemize}
 \item \texttt{austates}: The states and large mainland territories of Australia

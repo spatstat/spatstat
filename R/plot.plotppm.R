@@ -3,7 +3,7 @@
 #
 # engine of plot method for ppm
 #
-# $Revision: 1.21 $  $Date: 2020/11/17 03:47:24 $
+# $Revision: 1.22 $  $Date: 2020/12/19 05:25:06 $
 #
 #
 
@@ -65,6 +65,7 @@ plot.plotppm <- function(x,data=NULL,trend=TRUE,cif=TRUE,se=TRUE,
       main <- paste(if(ttt == "se") "Estimated" else "Fitted",
                     ttt, 
                     if(marked) paste("\n mark =", level) else NULL)
+      dont.complain.about(xsi)
       for (style in how) {
         switch(style,
                persp = {
@@ -81,6 +82,7 @@ plot.plotppm <- function(x,data=NULL,trend=TRUE,cif=TRUE,se=TRUE,
                                           list(main=main)))
                  if(superimposed) {
                    X <- if(marked) data[data.marks == level] else data
+                   dont.complain.about(X)
                    do.call(plot.ppp, append(list(x=quote(X), add=TRUE), 
 					    pppargs))
                  }
@@ -92,6 +94,7 @@ plot.plotppm <- function(x,data=NULL,trend=TRUE,cif=TRUE,se=TRUE,
                                           list(main=main)))
                  if(superimposed) {
                    X <- if(marked) data[data.marks == level] else data
+                   dont.complain.about(X)
                    do.call(plot.ppp, append(list(x=quote(X), add=TRUE), 
 					    pppargs))
                  }

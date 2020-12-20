@@ -3,7 +3,7 @@
 #
 # support for tessellations
 #
-#   $Revision: 1.97 $ $Date: 2019/09/13 04:29:08 $
+#   $Revision: 1.98 $ $Date: 2020/12/19 05:25:06 $
 #
 tess <- function(..., xgrid=NULL, ygrid=NULL, tiles=NULL, image=NULL,
                  window=NULL, marks=NULL, keepempty=FALSE,
@@ -248,6 +248,7 @@ plot.tess <- local({
       #' Determine colour map and plan layout (including colour ribbon)
       #' using rules for pixel images
       y <- as.im(as.function(x, values=values))
+      dont.complain.about(y)
       result <- do.call(plot.im,
                         resolve.defaults(
                           list(x=quote(y),
@@ -274,6 +275,7 @@ plot.tess <- local({
     switch(x$type,
            rect={
              win <- x$window
+             dont.complain.about(win)
              z <- do.call.matched(plot.owin,
                                   resolve.defaults(list(x=quote(win),
                                                         main=main,
@@ -315,6 +317,7 @@ plot.tess <- local({
            },
            tiled={
              xwin <- x$window
+             dont.complain.about(xwin)
              z <- do.call.matched(plot.owin,
                                   resolve.defaults(list(x=quote(xwin),
                                                         main=main,
@@ -340,6 +343,7 @@ plot.tess <- local({
            },
            image={
              if(is.null(y)) y <- x$image
+             dont.complain.about(y)
              result <-
                do.call(plot,
                        resolve.defaults(list(quote(y), add=add, main=main,

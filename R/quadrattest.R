@@ -1,7 +1,7 @@
 #
 #   quadrattest.R
 #
-#   $Revision: 1.63 $  $Date: 2020/11/18 03:07:14 $
+#   $Revision: 1.64 $  $Date: 2020/12/19 05:25:06 $
 #
 
 quadrat.test <- function(X, ...) {
@@ -61,6 +61,7 @@ quadrat.test.ppm <-
    if(is.marked(X))
     stop("Sorry, not yet implemented for marked point process models")
    Xdata <- data.ppm(X)
+   dont.complain.about(Xdata)
    do.call(quadrat.testEngine,
           resolve.defaults(list(quote(Xdata), nx=nx, ny=ny,
                                 alternative=alternative,
@@ -348,6 +349,7 @@ plot.quadrattest <- local({
     if(!is.atomicQtest(x)) {
       # pooled test - plot the original tests
       tests <- extractAtomicQtests(x)
+      dont.complain.about(tests)
       do.call(plot,
               resolve.defaults(list(x=quote(tests)),
                                list(...),

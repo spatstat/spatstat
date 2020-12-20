@@ -3,7 +3,7 @@
 #
 #  spatially sampled functions
 #
-#  $Revision: 1.19 $  $Date: 2018/03/07 03:31:17 $
+#  $Revision: 1.21 $  $Date: 2020/12/19 05:33:45 $
 #
 
 ssf <- function(loc, val) {
@@ -101,6 +101,7 @@ plot.ssf <- function(x, ..., how=c("smoothed", "nearest", "points"),
               nearest = nnmark(x), 
               smoothed = Smooth(x, sigma=sigma)
               )
+  dont.complain.about(y)
   # points plot
   if(how == "points") {
     out <- do.call("plot",
@@ -120,6 +121,7 @@ plot.ssf <- function(x, ..., how=c("smoothed", "nearest", "points"),
          },
          contour = {
            xwin <- as.owin(x)
+           dont.complain.about(xwin)
            do.call("plot",
                    resolve.defaults(list(quote(xwin)),
                                     otherargs, 
@@ -154,7 +156,8 @@ Smooth.ssf <- function(X, ...) {
   isnul <- as.logical(unlist(lapply(argh, is.null)))
   nonnularg <- argh[!isnul]
   sigma0 <- if(any(c("sigma", "varcov") %in% names(nonnularg)))
-            NULL else 1.4 * max(nndist(X))
+              NULL else 1.4 * max(nndist(X))
+  dont.complain.about(Y)
   Z <- do.call("Smooth.ppp",
                resolve.defaults(list(X = quote(Y)),
                                 list(...),

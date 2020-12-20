@@ -1,7 +1,7 @@
 #
 #  quadratcount.R
 #
-#  $Revision: 1.58 $  $Date: 2020/11/18 03:07:14 $
+#  $Revision: 1.59 $  $Date: 2020/12/19 05:25:06 $
 #
 
 quadratcount <- function(X, ...) {
@@ -84,6 +84,7 @@ plot.quadratcount <- function(x, ...,
   # add=TRUE,  show.tiles=FALSE => plot numbers
   if(show.tiles || !add) {
     context <- if(show.tiles) tess else as.owin(tess)
+    dont.complain.about(context)
     do.call(plot,
             resolve.defaults(list(quote(context), add=add),
                              list(...),
@@ -99,9 +100,11 @@ plot.quadratcount <- function(x, ...,
     ra <- sapply(incircles, getElement, name="r")
     xx <- x0 + dx *ra
     yy <- y0 + dy *ra
+    dont.complain.about(xx, yy, labels)
     do.call.matched(text.default,
-                    resolve.defaults(list(x=quote(xx), y = quote(yy)),
-                                     list(labels=labels),
+                    resolve.defaults(list(x=quote(xx),
+                                          y = quote(yy),
+                                          labels=quote(labels)),
                                      textargs, 
                                      list(...)),
                     funargs=graphicsPars("text"))

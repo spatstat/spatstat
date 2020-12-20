@@ -30,7 +30,7 @@ plot(a, main="Line segment pattern")
 marks(a) <- sample(letters[1:4], 20, replace=TRUE)
 plot(a, main="Multitype line segment pattern")
 marks(a) <- runif(20)
-plot(a, main="Marked line segment pattern")
+plot(a, main="Marked line segment pattern", style="width")
 
 plot(owin(), main="Rectangular window")
 plot(letterR, main="Polygonal window")

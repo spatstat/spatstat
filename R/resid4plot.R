@@ -5,7 +5,7 @@
 #         resid1plot       one or more unrelated individual plots 
 #         resid1panel      one panel of resid1plot
 #
-#   $Revision: 1.38 $    $Date: 2020/11/18 03:07:14 $
+#   $Revision: 1.39 $    $Date: 2020/12/19 05:25:06 $
 #
 #
 
@@ -25,12 +25,13 @@ resid4plot <- local({
                        legend, leg.side, leg.args,
                        nlevels, levels, labels, drawlabels, labcex) {
     ## avoid passing arguments of plot.ppp, contour.default to other functions
-    do.call(fun, list(...)) 
+    fun(...)
   }
 
   do.lines <- function(x, y, defaulty=1, ...) {
     force(x)
     force(y)
+    dont.complain.about(x,y)
     do.call(lines,
             resolve.defaults(list(quote(x), quote(y)),
                              list(...),
@@ -94,10 +95,11 @@ resid4plot <- local({
 
   # pre-plot the window(s)
   if(!redundant) {
+    YsWin <- Ys$window
     if(!clip) 
-      do.clean(plot, Ys$window, add=TRUE, ...)
+      do.clean(plot, YsWin, add=TRUE, ...)
     else
-      do.clean(ploterodewin, Ws, Ys$window, add=TRUE, ...)
+      do.clean(ploterodewin, Ws, YsWin, add=TRUE, ...)
   }
 
   ## adjust position of legend associated with eroded window
@@ -126,6 +128,7 @@ resid4plot <- local({
            Yds <- shift(Ydens, vec)
            Yms <- shift(Ymass, vec)
            Contour(Yds, add=TRUE, ...)
+           dont.complain.about(Yms)
            do.call(plot,
                    resolve.defaults(list(x=quote(Yms), add=TRUE),
                                     list(...), 
@@ -149,6 +152,7 @@ resid4plot <- local({
            if(plot.neg == "imagecontour")
              Contour(Yds, add=TRUE, ...)
            ## plot positive masses at atoms
+           dont.complain.about(Yms)
            do.call(plot,
                    resolve.defaults(list(x=quote(Yms), add=TRUE),
                                     list(...),
@@ -218,6 +222,7 @@ resid4plot <- local({
     ## shaded confidence bands
     xp <- xscale( c(theoreticalX, rev(theoreticalX)) )
     yp <- yscale( c(theoreticalHI, rev(theoreticalLO)) )
+    dont.complain.about(xp, yp)
     do.call.matched(polygon,
                     resolve.defaults(
                       list(x=quote(xp),
@@ -330,7 +335,7 @@ resid1plot <- local({
                        legend, leg.side, leg.args,
                        nlevels, levels, labels, drawlabels, labcex) {
     ## avoid passing arguments of plot.ppp, contour.default to other functions
-    do.call(fun, list(...)) 
+    fun(...)
   }
 
   resid1plot <- 
@@ -454,6 +459,7 @@ resid1plot <- local({
              ## decide whether mark scale should be shown
              showscale <- (type != "raw")
              ## plot positive masses at atoms
+             dont.complain.about(Ymass)
              z <- do.call(plot,
                           resolve.defaults(list(x=quote(Ymass), add=TRUE),
                                            list(...),

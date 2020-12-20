@@ -4,7 +4,7 @@
 #'   Given a measure, compute a pixel image of the smoothed density
 #'   and insert it in the object.
 #'
-#'   $Revision: 1.1 $  $Date: 2020/11/29 07:58:03 $
+#'   $Revision: 1.2 $  $Date: 2020/12/19 05:25:06 $
 
 
 augment.msr <- function(x, ..., sigma, recompute=FALSE) {
@@ -57,6 +57,7 @@ augment.msr <- function(x, ..., sigma, recompute=FALSE) {
       smo <- as.im(mean(xdensity), W=W)
     } else {
       xmd <- xloc %mark% xdensity
+      dont.complain.about(xmd)
       smo <- do.call(Smooth,
                      resolve.defaults(list(X=quote(xmd)),
                                       list(...),
@@ -67,6 +68,7 @@ augment.msr <- function(x, ..., sigma, recompute=FALSE) {
     names(smo) <- colnames(x)
     if(any(varble)) {
       xmdv <- xloc %mark% xdensity[,varble, drop=FALSE]
+      dont.complain.about(xmdv)
       smo[varble] <- do.call(Smooth,
                              resolve.defaults(list(X=quote(xmdv)),
                                               list(...),

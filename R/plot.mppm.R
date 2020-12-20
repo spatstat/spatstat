@@ -1,7 +1,7 @@
 #
 # plot.mppm.R
 #
-#   $Revision: 1.5 $  $Date: 2020/11/17 03:47:24 $
+#   $Revision: 1.6 $  $Date: 2020/12/19 05:25:06 $
 #
 #
 
@@ -10,6 +10,7 @@ plot.mppm <- function(x, ..., trend=TRUE, cif=FALSE, se=FALSE,
   xname <- deparse(substitute(x))
   how <- match.arg(how)
   subs <- subfits(x)
+  dont.complain.about(subs)
   arglist <- resolve.defaults(list(x=quote(subs), how=how),
                               list(...),
                               list(main=xname))

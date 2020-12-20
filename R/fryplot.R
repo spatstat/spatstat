@@ -1,7 +1,7 @@
 #
 #  fryplot.R
 #
-#  $Revision: 1.16 $ $Date: 2020/11/16 01:32:06 $
+#  $Revision: 1.17 $ $Date: 2020/12/19 05:25:06 $
 #
 
 fryplot <- function(X, ..., width=NULL, from=NULL, to=NULL, axes=FALSE) {
@@ -15,6 +15,7 @@ fryplot <- function(X, ..., width=NULL, from=NULL, to=NULL, axes=FALSE) {
   }
   bb <- owin(c(-1,1) * halfspan[1L], c(-1,1) * halfspan[2L])
   Y <- frypoints(X, from=from, to=to, dmax=diameter(bb))[bb]
+  dont.complain.about(Y)
   do.call(plot.ppp,
           resolve.defaults(list(x=quote(Y)),
                            list(...),

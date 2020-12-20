@@ -1,7 +1,7 @@
 #
 #  psp.R
 #
-#  $Revision: 1.108 $ $Date: 2020/11/17 03:47:24 $
+#  $Revision: 1.109 $ $Date: 2020/12/19 05:25:06 $
 #
 # Class "psp" of planar line segment patterns
 #
@@ -83,6 +83,7 @@ as.psp <- function(x, ..., from=NULL, to=NULL) {
     fromy <- from$y
     tox <- to$x
     toy <- to$y
+    dont.complain.about(fromx, fromy, tox, toy)
     Y <- do.call(psp,
                  resolve.defaults(list(quote(fromx), quote(fromy),
 					quote(tox), quote(toy)),
@@ -604,6 +605,7 @@ identify.psp <- function(x, ..., labels=seq_len(nsegments(x)),
         po <- poz[ident]
         mix <- mi$x
         miy <- mi$y
+        dont.complain.about(li, mix, miy)
         do.call.matched(graphics::text.default,
                         resolve.defaults(list(x=quote(mix), 
 					      y=quote(miy), 
@@ -653,6 +655,7 @@ text.psp <- function(x, ...) {
   poz <- c(1, 2,4, 3)[(floor(angles.psp(x)/(pi/4)) %% 4) + 1L]
   midx <- mids$x
   midy <- mids$y
+  dont.complain.about(midx, midy)
   do.call.matched(graphics::text.default,
                   resolve.defaults(list(x=quote(midx), y=quote(midy)),
                                    list(...),

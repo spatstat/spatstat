@@ -4,7 +4,7 @@
 #	Compute estimates of cross-type K functions
 #	for multitype point patterns
 #
-#	$Revision: 5.52 $	$Date: 2020/10/30 03:59:52 $
+#	$Revision: 5.53 $	$Date: 2020/12/19 05:25:06 $
 #
 #
 # -------- functions ----------------------------------------
@@ -102,6 +102,7 @@ function(X, i, j, r=NULL, breaks=NULL,
   if(i == j) {
     ## use Kest
     XI <- X[I]
+    dont.complain.about(XI)
     result <- do.call(Kest,
                       resolve.defaults(list(X=quote(XI),
                                             r=quote(r),

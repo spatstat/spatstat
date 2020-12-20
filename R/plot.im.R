@@ -1,7 +1,7 @@
 #
 #   plot.im.R
 #
-#  $Revision: 1.138 $   $Date: 2020/11/17 03:47:24 $
+#  $Revision: 1.139 $   $Date: 2020/12/19 05:25:06 $
 #
 #  Plotting code for pixel images
 #
@@ -876,6 +876,7 @@ contour.im <- function (x, ..., main, axes=FALSE, add=FALSE,
   xcol <- x$xcol
   yrow <- x$yrow
   zmat <- t(x$v)
+  dont.complain.about(xcol, yrow, zmat)
   if(!inherits(col, "colourmap")) {
     do.call.plotfun(contour.default,
                     resolve.defaults(list(x=quote(xcol), 

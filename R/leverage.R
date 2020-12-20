@@ -3,7 +3,7 @@
 #
 #  leverage and influence
 #
-#  $Revision: 1.120 $ $Date: 2020/11/29 07:50:49 $
+#  $Revision: 1.121 $ $Date: 2020/12/19 05:25:06 $
 #
 
 leverage <- function(model, ...) {
@@ -922,6 +922,7 @@ plot.leverage.ppm <- function(x, ...,
   if(what == "exact") {
     #' plot exact quadrature locations and leverage values
     yval <- y$val
+    dont.complain.about(yval)
     z <- do.call(plot,
                  resolve.defaults(list(x=quote(yval), multiplot=multiplot),
                                   list(...),

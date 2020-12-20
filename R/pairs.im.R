@@ -1,7 +1,7 @@
 #
 #   pairs.im.R
 #
-#   $Revision: 1.19 $   $Date: 2020/11/17 03:47:24 $
+#   $Revision: 1.20 $   $Date: 2020/12/19 05:25:06 $
 #
 
 pairs.listof <- pairs.solist <- function(..., plot=TRUE) {
@@ -119,6 +119,7 @@ panel.contour <- function(x, y, ..., sigma=NULL) {
   yy <- scaletointerval(y)
   p <- ppp(xx, yy, window=square(1), check=FALSE)
   Z <- density(p, sigma=sigma)
+  dont.complain.about(Z)
   do.call(contour,
           resolve.defaults(list(x=quote(Z), add=TRUE),
                            list(...),
