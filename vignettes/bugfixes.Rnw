@@ -86,8 +86,11 @@ book \cite{baddrubaturn15}.
 Following is a list of the {\bf most serious bugs}, 
 in decreasing order of potential impact.
 
-Bugs which cause an error exit are not listed, because these 
-are immediately obvious.
+A bug is classified as ``serious'' if it produced incorrect results
+without the user's knowledge.
+
+Bugs which cause an error exit are not listed here, because '
+the presence of a bug is obvious, and the bug would not have misled the user.
 
 \newcommand\bugger[4]{%
   \\  {} %
@@ -213,7 +216,7 @@ are immediately obvious.
     on the horizontal and vertical axes. (If pixel dimensions were not
     specified, then the results were incorrect whenever the Frame of the
     simulation window was not a square.) 
-   \bugger{1.38-0}{august 2014}{1.65-0}{december 2020}   
+   \bugger{1.22-2}{june 2011}{1.65-0}{december 2020}   
 
   \item \texttt{deviance.lppm}, \texttt{pseudoR2.lppm}:
     Results were completely incorrect, due to a coding error.
