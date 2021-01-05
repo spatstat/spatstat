@@ -44,6 +44,8 @@ mincontrast <- local({
         if(length(theo) != nrvals)
           stop("adjustment did not return the correct number of values")
       }
+      ## experimental
+      if(is.function(transfo)) theo <- transfo(theo)
       ## integrand of discrepancy 
       discrep <- (abs(theo^qq - obsq))^pp
       ## protect C code from weird values
@@ -158,6 +160,18 @@ mincontrast <- local({
       saveplace <- new.env()
       assign("h", NULL, envir=saveplace)
     } else saveplace <- NULL
+    ## experimental: custom transformation of summary function 
+    transfo <- pint$transfo
+    if(is.function(transfo)) {
+      obs <- try(transfo(obs))
+      if(inherits(obs, "try-error"))
+        stop("Transformation of observed summary function failed", call.=FALSE)
+      if(length(obs) != length(rvals))
+        stop(paste("Transformation of observed summary function values",
+                   "changed length",
+                   paren(paste(length(rvals), "to", length(obs)))),
+             call.=FALSE)
+    } else transfo <- NULL
     ## pack data into a list
     objargs <- list(theoretical = theoretical,
                     rvals       = rvals,
@@ -169,6 +183,7 @@ mincontrast <- local({
                     rmax        = rmax,
 		    adjustment  = adjustment,
                     whiu        = pint$whiu,
+                    transfo     = transfo,
                     saveplace   = saveplace,
                     TRACE       = TRACE,
                     BIGVALUE    = 1)

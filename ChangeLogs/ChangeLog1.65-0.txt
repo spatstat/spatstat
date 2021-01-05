@@ -892,3 +892,17 @@ Change log from spatstat 1.64-3 to spatstat 1.65-0
 (with environment variable SPATSTAT_TEST defined/undefined)
 ------------- installed on laptop TEMPORARILY FOR TESTS -------
 ------------- uploaded to GitHub ------------------------------
+
+05 jan 2021
+
+   mincontrast.R
+	Added experimental option to transform the summary function
+
+   DESCRIPTION
+	Incremented date 
+
+------------- passed R-4.0.3 CMD check ---------------
+(with environment variable SPATSTAT_TEST defined/undefined)
+------------- installed on laptop TEMPORARILY FOR TESTS -------
+------------- uploaded to GitHub ------------------------------
+   
