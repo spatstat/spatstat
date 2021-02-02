@@ -54,11 +54,3 @@ If your question is not listed,
 you can either post your question at stackoverflow, or
 email the authors.
 
-## Making your own changes
-
-Feel free to fork `spatstat`, make changes to the code,
-and ask us to include them in the package by making a github *pull request*. 
-
-However, this repository is only a copy of the development code, so 
-your pull request may not be implemented until the next official release.
-
