@@ -72,8 +72,11 @@ local({
 #'
 #'   leverage and influence for Gibbs models
 #' 
-#'   $Revision: 1.28 $ $Date: 2020/02/06 08:03:59 $
+#'   $Revision: 1.29 $ $Date: 2021/01/22 08:09:13 $
 #' 
+
+if(!FULLTEST)
+  spatstat.options(npixel=32, ndummy.min=16)
 
 local({
   cat("Running non-sparse algorithm...", fill=TRUE)
@@ -92,7 +95,7 @@ local({
     levG <- Leverage(fitG)
     infG <- Influence(fitG)
     ## AreaInter()$delta2
-    fitA <- ppm(cells ~ 1, AreaInter(0.07), rbord=0, nd=11)
+    fitA <- ppm(cells ~ 1, AreaInter(0.06), rbord=0, nd=11)
     levA <- Leverage(fitA)
     infA <- Influence(fitA)
     ## pairwise.family$delta2

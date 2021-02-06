@@ -99,28 +99,25 @@
   y <- runif(100)
   X <- ppp(x, y, c(0,1),c(0,1))
   X
-  \dontrun{plot(X)}
+  if(human <- interactive()) plot(X)
   mar <- sample(1:3, 100, replace=TRUE)
   mm <- ppp(x, y, c(0,1), c(0,1), marks=mar)
-  \dontrun{plot(mm)}
+  if(human) plot(mm)
   # points with mark equal to 2
   ss <- mm[ mm$marks == 2 , ]
-  \dontrun{plot(ss)}
+  if(human) plot(ss)
   # left half of pattern 'mm'
   lu <- owin(c(0,0.5),c(0,1))
   mmleft <- mm[ , lu]
-  \dontrun{plot(mmleft)}
-  \dontrun{
+  if(human) plot(mmleft)
   if(FALSE) {
   # input data from file
   qq <- scanpp("my.table", unit.square())
-
   # interactively build a point pattern
   plot(unit.square())
   X <- as.ppp(locator(10), unit.square())
   plot(X)
   }
- }
 }
 \author{\adrian
   

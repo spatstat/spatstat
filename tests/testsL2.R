@@ -20,9 +20,11 @@ cat(paste("--------- Executing",
 
 local({
   a <- localpcfmatrix(redwood)
-  a
-  plot(a)
-  a[, 3:5]
+  if(FULLTEST) {
+    a
+    plot(a)
+    a[, 3:5]
+  }
 })
 #
 # tests/lppstuff.R

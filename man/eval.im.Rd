@@ -84,8 +84,8 @@
   eval.im(abs(X - Y))
   Z <- eval.im(sin(X * pi) + Y)
 
-  ## Use of 'envir'
-  W <- eval.im(sin(U), list(U=density(cells)))
+  ## Use of 'envir': bei.extra is a list with components 'elev' and 'grad'
+  W <- eval.im(atan(grad) * 180/pi, bei.extra)
 }
 \author{
   \adrian

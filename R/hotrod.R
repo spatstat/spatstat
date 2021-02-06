@@ -5,7 +5,7 @@
 #'
 #'  Copyright (c) Greg McSwiggan and Adrian Baddeley 2017-2020
 #'
-#'  $Revision: 1.2 $ $Date: 2020/04/05 03:44:31 $
+#'  $Revision: 1.3 $ $Date: 2021/01/07 01:15:08 $
 
 hotrod <- function(len, xsource, xquery, sigma, 
                    ends=c("insulated", "absorbing"),

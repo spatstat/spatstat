@@ -14,14 +14,11 @@
     values to set.
   } 
 }
+\value{
+  Another object of class \code{"detpointprocfamily"}.
+}
 \author{
-  \adrian
-  
-  
-  \rolf
-  
-  and \ege
-  
+  \spatstatAuthors.
 }
 \keyword{spatial}
 \keyword{models}

@@ -1,7 +1,7 @@
 #
 #        edgeRipley.R
 #
-#    $Revision: 1.18 $    $Date: 2019/09/21 05:19:19 $
+#    $Revision: 1.19 $    $Date: 2021/01/07 03:08:41 $
 #
 #    Ripley isotropic edge correction weights
 #

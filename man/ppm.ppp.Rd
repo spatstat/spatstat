@@ -773,123 +773,22 @@
 
  ppm(nztrees)
  ppm(nztrees ~ 1)
+ # equivalent.
 
- \dontrun{
  Q <- quadscheme(nztrees) 
  ppm(Q) 
  # equivalent.
- }
 
- \dontrun{
-  ppm(nztrees, nd=128)
- }
- \testonly{
-   ppm(nztrees, nd=16)
- }
-
-fit1 <- ppm(nztrees, ~ x)
+ fit1 <- ppm(nztrees, ~ x)
  # fit the nonstationary Poisson process 
  # with intensity function lambda(x,y) = exp(a + bx)
  # where x,y are the Cartesian coordinates
  # and a,b are parameters to be estimated
 
-fit1
-coef(fit1)
-coef(summary(fit1))
-
-\dontrun{
- ppm(nztrees, ~ polynom(x,2))
-}
-\testonly{
- ppm(nztrees, ~ polynom(x,2), nd=16)
-}
-
- # fit the nonstationary Poisson process 
- # with intensity function lambda(x,y) = exp(a + bx + cx^2)
-
- \dontrun{
- library(splines)
- ppm(nztrees, ~ bs(x,df=3))
- }
- #       WARNING: do not use predict.ppm() on this result
- # Fits the nonstationary Poisson process 
- # with intensity function lambda(x,y) = exp(B(x))
- # where B is a B-spline with df = 3
-
-\dontrun{
- ppm(nztrees, ~1, Strauss(r=10), rbord=10)
-}
-\testonly{
- ppm(nztrees, ~1, Strauss(r=10), rbord=10, nd=16)
-}
- # Fit the stationary Strauss process with interaction range r=10
- # using the border method with margin rbord=10
-
-\dontrun{
- ppm(nztrees, ~ x, Strauss(13), correction="periodic")
-}
-\testonly{
- ppm(nztrees, ~ x, Strauss(13), correction="periodic", nd=16)
-}
- # Fit the nonstationary Strauss process with interaction range r=13
- # and exp(first order potential) =  activity = beta(x,y) = exp(a+bx)
- # using the periodic correction.
-
-
-# Compare Maximum Pseudolikelihood, Huang-Ogata and VB fits:
-\dontrun{ppm(swedishpines, ~1, Strauss(9))}
-
-\dontrun{ppm(swedishpines, ~1, Strauss(9), method="ho")}
-\testonly{ppm(swedishpines, ~1, Strauss(9), method="ho", nd=16, nsim=8)}
-
-ppm(swedishpines, ~1, Strauss(9), method="VBlogi")
-
- # COVARIATES
- #
- X <- rpoispp(42)
- weirdfunction <- function(x,y){ 10 * x^2 + 5 * sin(10 * y) }
- #
- # (a) covariate values as function
- ppm(X, ~ y + Z, covariates=list(Z=weirdfunction))
- #
- # (b) covariate values in pixel image
- Zimage <- as.im(weirdfunction, unit.square())
- ppm(X, ~ y + Z, covariates=list(Z=Zimage))
- #
- # (c) covariate values in data frame
- Q <- quadscheme(X)
- xQ <- x.quad(Q)
- yQ <- y.quad(Q)
- Zvalues <- weirdfunction(xQ,yQ)
- ppm(Q, ~ y + Z, covariates=data.frame(Z=Zvalues))
- # Note Q not X
-
- # COVARIATE FUNCTION WITH EXTRA ARGUMENTS
- #
-f <- function(x,y,a){ y - a }
-ppm(X, ~x + f, covariates=list(f=f), covfunargs=list(a=1/2))
-
- # COVARIATE: inside/outside window
- b <- owin(c(0.1, 0.6), c(0.1, 0.9))
- ppm(X, ~w, covariates=list(w=b))
-
- ## MULTITYPE POINT PROCESSES ### 
- # fit stationary marked Poisson process
- # with different intensity for each species
-\dontrun{ppm(lansing, ~ marks, Poisson())}
-\testonly{
-   ama <- amacrine[square(0.7)]
-   a <- ppm(ama, ~ marks, Poisson(), nd=16)
-}
-
- # fit nonstationary marked Poisson process
- # with different log-cubic trend for each species
-\dontrun{ppm(lansing, ~ marks * polynom(x,y,3), Poisson())}
-\testonly{b <- ppm(ama, ~ marks * polynom(x,y,2), Poisson(), nd=16)}
-
+ # For other examples, see help(ppm)
 }
 \author{
-  \spatstatAuthors
+  \spatstatAuthors.
 }
 \keyword{spatial}
 \keyword{models}

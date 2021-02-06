@@ -114,10 +114,9 @@ linearpcfcross.inhom(X, i, j, lambdaI, lambdaJ, r=NULL, \dots,
 
    g <- linearpcfcross.inhom(chicago, "assault", "robbery", lamI, lamJ)
 
-   \dontrun{
-     fit <- lppm(chicago, ~marks + x)
-     linearpcfcross.inhom(chicago, "assault", "robbery", fit, fit)
-   }
+   # using fitted models for intensity
+   # fit <- lppm(chicago ~marks + x)
+   # linearpcfcross.inhom(chicago, "assault", "robbery", fit, fit)
 }
 \author{\adrian
   

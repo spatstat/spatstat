@@ -72,16 +72,12 @@
   \code{\link{plot.im}}
 }
 \examples{
- D <- density(split(amacrine))
- image(D, equal.ribbon=TRUE, main="", col.ticks="red", col.axis="red")
+ ## bei.extra is a list of pixel images
+ Y <- solapply(bei.extra, scaletointerval)
+ image(Y, equal.ribbon=TRUE, main="", col.ticks="red", col.axis="red")
 }
-\author{\adrian
-  
-  
-  \rolf
-  
-  and \ege
-  
+\author{
+  \spatstatAuthors.
 }
 \keyword{spatial}
 \keyword{hplot}

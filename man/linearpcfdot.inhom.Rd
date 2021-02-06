@@ -110,10 +110,9 @@ linearpcfdot.inhom(X, i, lambdaI, lambdadot, r=NULL, \dots,
 
    g <- linearpcfdot.inhom(chicago, "assault", lamI, lam.)
 
-   \dontrun{
-     fit <- lppm(chicago, ~marks + x)
-     linearpcfdot.inhom(chicago, "assault", fit, fit)
-   }
+   # using fitted models for the intensity
+   # fit <- lppm(chicago, ~marks + x)
+   # linearpcfdot.inhom(chicago, "assault", fit, fit)
 }
 \author{\adrian
   

@@ -219,10 +219,11 @@
   and increase the values of \code{mar.panel}.
 }
 \examples{
-# Intensity estimate of multitype point pattern
- plot(D <- density(split(amacrine)))
+ D <- solapply(split(mucosa), distfun)
+
+ plot(D)
  plot(D, main="", equal.ribbon=TRUE,
-      panel.end=function(i,y,...){contour(y, ...)})
+      panel.end=function(i,y,...){contour(y, ..., drawlabels=FALSE)})
 
 # list of 3D point patterns
  ape1 <- osteo[osteo$shortid==4, "pts", drop=TRUE]
@@ -231,11 +232,9 @@
       cex=1.5, pch=21, bg='white')
 }
 
-\author{\adrian
-  
-  
+\author{
+  \adrian
   and \rolf
-  
 }
 \keyword{spatial}
 \keyword{hplot}

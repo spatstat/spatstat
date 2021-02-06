@@ -3,7 +3,7 @@
 #
 #   nearest neighbour distances (nndist) and identifiers (nnwhich)
 #
-#   $Revision: 1.12 $ $Date: 2020/01/10 06:37:05 $
+#   $Revision: 1.13 $ $Date: 2021/01/07 01:15:08 $
 #
 
 nndist <- function(X, ...) {
@@ -106,7 +106,7 @@ nndist.default <-
            nnd<-numeric(n)
            o <- fave.order(y)
            big <- sqrt(.Machine$double.xmax)
-           z<- .C("nndistsort",
+           z <- .C("nndistsort",
                   n= as.integer(n),
                   x= as.double(x[o]), y= as.double(y[o]), nnd= as.double(nnd),
                   as.double(big),
@@ -143,7 +143,7 @@ nndist.default <-
              nnd<-numeric(n * kmaxcalc)
              o <- fave.order(y)
              big <- sqrt(.Machine$double.xmax)
-             z<- .C("knndsort",
+             z <- .C("knndsort",
                     n    = as.integer(n),
                     kmax = as.integer(kmaxcalc),
                     x    = as.double(x[o]),
@@ -289,7 +289,7 @@ nnwhich.default <-
              nnw <- integer(n)
              o <- fave.order(y)
              big <- sqrt(.Machine$double.xmax)
-             z<- .C("nnwhichsort",
+             z <- .C("nnwhichsort",
                     n = as.integer(n),
                     x = as.double(x[o]),
                     y = as.double(y[o]),
@@ -331,7 +331,7 @@ nnwhich.default <-
              nnw <- matrix(integer(n * kmaxcalc), nrow=n, ncol=kmaxcalc)
              o <- fave.order(y)
              big <- sqrt(.Machine$double.xmax)
-             z<- .C("knnwhich",
+             z <- .C("knnwhich",
                     n = as.integer(n),
                     kmax = as.integer(kmaxcalc),
                     x = as.double(x[o]),

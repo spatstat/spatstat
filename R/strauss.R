@@ -2,7 +2,7 @@
 #
 #    strauss.R
 #
-#    $Revision: 2.45 $	$Date: 2020/11/30 10:48:23 $
+#    $Revision: 2.46 $	$Date: 2021/01/07 03:08:41 $
 #
 #    The Strauss process
 #

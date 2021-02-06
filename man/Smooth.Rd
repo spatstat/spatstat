@@ -28,11 +28,13 @@
   \code{\link{Smooth.msr}},
   \code{\link{Smooth.fv}}.
 }
-\author{\adrian
-  
-  
+\value{
+  An object containing smoothed values of the input data,
+  in an appropriate format. See the documentation for the methods.
+}
+\author{
+  \adrian
   and \rolf
-  
 }
 \keyword{spatial}
 \keyword{methods}

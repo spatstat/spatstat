@@ -1,7 +1,7 @@
 #
 #    util.R    miscellaneous utilities
 #
-#    $Revision: 1.249 $    $Date: 2020/07/08 02:57:50 $
+#    $Revision: 1.250 $    $Date: 2021/01/12 01:46:09 $
 #
 
 # common invocation of matrixsample
@@ -348,8 +348,14 @@ requireversion <- function(pkg, ver, fatal=TRUE) {
   pkgname <- deparse(substitute(pkg))
   pkgname <- gsub("\"", "", pkgname)
   pkgname <- gsub("'", "", pkgname)
-  v <- read.dcf(file=system.file("DESCRIPTION", package=pkgname), 
-                fields="Version")
+  dfile <- system.file("DESCRIPTION", package=pkgname)
+  if(nchar(dfile) == 0) {
+    ## package is not installed
+    if(!fatal) return(FALSE) else 
+    stop(paste("Package", sQuote(pkgname), "is needed but is not installed"),
+         call.=FALSE)
+  }
+  v <- read.dcf(file=dfile, fields="Version")
   ok <- (package_version(v) >= ver)
   if(!ok && fatal) 
     stop(paste("Package",

@@ -105,10 +105,8 @@ which can then be fitted to point pattern data.
 
    data(cells)
 
-   \dontrun{
-   ppm(cells, ~1, StraussHard(r=0.1, hc=0.05))
+   # ppm(cells, ~1, StraussHard(r=0.1, hc=0.05))
    # fit the stationary Strauss/hard core  process to `cells'
-   }
 
    ppm(cells, ~ polynom(x,y,3), StraussHard(r=0.1, hc=0.05))
    # fit a nonstationary Strauss/hard core process

@@ -36,9 +36,7 @@
 \examples{
   Z <- distmap(letterR)
   X <- rotate(Z)
-  \dontrun{
-  plot(X)
-  }
+  # plot(X)
   Y <- rotate(X, centre="midpoint")
 }
 \author{\adrian

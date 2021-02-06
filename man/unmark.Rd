@@ -41,10 +41,9 @@
 \examples{
   data(lansing)
   hicks <- lansing[lansing$marks == "hickory", ]
-  \dontrun{
-  plot(hicks)  # still a marked point pattern, but only 1 value of marks
-  plot(unmark(hicks)) # unmarked
-  }
+
+  # plot(hicks)  # still a marked point pattern, but only 1 value of marks
+  # plot(unmark(hicks)) # unmarked
 }
 \author{
   \adrian

@@ -67,7 +67,7 @@ reload.or.compute(filename, expr, objects = NULL,
   or loaded.
 }
 \examples{
-   \dontrun{
+    \dontrun{
     if(FALSE) {
      reload.or.compute("mydata.rda", {
         x <- very.long.computation()

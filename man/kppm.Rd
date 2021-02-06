@@ -390,6 +390,9 @@
   \emph{Biometrics} \bold{63}, 252--258.
 }
 \examples{
+  offline <- !interactive()
+  if(offline) op <- spatstat.options(npixel=32, ndummy.min=16)
+
   # method for point patterns
   kppm(redwood, ~1, "Thomas")
   # method for formulas
@@ -413,11 +416,10 @@
   # Different fitting techniques
   kppm(redwood ~ 1, "Thomas", method="c")
   kppm(redwood ~ 1, "Thomas", method="p")
-  # composite likelihood method
-  kppm(redwood ~ x, "VarGamma", method="clik2", nu.ker=-3/8)
-  # quasi-likelihood method
+  # quasi-likelihood improvement 
   kppm(redwood ~ x, "Thomas", improve.type = "quasi")
 
+  if(offline) spatstat.options(op)
 }
 \author{
   \spatstatAuthors,

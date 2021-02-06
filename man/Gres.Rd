@@ -87,9 +87,9 @@
     plot(Gres(cells, interaction=Strauss(0.12)))
 
 # How to make envelopes
-    \dontrun{
-    E <- envelope(fit1, Gres, model=fit1, nsim=39)
-    plot(E)
+    if(interactive()) {
+      E <- envelope(fit1, Gres, model=fit1, nsim=39)
+      plot(E)
     }
 # For computational efficiency
     Gc <- Gcom(fit1)

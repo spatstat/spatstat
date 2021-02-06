@@ -64,7 +64,7 @@
   co <- cos(theta)
   si <- sin(theta)
   mas <- owin(c(-1,1), c(-1,1), poly=list(x=co, y=si))
-  \dontrun{
+  if(human <- interactive()) {
   plot(mas)
   }
 
@@ -74,7 +74,7 @@
 
   ok <- inside.owin(x, y, mas)
 
-  \dontrun{
+  if(human) {
   points(x[ok], y[ok])
   points(x[!ok], y[!ok], pch="x")
   }  

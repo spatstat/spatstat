@@ -1,7 +1,7 @@
 #
 #      distances.R
 #
-#      $Revision: 1.47 $     $Date: 2018/10/07 11:07:54 $
+#      $Revision: 1.48 $     $Date: 2021/01/07 01:15:08 $
 #
 #
 #      Interpoint distances between pairs 
@@ -89,7 +89,7 @@ pairdist.default <-
                       squared=as.integer(squared),
                       d= as.double(d),
                       PACKAGE = "spatstat")
-           } else {
+               } else {
              z <- .C("CpairPdist",
                      n = as.integer(n),
                      x= as.double(x),
@@ -188,7 +188,7 @@ crossdist.default <-
                           squared = as.integer(squared),
                           d = as.double(matrix(0, nrow=n1, ncol=n2)),
                           PACKAGE = "spatstat")
-                 } else {
+                   } else {
                    z<- .C("CcrossPdist",
                           nfrom = as.integer(n1),
                           xfrom = as.double(x1),

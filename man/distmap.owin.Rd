@@ -72,7 +72,7 @@
 }
 \examples{
   U <- distmap(letterR)
-  \dontrun{
+  if(interactive()) {
   plot(U)
   plot(attr(U, "bdry"))
   }

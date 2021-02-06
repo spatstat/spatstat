@@ -49,20 +49,15 @@
 \value{
   A list, usually of class \code{"solist"}.
 }
-\author{\adrian
-  
-  
-  \rolf
-  
-  and \ege
-  
+\author{
+  \spatstatAuthors.
 }
 \seealso{
   \code{\link{solist}}, 
   \code{\link{anylist}}.
 }
 \examples{
-  solapply(waterstriders, density)
+  solapply(waterstriders, distmap)
 }
 \keyword{spatial}
 \keyword{list}

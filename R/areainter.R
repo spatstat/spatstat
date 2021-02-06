@@ -2,7 +2,7 @@
 #
 #    areainter.R
 #
-#    $Revision: 1.48 $	$Date: 2018/03/15 07:07:19 $
+#    $Revision: 1.50 $	$Date: 2021/02/06 03:45:20 $
 #
 #    The area interaction
 #
@@ -146,7 +146,7 @@ AreaInter <- local({
            else
              return(2 * r)
          },
-         delta2 = function(X, inte, correction, ..., sparseOK=FALSE) {
+         delta2 = function(X, inte, correction, ..., sparseOK=TRUE) {
            # Sufficient statistic for second order conditional intensity
            # Area-interaction model 
            if(!(correction %in% c("border", "none")))
@@ -170,7 +170,7 @@ AreaInter <- local({
 
 areadelta2 <- local({
 
-  areadelta2 <- function(X, r, ..., sparseOK=FALSE) {
+  areadelta2 <- function(X, r, ..., sparseOK=TRUE) {
     # Sufficient statistic for second order conditional intensity
     # Area-interaction model 
     if(is.ppp(X)) return(areadelppp(X, r, ..., sparseOK=sparseOK)) else
@@ -179,7 +179,7 @@ areadelta2 <- local({
   }
 
   areadelppp <- function(X, r, algorithm=c("C", "nncross", "nnmap"),
-                         sparseOK=FALSE) {
+                         sparseOK=TRUE) {
     # Evaluate \Delta_{x_i} \Delta_{x_j} S(x) for data points x_i, x_j
     # i.e.  h(X[i]|X) - h(X[i]|X[-j])
     #       where h is first order cif statistic
@@ -322,7 +322,7 @@ areadelta2 <- local({
     return(result)
   }
 
-  areadelquad <- function(Q, r, sparseOK=FALSE) {
+  areadelquad <- function(Q, r, sparseOK=TRUE) {
     # Sufficient statistic for second order conditional intensity
     # Area-interaction model 
     # Evaluate \Delta_{u_j} \Delta_{u_i} S(x) for quadrature points 

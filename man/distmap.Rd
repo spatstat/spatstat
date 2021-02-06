@@ -47,7 +47,7 @@
   data(cells)
   U <- distmap(cells)
   V <- distmap(letterR)
-  \dontrun{
+  if(interactive()) {
   plot(U)
   plot(V)
   }

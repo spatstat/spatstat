@@ -18,6 +18,9 @@
   evaluating the sufficient statistics of a Gibbs
   point process model taking an exponential family form. 
 } 
+\value{
+  Object of class \code{"isf"}, see \code{\link{isf.object}}.
+}
 \seealso{
   \code{\link{Triplets}} to create the triplet interaction process
   structure.

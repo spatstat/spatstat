@@ -44,9 +44,7 @@
   w <- owin(c(0,1),c(0,1))
   v <- rotate(w, pi/3)
   e <- rotate(w, pi/2, centre="midpoint")
-  \dontrun{
-  plot(v)
-  }
+  # plot(v)
   w <- as.mask(letterR)
   v <- rotate(w, pi/5)
 }

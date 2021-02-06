@@ -348,12 +348,12 @@ at new locations.
   \testonly{op <- spatstat.options(npixel=32)}
   m <- ppm(cells ~ polynom(x,y,2), Strauss(0.05))
   trend <- predict(m, type="trend")
-  \dontrun{
+  if(human <- interactive()) {
   image(trend)
   points(cells)
   }
   cif <- predict(m, type="cif")
-  \dontrun{
+  if(human) {
   persp(cif)
   }
   mj <- ppm(japanesepines ~ harmonic(x,y,2))

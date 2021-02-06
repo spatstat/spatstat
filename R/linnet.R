@@ -3,7 +3,7 @@
 #    
 #    Linear networks
 #
-#    $Revision: 1.79 $    $Date: 2020/06/17 05:39:37 $
+#    $Revision: 1.80 $    $Date: 2021/01/07 03:53:44 $
 #
 # An object of class 'linnet' defines a linear network.
 # It includes the following components

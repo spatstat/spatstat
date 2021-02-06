@@ -85,12 +85,10 @@
    # prints a sensible description of itself
    data(cells) 
 
-   \dontrun{
-   ppm(cells, ~1, PairPiece(r = c(0.05, 0.1, 0.2)))
+   ppm(cells ~1, PairPiece(r = c(0.05, 0.1, 0.2)))
    # fit a stationary piecewise constant pairwise interaction process
-   }
 
-   ppm(cells, ~polynom(x,y,3), PairPiece(c(0.05, 0.1)))
+   # ppm(cells ~polynom(x,y,3), PairPiece(c(0.05, 0.1)))
    # nonstationary process with log-cubic polynomial trend
 }
 \references{

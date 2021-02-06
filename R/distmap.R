@@ -2,7 +2,7 @@
 #
 #      distmap.R
 #
-#      $Revision: 1.23 $     $Date: 2017/06/05 10:31:58 $
+#      $Revision: 1.24 $     $Date: 2021/01/07 01:15:08 $
 #
 #
 #     Distance transforms
@@ -74,7 +74,7 @@ distmap.owin <- function(X, ..., discretise=FALSE, invert=FALSE) {
     pad <- invert # boundary condition is opposite of value inside W
     mat <- cbind(pad, mat, pad)
     mat <- rbind(pad, mat, pad)
-# call C routine
+    ## call C routine
     res <- .C("distmapbin",
               xmin=as.double(X$xrange[1L]),
               ymin=as.double(X$yrange[1L]),

@@ -26,14 +26,11 @@
   \code{\link{zapsmall}}
 }
 \examples{
-  data(cells)
-  D <- density(cells)
-  zapsmall.im(D)
+  Z <- as.im(function(x,y) { exp(-40*(x+y)) }, square(1), dimyx=32)
+  zapsmall.im(Z)
 }
 \author{\ege
   and \adrian
-  
-  
 }
 \keyword{spatial}
 \keyword{methods}

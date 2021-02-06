@@ -1,7 +1,7 @@
 #
 # closepairs.R
 #
-#   $Revision: 1.46 $   $Date: 2020/11/30 10:48:30 $
+#   $Revision: 1.47 $   $Date: 2021/01/07 01:15:08 $
 #
 #  simply extract the r-close pairs from a dataset
 # 
@@ -136,7 +136,7 @@ closepairs.ppp <- function(X, rmax, twice=TRUE,
              dy <- z[[8L]]
              d  <- z[[9L]]
            },
-           indices = {
+             indices = {
              z <- .Call("VcloseIJpairs",
                         xx=x, yy=y, rr=r, nguess=ng,
                         PACKAGE = "spatstat")
@@ -145,7 +145,7 @@ closepairs.ppp <- function(X, rmax, twice=TRUE,
              i  <- z[[1L]]  # NB no increment required
              j  <- z[[2L]]
            },
-           ijd = {
+               ijd = {
              z <- .Call("VcloseIJDpairs",
                         xx=x, yy=y, rr=r, nguess=ng,
                         PACKAGE = "spatstat")
@@ -185,7 +185,7 @@ closepairs.ppp <- function(X, rmax, twice=TRUE,
              dy <- z[[8L]]
              d  <- z[[9L]]
            },
-           indices = {
+             indices = {
              z <- .Call("altVcloseIJpairs",
                         xx=x, yy=y, rr=r, nguess=ng,
                         PACKAGE = "spatstat")
@@ -194,7 +194,7 @@ closepairs.ppp <- function(X, rmax, twice=TRUE,
              i  <- z[[1L]]  # NB no increment required
              j  <- z[[2L]]
            },
-           ijd = {
+               ijd = {
              z <- .Call("altVcloseIJDpairs",
                         xx=x, yy=y, rr=r, nguess=ng,
                         PACKAGE = "spatstat")
@@ -519,7 +519,7 @@ crosspairs.ppp <- function(X, Y, rmax, what=c("all", "indices", "ijd"), ...) {
              dy <- z[[8L]]
              d  <- z[[9L]]
            },
-           indices = {
+             indices = {
              z <- .Call("VcrossIJpairs",
                         xx1=Xx, yy1=Xy,
                         xx2=Yx, yy2=Yy,
@@ -530,7 +530,7 @@ crosspairs.ppp <- function(X, Y, rmax, what=c("all", "indices", "ijd"), ...) {
              i  <- z[[1L]]  # NB no increment required
              j  <- z[[2L]]
            }, 
-           ijd = {
+               ijd = {
              z <- .Call("VcrossIJDpairs",
                         xx1=Xx, yy1=Xy,
                         xx2=Yx, yy2=Yy,

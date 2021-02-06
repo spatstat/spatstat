@@ -125,39 +125,39 @@
 \examples{
  # Longleaf pines data
  lon <- longleaf
- \dontrun{
+ if(human <- interactive()) {
  plot(lon)
  }
  \testonly{lon <- lon[seq(1,npoints(lon),by=10)]}
 
  # adult trees defined to have diameter at least 30 cm
  longadult <- subset(lon, marks >= 30)
- \dontrun{
+ if(human){
  plot(longadult)
  }
  # note that the marks are still retained.
  # Use unmark(longadult) to remove the marks
  
  # New Zealand trees data
- \dontrun{
+ if(human){
  plot(nztrees)          # plot shows a line of trees at the far right
  abline(v=148, lty=2)   # cut along this line
  }
  nzw <- owin(c(0,148),c(0,95)) # the subwindow
  # trim dataset to this subwindow
  nzsub <- nztrees[nzw]
- \dontrun{
+ if(human){
  plot(nzsub)
  }
 
  # Redwood data
- \dontrun{
+ if(human){
  plot(redwood)
  }
  # Random thinning: delete 60\% of data
  retain <- (runif(npoints(redwood)) < 0.4)
  thinred <- redwood[retain]
- \dontrun{
+ if(human){
  plot(thinred)
  }
 

@@ -3,7 +3,7 @@
 #
 # connected component transform
 #
-#    $Revision: 1.23 $  $Date: 2020/06/17 05:42:17 $
+#    $Revision: 1.24 $  $Date: 2021/01/07 01:15:08 $
 #
 # Interpreted code for pixel images by Julian Burgos <jmburgos@u.washington.edu>
 # Rewritten in C by Adrian Baddeley
@@ -39,7 +39,7 @@ connected.owin <- function(X, ..., method="C") {
     L <- M
     L[M] <- seq_len(sum(M))
     L[!M] <- 0
-    # resolve labels
+    ## resolve labels
     z <- .C("cocoImage",
             mat=as.integer(t(L)),
             nr=as.integer(nr),

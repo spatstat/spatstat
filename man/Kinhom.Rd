@@ -390,7 +390,7 @@ If \code{ratio=TRUE} then the return value also has two
 
   # How to make simulation envelopes:
   #      Example shows method (2)
-  \dontrun{
+  if(interactive()) {
   smo <- density.ppp(X, sigma=0.1)
   Ken <- envelope(X, Kinhom, nsim=99,
                   simulate=expression(rpoispp(smo)),

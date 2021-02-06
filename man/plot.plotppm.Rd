@@ -87,7 +87,7 @@
 }
 \seealso{ \code{\link{plot.ppm}()} }
 \examples{
- \dontrun{
+ if(interactive()) {
  m <- ppm(cells ~ 1, Strauss(0.05))
  mpic <- plot(m)
  # Perspective plot only, with altered parameters:

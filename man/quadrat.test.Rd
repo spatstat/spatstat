@@ -245,10 +245,9 @@ quadrat.test(X, ...)
 
   # Using Monte Carlo p-values
   quadrat.test(swedishpines) # Get warning, small expected values.
-  \dontrun{
-    quadrat.test(swedishpines, method="M", nsim=4999)
-    quadrat.test(swedishpines, method="M", nsim=4999, conditional=FALSE)
-  }
+  # quadrat.test(swedishpines, method="M", nsim=4999)
+  #  quadrat.test(swedishpines, method="M", nsim=4999, conditional=FALSE)
+
   \testonly{
     quadrat.test(swedishpines, method="M", nsim=19)
     quadrat.test(swedishpines, method="M", nsim=19, conditional=FALSE)

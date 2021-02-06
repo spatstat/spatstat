@@ -220,13 +220,13 @@ lgcp.estK(X, startpar=c(var=1,scale=1),
 \examples{
     if(interactive()) {
       u <- lgcp.estK(redwood)
+      print(u)
+      plot(u)
     } else {
-      # slightly faster - better starting point
-      u <- lgcp.estK(redwood, c(var=1, scale=0.1))
+      # faster - better starting point
+      u <- lgcp.estK(redwood, c(var=1.05, scale=0.1))
     }
-    u
-    plot(u)
-
+  
     \testonly{
       if(require(RandomFields)) {
         K <- Kest(redwood, r=seq(0, 0.1, length=9))

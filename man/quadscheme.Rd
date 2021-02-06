@@ -140,10 +140,8 @@
   Q <- quadscheme(simdat, method="dirichlet", exact=FALSE)
 
   # random dummy pattern
-  \dontrun{
-  D <- runifrect(250, Window(simdat))
-  Q <- quadscheme(simdat, D, method="dirichlet", exact=FALSE)
-  }
+  # D <- runifrect(250, Window(simdat))
+  # Q <- quadscheme(simdat, D, method="dirichlet", exact=FALSE)
 
   # polygonal window
   data(demopat)

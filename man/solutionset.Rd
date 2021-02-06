@@ -75,13 +75,11 @@
 
   area(solutionset(X < Y))
 
-  solutionset(density(cells) > 20)
+  solutionset(distmap(cells) < 0.05)
 }
-\author{\adrian
-  
-  
+\author{
+  \adrian
   and \rolf
-  
 }
 \keyword{spatial}
 \keyword{programming}

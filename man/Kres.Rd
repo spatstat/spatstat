@@ -90,10 +90,8 @@
     }
 
 # How to make envelopes
-    \dontrun{
-    E <- envelope(fit1, Kres, model=fit1, nsim=19)
-    plot(E)
-    }
+    # E <- envelope(fit1, Kres, model=fit1, nsim=19)
+    # plot(E)
 
 # For computational efficiency
     Kc <- Kcom(fit1)

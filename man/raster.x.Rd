@@ -73,7 +73,7 @@
   X <- raster.x(w)
   Y <- raster.y(w)
   disc <- owin(c(-1,1), c(-1,1), mask=(X^2 + Y^2 <= 1))
-  \dontrun{plot(disc)}
+  # plot(disc)
   # approximation to the unit disc
 }
 \author{\adrian

@@ -205,7 +205,8 @@ densityEqualSplit <- function(x, sigma=NULL, ...,
                      stack)
       if(sortgen)
         stack <- stack[order(stack$generation), , drop=FALSE]
-      print(stack)
+      if(verbose)
+        print(stack)
     }
   }
   # attach values to nearest pixels

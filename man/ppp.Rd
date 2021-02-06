@@ -219,17 +219,15 @@
   # specify that the coordinates are given in metres
   X <- ppp(x, y, c(0,1), c(0,1), unitname=c("metre","metres"))
 
-  \dontrun{plot(X)}
+  # plot(X)
 
   # marks
   m <- sample(1:2, 20, replace=TRUE)
   m <- factor(m, levels=1:2)
   X <- ppp(x, y, c(0,1), c(0,1), marks=m)
-  \dontrun{plot(X)}
 
   # polygonal window
   X <- ppp(x, y, poly=list(x=c(0,10,0), y=c(0,0,10)))
-  \dontrun{plot(X)}
 
   # circular window of radius 2
   X <- ppp(x, y, window=disc(2))

@@ -75,12 +75,10 @@
   s$name
   s$trend$value
 
-  \dontrun{
   # multitype pattern
-  data(demopat)
-  fit <- ppm(demopat, ~marks, Poisson())
-  summary(fit)
-  }
+  # data(demopat)
+  # fit <- ppm(demopat, ~marks, Poisson())
+  # summary(fit)
 
   # model with external covariates
   fitX <- ppm(X, ~Z, covariates=list(Z=function(x,y){x+y}))

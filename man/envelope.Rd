@@ -648,7 +648,7 @@
  X <- simdat
 
  # Envelope of K function under CSR
- \dontrun{
+ \donttest{
  plot(envelope(X))
  }
  \testonly{
@@ -656,7 +656,7 @@
  }
 
  # Translation edge correction (this is also FASTER):
- \dontrun{
+ \donttest{
  plot(envelope(X, correction="translate"))
  }
  \testonly{
@@ -664,7 +664,7 @@
  }
 
 # Global envelopes
- \dontrun{
+ \donttest{
  plot(envelope(X, Lest, global=TRUE))
  plot(envelope(X, Kest,  global=TRUE, scale=function(r) { r }))
  }
@@ -676,10 +676,10 @@
  }
 
  # Envelope of K function for simulations from Gibbs model 
- \dontrun{
+ \donttest{
  fit <- ppm(cells ~1, Strauss(0.05))
  plot(envelope(fit))
- plot(envelope(fit), global=TRUE)
+ plot(envelope(fit, global=TRUE))
  }
  \testonly{
   fit <- ppm(cells ~1, Strauss(0.05), nd=20)
@@ -689,7 +689,7 @@
 
  # Envelope of K function for simulations from cluster model 
  fit <- kppm(redwood ~1, "Thomas")
- \dontrun{
+ \donttest{
  plot(envelope(fit, Gest))
  plot(envelope(fit, Gest, global=TRUE))
  }
@@ -698,7 +698,7 @@
  }
 
  # Envelope of G function under CSR
- \dontrun{
+ \donttest{
  plot(envelope(X, Gest))
  }
  \testonly{
@@ -707,7 +707,7 @@
 
  # Envelope of L function under CSR
  #  L(r) = sqrt(K(r)/pi)
- \dontrun{
+ \donttest{
   E <- envelope(X, Kest)
   plot(E, sqrt(./pi) ~ r)
  }
@@ -718,7 +718,7 @@
 
  # Simultaneous critical envelope for L function
  # (alternatively, use Lest)
- \dontrun{
+ \donttest{
   plot(envelope(X, Kest, transform=expression(sqrt(./pi)), global=TRUE))
  }
  \testonly{
@@ -727,7 +727,7 @@
  }
 
  ## One-sided envelope
- \dontrun{
+ \donttest{
   plot(envelope(X, Lest, alternative="less"))
  }
  \testonly{
@@ -738,7 +738,7 @@
  # We want envelopes for Jcross(X, "A", "B") 
  # where "A" and "B" are types of points in the dataset 'demopat'
 
- \dontrun{
+ \donttest{
  plot(envelope(demopat, Jcross, i="A", j="B"))
  }
  \testonly{
@@ -746,7 +746,7 @@
  }
  
  # Use of `simulate' expression
- \dontrun{
+ \donttest{
  plot(envelope(cells, Gest, simulate=expression(runifpoint(42))))
  plot(envelope(cells, Gest, simulate=expression(rMaternI(100,0.02))))
  }
@@ -757,7 +757,7 @@ nsim=3, global=TRUE))
  }
 
  # Use of `simulate' function
- \dontrun{
+ \donttest{
    plot(envelope(amacrine, Kcross, simulate=rlabel))
  }
  \testonly{
@@ -765,13 +765,13 @@ nsim=3, global=TRUE))
  }
 
  # Envelope under random toroidal shifts
- \dontrun{
+ \donttest{
  plot(envelope(amacrine, Kcross, i="on", j="off",
                simulate=expression(rshift(amacrine, radius=0.25)))) 
  }
 
  # Envelope under random shifts with erosion
- \dontrun{
+ \donttest{
  plot(envelope(amacrine, Kcross, i="on", j="off",
               simulate=expression(rshift(amacrine, radius=0.1, edge="erode"))))
  }
@@ -784,7 +784,7 @@ nsim=3, global=TRUE))
  # (lambda=NULL would also be valid)
 
  fit <- kppm(redwood ~1, clusters="MatClust")
- \dontrun{
+ \donttest{
     plot(envelope(fit, Kinhom, lambda=fit, nsim=19))
  }
  \testonly{
@@ -803,14 +803,14 @@ nsim=3, global=TRUE))
  # from a model that was fitted to the data; this is only a problem in
  # small datasets.
 
-\dontrun{
- red.dens <- density(redwood, sigma=bw.diggle)
+\donttest{
+ red.dens <- density(redwood, sigma=bw.diggle, positive=TRUE)
  plot(envelope(redwood, Kinhom, sigma=bw.diggle,
          simulate=expression(rpoispp(red.dens))))
  }
 
  # Precomputed list of point patterns
-\dontrun{
+\donttest{
  nX <- npoints(X)
  PatList <- list()
  for(i in 1:19) PatList[[i]] <- runifpoint(nX)
@@ -823,10 +823,9 @@ nsim=3, global=TRUE))
 }
 
 # re-using the same point patterns
-\dontrun{
- EK <- envelope(X, Kest, savepatterns=TRUE)
- EG <- envelope(X, Gest, simulate=EK)
-}
+# EK <- envelope(X, Kest, savepatterns=TRUE)
+# EG <- envelope(X, Gest, simulate=EK)
+
 \testonly{
  EK <- envelope(X, Kest, nsim=3, savepatterns=TRUE)
  EG <- envelope(X, Gest, nsim=3, simulate=EK)

@@ -1,7 +1,7 @@
 #
 #   edges2triangles.R
 #
-#   $Revision: 1.16 $  $Date: 2018/09/23 09:21:22 $
+#   $Revision: 1.17 $  $Date: 2021/01/07 01:38:36 $
 #
 
 edges2triangles <- function(iedge, jedge, nvert=max(iedge, jedge),
@@ -37,7 +37,7 @@ edges2triangles <- function(iedge, jedge, nvert=max(iedge, jedge),
     zz <- .Call("trioxgraph",
                 nv=nvert, iedge=iedge, jedge=jedge, friendly=fr,
                 PACKAGE="spatstat")
-  } else if(spatstat.options("fast.trigraph")) {
+    } else if(spatstat.options("fast.trigraph")) {
     zz <- .Call("triograph",
                 nv=nvert, iedge=iedge, jedge=jedge,
                 PACKAGE="spatstat")
@@ -117,7 +117,7 @@ edges2vees <- function(iedge, jedge, nvert=max(iedge, jedge),
     return(data.frame(i=numeric(0),
                       j=numeric(0),
                       k=numeric(0)))
-  # call 
+  ## call
   vees <- .Call("graphVees",
                 nv = nvert,
                 iedge = iedge,

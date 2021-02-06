@@ -175,17 +175,15 @@
 
    # Fit the stationary area interaction process to Swedish Pines data
    data(swedishpines)
-   ppm(swedishpines, ~1, AreaInter(r=7))
+   ppm(swedishpines ~1, AreaInter(r=7))
 
    # Fit the stationary area interaction process to `cells'
-   data(cells) 
-   ppm(cells, ~1, AreaInter(r=0.06))
+   ppm(cells ~1, AreaInter(r=0.06))
    # eta=0 indicates hard core process.
 
    # Fit a nonstationary area interaction with log-cubic polynomial trend
-   \dontrun{
-   ppm(swedishpines, ~polynom(x/10,y/10,3), AreaInter(r=7))
-   }
+   #   ppm(swedishpines ~polynom(x/10,y/10,3), AreaInter(r=7))
+
    \testonly{spatstat.options(op)}
 }
 \references{

@@ -62,22 +62,22 @@ im.apply(X, FUN, \dots, fun.handles.na=FALSE, check=TRUE)
   \code{\link{eval.im}} for algebraic operations with images.
 }
 \examples{
-  DA <- density(split(amacrine))
-  DA
-  im.apply(DA, max)
-  im.apply(DA, sum)
+  # list of two pixel images
+  Y <- solapply(bei.extra, scaletointerval)
+  plot(Y)
+  im.apply(Y, max)
+  im.apply(Y, sum)
 
   ## Example with incompatible patterns of NA values
-  Z <- density(split(ants))
   B <- owin(c(438, 666), c(80, 310))
-  Z[[1]][B] <- NA
+  Y[[1]][B] <- NA
   opa <- par(mfrow=c(2,2))
-  plot(Z[[1]])
-  plot(Z[[2]])
+  plot(Y[[1]])
+  plot(Y[[2]])
   #' Default action: NA -> NA
-  plot(im.apply(Z, mean))
+  plot(im.apply(Y, mean))
   #' Use NA handling in mean.default
-  plot(im.apply(Z, mean, na.rm=TRUE, fun.handles.na=TRUE))
+  plot(im.apply(Y, mean, na.rm=TRUE, fun.handles.na=TRUE))
   par(opa)
 }
 \author{

@@ -315,12 +315,18 @@
   determinantal point process models.
 }
 \examples{
+ offline <- !interactive()
+ if(offline) {
+    # reduce grid sizes for efficiency in tests
+    spatstat.options(npixel=32, ndummy.min=16)
+ }
+
  # fit the stationary Poisson process
  # to point pattern 'nztrees'
 
  ppm(nztrees ~ 1)
 
- \dontrun{
+ if(!offline) {
  Q <- quadscheme(nztrees) 
  ppm(Q ~ 1) 
  # equivalent.
@@ -336,56 +342,41 @@ fit1
 coef(fit1)
 coef(summary(fit1))
 
-\dontrun{
  ppm(nztrees ~ polynom(x,2))
-}
-\testonly{
- ppm(nztrees ~ polynom(x,2), nd=16)
-}
 
  # fit the nonstationary Poisson process 
  # with intensity function lambda(x,y) = exp(a + bx + cx^2)
 
- \dontrun{
- library(splines)
- ppm(nztrees ~ bs(x,df=3))
+ if(!offline) {
+   library(splines)
+   ppm(nztrees ~ bs(x,df=3))
  }
- #       WARNING: do not use predict.ppm() on this result
  # Fits the nonstationary Poisson process 
  # with intensity function lambda(x,y) = exp(B(x))
  # where B is a B-spline with df = 3
 
-\dontrun{
  ppm(nztrees ~ 1, Strauss(r=10), rbord=10)
-}
-\testonly{
- ppm(nztrees ~ 1, Strauss(r=10), rbord=10, nd=16)
-}
+
  # Fit the stationary Strauss process with interaction range r=10
  # using the border method with margin rbord=10
 
-\dontrun{
  ppm(nztrees ~ x, Strauss(13), correction="periodic")
-}
-\testonly{
- ppm(nztrees ~ x, Strauss(13), correction="periodic", nd=16)
-}
+
  # Fit the nonstationary Strauss process with interaction range r=13
  # and exp(first order potential) =  activity = beta(x,y) = exp(a+bx)
  # using the periodic correction.
 
+  # Compare Maximum Pseudolikelihood, Huang-Ogata and Variational Bayes fits:
+  if(!offline) ppm(swedishpines ~ 1, Strauss(9))
 
-# Compare Maximum Pseudolikelihood, Huang-Ogata and Variational Bayes fits:
-\dontrun{ppm(swedishpines ~ 1, Strauss(9))}
+  ppm(swedishpines ~ 1, Strauss(9), method="ho",
+      nsim=if(offline) 8 else 99)
 
-\dontrun{ppm(swedishpines ~ 1, Strauss(9), method="ho")}
-\testonly{ppm(swedishpines ~ 1, Strauss(9), method="ho", nd=16, nsim=8)}
-
-ppm(swedishpines ~ 1, Strauss(9), method="VBlogi")
+  ppm(swedishpines ~ 1, Strauss(9), method="VBlogi")
 
  # COVARIATES
  #
- X <- rpoispp(42)
+ X <- rpoispp(20)
  weirdfunction <- function(x,y){ 10 * x^2 + 5 * sin(10 * y) }
  #
  # (a) covariate values as function
@@ -408,23 +399,27 @@ ppm(swedishpines ~ 1, Strauss(9), method="VBlogi")
 f <- function(x,y,a){ y - a }
 ppm(X ~ x + f, covfunargs=list(a=1/2))
 
- # COVARIATE: inside/outside window
+ # COVARIATE: logical value TRUE inside window, FALSE outside
  b <- owin(c(0.1, 0.6), c(0.1, 0.9))
  ppm(X ~ b)
 
  ## MULTITYPE POINT PROCESSES ### 
  # fit stationary marked Poisson process
  # with different intensity for each species
-\dontrun{ppm(lansing ~  marks, Poisson())}
-\testonly{
+ if(!offline) {
+   ppm(lansing ~  marks, Poisson())
+ } else {
   ama <- amacrine[square(0.7)]
   a <- ppm(ama ~  marks, Poisson(), nd=16)
-}
+ }
 
  # fit nonstationary marked Poisson process
  # with different log-cubic trend for each species
-\dontrun{ppm(lansing ~  marks * polynom(x,y,3), Poisson())}
-\testonly{b <- ppm(ama ~  marks * polynom(x,y,2), Poisson(), nd=16)}
+ if(!offline) {
+  ppm(lansing ~  marks * polynom(x,y,3), Poisson())
+ } else {
+  b <- ppm(ama ~  marks * polynom(x,y,2), Poisson(), nd=16)
+ }
 
 }
 \author{

@@ -1,7 +1,7 @@
 #
 #           pixellate.R
 #
-#           $Revision: 1.26 $    $Date: 2020/11/17 03:47:24 $
+#           $Revision: 1.27 $    $Date: 2021/01/07 01:15:08 $
 #
 #     pixellate            convert an object to a pixel image
 #
@@ -218,7 +218,7 @@ polytileareaEngine <- function(P, xrange, yrange, nx, ny,
     xx <- c(xx, xx[1L])
     yy <- c(yy, yy[1L])
     nn <- nn+1
-    # call C routine
+    ## call C routine
     zz <- .C("poly2imA",
              ncol=as.integer(nx),
              nrow=as.integer(ny),

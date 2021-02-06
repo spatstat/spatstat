@@ -77,10 +77,6 @@
 \examples{
    H <- harmonise(K=Kest(cells), G=Gest(cells))
    H
-   \dontrun{
-      ## generates a warning about duplicated columns
-      try(cbind(H$K, H$G))
-   }
 }
 \seealso{
   \code{\link{fv.object}},

@@ -47,16 +47,15 @@
   \code{\link{predict.ppm}}
 }
 \examples{
-  fit <- dppm(swedishpines ~ x + y, dppGauss())
+  if(interactive()) {
+    fit <- dppm(swedishpines ~ x + y, dppGauss())
+  } else {
+    fit <- dppm(redwood ~ x, dppGauss())
+  }
   predict(fit)
 }
-\author{\adrian
-  
-  ,
-  \rolf
-  
-  and \ege
-  
+\author{
+  \spatstatAuthors.
 }
 \keyword{spatial}
 \keyword{models}

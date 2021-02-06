@@ -66,10 +66,14 @@ local({
 
 ## tests/cdf.test.R
 
+
 local({
+  NSIM <- 9
 #%^!ifdef CORE  
-  AC <- split(ants, un=FALSE)$Cataglyphis
-  AM <- split(ants, un=FALSE)$Messor
+  op <- spatstat.options(ndummy.min=16, npixel=32)
+  AA <- split(ants, un=FALSE)
+  AC <- AA[["Cataglyphis"]]
+  AM <- AA[["Messor"]]
   DM <- distmap(AM)
   if(ALWAYS) {
     ## (1) check cdf.test with strange data
@@ -88,15 +92,17 @@ local({
   if(FULLTEST) {
     ## (2) Monte Carlo test for Gibbs model
     fit <- ppm(cells ~ 1, Strauss(0.07))
-    cdf.test(fit, "x", nsim=9)
+    cdf.test(fit, "x", nsim=NSIM)
 
     ## cdf.test.slrm
     fut <- slrm(japanesepines ~ x + y)
     Z <- distmap(japanesepines)
     cdf.test(fut, Z)
   }
+  reset.spatstat.options()
 #%^!endif
 #%^!ifdef LINEARNETWORKS  
+  op <- spatstat.options(ndummy.min=16, npixel=32)
   if(ALWAYS) {
     ## (3) linear networks
     set.seed(42)
@@ -107,10 +113,10 @@ local({
       cdf.test(X %mark% runif(20), "x")
     }
     fit <- lppm(X ~1)
-    cdf.test(fit, "y", "cvm")
+    cdf.test(fit, "y", "cvm", nsim=NSIM)
     if(FULLTEST) {
-      cdf.test(fit, "y")
-      cdf.test(fit, "y", "ad")
+      cdf.test(fit, "y", nsim=NSIM)
+      cdf.test(fit, "y", "ad", nsim=NSIM)
     }
     if(FULLTEST) {
       ## marked
@@ -118,8 +124,11 @@ local({
       cdf.test(subset(chicago, marks != "assault"), "y")
     }
   }
+  reset.spatstat.options()
 #%^!endif
 })
+
+
 #'    tests/circular.R
 #'
 #'    Circular data and periodic distributions

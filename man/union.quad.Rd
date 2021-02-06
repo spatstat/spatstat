@@ -32,7 +32,8 @@
   data(simdat)
   Q <- quadscheme(simdat, default.dummy(simdat))
   U <- union.quad(Q)
-  \dontrun{plot(U)}
+  # plot(U)
+
   # equivalent:
   U <- as.ppp(Q)
 }

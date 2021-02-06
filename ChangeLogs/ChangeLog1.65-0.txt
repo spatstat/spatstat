@@ -874,6 +874,10 @@ Change log from spatstat 1.64-3 to spatstat 1.65-0
    texture.R
 	Tweak to avoid complaints from codetools coverage check
 	
+   updates.Rnw
+   bugfixes.Rnw
+	Updated to cover all the above.
+	
    DESCRIPTION
    NEWS
    Nickname.txt
@@ -905,4 +909,28 @@ Change log from spatstat 1.64-3 to spatstat 1.65-0
 (with environment variable SPATSTAT_TEST defined/undefined)
 ------------- installed on laptop TEMPORARILY FOR TESTS -------
 ------------- uploaded to GitHub ------------------------------
-   
+
+06 feb 2021
+
+   mpl.R
+	sparseOK defaults to TRUE in deltasuffstat
+	
+   geyer.R
+   areainter.R
+	sparseOK defaults to TRUE in delta2 functions
+
+   vcov.ppm.R
+	sparseOK defaults to TRUE in vcalcGibbsGeneral
+
+   *.R, *.Rd
+        Large number of minor changes to satisfy CRAN
+	(for the packages spatstat.core and spatstat.linnet)
+
+   DESCRIPTION
+	Requires spatstat.sparse 1.2-1
+	Incremented date
+
+------------- passed R-4.0.3 CMD check ---------------
+(with environment variable SPATSTAT_TEST defined/undefined)
+------------- installed on laptop TEMPORARILY FOR TESTS -------
+------------- uploaded to GitHub ------------------------------

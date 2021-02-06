@@ -79,9 +79,8 @@ linearmarkconnect(X, i, j, r=NULL, \dots)
 }
 \examples{
    pab <- linearmarkconnect(chicago, "assault", "burglary")
-  \dontrun{
-   plot(alltypes(chicago, linearmarkconnect))
-  }
+   
+   # plot(alltypes(chicago, linearmarkconnect))
 }
 \author{\adrian
   

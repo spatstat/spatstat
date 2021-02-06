@@ -1,7 +1,7 @@
 #
 #  Perfect Simulation 
 #
-#  $Revision: 1.21 $ $Date: 2017/06/05 10:31:58 $
+#  $Revision: 1.22 $ $Date: 2021/01/07 03:08:41 $
 #
 #  rStrauss
 #  rHardcore

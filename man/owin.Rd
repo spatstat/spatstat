@@ -167,21 +167,14 @@ describing a window in the two-dimensional plane.
   wm <- owin(w$xrange, w$yrange, mask=(X^2 + Y^2 <= 1))
           # discrete approximation to the unit disc
 
-  \dontrun{
-  if(FALSE) {
-    plot(c(0,1),c(0,1),type="n")
-    bdry <- locator()
-    # click the vertices of a polygon (anticlockwise)
-  }
-  }
-  \testonly{
+  # vertices of a polygon (listed anticlockwise)
   bdry <- list(x=c(0.1,0.3,0.7,0.4,0.2),
                y=c(0.1,0.1,0.5,0.7,0.3))
-  }
+  # vertices could alternatively be read from a file, or use locator()
   w <- owin(poly=bdry)
-  \dontrun{plot(w)}
  
  \dontrun{
+ # how to read in a binary mask from a file
  im <- as.logical(matrix(scan("myfile"), nrow=128, ncol=128))
  # read in an arbitrary 128 x 128 digital image from text file
  rim <- im[, 128:1]

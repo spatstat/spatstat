@@ -1,7 +1,7 @@
 #
 #       images.R
 #
-#      $Revision: 1.163 $     $Date: 2020/11/30 07:15:55 $
+#      $Revision: 1.164 $     $Date: 2021/01/07 01:15:08 $
 #
 #      The class "im" of raster images
 #

@@ -6,7 +6,7 @@
 #'
 #'  Copyright (c) Greg McSwiggan and Adrian Baddeley 2017-2020
 #'
-#'  $Revision: 1.3 $  $Date: 2020/06/14 12:19:52 $
+#'  $Revision: 1.4 $  $Date: 2021/01/07 03:54:20 $
 #'
 
 heatkernelapprox <- function(X, sigma, nmax=20, floored=TRUE) {

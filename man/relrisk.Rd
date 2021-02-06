@@ -42,12 +42,11 @@
   \code{\link{relrisk.ppp}},
   \code{\link{relrisk.ppm}}.
 }
-\author{\adrian
-  
-  
-  \rolf
-  
-  and \ege
-  
+\value{
+  A pixel image, or a list of pixel images, or a numeric vector or
+  matrix, containing the requested estimates of relative risk.
+}
+\author{
+  \spatstatAuthors.
 }
 \keyword{spatial}

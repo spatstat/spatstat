@@ -107,9 +107,9 @@
   data(simdat)
   P <- simdat
   D <- default.dummy(P, 100)
-  \dontrun{plot(D)}
+  \donttest{plot(D)}
   Q <- quadscheme(P, D, "grid")
-  \dontrun{plot(union.quad(Q))}
+  if(interactive()) {plot(union.quad(Q))}
 }
 \author{\adrian
   

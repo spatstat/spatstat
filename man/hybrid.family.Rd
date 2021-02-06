@@ -15,11 +15,9 @@
  
   If you need to create a specific hybrid interaction model for use in 
   modelling, use the function \code{\link{Hybrid}}.
- 
-  Anyway, \code{hybrid.family} is an object of class \code{"isf"}
-  containing a function \code{hybrid.family$eval} for
-  evaluating the sufficient statistics of any hybrid interaction
-  point process model.
+}
+\value{
+  Object of class \code{"isf"}, see \code{\link{isf.object}}.
 }
 \seealso{
   Use \code{\link{Hybrid}} to make hybrid interactions.
@@ -30,11 +28,9 @@
   \code{\link{ord.family}},
   \code{\link{inforder.family}}.
 }
-\author{\adrian
-  
-  
-  and \rolf
-  
+\author{
+  \adrian
+  and \rolf.
 }
 \keyword{spatial}
 \keyword{models}

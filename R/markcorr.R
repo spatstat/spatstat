@@ -737,9 +737,7 @@ sewsmod <- function(d, ff, wt, Ef, rvals, method="smrep", ..., nwtsteps=500) {
          },
          sm={
            ## This is slow!
-           oldopt <- options(warn=-1)
-           smok <- requireNamespace("sm")
-           options(oldopt)
+           suppressWarnings(smok <- requireNamespace("sm"))
            if(!smok)
              stop(paste("Option method=sm requires package sm,",
                         "which is not available"))
@@ -758,9 +756,7 @@ sewsmod <- function(d, ff, wt, Ef, rvals, method="smrep", ..., nwtsteps=500) {
            result <- numerator/denominator
          },
          smrep={
-           oldopt <- options(warn=-1)
-           smok <- requireNamespace("sm")
-           options(oldopt)
+           suppressWarnings(smok <- requireNamespace("sm"))
            if(!smok)
              stop(paste("Option method=smrep requires package sm,",
                   "which is not available"))

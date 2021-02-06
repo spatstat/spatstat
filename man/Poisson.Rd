@@ -53,9 +53,7 @@ which can then be fitted to point pattern data.
  # fit stationary marked Poisson process
  # with different intensity for each species
 
-\dontrun{
- ppm(lansing ~ marks * polynom(x,y,3), Poisson())
-}
+ # ppm(lansing ~ marks * polynom(x,y,3), Poisson())
  # fit nonstationary marked Poisson process
  # with different log-cubic trend for each species
 \testonly{

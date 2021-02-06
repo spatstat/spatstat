@@ -215,18 +215,13 @@
   and increase the values of \code{mar.panel}.
 }
 \examples{
-# Intensity estimate of multitype point pattern
- plot(D <- density(split(amacrine)))
+ D <- solapply(split(amacrine), distmap)
+ plot(D)
  plot(D, main="", equal.ribbon=TRUE,
       panel.end=function(i,y,...){contour(y, ...)})
 }
-\author{\adrian
-  
-  
-  \rolf
-  
-  and \ege
-  
+\author{
+  \spatstatAuthors.
 }
 \keyword{spatial}
 \keyword{hplot}

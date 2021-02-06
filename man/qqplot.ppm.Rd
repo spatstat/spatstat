@@ -326,21 +326,23 @@
 
     fit <- ppm(cells, ~1, Poisson())
     diagnose.ppm(fit)  # no suggestion of departure from stationarity
-    \dontrun{qqplot.ppm(fit, 80)  # strong evidence of non-Poisson interaction}
-    \testonly{qqplot.ppm(fit, 4)}
-
-    \dontrun{
+    if(interactive()) {
+       qqplot.ppm(fit, 80)  # strong evidence of non-Poisson interaction
      diagnose.ppm(fit, type="pearson")  
      qqplot.ppm(fit, type="pearson")
     }
-    \testonly{qqplot.ppm(fit, 4, type="pearson")}
+    \testonly{
+       qqplot.ppm(fit, 4)
+       qqplot.ppm(fit, 4, type="pearson")
+    }
 
-    ###########################################
-    ## oops, I need the plot coordinates
+    # capture the plot coordinates
+    # mypreciousdata <- qqplot.ppm(fit, type="pearson")
+    # mypreciousdata <- qqplot.ppm(fit, 4, type="pearson")
+    # plot(mypreciousdata)
+
+    ##     use the idiom .Last.value if you forgot to assign them
     mypreciousdata <- .Last.value
-    \dontrun{mypreciousdata <- qqplot.ppm(fit, type="pearson")}
-    \testonly{mypreciousdata <- qqplot.ppm(fit, 4, type="pearson")}
-    plot(mypreciousdata)
 
     ######################################################
     # Q-Q plots based on fixed n
@@ -348,7 +350,7 @@
     # But I want to simulate conditional on n, instead of Poisson
     # Do this by setting rmhcontrol(p=1)
     fixit <- list(p=1)
-    \dontrun{qqplot.ppm(fit, 100, control=fixit)}
+    if(interactive()) {qqplot.ppm(fit, 100, control=fixit)}
     \testonly{qqplot.ppm(fit, 4, control=fixit)}
 
     ######################################################
@@ -357,7 +359,7 @@
     plot(X)
     # Inhomogeneous Poisson model
     fit <- ppm(X, ~x, Poisson())
-    \dontrun{qqplot.ppm(fit, 100)}
+    if(interactive()) {qqplot.ppm(fit, 100)}
     \testonly{qqplot.ppm(fit, 4)}
     # conclusion: fitted inhomogeneous Poisson model looks OK
 
@@ -367,7 +369,7 @@
     # set the initial conditions in Metropolis-Hastings algorithm
     # 
     expr <- expression(rmh(fit, start=list(n.start=42), verbose=FALSE))
-    \dontrun{qqplot.ppm(fit, 100, expr)}
+    if(interactive()) \donttest{qqplot.ppm(fit, 100, expr)}
     \testonly{qqplot.ppm(fit, 4, expr)}
 
 }

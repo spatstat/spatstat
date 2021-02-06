@@ -31,4 +31,10 @@ which.max.im(x)
   \code{circumradius} is replaced by the more appropriately named
   \code{boundingradius}.
 }
+\value{
+\code{as.psp.owin} returns a window (object of class \code{"owin"}).
+\code{circumradius} returns a numeric value.
+\code{which.max.im} returns an integer.
+\code{circumradius.linnet} returns a numeric value.
+}
 \keyword{internal}

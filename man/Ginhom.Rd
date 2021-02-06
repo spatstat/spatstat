@@ -174,10 +174,9 @@
   \code{\link{Gest}}
 }
 \examples{
-  \dontrun{
-    plot(Ginhom(swedishpines, sigma=bw.diggle, adjust=2))
-  }
   plot(Ginhom(swedishpines, sigma=10))
+
+  # plot(Ginhom(swedishpines, sigma=bw.diggle, adjust=2))
 }
 \author{
   Original code by Marie-Colette van Lieshout.

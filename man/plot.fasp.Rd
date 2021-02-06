@@ -132,7 +132,7 @@
 }
 
 \examples{
-   \dontrun{
+   if(interactive()) {
    X.G <- alltypes(amacrine,"G")
    plot(X.G)
    plot(X.G,subset="r<=0.2")

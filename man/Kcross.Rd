@@ -196,15 +196,14 @@ Kcross(X, i, j, r=NULL, breaks=NULL, correction,
     \testonly{
     K01 <- Kcross(amacrine, "off", "on", ratio=TRUE) 
     }
-    \dontrun{
-    K10 <- Kcross(amacrine, "on", "off")
+
+    ## K10 <- Kcross(amacrine, "on", "off")
 
     # synthetic example: point pattern with marks 0 and 1
-    pp <- runifpoispp(50)
-    pp <- pp \%mark\% factor(sample(0:1, npoints(pp), replace=TRUE))
-    K <- Kcross(pp, "0", "1")
-    K <- Kcross(pp, 0, 1) # equivalent
-    }
+    ## pp <- runifpoispp(50)
+    ## pp <- pp \%mark\% factor(sample(0:1, npoints(pp), replace=TRUE))
+    ## K <- Kcross(pp, "0", "1")
+    ## K <- Kcross(pp, 0, 1) # equivalent
 }
 \author{\adrian
   

@@ -1,7 +1,7 @@
 #
 #	wingeom.R	Various geometrical computations in windows
 #
-#	$Revision: 4.136 $	$Date: 2020/03/16 10:28:51 $
+#	$Revision: 4.137 $	$Date: 2021/01/07 01:15:08 $
 #
 
 volume.owin <- function(x) { area.owin(x) }
@@ -167,7 +167,7 @@ owinpoly2mask <- function(w, rasta, check=TRUE) {
     xp[whole] <-  xp[whole] + epsilon
     whole <- (ceiling(yp) == floor(yp))
     yp[whole] <-  yp[whole] + epsilon
-    # call C
+    ## call C
     z <- .C("poly2imI",
             xp=as.double(xp),
             yp=as.double(yp),

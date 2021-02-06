@@ -151,8 +151,11 @@ local({
 #
 # Basic tests of mppm
 #
-# $Revision: 1.19 $ $Date: 2020/11/04 00:24:03 $
+# $Revision: 1.20 $ $Date: 2021/01/22 08:09:02 $
 # 
+
+if(!FULLTEST)
+  spatstat.options(npixel=32, ndummy.min=16)
 
 local({
   ## test interaction formulae and subfits
@@ -372,6 +375,7 @@ local({
   }
 })
 
+reset.spatstat.options()
 #'
 #'     tests/msr.R
 #'

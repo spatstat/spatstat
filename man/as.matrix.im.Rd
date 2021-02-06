@@ -40,10 +40,8 @@
 
    median(M)
    
-   \dontrun{
    # plot the cumulative distribution function of pixel values
-   plot(ecdf(as.matrix(Z)))
-   }
+   # plot(ecdf(as.matrix(Z)))
 }
 \author{\adrian
   

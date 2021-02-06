@@ -108,10 +108,9 @@ linearKdot.inhom(X, i, lambdaI, lambdadot, r=NULL, \dots,
 
    K <- linearKdot.inhom(chicago, "assault", lamI, lam.)
 
-   \dontrun{
-     fit <- lppm(chicago, ~marks + x)
-     linearKdot.inhom(chicago, "assault", fit, fit)
-   }
+   # using fitted models for the intensity
+   # fit <- lppm(chicago ~marks + x)
+   # linearKdot.inhom(chicago, "assault", fit, fit)
 }
 \author{\adrian
   

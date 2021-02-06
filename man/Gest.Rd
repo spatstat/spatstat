@@ -224,7 +224,7 @@ Gest(X, r=NULL, breaks=NULL, \dots,
   # the empirical G is below the Poisson G,
   # indicating an inhibited pattern
 
-  \dontrun{
+  if(interactive()) {
      plot(G, . ~ r)
      plot(G, . ~ theo)
      plot(G, asin(sqrt(.)) ~ asin(sqrt(theo)))

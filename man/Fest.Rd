@@ -292,7 +292,7 @@ Fhazard(X, \dots)
    # The empirical F is above the Poisson F
    # indicating an inhibited pattern
 
-   \dontrun{
+   if(interactive()) {
    plot(Fc, . ~ theo)
    plot(Fc, asin(sqrt(.)) ~ asin(sqrt(theo)))
    }

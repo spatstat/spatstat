@@ -23,6 +23,9 @@ cat(paste("--------- Executing",
 
 myfun <- function(x,y){(x+1) * y } # must be outside
 
+if(!FULLTEST)
+  spatstat.options(npixel=32, ndummy.min=16)
+
 local({
   if(FULLTEST) {
     #' supporting code
@@ -108,7 +111,8 @@ local({
   }
   if(ALWAYS) {
     #' run slow code for edge correction and compare results
-    X <- redwood[c(TRUE, FALSE, FALSE)]
+    op <- spatstat.options(npixel=128)
+    X <- redwood[c(TRUE, FALSE, FALSE, FALSE)]
     Window(X) <- as.polygonal(Window(X))
     Eapprox <- edge.Trans(X)
     Eexact <- edge.Trans(X, exact=TRUE)
@@ -117,6 +121,7 @@ local({
       stop(paste("Exact and approximate algorithms for edge.Trans disagree by",
                  paste0(round(100*maxrelerr), "%")),
            call.=FALSE)
+    spatstat.options(op)
   }
 })
 
@@ -307,13 +312,18 @@ local({
     compere(eZ,      c(2,4/3), "at interior point of polygon (debug off)")
   }
 })
+
+reset.spatstat.options()
 #
 # tests/kppm.R
 #
-# $Revision: 1.34 $ $Date: 2020/12/16 03:58:13 $
+# $Revision: 1.35 $ $Date: 2021/01/22 08:08:55 $
 #
 # Test functionality of kppm that depends on RandomFields
 # Test update.kppm for old style kppm objects
+
+if(!FULLTEST)
+  spatstat.options(npixel=32, ndummy.min=16)
 
 local({
 

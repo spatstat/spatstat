@@ -59,10 +59,8 @@
 \examples{
   W <- owin(c(0,1),c(0,1))
   X <- shift(W, c(2,3))
-  \dontrun{
-  plot(W)
+  # plot(W)
   # no discernible difference except coordinates are different
-  }
   shift(W, origin="top")
 }
 \author{\adrian

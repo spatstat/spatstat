@@ -14,24 +14,13 @@
   If you need to create a specific Ord-type model for use in 
   analysis, use the function \code{\link{OrdThresh}} or
   \code{\link{Ord}}.
- 
-  Anyway, \code{ord.family} is an object of class \code{"isf"}
-  containing a function \code{ord.family$eval} for
-  evaluating the sufficient statistics of any Ord type
-  point process model taking an exponential family form. 
-} 
+}
+\value{
+  Object of class \code{"isf"}, see \code{\link{isf.object}}.
+}
 \seealso{
   \code{\link{pairwise.family}},
   \code{\link{pairsat.family}},
-  \code{\link{Poisson}},
-  \code{\link{Pairwise}},
-  \code{\link{PairPiece}},
-  \code{\link{Strauss}},
-  \code{\link{StraussHard}},
-  \code{\link{Softcore}},
-  \code{\link{Geyer}},
-  \code{\link{SatPiece}},
-  \code{\link{Saturated}},
   \code{\link{Ord}},
   \code{\link{OrdThresh}}
 }

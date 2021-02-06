@@ -24,14 +24,13 @@
   \item{model}{Model of class \code{"detpointprocfamily"} or \code{"dppm"}.}
   \item{\dots}{Ignored (not quite true -- there is some undocumented internal use)}
 }
+\value{
+  A function in the \R language, with one numeric argument \code{r},
+  that can be used to evaluate the theoretical \eqn{K}-function or
+  pair correlation function of the model at distances \code{r}.
+}
 \author{
-  \adrian
-  
-  
-  \rolf
-  
-  and \ege
-  
+  \spatstatAuthors.
 }
 \examples{
   model <- dppMatern(lambda=100, alpha=.01, nu=1, d=2)

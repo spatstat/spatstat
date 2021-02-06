@@ -119,9 +119,6 @@ Jfox(X, Y, r=NULL, breaks=NULL, correction=c("km", "rs", "han"), W, \dots,
   \testonly{
   J <- Jfox(X,Y, correction="km", eps=1)
   }
-  \dontrun{
-  J <- Jfox(X,Y, correction="km", eps=0.25)
-  }
 }
 \author{Rob Foxall and
   \adrian

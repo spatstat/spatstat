@@ -674,7 +674,7 @@ trend corresponding to a particular type, there is still a component
 
 
    # Illustrating scalability.
-   \dontrun{
+   if(FALSE) {
     M1 <- rmhmodel(cif="strauss",par=list(beta=60,gamma=0.5,r=0.04),w=owin())
     set.seed(496)
     X1 <- rmh(model=M1,start=list(n.start=300))

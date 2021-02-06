@@ -45,10 +45,10 @@
   data(cells)
   # shear transformation
   X <- affine(cells, matrix(c(1,0,0.6,1),ncol=2))
-  \dontrun{
-  plot(X)
-  # rescale y coordinates by factor 1.3
-  plot(affine(cells, diag(c(1,1.3))))
+  if(interactive()) {
+    plot(X)
+    # rescale y coordinates by factor 1.3
+    plot(affine(cells, diag(c(1,1.3))))
   }
 }
 \author{\adrian

@@ -38,13 +38,10 @@
   \item{\dots}{Ignored.}
 }
 \author{
-  \adrian
-  
-  
-  \rolf
-  
-  and \ege
-  
+  \spatstatAuthors.
+}
+\value{
+  A point pattern (object of class \code{"ppp"}).
 }
 \examples{
 index <- expand.grid(-2:2,-2:2)

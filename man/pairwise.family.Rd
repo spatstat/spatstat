@@ -21,6 +21,9 @@
   evaluating the sufficient statistics of any pairwise interaction
   point process model taking an exponential family form. 
 } 
+\value{
+  Object of class \code{"isf"}, see \code{\link{isf.object}}.
+}
 \seealso{
   Other families: 
   \code{\link{pairsat.family}},

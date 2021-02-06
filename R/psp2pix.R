@@ -1,7 +1,7 @@
 #
 # psp2pix.R
 #
-#  $Revision: 1.13 $  $Date: 2020/11/17 03:47:24 $
+#  $Revision: 1.14 $  $Date: 2021/01/07 01:15:08 $
 #
 #
 
@@ -110,7 +110,7 @@ pixellate.psp <- function(x, W=NULL, ..., weights=NULL,
                     out=as.double(numeric(nr * nc)),
                     PACKAGE = "spatstat")
          },
-         number = {
+           number = {
            zz <- .C("seg2pixN",
                     ns=as.integer(nseg),
                     x0=as.double(x0),

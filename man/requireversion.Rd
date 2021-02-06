@@ -43,6 +43,6 @@ requireversion(pkg, ver, fatal=TRUE)
 }
 \examples{
   requireversion(spatstat, "1.42-0")
-  requireversion(spatstat, "999.999-999", fatal=FALSE)
+  requireversion(spatstat.data, "999.999-999", fatal=FALSE)
 }
 \keyword{environment}

@@ -3,7 +3,7 @@
 #'
 #'     Metric distance transform of pixel mask
 #'
-#'	$Revision: 1.6 $	$Date: 2020/11/29 07:42:07 $
+#'	$Revision: 1.7 $	$Date: 2021/01/07 01:15:08 $
 
 
 rectdistmap <- function(X, asp=1.0, npasses=1, verbose=FALSE) {

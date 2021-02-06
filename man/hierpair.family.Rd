@@ -11,12 +11,10 @@
   This structure would not normally be touched by
   the user. It describes 
   the hierarchical pairwise interaction family of point process models.
-
-  Anyway, \code{hierpair.family} is an object of class \code{"isf"}
-  containing a function \code{hierpair.family$eval} for
-  evaluating the sufficient statistics of any hierarchical pairwise interaction
-  point process model taking an exponential family form. 
-} 
+}
+\value{
+  Object of class \code{"isf"}, see \code{\link{isf.object}}.
+}
 \seealso{
   Other families: 
   \code{\link{pairwise.family}},
@@ -27,12 +25,8 @@
   Hierarchical Strauss interaction:
   \code{\link{HierStrauss}}.
 }
-\author{\adrian
-  
-  
-  \rolf
-  
-  and \ege.
+\author{
+  \spatstatAuthors.
 }
 \keyword{spatial}
 \keyword{models}

@@ -17,7 +17,10 @@ cat(paste("--------- Executing",
 #' 
 #'    Explicit tests of 'deltasuffstat'
 #' 
-#' $Revision: 1.3 $ $Date: 2020/04/28 12:58:26 $
+#' $Revision: 1.4 $ $Date: 2021/01/22 08:08:48 $
+
+if(!FULLTEST)
+  spatstat.options(npixel=32, ndummy.min=16)
 
 if(ALWAYS) {  # depends on C code
 local({
@@ -51,6 +54,8 @@ local({
 })
 
 }
+
+reset.spatstat.options()
 #'
 #'  tests/density.R
 #'
@@ -59,8 +64,11 @@ local({
 #'                    and inhomogeneous summary functions
 #'                    and idw, adaptive.density, intensity
 #'
-#'  $Revision: 1.56 $  $Date: 2020/04/28 12:58:26 $
+#'  $Revision: 1.57 $  $Date: 2021/01/22 08:08:42 $
 #'
+
+if(!FULLTEST)
+  spatstat.options(npixel=32, ndummy.min=16)
 
 local({
 
@@ -569,8 +577,9 @@ local({
 
   ## cases of 'intensity' etc
   a <- intensity(amacrine, weights=expression(x))
-  a <- intensity(split(amacrine), weights=expression(x))
-  a <- intensity(split(amacrine), weights=amacrine$x)
+  SA <- split(amacrine)
+  a <- intensity(SA, weights=expression(x))
+  a <- intensity(SA, weights=amacrine$x)
   a <- intensity(ppm(amacrine ~ 1))
 
   ## check infrastructure for 'densityfun'
@@ -578,6 +587,7 @@ local({
   Z <- as.im(f)
   Z <- as.im(f, W=square(0.5))
 })
+
 reset.spatstat.options()
 
 #'

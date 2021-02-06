@@ -40,9 +40,7 @@
 \examples{
   data(cells)
   X <- rotate(cells, pi/3)
-  \dontrun{
-  plot(X)
-  }
+  # plot(X)
 }
 \author{\adrian
   

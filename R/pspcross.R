@@ -3,7 +3,7 @@
 #
 #    Intersections of line segments
 #    
-#    $Revision: 1.26 $   $Date: 2020/03/23 01:15:26 $
+#    $Revision: 1.28 $   $Date: 2021/01/07 01:33:13 $
 #
 #
 crossing.psp <- function(A,B,fatal=TRUE,details=FALSE) {
@@ -33,7 +33,7 @@ crossing.psp <- function(A,B,fatal=TRUE,details=FALSE) {
 
   useCall <- spatstat.options("crossing.psp.useCall")
   if(!useCall) {
-    # old C routine
+    ## old C routine
     out <- .C("xysegint",
               na=as.integer(na),
               x0a=as.double(x0a),
@@ -188,7 +188,7 @@ selfcrossing.psp <- function(A) {
 
   useCall <- spatstat.options("selfcrossing.psp.useCall")
   if(!useCall) {
-    # old C routine
+    ## old C routine
     out <- .C("xysegXint",
               n=as.integer(n),
               x0=as.double(x0),

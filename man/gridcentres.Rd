@@ -51,7 +51,7 @@
 \examples{
   w <- unit.square()
   xy <- gridcentres(w, 10,15)
-  \dontrun{
+  if(human <- interactive()) {
   plot(w)
   points(xy)
   }
@@ -61,7 +61,7 @@
   w <- owin(c(0,1), c(0,1), poly=bdry)
   xy <- gridcentres(w, 30, 30)
   ok <- inside.owin(xy$x, xy$y, w)
-  \dontrun{
+  if(human) {
   plot(w)
   points(xy$x[ok], xy$y[ok])
   }

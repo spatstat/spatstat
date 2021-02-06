@@ -1,7 +1,7 @@
 #
 #      distanxD.R
 #
-#      $Revision: 1.15 $     $Date: 2020/04/24 03:33:47 $
+#      $Revision: 1.16 $     $Date: 2021/01/07 01:15:08 $
 #
 #      Interpoint distances for multidimensional points
 #
@@ -347,7 +347,7 @@ nncross.ppx <- function(X, Y, iX=NULL, iY=NULL,
                  nnwhich = as.integer(nnw),
                  as.double(big),
                  PACKAGE = "spatstat")
-    } else {
+      } else {
       Cout <- .C("nnXxMD",
                  m  =as.integer(m),
                  n1 = as.integer(nX),
@@ -387,7 +387,7 @@ nncross.ppx <- function(X, Y, iX=NULL, iY=NULL,
                  nnwhich = as.integer(nnw),
                  huge    = as.double(big),
                  PACKAGE = "spatstat")
-    } else {
+      } else {
       Cout <- .C("knnXxMD",
                  m       = as.integer(m),
                  n1      = as.integer(nX),

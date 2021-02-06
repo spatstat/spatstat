@@ -233,7 +233,7 @@
 }
 \examples{
    X <- rpoispp3(20, box3())
- \dontrun{
+ if(interactive()) {
  plot(envelope(X, nsim=39))
  }
  \testonly{

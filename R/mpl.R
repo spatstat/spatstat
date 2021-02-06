@@ -1,6 +1,6 @@
 #    mpl.R
 #
-#	$Revision: 5.233 $	$Date: 2020/03/04 04:25:13 $
+#	$Revision: 5.234 $	$Date: 2021/02/06 03:43:21 $
 #
 #    mpl.engine()
 #          Fit a point process model to a two-dimensional point pattern
@@ -115,7 +115,7 @@ mpl.engine <-
     the.version <- list(major=spv$major,
                         minor=spv$minor,
                         release=spv$patchlevel,
-                        date="$Date: 2020/03/04 04:25:13 $")
+                        date="$Date: 2021/02/06 03:43:21 $")
 
     if(want.inter) {
       ## ensure we're using the latest version of the interaction object
@@ -1262,14 +1262,14 @@ deltasuffstat <- local({
   deltasuffstat <- function(model, ...,
                             restrict=c("pairs", "first", "none"),
 			    dataonly=TRUE,
-                            sparseOK=FALSE,
+                            sparseOK=TRUE,
                             quadsub=NULL,
                             force=FALSE,
                             warn.forced=FALSE,
                             verbose=warn.forced,
                             use.special=TRUE) {
     stopifnot(is.ppm(model))
-    sparsegiven <- !missing(sparseOK)
+    sparseOK <- !isFALSE(sparseOK)  # NULL -> TRUE
     restrict <- match.arg(restrict)
     
     if(dataonly) {
@@ -1289,12 +1289,11 @@ deltasuffstat <- local({
     ncoef <- length(coef(model))
     inte <- as.interact(model)
 
-    if(!sparseOK && exceedsMaxArraySize(nX, nX, ncoef)) {
-      if(sparsegiven)
-        stop("Array dimensions too large", call.=FALSE)
-      warning("Switching to sparse array code", call.=FALSE)
-      sparseOK <- TRUE
-    }
+    if(!sparseOK && exceedsMaxArraySize(nX, nX, ncoef)) 
+      stop(paste("Array dimensions too large",
+                 paren(paste(c(nX, nX, ncoef), collapse=" x ")),
+                 "for non-sparse calculation of variance terms"),
+           call.=FALSE)
 
     zeroes <- if(!sparseOK) array(0, dim=c(nX, nX, ncoef)) else
                             sparse3Darray(dims=c(nX, nX, ncoef))
@@ -1419,7 +1418,7 @@ deltasuffstat <- local({
 
   ## compute deltasuffstat using partialModelMatrix
 
-  deltasufX <- function(model, sparseOK=FALSE, verbose=FALSE) {
+  deltasufX <- function(model, sparseOK=TRUE, verbose=FALSE) {
     stopifnot(is.ppm(model))
     X <- data.ppm(model)
     hasInf <- !identical(model$interaction$hasInf, FALSE)

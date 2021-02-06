@@ -158,14 +158,13 @@ vargamma.estK(X, startpar=c(kappa=1,scale=1), nu = -1/4, lambda=NULL,
   \code{\link{rVarGamma}} to simulate the model.
 }
 \examples{
-   \testonly{
-     u <- vargamma.estK(redwood, startpar=c(kappa=15, eta=0.075))
-    }
-    if(interactive()) {
+   if(interactive()) {
       u <- vargamma.estK(redwood)
-      u
+      print(u)
       plot(u)
-    }
+   } else {
+     u <- vargamma.estK(redwood, startpar=c(kappa=15, eta=0.07))
+   }
 }
 \keyword{spatial}
 \keyword{models}

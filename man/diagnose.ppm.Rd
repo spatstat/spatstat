@@ -390,7 +390,7 @@
 \examples{
     fit <- ppm(cells ~x, Strauss(r=0.15))
     diagnose.ppm(fit)
-    \dontrun{
+    \donttest{
     diagnose.ppm(fit, type="pearson")
     }
 
@@ -402,7 +402,7 @@
 
     # save the diagnostics and plot them later
     u <- diagnose.ppm(fit, rbord=0.15, plot.it=FALSE)
-    \dontrun{
+    if(interactive()) {
     plot(u)
     plot(u, which="marks")
     }

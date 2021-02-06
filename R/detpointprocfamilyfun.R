@@ -189,9 +189,9 @@ dppBessel <- detpointprocfamilyfun(
     logrslt <- log(lambda) + (d/2)*log(2*pi) + d*log(alpha) + lgamma(0.5*a+1)
     logrslt <- logrslt - (d/2)*log(a) - lgamma(sigma/2+1)
     tmp <- 1-2*pi^2*alpha^2*x^2/a
-    warnopt <- options(warn=-1)
-    logrslt <- logrslt + ifelse(tmp<0, -Inf, (sigma/2)*log(tmp))
-    options(warnopt)
+    suppressWarnings({
+      logrslt <- logrslt + ifelse(tmp<0, -Inf, (sigma/2)*log(tmp))
+    })
     return(exp(logrslt))
   },
   specdenrange=function(model){

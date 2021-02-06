@@ -90,7 +90,7 @@
   attach(split(lansing))
   b <- bw.diggle(hickory)
   plot(b, ylim=c(-2, 0), main="Cross validation for hickories")
-  \donttest{
+  if(interactive()) {
    plot(density(hickory, b))
   }
 }

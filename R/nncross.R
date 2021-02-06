@@ -2,7 +2,7 @@
 #   nncross.R
 #
 #
-#    $Revision: 1.31 $  $Date: 2020/01/05 00:46:13 $
+#    $Revision: 1.32 $  $Date: 2021/01/07 01:15:08 $
 #
 #  Copyright (C) Adrian Baddeley, Jens Oehlschlaegel and Rolf Turner 2000-2012
 #  Licence: GNU Public Licence >= 2
@@ -179,7 +179,7 @@ nncross.ppp <- function(X, Y, iX=NULL, iY=NULL,
     if(!exclude) iX <- iY <- integer(1)
 
     huge <- 1.1 * diameter(boundingbox(as.rectangle(X), as.rectangle(Y)))
-  
+
     z <- .C("knnXinterface",
             n1=as.integer(nX),
             x1=as.double(Xx),

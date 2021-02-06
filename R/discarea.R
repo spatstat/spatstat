@@ -1,7 +1,7 @@
 #
 #    discarea.R
 #
-#  $Revision: 1.21 $  $Date: 2019/02/20 03:34:50 $
+#  $Revision: 1.22 $  $Date: 2021/01/07 01:15:08 $
 #
 #
 #  Compute area of intersection between a disc and a window,
@@ -31,7 +31,7 @@ discpartarea <- function(X, r, W=as.owin(X)) {
   # remove vertical segments (contribution is zero)
   vert <- (Y$ends$x1 == Y$ends$x0)
   Y <- Y[!vert]
-  # go
+  ## go
   z <- .C("discareapoly",
           nc=as.integer(n),
           xc=as.double(X$x),

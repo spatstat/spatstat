@@ -51,10 +51,10 @@
 
  # extract first three marks only
  b <- a[1:3,1:3]
- \dontrun{plot(b)}
+ if(interactive()) {plot(b)}
  # subset of array pertaining to hickories
  h <- a["hickory", ]
- \dontrun{plot(h)}
+ if(interactive()) {plot(h)}
 }
 \author{
   \spatstatAuthors

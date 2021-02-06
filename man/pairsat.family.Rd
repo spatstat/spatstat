@@ -33,7 +33,10 @@
   evaluating the sufficient statistics of any saturated pairwise interaction
   point process model in which the original pair potentials 
   take an exponential family form. 
-} 
+}
+\value{
+  Object of class \code{"isf"}, see \code{\link{isf.object}}.
+}
 \references{
   Geyer, C.J. (1999)
   Likelihood Inference for Spatial Point Processes.

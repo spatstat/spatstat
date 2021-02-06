@@ -143,11 +143,9 @@
   fit <- ppm(cells ~ x, Strauss(0.1), correction="periodic")
   fit
   coef(fit)
-  \dontrun{
-  pred <- predict(fit)
-  }
+  # pred <- predict(fit)
   pred <- predict(fit, ngrid=20, type="trend")
-  \dontrun{
+  if(interactive()) {
   plot(fit)
   }  
 }

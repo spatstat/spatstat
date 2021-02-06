@@ -100,9 +100,7 @@ rho2hat(object, cov1, cov2, ..., method=c("ratio", "reweight"))
   attach(bei.extra)
   plot(rho2hat(bei, elev, grad))
   fit <- ppm(bei, ~elev, covariates=bei.extra)
-  \dontrun{
-  plot(rho2hat(fit, elev, grad))
-  }
+  # plot(rho2hat(fit, elev, grad))
   plot(rho2hat(fit, elev, grad, method="reweight"))
 }
 \keyword{spatial}

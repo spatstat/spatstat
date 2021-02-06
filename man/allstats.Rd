@@ -86,7 +86,7 @@
 \examples{
 	data(swedishpines)
         a <- allstats(swedishpines,dataname="Swedish Pines")
-        \dontrun{
+        if(interactive()) {
         plot(a)
         plot(a, subset=list("r<=15","r<=15","r<=15","r<=50"))
         }

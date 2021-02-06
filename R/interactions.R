@@ -58,11 +58,9 @@ active.interactions <- function(object) {
   iformula <- object$iformula
   nenv <- new.env()
   environment(iformula) <- nenv 
-#%^!ifdef RANDOMEFFECTS
   random <- object$random
   if(!is.null(random))
     environment(random) <- nenv
-#%^!endif  
 
   itags    <- object$Inter$itags
 # The following are currently unused  
@@ -82,7 +80,6 @@ active.interactions <- function(object) {
   
   # determine which interaction(s) are in force 
   answer <- impliedpresence(itags, iformula, dfdata, nondfnames)
-#%^!ifdef RANDOMEFFECTS  
   if(!is.null(random)) {
     if("|" %in% all.names(random)) {
       ## hack since model.matrix doesn't handle "|" as desired
@@ -92,7 +89,6 @@ active.interactions <- function(object) {
     answer2 <- impliedpresence(itags, random, dfdata, nondfnames)
     answer <- answer | answer2
   }
-#%^!endif  
   colnames(answer) <- names(interaction)
   return(answer)
 }
@@ -155,20 +151,22 @@ impliedcoefficients <- function(object, tag) {
   }
   # (2) evaluate linear predictor
   Coefs <- if(!has.random) coef(fitobj) else fixef(fitobj)
-  opt <- options(warn= -1)
+  suppressWarnings({
 #  eta0 <- predict(fitobj, newdata=df, type="link")
-  eta0 <- GLMpredict(fitobj, data=df, coefs=Coefs, changecoef=TRUE, type="link")
-  options(opt)
+    eta0 <- GLMpredict(fitobj, data=df, coefs=Coefs,
+                       changecoef=TRUE, type="link")
+  })
   
   # (3) for each vname in turn,
   # set the value of the vname to 1 and predict again
   for(j in seq_along(vnames)) {
     vnj <- vnames[j]
     df[[vnj]] <- 1
-    opt <- options(warn= -1)
+    suppressWarnings({
 #    etaj <- predict(fitobj, newdata=df, type="link")
-    etaj <- GLMpredict(fitobj, data=df, coefs=Coefs, changecoef=TRUE, type="link")
-    options(opt)
+      etaj <- GLMpredict(fitobj, data=df, coefs=Coefs,
+                         changecoef=TRUE, type="link")
+    })
     answer[ ,j] <- etaj - eta0
     # set the value of this vname back to 0
     df[[vnj]] <- 0

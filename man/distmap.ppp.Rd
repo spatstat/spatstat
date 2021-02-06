@@ -60,7 +60,7 @@
 \examples{
   data(cells)
   U <- distmap(cells)
-  \dontrun{
+  if(interactive()) {
   plot(U)
   plot(attr(U, "bdry"))
   plot(attr(U, "index"))

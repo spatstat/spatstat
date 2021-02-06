@@ -132,9 +132,7 @@
 
    # Fit a nonstationary connected component model
    # with log-cubic polynomial trend
-   \dontrun{
-   ppm(swedishpines, ~polynom(x/10,y/10,3), Concom(r=7), rbord=7)
-   }
+   # ppm(swedishpines, ~polynom(x/10,y/10,3), Concom(r=7), rbord=7)
 }
 \references{
   Baddeley, A.J. and \Moller, J. (1989)

@@ -3,7 +3,7 @@
 #'
 #'   Tessellations on a Linear Network
 #'
-#'   $Revision: 1.42 $   $Date: 2020/03/16 10:28:51 $
+#'   $Revision: 1.43 $   $Date: 2021/01/07 03:53:35 $
 #'
 
 lintess <- function(L, df, marks=NULL) {

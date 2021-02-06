@@ -115,14 +115,14 @@
   If supplied, the arguments of \code{Kfun} should be like the
   arguments of \code{kernel} and \code{specden} (see above).
 }
+\value{
+  A function in the \R language, belonging to the class
+  \code{"detpointprocfamilyfun"}. The function has formal arguments
+  \code{\dots} and returns a determinantal point process family
+  (object of class \code{"detpointprocfamily"}).
+}
 \author{
-  \adrian
-  
-  
-  \rolf
-  
-  and \ege
-  
+  \spatstatAuthors.
 }
 \examples{
   ## Example of how to define the Gauss family

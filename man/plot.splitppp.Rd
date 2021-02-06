@@ -52,13 +52,11 @@
 # Multitype point pattern
  plot(split(amacrine))
  plot(split(amacrine), main="", 
-     panel.begin=function(i, y, ...) { plot(density(y), ribbon=FALSE, ...) })
+     panel.begin=function(i, y, ...) { plot(distmap(y), ribbon=FALSE, ...) })
 }
-\author{\adrian
-  
-  
+\author{
+  \adrian
   and \rolf
-  
 }
 \keyword{spatial}
 \keyword{hplot}

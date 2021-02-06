@@ -48,32 +48,26 @@
   centroid.owin(w)
   # returns 0.5, 0.5
 
-  data(demopat)
   w <- Window(demopat)
   # an irregular window
   cent <- centroid.owin(w, as.ppp = TRUE)
-  \dontrun{
-  plot(cent)
-  # plot the window and its centroid
-  }
 
   wapprox <- as.mask(w)
   # pixel approximation of window
-  \dontrun{
-  points(centroid.owin(wapprox))
-  # should be indistinguishable 
+
+  if(interactive()) {
+    plot(cent)
+    # plot the window and its centroid
+    points(centroid.owin(wapprox))
+    # should be indistinguishable 
   }
   \testonly{
   centroid.owin(w)
   centroid.owin(wapprox)
   }	
 }
-\author{\adrian
-  
-  ,
-  \rolf
-  
-  and \ege
+\author{
+ \spatstatAuthors.
 }
 \keyword{spatial}
 \keyword{math}

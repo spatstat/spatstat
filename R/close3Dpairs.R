@@ -1,7 +1,7 @@
 #
 # close3Dpairs.R
 #
-#   $Revision: 1.14 $   $Date: 2020/02/06 05:53:02 $
+#   $Revision: 1.15 $   $Date: 2021/01/07 01:38:43 $
 #
 #  extract the r-close pairs from a 3D dataset
 # 
@@ -72,12 +72,12 @@ closepairs.pp3 <- local({
                         xx=x, yy=y, zz=z, rr=r, nguess=ng,
                         PACKAGE = "spatstat")
                 },
-                indices = {
+                  indices = {
                   .Call("close3IJpairs",
                         xx=x, yy=y, zz=z, rr=r, nguess=ng,
                         PACKAGE = "spatstat")
                 },
-                ijd = {
+                    ijd = {
                   .Call("close3IJDpairs",
                         xx=x, yy=y, zz=z, rr=r, nguess=ng,
                         PACKAGE = "spatstat")
@@ -226,14 +226,14 @@ crosspairs.pp3 <- local({
                         rr=r, nguess=ng,
                         PACKAGE = "spatstat")
                 },
-                indices = {
+                  indices = {
                   .Call("cross3IJpairs",
                         xx1=Xx, yy1=Xy, zz1=Xz,
                         xx2=Yx, yy2=Yy, zz2=Yz,
                         rr=r, nguess=ng,
                         PACKAGE = "spatstat")
                 },
-                ijd = {
+                    ijd = {
                   .Call("cross3IJDpairs",
                         xx1=Xx, yy1=Xy, zz1=Xz,
                         xx2=Yx, yy2=Yy, zz2=Yz,

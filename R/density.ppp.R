@@ -3,7 +3,7 @@
 #
 #  Method for 'density' for point patterns
 #
-#  $Revision: 1.112 $    $Date: 2020/11/29 07:35:59 $
+#  $Revision: 1.113 $    $Date: 2021/01/07 03:08:41 $
 #
 
 # ksmooth.ppp <- function(x, sigma, ..., edge=TRUE) {

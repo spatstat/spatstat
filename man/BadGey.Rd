@@ -124,9 +124,7 @@
    ppm(cells ~1, BadGey(c(0.07, 0.1, 0.13), 2))
 
    # nonstationary process with log-cubic polynomial trend
-   \dontrun{
-   ppm(cells ~polynom(x,y,3), BadGey(c(0.07, 0.1, 0.13), 2))
-   }
+   # ppm(cells ~polynom(x,y,3), BadGey(c(0.07, 0.1, 0.13), 2))
 }
 \author{
   \adrian

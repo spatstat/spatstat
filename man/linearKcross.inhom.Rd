@@ -112,14 +112,12 @@ linearKcross.inhom(X, i, j, lambdaI, lambdaJ,
 
    K <- linearKcross.inhom(chicago, "assault", "robbery", lamI, lamJ)
 
-   \dontrun{
-     fit <- lppm(chicago, ~marks + x)
-     linearKcross.inhom(chicago, "assault", "robbery", fit, fit)
-   }
+   # using fitted models for the intensity
+   # fit <- lppm(chicago ~marks + x)
+   # K <- linearKcross.inhom(chicago, "assault", "robbery", fit, fit)
 }
-\author{\adrian
-  
-  
+\author{
+  \adrian.
 }
 \keyword{spatial}
 \keyword{nonparametric}

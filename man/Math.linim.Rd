@@ -87,6 +87,14 @@
 \seealso{
   \code{\link{eval.linim}} for evaluating expressions involving images.
 }
+\value{
+  The return value is another object of class \code{"linim"},
+  except in the following cases:
+  \code{all} and \code{any} return a single
+  logical value; \code{sum}, \code{prod}, \code{min} and \code{max}
+  return a single numerical value; \code{range} returns a vector of two
+  numerical values.
+}
 \examples{
   fx <- function(x,y,seg,tp) { (x - y)^2 }
   fL <- linfun(fx, simplenet)
@@ -96,13 +104,8 @@
   A <- sqrt(Z)
   A <- !(Z > 0.1)
 }
-\author{\adrian
-  
-  
-  \rolf
-  
-  and \ege
-  
+\author{
+  \spatstatAuthors.
 }
 \keyword{spatial}
 \keyword{methods}

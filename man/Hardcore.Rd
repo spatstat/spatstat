@@ -74,16 +74,14 @@ which can then be fitted to point pattern data.
    Hardcore(0.02)
    # prints a sensible description of itself
 
-   \dontrun{
-   ppm(cells, ~1, Hardcore(0.05))
+   ppm(cells ~1, Hardcore(0.05))
    # fit the stationary hard core process to `cells'
-   }
 
    # estimate hard core radius from data
    ppm(cells, ~1, Hardcore())
-   ppm(cells, ~1, Hardcore)
+   # ppm(cells ~1, Hardcore)
 
-   ppm(cells, ~ polynom(x,y,3), Hardcore(0.05))
+   # ppm(cells ~ polynom(x,y,3), Hardcore(0.05))
    # fit a nonstationary hard core process
    # with log-cubic polynomial trend
 }

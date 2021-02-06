@@ -183,11 +183,9 @@ Jdot(X, i, eps=NULL, r=NULL, breaks=NULL, \dots, correction=NULL)
     Jhh <- Jest(split(woods)$hickory)
     plot(Jhh, add=TRUE, legendpos="bottom")
 
-    \dontrun{
     # synthetic example with two marks "a" and "b"
-    pp <- runifpoint(30) \%mark\% factor(sample(c("a","b"), 30, replace=TRUE))
-    J <- Jdot(pp, "a")
-    }
+    ## pp <- runifpoint(30) \%mark\% factor(sample(c("a","b"), 30, replace=TRUE))
+    ## J <- Jdot(pp, "a")
 }
 \author{\adrian
   

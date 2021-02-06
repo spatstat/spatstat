@@ -79,15 +79,11 @@ which can then be fitted to point pattern data.
 \examples{
    Strauss(r=0.1)
    # prints a sensible description of itself
-   data(cells)
 
-   \dontrun{
-   ppm(cells, ~1, Strauss(r=0.07))
+   # ppm(cells ~1, Strauss(r=0.07))
    # fit the stationary Strauss process to `cells'
-   }
 
-
-   ppm(cells, ~polynom(x,y,3), Strauss(r=0.07))
+   ppm(cells ~polynom(x,y,3), Strauss(r=0.07))
    # fit a nonstationary Strauss process with log-cubic polynomial trend
 }
 \author{\adrian

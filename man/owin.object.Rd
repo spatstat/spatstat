@@ -103,7 +103,6 @@
  # the unit square
   
  w <- owin(c(0,1), c(0,2))
- \dontrun{
  if(FALSE) {
    plot(w)
    # plots edges of a box 1 unit x 2 units
@@ -117,7 +116,6 @@
    plot(as.mask(u, eps=0.02))
    # plots discrete pixel approximation to polygon
  }
-}
 }
 \author{\adrian
   

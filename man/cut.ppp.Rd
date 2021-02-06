@@ -96,13 +96,13 @@
 	# smaller dataset
 	trees <- trees[seq(1, npoints(trees), by=80)]
  }
- \dontrun{
+ if(interactive()) {
  plot(trees)
  }
 
  # cut the range of tree diameters into three intervals
  long3 <- cut(trees, breaks=3)
- \dontrun{
+ if(interactive()) {
  plot(long3)
  }
 

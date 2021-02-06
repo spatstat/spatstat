@@ -60,10 +60,8 @@
 \examples{
   data(cells)
   X <- shift(cells, c(2,3))
-  \dontrun{
-  plot(X)
+  # plot(X)
   # no discernible difference except coordinates are different
-  }
   plot(cells, pch=16)
   plot(shift(cells, c(0.03,0.03)), add=TRUE)
 

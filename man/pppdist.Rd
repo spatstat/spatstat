@@ -178,7 +178,7 @@
 \author{
   Dominic Schuhmacher
   \email{dominic.schuhmacher@mathematik.uni-goettingen.de} \cr
-  \url{http://www.dominic.schuhmacher.name}
+  \url{http://dominic.schuhmacher.name/}
 }
 \seealso{
   \code{\link{pppmatching.object}}, \code{\link{matchingdist}},
@@ -191,7 +191,7 @@ X <- runifrect(500)
 Y <- runifrect(500)
 m <- pppdist(X, Y)
 m
-\dontrun{
+if(interactive()) {
 plot(m)}
   
 # differing cardinalities
@@ -203,7 +203,7 @@ m3 <- pppdist(X, Y, type="mat", auction=FALSE)
 summary(m1)
 summary(m2)
 summary(m3)
-\dontrun{
+if(interactive()) {
 m1$matrix
 m2$matrix
 m3$matrix}

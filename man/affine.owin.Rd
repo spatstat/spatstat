@@ -48,9 +48,7 @@
   # shear transformation
   shear <- matrix(c(1,0,0.6,1),ncol=2)
   X <- affine(owin(), shear)
-  \dontrun{
-  plot(X)
-  }
+  if(interactive()) plot(X)
   affine(letterR, shear, c(0, 0.5))
   affine(as.mask(letterR), shear, c(0, 0.5))
 }

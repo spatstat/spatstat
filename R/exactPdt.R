@@ -2,7 +2,7 @@
 #	exactPdt.R
 #	R function exactPdt() for exact distance transform of pixel image
 #
-#	$Revision: 4.17 $	$Date: 2017/06/05 10:31:58 $
+#	$Revision: 4.18 $	$Date: 2021/01/07 01:15:08 $
 #
 
 "exactPdt"<-
@@ -28,7 +28,7 @@
   # do padding
   x <- matrix(FALSE, nrow=Nnr, ncol=Nnc)
   x[rmin:rmax, cmin:cmax] <- w$m
-  #
+                                        #
   res <- .C("ps_exact_dt_R",
             as.double(w$xrange[1L]),
             as.double(w$yrange[1L]),

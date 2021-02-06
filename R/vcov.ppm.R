@@ -3,7 +3,7 @@
 ## and Fisher information matrix
 ## for ppm objects
 ##
-##  $Revision: 1.133 $  $Date: 2020/01/30 05:13:43 $
+##  $Revision: 1.134 $  $Date: 2021/02/06 03:43:12 $
 ##
 
 vcov.ppm <- local({
@@ -382,7 +382,7 @@ vcalcGibbsGeneral <- function(model,
                          new.coef = NULL, dropcoef=FALSE,
                          saveterms = FALSE,
                          parallel = TRUE,
-                         sparseOK = FALSE
+                         sparseOK = TRUE
                          ) {
   modmat.given <- !missing(modmat)
   na.action <- match.arg(na.action)

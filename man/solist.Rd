@@ -89,7 +89,7 @@ solist(\dots, check=TRUE, promote=TRUE, demote=FALSE, .NameBase)
   \code{\link{solapply}}
 }
 \examples{
-  solist(cells, density(cells))
+  solist(cells, distmap(cells), quadratcount(cells))
   solist(cells, japanesepines, redwood, .NameBase="Pattern")
 }
 \keyword{spatial}

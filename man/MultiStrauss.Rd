@@ -83,10 +83,8 @@ which can then be fitted to point pattern data.
    ppm(X ~1, MultiStrauss(r))
    # fit the stationary multitype Strauss process to `amacrine'
 
-   \dontrun{
-   ppm(X ~polynom(x,y,3), MultiStrauss(r, c("off","on")))
+   # ppm(X ~polynom(x,y,3), MultiStrauss(r, c("off","on")))
    # fit a nonstationary multitype Strauss process with log-cubic trend
-   }
 }
 \section{Warnings}{
   In order that \code{\link{ppm}} can fit the multitype Strauss

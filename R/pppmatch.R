@@ -1,7 +1,7 @@
 #
 # pppmatch.R
 #
-# $Revision: 1.25 $  $Date: 2018/10/26 08:06:28 $
+# $Revision: 1.26 $  $Date: 2021/01/07 01:15:08 $
 #
 # Code by Dominic Schuhmacher
 #
@@ -451,7 +451,7 @@ pppdist <- function(X, Y, type = "spa", cutoff = 1, q = 1, matching = TRUE,
       am <- matrix(0, n, n)
       am[cbind(1:n,res$pers_to_obj+1)] <- 1
     }
-    else {           
+      else {
       res <- .C("dwpure",
                 as.integer(d),
                 as.integer(rep.int(1,n)),
@@ -692,7 +692,7 @@ pppdist.prohorov <- function(X, Y, n, dfix, type, cutoff = 1, matching = TRUE,
         am <- matrix(0, n, n)
         am[cbind(1:n,res$pers_to_obj+1)] <- 1
       }
-      else {           
+        else {
         res <- .C("dwpure",
                   as.integer(d),
                   as.integer(rep.int(1,n)),

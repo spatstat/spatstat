@@ -3,7 +3,7 @@
 #'
 #'   Check validity of polygon data
 #'
-#'  $Revision: 1.2 $  $Date: 2017/06/05 10:31:58 $
+#'  $Revision: 1.3 $  $Date: 2021/01/07 01:15:08 $
 #'
 
 #' check validity of a polygonal owin
@@ -143,7 +143,7 @@ xypolyselfint <- function(p, eps=.Machine$double.eps,
   dx <- diff(x0[c(1:n,1L)])
   dy <- diff(y0[c(1:n,1L)])
   if(yesorno) {
-    # get a yes-or-no answer
+    ## get a yes-or-no answer
     answer <- .C("xypsi",
                  n=as.integer(n),
                  x0=as.double(x0),
@@ -159,7 +159,7 @@ xypolyselfint <- function(p, eps=.Machine$double.eps,
     if(verbose)
       cat("]\n")
     return(answer != 0)
-  }
+    }
   out <- .C("Cxypolyselfint",
             n=as.integer(n),
             x0=as.double(x0),

@@ -10,20 +10,22 @@
 \usage{dppapproxpcf(model, trunc = 0.99, W = NULL)}
 \arguments{
   \item{model}{Object of class \code{"detpointprocfamily"}.}
-  \item{trunc}{Numeric specifying how the model truncation is
-    performed. See Details section of \code{\link{simulate.detpointprocfamily}}.}
+  \item{trunc}{Numeric value specifying how the model truncation is
+    performed.
+    See Details section of \code{\link{simulate.detpointprocfamily}}.}
   \item{W}{Optional window -- undocumented at the moment.}
 }
-\details{This function is usually NOT needed for anything. It
-only exists for investigative purposes.}
+\details{
+  This function is usually NOT needed for anything. It
+  only exists for investigative purposes.
+}
+\value{
+  A function in the \R language, with one numeric argument \code{x},
+  that returns the value of the approximate pair correlation
+  at distances \code{x}.
+}
 \author{
-  \adrian
-  
-  
-  \rolf
-  
-  and \ege
-  
+  \spatstatAuthors.
 }
 \examples{
 f <- dppapproxpcf(dppMatern(lambda = 100, alpha=.028, nu=1, d=2))

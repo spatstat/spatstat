@@ -70,12 +70,10 @@ which can then be fitted to point pattern data.
    DiggleGatesStibbard(0.02)
    # prints a sensible description of itself
 
-   \dontrun{
    ppm(cells ~1, DiggleGatesStibbard(0.05))
    # fit the stationary D-G-S process to `cells'
-   }
 
-   ppm(cells ~ polynom(x,y,3), DiggleGatesStibbard(0.05))
+   # ppm(cells ~ polynom(x,y,3), DiggleGatesStibbard(0.05))
    # fit a nonstationary D-G-S process
    # with log-cubic polynomial trend
 }

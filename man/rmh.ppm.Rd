@@ -205,14 +205,14 @@
    Xsim <- rmh(fit)
    if(live) plot(Xsim, main="simulation from fitted Strauss model")
 
-   \dontrun{
+   if(live) {
      # Strauss process simulated on a larger window
      # then clipped to original window
      Xsim <- rmh(fit, control=list(nrep=Nrep, expand=1.1, periodic=TRUE))
      Xsim <- rmh(fit, nrep=Nrep, expand=2, periodic=TRUE)
    }
 
-   \dontrun{
+   if(live) {
      X <- rSSI(0.05, 100)
      # piecewise-constant pairwise interaction function
      fit <- ppm(X, ~1, PairPiece(seq(0.02, 0.1, by=0.01)))
@@ -222,7 +222,7 @@
     # marked point pattern
     Y <- amacrine
 
-   \dontrun{
+   if(live) {
      # marked Poisson models
      fit <- ppm(Y)
      fit <- ppm(Y,~marks)
@@ -235,7 +235,7 @@
    # multitype Strauss models
    MS <- MultiStrauss(radii=matrix(0.07, ncol=2, nrow=2),
                       types = levels(Y$marks))
-   \dontrun{
+   if(live) {
     fit <- ppm(Y ~marks, MS)
     Ysim <- rmh(fit)
    }
@@ -246,7 +246,7 @@
 
    spatstat.options(op)
 
-  \dontrun{
+  if(live) {
     # Hybrid model
     fit <- ppm(redwood, ~1, Hybrid(A=Strauss(0.02), B=Geyer(0.1, 2)))
     Y <- rmh(fit)

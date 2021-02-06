@@ -80,7 +80,7 @@
 \examples{
  fit <- ppm(cells ~1, Strauss(r=0.1))
  Q <- quad.ppm(fit)
- \dontrun{plot(Q)}
+ # plot(Q)
  npoints(Q$data)
  npoints(Q$dummy)
 }

@@ -12,12 +12,10 @@
   the user. It describes the interaction structure
   of Gibbs point processes which have infinite order of interaction,
   such as the area-interaction process \cite{\link{AreaInter}}.
- 
-  Anyway, \code{inforder.family} is an object of class \code{"isf"}
-  containing a function \code{inforder.family$eval} for
-  evaluating the sufficient statistics of a Gibbs
-  point process model taking an exponential family form. 
 } 
+\value{
+  Object of class \code{"isf"}, see \code{\link{isf.object}}.
+}
 \seealso{
   \code{\link{AreaInter}} to create the area interaction process
   structure.
@@ -26,8 +24,6 @@
   \code{\link{pairwise.family}},
   \code{\link{pairsat.family}},
   \code{\link{ord.family}}.
-
-  
 }
 \references{
   Baddeley, A. and Turner, R. (2000)

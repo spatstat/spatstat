@@ -62,22 +62,12 @@ integral(f, domain=NULL, \dots)
    integral.im(Z)
    # correct answer is 2
 
-   D <- density(cells)
-   integral.im(D)
-   # should be approximately equal to number of points = 42
-
    # integrate over the subset [0.1,0.9] x [0.2,0.8]
    W <- owin(c(0.1,0.9), c(0.2,0.8))
-   integral.im(D, W)
+   integral.im(Z, W)
 }
 \author{
-\adrian
-
-
-\rolf
-
-and \ege
-
+\spatstatAuthors.
 }
 \keyword{spatial}
 \keyword{math}

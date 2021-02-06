@@ -1,7 +1,7 @@
 #
 #   nncross3D.R
 #
-#    $Revision: 1.9 $  $Date: 2020/04/25 10:14:28 $
+#    $Revision: 1.10 $  $Date: 2021/01/07 01:15:08 $
 #
 #  Copyright (C) Adrian Baddeley, Jens Oehlschlaegel and Rolf Turner 2000-2013
 #  Licence: GNU Public Licence >= 2
@@ -118,7 +118,7 @@ nncross.pp3 <- function(X, Y, iX=NULL, iY=NULL,
     if(!exclude) iX <- iY <- integer(1)
 
     huge <- 1.1 * diameter(bounding.box3(as.box3(X),as.box3(Y)))
-  
+
     z <- .C("nnX3Dinterface",
             n1=as.integer(nX),
             x1=as.double(XX[,1]),
@@ -166,7 +166,7 @@ nncross.pp3 <- function(X, Y, iX=NULL, iY=NULL,
     nnwh <- if(want.which) integer(nX * kmaxcalc) else integer(1)
     if(!exclude) iX <- iY <- integer(1)
     huge <- 1.1 * diameter(bounding.box3(as.box3(X),as.box3(Y)))
-  
+
     z <- .C("knnX3Dinterface",
             n1=as.integer(nX),
             x1=as.double(XX[,1]),

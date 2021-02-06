@@ -49,26 +49,21 @@
 \examples{
   w <- unit.square()
   xy <- stratrand(w, 10, 10)
-  \dontrun{
-  plot(w)
-  points(xy)
-  }
+  # plot(w)
+  # points(xy)
 
   # polygonal boundary
   bdry <- list(x=c(0.1,0.3,0.7,0.4,0.2),
                y=c(0.1,0.1,0.5,0.7,0.3))
   w <- owin(c(0,1), c(0,1), poly=bdry)
   xy <- stratrand(w, 10, 10, 3)
-  \dontrun{
-  plot(w)
-  points(xy)
-  }
+  # plot(w)
+  # points(xy)
+
   # determine which grid points are inside polygon
   ok <- inside.owin(xy$x, xy$y, w)
-  \dontrun{
-  plot(w)
-  points(xy$x[ok], xy$y[ok])
-  }
+  # plot(w)
+  # points(xy$x[ok], xy$y[ok])
 }
 \author{\adrian
   

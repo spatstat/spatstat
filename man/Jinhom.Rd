@@ -170,9 +170,8 @@
   \code{\link{Jest}}
 }
 \examples{
-  \dontrun{
-    plot(Jinhom(swedishpines, sigma=bw.diggle, adjust=2))
-  }
+  # plot(Jinhom(swedishpines, sigma=bw.diggle, adjust=2))
+
   plot(Jinhom(swedishpines, sigma=10))
 }
 \author{
