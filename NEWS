@@ -12,6 +12,8 @@ OVERVIEW
 
     o Increased speed for large datasets.
 
+    o variance calculations handle larger datasets.
+    
     o spatstat now requires spatstat.utils version >= 1.18-0
 
     o spatstat now requires spatstat.data version >= 1.7-0
@@ -28,6 +30,10 @@ NEW DATASETS
     
 SIGNIFICANT USER-VISIBLE CHANGES
 
+    o vcov.ppm, summary.ppm
+    Variance calculations now handle larger datasets
+    because they use sparse arrays, by default.
+    
     o dirichletEdges
     New argument 'clip'.
 
@@ -93,6 +99,10 @@ BUG FIXES
 
     o nnclean
     Crashed if k >= npoints(X).
+    Fixed.
+
+    o print.ppm
+    Crashed sometimes when applied to the result of subfits().
     Fixed.
     
         CHANGES IN spatstat VERSION 1.64-3

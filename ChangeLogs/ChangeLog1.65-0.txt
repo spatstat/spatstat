@@ -934,3 +934,14 @@ Change log from spatstat 1.64-3 to spatstat 1.65-0
 (with environment variable SPATSTAT_TEST defined/undefined)
 ------------- installed on laptop TEMPORARILY FOR TESTS -------
 ------------- uploaded to GitHub ------------------------------
+
+    ppmclass.R
+	Bug fix (in print.ppm handling subfits())
+
+    NEWS
+	updated.
+	
+------------- passed R-4.0.3 CMD check ---------------
+(with environment variable SPATSTAT_TEST defined/undefined)
+------------- installed on laptop TEMPORARILY FOR TESTS -------
+------------- uploaded to GitHub ------------------------------

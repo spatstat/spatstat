@@ -4,7 +4,7 @@
 #	Class 'ppm' representing fitted point process models.
 #
 #
-#	$Revision: 2.148 $	$Date: 2020/11/17 03:47:24 $
+#	$Revision: 2.149 $	$Date: 2021/02/06 09:02:36 $
 #
 #       An object of class 'ppm' contains the following:
 #
@@ -53,26 +53,31 @@ function(x, ...,
   terselevel <- spatstat.options("terse")
   digits <- getOption('digits')
   
-  # If SE was explicitly requested, calculate it.
-  # Otherwise, do it only if the model is Poisson (by default)
-  do.SE <- force.no.SE <- force.SE <- FALSE
-  if(np == 0) {
-    force.no.SE <- TRUE
-  } else if(!is.null(x$internal$VB)) {
-    force.no.SE <- TRUE
-  } else if(!misswhat && ("se" %in% what)) {
+  ## Determine whether SE is required 
+  want.SE <- force.SE <- force.no.SE <- FALSE
+  if(!misswhat && ("se" %in% what)) {
+    ## SE was explicitly requested
     force.SE <- TRUE
-  } else switch(spatstat.options("print.ppm.SE"),
-                always = { force.SE <- TRUE }, 
-                never  = { force.no.SE <- TRUE },
-                poisson = {
-                  do.SE <-
-                    is.poisson(x) &&
-                      !identical(x$fitter, "gam") &&
-                        (!is.null(x$varcov) || x$method != "logi") &&
-                          waxlyrical("extras", terselevel)
-                })
-  do.SE <- (do.SE || force.SE) && !force.no.SE
+  } else {
+    ## Default rule: compute SE only if the model is Poisson
+    switch(spatstat.options("print.ppm.SE"),
+           always = { force.SE <- TRUE }, 
+           never  = { force.no.SE <- TRUE },
+           poisson = {
+             want.SE <- is.poisson(x) && waxlyrical("extras", terselevel)
+           })
+  }
+  do.SE <- (want.SE || force.SE) && !force.no.SE
+  if(do.SE) {
+    ## Check whether able to compute SE
+    unable.SE <- (np == 0) || any(x$fitter %in% "gam") ||
+      !is.null(x$internal$VB) || 
+      (any(x$method %in% "mppm") && is.null(x$varcov))
+    ## resolve
+    if(force.SE && unable.SE) 
+      warning("Unable to compute variances for this model", call.=FALSE)
+    do.SE <- do.SE && !unable.SE
+  }
 
   s <- summary.ppm(x, quick=if(do.SE) FALSE else "no variances")
         
