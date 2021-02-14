@@ -27,30 +27,3 @@ The `spatstat` package has grown so large that CRAN have asked us
 to split it into sub-packages. This process is almost finished.
 Watch this space for further announcements!
 
-## Installation
-
-To install the official release of `spatstat` from CRAN, start `R` and type
-
-```R
-install.packages('spatstat')
-```
-
-## Bug reports 
-
-Users are encouraged to report bugs here.
-Go to 
-[issues](https://github.com/spatstat/spatstat/issues) in the menu above, 
-and press *new issue* to start a new bug report, documentation correction
-or feature request.
-
-**Please do not post questions** on the Issues page,
-because it's too clunky for correspondence.
-
-## Questions about spatstat
-
-For questions about `spatstat`, first check 
-the question-and-answer website [stackoverflow](http://stackoverflow.com/questions/tagged/spatstat).
-If your question is not listed,
-you can either post your question at stackoverflow, or
-email the authors.
-
