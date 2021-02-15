@@ -8,12 +8,12 @@ citEntry(entry = "Book",
   year         = "2015",
   publisher    = "Chapman and Hall/CRC Press",
   address      = "London",
-  url="http://www.crcpress.com/Spatial-Point-Patterns-Methodology-and-Applications-with-R/Baddeley-Rubak-Turner/9781482210200/",
+  url="https://www.routledge.com/Spatial-Point-Patterns-Methodology-and-Applications-with-R/Baddeley-Rubak-Turner/9781482210200/",
   textVersion  =
   paste("Adrian Baddeley, Ege Rubak, Rolf Turner (2015).",
         "Spatial Point Patterns: Methodology and Applications with R.",
         "London: Chapman and Hall/CRC Press, 2015.",
-        "URL http://www.crcpress.com/Spatial-Point-Patterns-Methodology-and-Applications-with-R/Baddeley-Rubak-Turner/9781482210200/")
+        "URL https://www.routledge.com/Spatial-Point-Patterns-Methodology-and-Applications-with-R/Baddeley-Rubak-Turner/9781482210200/")
 )
 
 citEntry(entry = "Article",

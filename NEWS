@@ -3,12 +3,10 @@
 
 OVERVIEW
 
-    o We thank Tilman Davies, Pavel Fibich and
-    Professor Shin-ichi Igarashi for contributions.
+    o We thank Michael Chirico, Tilman Davies and Pavel Fibich
+    for contributions.
 
     o Important bug fix in simulation of log-Gaussian Cox processes.
-
-    o New dataset 'concrete'
 
     o Increased speed for large datasets.
 
@@ -22,12 +20,6 @@ OVERVIEW
 
     o Version nickname: "Famous Last Words"
 
-NEW DATASETS
-
-    o concrete
-    Air bubbles in concrete.
-    Kindly contributed by Professor Shin-ichi Igarashi.
-    
 SIGNIFICANT USER-VISIBLE CHANGES
 
     o vcov.ppm, summary.ppm
@@ -283,7 +275,8 @@ BUG FIXES
     and the hyperframe had exactly one row.
     Fixed.
     
-        CHANGES IN spatstat VERSION 1.64-1
+
+	CHANGES IN spatstat VERSION 1.64-1
 
 OVERVIEW
 

@@ -81,7 +81,9 @@ mergeSizeTables <- function(a, b, breakupdate) {
 }
 z <- getSizeTable()
 ## handle the case where spatstat is the umbrella package
-if(isTRUE(getSpatstatVariable("Spatstat.Is.Umbrella"))) {
+isumb <- existsSpatstatVariable("Spatstat.Is.Umbrella") && 
+         isTRUE(getSpatstatVariable("Spatstat.Is.Umbrella"))
+if(isumb) {
   Bday <- "2020-12-14"
   zgeom <- getSizeTable("spatstat.geom")
   z <- mergeSizeTables(z, zgeom, Bday)
@@ -274,12 +276,15 @@ the News and Release Notes for each update.
 \begin{itemize}
 
 %#%^!ifndef ANTEDILUVIAN
-  \item \spst\ now requires the packages \pkg{spatstat.core} 
-    and \pkg{spatstat.geom}.
+  \item the original \spst package has now been split into 7 sub-packages
+    (\pkg{spatstat.utils}, \pkg{spatstat.data}, \pkg{spatstat.sparse},
+    \pkg{spatstat.geom}, \pkg{spatstat.core}, \pkg{spatstat.linnet}
+    and \pkg{spatstat}).
 %#%^!endif
 
   \item The interactive graphics functions \texttt{iplot} and \texttt{istat}
-    have been removed from \spst\ into a new package \pkg{spatstat.gui}.
+    have been removed from \spst\ into a new 
+    extension package \pkg{spatstat.gui}.
 
   \item The packages \pkg{tcltk} and \pkg{rpanel} are no longer 
     Suggested by \spst.
@@ -293,15 +298,27 @@ the News and Release Notes for each update.
   \item \spst\ now suggests the package \pkg{fftwtools}.
 
   \item Increased speed for large datasets.
+
+  \item Variance calculations handle larger datasets.
+
+  \item Important bug fix in simulation of log-Gaussian Cox processes.
     
   \item Relative risk estimation on a network.
     
   \item Leave-one-out density estimation on a network.
     
   \item Add new vertices to a linear network.
-    
-  \item New dataset \texttt{concrete}.
 
+  \item More support for multi-dimensional patterns.
+
+  \item \texttt{predict.mppm} now works for multitype point process models.
+    
+  \item Improved handling of \texttt{newdata} in \texttt{predict.mppm}
+    
+  % \item New dataset \texttt{concrete}.
+    
+  \item Changed default value of \texttt{stringsAsFactors}.
+    
    \item Function \texttt{lengths.psp} has been renamed \verb!lengths_psp!.
 
    \item Tessellations on a linear network can now have marks.
@@ -584,7 +601,7 @@ These are now provided in the sub-package \pkg{spatstat.data}.
    represented as polygonal regions forming a tessellation.
  \item \texttt{redwood3}: a more accurate version of the \texttt{redwood} data.
  \item \texttt{cetaceans}: point patterns of whale and dolphin sightings.
- \item \texttt{concrete}: air bubbles in concrete.
+% \item \texttt{concrete}: air bubbles in concrete.
 \end{itemize}
 
 \section{New classes}
@@ -1685,7 +1702,12 @@ listed alphabetically.
  \item \texttt{default.rmhcontrol, default.rmhexpand}:
    New argument \texttt{w}.
 
-   
+ \item \texttt{densityHeat}: 
+   \begin{itemize}
+   \item    default behaviour has changed slightly.
+   \item new argument \texttt{finespacing}.
+   \end{itemize}
+
  \item \texttt{density.lpp}:
    \begin{itemize}
    \item
@@ -1767,6 +1789,10 @@ listed alphabetically.
     Improved geometrical accuracy.
     Now accepts arguments to control resolution of polygonal approximation.
 
+    
+  \item \texttt{dirichletEdges}:
+    New argument \texttt{clip}.
+    
  \item \texttt{discs}:
    \begin{itemize}
    \item     Now accepts a single numeric value for \texttt{radii}.
@@ -1919,6 +1945,11 @@ listed alphabetically.
      New argument \texttt{fraction}.
 %%H
    
+     
+   \item \texttt{harmonise.im}:
+     The result belongs to classes \texttt{solist} and \texttt{imlist}
+     so that it can be plotted.
+     
  \item \texttt{Hest}:
    \begin{itemize}
    \item Argument \texttt{X} can now be a pixel image with logical values.
@@ -1930,10 +1961,13 @@ listed alphabetically.
    
  
  \item \texttt{hyperframe}: 
+   \begin{itemize}
+   \item 
    The formal default value of \texttt{stringsAsFactors}
    has been changed to \texttt{NULL}
    to conform to changes in R. (The actual default value is \texttt{TRUE}
    for \texttt{R < 4.1.0} and \texttt{FALSE} for \texttt{R >= 4.1.0}).
+   \end{itemize}
    
 %%I
  \item \texttt{identify.psp}: Improved placement of labels.
@@ -2202,9 +2236,12 @@ listed alphabetically.
     \item Tessellations can now have marks. New argument \texttt{marks}.
     \end{itemize}
   
+  \item \texttt{localpcf}:
+    New argument \texttt{rvalue}.
+    
   \item \texttt{localpcfinhom}:
     \begin{itemize}
-    \item New arguments \texttt{update} and \texttt{leaveoneout}.
+    \item New arguments \texttt{update}, \texttt{leaveoneout}, \texttt{rvalue}.
     \end{itemize}
     
   \item \texttt{logLik.ppm}:
@@ -2844,6 +2881,10 @@ listed alphabetically.
 
    \item \texttt{rlabel}: 
      \begin{itemize}
+     \item New argument \texttt{group} specifies that the points are 
+       divided into several groups, and that relabelling is applied
+       within each group.
+       
      \item New arguments \texttt{nsim} and \texttt{drop}.
      \item 
        \texttt{X} can now be a point pattern of any type
@@ -2934,6 +2975,9 @@ listed alphabetically.
 
    \item \texttt{rshift.ppp}, \texttt{rshift.splitppp}: 
      new argument \texttt{nsim}.
+     
+     
+   \item \texttt{rSSI}: Accelerated.
      
  \item \texttt{rStrauss, rHardcore, rStraussHard, rDiggleGratton, rDGS, rPenttinen:}
    New argument \texttt{drop}.
@@ -3200,6 +3244,8 @@ listed alphabetically.
      \begin{itemize}
      \item 
      Performance slightly improved, for Gibbs models.
+   \item Variance calculations now handle larger datasets
+     because they use sparse arrays, by default.
    \item New argument \texttt{nacoef.action} specifies what to do if
      some of the fitted model coefficients are \texttt{NA}, \texttt{NaN}
      or infinite.
