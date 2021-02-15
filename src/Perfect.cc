@@ -330,7 +330,7 @@ class PointProcess {
     Xmin = xmin; Xmax = xmax;
     Ymin = ymin; Ymax = ymax;
   }
-  ~PointProcess(){}
+  virtual ~PointProcess(){}
   virtual void NewEvent(double *x, double *y, char *InWindow)=0;
   virtual void GeneratePoisson(Point *headPoint, 
 			       long int *GeneratedPoints,
