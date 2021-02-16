@@ -12,18 +12,51 @@ spatstat
 spatial point pattern data (and other kinds of spatial data).
 See the website [www.spatstat.org](http://www.spatstat.org)
 or read the [book](http://book.spatstat.org).
-  
+
+## This is the development version
+
+This repository holds the current **development version** of `spatstat`.
+
 ## Where is the official release?
 
 For the most recent **official release** of `spatstat`,
-see the [CRAN page](https://cran.r-project.org/web/packages/spatstat). 
+see the [CRAN page](https://cran.r-project.org/web/packages/spatstat).
 
-## This page is frozen -- we are rebuilding
+## spatstat is being split into a family of packages
 
-Normally this repository holds the development version of `spatstat`.
-However, it is frozen at the moment.
-
-The `spatstat` package has grown so large that CRAN have asked us
+The `spatstat` package has grown so large that CRAN require us
 to split it into sub-packages. This process is almost finished.
-Watch this space for further announcements!
 
+The official release `spatstat 1.64-1` on the
+[CRAN page](https://cran.r-project.org/web/packages/spatstat)
+is the last release of `spatstat` as a single package.
+
+In the development version of `spatstat 2.0-0` available on this repository,
+almost all of the code in the original `spatstat` has been removed,
+and placed into a series of sub-packages:
+
+| Sub-package | CRAN page | GitHub repository | Description |
+| ----------  | --------- | ----------------- | ----------  |
+| `spatstat.utils` | [here](https://cran.r-project.org/web/packages/spatstat.utils) | [here](https://github.com/spatstat/spatstat.utils) | Basic utilities |
+| `spatstat.data` | [here](https://cran.r-project.org/web/packages/spatstat.data) | [here](https://github.com/spatstat/spatstat.data) | Datasets |
+| `spatstat.sparse` | [here](https://cran.r-project.org/web/packages/spatstat.sparse) | [here](https://github.com/spatstat/spatstat.sparse) | Sparse arrays |
+| `spatstat.geom` | [here](https://cran.r-project.org/web/packages/spatstat.geom) | [here](https://github.com/spatstat/spatstat.geom) | Geometry |
+| `spatstat.core` | [here](https://cran.r-project.org/web/packages/spatstat.core) | [here](https://github.com/spatstat/spatstat.core) | Data analysis |
+| `spatstat.linnet` | [here](https://cran.r-project.org/web/packages/spatstat.linnet) | [here](https://github.com/baddstats/spatstat.linnet) | Linear networks |
+| `spatstat` | Not yet published | This repo | Umbrella package |
+
+When you install the new `spatstat`, all the sub-packages listed above will
+be installed. When you load the `spatstat` package in an R session,
+all the sub-packages listed above will be loaded or imported.
+
+Additionally there are **extension packages** which contain additional
+functionality:
+
+| Extension package | CRAN page | GitHub repository | Description |
+| ----------------  | --------- | ----------------- | ----------  |
+| `spatstat.gui` | [here](https://cran.r-project.org/web/packages/spatstat.gui) | [here](https://github.com/spatstat/spatstat.gui) | Graphical interface |
+| `spatstat.Knet` | [here](https://cran.r-project.org/web/packages/spatstat.Knet) | [here](https://github.com/spatstat/spatstat.Knet) | linear networks |
+| `spatstat.local` | [here](https://cran.r-project.org/web/packages/spatstat.local) | [here](https://github.com/baddstats/spatstat.local) | Geographically weighted models |
+| `spatstat.sphere` | Not yet published | [here](https://github.com/spatstat/spatstat.sphere) | Spherical data |
+
+![Spatstat pieces](RepoStuff/newspatstat.jpg)

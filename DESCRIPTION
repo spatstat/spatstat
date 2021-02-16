@@ -1,229 +1,21 @@
 Package: spatstat
-Version: 1.65-0
+Version: 2.0-0
 Date: 2021-02-15
 Title: Spatial Point Pattern Analysis, Model-Fitting, Simulation, Tests
-Author: Adrian Baddeley <Adrian.Baddeley@curtin.edu.au>,
-	Rolf Turner <r.turner@auckland.ac.nz> 
-        and Ege Rubak <rubak@math.aau.dk>,
-	with substantial contributions of code by 
-	Kasper Klitgaard Berthelsen;
-	Ottmar Cronie;
-	Tilman Davies;
-	Yongtao Guan;
-	Ute Hahn;
-	Abdollah Jalilian;
-	Marie-Colette van Lieshout;
-	Greg McSwiggan;
-	Tuomas Rajala;
-	Suman Rakshit;
-	Dominic Schuhmacher;
-	Rasmus Waagepetersen;
- 	and Hangsheng Wang.
-	Additional contributions 
-	by M. Adepeju;
-        C. Anderson; 
-        Q.W. Ang;
-	R. Arellano;
-	J. Astrom;
-	R. Aue;
-        M. Austenfeld;
-	S. Azaele; 
-	M. Baddeley;
-	C. Beale; 
-	M. Bell;
-	R. Bernhardt; 
-	T. Bendtsen;
-	A. Bevan;
-	B. Biggerstaff;
-	A. Bilgrau;
-	L. Bischof;
-	C. Biscio;
-	R. Bivand;
-	J.M. Blanco Moreno;
-	F. Bonneu;
-	J. Brown;
-	I. Buller;
-	J. Burgos; 
-	S. Byers; 
-	Y.M. Chang; 
-	J.B. Chen; 
-	I. Chernayavsky; 
-	Y.C. Chin; 
-	B. Christensen;
-	L. Cobo Sanchez;
-	J.-F. Coeurjolly;
-	K. Colyvas;
-	H. Commenges;
-	R. Constantine;
-	R. Corria Ainslie;
-	R. Cotton;
-	A. Craig;
-	M. de la Cruz; 
-	P. Dalgaard; 
-	M. D'Antuono;
-        S. Das;
-	P.J. Diggle; 
-	P. Donnelly;
-	I. Dryden; 
-	S. Eglen; 
-	A. El-Gabbas;
-        B. Fandohan;
-	P. Fibich;
-        O. Flores;
-	E.D. Ford;
-        P. Forbes;
-	S. Frank; 
-	J. Franklin; 
-	N. Funwi-Gabga;
-        O. Garcia;
-	A. Gault; 
- 	J. Geldmann;
-	M. Genton;
-	S. Ghalandarayeshi;
-	J. Gilbey;
-	J. Goldstick;
-	P. Grabarnik; 
-	C. Graf; 
-	U. Hahn; 
-	A. Hardegen; 
-	M.B. Hansen; 
-	M. Hazelton; 
-	J. Heikkinen; 
-	M. Hering; 
-	M. Herrmann;
-	M. Hesselbarth;
-	P. Hewson;
-	H. Heydarian;
-	K. Hingee;
-	K. Hornik; 
-	P. Hunziker; 
-	J. Hywood;
-	S.I. Igarashi;
-	R. Ihaka;
-	C. Icos; 
-	A. Jammalamadaka;
-	R. John-Chandran; 
-	D. Johnson; 
-	M. Khanmohammadi;
-	R. Klaver;
-	P. Kovesi;
-	L. Kozmian-Ledward;
-	M. Kuhn; 
-	J. Laake; 
-	R.A. Lamb; 
-	F. Lavancier;
-	T. Lawrence;
-	T. Lazauskas;
-	J. Lee; 
-	G.P. Leser;
-	A. Li;
-	H.T. Li;
-	G. Limitsios;
-	A. Lister;
-	N. Luambua;
-	B. Madin;
-	M. Maechler;
-	J. Marcus;
-	K. Marchikanti; 
-	R. Mark; 
-	J. Mateu;
-	P. McCullagh; 
-	U. Mehlig;
-	F. Mestre;
-	S. Meyer; 
-	X.C. Mi;
-	L. De Middeleer;
-	R.K. Milne; 
-        E. Miranda;
-	J. Moller;
-	A. Mollie;
-	I. Moncada;
-	M. Moradi;
-	V. Morera Pujol; 
-	E. Mudrak;
-        G.M. Nair;
-	N. Najari;
-	N. Nava;
-	L.S. Nielsen; 
-	F. Nunes; 
-	J.R. Nyengaard;
-	J. Oehlschlaegel;
-	T. Onkelinx;
-	S. O'Riordan;
-	E. Parilov; 
-	J. Picka; 
-	N. Picard;
-	T. Pollington;
-	M. Porter;
-	S. Protsiv;
-	A. Raftery; 
-	S. Rakshit; 
-	B. Ramage;
-	P. Ramon;
-	X. Raynaud;
-	N. Read; 
-	M. Reiter; 
-        I. Renner;
-	T.O. Richardson;  
-	B.D. Ripley;
-	Y. Rosen;
-	E. Rosenbaum; 
-	B. Rowlingson; 
-	J. Rudokas;
-	T. Rudolph;
-	J. Rudge;
-	C. Ryan; 
-	F. Safavimanesh;
-	A. Sarkka; 
-	C. Schank; 
-	K. Schladitz; 
-	S. Schutte;
-	B.T. Scott; 
-        O. Semboli;
-	F. Semecurbe;
-	V. Shcherbakov;
-	G.C. Shen;
-        P. Shi;
-	H.-J. Ship;
-	T.L. Silva;
-	I.-M. Sintorn; 
-	Y. Song; 
-	M. Spiess; 
-	M. Stevenson; 
-	K. Stucki;
-	J. Sulavik;
-	M. Sumner; 
-	P. Surovy; 
-	B. Taylor; 
-	T. Thorarinsdottir;
-	L. Torres;
-	B. Turlach; 
-	T. Tvedebrink;
-        K. Ummer;
-	M. Uppala;
-	A. van Burgel; 
-	T. Verbeke; 
-        M. Vihtakari;
-	A. Villers; 
-        F. Vinatier;
-        M. Vogtland;
-        S. Voss;
-	S. Wagner;
-	H. Wang; 
-	H. Wendrock; 
-	J. Wild;
-	C. Witthoft;
-	S. Wong;
-	M. Woringer;
-	L. Yates;
-	M.E. Zamboni
-	and
-	A. Zeileis.
+Authors@R: c(person("Adrian", "Baddeley", 
+                    role = c("aut", "cre"),
+       	            email = "Adrian.Baddeley@curtin.edu.au"),
+	     person("Rolf", "Turner", 
+                    role = "aut",
+ 	            email="r.turner@auckland.ac.nz"),
+	     person("Ege",   "Rubak", 
+                    role = "aut",
+		    email = "rubak@math.aau.dk"))
 Maintainer: Adrian Baddeley <Adrian.Baddeley@curtin.edu.au>
-Depends: R (>= 3.5.0), spatstat.data (>= 1.7-0), stats, graphics, grDevices, utils, methods, nlme, rpart
-Imports: spatstat.utils (>= 1.18-0), spatstat.sparse (>= 1.2-1), mgcv, Matrix, deldir (>= 0.0-21), abind, tensor, polyclip (>= 1.10-0), goftest (>= 1.2-2)
-Suggests: sm, maptools (>= 0.9-9), gsl, locfit, spatial, RandomFields (>= 3.1.24.1), RandomFieldsUtils(>= 0.3.3.1), fftwtools (>= 0.9-8)
-Remotes: spatstat/spatstat.utils, spatstat/spatstat.data, spatstat/spatstat.sparse, baddstats/polyclip
+Depends: R (>= 3.5.0), spatstat.data (>= 1.4-2), spatstat.geom (>= 1.65-0), spatstat.core (>= 1.65-0), spatstat.linnet (>= 1.65-0), utils
+Imports: spatstat.utils (>= 1.20-0)
+Suggests: 
+Remotes: spatstat/spatstat.utils, spatstat/spatstat.data, spatstat/spatstat.geom, spatstat/spatstat.core, baddstats/spatstat.linnet
 Description: Comprehensive open-source toolbox for analysing Spatial Point Patterns. Focused mainly on two-dimensional point patterns, including multitype/marked points, in any spatial region. Also supports three-dimensional point patterns, space-time point patterns in any number of dimensions, point patterns on a linear network, and patterns of other geometrical objects. Supports spatial covariate data such as pixel images. 
 	Contains over 2000 functions for plotting spatial data, exploratory data analysis, model-fitting, simulation, spatial sampling, model diagnostics, and formal inference. 
 	Data types include point patterns, line segment patterns, spatial windows, pixel images, tessellations, and linear networks. 
@@ -236,4 +28,4 @@ URL: http://spatstat.org/
 LazyData: true
 NeedsCompilation: yes
 ByteCompile: true
-BugReports: https://github.com/spatstat/spatstat/issues
+BugReports: https://github.com/baddstats/spatstat/issues

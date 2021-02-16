@@ -1,10 +1,16 @@
 
-        CHANGES IN spatstat VERSION 1.65-0
+        CHANGES IN spatstat VERSION 2.0-0
 
 OVERVIEW
 
-    o We thank Michael Chirico, Tilman Davies and Pavel Fibich
+    o We thank Corey Anderson, Michael Chirico, Andy Craig,
+    Marcelino de la Cruz, Tilman Davies, Pavel Fibich,
+    Kurt Hornik, Gopalan Nair, Yonatan Rosen and Rasmus Waagepetersen
     for contributions.
+
+    o spatstat has been divided into 7 sub-packages
+    (spatstat.utils, spatstat.data, spatstat.sparse,
+    spatstat.geom, spatstat.core, spatstat.linnet and spatstat).
 
     o Important bug fix in simulation of log-Gaussian Cox processes.
 
@@ -12,15 +18,50 @@ OVERVIEW
 
     o variance calculations handle larger datasets.
     
+    o predict.mppm now works for multitype point process models.
+
+    o Improved handling of 'newdata' in predict.mppm.
+
+    o More support for multi-dimensional patterns.
+    
+    o Changed default value of 'stringsAsFactors'.
+
+    o spatstat now depends on R version 3.5.0 or later.
+    
     o spatstat now requires spatstat.utils version >= 1.18-0
 
     o spatstat now requires spatstat.data version >= 1.7-0
 
     o Bug fixes and minor improvements.
 
-    o Version nickname: "Famous Last Words"
+    o Version nickname: "Caution: contains small parts"
+
+NEW FUNCTIONS
+
+    o intersect.boxx
+    Compute intersection of boxes in multi-dimensional space
+
+    o scale.boxx, scale.ppx
+    Methods for 'scale' for boxes and patterns in multi-dimensional space
+
+    o shift.boxx, shift.ppx
+    Methods for 'shift' for boxes and patterns in multi-dimensional space
+
+    o is.boxx
+    Determine whether an object is a multidimensional box
 
 SIGNIFICANT USER-VISIBLE CHANGES
+
+    o package structure
+    The original 'spatstat' package has been divided into 7 sub-packages
+    (spatstat.utils, spatstat.data, spatstat.sparse,
+    spatstat.geom, spatstat.core, spatstat.linnet and spatstat).
+    The remaining 'spatstat' package requires all the other sub-packages.
+    Your existing code scripts should still work with minimal changes.
+    
+    o overall speed
+    Changes have been made to the internal code of spatstat 
+    which should accelerate computations involving large datasets.
 
     o vcov.ppm, summary.ppm
     Variance calculations now handle larger datasets
@@ -32,16 +73,80 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o rSSI
     Accelerated.
     
-    o overall speed
-    Changes have been made to the internal code of spatstat 
-    which should accelerate computations involving large datasets.
-
     o localpcf, localpcfinhom
     New argument 'rvalue'.
 
     o harmonise.im
     The result belongs to class 'solist' and 'imlist'
     so that it can be plotted.
+
+    o hyperframe, as.im.function
+    The formal default value of 'stringsAsFactors' has been changed
+    to 'NULL' to conform to changes in R. (The actual default value
+    is TRUE for R < 4.1.0 and FALSE for R >= 4.1.0)
+
+    o predict.mppm
+    Now supports multitype point process models.
+
+    o predict.mppm
+    Improved handling of argument 'newdata'
+    
+    o densityHeat
+    Default behaviour has changed slightly.
+    New argument 'finespacing'.
+
+    o density.lpp
+    Accelerated when the pattern contains duplicated points.
+    
+    o rotmean
+    The result now has the same 'unitname' as the input object X.
+    New argument 'adjust' controls the smoothing bandwidth.
+    
+    o sessionInfo
+    Output now lists packages that are imported but not loaded.
+
+    o rlabel
+    New argument 'group' specifies that the points are divided into
+    several groups, and that relabelling is applied within each group.
+    
+    o plot.psp
+    The code for 'style="width"' has been completely rewritten,
+    so that it no longer depends on plot.linim, and is more efficient.
+    The formal argument list has been extended.
+
+    o mincontrast
+    New argument 'action.bad.values' specifies what action is taken
+    when the summary function produces NA or NaN or infinite values.
+    
+    o sessionLibs
+    Package names are now sorted alphabetically.
+    
+    o [.linim
+    Accelerated.
+
+    o integral.im
+    Accelerated in the case where 'domain' is a tessellation.
+
+    o cbind.hyperframe
+    Row names are not altered (previously they were altered
+    using 'make.names')
+
+    o simulate.ppm
+    Now recognises the argument 'window' as an alternative to 'w'.
+
+    o kppm
+    Improved numerical robustness.
+
+    o Kcross, Gcross, Jcross
+    Function labels (shown on the plot legend) have been
+    improved when i = j.
+
+    o anova.mppm
+    Issues a warning when applied to random-effects models
+    (models fitted using the argument 'random').
+
+    o [.ppx
+    New argument 'clip'
 
 BUG FIXES
 
@@ -56,6 +161,32 @@ BUG FIXES
     
     o crossdist.pp3
     Results with periodic=TRUE were partially incorrect.
+    Fixed.
+    
+    o deviance.lppm, pseudoR2.lppm
+    Results were completely incorrect, due to a coding error.
+    Fixed.
+
+    o colourmap
+    If a colour map was applied to numbers lying outside the range of the
+    colour map, the wrong number of NA's was sometimes produced.
+    Fixed.
+
+    o Gest
+    If correction="rs" or correction="km", then both the reduced-sample
+    (border correction) and Kaplan-Meier corrected estimates were calculated.
+    [Spotted by Gopalan Nair.]
+    Fixed.
+    
+    o Lcross.inhom, Kcross.inhom, Kmulti.inhom
+    The option 'correction="none"' was accepted but ignored.
+    [Spotted by Corey Anderson.]
+    Fixed.
+
+    o rMatClust, rThomas, rCauchy, rVarGamma
+    If the fitted model was effectively a Poisson process,
+    the result did not have attributes 'Lambda' and 'parents'
+    even when the user requested them.
     Fixed.
     
     o affine.owin
@@ -95,157 +226,6 @@ BUG FIXES
 
     o print.ppm
     Crashed sometimes when applied to the result of subfits().
-    Fixed.
-    
-        CHANGES IN spatstat VERSION 1.64-3
-
-OVERVIEW
-
-    o Minor changes to help files to satisfy CRAN.
-
-    o Version nickname: "Keeping up with the K-functions"
-    
-
-        CHANGES IN spatstat VERSION 1.64-2
-
-OVERVIEW
-
-    o spatstat now depends on the new package 'spatstat.sparse'.
-
-    o spatstat now depends on R version 3.5.0 or later.
-    
-    o Changed default value of 'stringsAsFactors'.
-
-    o predict.mppm now works for multitype point process models.
-
-    o Improved handling of 'newdata' in predict.mppm.
-
-    o More support for multi-dimensional patterns.
-    
-    o Bug fixes and minor improvements.
-
-    o Version nickname: "Keeping up with the K-functions"
-
-    o We thank Corey Anderson, Andy Craig, Marcelino de la Cruz,
-    Pavel Fibich, Kurt Hornik, Gopalan Nair, Yonatan Rosen
-    and Rasmus Waagepetersen for contributions.
-
-NEW FUNCTIONS
-
-    o intersect.boxx
-    Compute intersection of boxes in multi-dimensional space
-
-    o scale.boxx, scale.ppx
-    Methods for 'scale' for boxes and patterns in multi-dimensional space
-
-    o shift.boxx, shift.ppx
-    Methods for 'shift' for boxes and patterns in multi-dimensional space
-
-    o is.boxx
-    Determine whether an object is a multidimensional box
-    
-SIGNIFICANT USER-VISIBLE CHANGES
-
-    o package structure
-    We have removed some internal code from spatstat
-    to make a new sub-package 'spatstat.sparse',
-    which is now Required by 'spatstat'.
-    
-    o sumouter, quadform, bilinearform
-    These functions have been moved to the new sub-package 'spatstat.sparse'.
-
-    o hyperframe, as.im.function
-    The formal default value of 'stringsAsFactors' has been changed to 'NULL'
-    to conform to changes in R. (The actual default value is TRUE for R < 4.1.0
-    and FALSE for R >= 4.1.0)
-
-    o predict.mppm
-    Now supports multitype point process models.
-
-    o predict.mppm
-    Improved handling of argument 'newdata'
-    
-    o densityHeat
-    Default behaviour has changed slightly.
-    New argument 'finespacing'.
-
-    o density.lpp
-    Accelerated when the pattern contains duplicated points.
-    
-    o rotmean
-    The result now has the same 'unitname' as the input object X.
-    New argument 'adjust' controls the smoothing bandwidth.
-    
-    o sessionInfo
-    Output now includes a list of packages that are imported but not loaded.
-
-    o rlabel
-    New argument 'group' specifies that the points are divided into
-    several groups, and that relabelling is applied within each group.
-    
-    o plot.psp
-    The code for 'style="width"' has been completely rewritten,
-    so that it no longer depends on plot.linim, and is much more efficient.
-    The formal argument list has been extended.
-
-    o mincontrast
-    New argument 'action.bad.values' specifies what action is taken
-    when the summary function produces NA or NaN or infinite values.
-    
-    o sessionLibs
-    Package names are now sorted alphabetically.
-    
-    o [.linim
-    Accelerated.
-
-    o integral.im
-    Accelerated in the case where 'domain' is a tessellation.
-
-    o cbind.hyperframe
-    Row names are not altered (previously they were altered using 'make.names')
-
-    o simulate.ppm
-    Now recognises the argument 'window' as an alternative to 'w'.
-
-    o kppm
-    Improved numerical robustness.
-
-    o Kcross, Gcross, Jcross
-    Function labels (shown on the plot legend) have been improved when i = j.
-
-    o anova.mppm
-    Issues a warning when applied to random-effects models
-    (models fitted using the argument 'random').
-
-    o [.ppx
-    New argument 'clip'
-    
-BUG FIXES
-
-    o deviance.lppm, pseudoR2.lppm
-    Results were completely incorrect, due to a coding error.
-    Fixed.
-
-    o colourmap
-    If a colour map was applied to numbers lying outside the range of the
-    colour map, the wrong number of NA's was sometimes produced.
-    Fixed.
-
-    o Gest
-    If correction="rs" or correction="km", then both the reduced-sample
-    (border correction) and Kaplan-Meier corrected estimates were calculated.
-    [Spotted by Gopalan Nair.]
-    Fixed.
-    
-    o Lcross.inhom, Kcross.inhom, Kmulti.inhom
-    The option 'correction="none"' was accepted but ignored.
-    [Spotted by Corey Anderson.]
-    Fixed.
-
-    o rMatClust, rThomas, rCauchy, rVarGamma
-    In cases where the model was degenerate (effectively a Poisson process)
-    the result did not have attributes 'Lambda' and 'parents'
-    even when the user requested them.
     Fixed.
     
     o model.matrix.mppm
