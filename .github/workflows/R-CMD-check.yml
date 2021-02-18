@@ -48,8 +48,6 @@ jobs:
           http-user-agent: ${{ matrix.config.http-user-agent }}
 
       - uses: r-lib/actions/setup-pandoc@v1
-        env: 
-          TINYTEX_VERSION: 2021.02
 
       - uses: r-lib/actions/setup-tinytex@v1
 
