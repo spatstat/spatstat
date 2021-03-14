@@ -8,7 +8,7 @@ spatstat
 
 ## What is spatstat?
 
-`spatstat` is an R package for analysing 
+`spatstat` is a family of R packages for analysing 
 spatial point pattern data (and other kinds of spatial data).
 See the website [www.spatstat.org](http://www.spatstat.org)
 or read the [book](http://book.spatstat.org).
@@ -22,17 +22,11 @@ This repository holds the current **development version** of `spatstat`.
 For the most recent **official release** of `spatstat`,
 see the [CRAN page](https://cran.r-project.org/web/packages/spatstat).
 
-## spatstat is being split into a family of packages
+## spatstat has been split into a family of packages
 
 The `spatstat` package has grown so large that CRAN require us
 to split it into sub-packages. This process is almost finished.
-
-The official release `spatstat 1.64-1` on the
-[CRAN page](https://cran.r-project.org/web/packages/spatstat)
-is the last release of `spatstat` as a single package.
-
-In the development version of `spatstat 2.0-0` available on this repository,
-almost all of the code in the original `spatstat` has been removed,
+Almost all of the code in the original `spatstat` has been removed,
 and placed into a series of sub-packages:
 
 | Sub-package | CRAN page | GitHub repository | Description |
@@ -43,7 +37,7 @@ and placed into a series of sub-packages:
 | `spatstat.geom` | [here](https://cran.r-project.org/web/packages/spatstat.geom) | [here](https://github.com/spatstat/spatstat.geom) | Spatial data classes; geometrical operations |
 | `spatstat.core` | [here](https://cran.r-project.org/web/packages/spatstat.core) | [here](https://github.com/spatstat/spatstat.core) | Data analysis and modelling of spatial data |
 | `spatstat.linnet` | [here](https://cran.r-project.org/web/packages/spatstat.linnet) | [here](https://github.com/baddstats/spatstat.linnet) | Spatial analysis on a linear network |
-| `spatstat` | Not yet published | This repo | Umbrella package |
+| `spatstat` | [here](https://cran.r-project.org/web/packages/spatstat) | This repo | Umbrella package |
 
 There will still exist a package called `spatstat`, which is now an
 **umbrella package** that requires all the sub-packages listed above.
@@ -64,7 +58,7 @@ the user must do that if these extra features are desired.
 
 ## The new spatstat family
 
-The box marked `spatstat` contains all the sub-packages that will be
+The pink box marked `spatstat` contains all the code that will be
 installed when you install the `spatstat` umbrella package, and loaded
 or imported when you load the `spatstat` umbrella package.
 
