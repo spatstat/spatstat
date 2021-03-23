@@ -31,13 +31,13 @@ and placed into a series of sub-packages:
 
 | Sub-package | CRAN page | GitHub repository | Description |
 | ----------  | --------- | ----------------- | ----------  |
-| `spatstat.utils` | [here](https://cran.r-project.org/web/packages/spatstat.utils) | [here](https://github.com/spatstat/spatstat.utils) | Basic utilities |
-| `spatstat.data` | [here](https://cran.r-project.org/web/packages/spatstat.data) | [here](https://github.com/spatstat/spatstat.data) | Datasets |
-| `spatstat.sparse` | [here](https://cran.r-project.org/web/packages/spatstat.sparse) | [here](https://github.com/spatstat/spatstat.sparse) | Sparse arrays |
-| `spatstat.geom` | [here](https://cran.r-project.org/web/packages/spatstat.geom) | [here](https://github.com/spatstat/spatstat.geom) | Spatial data classes; geometrical operations |
-| `spatstat.core` | [here](https://cran.r-project.org/web/packages/spatstat.core) | [here](https://github.com/spatstat/spatstat.core) | Data analysis and modelling of spatial data |
-| `spatstat.linnet` | [here](https://cran.r-project.org/web/packages/spatstat.linnet) | [here](https://github.com/baddstats/spatstat.linnet) | Spatial analysis on a linear network |
-| `spatstat` | [here](https://cran.r-project.org/web/packages/spatstat) | This repo | Umbrella package |
+| `spatstat.utils` | [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/spatstat.utils)](http://cran.r-project.org/web/packages/spatstat.utils) | [here](https://github.com/spatstat/spatstat.utils) | Basic utilities |
+| `spatstat.data` | [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/spatstat.data)](http://cran.r-project.org/web/packages/spatstat.data) | [here](https://github.com/spatstat/spatstat.data) | Datasets |
+| `spatstat.sparse` | [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/spatstat.sparse)](http://cran.r-project.org/web/packages/spatstat.sparse) | [here](https://github.com/spatstat/spatstat.sparse) | Sparse arrays |
+| `spatstat.geom` | [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/spatstat.geom)](http://cran.r-project.org/web/packages/spatstat.geom) | [here](https://github.com/spatstat/spatstat.geom) | Spatial data classes; geometrical operations |
+| `spatstat.core` | [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/spatstat.core)](http://cran.r-project.org/web/packages/spatstat.core) | [here](https://github.com/spatstat/spatstat.core) | Data analysis and modelling of spatial data |
+| `spatstat.linnet` | [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/spatstat.linnet)](http://cran.r-project.org/web/packages/spatstat.linnet) | [here](https://github.com/baddstats/spatstat.linnet) | Spatial analysis on a linear network |
+| `spatstat` | [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/spatstat)](http://cran.r-project.org/web/packages/spatstat) | This repo | Umbrella package |
 
 There will still exist a package called `spatstat`, which is now an
 **umbrella package** that requires all the sub-packages listed above.
