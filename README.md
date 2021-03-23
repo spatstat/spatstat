@@ -51,9 +51,9 @@ the user must do that if these extra features are desired.
 
 | Extension package | CRAN page | GitHub repository | Description |
 | ----------------  | --------- | ----------------- | ----------  |
-| `spatstat.gui` | [here](https://cran.r-project.org/web/packages/spatstat.gui) | [here](https://github.com/spatstat/spatstat.gui) | Graphical interface |
-| `spatstat.Knet` | [here](https://cran.r-project.org/web/packages/spatstat.Knet) | [here](https://github.com/spatstat/spatstat.Knet) | linear networks |
-| `spatstat.local` | [here](https://cran.r-project.org/web/packages/spatstat.local) | [here](https://github.com/baddstats/spatstat.local) | Local (geographically weighted) models |
+| `spatstat.gui` | [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/spatstat.gui)](http://cran.r-project.org/web/packages/spatstat.gui)  | [here](https://github.com/spatstat/spatstat.gui) | Graphical interface |
+| `spatstat.Knet` | [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/spatstat.Knet)](http://cran.r-project.org/web/packages/spatstat.Knet) | [here](https://github.com/spatstat/spatstat.Knet) | linear networks |
+| `spatstat.local` | [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/spatstat.local)](http://cran.r-project.org/web/packages/spatstat.local) | [here](https://github.com/baddstats/spatstat.local) | Local (geographically weighted) models |
 | `spatstat.sphere` | Not yet published | [here](https://github.com/spatstat/spatstat.sphere) | Spherical data |
 
 ## The new spatstat family
