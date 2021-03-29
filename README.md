@@ -24,10 +24,12 @@ see the [CRAN page](https://cran.r-project.org/web/packages/spatstat).
 
 ## spatstat has been split into a family of packages
 
-The `spatstat` package has grown so large that CRAN require us
-to split it into sub-packages. This process is almost finished.
-Almost all of the code in the original `spatstat` has been removed,
-and placed into a series of sub-packages:
+Originally there was a single package called `spatstat`.
+It grew so large (150,000 lines of code) that CRAN required us
+to split it into pieces. 
+
+Almost all of the code in the original `spatstat` has been 
+ placed into a family of sub-packages:
 
 | Sub-package | CRAN page | GitHub repository | Description |
 | ----------  | --------- | ----------------- | ----------  |
@@ -39,7 +41,7 @@ and placed into a series of sub-packages:
 | `spatstat.linnet` | [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/spatstat.linnet)](http://cran.r-project.org/web/packages/spatstat.linnet) | [here](https://github.com/baddstats/spatstat.linnet) | Spatial analysis on a linear network |
 | `spatstat` | [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/spatstat)](http://cran.r-project.org/web/packages/spatstat) | This repo | Umbrella package |
 
-There will still exist a package called `spatstat`, which is now an
+There still exists a package called `spatstat`, which is now an
 **umbrella package** that requires all the sub-packages listed above.
 When you install the new `spatstat`, all the sub-packages listed above will
 be installed. When you load the `spatstat` package in an R session,
