@@ -407,6 +407,8 @@
 	apply scalar dilation\cr
 	\code{\link[spatstat.core]{density.ppp}} \tab
 	kernel estimation of point pattern intensity\cr
+	\code{\link[spatstat.core]{densityHeat.ppp}} \tab
+	diffusion kernel estimation of point pattern intensity\cr
 	\code{\link[spatstat.core]{Smooth.ppp}} \tab
 	kernel smoothing of marks of point pattern\cr
 	\code{\link[spatstat.geom]{nnmark}} \tab
@@ -958,6 +960,7 @@
     \code{\link[spatstat.geom]{nnmap}} \tab nearest point image \cr
     \code{\link[spatstat.geom]{nnfun}} \tab nearest point function \cr
     \code{\link[spatstat.core]{density.ppp}} \tab kernel smoothed density\cr
+    \code{\link[spatstat.core]{densityHeat.ppp}} \tab diffusion kernel smoothed density\cr
     \code{\link[spatstat.core]{Smooth.ppp}} \tab spatial interpolation of marks  \cr
     \code{\link[spatstat.core]{relrisk}} \tab kernel estimate of relative risk\cr
     \code{\link[spatstat.core]{sharpen.ppp}} \tab data sharpening  \cr
@@ -1098,6 +1101,7 @@
     \code{\link[spatstat.linnet]{nnwhich.lpp}} \tab find nearest neighbours  \cr
     \code{\link[spatstat.linnet]{nnfun.lpp}} \tab find nearest data point  \cr
     \code{\link[spatstat.linnet]{density.lpp}} \tab kernel smoothing estimator of intensity  \cr
+    \code{\link[spatstat.linnet]{densityHeat.lpp}} \tab diffusion kernel estimate  \cr
     \code{\link[spatstat.linnet]{distfun.lpp}} \tab distance transform  \cr
     \code{\link[spatstat.linnet]{envelope.lpp}} \tab simulation envelopes  \cr
     \code{\link[spatstat.linnet]{rpoislpp}} \tab simulate Poisson points on linear network \cr

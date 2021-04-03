@@ -95,6 +95,8 @@ that are supplied with the current installation of \sdat:
             age & \nocov & \recto \\
 {\tt bronzefilter} & bronze particles & 
             diameter & \nocov & \recto \\
+{\tt btb} & bovine tuberculosis & 
+            type, year & \nocov & \irregpoly \\
 {\tt cells} & biological cells &
              \nomarks &\nocov & \recto \\
 {\tt chorley} & cancers & 
@@ -368,6 +370,15 @@ filter made from bronze powder.
 
 <<fig=TRUE>>=
 plot(bronzefilter,markscale=2)
+@ 
+
+\subsubsection*{\texttt{btb}: bovine tuberculosis}
+
+Locations of farms where bovine tuberculosis was detected,
+marked by year of detection and spoligotype of tuberculosis.
+
+<<fig=TRUE>>=
+plot(btb, which.marks="spoligotype", cols=2:5, chars=1:4)
 @ 
 
 \subsubsection*{\texttt{cells}: Biological cells}

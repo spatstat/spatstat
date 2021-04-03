@@ -1,4 +1,30 @@
 
+        CHANGES IN spatstat VERSION 2.1-0
+
+OVERVIEW
+
+    o We thank Peter Diggle for contributions.
+
+    o diffusion kernel estimate of intensity
+    
+    o New dataset 'btb'
+
+NEW FUNCTIONS
+
+    o densityHeat
+    New generic function for diffusion kernel estimation of intensity
+
+    o densityHeat.ppp
+    Diffusion kernel estimation of intensity in 2 dimensions
+
+    o densityHeat.lpp
+    Diffusion kernel estimation of intensity on a linear network
+    
+NEW DATASETS
+
+    o btb
+    Bovine tuberculosis data, from Prof Peter Diggle.
+
         CHANGES IN spatstat VERSION 2.0-1
 
 OVERVIEW
