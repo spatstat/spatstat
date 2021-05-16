@@ -39,7 +39,7 @@ Almost all of the code in the original `spatstat` has been
 | `spatstat.geom` | [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/spatstat.geom)](http://cran.r-project.org/web/packages/spatstat.geom) | [![GitHub R package version](https://img.shields.io/github/r-package/v/spatstat/spatstat.geom)](https://github.com/spatstat/spatstat.geom) | Spatial data classes; geometrical operations |
 | `spatstat.core` | [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/spatstat.core)](http://cran.r-project.org/web/packages/spatstat.core) | [![GitHub R package version](https://img.shields.io/github/r-package/v/spatstat/spatstat.core)](https://github.com/spatstat/spatstat.core) | Data analysis and modelling of spatial data |
 | `spatstat.linnet` | [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/spatstat.linnet)](http://cran.r-project.org/web/packages/spatstat.linnet) | [![GitHub R package version](https://img.shields.io/github/r-package/v/spatstat/spatstat.linnet)](https://github.com/spatstat/spatstat.linnet) | Spatial analysis on a linear network |
-| `spatstat` | [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/spatstat)](http://cran.r-project.org/web/packages/spatstat) | ![GitHub R package version](https://img.shields.io/github/r-package/v/spatstat/spatstat) | Umbrella package |
+| `spatstat` | [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/spatstat)](http://cran.r-project.org/web/packages/spatstat) | [![GitHub R package version](https://img.shields.io/github/r-package/v/spatstat/spatstat)](https://github.com/spatstat/spatstat) | Umbrella package |
 
 There still exists a package called `spatstat`, which is now an
 **umbrella package** that requires all the sub-packages listed above.
