@@ -55,7 +55,7 @@ the user must do that if these extra features are desired.
 | `spatstat.local` | [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/spatstat.local)](http://cran.r-project.org/web/packages/spatstat.local) | [![GitHub R package version](https://img.shields.io/github/r-package/v/baddstats/spatstat.local)](https://github.com/baddstats/spatstat.local) | Local (geographically weighted) models |
 | `spatstat.sphere` | Not yet published | [![GitHub R package version](https://img.shields.io/github/r-package/v/spatstat/spatstat.sphere)](https://github.com/spatstat/spatstat.sphere) | Spherical data |
 
-## The new spatstat family
+## Family portrait 
 
 The pink box marked `spatstat` contains all the code that will be
 installed when you install the `spatstat` umbrella package, and loaded
