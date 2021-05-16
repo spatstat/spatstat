@@ -13,15 +13,6 @@ spatial point pattern data (and other kinds of spatial data).
 See the website [www.spatstat.org](http://www.spatstat.org)
 or read the [book](http://book.spatstat.org).
 
-## This is the development version
-
-This repository holds the current **development version** of `spatstat`.
-
-## Where is the official release?
-
-For the most recent **official release** of `spatstat`,
-see the [CRAN page](https://cran.r-project.org/web/packages/spatstat).
-
 ## spatstat has been split into a family of packages
 
 Originally there was a single package called `spatstat`.
@@ -41,11 +32,17 @@ Almost all of the code in the original `spatstat` has been
 | `spatstat.linnet` | [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/spatstat.linnet)](http://cran.r-project.org/web/packages/spatstat.linnet) | [![GitHub R package version](https://img.shields.io/github/r-package/v/spatstat/spatstat.linnet)](https://github.com/spatstat/spatstat.linnet) | Spatial analysis on a linear network |
 | `spatstat` | [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/spatstat)](http://cran.r-project.org/web/packages/spatstat) | [![GitHub R package version](https://img.shields.io/github/r-package/v/spatstat/spatstat)](https://github.com/spatstat/spatstat) | Umbrella package |
 
+Click the green badge to visit the CRAN page which contains the current
+release of each sub-package. Click the blue badge to visit the GitHub repository
+for the current development version of the sub-package. 
+
 There still exists a package called `spatstat`, which is now an
 **umbrella package** that requires all the sub-packages listed above.
 When you install the new `spatstat`, all the sub-packages listed above will
 be installed. When you load the `spatstat` package in an R session,
 all the sub-packages listed above will be loaded or imported.
+
+## Extension packages
 
 Additionally there are **extension packages** which contain additional
 functionality. These packages are not automatically installed or loaded;
