@@ -1,13 +1,198 @@
 
-        CHANGES IN spatstat VERSION 2.1-0
+        CHANGES IN spatstat VERSION 2.2-0
 
 OVERVIEW
 
-    o We thank Peter Diggle for contributions.
+    o We thank Warick Brown, Achmad Choiruddin, Jean-Francois Coeurjolly,
+    Andrea Gilardi, Yongtao Guan, Abdollah Jalilian, Hank Stevens
+    and Rasmus Waagepetersen for contributions.
+
+    o Conditional simulation in kppm.
+    
+    o Simulation of the product shot noise Cox process.
+
+    o Information criteria for model selection in kppm
+
+    o Estimation of the spatial covariance function of a pixel image
+
+    o Modified handling of covariates in slrm
+
+    o Buffer tessellation
+    
+    o New function for jittering point patterns on a network.
+
+    o Extensions to 'rhohat'
+
+    o densityfun.ppp handles query points outside original window
+
+    o Extension to 'discretise'.
+
+    o Improvement to densityEqualSplit
+
+    o summary method for spatial logistic regression models
+
+    o New options for distmap.psp
+
+    o Improved output in summary.mppm
+    
+    o Bug fix in nncross
+
+    o Bug fix in density.lpp
+    
+NEW FUNCTIONS
+
+    o bufftess
+    Distance buffer tessellation
+
+    o ic
+    Information criteria for model selection in ppm and kppm.
+    Kindly contributed by Achmad Choiruddin, Jean-Francois Coeurjolly
+    and Rasmus Waagepetersen.
+    
+    o rPSNCP
+    Generate simulated realisations of the product shot noise Cox process.
+    Contributed by Abdollah Jalilian, Yongtao Guan and Rasmus Waagepetersen.
+    
+    o spatcov
+    Estimate the spatial covariance function of a pixel image.
+
+    o summary.slrm, print.summary.slrm
+    Summary method for spatial logistic regression models
+
+    o coef.summary.slrm
+    Print the fitted coefficients, confidence interval and p-values
+    for a spatial logistic regression model.
+
+    o pairMean
+    Compute the mean of a specified function of interpoint distance
+    between random points in a window.
+
+    o rjitterlpp
+    Apply random displacements to the points on a linear network.
+    
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o simulate.kppm
+    Conditional simulation of the model, given a fixed number of points,
+    is now supported using the new arguments 'n.cond' and 'w.cond'.
+    
+    o densityfun.ppp
+    The resulting function can now handle query points which lie
+    outside the window of the original data,
+    and has argument 'drop=TRUE' which specifies how to handle them.
+
+    o rpoint
+    New argument 'forcewin' forces the code to use the window 'win'
+    when 'f' is a pixel image.
+
+    o slrm
+    In the default case (where dataAtPoints is not given)
+    all spatial covariates, including the spatial coordinates x and y,
+    are now evaluated at the centre of each pixel. This improves
+    consistency with other implementations of spatial logistic regression.
+    
+    o slrm
+    Silently ignores any arguments '...' that are not recognised by 'as.mask'
+
+    o summary.mppm
+    Improved summary of the dependence of the
+    interpoint interaction on the covariates.
+
+    o densityEqualSplit
+    New arguments 'at' and 'leaveoneout' for consistency with other functions.
+
+    o pairs.im
+    New argument 'drop'.
+
+    o distmap.psp
+    New arguments 'extras' and 'clip' 
+
+    o discretise
+    New argument 'move.points' determines whether the point coordinates
+    are also discretised.
+
+    o summary.im
+    Output improved when the image is empty (i.e. when all pixel values
+    are undefined).
+
+    o rhohat
+    New option (smoother='piecewise') computes a piecewise-constant
+    estimate of rho(z).
+    
+    o rhohat
+    The result now includes the 'average' intensity rho.
+
+    o distcdf
+    Arguments which are NULL will be treated as missing.
+
+    o distcdf
+    New argument 'savedenom'.
+
+    o densityHeat
+    The function formerly known as 'densityHeat' or 'densityHeatlpp'
+    is now renamed 'densityHeat.lpp' and is a method for the generic
+    'densityHeat'.
+
+BUG FIXES
+
+    o nncross.ppp
+    If the argument 'by' was given, some of the results were incorrect.
+    [Spotted by Hank Stevens.]
+    Fixed.
+
+    o nncross.ppp, nncross.pp3
+    If 'iX' and 'iY' were given, some of the results were incorrect.
+    Fixed.
+
+    o density.lpp
+    The result had the wrong length if 'x' contained duplicated points
+    when 'weights' were given and 'at="points"'.
+    [Spotted by Andrea Gilardi]
+    Fixed.
+
+    o simulate.kppm
+    Conditional simulation crashed on rare occasions,
+    with an error about negative probabilities.
+    Fixed.
+
+    o model.matrix.mppm
+    If the model was fitted using 'gam', the resulting matrix
+    did not have an 'assign' attribute.
+    Fixed.
+    
+    o model.depends
+    Crashed for models fitted using 'gam'.
+    Fixed.
+
+    o predict.slrm, fitted.slrm
+    Crashed if the model was fitted using split pixels (argument 'splitby').
+    Fixed.
+
+    o predict.slrm, fitted.slrm
+    Crashed in some cases when 'window' was given.
+    Fixed.
+
+    o update.slrm
+    Failed to find covariates that were provided in 'env'.
+    Fixed.
+
+    o cdf.test
+    Crashed if the covariate was constant.
+    Fixed.
+
+         CHANGES IN spatstat VERSION 2.1-0
+
+OVERVIEW
+
+    o We thank Tilman Davies, Peter Diggle, Greg McSwiggan and Suman Rakshit
+    for contributions.
 
     o diffusion kernel estimate of intensity
     
     o New dataset 'btb'
+
+    o More support for spatial logistic regression models.
 
 NEW FUNCTIONS
 
@@ -19,7 +204,10 @@ NEW FUNCTIONS
 
     o densityHeat.lpp
     Diffusion kernel estimation of intensity on a linear network
-    
+
+    o slrm
+    'step' can now be applied to models fitted using 'slrm'.
+
 NEW DATASETS
 
     o btb
