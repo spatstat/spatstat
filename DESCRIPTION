@@ -1,6 +1,6 @@
 Package: spatstat
 Version: 2.2-0
-Date: 2021-06-14
+Date: 2021-06-23
 Title: Spatial Point Pattern Analysis, Model-Fitting, Simulation, Tests
 Authors@R: c(person("Adrian", "Baddeley", 
                     role = c("aut", "cre"),
@@ -26,4 +26,4 @@ License: GPL (>= 2)
 URL: http://spatstat.org/
 NeedsCompilation: yes
 ByteCompile: true
-BugReports: https://github.com/baddstats/spatstat/issues
+BugReports: https://github.com/spatstat/spatstat/issues

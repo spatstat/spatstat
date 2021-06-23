@@ -352,6 +352,15 @@ the presence of a bug is obvious, and the bug would not have misled the user.
   \subsection{Bugs, Substantially Incorrect, Moderate Impact}
 
   \begin{itemize}
+  \item \texttt{nncross.ppp}:
+    If the argument \texttt{by} was given, some of the results were incorrect.
+    [Spotted by Hank Stevens.]
+    \bugger{1.32-0}{august 2013}{2.2-0}{june 2021}
+    
+\item \texttt{nncross.ppp}, \texttt{nncross.pp3}:
+  If \texttt{iX} and \texttt{iY} were given, some of the results were incorrect.
+  \bugger{1.32-0}{august 2013}{2.2-0}{june 2021}
+
   \item \texttt{vcov.ppm}:
     Result was sometimes incorrect for Gibbs models.
     The Fisher information was slightly underestimated.
@@ -496,6 +505,13 @@ the presence of a bug is obvious, and the bug would not have misled the user.
  \subsection{Partially Incorrect}
  \begin{itemize}
    
+   
+ \item \texttt{density.lpp}:
+   The result had the wrong length if \texttt{x} contained duplicated points
+    when \texttt{weights} were given and \texttt{at="points"}.
+    [Spotted by Andrea Gilardi]
+    \bugger{1.55-1}{april 2018}{2.2-0}{june 2021}
+    
   \item \texttt{crossdist.pp3}:
     Results with \texttt{periodic=TRUE} were partially incorrect.
     \bugger{1.34-1}{dec 2013}{1.65-0}{dec 2020}
@@ -806,7 +822,15 @@ the presence of a bug is obvious, and the bug would not have misled the user.
     (The \texttt{rmh} debugger is invoked by calling \texttt{rmh}
     with \texttt{snoop=TRUE}).
     \bugger{1.31-1}{march 2013}{1.63-0}{january 2020}
-  
+    
+  \item \texttt{model.matrix.mppm}:
+    If the model was fitted using \texttt{gam}, the resulting matrix
+    did not have an \texttt{"assign"} attribute.
+    \bugger{1.55-0}{march 2018}{2.2-0}{june 2021}
+    
+  \item \texttt{update.slrm}:
+    Failed to find covariates that were provided in \texttt{env}.
+    \bugger{1.33-0}{september 2013}{2.2-0}{june 2021}
 \end{itemize}
 
 \begin{thebibliography}{1}
