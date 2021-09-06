@@ -8,11 +8,12 @@
   or another specified package.
 }
 \usage{
-latest.news(package = "spatstat", doBrowse=FALSE, major=TRUE)
+latest.news(package = spatstat.family(), doBrowse=FALSE, major=TRUE)
 }
 \arguments{
   \item{package}{
     Name of package for which the latest news should be printed.
+    A character string, or vector of character strings.
   }
   \item{doBrowse}{
     Logical value indicating whether to display the results in a browser
@@ -28,7 +29,10 @@ latest.news(package = "spatstat", doBrowse=FALSE, major=TRUE)
 }
 \details{
   This function prints the news documentation about changes in the
-  current installed version of the \pkg{spatstat} package.
+  current installed version of a package.
+
+  By default, it prints the latest news about all the sub-packages in
+  the \pkg{spatstat} family.
   
   The function can be called simply by typing its
   name without parentheses (see the Examples).
@@ -51,12 +55,14 @@ latest.news(package = "spatstat", doBrowse=FALSE, major=TRUE)
   Null.
 }
 \author{
-  \adrian
-  and \rolf
+  \spatstatAuthors.
 }
 \seealso{
-  \code{\link[utils]{news}},
-  \code{\link{bugfixes}}
+  \code{\link{spatstat.family}} lists the packages in the \pkg{spatstat} family.
+
+  \code{\link{bugfixes}} lists bug fixes.
+
+  \code{\link[utils]{news}} 
 }
 \examples{
   if(interactive()) {
@@ -65,7 +71,7 @@ latest.news(package = "spatstat", doBrowse=FALSE, major=TRUE)
     latest.news
 
     # all news
-    news(package="spatstat")
+    # news(package="spatstat")
 
   }
 }

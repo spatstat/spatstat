@@ -1,223 +1,48 @@
 
-        CHANGES IN spatstat VERSION 2.2-0.002
+        CHANGES IN spatstat VERSION 2.2-0.003
 
 OVERVIEW
 
-   o Minor tweaks to package information and documentation
-   
+    o Minor tweaks to package information and documentation
+
+    o The NEWS file for package='spatstat' now contains only
+    the news for the sub-package 'spatstat'. Other changes in the spatstat
+    family of packages are reported in the NEWS file for the relevant
+    sub-package.
+
+    o 'latest.news' now collects news from all packages in the spatstat family
+
+    o 'bugfixes' now collects bug fixes from all packages in the spatstat family
+
+    o New function 'spatstat.family'
+
+NEW FUNCTIONS
+
+    o spatstat.family
+    Return the names of all packages in the spatstat family.
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o latest.news
+    Now gives the latest news for all packages in the spatstat family.
+
+    o bugfixes
+    Now lists bugs reported for all packages in the spatstat family.
+    
+    
         CHANGES IN spatstat VERSION 2.2-0
 
 OVERVIEW
 
-    o We thank Warick Brown, Achmad Choiruddin, Jean-Francois Coeurjolly,
-    Andrea Gilardi, Yongtao Guan, Abdollah Jalilian, Hank Stevens
-    and Rasmus Waagepetersen for contributions.
+    o Minor tweaks to package information
 
-    o Conditional simulation in kppm.
-    
-    o Simulation of the product shot noise Cox process.
-
-    o Information criteria for model selection in kppm
-
-    o Estimation of the spatial covariance function of a pixel image
-
-    o Modified handling of covariates in slrm
-
-    o Buffer tessellation
-    
-    o New function for jittering point patterns on a network.
-
-    o Extensions to 'rhohat'
-
-    o densityfun.ppp handles query points outside original window
-
-    o Extension to 'discretise'.
-
-    o Improvement to densityEqualSplit
-
-    o summary method for spatial logistic regression models
-
-    o New options for distmap.psp
-
-    o Improved output in summary.mppm
-    
-    o Bug fix in nncross
-
-    o Bug fix in density.lpp
-    
-NEW FUNCTIONS
-
-    o bufftess
-    Distance buffer tessellation
-
-    o ic
-    Information criteria for model selection in ppm and kppm.
-    Kindly contributed by Achmad Choiruddin, Jean-Francois Coeurjolly
-    and Rasmus Waagepetersen.
-    
-    o rPSNCP
-    Generate simulated realisations of the product shot noise Cox process.
-    Contributed by Abdollah Jalilian, Yongtao Guan and Rasmus Waagepetersen.
-    
-    o spatcov
-    Estimate the spatial covariance function of a pixel image.
-
-    o summary.slrm, print.summary.slrm
-    Summary method for spatial logistic regression models
-
-    o coef.summary.slrm
-    Print the fitted coefficients, confidence interval and p-values
-    for a spatial logistic regression model.
-
-    o pairMean
-    Compute the mean of a specified function of interpoint distance
-    between random points in a window.
-
-    o rjitterlpp
-    Apply random displacements to the points on a linear network.
-    
-
-SIGNIFICANT USER-VISIBLE CHANGES
-
-    o simulate.kppm
-    Conditional simulation of the model, given a fixed number of points,
-    is now supported using the new arguments 'n.cond' and 'w.cond'.
-    
-    o densityfun.ppp
-    The resulting function can now handle query points which lie
-    outside the window of the original data,
-    and has argument 'drop=TRUE' which specifies how to handle them.
-
-    o rpoint
-    New argument 'forcewin' forces the code to use the window 'win'
-    when 'f' is a pixel image.
-
-    o slrm
-    In the default case (where dataAtPoints is not given)
-    all spatial covariates, including the spatial coordinates x and y,
-    are now evaluated at the centre of each pixel. This improves
-    consistency with other implementations of spatial logistic regression.
-    
-    o slrm
-    Silently ignores any arguments '...' that are not recognised by 'as.mask'
-
-    o summary.mppm
-    Improved summary of the dependence of the
-    interpoint interaction on the covariates.
-
-    o densityEqualSplit
-    New arguments 'at' and 'leaveoneout' for consistency with other functions.
-
-    o pairs.im
-    New argument 'drop'.
-
-    o distmap.psp
-    New arguments 'extras' and 'clip' 
-
-    o discretise
-    New argument 'move.points' determines whether the point coordinates
-    are also discretised.
-
-    o summary.im
-    Output improved when the image is empty (i.e. when all pixel values
-    are undefined).
-
-    o rhohat
-    New option (smoother='piecewise') computes a piecewise-constant
-    estimate of rho(z).
-    
-    o rhohat
-    The result now includes the 'average' intensity rho.
-
-    o distcdf
-    Arguments which are NULL will be treated as missing.
-
-    o distcdf
-    New argument 'savedenom'.
-
-    o densityHeat
-    The function formerly known as 'densityHeat' or 'densityHeatlpp'
-    is now renamed 'densityHeat.lpp' and is a method for the generic
-    'densityHeat'.
-
-BUG FIXES
-
-    o nncross.ppp
-    If the argument 'by' was given, some of the results were incorrect.
-    [Spotted by Hank Stevens.]
-    Fixed.
-
-    o nncross.ppp, nncross.pp3
-    If 'iX' and 'iY' were given, some of the results were incorrect.
-    Fixed.
-
-    o density.lpp
-    The result had the wrong length if 'x' contained duplicated points
-    when 'weights' were given and 'at="points"'.
-    [Spotted by Andrea Gilardi]
-    Fixed.
-
-    o simulate.kppm
-    Conditional simulation crashed on rare occasions,
-    with an error about negative probabilities.
-    Fixed.
-
-    o model.matrix.mppm
-    If the model was fitted using 'gam', the resulting matrix
-    did not have an 'assign' attribute.
-    Fixed.
-    
-    o model.depends
-    Crashed for models fitted using 'gam'.
-    Fixed.
-
-    o predict.slrm, fitted.slrm
-    Crashed if the model was fitted using split pixels (argument 'splitby').
-    Fixed.
-
-    o predict.slrm, fitted.slrm
-    Crashed in some cases when 'window' was given.
-    Fixed.
-
-    o update.slrm
-    Failed to find covariates that were provided in 'env'.
-    Fixed.
-
-    o cdf.test
-    Crashed if the covariate was constant.
-    Fixed.
 
          CHANGES IN spatstat VERSION 2.1-0
 
 OVERVIEW
 
-    o We thank Tilman Davies, Peter Diggle, Greg McSwiggan and Suman Rakshit
-    for contributions.
+    o Minor changes to package structure.
 
-    o diffusion kernel estimate of intensity
-    
-    o New dataset 'btb'
-
-    o More support for spatial logistic regression models.
-
-NEW FUNCTIONS
-
-    o densityHeat
-    New generic function for diffusion kernel estimation of intensity
-
-    o densityHeat.ppp
-    Diffusion kernel estimation of intensity in 2 dimensions
-
-    o densityHeat.lpp
-    Diffusion kernel estimation of intensity on a linear network
-
-    o slrm
-    'step' can now be applied to models fitted using 'slrm'.
-
-NEW DATASETS
-
-    o btb
-    Bovine tuberculosis data, from Prof Peter Diggle.
 
         CHANGES IN spatstat VERSION 2.0-1
 
@@ -239,43 +64,9 @@ OVERVIEW
     (spatstat.utils, spatstat.data, spatstat.sparse,
     spatstat.geom, spatstat.core, spatstat.linnet and spatstat).
 
-    o Important bug fix in simulation of log-Gaussian Cox processes.
-
-    o Increased speed for large datasets.
-
-    o variance calculations handle larger datasets.
-    
-    o predict.mppm now works for multitype point process models.
-
-    o Improved handling of 'newdata' in predict.mppm.
-
-    o More support for multi-dimensional patterns.
-    
-    o Changed default value of 'stringsAsFactors'.
-
     o spatstat now depends on R version 3.5.0 or later.
     
-    o spatstat now requires spatstat.utils version >= 1.18-0
-
-    o spatstat now requires spatstat.data version >= 1.7-0
-
-    o Bug fixes and minor improvements.
-
     o Version nickname: "Caution: contains small parts"
-
-NEW FUNCTIONS
-
-    o intersect.boxx
-    Compute intersection of boxes in multi-dimensional space
-
-    o scale.boxx, scale.ppx
-    Methods for 'scale' for boxes and patterns in multi-dimensional space
-
-    o shift.boxx, shift.ppx
-    Methods for 'shift' for boxes and patterns in multi-dimensional space
-
-    o is.boxx
-    Determine whether an object is a multidimensional box
 
 SIGNIFICANT USER-VISIBLE CHANGES
 
@@ -286,201 +77,11 @@ SIGNIFICANT USER-VISIBLE CHANGES
     The remaining 'spatstat' package requires all the other sub-packages.
     Your existing code scripts should still work with minimal changes.
     
-    o overall speed
-    Changes have been made to the internal code of spatstat 
-    which should accelerate computations involving large datasets.
-
-    o vcov.ppm, summary.ppm
-    Variance calculations now handle larger datasets
-    because they use sparse arrays, by default.
-    
-    o dirichletEdges
-    New argument 'clip'.
-
-    o rSSI
-    Accelerated.
-    
-    o localpcf, localpcfinhom
-    New argument 'rvalue'.
-
-    o harmonise.im
-    The result belongs to class 'solist' and 'imlist'
-    so that it can be plotted.
-
-    o hyperframe, as.im.function
-    The formal default value of 'stringsAsFactors' has been changed
-    to 'NULL' to conform to changes in R. (The actual default value
-    is TRUE for R < 4.1.0 and FALSE for R >= 4.1.0)
-
-    o predict.mppm
-    Now supports multitype point process models.
-
-    o predict.mppm
-    Improved handling of argument 'newdata'
-    
-    o densityHeat
-    Default behaviour has changed slightly.
-    New argument 'finespacing'.
-
-    o density.lpp
-    Accelerated when the pattern contains duplicated points.
-    
-    o rotmean
-    The result now has the same 'unitname' as the input object X.
-    New argument 'adjust' controls the smoothing bandwidth.
-    
     o sessionInfo
     Output now lists packages that are imported but not loaded.
 
-    o rlabel
-    New argument 'group' specifies that the points are divided into
-    several groups, and that relabelling is applied within each group.
-    
-    o plot.psp
-    The code for 'style="width"' has been completely rewritten,
-    so that it no longer depends on plot.linim, and is more efficient.
-    The formal argument list has been extended.
-
-    o mincontrast
-    New argument 'action.bad.values' specifies what action is taken
-    when the summary function produces NA or NaN or infinite values.
-    
     o sessionLibs
     Package names are now sorted alphabetically.
-    
-    o [.linim
-    Accelerated.
-
-    o integral.im
-    Accelerated in the case where 'domain' is a tessellation.
-
-    o cbind.hyperframe
-    Row names are not altered (previously they were altered
-    using 'make.names')
-
-    o simulate.ppm
-    Now recognises the argument 'window' as an alternative to 'w'.
-
-    o kppm
-    Improved numerical robustness.
-
-    o Kcross, Gcross, Jcross
-    Function labels (shown on the plot legend) have been
-    improved when i = j.
-
-    o anova.mppm
-    Issues a warning when applied to random-effects models
-    (models fitted using the argument 'random').
-
-    o [.ppx
-    New argument 'clip'
-
-BUG FIXES
-
-    o rLGCP, simulate.kppm
-    Simulation results for log-Gaussian Cox processes were incorrect
-    unless the pixel dimensions and pixel spacings were identical
-    on the horizontal and vertical axes. (If pixel dimensions were not
-    specified, then the results were incorrect whenever the Frame of the
-    simulation window was not a square.) 
-    [Spotted by Tilman Davies.]
-    Fixed.
-    
-    o crossdist.pp3
-    Results with periodic=TRUE were partially incorrect.
-    Fixed.
-    
-    o deviance.lppm, pseudoR2.lppm
-    Results were completely incorrect, due to a coding error.
-    Fixed.
-
-    o colourmap
-    If a colour map was applied to numbers lying outside the range of the
-    colour map, the wrong number of NA's was sometimes produced.
-    Fixed.
-
-    o Gest
-    If correction="rs" or correction="km", then both the reduced-sample
-    (border correction) and Kaplan-Meier corrected estimates were calculated.
-    [Spotted by Gopalan Nair.]
-    Fixed.
-    
-    o Lcross.inhom, Kcross.inhom, Kmulti.inhom
-    The option 'correction="none"' was accepted but ignored.
-    [Spotted by Corey Anderson.]
-    Fixed.
-
-    o rMatClust, rThomas, rCauchy, rVarGamma
-    If the fitted model was effectively a Poisson process,
-    the result did not have attributes 'Lambda' and 'parents'
-    even when the user requested them.
-    Fixed.
-    
-    o affine.owin
-    For mask windows, the pixel resolution of the result
-    was too fine, leading to very large datasets.
-    Fixed.
-
-    o affine.im
-    If the transformation matrix was not diagonal, the pixel resolution
-    of the result was too fine, leading to very large datasets.
-    Fixed.
-
-    o plot.ppp
-    For a point pattern in a binary mask window,
-    if both arguments 'col' and 'cols' were given,
-    the points were coloured according to 'col', which was incorrect.
-    Fixed.
-    
-    o dirichletEdges
-    Crashed if any edges crossed the boundary of the window.
-    Fixed.
-
-    o Vmark
-    Crashed if normalise=TRUE when there was only one column of marks.
-    (Spotted by Pavel Fibich.)
-    Fixed.
-    
-    o unitname
-    Spatial datasets with incorrect internal format
-    (or using an out-of-date version of the spatstat format)
-    caused an error if the 'units' package was loaded.
-    Fixed.
-
-    o nnclean
-    Crashed if k >= npoints(X).
-    Fixed.
-
-    o print.ppm
-    Crashed sometimes when applied to the result of subfits().
-    Fixed.
-    
-    o model.matrix.mppm
-    Crashed with random-effects models.
-    Fixed.
-
-    o anova.mppm
-    Crashed with random-effects models.
-    Fixed.
-
-    o objsurf.kppm
-    Crashed if the model was fitted by Palm likelihood (method="palm")
-    or second order composite likelihood (method="clik2").
-    Fixed.
-    
-    o MinkowskiSum
-    Crashed sometimes with an error message about 'sumconnected'.
-    Fixed.
-
-    o simulate.rhohat
-    Crashed when applied to rhohat objects computed from data
-    on a linear network.
-    Fixed.
-    
-    o hyperframe
-    Crashed if the argument 'row.names' was given
-    and the hyperframe had exactly one row.
-    Fixed.
     
 
 	CHANGES IN spatstat VERSION 1.64-1

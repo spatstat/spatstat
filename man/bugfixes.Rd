@@ -11,7 +11,7 @@
 }
 \usage{
   bugfixes(sinceversion = NULL, sincedate = NULL,
-           package = "spatstat", show = TRUE)
+           package = spatstat.family(), show = TRUE)
 }
 \arguments{
   \item{sinceversion}{
@@ -25,7 +25,8 @@
     A character string or a date-time object.
   }
   \item{package}{
-    Character string. The name of the package for which bugs are to be listed.
+    The name of the package (or packages) for which bugs are to be listed.
+    A character string or character vector.
   }
   \item{show}{
     Logical value indicating whether to display the bug table
@@ -51,18 +52,18 @@
   If \code{sinceversion="all"} or \code{sincedate="all"}
   then all recorded bugs will be listed.
   
-  If \code{package="spatstat"} (the default) then
-  \code{sinceversion="book"} and \code{sincedate="book"}
-  are interpreted to mean \code{sinceversion="1.42-1"},
+  The special options \code{sinceversion="book"} and \code{sincedate="book"}
+  are interpreted to mean \code{sincedate="2015-06-05"},
   which gives all bugs reported after publication of
   the book by Baddeley, Rubak and Turner (2015).
 
   Typing \code{bugfixes} without parentheses will display a table of
-  all bugs that were fixed in the current installed version of \pkg{spatstat}.
+  all bugs that were fixed in the current installed version of
+  \pkg{spatstat} and its sub-packages.
 }
 \value{
-  A data frame, belonging to the class \code{"bugtable"},
-  which has its own print method. 
+  (Invisibly) a data frame, belonging to the class \code{"bugtable"},
+  which has a \code{print} method.
 }
 \author{
   \adrian.
@@ -79,7 +80,6 @@
 \examples{
    bugfixes
    ## show all bugs reported after publication of the spatstat book
-   if(interactive()) bugfixes(sinceversion="1.42-1")
-   ## equivalent to bugfixes(sinceversion="book")
+   if(interactive()) bugfixes(sinceversion="book")
 }
 \keyword{documentation}

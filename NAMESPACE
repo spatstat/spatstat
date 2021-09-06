@@ -34,6 +34,7 @@ export("latest.news")
 export("plot.foo")
 export("print.autoexec")    
 export("print.bugtable")
+export("spatstat.family")
 
 # .......  Special cases ........... 
 # .......  End of special cases  ... 
