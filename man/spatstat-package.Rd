@@ -1750,7 +1750,7 @@
   Baddeley, A. and Turner, R. (2005a)
   Spatstat: an R package for analyzing spatial point patterns.
   \emph{Journal of Statistical Software} \bold{12}:6, 1--42.
-  \doi{10.18637/jss.v012.i06}. 
+  \code{DOI: 10.18637/jss.v012.i06}. 
 
   Baddeley, A. and Turner, R. (2005b)
   Modelling spatial point patterns in R.
