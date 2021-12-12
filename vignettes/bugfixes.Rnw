@@ -33,7 +33,7 @@ options(useFancyQuotes=FALSE)
 
 This vignette lists all \emph{important} bugs detected and fixed in the
 \spst\ package since 2010. It also explains how to search the list of
-all recorded bugs in \spst.
+all recorded bugs in the \spst\ famil of packages.
 
 <<echo=FALSE,results=hide>>=
 nbugs <- nrow(news(grepl("^BUG", Category), 
@@ -80,6 +80,10 @@ which currently produces a list of \Sexpr{nbugs} bugs,
 of which \Sexpr{nbugssince} were detected after publication of the
 book \cite{baddrubaturn15}.
 
+Recently \spst\ was divided into a family of sub-packages.
+The command \texttt{bugfixes} now covers the bug history in 
+all of these sub-packages. See the help for \texttt{bugfixes} for further details.
+
 \pagebreak
 \section{Serious bugs}
 
@@ -92,11 +96,23 @@ without the user's knowledge.
 Bugs which cause an error exit are not listed here, because '
 the presence of a bug is obvious, and the bug would not have misled the user.
 
-\newcommand\bugger[4]{%
+\newcommand\bugger[4]{%  
   \\  {} %
   {\small (Bug introduced in \texttt{spatstat {#1}}, {#2}; %
     fixed in \texttt{spatstat {#3}}, {#4})}%
 }
+\newcommand\bugin[4]{%  
+  \\  {} %
+  {\small (Bug introduced in \texttt{{#1}}, {#2}; %
+    fixed in \texttt{{#3}}, {#4})}%
+}
+\newcommand\bugbefore[4]{%  
+  \\  {} %
+  {\small (Bug introduced before \texttt{{#1}}, {#2}; %
+    fixed in \texttt{{#3}}, {#4})}%
+}
+
+
 
   %%% LEVEL 1
 \subsection{Serious Bugs, Always Wrong, Broad Impact} 
@@ -222,7 +238,13 @@ the presence of a bug is obvious, and the bug would not have misled the user.
     Results were completely incorrect, due to a coding error.
    \bugger{1.44-0}{december 2015}{1.64-2}{november 2020}   
 
-
+  \item \texttt{kppm}: 
+    Results were sometimes incorrect for method='clik2' and method='palm'
+    because the log composite likelihood was erroneously truncated to
+    positive values. Any fitted model for which \verb!logLik(model) = 2.2e-16!
+    should be suspected of being incorrect.
+    \bugin{spatstat.core 2.0-0}{march 2021}{spatstat.core 2.3-2}{november 2021}   
+    
  \item \texttt{bw.pcf}:
    Results were totally incorrect due to a typo.
    \bugger{1.51-0}{may 2017}{1.52-0}{august 2017}   
@@ -505,7 +527,6 @@ the presence of a bug is obvious, and the bug would not have misled the user.
  \subsection{Partially Incorrect}
  \begin{itemize}
    
-   
  \item \texttt{density.lpp}:
    The result had the wrong length if \texttt{x} contained duplicated points
     when \texttt{weights} were given and \texttt{at="points"}.
@@ -527,6 +548,11 @@ the presence of a bug is obvious, and the bug would not have misled the user.
    quadrature scheme. 
     \bugger{1.35-0}{december 2013}{1.64-0}{april 2020}.
     
+  \item \texttt{edge.Ripley}:
+    Results were incorrect for data points lying exactly at the corners
+    of a rectangle.
+    \bugbefore{spatstat 1.21-0}{november 2010}{spatstat.core 2.3-2}{november 2021}   
+
  \item \texttt{kppm}, \texttt{AIC}:
     For kppm models fitted with \verb!method='clik2'!, 
     the resulting value of \texttt{logLik()}

@@ -7,7 +7,7 @@
   List all bug fixes in a package, starting from a certain date or
   version of the package. Fixes are sorted alphabetically by the name of the
   affected function. The default is to list bug fixes in the latest
-  version of the \pkg{spatstat} package.  
+  version of the \pkg{spatstat} family of packages.  
 }
 \usage{
   bugfixes(sinceversion = NULL, sincedate = NULL,

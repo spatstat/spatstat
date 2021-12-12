@@ -310,8 +310,12 @@ the News and Release Notes for each update.
   \item \spst\ now suggests the package \pkg{fftwtools}.
 
    \item Conditional simulation in \texttt{kppm}.
-    
-   \item Simulation of the product shot noise Cox process.
+  
+  \item More diagnostics for spatial logistic regression models.
+
+  \item Increased numerical stability in \texttt{kppm}.
+
+  \item Simulation of the product shot noise Cox process.
 
    \item Information criteria for model selection in \texttt{kppm}.
 
@@ -319,6 +323,8 @@ the News and Release Notes for each update.
 
    \item Modified handling of covariates in \texttt{slrm}
 
+   \item New options for \texttt{weighted.quantile}
+   
    \item Buffer tessellation
     
    \item New function for jittering point patterns on a network.
@@ -645,9 +651,18 @@ These are now provided in the sub-package \pkg{spatstat.data}.
 
 \section{New classes}
 
+The following new classes of objects may be of use.
+
 \begin{itemize}
+\item \texttt{metric}: Class of distance metrics.
+   An object of class \texttt{metric} represents a distance metric
+   between points in two-dimensional space.
+   See \texttt{help(metric.object)}.
 \item \texttt{ssf}:
-  Class of spatially sampled functions.
+  Class of spatially sampled functions. 
+  An object of class \texttt{"ssf"} represents a spatial function
+  which has been evaluated or sampled at an irregular set of points.
+  See \texttt{help(ssf)}.
 \end{itemize}
 
 \section{New Functions}
@@ -656,6 +671,33 @@ Following is a list of all the functions that have been added,
 starting with the most recent additions.
 
 \begin{itemize}
+  
+  \item \texttt{lurking.slrm}:
+    Lurking variable plot for spatial logistic regression models.
+
+  \item \texttt{eem.slrm}:
+    Exponential energy marks for spatial logistic regression models.
+
+  \item \texttt{eem.ppm}:
+    Exponential energy marks for Gibbs and Poisson point process models
+    (this function was previously called \texttt{eem}).
+  
+  \item \texttt{transformquantiles}:
+    Transform the quantiles of a vector, matrix, array or pixel image.
+
+  \item \texttt{convexmetric}:
+    Distance metric based on a convex set.
+
+  \texttt{invoke.metric}:
+    Low level function to perform a desired operation using a given metric.
+
+  \item \texttt{mean.ecdf, mean.ewcdf}
+    Calculate the mean of an empirical cumulative distribution function.
+    
+  \item \texttt{rjitter.ppp}
+    This function was previously called \texttt{rjitter}. It is now a method
+    for the new generic function \texttt{rjitter}.
+  
   \item \texttt{bufftess}:
     Distance buffer tessellation
 
@@ -1498,7 +1540,7 @@ listed alphabetically.
 \end{itemize}
 
 \item \texttt{as.linim.default}:
-   New argument \texttt{delta} controls spacing of sample points
+   New arguments \texttt{delta} and \texttt{nd} control spacing of sample points
    in internal data.
 
  \item \texttt{as.linnet.linnet}:
@@ -1920,6 +1962,12 @@ listed alphabetically.
   \item \texttt{edge.Trans}:
     New argument \texttt{gW} for efficiency.
 
+    
+  \item \texttt{eem}:
+    The function \texttt{eem} is now generic, with methods for 
+    \texttt{ppm} and \texttt{slrm}.
+    The function previously named \texttt{eem} is now called \texttt{eem.ppm}.
+
   \item \texttt{effectfun}:
     \begin{itemize}
     \item 
@@ -2089,6 +2137,8 @@ listed alphabetically.
    \begin{itemize}
    \item    New argument \texttt{delta} controls step length of
    approximation to integral.
+ \item New argument \texttt{nd} controls approximate number of sample points
+   used to calculate integral.
    \item    Argument \code{domain} can be a tessellation.
    \item Now handles complex-valued functions.
    \end{itemize}
@@ -2196,6 +2246,11 @@ listed alphabetically.
     
  \item \texttt{kppm}:
    \begin{itemize}
+   \item 
+    New default settings ensure greater numerical stability of the
+    optimization algorithm against the effects of the scale of the
+    spatial coordinates.  New argument \texttt{stabilize} specifies whether
+    the optimization algorithm should be numerically stabilized.
    \item 
      Fitting a model with \texttt{clusters="LGCP"} no longer requires the
      package \pkg{RandomFields} to be loaded explicitly.
@@ -2513,6 +2568,10 @@ listed alphabetically.
    \end{itemize}
    
 %%O
+   
+   \item \texttt{owin}: If argument \texttt{mask} is a logical matrix,
+    \texttt{NA} entries will be accepted, and converted to \texttt{FALSE}.
+    
 %%P
    
  \item \texttt{padimage}:
