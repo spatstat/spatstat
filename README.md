@@ -11,17 +11,18 @@ spatstat
 
 `spatstat` is a family of R packages for analysing 
 spatial point pattern data (and other kinds of spatial data).
+It has extensive capabilities for exploratory analysis,
+statistical modelling, simulation and statistical inference.
+
 See the website [www.spatstat.org](http://www.spatstat.org)
 or read the [book](http://book.spatstat.org).
 
 ## spatstat has been split into a family of packages
 
 Originally there was a single package called `spatstat`.
-It grew so large (150,000 lines of code) that CRAN required us
-to split it into pieces. 
+It grew so large that CRAN required us to split it into pieces.
 
-Almost all of the code in the original `spatstat` has been 
- placed into a family of sub-packages:
+The original `spatstat` has now been divided into a family of sub-packages:
 
 | Sub-package | CRAN page | GitHub repository | Description |
 | ----------  | --------- | ----------------- | ----------  |
@@ -39,13 +40,16 @@ for the current development version of the sub-package.
 
 There still exists a package called `spatstat`, which is now an
 **umbrella package** that requires all the sub-packages listed above.
-When you install the new `spatstat`, all the sub-packages listed above will
-be installed. When you load the `spatstat` package in an R session,
+
+You can install and load the new `spatstat` family in virtually the
+same way as you would previously have installed and loaded the old `spatstat` package.
+When you install the new umbrella package `spatstat`, all the sub-packages listed above will
+be installed. When you load the new umbrella `spatstat` package in an R session,
 all the sub-packages listed above will be loaded or imported.
 
 ## Extension packages
 
-Additionally there are **extension packages** which contain additional
+Additionally there are **extension packages** which contain more
 functionality. These packages are not automatically installed or loaded;
 the user must do that if these extra features are desired.
 
@@ -66,3 +70,13 @@ The blue boxes are extension packages which must be installed and loaded
 separately.
 
 ![Spatstat pieces](RepoStuff/newspatstat.jpg)
+
+## Future development
+
+`spatstat` is the result of 30 years of software development
+and contains over 175,000 lines of code.
+It is still under
+development, motivated by the needs of researchers in many fields,
+and driven by innovations in statistical science.
+We welcome contributions of code, and suggestions
+for improvements.
