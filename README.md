@@ -30,6 +30,7 @@ The original `spatstat` has now been divided into a family of sub-packages:
 | `spatstat.data` | [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/spatstat.data)](http://cran.r-project.org/web/packages/spatstat.data) | [![GitHub R package version](https://img.shields.io/github/r-package/v/spatstat/spatstat.data)](https://github.com/spatstat/spatstat.data) | Datasets |
 | `spatstat.sparse` | [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/spatstat.sparse)](http://cran.r-project.org/web/packages/spatstat.sparse) | [![GitHub R package version](https://img.shields.io/github/r-package/v/spatstat/spatstat.sparse)](https://github.com/spatstat/spatstat.sparse) | Sparse arrays |
 | `spatstat.geom` | [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/spatstat.geom)](http://cran.r-project.org/web/packages/spatstat.geom) | [![GitHub R package version](https://img.shields.io/github/r-package/v/spatstat/spatstat.geom)](https://github.com/spatstat/spatstat.geom) | Spatial data classes; geometrical operations |
+| `spatstat.random` | [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/spatstat.random)](http://cran.r-project.org/web/packages/spatstat.random) | [![GitHub R package version](https://img.shields.io/github/r-package/v/spatstat/spatstat.random)](https://github.com/spatstat/spatstat.random) | Random generation of spatial patterns; simulation |
 | `spatstat.core` | [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/spatstat.core)](http://cran.r-project.org/web/packages/spatstat.core) | [![GitHub R package version](https://img.shields.io/github/r-package/v/spatstat/spatstat.core)](https://github.com/spatstat/spatstat.core) | Data analysis and modelling of spatial data |
 | `spatstat.linnet` | [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/spatstat.linnet)](http://cran.r-project.org/web/packages/spatstat.linnet) | [![GitHub R package version](https://img.shields.io/github/r-package/v/spatstat/spatstat.linnet)](https://github.com/spatstat/spatstat.linnet) | Spatial analysis on a linear network |
 | `spatstat` | [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/spatstat)](http://cran.r-project.org/web/packages/spatstat) | [![GitHub R package version](https://img.shields.io/github/r-package/v/spatstat/spatstat)](https://github.com/spatstat/spatstat) | Umbrella package |
@@ -69,7 +70,7 @@ or imported when you load the `spatstat` umbrella package.
 The blue boxes are extension packages which must be installed and loaded
 separately.
 
-![Spatstat pieces](RepoStuff/newspatstat.jpg)
+![Spatstat pieces](RepoStuff/newnewspatstat.jpg)
 
 ## Future development
 
