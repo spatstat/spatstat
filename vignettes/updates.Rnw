@@ -92,6 +92,7 @@ mergeSizeTables <- function(a, b, breakupdate, allow.devel=FALSE) {
 z <- getSizeTable()
 ## sub-packages- access via the sub-package
 zgeom <- getSizeTable("spatstat.geom")
+zrandom <- getSizeTable("spatstat.random")
 zcore <- getSizeTable("spatstat.core")
 zlin <- getSizeTable("spatstat.linnet")
 zutils <- getSizeTable("spatstat.utils")
@@ -106,6 +107,7 @@ z <- mergeSizeTables(z, zlin, Bday)
 z <- mergeSizeTables(z, zutils, "2017-03-22")
 z <- mergeSizeTables(z, zdata,  "2017-09-23")
 z <- mergeSizeTables(z, zsparse, "2020-11-04")
+z <- mergeSizeTables(z, zrandom, "2022-01-04")
 ## extension packages - use copy of package size file stored in spatstat
 zlocal <- getSizeTable("spatstat", "spatstatlocalsize.txt")
 zgui <- getSizeTable("spatstat", "spatstatguisize.txt")
@@ -178,6 +180,7 @@ AppendVersion <- function(pkg, sizetable, v, allow.devel=FALSE) {
   rbind(v, data.frame(package=pkg, version=lastrow[,"version"], date=as.Date(lastrow[,"date"])))
 }
 vtable <- AppendVersion("spatstat.geom", zgeom, vtable)
+vtable <- AppendVersion("spatstat.random", zrandom, vtable)
 vtable <- AppendVersion("spatstat.core", zcore, vtable)
 vtable <- AppendVersion("spatstat.linnet", zlin, vtable)
 vtable <- AppendVersion("spatstat.sparse", zsparse, vtable)
@@ -208,12 +211,13 @@ Typing \code{library(spatstat)} will load the familiar
 
 \subsection{Sub-packages}
 
-    Currently there are seven
+    Currently there are eight
     sub-packages, called 
     \pkg{spatstat.utils},
     \pkg{spatstat.data},
     \pkg{spatstat.sparse},
     \pkg{spatstat.geom},
+    \pkg{spatstat.random},
     \pkg{spatstat.core},
     \pkg{spatstat.linnet},
     and \pkg{spatstat}.
@@ -239,6 +243,10 @@ Typing \code{library(spatstat)} will load the familiar
       contains definitions of spatial objects (such as point patterns, windows
       and pixel images) and code which performs geometrical operations.
     \item
+      The \pkg{spatstat.random} package
+      contains functions for random generation of spatial patterns
+      and random simulation of models.
+    \item
       The \pkg{spatstat.core} package
       contains the main code for statistical analysis of spatial point patterns
       and other spatial data.
@@ -256,7 +264,7 @@ Typing \code{library(spatstat)} will load the familiar
     \noindent\textbf{Running:}
     If you type \code{library(spatstat)} in an \textsf{R} session,
     the system will automatically load 
-    \pkg{spatstat.data}, \pkg{spatstat.geom},
+    \pkg{spatstat.data}, \pkg{spatstat.geom}, \pkg{spatstat.random},
     \pkg{spatstat.core} and \pkg{spatstat.linnet}.
     It will also silently \textbf{``import''}
     \pkg{spatstat.utils} and \pkg{spatstat.sparse}.
@@ -288,9 +296,12 @@ the News and Release Notes for each update.
 
 \begin{itemize}
 
-  \item the original \spst\ package has now been split into 7 sub-packages
+  \item New package \pkg{spatstat.random}.
+    
+  \item the original \spst\ package has now been split into 8 sub-packages
     (\pkg{spatstat.utils}, \pkg{spatstat.data}, \pkg{spatstat.sparse},
-    \pkg{spatstat.geom}, \pkg{spatstat.core}, \pkg{spatstat.linnet}
+    \pkg{spatstat.geom}, \pkg{spatstat.random},
+    \pkg{spatstat.core}, \pkg{spatstat.linnet}
     and \pkg{spatstat}).
 
   \item The interactive graphics functions \texttt{iplot} and \texttt{istat}

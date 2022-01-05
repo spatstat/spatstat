@@ -2,6 +2,7 @@
 \title{Internal spatstat functions}
 
 
+
 \alias{print.autoexec}    
 \alias{print.bugtable}
 
@@ -10,6 +11,7 @@
   Internal spatstat functions.
 }
 \usage{
+
 
 
 \method{print}{autoexec}(x, \dots)

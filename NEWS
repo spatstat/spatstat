@@ -1,4 +1,15 @@
 
+        CHANGES IN spatstat VERSION 2.3-0.001
+
+OVERVIEW
+
+    o spatstat depends on the package 'spatstat.random'
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o package dependence
+    spatstat now depends on the new package 'spatstat.random'.
+
         CHANGES IN spatstat VERSION 2.3-0
 
 OVERVIEW

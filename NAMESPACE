@@ -5,6 +5,7 @@ importFrom(utils, RShowDoc, news, page, read.table)
 import(spatstat.utils)
 import(spatstat.data)
 import(spatstat.geom)
+import(spatstat.random)
 import(spatstat.core)
 import(spatstat.linnet)
 
