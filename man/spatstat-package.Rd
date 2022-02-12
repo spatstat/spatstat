@@ -225,79 +225,79 @@
   \bold{To simulate a random point pattern:}
   
   \tabular{ll}{
-	\code{\link[spatstat.core]{runifpoint}} \tab
+	\code{\link[spatstat.random]{runifpoint}} \tab
 	generate \eqn{n} independent uniform random points \cr
-	\code{\link[spatstat.core]{rpoint}} \tab
+	\code{\link[spatstat.random]{rpoint}} \tab
 	generate \eqn{n} independent random points \cr
-	\code{\link[spatstat.core]{rmpoint}} \tab
+	\code{\link[spatstat.random]{rmpoint}} \tab
 	generate \eqn{n} independent multitype random points \cr
-	\code{\link[spatstat.core]{rpoispp}} \tab
+	\code{\link[spatstat.random]{rpoispp}} \tab
 	simulate the (in)homogeneous Poisson point process \cr
-	\code{\link[spatstat.core]{rmpoispp}} \tab
+	\code{\link[spatstat.random]{rmpoispp}} \tab
 	simulate the (in)homogeneous multitype Poisson point process \cr
-	\code{\link[spatstat.core]{runifdisc}} \tab
+	\code{\link[spatstat.random]{runifdisc}} \tab
 	generate \eqn{n} independent uniform random points in disc\cr
-	\code{\link[spatstat.core]{rstrat}} \tab
+	\code{\link[spatstat.random]{rstrat}} \tab
 	stratified random sample of points \cr
 	\code{\link[spatstat.geom]{rsyst}} \tab
 	systematic random sample of points \cr
 	\code{\link[spatstat.geom]{rjitter}} \tab
 	apply random displacements to points in a pattern\cr
-	\code{\link[spatstat.core]{rMaternI}}  \tab
+	\code{\link[spatstat.random]{rMaternI}}  \tab
 	simulate the \Matern Model I inhibition process\cr
-	\code{\link[spatstat.core]{rMaternII}} \tab
+	\code{\link[spatstat.random]{rMaternII}} \tab
 	simulate the \Matern Model II inhibition process\cr
-	\code{\link[spatstat.core]{rSSI}} \tab
+	\code{\link[spatstat.random]{rSSI}} \tab
 	simulate Simple Sequential Inhibition process\cr
-	\code{\link[spatstat.core]{rStrauss}} \tab
+	\code{\link[spatstat.random]{rStrauss}} \tab
 	simulate Strauss process (perfect simulation)\cr
-	\code{\link[spatstat.core]{rHardcore}} \tab
+	\code{\link[spatstat.random]{rHardcore}} \tab
 	simulate Hard Core process (perfect simulation)\cr
-	\code{\link[spatstat.core]{rStraussHard}} \tab
+	\code{\link[spatstat.random]{rStraussHard}} \tab
 	simulate Strauss-hard core process (perfect simulation)\cr
-	\code{\link[spatstat.core]{rDiggleGratton}} \tab
+	\code{\link[spatstat.random]{rDiggleGratton}} \tab
 	simulate Diggle-Gratton process (perfect simulation)\cr
-	\code{\link[spatstat.core]{rDGS}} \tab
+	\code{\link[spatstat.random]{rDGS}} \tab
 	simulate Diggle-Gates-Stibbard process (perfect simulation)\cr
-	\code{\link[spatstat.core]{rPenttinen}} \tab
+	\code{\link[spatstat.random]{rPenttinen}} \tab
 	simulate Penttinen process (perfect simulation)\cr
-	\code{\link[spatstat.core]{rNeymanScott}} \tab
+	\code{\link[spatstat.random]{rNeymanScott}} \tab
 	simulate a general Neyman-Scott process\cr
-	\code{\link[spatstat.core]{rPoissonCluster}} \tab
+	\code{\link[spatstat.random]{rPoissonCluster}} \tab
 	simulate a general Poisson cluster process\cr
-	\code{\link[spatstat.core]{rMatClust}} \tab
+	\code{\link[spatstat.random]{rMatClust}} \tab
 	simulate the \Matern Cluster process\cr
-	\code{\link[spatstat.core]{rThomas}} \tab
+	\code{\link[spatstat.random]{rThomas}} \tab
 	simulate the Thomas process  \cr
-	\code{\link[spatstat.core]{rGaussPoisson}}  \tab
+	\code{\link[spatstat.random]{rGaussPoisson}}  \tab
 	simulate the Gauss-Poisson cluster process\cr
-	\code{\link[spatstat.core]{rCauchy}} \tab
+	\code{\link[spatstat.random]{rCauchy}} \tab
 	simulate Neyman-Scott Cauchy cluster process \cr
-	\code{\link[spatstat.core]{rVarGamma}} \tab
+	\code{\link[spatstat.random]{rVarGamma}} \tab
 	simulate Neyman-Scott Variance Gamma cluster process \cr
-	\code{\link[spatstat.core]{rthin}} \tab  random thinning  \cr
-	\code{\link[spatstat.core]{rcell}} \tab
+	\code{\link[spatstat.random]{rthin}} \tab  random thinning  \cr
+	\code{\link[spatstat.random]{rcell}} \tab
 	simulate the Baddeley-Silverman cell process  \cr
-	\code{\link[spatstat.core]{rmh}} \tab
+	\code{\link[spatstat.random]{rmh}} \tab
 	simulate Gibbs point process using Metropolis-Hastings \cr
 	\code{\link[spatstat.core]{simulate.ppm}} \tab
 	simulate Gibbs point process using Metropolis-Hastings \cr
-	\code{\link[spatstat.core]{runifpointOnLines}} \tab
+	\code{\link[spatstat.random]{runifpointOnLines}} \tab
 	generate \eqn{n} random points along specified line segments \cr
-	\code{\link[spatstat.core]{rpoisppOnLines}} \tab
+	\code{\link[spatstat.random]{rpoisppOnLines}} \tab
 	generate Poisson random points along specified line segments 
       }
 
       \bold{To randomly change an existing point pattern:}
       
       \tabular{ll}{
-	\code{\link[spatstat.core]{rshift}} \tab random shifting of points \cr
+	\code{\link[spatstat.random]{rshift}} \tab random shifting of points \cr
         \code{\link[spatstat.geom]{rjitter}} \tab
 	apply random displacements to points in a pattern\cr
-	\code{\link[spatstat.core]{rthin}} \tab  random thinning \cr
-	\code{\link[spatstat.core]{rlabel}} \tab random (re)labelling of a multitype
+	\code{\link[spatstat.random]{rthin}} \tab  random thinning \cr
+	\code{\link[spatstat.random]{rlabel}} \tab random (re)labelling of a multitype
 	point pattern \cr
-        \code{\link[spatstat.core]{quadratresample}} \tab block resampling 
+        \code{\link[spatstat.random]{quadratresample}} \tab block resampling 
       }
 
       \bold{Standard point pattern datasets:}
@@ -609,7 +609,7 @@
 	\code{\link[spatstat.geom]{pixelcentres}} \tab extract centres of pixels \cr
 	\code{\link[spatstat.geom]{transmat}} \tab convert matrix of pixel values \cr
 	                       \tab to a different indexing convention \cr
-	\code{\link[spatstat.core]{rnoise}} \tab random pixel noise
+	\code{\link[spatstat.random]{rnoise}} \tab random pixel noise
      }
 
     \bold{Line segment patterns}
@@ -666,7 +666,7 @@
       closest to a given point \cr
       \code{\link[spatstat.geom]{pointsOnLines}} \tab generate points evenly spaced
       along line segment \cr
-      \code{\link[spatstat.core]{rpoisline}} \tab generate a realisation of the
+      \code{\link[spatstat.random]{rpoisline}} \tab generate a realisation of the
       Poisson line process inside a window\cr
       \code{\link[spatstat.geom]{rlinegrid}} \tab generate a random array of parallel
       lines through a window
@@ -693,7 +693,7 @@
       \code{\link[spatstat.geom]{intersect.tess}} \tab intersect two tessellations \cr
                               \tab or restrict a tessellation to a window \cr
       \code{\link[spatstat.geom]{chop.tess}} \tab subdivide a tessellation by a line \cr
-      \code{\link[spatstat.core]{rpoislinetess}} \tab generate tessellation using Poisson line
+      \code{\link[spatstat.random]{rpoislinetess}} \tab generate tessellation using Poisson line
       process \cr
       \code{\link[spatstat.geom]{tile.areas}}	\tab
       area of each tile in tessellation \cr
@@ -721,8 +721,8 @@
       \code{\link[spatstat.geom]{subset.pp3}} \tab extract subset of 3-D point pattern \cr
       \code{\link[spatstat.geom]{unitname.pp3}} \tab name of unit of length \cr
       \code{\link[spatstat.geom]{npoints}} \tab count the number of points  \cr
-      \code{\link[spatstat.core]{runifpoint3}} \tab generate uniform random points in 3-D \cr
-      \code{\link[spatstat.core]{rpoispp3}} \tab generate Poisson random points in 3-D \cr
+      \code{\link[spatstat.random]{runifpoint3}} \tab generate uniform random points in 3-D \cr
+      \code{\link[spatstat.random]{rpoispp3}} \tab generate Poisson random points in 3-D \cr
       \code{\link[spatstat.core]{envelope.pp3}} \tab generate simulation envelopes for
       3-D pattern \cr
       \code{\link[spatstat.geom]{box3}} \tab create a 3-D rectangular box \cr
@@ -746,8 +746,8 @@
       \code{\link[spatstat.geom]{subset.ppx}} \tab extract subset \cr
       \code{\link[spatstat.geom]{unitname.ppx}} \tab name of unit of length \cr
       \code{\link[spatstat.geom]{npoints}} \tab count the number of points  \cr
-      \code{\link[spatstat.core]{runifpointx}} \tab generate uniform random points \cr
-      \code{\link[spatstat.core]{rpoisppx}} \tab generate Poisson random points \cr
+      \code{\link[spatstat.random]{runifpointx}} \tab generate uniform random points \cr
+      \code{\link[spatstat.random]{rpoisppx}} \tab generate Poisson random points \cr
       \code{\link[spatstat.geom]{boxx}} \tab define multidimensional box  \cr
       \code{\link[spatstat.geom]{diameter.boxx}} \tab diameter of box \cr
       \code{\link[spatstat.geom]{volume.boxx}} \tab volume of box \cr
@@ -964,7 +964,7 @@
     \code{\link[spatstat.core]{Smooth.ppp}} \tab spatial interpolation of marks  \cr
     \code{\link[spatstat.core]{relrisk}} \tab kernel estimate of relative risk\cr
     \code{\link[spatstat.core]{sharpen.ppp}} \tab data sharpening  \cr
-    \code{\link[spatstat.core]{rknn}} \tab theoretical distribution of nearest
+    \code{\link[spatstat.random]{rknn}} \tab theoretical distribution of nearest
     neighbour distance
  }
 
@@ -1198,9 +1198,9 @@
   
   The theoretical models can also be simulated,
   for any choice of parameter values,
-  using \code{\link[spatstat.core]{rThomas}}, \code{\link[spatstat.core]{rMatClust}},
-  \code{\link[spatstat.core]{rCauchy}}, \code{\link[spatstat.core]{rVarGamma}},
-  and \code{\link[spatstat.core]{rLGCP}}.
+  using \code{\link[spatstat.random]{rThomas}}, \code{\link[spatstat.random]{rMatClust}},
+  \code{\link[spatstat.random]{rCauchy}}, \code{\link[spatstat.random]{rVarGamma}},
+  and \code{\link[spatstat.random]{rLGCP}}.
   
   Lower-level fitting functions include:
 
@@ -1378,7 +1378,7 @@
   \tabular{ll}{
     \code{\link[spatstat.geom]{default.dummy}} \tab default pattern of dummy points \cr
     \code{\link[spatstat.geom]{gridcentres}} \tab dummy points in a rectangular grid \cr
-    \code{\link[spatstat.core]{rstrat}} \tab stratified random dummy pattern \cr
+    \code{\link[spatstat.random]{rstrat}} \tab stratified random dummy pattern \cr
     \code{\link[spatstat.geom]{spokes}} \tab radial pattern of dummy points  \cr
     \code{\link[spatstat.geom]{corners}} \tab dummy points at corners of the window
   }
@@ -1504,70 +1504,70 @@
   \bold{Random point patterns:}
 
   \tabular{ll}{
-    \code{\link[spatstat.core]{runifpoint}} \tab
+    \code{\link[spatstat.random]{runifpoint}} \tab
     generate \eqn{n} independent uniform random points \cr
-    \code{\link[spatstat.core]{rpoint}} \tab
+    \code{\link[spatstat.random]{rpoint}} \tab
     generate \eqn{n} independent random points \cr
-    \code{\link[spatstat.core]{rmpoint}} \tab
+    \code{\link[spatstat.random]{rmpoint}} \tab
     generate \eqn{n} independent multitype random points \cr
-    \code{\link[spatstat.core]{rpoispp}} \tab
+    \code{\link[spatstat.random]{rpoispp}} \tab
     simulate the (in)homogeneous Poisson point process \cr
-    \code{\link[spatstat.core]{rmpoispp}} \tab
+    \code{\link[spatstat.random]{rmpoispp}} \tab
     simulate the (in)homogeneous multitype Poisson point process \cr
-    \code{\link[spatstat.core]{runifdisc}} \tab
+    \code{\link[spatstat.random]{runifdisc}} \tab
     generate \eqn{n} independent uniform random points in disc\cr
-    \code{\link[spatstat.core]{rstrat}} \tab
+    \code{\link[spatstat.random]{rstrat}} \tab
     stratified random sample of points \cr
     \code{\link[spatstat.geom]{rsyst}} \tab
     systematic random sample (grid) of points \cr
-    \code{\link[spatstat.core]{rMaternI}}  \tab
+    \code{\link[spatstat.random]{rMaternI}}  \tab
     simulate the \Matern Model I inhibition process\cr
-    \code{\link[spatstat.core]{rMaternII}} \tab
+    \code{\link[spatstat.random]{rMaternII}} \tab
     simulate the \Matern Model II inhibition process\cr
-    \code{\link[spatstat.core]{rSSI}} \tab
+    \code{\link[spatstat.random]{rSSI}} \tab
     simulate Simple Sequential Inhibition process\cr
-    \code{\link[spatstat.core]{rHardcore}} \tab
+    \code{\link[spatstat.random]{rHardcore}} \tab
     simulate hard core process (perfect simulation)\cr
-    \code{\link[spatstat.core]{rStrauss}} \tab
+    \code{\link[spatstat.random]{rStrauss}} \tab
     simulate Strauss process (perfect simulation)\cr
-    \code{\link[spatstat.core]{rStraussHard}} \tab
+    \code{\link[spatstat.random]{rStraussHard}} \tab
     simulate Strauss-hard core process (perfect simulation)\cr
-    \code{\link[spatstat.core]{rDiggleGratton}} \tab
+    \code{\link[spatstat.random]{rDiggleGratton}} \tab
     simulate Diggle-Gratton process (perfect simulation)\cr
-    \code{\link[spatstat.core]{rDGS}} \tab
+    \code{\link[spatstat.random]{rDGS}} \tab
     simulate Diggle-Gates-Stibbard process (perfect simulation)\cr
-    \code{\link[spatstat.core]{rPenttinen}} \tab
+    \code{\link[spatstat.random]{rPenttinen}} \tab
     simulate Penttinen process (perfect simulation)\cr
-    \code{\link[spatstat.core]{rNeymanScott}} \tab
+    \code{\link[spatstat.random]{rNeymanScott}} \tab
     simulate a general Neyman-Scott process\cr
-    \code{\link[spatstat.core]{rMatClust}} \tab
+    \code{\link[spatstat.random]{rMatClust}} \tab
     simulate the \Matern Cluster process\cr
-    \code{\link[spatstat.core]{rThomas}} \tab
+    \code{\link[spatstat.random]{rThomas}} \tab
     simulate the Thomas process  \cr
-    \code{\link[spatstat.core]{rLGCP}} \tab
+    \code{\link[spatstat.random]{rLGCP}} \tab
     simulate the log-Gaussian Cox process  \cr
-    \code{\link[spatstat.core]{rGaussPoisson}}  \tab
+    \code{\link[spatstat.random]{rGaussPoisson}}  \tab
     simulate the Gauss-Poisson cluster process\cr
-    \code{\link[spatstat.core]{rCauchy}} \tab
+    \code{\link[spatstat.random]{rCauchy}} \tab
     simulate Neyman-Scott process with Cauchy clusters \cr
-    \code{\link[spatstat.core]{rVarGamma}} \tab
+    \code{\link[spatstat.random]{rVarGamma}} \tab
     simulate Neyman-Scott process with Variance Gamma clusters \cr
-    \code{\link[spatstat.core]{rcell}} \tab
+    \code{\link[spatstat.random]{rcell}} \tab
     simulate the Baddeley-Silverman cell process  \cr
-    \code{\link[spatstat.core]{runifpointOnLines}} \tab
+    \code{\link[spatstat.random]{runifpointOnLines}} \tab
     generate \eqn{n} random points along specified line segments \cr
-    \code{\link[spatstat.core]{rpoisppOnLines}} \tab
+    \code{\link[spatstat.random]{rpoisppOnLines}} \tab
     generate Poisson random points along specified line segments 
   }
       
   \bold{Resampling a point pattern:}
 
   \tabular{ll}{
-    \code{\link[spatstat.core]{quadratresample}} \tab block resampling \cr
+    \code{\link[spatstat.random]{quadratresample}} \tab block resampling \cr
     \code{\link[spatstat.geom]{rjitter}} \tab
     apply random displacements to points in a pattern\cr
-    \code{\link[spatstat.core]{rshift}} \tab random shifting of (subsets of) points\cr
-    \code{\link[spatstat.core]{rthin}} \tab  random thinning 
+    \code{\link[spatstat.random]{rshift}} \tab random shifting of (subsets of) points\cr
+    \code{\link[spatstat.random]{rthin}} \tab  random thinning 
   }
   
   See also \code{\link[spatstat.core]{varblock}} for estimating the variance
@@ -1588,7 +1588,7 @@
    Gibbs point process models 
    are fitted by the function \code{\link[spatstat.core]{ppm}} yielding an
    object of class \code{"ppm"}. To generate a simulated
-   realisation of this fitted model, use \code{\link[spatstat.core]{rmh}}.
+   realisation of this fitted model, use \code{\link[spatstat.random]{rmh}}.
    To generate one or more simulated realisations of the fitted model,
    use \code{\link[spatstat.core]{simulate.ppm}}.
 
@@ -1597,13 +1597,13 @@
    \tabular{ll}{
      \code{\link[spatstat.geom]{rlinegrid}} \tab
      generate a random array of parallel lines through a window \cr
-     \code{\link[spatstat.core]{rpoisline}} \tab
+     \code{\link[spatstat.random]{rpoisline}} \tab
      simulate the Poisson line process within a window \cr
-     \code{\link[spatstat.core]{rpoislinetess}} \tab
+     \code{\link[spatstat.random]{rpoislinetess}} \tab
      generate random tessellation using Poisson line process \cr
-     \code{\link[spatstat.core]{rMosaicSet}} \tab
+     \code{\link[spatstat.random]{rMosaicSet}} \tab
      generate random set by selecting some tiles of a tessellation \cr
-     \code{\link[spatstat.core]{rMosaicField}} \tab
+     \code{\link[spatstat.random]{rMosaicField}} \tab
      generate random pixel image by assigning random values
      in each tile of a tessellation
    }
@@ -1708,11 +1708,11 @@
   and resampling using the following capabilities:
   
   \tabular{ll}{
-    \code{\link[spatstat.core]{quadratresample}} \tab block resampling \cr
+    \code{\link[spatstat.random]{quadratresample}} \tab block resampling \cr
     \code{\link[spatstat.geom]{rjitter}} \tab
     apply random displacements to points in a pattern\cr
-    \code{\link[spatstat.core]{rshift}} \tab random shifting of (subsets of) points\cr
-    \code{\link[spatstat.core]{rthin}} \tab  random thinning  
+    \code{\link[spatstat.random]{rshift}} \tab random shifting of (subsets of) points\cr
+    \code{\link[spatstat.random]{rthin}} \tab  random thinning  
   }
 }
 
