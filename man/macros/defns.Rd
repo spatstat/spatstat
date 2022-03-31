@@ -6,6 +6,7 @@
 % Names with accents
 \newcommand{\Bogsted}{\ifelse{latex}{\out{B\o gsted}}{Bogsted}}
 \newcommand{\Cramer}{\ifelse{latex}{\out{Cram\'er}}{Cramer}}
+\newcommand{\Frederic}{\ifelse{latex}{\out{Fr{\'e}d{\'e}ric}}{Frederic}}
 \newcommand{\Hogmander}{\ifelse{latex}{\out{H{\"o}gmander}}{Hogmander}}
 \newcommand{\Jyvaskyla}{\ifelse{latex}{\out{Jyv\"askyl\"a}}{Jyvaskyla}}
 \newcommand{\Matern}{\ifelse{latex}{\out{Mat\'ern}}{Matern}}

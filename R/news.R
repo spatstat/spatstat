@@ -35,7 +35,8 @@ class(latest.news) <- "autoexec"
 
 spatstat.family <- function(subpackages=TRUE, extensions=FALSE) {
   sub <- c("spatstat.utils", "spatstat.data", "spatstat.sparse",
-           "spatstat.geom", "spatstat.core", "spatstat.linnet",
+           "spatstat.geom", "spatstat.random", "spatstat.core",
+           "spatstat.linnet",
            "spatstat")
   ext <- c("spatstat.gui", "spatstat.local", "spatstat.Knet")
   result <- c(if(subpackages) sub else NULL,

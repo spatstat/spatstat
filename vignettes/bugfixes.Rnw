@@ -19,8 +19,10 @@
 
 <<echo=FALSE,results=hide>>=
 library(spatstat)
-sversion <- read.dcf(file = system.file("DESCRIPTION", package = "spatstat"),
-         fields = "Version")
+x <- read.dcf(file = system.file("DESCRIPTION", package = "spatstat"),
+              fields = c("Version", "Date"))
+sversion <- as.character(x[,"Version"])
+sdate    <- as.character(x[,"Date"])
 options(useFancyQuotes=FALSE)
 @ 
 
@@ -84,6 +86,33 @@ Recently \spst\ was divided into a family of sub-packages.
 The command \texttt{bugfixes} now covers the bug history in 
 all of these sub-packages. See the help for \texttt{bugfixes} for further details.
 
+<<echo=FALSE,results=hide>>=
+getstuff <- function(pkg) {
+  x <- read.dcf(file=system.file("DESCRIPTION", package=pkg),
+                fields=c("Version", "Date"))
+  xversion <- as.character(x[,"Version"])
+  xdate    <- as.character(x[,"Date"])
+  data.frame(date=as.Date(xdate), package=pkg, version=xversion)
+}
+vtable <- do.call(rbind,
+                  lapply(c("spatstat.utils",
+                           "spatstat.data", 
+                           "spatstat.sparse",
+                           "spatstat.geom",
+                           "spatstat.random",
+                           "spatstat.core",
+                           "spatstat.linnet",
+                           "spatstat"),
+                         getstuff))
+@ 
+
+The current versions of the \spst\ family of packages
+(used to produce this document) are:
+
+<<echo=FALSE>>=
+print(vtable, row.names=FALSE)
+@ 
+
 \pagebreak
 \section{Serious bugs}
 
@@ -111,7 +140,7 @@ the presence of a bug is obvious, and the bug would not have misled the user.
   {\small (Bug introduced before \texttt{{#1}}, {#2}; %
     fixed in \texttt{{#3}}, {#4})}%
 }
-
+\newcommand\bugalways[2]{\bugbefore{spatstat 1.19-0}{may 2010}{#1}{#2}}
 
 
   %%% LEVEL 1
@@ -374,10 +403,42 @@ the presence of a bug is obvious, and the bug would not have misled the user.
   \subsection{Bugs, Substantially Incorrect, Moderate Impact}
 
   \begin{itemize}
+  \item \texttt{closepairs.ppp}:
+    If \texttt{distinct=FALSE} and \texttt{what="all"}, the resulting vectors
+    \texttt{yi} and \texttt{yj} contained incorrect values, 
+    and had the wrong length.
+    \bugbefore{spatstat 1.56-0}{june 2018}{spatstat.geom 2.4-0}{march 2022}
+
+  \item \texttt{nncross.ppp}:
+    When \texttt{k > 1}, distance values were incorrectly replaced by
+    \texttt{Inf} in some cases.
+    \bugbefore{spatstat 1.56-0}{june 2018}{spatstat.geom 2.4-0}{march 2022}
+    
   \item \texttt{nncross.ppp}:
     If the argument \texttt{by} was given, some of the results were incorrect.
     [Spotted by Hank Stevens.]
     \bugger{1.32-0}{august 2013}{2.2-0}{june 2021}
+    
+ \item \texttt{vcov.mppm}:
+    For Gibbs (non-Poisson) models, the variance matrix was
+    calculated incorrectly in some cases. 
+   \bugger{1.45-1}{may 2016}{spatstat.core 2.4-1}{may 2022}   
+
+ \item \texttt{vcov.mppm}:
+    Results were sometimes incorrect if the two models
+    had different interactions (e.g. Strauss vs Poisson).
+   \bugger{1.45-1}{may 2016}{spatstat.core 2.4-1}{may 2022}   
+
+ \item \texttt{distmap.owin}:
+   If the window was a binary mask, the distance values were
+    slightly too large (by a factor \texttt{1 + 1/n} where \texttt{n}
+    is the pixel grid dimension).
+    \bugalways{spatstat.geom 2.4-0}{march 2022}
+    
+ \item \texttt{distfun.owin}:
+   If the window was a binary mask, the distance values were
+    slightly too small (typically reduced by 1/20 of a pixel width).
+    \bugalways{spatstat.geom 2.4-0}{march 2022}
     
 \item \texttt{nncross.ppp}, \texttt{nncross.pp3}:
   If \texttt{iX} and \texttt{iY} were given, some of the results were incorrect.
@@ -393,7 +454,12 @@ the presence of a bug is obvious, and the bug would not have misled the user.
     [Such objects can be repaired using \texttt{repairNetwork}.]
      \bugger{1.41-1}{february 2015}{1.62-0}{december 2019}
     
-     \item \texttt{rlpp}:
+   \item \texttt{addvar}:
+    If the covariate contained \texttt{NA}, \texttt{NaN} or \texttt{Inf} values,
+    the calculations were sometimes incorrect.
+    \bugger{1.45-0}{march 2016}{.core 2.4-1}{march 2022}
+    
+    \item \texttt{rlpp}:
        The resulting pattern was unmarked 
        even when it should have been multitype.
        \bugger{1.48-0}{december 2016}{1.63-0}{january 2020}
@@ -857,6 +923,20 @@ the presence of a bug is obvious, and the bug would not have misled the user.
   \item \texttt{update.slrm}:
     Failed to find covariates that were provided in \texttt{env}.
     \bugger{1.33-0}{september 2013}{2.2-0}{june 2021}
+
+   \item \texttt{distmap.owin}:
+     Values were incorrect if X was an empty window 
+     (\texttt{is.empty(X) = TRUE}).
+     \bugalways{spatstat.geom 2.4-0}{march 2022}
+    
+   \item \texttt{distmap.ppp}, \texttt{distmap.psp}:
+    Values were incorrect if X was an empty pattern (\texttt{npoints(X) = 0}).
+     \bugalways{spatstat.geom 2.4-0}{march 2022}
+    
+   \item \texttt{distmap.psp}:
+    Values were incorrect if X was an empty pattern (\texttt{nsegments(X) = 0}).
+     \bugalways{spatstat.geom 2.4-0}{march 2022}
+    
 \end{itemize}
 
 \begin{thebibliography}{1}

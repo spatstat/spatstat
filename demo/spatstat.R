@@ -117,6 +117,7 @@ plot(hsvim(D,L,X), valuesAreColours=TRUE,
 V <- as.linim(function(x,y,seg,tp){(y/1000)^2-(x/1000)^3}, L=domain(chicago))
 plot(V, main="Pixel image on a linear network (colour plot)")
 plot(V, style="w", main="Pixel image on a linear network (width plot)")
+persp(V, phi=25, theta=-35, expand=0.2, main="Pixel image on a linear network (perspective plot)")
 
 fanfare("III. Conversion between types")
 

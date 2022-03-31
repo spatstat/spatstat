@@ -295,6 +295,12 @@ Here is the text from the `overview' sections of
 the News and Release Notes for each update. 
 
 \begin{itemize}
+  
+   \item Improved approximation of intensity of Gibbs models.
+    
+   \item Experimental code to represent (theoretical) point process models
+    
+   \item  Extract more information about a point process model.
 
   \item New package \pkg{spatstat.random}.
     
@@ -674,6 +680,10 @@ The following new classes of objects may be of use.
   An object of class \texttt{"ssf"} represents a spatial function
   which has been evaluated or sampled at an irregular set of points.
   See \texttt{help(ssf)}.
+\item \texttt{zgibbsmodel}:
+  Experimental. An object of class \texttt{zgibbsmodel} represents a
+    Gibbs point process model with specified parameter values
+    (whereas \texttt{ppm} represents a model fitted to data).
 \end{itemize}
 
 \section{New Functions}
@@ -682,7 +692,28 @@ Following is a list of all the functions that have been added,
 starting with the most recent additions.
 
 \begin{itemize}
+    
+\item \texttt{hardcoredist}:
+    Extract the hard core distance of a point process model.
+
+  \item \texttt{interactionorder}:
+    Extract the order of interpoint interaction of a point process model.
+
   
+  \item \texttt{zgibbsmodel}:
+    Experimental. Create an object of class \texttt{zgibbsmodel}.
+
+  \item \texttt{print.zgibbsmodel}:
+    Experimental. Print an object of class \texttt{zgibbsmodel}.
+
+ 
+  \item \texttt{is.poisson.zgibbsmodel}, \texttt{is.stationary.zgibbsmodel}:
+    Experimental. Methods for class \texttt{zgibbsmodel}.
+
+  \item \texttt{indefinteg}: Numerically computes the indefinite integral of a function
+  
+  \item \texttt{framedist.pixels}: Computes distance from each pixel to the enclosing rectangle.
+    
   \item \texttt{lurking.slrm}:
     Lurking variable plot for spatial logistic regression models.
 
@@ -1956,6 +1987,14 @@ listed alphabetically.
    \end{itemize}
 
     
+ \item \texttt{distmap.owin}:
+    Behaviour has been altered so that, when \texttt{X} is a binary mask, the results of
+    \texttt{distmap(X, invert=TRUE)} and \texttt{distmap(complement.owin(X))} are identical.
+    This affects a few pixels close to the edge of the frame.
+   
+ \item \texttt{distmap.ppp}:
+   New argument \texttt{clip}.
+
  \item \texttt{distmap.psp}:
    New arguments \texttt{extras} and \texttt{clip}.
    
@@ -2165,11 +2204,21 @@ listed alphabetically.
    Argument \code{domain} can be a tessellation.
 
 \item \texttt{intensity.ppm}:
-   Intensity approximation is now implemented for
+  \begin{itemize}
+  \item    Intensity approximation is now implemented for
    area-interaction model, and Geyer saturation model.
+ \item Can now calculate the Coeurjolly-Lavancier DPP approximation of intensity.
+    [Code kindly contributed by Frederic Lavancier]
+  \item New argument \texttt{approx} specifies the choice of approximation.
+  \end{itemize}
+
 
 \item \texttt{interp.im}:
   New argument \texttt{bilinear}.
+
+
+\item \texttt{intersect.tess}:
+  New argument \texttt{keepempty}.
 
 
  
@@ -2531,6 +2580,10 @@ listed alphabetically.
    \item    Computation accelerated.
    \end{itemize}
 
+ \item \texttt{nncross.ppp}:
+   When \texttt{X} is a point pattern and \texttt{Y} is a line segment pattern,
+    higher order neighbours (\verb!k > 1!) are now supported.
+    
  \item \texttt{nndist.pp3}:
    New argument \texttt{by} allows computation of the nearest 
      distance to each group of points.
@@ -3023,6 +3076,9 @@ listed alphabetically.
        are now explicit formal arguments.
      \item 
        New argument \texttt{weights}.
+     \item
+       Ratios which are close to 0/0 are handled more effectively,
+       reducing the likelihood of strange-looking plots when \texttt{sigma} is very small.
      \end{itemize}
      
    \texttt{rhohat}:
@@ -3405,6 +3461,13 @@ listed alphabetically.
   \item \texttt{union.owin}:
    Improved behaviour when there are more than 2 windows.
 
+   \item \texttt{unnormdensity}:
+     \begin{itemize}
+     \item Argument \texttt{weights} may have length 1.
+     \item New argument \texttt{defaults}.
+     \end{itemize}
+
+     
    \item \texttt{unstack.lintess}: now handles marks.
      
    \item \texttt{update}: now works for models of class \texttt{"mppm"}.

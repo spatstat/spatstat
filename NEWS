@@ -1,4 +1,20 @@
 
+        CHANGES IN spatstat VERSION 2.3-4
+
+OVERVIEW
+
+    o Minor bug fixes and improvements.
+
+BUG FIXES
+
+    o latest.news
+    Did not include news from the new package 'spatstat.random'.
+    Fixed.
+
+    o spatstat.family
+    Omitted the new package 'spatstat.random'.
+    Fixed.
+    
         CHANGES IN spatstat VERSION 2.3-3
 
 OVERVIEW
