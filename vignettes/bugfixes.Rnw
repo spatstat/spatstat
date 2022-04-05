@@ -122,7 +122,7 @@ in decreasing order of potential impact.
 A bug is classified as ``serious'' if it produced incorrect results
 without the user's knowledge.
 
-Bugs which cause an error exit are not listed here, because '
+Bugs which cause an error exit are not listed here, because 
 the presence of a bug is obvious, and the bug would not have misled the user.
 
 \newcommand\bugger[4]{%  

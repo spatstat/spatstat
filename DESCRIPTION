@@ -1,16 +1,19 @@
 Package: spatstat
-Version: 2.3-4
-Date: 2022-03-31
+Version: 2.3-4.001
+Date: 2022-04-05
 Title: Spatial Point Pattern Analysis, Model-Fitting, Simulation, Tests
 Authors@R: c(person("Adrian", "Baddeley", 
                     role = c("aut", "cre"),
-       	            email = "Adrian.Baddeley@curtin.edu.au"),
+       	            email = "Adrian.Baddeley@curtin.edu.au",
+		    comment = c(ORCID="0000-0001-9499-8382")),
 	     person("Rolf", "Turner", 
                     role = "aut",
- 	            email="r.turner@auckland.ac.nz"),
+ 	            email="r.turner@auckland.ac.nz",
+		    comment=c(ORCID="0000-0001-5521-5218")),
 	     person("Ege",   "Rubak", 
                     role = "aut",
-		    email = "rubak@math.aau.dk"))
+		    email = "rubak@math.aau.dk",
+		    comment=c(ORCID="0000-0002-6675-533X")))
 Maintainer: Adrian Baddeley <Adrian.Baddeley@curtin.edu.au>
 Depends: R (>= 3.5.0), spatstat.data (>= 2.1-2), spatstat.geom (>= 2.4-0), spatstat.random (>= 2.2-0), spatstat.core (>= 2.4-1), spatstat.linnet (>= 2.3-2), utils
 Imports: spatstat.utils (>= 2.3-0)
