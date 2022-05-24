@@ -30,7 +30,7 @@ The original `spatstat` has now been divided into a family of sub-packages:
 | `spatstat.data` | [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/spatstat.data)](http://cran.r-project.org/web/packages/spatstat.data) | [![GitHub R package version](https://img.shields.io/github/r-package/v/spatstat/spatstat.data)](https://github.com/spatstat/spatstat.data) | Datasets |
 | `spatstat.sparse` | [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/spatstat.sparse)](http://cran.r-project.org/web/packages/spatstat.sparse) | [![GitHub R package version](https://img.shields.io/github/r-package/v/spatstat/spatstat.sparse)](https://github.com/spatstat/spatstat.sparse) | Sparse arrays |
 | `spatstat.geom` | [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/spatstat.geom)](http://cran.r-project.org/web/packages/spatstat.geom) | [![GitHub R package version](https://img.shields.io/github/r-package/v/spatstat/spatstat.geom)](https://github.com/spatstat/spatstat.geom) | Spatial data classes; geometrical operations |
-| `spatstat.random` | [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/spatstat.random)](http://cran.r-project.org/web/packages/spatstat.random) | [![GitHub R package version](https://img.shields.io/github/r-package/v/spatstat/spatstat.random)](https://github.com/spatstat/spatstat.random) |  :kangaroo: :kangaroo: NEW :kangaroo: :kangaroo: Generation of random patterns |
+| `spatstat.random` | [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/spatstat.random)](http://cran.r-project.org/web/packages/spatstat.random) | [![GitHub R package version](https://img.shields.io/github/r-package/v/spatstat/spatstat.random)](https://github.com/spatstat/spatstat.random) |  Generation of random patterns |
 | `spatstat.core` | [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/spatstat.core)](http://cran.r-project.org/web/packages/spatstat.core) | [![GitHub R package version](https://img.shields.io/github/r-package/v/spatstat/spatstat.core)](https://github.com/spatstat/spatstat.core) | :kangaroo: :kangaroo: OBSOLETE :kangaroo: :kangaroo: Data analysis and modelling of spatial data |
 | `spatstat.explore` | [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/spatstat.explore)](http://cran.r-project.org/web/packages/spatstat.explore) | [![GitHub R package version](https://img.shields.io/github/r-package/v/baddstats/spatstat.explore)](https://github.com/baddstats/spatstat.explore) | :kangaroo: :kangaroo: NEW :kangaroo: :kangaroo: Exploratory Data Analysis of spatial data |
 | `spatstat.model` | [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/spatstat.model)](http://cran.r-project.org/web/packages/spatstat.model) | [![GitHub R package version](https://img.shields.io/github/r-package/v/baddstats/spatstat.model)](https://github.com/baddstats/spatstat.model) | :kangaroo: :kangaroo: NEW :kangaroo: :kangaroo: Parametric Modelling and Formal Inference for spatial data |
@@ -72,7 +72,7 @@ or imported when you load the `spatstat` umbrella package.
 The blue boxes are extension packages which must be installed and loaded
 separately.
 
-![Spatstat pieces](RepoStuff/newnewspatstat.jpg)
+![Spatstat pieces](RepoStuff/newnewnewspatstat.jpg)
 
 ## Future development
 
