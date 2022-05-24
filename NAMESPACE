@@ -6,7 +6,8 @@ import(spatstat.utils)
 import(spatstat.data)
 import(spatstat.geom)
 import(spatstat.random)
-import(spatstat.core)
+import(spatstat.explore)
+import(spatstat.model)
 import(spatstat.linnet)
 
 # no dynamic library
