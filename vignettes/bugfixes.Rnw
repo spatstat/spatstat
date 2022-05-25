@@ -38,10 +38,8 @@ This vignette lists all \emph{important} bugs detected and fixed in the
 all recorded bugs in the \spst\ famil of packages.
 
 <<echo=FALSE,results=hide>>=
-nbugs <- nrow(news(grepl("^BUG", Category), 
-                   package="spatstat"))
-nbugssince <- nrow(news(Version > "1.42-0" & grepl("^BUG", Category), 
-                   package="spatstat"))
+nbugs      <- nrow(bugfixes("all",  show=FALSE))
+nbugssince <- nrow(bugfixes("book", show=FALSE))
 @ 
 
 \tableofcontents
@@ -84,7 +82,8 @@ book \cite{baddrubaturn15}.
 
 Recently \spst\ was divided into a family of sub-packages.
 The command \texttt{bugfixes} now covers the bug history in 
-all of these sub-packages. See the help for \texttt{bugfixes} for further details.
+all of these sub-packages. See the help for \texttt{bugfixes} 
+for further details.
 
 <<echo=FALSE,results=hide>>=
 getstuff <- function(pkg) {
@@ -100,7 +99,8 @@ vtable <- do.call(rbind,
                            "spatstat.sparse",
                            "spatstat.geom",
                            "spatstat.random",
-                           "spatstat.core",
+                           "spatstat.explore",
+                           "spatstat.model",
                            "spatstat.linnet",
                            "spatstat"),
                          getstuff))

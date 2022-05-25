@@ -3,8 +3,12 @@
 #
 #  News and warnings
 #
+
 latest.news <- function(package=spatstat.family(), doBrowse=FALSE, major=TRUE) {
   stopifnot(is.character(package))
+  ## news from spatstat.core is subsumed in spatstat.explore + spatstat.model
+  defunctpackages <- "spatstat.core"
+  package <- setdiff(package, defunctpackages)
   n <- length(package)
   result <- vector(mode="list", length=n)
   names(result) <- package
@@ -35,7 +39,8 @@ class(latest.news) <- "autoexec"
 
 spatstat.family <- function(subpackages=TRUE, extensions=FALSE) {
   sub <- c("spatstat.utils", "spatstat.data", "spatstat.sparse",
-           "spatstat.geom", "spatstat.random", "spatstat.core",
+           "spatstat.geom", "spatstat.random",
+           "spatstat.explore", "spatstat.model",
            "spatstat.linnet",
            "spatstat")
   ext <- c("spatstat.gui", "spatstat.local", "spatstat.Knet")

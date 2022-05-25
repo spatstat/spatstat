@@ -60,6 +60,11 @@
   Typing \code{bugfixes} without parentheses will display a table of
   all bugs that were fixed in the current installed version of
   \pkg{spatstat} and its sub-packages.
+
+  By default, bugs in the \emph{extension} packages
+  \pkg{spatstat.local}, \pkg{spatstat.Knet}, \pkg{spatstat.gui}
+  are \emph{not} reported. To include these bugs as well,
+  set \code{package=spatstat.family(TRUE,TRUE)}.
 }
 \value{
   (Invisibly) a data frame, belonging to the class \code{"bugtable"},

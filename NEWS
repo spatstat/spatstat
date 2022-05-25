@@ -1,10 +1,28 @@
 
-        CHANGES IN spatstat VERSION 2.3-4.002
+        CHANGES IN spatstat VERSION 3.0-0
 
 OVERVIEW
 
-    o Minor changes to package information.
+    o Further split of the spatstat family of packages.
 
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o Package structure
+    The package 'spatstat.core' has been split into two packages called
+    'spatstat.explore' (for exploratory data analysis)
+    and 'spatstat.model' (for modelling and formal inference).
+
+    o Package dependence
+    'spatstat' now depends on the new packages 'spatstat.explore'
+    and 'spatstat.model' which have replaced the old package 'spatstat.core'.
+
+    o spatstat.family
+    Packages 'spatstat.explore' and 'spatstat.model' have been added
+    and 'spatstat.core' has been deleted from the list of packages.
+    
+    o bugfixes, latest.news
+    Updated to cover the new sub-packages 'spatstat.explore'
+    and 'spatstat.model'.
 
         CHANGES IN spatstat VERSION 2.3-4
 

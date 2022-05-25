@@ -109,8 +109,11 @@
     \item \pkg{spatstat.data} containing datasets
     \item \pkg{spatstat.geom} containing functionality for geometrical
     operations, and defining the main classes of spatial objects
-    \item \pkg{spatstat.core} containing the main functions for statistical
-    analysis and modelling of spatial data
+    \item \pkg{spatstat.explore} containing the main functions for exploratory
+    analysis of spatial data
+    \item \pkg{spatstat.model} containing the main functions for
+    parametric statistical modelling and analysis,
+    and formal inference, for spatial data
     \item \pkg{spatstat.linnet} containing functions for
     spatial data on a linear network
     \item \pkg{spatstat}, which simply loads the other sub-packages
@@ -280,7 +283,7 @@
 	simulate the Baddeley-Silverman cell process  \cr
 	\code{\link[spatstat.random]{rmh}} \tab
 	simulate Gibbs point process using Metropolis-Hastings \cr
-	\code{\link[spatstat.core]{simulate.ppm}} \tab
+	\code{\link[spatstat.model]{simulate.ppm}} \tab
 	simulate Gibbs point process using Metropolis-Hastings \cr
 	\code{\link[spatstat.random]{runifpointOnLines}} \tab
 	generate \eqn{n} random points along specified line segments \cr
@@ -405,15 +408,15 @@
 	apply affine transformation\cr
 	\code{\link[spatstat.geom]{scalardilate}} \tab
 	apply scalar dilation\cr
-	\code{\link[spatstat.core]{density.ppp}} \tab
+	\code{\link[spatstat.explore]{density.ppp}} \tab
 	kernel estimation of point pattern intensity\cr
-	\code{\link[spatstat.core]{densityHeat.ppp}} \tab
+	\code{\link[spatstat.explore]{densityHeat.ppp}} \tab
 	diffusion kernel estimation of point pattern intensity\cr
-	\code{\link[spatstat.core]{Smooth.ppp}} \tab
+	\code{\link[spatstat.explore]{Smooth.ppp}} \tab
 	kernel smoothing of marks of point pattern\cr
 	\code{\link[spatstat.geom]{nnmark}} \tab
 	mark value of nearest data point\cr
-	\code{\link[spatstat.core]{sharpen.ppp}} \tab
+	\code{\link[spatstat.explore]{sharpen.ppp}} \tab
 	data sharpening\cr
 	\code{\link[spatstat.geom]{identify.ppp}} \tab
 	interactively identify points \cr
@@ -562,8 +565,8 @@
     \bold{Pixel images:}
     An object of class \code{"im"} represents a pixel image. 
     Such objects are returned by some of the functions in
-      \pkg{spatstat} including \code{\link[spatstat.core]{Kmeasure}},
-      \code{\link[spatstat.geom]{setcov}} and \code{\link[spatstat.core]{density.ppp}}. 
+      \pkg{spatstat} including \code{\link[spatstat.explore]{Kmeasure}},
+      \code{\link[spatstat.geom]{setcov}} and \code{\link[spatstat.explore]{density.ppp}}. 
       \tabular{ll}{
 	\code{\link[spatstat.geom]{im}} \tab create a pixel image\cr
 	\code{\link[spatstat.geom]{as.im}} \tab convert other data to a pixel image\cr
@@ -590,8 +593,8 @@
 	\code{\link[spatstat.geom]{cut.im}} \tab	convert numeric image to factor image \cr
 	\code{\link[spatstat.geom]{is.im}} \tab test whether an object is a pixel image\cr
 	\code{\link[spatstat.geom]{interp.im}} \tab interpolate a pixel image\cr
-	\code{\link[spatstat.core]{blur}} \tab apply Gaussian blur to image\cr
-	\code{\link[spatstat.core]{Smooth.im}} \tab apply Gaussian blur to image\cr
+	\code{\link[spatstat.explore]{blur}} \tab apply Gaussian blur to image\cr
+	\code{\link[spatstat.explore]{Smooth.im}} \tab apply Gaussian blur to image\cr
 	\code{\link[spatstat.geom]{connected.im}} \tab find connected components \cr
 	\code{\link[spatstat.geom]{compatible.im}} \tab test whether two images have
 	compatible dimensions \cr
@@ -605,7 +608,7 @@
 	\code{\link[spatstat.geom]{solutionset}} \tab region where an expression is true \cr
 	\code{\link[spatstat.geom]{imcov}} \tab spatial covariance function of image \cr
 	\code{\link[spatstat.geom]{convolve.im}} \tab spatial convolution of images \cr
-	\code{\link[spatstat.core]{transect.im}} \tab line transect of image \cr
+	\code{\link[spatstat.explore]{transect.im}} \tab line transect of image \cr
 	\code{\link[spatstat.geom]{pixelcentres}} \tab extract centres of pixels \cr
 	\code{\link[spatstat.geom]{transmat}} \tab convert matrix of pixel values \cr
 	                       \tab to a different indexing convention \cr
@@ -650,7 +653,7 @@
       segment pattern \cr
       \code{\link[spatstat.geom]{distfun.psp}} \tab compute the distance map of a line
       segment pattern \cr
-      \code{\link[spatstat.core]{density.psp}} \tab kernel smoothing of line segments\cr
+      \code{\link[spatstat.explore]{density.psp}} \tab kernel smoothing of line segments\cr
       \code{\link[spatstat.geom]{selfcrossing.psp}} \tab find crossing points between
       line segments \cr
       \code{\link[spatstat.geom]{selfcut.psp}} \tab cut segments where they cross \cr
@@ -723,7 +726,7 @@
       \code{\link[spatstat.geom]{npoints}} \tab count the number of points  \cr
       \code{\link[spatstat.random]{runifpoint3}} \tab generate uniform random points in 3-D \cr
       \code{\link[spatstat.random]{rpoispp3}} \tab generate Poisson random points in 3-D \cr
-      \code{\link[spatstat.core]{envelope.pp3}} \tab generate simulation envelopes for
+      \code{\link[spatstat.explore]{envelope.pp3}} \tab generate simulation envelopes for
       3-D pattern \cr
       \code{\link[spatstat.geom]{box3}} \tab create a 3-D rectangular box \cr
       \code{\link[spatstat.geom]{as.box3}} \tab convert data to 3-D rectangular box \cr
@@ -859,43 +862,43 @@
 
   \bold{Classical exploratory tools:}
   \tabular{ll}{
-    \code{\link[spatstat.core]{clarkevans}} \tab Clark and Evans aggregation index \cr
-    \code{\link[spatstat.core]{fryplot}} \tab Fry plot \cr
-    \code{\link[spatstat.core]{miplot}} \tab Morisita Index plot
+    \code{\link[spatstat.explore]{clarkevans}} \tab Clark and Evans aggregation index \cr
+    \code{\link[spatstat.explore]{fryplot}} \tab Fry plot \cr
+    \code{\link[spatstat.explore]{miplot}} \tab Morisita Index plot
   }
 
   \bold{Smoothing:}
   \tabular{ll}{
-    \code{\link[spatstat.core]{density.ppp}} \tab kernel smoothed density/intensity\cr
-    \code{\link[spatstat.core]{relrisk}} \tab kernel estimate of relative risk\cr
-    \code{\link[spatstat.core]{Smooth.ppp}} \tab spatial interpolation of marks  \cr
-    \code{\link[spatstat.core]{bw.diggle}} \tab cross-validated bandwidth selection
-                               for \code{\link[spatstat.core]{density.ppp}}\cr
-    \code{\link[spatstat.core]{bw.ppl}} \tab likelihood cross-validated bandwidth selection
-                               for \code{\link[spatstat.core]{density.ppp}}\cr
-    \code{\link[spatstat.core]{bw.CvL}} \tab Cronie-Van Lieshout bandwidth selection
+    \code{\link[spatstat.explore]{density.ppp}} \tab kernel smoothed density/intensity\cr
+    \code{\link[spatstat.explore]{relrisk}} \tab kernel estimate of relative risk\cr
+    \code{\link[spatstat.explore]{Smooth.ppp}} \tab spatial interpolation of marks  \cr
+    \code{\link[spatstat.explore]{bw.diggle}} \tab cross-validated bandwidth selection
+                               for \code{\link[spatstat.explore]{density.ppp}}\cr
+    \code{\link[spatstat.explore]{bw.ppl}} \tab likelihood cross-validated bandwidth selection
+                               for \code{\link[spatstat.explore]{density.ppp}}\cr
+    \code{\link[spatstat.explore]{bw.CvL}} \tab Cronie-Van Lieshout bandwidth selection
                                 for density estimation\cr
-    \code{\link[spatstat.core]{bw.scott}} \tab Scott's rule of thumb 
+    \code{\link[spatstat.explore]{bw.scott}} \tab Scott's rule of thumb 
                                 for density estimation\cr
-    \code{\link[spatstat.core]{bw.abram}} \tab Abramson's rule for adaptive bandwidths\cr
-    \code{\link[spatstat.core]{bw.relrisk}} \tab cross-validated bandwidth selection
-                               for \code{\link[spatstat.core]{relrisk}} \cr
-    \code{\link[spatstat.core]{bw.smoothppp}} \tab cross-validated bandwidth selection
-                               for \code{\link[spatstat.core]{Smooth.ppp}} \cr
-    \code{\link[spatstat.core]{bw.frac}} \tab bandwidth selection using window geometry\cr
-    \code{\link[spatstat.core]{bw.stoyan}} \tab Stoyan's rule of thumb for bandwidth
-                               for \code{\link[spatstat.core]{pcf}}
+    \code{\link[spatstat.explore]{bw.abram}} \tab Abramson's rule for adaptive bandwidths\cr
+    \code{\link[spatstat.explore]{bw.relrisk}} \tab cross-validated bandwidth selection
+                               for \code{\link[spatstat.explore]{relrisk}} \cr
+    \code{\link[spatstat.explore]{bw.smoothppp}} \tab cross-validated bandwidth selection
+                               for \code{\link[spatstat.explore]{Smooth.ppp}} \cr
+    \code{\link[spatstat.explore]{bw.frac}} \tab bandwidth selection using window geometry\cr
+    \code{\link[spatstat.explore]{bw.stoyan}} \tab Stoyan's rule of thumb for bandwidth
+                               for \code{\link[spatstat.explore]{pcf}}
   }
 
   \bold{Modern exploratory tools:}
   \tabular{ll}{
-    \code{\link[spatstat.core]{clusterset}} \tab Allard-Fraley feature detection  \cr
-    \code{\link[spatstat.core]{nnclean}} \tab Byers-Raftery feature detection  \cr
-    \code{\link[spatstat.core]{sharpen.ppp}} \tab Choi-Hall data sharpening \cr
-    \code{\link[spatstat.core]{rhohat}} \tab Kernel estimate of covariate effect\cr
-    \code{\link[spatstat.core]{rho2hat}} \tab Kernel estimate of effect of two covariates\cr
-    \code{\link[spatstat.core]{spatialcdf}} \tab Spatial cumulative distribution function\cr
-    \code{\link[spatstat.core]{roc}} \tab Receiver operating characteristic curve
+    \code{\link[spatstat.explore]{clusterset}} \tab Allard-Fraley feature detection  \cr
+    \code{\link[spatstat.explore]{nnclean}} \tab Byers-Raftery feature detection  \cr
+    \code{\link[spatstat.explore]{sharpen.ppp}} \tab Choi-Hall data sharpening \cr
+    \code{\link[spatstat.explore]{rhohat}} \tab Kernel estimate of covariate effect\cr
+    \code{\link[spatstat.explore]{rho2hat}} \tab Kernel estimate of effect of two covariates\cr
+    \code{\link[spatstat.explore]{spatialcdf}} \tab Spatial cumulative distribution function\cr
+    \code{\link[spatstat.explore]{roc}} \tab Receiver operating characteristic curve
   }
 
   \bold{Summary statistics for a point pattern:}
@@ -905,50 +908,50 @@
     \code{\link[spatstat.geom]{intensity}} \tab Mean intensity \cr
     \code{\link[spatstat.geom]{quadratcount}} \tab Quadrat counts \cr
     \code{\link[spatstat.geom]{intensity.quadratcount}} \tab Mean intensity in quadrats \cr
-    \code{\link[spatstat.core]{Fest}} \tab empty space function \eqn{F} \cr
-    \code{\link[spatstat.core]{Gest}} \tab nearest neighbour distribution function \eqn{G} \cr
-    \code{\link[spatstat.core]{Jest}} \tab \eqn{J}-function \eqn{J = (1-G)/(1-F)} \cr
-    \code{\link[spatstat.core]{Kest}} \tab Ripley's \eqn{K}-function\cr
-    \code{\link[spatstat.core]{Lest}} \tab Besag \eqn{L}-function\cr
-    \code{\link[spatstat.core]{Tstat}} \tab Third order \eqn{T}-function \cr
-    \code{\link[spatstat.core]{allstats}} \tab all four functions \eqn{F}, \eqn{G}, \eqn{J}, \eqn{K} \cr
-    \code{\link[spatstat.core]{pcf}} \tab 	pair correlation function \cr
-    \code{\link[spatstat.core]{Kinhom}} \tab \eqn{K} for inhomogeneous point patterns \cr
-    \code{\link[spatstat.core]{Linhom}} \tab \eqn{L} for inhomogeneous point patterns \cr
-    \code{\link[spatstat.core]{pcfinhom}} \tab pair correlation for inhomogeneous patterns\cr
-    \code{\link[spatstat.core]{Finhom}} \tab \eqn{F} for inhomogeneous point patterns \cr
-    \code{\link[spatstat.core]{Ginhom}} \tab \eqn{G} for inhomogeneous point patterns \cr
-    \code{\link[spatstat.core]{Jinhom}} \tab \eqn{J} for inhomogeneous point patterns \cr
-    \code{\link[spatstat.core]{localL}} \tab Getis-Franklin neighbourhood density function\cr
-    \code{\link[spatstat.core]{localK}} \tab neighbourhood K-function\cr
-    \code{\link[spatstat.core]{localpcf}} \tab local pair correlation function\cr
-    \code{\link[spatstat.core]{localKinhom}} \tab local \eqn{K} for inhomogeneous point patterns \cr
-    \code{\link[spatstat.core]{localLinhom}} \tab local \eqn{L} for inhomogeneous point patterns \cr
-    \code{\link[spatstat.core]{localpcfinhom}} \tab local pair correlation for inhomogeneous patterns\cr
-    \code{\link[spatstat.core]{Ksector}} \tab Directional \eqn{K}-function\cr
-    \code{\link[spatstat.core]{Kscaled}} \tab locally scaled \eqn{K}-function \cr
-    \code{\link[spatstat.core]{Kest.fft}} \tab fast \eqn{K}-function using FFT for large datasets \cr
-    \code{\link[spatstat.core]{Kmeasure}} \tab reduced second moment measure \cr
-    \code{\link[spatstat.core]{envelope}} \tab simulation envelopes for a summary
+    \code{\link[spatstat.explore]{Fest}} \tab empty space function \eqn{F} \cr
+    \code{\link[spatstat.explore]{Gest}} \tab nearest neighbour distribution function \eqn{G} \cr
+    \code{\link[spatstat.explore]{Jest}} \tab \eqn{J}-function \eqn{J = (1-G)/(1-F)} \cr
+    \code{\link[spatstat.explore]{Kest}} \tab Ripley's \eqn{K}-function\cr
+    \code{\link[spatstat.explore]{Lest}} \tab Besag \eqn{L}-function\cr
+    \code{\link[spatstat.explore]{Tstat}} \tab Third order \eqn{T}-function \cr
+    \code{\link[spatstat.explore]{allstats}} \tab all four functions \eqn{F}, \eqn{G}, \eqn{J}, \eqn{K} \cr
+    \code{\link[spatstat.explore]{pcf}} \tab 	pair correlation function \cr
+    \code{\link[spatstat.explore]{Kinhom}} \tab \eqn{K} for inhomogeneous point patterns \cr
+    \code{\link[spatstat.explore]{Linhom}} \tab \eqn{L} for inhomogeneous point patterns \cr
+    \code{\link[spatstat.explore]{pcfinhom}} \tab pair correlation for inhomogeneous patterns\cr
+    \code{\link[spatstat.explore]{Finhom}} \tab \eqn{F} for inhomogeneous point patterns \cr
+    \code{\link[spatstat.explore]{Ginhom}} \tab \eqn{G} for inhomogeneous point patterns \cr
+    \code{\link[spatstat.explore]{Jinhom}} \tab \eqn{J} for inhomogeneous point patterns \cr
+    \code{\link[spatstat.explore]{localL}} \tab Getis-Franklin neighbourhood density function\cr
+    \code{\link[spatstat.explore]{localK}} \tab neighbourhood K-function\cr
+    \code{\link[spatstat.explore]{localpcf}} \tab local pair correlation function\cr
+    \code{\link[spatstat.explore]{localKinhom}} \tab local \eqn{K} for inhomogeneous point patterns \cr
+    \code{\link[spatstat.explore]{localLinhom}} \tab local \eqn{L} for inhomogeneous point patterns \cr
+    \code{\link[spatstat.explore]{localpcfinhom}} \tab local pair correlation for inhomogeneous patterns\cr
+    \code{\link[spatstat.explore]{Ksector}} \tab Directional \eqn{K}-function\cr
+    \code{\link[spatstat.explore]{Kscaled}} \tab locally scaled \eqn{K}-function \cr
+    \code{\link[spatstat.explore]{Kest.fft}} \tab fast \eqn{K}-function using FFT for large datasets \cr
+    \code{\link[spatstat.explore]{Kmeasure}} \tab reduced second moment measure \cr
+    \code{\link[spatstat.explore]{envelope}} \tab simulation envelopes for a summary
     function \cr
-    \code{\link[spatstat.core]{varblock}} \tab variances and confidence intervals\cr
+    \code{\link[spatstat.explore]{varblock}} \tab variances and confidence intervals\cr
                    \tab for a summary function \cr
-    \code{\link[spatstat.core]{lohboot}} \tab bootstrap for a summary function 
+    \code{\link[spatstat.explore]{lohboot}} \tab bootstrap for a summary function 
   }
 
   Related facilities:
   \tabular{ll}{
-    \code{\link[spatstat.core]{plot.fv}} \tab plot a summary function\cr
-    \code{\link[spatstat.core]{eval.fv}} \tab evaluate any expression involving
+    \code{\link[spatstat.explore]{plot.fv}} \tab plot a summary function\cr
+    \code{\link[spatstat.explore]{eval.fv}} \tab evaluate any expression involving
     summary functions\cr
-    \code{\link[spatstat.core]{harmonise.fv}} \tab make functions compatible \cr
-    \code{\link[spatstat.core]{eval.fasp}} \tab evaluate any expression involving
+    \code{\link[spatstat.explore]{harmonise.fv}} \tab make functions compatible \cr
+    \code{\link[spatstat.explore]{eval.fasp}} \tab evaluate any expression involving
     an array of functions\cr
-    \code{\link[spatstat.core]{with.fv}} \tab evaluate an expression for a 
+    \code{\link[spatstat.explore]{with.fv}} \tab evaluate an expression for a 
     summary function\cr
-    \code{\link[spatstat.core]{Smooth.fv}} \tab apply smoothing to a summary function\cr
-    \code{\link[spatstat.core]{deriv.fv}} \tab calculate derivative of a summary function\cr
-    \code{\link[spatstat.core]{pool.fv}} \tab pool several estimates of a summary function\cr
+    \code{\link[spatstat.explore]{Smooth.fv}} \tab apply smoothing to a summary function\cr
+    \code{\link[spatstat.explore]{deriv.fv}} \tab calculate derivative of a summary function\cr
+    \code{\link[spatstat.explore]{pool.fv}} \tab pool several estimates of a summary function\cr
     \code{\link[spatstat.geom]{nndist}} \tab nearest neighbour distances \cr
     \code{\link[spatstat.geom]{nnwhich}} \tab find nearest neighbours \cr
     \code{\link[spatstat.geom]{pairdist}} \tab distances between all pairs of points\cr
@@ -959,11 +962,11 @@
     \code{\link[spatstat.geom]{distfun}} \tab distance map function\cr
     \code{\link[spatstat.geom]{nnmap}} \tab nearest point image \cr
     \code{\link[spatstat.geom]{nnfun}} \tab nearest point function \cr
-    \code{\link[spatstat.core]{density.ppp}} \tab kernel smoothed density\cr
-    \code{\link[spatstat.core]{densityHeat.ppp}} \tab diffusion kernel smoothed density\cr
-    \code{\link[spatstat.core]{Smooth.ppp}} \tab spatial interpolation of marks  \cr
-    \code{\link[spatstat.core]{relrisk}} \tab kernel estimate of relative risk\cr
-    \code{\link[spatstat.core]{sharpen.ppp}} \tab data sharpening  \cr
+    \code{\link[spatstat.explore]{density.ppp}} \tab kernel smoothed density\cr
+    \code{\link[spatstat.explore]{densityHeat.ppp}} \tab diffusion kernel smoothed density\cr
+    \code{\link[spatstat.explore]{Smooth.ppp}} \tab spatial interpolation of marks  \cr
+    \code{\link[spatstat.explore]{relrisk}} \tab kernel estimate of relative risk\cr
+    \code{\link[spatstat.explore]{sharpen.ppp}} \tab data sharpening  \cr
     \code{\link[spatstat.random]{rknn}} \tab theoretical distribution of nearest
     neighbour distance
  }
@@ -972,42 +975,42 @@
   A multitype point pattern is represented by an object \code{X}
   of class \code{"ppp"} such that \code{marks(X)} is a factor. 
   \tabular{ll}{
-    \code{\link[spatstat.core]{relrisk}} \tab kernel estimation of relative risk  \cr
-    \code{\link[spatstat.core]{scan.test}} \tab spatial scan test of elevated risk  \cr
-    \code{\link[spatstat.core]{Gcross},\link[spatstat.core]{Gdot},\link[spatstat.core]{Gmulti}} \tab
+    \code{\link[spatstat.explore]{relrisk}} \tab kernel estimation of relative risk  \cr
+    \code{\link[spatstat.explore]{scan.test}} \tab spatial scan test of elevated risk  \cr
+    \code{\link[spatstat.explore]{Gcross},\link[spatstat.explore]{Gdot},\link[spatstat.explore]{Gmulti}} \tab
     multitype nearest neighbour distributions 
     \eqn{G_{ij}, G_{i\bullet}}{G[i,j], G[i.]} \cr
-    \code{\link[spatstat.core]{Kcross},\link[spatstat.core]{Kdot}, \link[spatstat.core]{Kmulti}} \tab
+    \code{\link[spatstat.explore]{Kcross},\link[spatstat.explore]{Kdot}, \link[spatstat.explore]{Kmulti}} \tab
     multitype \eqn{K}-functions 
     \eqn{K_{ij}, K_{i\bullet}}{K[i,j], K[i.]} \cr
-    \code{\link[spatstat.core]{Lcross},\link[spatstat.core]{Ldot}} \tab
+    \code{\link[spatstat.explore]{Lcross},\link[spatstat.explore]{Ldot}} \tab
     multitype \eqn{L}-functions 
     \eqn{L_{ij}, L_{i\bullet}}{L[i,j], L[i.]} \cr
-    \code{\link[spatstat.core]{Jcross},\link[spatstat.core]{Jdot},\link[spatstat.core]{Jmulti}} \tab
+    \code{\link[spatstat.explore]{Jcross},\link[spatstat.explore]{Jdot},\link[spatstat.explore]{Jmulti}} \tab
     multitype \eqn{J}-functions
     \eqn{J_{ij}, J_{i\bullet}}{J[i,j],J[i.]} \cr
-    \code{\link[spatstat.core]{pcfcross}} \tab
+    \code{\link[spatstat.explore]{pcfcross}} \tab
     multitype pair correlation function \eqn{g_{ij}}{g[i,j]} \cr
-    \code{\link[spatstat.core]{pcfdot}} \tab
+    \code{\link[spatstat.explore]{pcfdot}} \tab
     multitype pair correlation function \eqn{g_{i\bullet}}{g[i.]} \cr
-    \code{\link[spatstat.core]{pcfmulti}} \tab
+    \code{\link[spatstat.explore]{pcfmulti}} \tab
     general pair correlation function \cr
-    \code{\link[spatstat.core]{markconnect}} \tab
+    \code{\link[spatstat.explore]{markconnect}} \tab
     marked connection function \eqn{p_{ij}}{p[i,j]} \cr
-    \code{\link[spatstat.core]{alltypes}} \tab  estimates of the above
+    \code{\link[spatstat.explore]{alltypes}} \tab  estimates of the above
     for all \eqn{i,j} pairs \cr
-    \code{\link[spatstat.core]{Iest}} \tab  multitype \eqn{I}-function\cr
-    \code{\link[spatstat.core]{Kcross.inhom},\link[spatstat.core]{Kdot.inhom}} \tab
+    \code{\link[spatstat.explore]{Iest}} \tab  multitype \eqn{I}-function\cr
+    \code{\link[spatstat.explore]{Kcross.inhom},\link[spatstat.explore]{Kdot.inhom}} \tab
     inhomogeneous counterparts of \code{Kcross}, \code{Kdot} \cr
-    \code{\link[spatstat.core]{Lcross.inhom},\link[spatstat.core]{Ldot.inhom}} \tab
+    \code{\link[spatstat.explore]{Lcross.inhom},\link[spatstat.explore]{Ldot.inhom}} \tab
     inhomogeneous counterparts of \code{Lcross}, \code{Ldot} \cr
-    \code{\link[spatstat.core]{pcfcross.inhom},\link[spatstat.core]{pcfdot.inhom}} \tab
+    \code{\link[spatstat.explore]{pcfcross.inhom},\link[spatstat.explore]{pcfdot.inhom}} \tab
     inhomogeneous counterparts of \code{pcfcross}, \code{pcfdot} \cr
-    \code{\link[spatstat.core]{localKcross},\link[spatstat.core]{localKdot}} \tab
+    \code{\link[spatstat.explore]{localKcross},\link[spatstat.explore]{localKdot}} \tab
     local counterparts of \code{Kcross}, \code{Kdot} \cr
-    \code{\link[spatstat.core]{localLcross},\link[spatstat.core]{localLdot}} \tab
+    \code{\link[spatstat.explore]{localLcross},\link[spatstat.explore]{localLdot}} \tab
     local counterparts of \code{Lcross}, \code{Ldot} \cr
-    \code{\link[spatstat.core]{localKcross.inhom},\link[spatstat.core]{localLcross.inhom}} \tab
+    \code{\link[spatstat.explore]{localKcross.inhom},\link[spatstat.explore]{localLcross.inhom}} \tab
     local counterparts of \code{Kcross.inhom}, \code{Lcross.inhom} 
   }
 
@@ -1018,23 +1021,23 @@
   string or any other atomic type. For numeric marks, there are the
   following functions:
   \tabular{ll}{
-    \code{\link[spatstat.core]{markmean}} \tab smoothed local average of marks \cr
-    \code{\link[spatstat.core]{markvar}} \tab smoothed local variance of marks \cr
-    \code{\link[spatstat.core]{markcorr}} \tab mark correlation function \cr
-    \code{\link[spatstat.core]{markcrosscorr}} \tab mark cross-correlation function \cr
-    \code{\link[spatstat.core]{markvario}} \tab mark variogram \cr
-    \code{\link[spatstat.core]{markmarkscatter}} \tab mark-mark scatterplot \cr
-    \code{\link[spatstat.core]{Kmark}} \tab mark-weighted \eqn{K} function \cr
-    \code{\link[spatstat.core]{Emark}} \tab mark independence diagnostic \eqn{E(r)} \cr
-    \code{\link[spatstat.core]{Vmark}} \tab mark independence diagnostic \eqn{V(r)} \cr
-    \code{\link[spatstat.core]{nnmean}} \tab nearest neighbour mean index \cr
-    \code{\link[spatstat.core]{nnvario}} \tab nearest neighbour mark variance index 
+    \code{\link[spatstat.explore]{markmean}} \tab smoothed local average of marks \cr
+    \code{\link[spatstat.explore]{markvar}} \tab smoothed local variance of marks \cr
+    \code{\link[spatstat.explore]{markcorr}} \tab mark correlation function \cr
+    \code{\link[spatstat.explore]{markcrosscorr}} \tab mark cross-correlation function \cr
+    \code{\link[spatstat.explore]{markvario}} \tab mark variogram \cr
+    \code{\link[spatstat.explore]{markmarkscatter}} \tab mark-mark scatterplot \cr
+    \code{\link[spatstat.explore]{Kmark}} \tab mark-weighted \eqn{K} function \cr
+    \code{\link[spatstat.explore]{Emark}} \tab mark independence diagnostic \eqn{E(r)} \cr
+    \code{\link[spatstat.explore]{Vmark}} \tab mark independence diagnostic \eqn{V(r)} \cr
+    \code{\link[spatstat.explore]{nnmean}} \tab nearest neighbour mean index \cr
+    \code{\link[spatstat.explore]{nnvario}} \tab nearest neighbour mark variance index 
   }
   For marks of any type, there are the following:
   \tabular{ll}{
-    \code{\link[spatstat.core]{Gmulti}} \tab multitype nearest neighbour distribution \cr
-    \code{\link[spatstat.core]{Kmulti}} \tab multitype \eqn{K}-function \cr
-    \code{\link[spatstat.core]{Jmulti}} \tab multitype \eqn{J}-function 
+    \code{\link[spatstat.explore]{Gmulti}} \tab multitype nearest neighbour distribution \cr
+    \code{\link[spatstat.explore]{Kmulti}} \tab multitype \eqn{K}-function \cr
+    \code{\link[spatstat.explore]{Jmulti}} \tab multitype \eqn{J}-function 
   }
   Alternatively use \code{\link[spatstat.geom]{cut.ppp}} to convert a marked point pattern
   to a multitype point pattern.
@@ -1045,7 +1048,7 @@
     in a point pattern \cr
     \code{\link[spatstat.geom]{markstat}} \tab apply function to the marks of neighbours
     in a point pattern \cr
-    \code{\link[spatstat.core]{marktable}} \tab tabulate the marks of neighbours
+    \code{\link[spatstat.explore]{marktable}} \tab tabulate the marks of neighbours
     in a point pattern \cr
     \code{\link[spatstat.geom]{pppdist}} \tab find the optimal match between two point
     patterns
@@ -1116,15 +1119,15 @@
   These are for 3-dimensional point pattern objects (class \code{pp3}).
 
   \tabular{ll}{
-    \code{\link[spatstat.core]{F3est}} \tab empty space function \eqn{F} \cr
-    \code{\link[spatstat.core]{G3est}} \tab nearest neighbour function \eqn{G} \cr
-    \code{\link[spatstat.core]{K3est}} \tab \eqn{K}-function \cr
-    \code{\link[spatstat.core]{pcf3est}} \tab pair correlation function
+    \code{\link[spatstat.explore]{F3est}} \tab empty space function \eqn{F} \cr
+    \code{\link[spatstat.explore]{G3est}} \tab nearest neighbour function \eqn{G} \cr
+    \code{\link[spatstat.explore]{K3est}} \tab \eqn{K}-function \cr
+    \code{\link[spatstat.explore]{pcf3est}} \tab pair correlation function
   }
 
   Related facilities:
   \tabular{ll}{
-    \code{\link[spatstat.core]{envelope.pp3}} \tab simulation envelopes \cr
+    \code{\link[spatstat.explore]{envelope.pp3}} \tab simulation envelopes \cr
     \code{\link[spatstat.geom]{pairdist.pp3}} \tab distances between all pairs of
     points \cr
     \code{\link[spatstat.geom]{crossdist.pp3}} \tab distances between points in
@@ -1155,9 +1158,9 @@
   or windows (class \code{owin}).
   
   \tabular{ll}{
-    \code{\link[spatstat.core]{Hest}} \tab spherical contact distribution \eqn{H} \cr
-    \code{\link[spatstat.core]{Gfox}} \tab Foxall \eqn{G}-function \cr
-    \code{\link[spatstat.core]{Jfox}} \tab Foxall \eqn{J}-function
+    \code{\link[spatstat.explore]{Hest}} \tab spherical contact distribution \eqn{H} \cr
+    \code{\link[spatstat.explore]{Gfox}} \tab Foxall \eqn{G}-function \cr
+    \code{\link[spatstat.explore]{Jfox}} \tab Foxall \eqn{J}-function
   }
   
 }
@@ -1165,36 +1168,36 @@
 \section{III. MODEL FITTING (COX AND CLUSTER MODELS)}{
   
   Cluster process models (with homogeneous or inhomogeneous intensity)
-  and Cox processes can be fitted by the function \code{\link[spatstat.core]{kppm}}.
+  and Cox processes can be fitted by the function \code{\link[spatstat.model]{kppm}}.
   Its result is an object of class \code{"kppm"}.
   The fitted model can be printed, plotted, predicted, simulated
   and updated.
 
   \tabular{ll}{
-    \code{\link[spatstat.core]{kppm}} \tab  Fit model\cr
-    \code{\link[spatstat.core]{plot.kppm}} \tab  Plot the fitted model\cr
-    \code{\link[spatstat.core]{summary.kppm}} \tab  Summarise the fitted model\cr
-    \code{\link[spatstat.core]{fitted.kppm}} \tab Compute fitted intensity \cr
-    \code{\link[spatstat.core]{predict.kppm}} \tab Compute fitted intensity \cr
-    \code{\link[spatstat.core]{update.kppm}} \tab Update the model \cr
-    \code{\link[spatstat.core]{improve.kppm}} \tab Refine the estimate of trend \cr
-    \code{\link[spatstat.core]{simulate.kppm}} \tab Generate simulated realisations \cr
-    \code{\link[spatstat.core]{vcov.kppm}} \tab Variance-covariance matrix of coefficients \cr
-    \code{\link[spatstat.core:methods.kppm]{coef.kppm}}
+    \code{\link[spatstat.model]{kppm}} \tab  Fit model\cr
+    \code{\link[spatstat.model]{plot.kppm}} \tab  Plot the fitted model\cr
+    \code{\link[spatstat.model]{summary.kppm}} \tab  Summarise the fitted model\cr
+    \code{\link[spatstat.model]{fitted.kppm}} \tab Compute fitted intensity \cr
+    \code{\link[spatstat.model]{predict.kppm}} \tab Compute fitted intensity \cr
+    \code{\link[spatstat.model]{update.kppm}} \tab Update the model \cr
+    \code{\link[spatstat.model]{improve.kppm}} \tab Refine the estimate of trend \cr
+    \code{\link[spatstat.model]{simulate.kppm}} \tab Generate simulated realisations \cr
+    \code{\link[spatstat.model]{vcov.kppm}} \tab Variance-covariance matrix of coefficients \cr
+    \code{\link[spatstat.model:methods.kppm]{coef.kppm}}
     \tab Extract trend coefficients \cr
-    \code{\link[spatstat.core:methods.kppm]{formula.kppm}}
+    \code{\link[spatstat.model:methods.kppm]{formula.kppm}}
     \tab Extract trend formula \cr
-    \code{\link[spatstat.core]{parameters}} \tab Extract all model parameters \cr
-    \code{\link[spatstat.core]{clusterfield}} \tab Compute offspring density \cr
-    \code{\link[spatstat.core]{clusterradius}} \tab Radius of support of offspring density \cr
-    \code{\link[spatstat.core]{Kmodel.kppm}} \tab \eqn{K} function of fitted model \cr
-    \code{\link[spatstat.core]{pcfmodel.kppm}} \tab Pair correlation of fitted model 
+    \code{\link[spatstat.model]{parameters}} \tab Extract all model parameters \cr
+    \code{\link[spatstat.model]{clusterfield}} \tab Compute offspring density \cr
+    \code{\link[spatstat.model]{clusterradius}} \tab Radius of support of offspring density \cr
+    \code{\link[spatstat.model]{Kmodel.kppm}} \tab \eqn{K} function of fitted model \cr
+    \code{\link[spatstat.model]{pcfmodel.kppm}} \tab Pair correlation of fitted model 
   }
   
   For model selection, you can also use 
   the generic functions \code{\link[stats]{step}}, \code{\link[stats]{drop1}} 
   and \code{\link[stats]{AIC}} on fitted point process models.
-  For variable selection, see \code{\link[spatstat.core]{sdr}}.
+  For variable selection, see \code{\link[spatstat.explore]{sdr}}.
   
   The theoretical models can also be simulated,
   for any choice of parameter values,
@@ -1205,17 +1208,17 @@
   Lower-level fitting functions include:
 
   \tabular{ll}{
-    \code{\link[spatstat.core]{lgcp.estK}} \tab fit a log-Gaussian Cox process model\cr
-    \code{\link[spatstat.core]{lgcp.estpcf}} \tab fit a log-Gaussian Cox process model\cr
-    \code{\link[spatstat.core]{thomas.estK}} \tab fit the Thomas process model \cr
-    \code{\link[spatstat.core]{thomas.estpcf}} \tab fit the Thomas process model \cr
-    \code{\link[spatstat.core]{matclust.estK}} \tab fit the \Matern Cluster process model \cr
-    \code{\link[spatstat.core]{matclust.estpcf}} \tab fit the \Matern Cluster process model \cr
-    \code{\link[spatstat.core]{cauchy.estK}} \tab fit a Neyman-Scott Cauchy cluster process \cr
-   \code{\link[spatstat.core]{cauchy.estpcf}} \tab fit a Neyman-Scott Cauchy cluster process\cr
-   \code{\link[spatstat.core]{vargamma.estK}} \tab fit a Neyman-Scott Variance Gamma process\cr
-   \code{\link[spatstat.core]{vargamma.estpcf}} \tab fit a Neyman-Scott Variance Gamma process\cr
-    \code{\link[spatstat.core]{mincontrast}} \tab low-level algorithm for fitting models
+    \code{\link[spatstat.model]{lgcp.estK}} \tab fit a log-Gaussian Cox process model\cr
+    \code{\link[spatstat.model]{lgcp.estpcf}} \tab fit a log-Gaussian Cox process model\cr
+    \code{\link[spatstat.model]{thomas.estK}} \tab fit the Thomas process model \cr
+    \code{\link[spatstat.model]{thomas.estpcf}} \tab fit the Thomas process model \cr
+    \code{\link[spatstat.model]{matclust.estK}} \tab fit the \Matern Cluster process model \cr
+    \code{\link[spatstat.model]{matclust.estpcf}} \tab fit the \Matern Cluster process model \cr
+    \code{\link[spatstat.model]{cauchy.estK}} \tab fit a Neyman-Scott Cauchy cluster process \cr
+   \code{\link[spatstat.model]{cauchy.estpcf}} \tab fit a Neyman-Scott Cauchy cluster process\cr
+   \code{\link[spatstat.model]{vargamma.estK}} \tab fit a Neyman-Scott Variance Gamma process\cr
+   \code{\link[spatstat.model]{vargamma.estpcf}} \tab fit a Neyman-Scott Variance Gamma process\cr
+    \code{\link[spatstat.model]{mincontrast}} \tab low-level algorithm for fitting models
     \cr \tab by the method of minimum contrast 
   }
 }
@@ -1242,7 +1245,7 @@
   \bold{To fit a Poisson or Gibbs point process model:}
 
   Model fitting in \pkg{spatstat} is performed mainly by the function
-  \code{\link[spatstat.core]{ppm}}. Its result is an object of class \code{"ppm"}.
+  \code{\link[spatstat.model]{ppm}}. Its result is an object of class \code{"ppm"}.
   
   Here are some examples, where \code{X} is a point pattern (class
   \code{"ppp"}):
@@ -1263,40 +1266,40 @@
   \bold{Manipulating the fitted model:}
 
   \tabular{ll}{
-    \code{\link[spatstat.core]{plot.ppm}} \tab 		Plot the fitted model\cr
-    \code{\link[spatstat.core]{predict.ppm}}
+    \code{\link[spatstat.model]{plot.ppm}} \tab 		Plot the fitted model\cr
+    \code{\link[spatstat.model]{predict.ppm}}
     \tab   Compute the spatial trend and conditional intensity\cr
     \tab   of the fitted point process model \cr
-    \code{\link[spatstat.core]{coef.ppm}} \tab Extract the fitted model coefficients\cr
-    \code{\link[spatstat.core]{parameters}} \tab Extract all model parameters\cr
-    \code{\link[spatstat.core]{formula.ppm}} \tab Extract the trend formula\cr
-    \code{\link[spatstat.core]{intensity.ppm}} \tab Compute fitted intensity \cr
-    \code{\link[spatstat.core]{Kmodel.ppm}} \tab \eqn{K} function of fitted model \cr
-    \code{\link[spatstat.core]{pcfmodel.ppm}} \tab pair correlation of fitted model \cr
-    \code{\link[spatstat.core]{fitted.ppm}} \tab Compute fitted conditional intensity at quadrature points \cr
-    \code{\link[spatstat.core]{residuals.ppm}} \tab Compute point process residuals at quadrature points \cr
-    \code{\link[spatstat.core]{update.ppm}} \tab Update the fit \cr
-    \code{\link[spatstat.core]{vcov.ppm}} \tab Variance-covariance matrix of estimates\cr
-    \code{\link[spatstat.core]{rmh.ppm}} \tab Simulate from fitted model  \cr
-    \code{\link[spatstat.core]{simulate.ppm}} \tab Simulate from fitted model  \cr
-    \code{\link[spatstat.core]{print.ppm}} \tab Print basic information about a fitted model\cr
-    \code{\link[spatstat.core]{summary.ppm}} \tab Summarise a fitted model\cr
-    \code{\link[spatstat.core]{effectfun}} \tab Compute the fitted effect of one covariate\cr
-    \code{\link[spatstat.core]{logLik.ppm}} \tab log-likelihood or log-pseudolikelihood\cr
-    \code{\link[spatstat.core]{anova.ppm}} \tab Analysis of deviance \cr
-    \code{\link[spatstat.core]{model.frame.ppm}} \tab Extract data frame used to fit model  \cr
-    \code{\link[spatstat.core]{model.images}} \tab Extract spatial data used to fit model  \cr
-    \code{\link[spatstat.core]{model.depends}} \tab Identify variables in the model \cr
-    \code{\link[spatstat.core]{as.interact}} \tab Interpoint interaction component of model \cr
-    \code{\link[spatstat.core]{fitin}} \tab Extract fitted interpoint interaction \cr
-    \code{\link[spatstat.core]{is.hybrid}} \tab Determine whether the model is a hybrid \cr
-    \code{\link[spatstat.core]{valid.ppm}} \tab Check the model is a valid point process \cr
-    \code{\link[spatstat.core]{project.ppm}} \tab Ensure the model is a valid point process 
+    \code{\link[spatstat.model]{coef.ppm}} \tab Extract the fitted model coefficients\cr
+    \code{\link[spatstat.model]{parameters}} \tab Extract all model parameters\cr
+    \code{\link[spatstat.model]{formula.ppm}} \tab Extract the trend formula\cr
+    \code{\link[spatstat.model]{intensity.ppm}} \tab Compute fitted intensity \cr
+    \code{\link[spatstat.model]{Kmodel.ppm}} \tab \eqn{K} function of fitted model \cr
+    \code{\link[spatstat.model]{pcfmodel.ppm}} \tab pair correlation of fitted model \cr
+    \code{\link[spatstat.model]{fitted.ppm}} \tab Compute fitted conditional intensity at quadrature points \cr
+    \code{\link[spatstat.model]{residuals.ppm}} \tab Compute point process residuals at quadrature points \cr
+    \code{\link[spatstat.model]{update.ppm}} \tab Update the fit \cr
+    \code{\link[spatstat.model]{vcov.ppm}} \tab Variance-covariance matrix of estimates\cr
+    \code{\link[spatstat.model]{rmh.ppm}} \tab Simulate from fitted model  \cr
+    \code{\link[spatstat.model]{simulate.ppm}} \tab Simulate from fitted model  \cr
+    \code{\link[spatstat.model]{print.ppm}} \tab Print basic information about a fitted model\cr
+    \code{\link[spatstat.model]{summary.ppm}} \tab Summarise a fitted model\cr
+    \code{\link[spatstat.model]{effectfun}} \tab Compute the fitted effect of one covariate\cr
+    \code{\link[spatstat.model]{logLik.ppm}} \tab log-likelihood or log-pseudolikelihood\cr
+    \code{\link[spatstat.model]{anova.ppm}} \tab Analysis of deviance \cr
+    \code{\link[spatstat.model]{model.frame.ppm}} \tab Extract data frame used to fit model  \cr
+    \code{\link[spatstat.model]{model.images}} \tab Extract spatial data used to fit model  \cr
+    \code{\link[spatstat.model]{model.depends}} \tab Identify variables in the model \cr
+    \code{\link[spatstat.model]{as.interact}} \tab Interpoint interaction component of model \cr
+    \code{\link[spatstat.model]{fitin}} \tab Extract fitted interpoint interaction \cr
+    \code{\link[spatstat.model]{is.hybrid}} \tab Determine whether the model is a hybrid \cr
+    \code{\link[spatstat.model]{valid.ppm}} \tab Check the model is a valid point process \cr
+    \code{\link[spatstat.model]{project.ppm}} \tab Ensure the model is a valid point process 
   }
   For model selection, you can also use 
   the generic functions \code{\link[stats]{step}}, \code{\link[stats]{drop1}} 
   and \code{\link[stats]{AIC}} on fitted point process models.
-  For variable selection, see \code{\link[spatstat.core]{sdr}}.
+  For variable selection, see \code{\link[spatstat.explore]{sdr}}.
   
   See \code{\link[spatstat.geom]{spatstat.options}} to control plotting of fitted model.
   
@@ -1320,38 +1323,38 @@
   The higher order (``interaction'') components are described by
   an object of class \code{"interact"}. Such objects are created by:
   \tabular{ll}{
-    \code{\link[spatstat.core]{Poisson}()} \tab		the Poisson point process\cr
-    \code{\link[spatstat.core]{AreaInter}()}	 \tab Area-interaction process\cr
-    \code{\link[spatstat.core]{BadGey}()} \tab	multiscale Geyer process\cr
-    \code{\link[spatstat.core]{Concom}()} \tab	connected component interaction\cr
-    \code{\link[spatstat.core]{DiggleGratton}() } \tab Diggle-Gratton potential \cr
-    \code{\link[spatstat.core]{DiggleGatesStibbard}() } \tab Diggle-Gates-Stibbard potential \cr
-    \code{\link[spatstat.core]{Fiksel}()}	 \tab Fiksel pairwise interaction process\cr
-    \code{\link[spatstat.core]{Geyer}()}	 \tab Geyer's saturation process\cr
-    \code{\link[spatstat.core]{Hardcore}()}	 \tab Hard core process\cr
-    \code{\link[spatstat.core]{HierHard}()}	 \tab Hierarchical multiype hard core process\cr
-    \code{\link[spatstat.core]{HierStrauss}()}	 \tab Hierarchical multiype Strauss process\cr
-    \code{\link[spatstat.core]{HierStraussHard}()}	 \tab
+    \code{\link[spatstat.model]{Poisson}()} \tab		the Poisson point process\cr
+    \code{\link[spatstat.model]{AreaInter}()}	 \tab Area-interaction process\cr
+    \code{\link[spatstat.model]{BadGey}()} \tab	multiscale Geyer process\cr
+    \code{\link[spatstat.model]{Concom}()} \tab	connected component interaction\cr
+    \code{\link[spatstat.model]{DiggleGratton}() } \tab Diggle-Gratton potential \cr
+    \code{\link[spatstat.model]{DiggleGatesStibbard}() } \tab Diggle-Gates-Stibbard potential \cr
+    \code{\link[spatstat.model]{Fiksel}()}	 \tab Fiksel pairwise interaction process\cr
+    \code{\link[spatstat.model]{Geyer}()}	 \tab Geyer's saturation process\cr
+    \code{\link[spatstat.model]{Hardcore}()}	 \tab Hard core process\cr
+    \code{\link[spatstat.model]{HierHard}()}	 \tab Hierarchical multiype hard core process\cr
+    \code{\link[spatstat.model]{HierStrauss}()}	 \tab Hierarchical multiype Strauss process\cr
+    \code{\link[spatstat.model]{HierStraussHard}()}	 \tab
     Hierarchical multiype Strauss-hard core process\cr
-    \code{\link[spatstat.core]{Hybrid}()}	 \tab Hybrid of several interactions\cr
-    \code{\link[spatstat.core]{LennardJones}() } \tab Lennard-Jones potential \cr
-    \code{\link[spatstat.core]{MultiHard}()} \tab 		multitype hard core process \cr
-    \code{\link[spatstat.core]{MultiStrauss}()} \tab 		multitype Strauss process \cr
-    \code{\link[spatstat.core]{MultiStraussHard}()} \tab 	multitype Strauss/hard core process \cr
-    \code{\link[spatstat.core]{OrdThresh}()} \tab		Ord process, threshold potential\cr
-    \code{\link[spatstat.core]{Ord}()} \tab 		        Ord model, user-supplied potential \cr
-    \code{\link[spatstat.core]{PairPiece}()} \tab		pairwise interaction, piecewise constant \cr
-    \code{\link[spatstat.core]{Pairwise}()} \tab	pairwise interaction, user-supplied potential\cr
-    \code{\link[spatstat.core]{Penttinen}()} \tab	Penttinen pairwise interaction\cr
-    \code{\link[spatstat.core]{SatPiece}()} \tab	Saturated pair model, piecewise  constant potential\cr
-    \code{\link[spatstat.core]{Saturated}()} \tab	Saturated pair model, user-supplied potential\cr
-    \code{\link[spatstat.core]{Softcore}()} \tab pairwise interaction, soft core potential\cr
-    \code{\link[spatstat.core]{Strauss}()} \tab  Strauss process \cr
-    \code{\link[spatstat.core]{StraussHard}()} \tab Strauss/hard core point process \cr
-    \code{\link[spatstat.core]{Triplets}()} \tab Geyer triplets process
+    \code{\link[spatstat.model]{Hybrid}()}	 \tab Hybrid of several interactions\cr
+    \code{\link[spatstat.model]{LennardJones}() } \tab Lennard-Jones potential \cr
+    \code{\link[spatstat.model]{MultiHard}()} \tab 		multitype hard core process \cr
+    \code{\link[spatstat.model]{MultiStrauss}()} \tab 		multitype Strauss process \cr
+    \code{\link[spatstat.model]{MultiStraussHard}()} \tab 	multitype Strauss/hard core process \cr
+    \code{\link[spatstat.model]{OrdThresh}()} \tab		Ord process, threshold potential\cr
+    \code{\link[spatstat.model]{Ord}()} \tab 		        Ord model, user-supplied potential \cr
+    \code{\link[spatstat.model]{PairPiece}()} \tab		pairwise interaction, piecewise constant \cr
+    \code{\link[spatstat.model]{Pairwise}()} \tab	pairwise interaction, user-supplied potential\cr
+    \code{\link[spatstat.model]{Penttinen}()} \tab	Penttinen pairwise interaction\cr
+    \code{\link[spatstat.model]{SatPiece}()} \tab	Saturated pair model, piecewise  constant potential\cr
+    \code{\link[spatstat.model]{Saturated}()} \tab	Saturated pair model, user-supplied potential\cr
+    \code{\link[spatstat.model]{Softcore}()} \tab pairwise interaction, soft core potential\cr
+    \code{\link[spatstat.model]{Strauss}()} \tab  Strauss process \cr
+    \code{\link[spatstat.model]{StraussHard}()} \tab Strauss/hard core point process \cr
+    \code{\link[spatstat.model]{Triplets}()} \tab Geyer triplets process
   }
   Note that it is also possible to combine several such interactions
-  using \code{\link[spatstat.core]{Hybrid}}.
+  using \code{\link[spatstat.model]{Hybrid}}.
   
   \bold{Finer control over model fitting:}
   
@@ -1393,9 +1396,9 @@
   \bold{Simulation and goodness-of-fit for fitted models:}
   
   \tabular{ll}{
-    \code{\link[spatstat.core]{rmh.ppm}} \tab simulate realisations of a fitted model \cr
-    \code{\link[spatstat.core]{simulate.ppm}} \tab simulate realisations of a fitted model \cr
-    \code{\link[spatstat.core]{envelope}} \tab compute simulation envelopes for a
+    \code{\link[spatstat.model]{rmh.ppm}} \tab simulate realisations of a fitted model \cr
+    \code{\link[spatstat.model]{simulate.ppm}} \tab simulate realisations of a fitted model \cr
+    \code{\link[spatstat.explore]{envelope}} \tab compute simulation envelopes for a
     fitted model 
   }
 
@@ -1427,7 +1430,7 @@
   Code for fitting \emph{determinantal point process models} has 
   recently been added to \pkg{spatstat}.
 
-  For information, see the help file for \code{\link[spatstat.core]{dppm}}.
+  For information, see the help file for \code{\link[spatstat.model]{dppm}}.
 }
 
 \section{VI. MODEL FITTING (SPATIAL LOGISTIC REGRESSION)}{
@@ -1452,7 +1455,7 @@
   \bold{Fitting a spatial logistic regression}
   
   Spatial logistic regression is performed by the function
-  \code{\link[spatstat.core]{slrm}}. Its result is an object of class \code{"slrm"}.
+  \code{\link[spatstat.model]{slrm}}. Its result is an object of class \code{"slrm"}.
   There are many methods for this class, including methods for
   \code{print}, \code{fitted}, \code{predict}, \code{simulate},
   \code{anova}, \code{coef}, \code{logLik}, \code{terms},
@@ -1473,25 +1476,25 @@
   \bold{Manipulating a fitted spatial logistic regression}
   
   \tabular{ll}{
-    \code{\link[spatstat.core]{anova.slrm}} \tab Analysis of deviance \cr
-    \code{\link[spatstat.core]{coef.slrm}}  \tab Extract fitted coefficients \cr
-    \code{\link[spatstat.core]{vcov.slrm}}  \tab Variance-covariance matrix of fitted coefficients \cr
-    \code{\link[spatstat.core]{fitted.slrm}} \tab Compute fitted probabilities or
+    \code{\link[spatstat.model]{anova.slrm}} \tab Analysis of deviance \cr
+    \code{\link[spatstat.model]{coef.slrm}}  \tab Extract fitted coefficients \cr
+    \code{\link[spatstat.model]{vcov.slrm}}  \tab Variance-covariance matrix of fitted coefficients \cr
+    \code{\link[spatstat.model]{fitted.slrm}} \tab Compute fitted probabilities or
     intensity \cr
-    \code{\link[spatstat.core]{logLik.slrm}}   \tab Evaluate loglikelihood of fitted
+    \code{\link[spatstat.model]{logLik.slrm}}   \tab Evaluate loglikelihood of fitted
     model \cr
-    \code{\link[spatstat.core]{plot.slrm}}    \tab Plot fitted probabilities or
+    \code{\link[spatstat.model]{plot.slrm}}    \tab Plot fitted probabilities or
     intensity \cr
-    \code{\link[spatstat.core]{predict.slrm}} \tab Compute predicted probabilities or
+    \code{\link[spatstat.model]{predict.slrm}} \tab Compute predicted probabilities or
     intensity with new data \cr
-    \code{\link[spatstat.core]{simulate.slrm}} \tab Simulate model
+    \code{\link[spatstat.model]{simulate.slrm}} \tab Simulate model
   }
   
   There are many other undocumented methods for this class,
   including methods for \code{print}, \code{update}, \code{formula}
   and \code{terms}. Stepwise model selection is
   possible using \code{step} or \code{stepAIC}.
-  For variable selection, see \code{\link[spatstat.core]{sdr}}.
+  For variable selection, see \code{\link[spatstat.explore]{sdr}}.
 }
 
 
@@ -1570,9 +1573,9 @@
     \code{\link[spatstat.random]{rthin}} \tab  random thinning 
   }
   
-  See also \code{\link[spatstat.core]{varblock}} for estimating the variance
+  See also \code{\link[spatstat.explore]{varblock}} for estimating the variance
   of a summary statistic by block resampling, and
-  \code{\link[spatstat.core]{lohboot}} for another bootstrap technique.
+  \code{\link[spatstat.explore]{lohboot}} for another bootstrap technique.
   
   \bold{Fitted point process models:}
 
@@ -1580,17 +1583,17 @@
    the fitted model can be simulated.
 
    Cluster process models 
-   are fitted by the function \code{\link[spatstat.core]{kppm}} yielding an
+   are fitted by the function \code{\link[spatstat.model]{kppm}} yielding an
    object of class \code{"kppm"}. To generate one or more simulated
    realisations of this fitted model, use 
-   \code{\link[spatstat.core]{simulate.kppm}}.
+   \code{\link[spatstat.model]{simulate.kppm}}.
 
    Gibbs point process models 
-   are fitted by the function \code{\link[spatstat.core]{ppm}} yielding an
+   are fitted by the function \code{\link[spatstat.model]{ppm}} yielding an
    object of class \code{"ppm"}. To generate a simulated
    realisation of this fitted model, use \code{\link[spatstat.random]{rmh}}.
    To generate one or more simulated realisations of the fitted model,
-   use \code{\link[spatstat.core]{simulate.ppm}}.
+   use \code{\link[spatstat.model]{simulate.ppm}}.
 
    \bold{Other random patterns:}
 
@@ -1611,15 +1614,15 @@
    \bold{Simulation-based inference}
 
    \tabular{ll}{
-    \code{\link[spatstat.core]{envelope}} \tab critical envelope for Monte Carlo
+    \code{\link[spatstat.explore]{envelope}} \tab critical envelope for Monte Carlo
     test of goodness-of-fit \cr
-    \code{\link[spatstat.core]{bits.envelope}} \tab critical envelope for balanced
+    \code{\link[spatstat.explore]{bits.envelope}} \tab critical envelope for balanced
     two-stage Monte Carlo test \cr
-    \code{\link[spatstat.core]{qqplot.ppm}} \tab diagnostic plot for interpoint
+    \code{\link[spatstat.model]{qqplot.ppm}} \tab diagnostic plot for interpoint
     interaction \cr
-    \code{\link[spatstat.core]{scan.test}} \tab spatial scan statistic/test \cr
-    \code{\link[spatstat.core]{studpermu.test}} \tab studentised permutation test\cr
-    \code{\link[spatstat.core]{segregation.test}} \tab test of segregation of types 
+    \code{\link[spatstat.explore]{scan.test}} \tab spatial scan statistic/test \cr
+    \code{\link[spatstat.explore]{studpermu.test}} \tab studentised permutation test\cr
+    \code{\link[spatstat.explore]{segregation.test}} \tab test of segregation of types 
   }
 }
 
@@ -1629,27 +1632,27 @@
   \bold{Hypothesis tests:}
 
   \tabular{ll}{
-    \code{\link[spatstat.core]{quadrat.test}} \tab \eqn{\chi^2}{chi^2} goodness-of-fit
+    \code{\link[spatstat.explore]{quadrat.test}} \tab \eqn{\chi^2}{chi^2} goodness-of-fit
     test on quadrat counts \cr
-    \code{\link[spatstat.core]{clarkevans.test}} \tab Clark and Evans test \cr
-    \code{\link[spatstat.core]{cdf.test}} \tab Spatial distribution goodness-of-fit test\cr
-    \code{\link[spatstat.core]{berman.test}} \tab Berman's goodness-of-fit tests\cr
-    \code{\link[spatstat.core]{envelope}} \tab critical envelope for Monte Carlo
+    \code{\link[spatstat.explore]{clarkevans.test}} \tab Clark and Evans test \cr
+    \code{\link[spatstat.explore]{cdf.test}} \tab Spatial distribution goodness-of-fit test\cr
+    \code{\link[spatstat.explore]{berman.test}} \tab Berman's goodness-of-fit tests\cr
+    \code{\link[spatstat.explore]{envelope}} \tab critical envelope for Monte Carlo
     test of goodness-of-fit \cr
-    \code{\link[spatstat.core]{scan.test}} \tab spatial scan statistic/test \cr
-    \code{\link[spatstat.core]{dclf.test}} \tab Diggle-Cressie-Loosmore-Ford test \cr
-    \code{\link[spatstat.core]{mad.test}} \tab Mean Absolute Deviation test \cr
-    \code{\link[spatstat.core]{anova.ppm}} \tab Analysis of Deviance for
+    \code{\link[spatstat.explore]{scan.test}} \tab spatial scan statistic/test \cr
+    \code{\link[spatstat.explore]{dclf.test}} \tab Diggle-Cressie-Loosmore-Ford test \cr
+    \code{\link[spatstat.explore]{mad.test}} \tab Mean Absolute Deviation test \cr
+    \code{\link[spatstat.model]{anova.ppm}} \tab Analysis of Deviance for
     point process models 
   }
 
   More recently-developed tests:
   
   \tabular{ll}{
-    \code{\link[spatstat.core]{dg.test}} \tab Dao-Genton test \cr
-    \code{\link[spatstat.core]{bits.test}} \tab Balanced independent two-stage test \cr
-    \code{\link[spatstat.core]{dclf.progress}} \tab Progress plot for DCLF test \cr
-    \code{\link[spatstat.core]{mad.progress}} \tab Progress plot for MAD test \cr
+    \code{\link[spatstat.explore]{dg.test}} \tab Dao-Genton test \cr
+    \code{\link[spatstat.explore]{bits.test}} \tab Balanced independent two-stage test \cr
+    \code{\link[spatstat.explore]{dclf.progress}} \tab Progress plot for DCLF test \cr
+    \code{\link[spatstat.explore]{mad.progress}} \tab Progress plot for MAD test \cr
   }
 
 \bold{Sensitivity diagnostics:}
@@ -1658,10 +1661,10 @@
   have been adapted to point process models.
   
     \tabular{ll}{
-      \code{\link[spatstat.core]{leverage.ppm}} \tab Leverage for point process model\cr
-      \code{\link[spatstat.core]{influence.ppm}} \tab Influence for point process model\cr
-      \code{\link[spatstat.core]{dfbetas.ppm}} \tab Parameter influence\cr
-      \code{\link[spatstat.core]{dffit.ppm}} \tab Effect change diagnostic
+      \code{\link[spatstat.model]{leverage.ppm}} \tab Leverage for point process model\cr
+      \code{\link[spatstat.model]{influence.ppm}} \tab Influence for point process model\cr
+      \code{\link[spatstat.model]{dfbetas.ppm}} \tab Parameter influence\cr
+      \code{\link[spatstat.model]{dffit.ppm}} \tab Effect change diagnostic
     }
   
   \bold{Diagnostics for covariate effect:}
@@ -1670,10 +1673,10 @@
   point process models.
 
   \tabular{ll}{
-    \code{\link[spatstat.core]{parres}} \tab Partial residual plot\cr
-    \code{\link[spatstat.core]{addvar}} \tab Added variable plot \cr
-    \code{\link[spatstat.core]{rhohat}} \tab Kernel estimate of covariate effect\cr
-    \code{\link[spatstat.core]{rho2hat}} \tab Kernel estimate of covariate effect
+    \code{\link[spatstat.model]{parres}} \tab Partial residual plot\cr
+    \code{\link[spatstat.model]{addvar}} \tab Added variable plot \cr
+    \code{\link[spatstat.explore]{rhohat}} \tab Kernel estimate of covariate effect\cr
+    \code{\link[spatstat.explore]{rho2hat}} \tab Kernel estimate of covariate effect
     (bivariate) 
   }
   
@@ -1687,17 +1690,17 @@
   for a demonstration of the diagnostics features.
 
   \tabular{ll}{
-    \code{\link[spatstat.core]{diagnose.ppm}} \tab diagnostic plots for spatial trend\cr
-    \code{\link[spatstat.core]{qqplot.ppm}} \tab diagnostic Q-Q plot for interpoint interaction\cr
+    \code{\link[spatstat.model]{diagnose.ppm}} \tab diagnostic plots for spatial trend\cr
+    \code{\link[spatstat.model]{qqplot.ppm}} \tab diagnostic Q-Q plot for interpoint interaction\cr
     \code{\link[spatstat.data]{residualspaper}} \tab examples from Baddeley et al (2005) \cr
-    \code{\link[spatstat.core]{Kcom}} \tab model compensator of \eqn{K} function \cr
-    \code{\link[spatstat.core]{Gcom}} \tab model compensator of \eqn{G} function \cr
-    \code{\link[spatstat.core]{Kres}} \tab score residual of \eqn{K} function \cr
-    \code{\link[spatstat.core]{Gres}} \tab score residual of \eqn{G} function \cr
-    \code{\link[spatstat.core]{psst}} \tab pseudoscore residual of summary function \cr
-    \code{\link[spatstat.core]{psstA}} \tab pseudoscore residual of empty space function \cr
-    \code{\link[spatstat.core]{psstG}} \tab pseudoscore residual of \eqn{G} function \cr
-    \code{\link[spatstat.core]{compareFit}} \tab compare compensators of several fitted
+    \code{\link[spatstat.model]{Kcom}} \tab model compensator of \eqn{K} function \cr
+    \code{\link[spatstat.model]{Gcom}} \tab model compensator of \eqn{G} function \cr
+    \code{\link[spatstat.model]{Kres}} \tab score residual of \eqn{K} function \cr
+    \code{\link[spatstat.model]{Gres}} \tab score residual of \eqn{G} function \cr
+    \code{\link[spatstat.model]{psst}} \tab pseudoscore residual of summary function \cr
+    \code{\link[spatstat.model]{psstA}} \tab pseudoscore residual of empty space function \cr
+    \code{\link[spatstat.model]{psstG}} \tab pseudoscore residual of \eqn{G} function \cr
+    \code{\link[spatstat.model]{compareFit}} \tab compare compensators of several fitted
     models
   }
 

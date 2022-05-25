@@ -1,0 +1,912 @@
+
+        CHANGES IN spatstat.core VERSION 2.4-4.010
+
+OVERVIEW
+
+    o Internal improvements.
+
+
+        CHANGES IN spatstat.core VERSION 2.4-4
+
+OVERVIEW
+
+    o Bug fixes and minor improvements.
+
+BUG FIXES
+
+    o rhohat.ppp
+    The argument 'subset' was not handled correctly in the internal data.
+    The estimated function 'rho' was correct, but if 'predict.rhohat' was applied,
+    predictions were computed only in the 'subset', and were possibly incorrect values.
+    Fixed.
+
+    o Gfox, Jfox
+    Warnings were issued about text formatting errors (mentioning 'sprintf' or 'fmt').
+    Fixed.
+    
+        CHANGES IN spatstat.core VERSION 2.4-3
+
+OVERVIEW
+
+    o We thank Art Stock for contributions.
+    
+    o Bug fixes and minor improvements.
+
+BUG FIXES
+
+    o Smooth.ppp
+    Crashed when 'kernel' was a function, 'at="points"' and 'scalekernel=FALSE'.
+    Fixed.
+
+    o Finhom, Ginhom, Jinhom
+    Crashed when ratio=TRUE.
+    [Spotted by Art Stock.]
+    Fixed.
+    
+    o envelope
+    Crashed for some of the summary functions when ratio=TRUE.
+    [Spotted by Art Stock.]
+    Fixed.
+
+    o "[.rat"
+    Crashed in some cases.
+    Fixed.
+
+    o Kcross
+    The result of Kcross() was 'invisible',
+    i.e. it was not automatically printed.
+    Fixed.
+    
+        CHANGES IN spatstat.core VERSION 2.4-2
+
+OVERVIEW
+
+    o Internal bug fixes.
+
+
+        CHANGES IN spatstat.core VERSION 2.4-1
+
+OVERVIEW
+
+    o We thank Frederic Lavancier, Sebastian Meyer, Suman Rakshit and Sven Wagner
+    for contributions.
+    
+    o Improved approximation of intensity of Gibbs models.
+    
+    o Experimental code to represent (theoretical) point process models
+    
+    o Extract more information about a point process model.
+
+    o Internal improvements and bug fixes.
+
+NEW CLASSES
+
+    o zgibbsmodel
+    Experimental. An object of class 'zgibbsmodel' represents a
+    Gibbs point process model with specified parameter values
+    (whereas 'ppm' represents a model fitted to data).
+
+NEW FUNCTIONS
+
+    o hardcoredist
+    Extract the hard core distance of a point process model.
+
+    o interactionorder
+    Extract the order of interpoint interaction of a point process model.
+
+    o zgibbsmodel
+    Experimental. Create an object of class 'zgibbsmodel'.
+
+    o print.zgibbsmodel
+    Experimental. Print an object of class 'zgibbsmodel'.
+    
+    o is.poisson.zgibbsmodel, is.stationary.zgibbsmodel
+    Experimental. Methods for class 'zgibbsmodel'
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o intensity.ppm
+    Can now calculate the Coeurjolly-Lavancier DPP approximation of intensity.
+    [Code kindly contributed by Frederic Lavancier]
+    New argument 'approx' specifies the choice of approximation.
+
+    o relrisk.ppp
+    Ratios which are close to 0/0 are handled more effectively,
+    reducing the likelihood of strange-looking plots when 'sigma' is very small.
+
+BUG FIXES
+
+    o density.ppp
+    Crashed if the observation window had zero area.
+    Fixed.
+
+    o dirichletVoronoi.ppp
+    Crashed randomly, with obscure error messages from 'im' or 'eval.im',
+    when argument 'f' had a small value.
+    [Spotted by Suman Rakshit.]
+    Fixed.
+
+    o dirichletVoronoi.ppp
+    Rarely, produced an image containing NA values.
+    [Spotted by Suman Rakshit.]
+    Fixed.
+
+    o vcov.ppm
+    Crashed in some cases, with message 'object lamdel not found'.
+    [Spotted by Sven Wagner.]
+    Fixed.
+    
+        CHANGES IN spatstat.core VERSION 2.4-0
+
+OVERVIEW
+
+    o We thank Sriram Ramamurthy for contributions.
+
+    o spatstat.core now depends on the new package 'spatstat.random'.
+
+    o Functions for generating random patterns have been removed.
+    
+    o Important bug fixes in anova.mppm and vcov.mppm.
+
+    o Minor improvements and bug fixes
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o package structure
+    The code for generating random spatial patterns (including 'rpoispp',
+    'rMatClust', 'rThomas', 'rNeymanScott', 'rStrauss', 'rmh')
+    has been removed from 'spatstat.core' and placed in a new package
+    'spatstat.random'. This new package is required by 'spatstat.core'.
+
+    o anova.mppm
+    Improved labelling of models in output.
+
+    o qqplot.ppm, plot.qqppm
+    Improved the text label indicating the type of residuals.
+
+    o reload.or.compute
+    New argument 'context' 
+
+BUG FIXES
+
+    o vcov.mppm
+    For Gibbs (non-Poisson) models, the variance matrix was
+    calculated incorrectly in some cases. 
+    Fixed.
+
+    o anova.mppm
+    Results were sometimes incorrect if the two models
+    had different interactions (e.g. Strauss vs Poisson).
+    Fixed.
+
+    o anova.mppm
+    Crashed for some models with a message about 'coefficient missing
+    from new.coef'.
+    Fixed.
+    
+    o anova.mppm
+    Gave a warning for some models about "Internal error: 
+    unable to map submodels to full model".
+    Fixed.
+
+    o addvar
+    If the covariate contained NA, NaN or Infinite values,
+    the calculations were sometimes incorrect.
+    Fixed.
+
+    o pcfmodel.ppm
+    Refused to handle an inhomogeneous Poisson process.
+    Fixed.
+
+    o fitted.ppm
+    Crashed if leaveoneout=TRUE and the model had no fitted coefficients.
+    Fixed.
+
+    o reload.or.compute
+    Scoping error (crashed sometimes if called from a non-global environment).
+    Fixed.
+    
+        CHANGES IN spatstat.core VERSION 2.3-2
+
+OVERVIEW
+
+    o More diagnostics for spatial logistic regression models.
+
+    o Important bug fix in kppm.
+
+    o Increased numerical stability in kppm.
+    
+    o Minor improvements and bug fixes.
+
+    o We thank Jonas Brehmer for contributions.
+
+NEW FUNCTIONS
+
+    o lurking.slrm
+    Lurking variable plot for spatial logistic regression models.
+
+    o eem.slrm
+    Exponential energy marks for spatial logistic regression models.
+
+    o eem.ppm
+    Exponential energy marks for Gibbs and Poisson point process models
+    (this function was previously called 'eem').
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o eem
+    The function 'eem' is now generic, with methods for 'ppm' and 'slrm'.
+    The function previously named 'eem' is now called 'eem.ppm'.
+
+    o objsurf.dppm, objsurf.kppm, objsurf.mincontrast
+    New arguments 'xlim', 'ylim' determine the range of parameter values
+    to be considered.
+
+    o Hybrid
+    Printed output from hybrid models has been improved slightly.
+
+    o kppm
+    New default settings ensure greater numerical stability of the
+    optimization algorithm against the effects of the scale of the
+    spatial coordinates.  New argument 'stabilize' specifies whether
+    the optimization algorithm should be numerically stabilized.
+
+    o pcf
+    Improved error message
+    
+BUG FIXES
+
+    o kppm
+    Results were sometimes incorrect for method='clik2' and method='palm'
+    because the log composite likelihood was erroneously truncated to
+    positive values. Any fitted model for which logLik(model) = 2.2e-16
+    should be suspected of being incorrect.
+    Fixed.
+
+    o edge.Ripley
+    Results were incorrect for data points lying exactly at the corners
+    of a rectangle.
+    Fixed.
+
+    o MultiHard
+    A hybrid of 'MultiHard' with another multitype interaction caused an error.
+    Fixed.
+
+    o simulate.dppm, simulate.detpointprocfamily
+    Crashed, rarely, with error message 'The dimension differs from the number of columns in index'.
+    Fixed.
+    
+    o as.fv.kppm, as.fv.dppm
+    The default plot labels in 'as.fv(x)' implied that the model 'x' was inhomogeneous.
+    Fixed.
+    
+        CHANGES IN spatstat.core VERSION 2.3-1
+
+OVERVIEW
+
+    o Covariates in ppm and mppm may be functions that depend on the marks
+    as well as the spatial coordinates.
+
+    o Automatic selection of threshold for defining a binary predictor.
+    
+    o Random perturbation of line segments.
+    
+    o Minor extensions, performance improvements, and bug fixes.
+
+NEW FUNCTIONS
+
+    o thresholdSelect, thresholdCI
+    Select the optimal threshold for converting a numerical predictor
+    to a binary predictor.
+    
+    o coef<-.fii
+    Changes the coefficients of a fitted interaction object
+    (a method for the generic "coef<-")
+
+    o rjitter.psp
+    Random perturbation of a spatial pattern of line segments.
+    A method for 'rjitter' for class 'psp'.
+    
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o ppm
+    Covariates which are functions may now depend on the marks
+    as well as the spatial coordinates: function(x,y,marks).
+    
+    o mppm
+    Covariates which are functions may now depend on the marks
+    as well as the spatial coordinates: function(x,y,marks).
+    
+    o reach.kppm
+    Now returns a result for LGCP models as well as cluster models.
+
+    o distcdf
+    Improved regularisation algorithm.
+    Argument 'nr=NULL' is now accepted.
+    New argument 'delta' allows the result to be interpolated
+    onto a finer grid.
+
+    o collapse.fv
+    Columns identified by the arguments 'same' and 'different'
+    may now be absent from some of the 'fv' objects that will be collapsed.
+
+    o Kest
+    When the argument 'domain' is given, the calculation of estimates of K(r)
+    has changed slightly, to adhere more closely to the description in
+    the help file.
+    
+    o reload.or.compute
+    Now prints a message indicating whether the data were recomputed
+    or reloaded from file.
+    New argument 'verbose'.
+
+    o update.kppm
+    New argument 'envir'.
+    
+    o clusterfit
+    Minor changes to the argument list.
+
+    o mincontrast
+    Minor changes to the argument list.
+
+    o mincontrast
+    Improved algorithm for handling NA, NaN or infinite values.
+
+    o varcount
+    Argument B has a sensible default.
+
+    o pool.envelope
+    Now uses the value of 'nrank' which was used in the original envelopes.
+    
+    o Kmulti
+    New argument 'rmax'.
+
+    o Kinhom
+    No longer issues a warning about changed behaviour in the case where
+    'lambda' is a fitted model.
+    
+    o pcfinhom
+    No longer issues a warning about changed behaviour in the case where
+    'lambda' is a fitted model.
+    
+BUG FIXES
+
+    o subfits
+    The fitted interaction coefficients were garbled.
+    If 'mfit' is the mppm object and 'a <- subfits(mfit)[[i]]' is one of the
+    sub-models, then coef(a) was correct, but coef(fitin(a)) was incorrect.
+    The fitted interaction was shown correctly by printing 'mfit'
+    but incorrectly by printing 'a'.
+    Fixed.
+    
+    o varcount
+    The result was very inaccurate if the cluster radius was small 
+    compared to the size of the window 'B', due to discretisation error.
+    Fixed.
+
+    o segregation.test
+    The test statistic was calculated as the mean, rather than the sum,
+    of discrepancies between probabilities. (The p-value was not affected.)
+    Fixed.
+
+    o Kest
+    If 'domain' was specified, 'rmax' was ignored.
+    Fixed.
+
+    o edge.Ripley
+    Value was incorrect for a point lying exactly on a corner.
+    Fixed.
+
+    o edge.Ripley
+    Crashed when method="interpreted", if a point lay exactly on a corner.
+    Fixed.
+
+    o plot.fv, plot.envelope
+    Crashed when trying to display a significance band of width zero
+    around a constant function.
+    Fixed.
+    
+    o collapse.fv
+    Crashed if 'length(same) > 1'.
+    Fixed.
+
+        CHANGES IN spatstat.core VERSION 2.3-0
+
+OVERVIEW
+
+    o We thank Chiara Fend for contributions.
+    
+    o Extensive support for spatial logistic regression models.
+
+    o New fitting method in kppm and dppm.
+
+    o Transect of an image along a curve.
+
+    o Image cross-correlation and cross-covariance.
+    
+    o Summary method for 'objsurf'.
+
+    o Minor bug fixes.
+
+NEW FUNCTIONS
+
+    o response
+    Generic function which extracts the values of the response
+    in a fitted model. There are methods for lm, glm (which extract the
+    numeric vector of responses), and ppm, kppm, slrm, lppm and mppm
+    (which extract the original data point pattern).
+
+    o cov.im, cor.im
+    Correlation or covariance between several pixel images.
+    
+    o summary.objsurf, print.summary.objsurf
+    Summary method for 'objsurf'
+
+    o residuals.slrm
+    Residuals for spatial logistic regression models.
+    
+    o leverage.slrm, influence.slrm, dfbetas.slrm, dffit.slrm
+    Leverage and influence diagnostics for spatial logistic regression models.
+    
+    o rhohat.slrm
+    Method for 'rhohat' for spatial logistic regression models.
+
+    o envelope.slrm
+    Method for 'envelope' for spatial logistic regression models.
+
+    o intensity.slrm
+    Method for 'intensity' for spatial logistic regression models.
+
+    o deviance.slrm
+    Method for 'deviance' for spatial logistic regression models.
+
+    o pseudoR2.slrm
+    Method for 'pseudoR2' for spatial logistic regression models.
+
+    o quadrat.test.slrm
+    Method for 'quadrat.test' for spatial logistic regression models.
+
+    o parameters.slrm
+    Method for 'parameters' for spatial logistic regression models.
+
+    o valid.slrm
+    Method for 'valid' for spatial logistic regression models.
+
+    o emend.slrm
+    Method for 'emend' for spatial logistic regression models.
+
+    o roc.slrm
+    Method for 'roc' for spatial logistic regression models.
+
+    o auc.slrm
+    Method for 'auc' for spatial logistic regression models.
+
+    o Window.slrm, as.owin.slrm
+    Methods for 'Window' and 'as.owin' for spatial logistic regression models.
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o kppm, dppm
+    New option 'method="adapcl"' performs adaptive composite likelihood fitting.
+    [Contributed by Chiara Fend.]
+    
+    o transect.im
+    New argument 'curve' allows the user to specify a curved transect.
+
+BUG FIXES
+
+    o clusterfield
+    Values of the cluster field were slightly incorrect (slightly higher
+    than the correct values) near the edge of the window,
+    because an 'edge correction' was mistakenly applied.
+    Fixed.
+
+    o rhohat
+    The rug plot (produced by plot.rhohat) was incorrect
+    when rhohat was called with method="piecewise".
+    Fixed.
+
+    o markcrosscorr
+    Did not recognise the option 'correction="none"'.
+    Fixed.
+
+   o roc.ppp
+   The default plot of the result of roc.ppp
+   did not include the diagonal line 'y=x'.
+   Fixed.
+   
+        CHANGES IN spatstat.core VERSION 2.2-0
+
+OVERVIEW
+
+    o We thank Abdollah Jalilian, Yongtao Guan and Rasmus Waagepetersen
+    for contributions.
+    
+    o summary method for spatial logistic regression models
+
+    o estimation of the spatial covariance function of a pixel image
+
+    o simulation of the product shot noise Cox process.
+
+    o extensions to rhohat
+    
+NEW FUNCTIONS
+
+    o rPSNCP
+    Generate simulated realisations of the product shot noise Cox process.
+    Contributed by Abdollah Jalilian, Yongtao Guan and Rasmus Waagepetersen.
+    
+    o spatcov
+    Estimate the spatial covariance function of a pixel image.
+
+    o summary.slrm, print.summary.slrm
+    Summary method for spatial logistic regression models
+
+    o coef.summary.slrm
+    Print the fitted coefficients, confidence interval and p-values
+    for a spatial logistic regression model.
+
+    o pairMean
+    Compute the mean of a specified function of interpoint distance
+    between random points in a window.
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o rhohat
+    New option (smoother='piecewise') computes a piecewise-constant
+    estimate of rho(z).
+    
+    o rhohat
+    The result now includes the 'average' intensity rho.
+
+    o distcdf
+    Arguments which are NULL will be treated as missing.
+
+    o distcdf
+    New argument 'savedenom'.
+    
+
+        CHANGES IN spatstat.core VERSION 2.1-2
+
+OVERVIEW
+
+    o Reduced CRAN check time.
+
+        CHANGES IN spatstat.core VERSION 2.1-1
+
+OVERVIEW
+
+    o Minor bug fix
+
+BUG FIXES
+
+    o simulate.kppm
+    Conditional simulation crashed on rare occasions,
+    with an error about negative probabilities.
+    Fixed.
+
+        CHANGES IN spatstat.core VERSION 2.1-0
+
+OVERVIEW
+
+    o We thank Achmad Choiruddin, Jean-Francois Coeurjolly
+    and Rasmus Waagepetersen for contributions.
+
+    o Conditional simulation in kppm
+    
+    o Information criteria for model selection in kppm
+
+    o Modified handling of covariates in slrm
+
+    o densityfun.ppp handles query points outside original window
+
+    o Improved output in summary.mppm
+
+    o Minor improvements and bug fixes.
+
+NEW FUNCTIONS
+
+    o ic
+    Information criteria for model selection in ppm and kppm.
+    Kindly contributed by Achmad Choiruddin, Jean-Francois Coeurjolly
+    and Rasmus Waagepetersen.
+    
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o simulate.kppm
+    Conditional simulation of the model, given a fixed number of points,
+    is now supported using the new arguments 'n.cond' and 'w.cond'.
+    
+    o densityfun.ppp
+    The resulting function can now handle query points which lie
+    outside the window of the original data,
+    and has argument 'drop=TRUE' which specifies how to handle them.
+
+    o rpoint
+    New argument 'forcewin' forces the code to use the window 'win'
+    when 'f' is a pixel image.
+
+    o slrm
+    In the default case (where dataAtPoints is not given)
+    all spatial covariates, including the spatial coordinates x and y,
+    are now evaluated at the centre of each pixel. This improves
+    consistency with other implementations of spatial logistic regression.
+    
+    o slrm
+    Silently ignores any arguments '...' that are not recognised by 'as.mask'
+
+    o summary.mppm
+    Improved summary of the dependence of the
+    interpoint interaction on the covariates.
+
+    o pairs.im
+    New argument 'drop'.
+    
+BUG FIXES
+
+    o model.matrix.mppm
+    If the model was fitted using 'gam', the resulting matrix
+    did not have an 'assign' attribute.
+    Fixed.
+    
+    o model.depends
+    Crashed for models fitted using 'gam'.
+    Fixed.
+
+    o predict.slrm, fitted.slrm
+    Crashed if the model was fitted using split pixels (argument 'splitby').
+    Fixed.
+
+    o predict.slrm, fitted.slrm
+    Crashed in some cases when 'window' was given.
+    Fixed.
+
+    o update.slrm
+    Failed to find covariates that were provided in 'env'.
+    Fixed.
+
+    o cdf.test
+    Crashed if the covariate was constant.
+    Fixed.
+
+        CHANGES IN spatstat.core VERSION 2.0-0
+
+OVERVIEW
+
+    o We thank Tilman Davies,  Greg McSwiggan and Suman Rakshit
+    for contributions.
+
+    o We thank Corey Anderson, Michael Chirico, Andy Craig,
+    Marcelino de la Cruz, Tilman Davies, Pavel Fibich,
+    Kurt Hornik, Gopalan Nair, Yonatan Rosen and Rasmus Waagepetersen
+    for contributions.
+    
+    o Diffusion kernel smoothing.
+    
+    o More support for spatial logistic regression models.
+
+    o predict.mppm now works for multitype point process models.
+
+    o Improved handling of 'newdata' in predict.mppm.
+
+    o More support for multi-dimensional patterns.
+    
+NEW FUNCTIONS
+
+    o densityHeat
+    New generic function for diffusion kernel estimation of intensity
+
+    o densityHeat.ppp
+    Diffusion kernel estimation of intensity for point pattern in 2 dimensions.
+    This is an alternative to density.ppp.
+
+    o intersect.boxx
+    Compute intersection of boxes in multi-dimensional space
+
+    o scale.boxx, scale.ppx
+    Methods for 'scale' for boxes and patterns in multi-dimensional space
+
+    o shift.boxx, shift.ppx
+    Methods for 'shift' for boxes and patterns in multi-dimensional space
+
+    o is.boxx
+    Determine whether an object is a multidimensional box
+
+    o mincontrast
+    New argument 'action.bad.values' specifies what action is taken
+    when the summary function produces NA or NaN or infinite values.
+    
+
+    
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o slrm
+    'step' can now be applied to models fitted using 'slrm'.
+
+    o predict.mppm
+    Now supports multitype point process models.
+
+    o predict.mppm
+    Improved handling of argument 'newdata'
+    
+    o rotmean
+    The result now has the same 'unitname' as the input object X.
+    New argument 'adjust' controls the smoothing bandwidth.
+    
+    o rlabel
+    New argument 'group' specifies that the points are divided into
+    several groups, and that relabelling is applied within each group.
+    
+    o simulate.ppm
+    Now recognises the argument 'window' as an alternative to 'w'.
+
+    o kppm
+    Improved numerical robustness.
+
+    o Kcross, Gcross, Jcross
+    Function labels (shown on the plot legend) have been
+    improved when i = j.
+
+    o anova.mppm
+    Issues a warning when applied to random-effects models
+    (models fitted using the argument 'random').
+
+BUG FIXES
+
+    o Gest
+    If correction="rs" or correction="km", then both the reduced-sample
+    (border correction) and Kaplan-Meier corrected estimates were calculated.
+    [Spotted by Gopalan Nair.]
+    Fixed.
+
+    o rMatClust, rThomas, rCauchy, rVarGamma
+    If the fitted model was effectively a Poisson process,
+    the result did not have attributes 'Lambda' and 'parents'
+    even when the user requested them.
+    Fixed.
+    
+    o model.matrix.mppm
+    Crashed with random-effects models.
+    Fixed.
+
+    o anova.mppm
+    Crashed with random-effects models.
+    Fixed.
+
+    o simulate.rhohat
+    Crashed when applied to rhohat objects computed from data
+    on a linear network.
+    Fixed.
+
+    o objsurf.kppm
+    Crashed if the model was fitted by Palm likelihood (method="palm")
+    or second order composite likelihood (method="clik2").
+    Fixed.
+    
+    
+        CHANGES IN spatstat.core VERSION 1.65-11
+
+OVERVIEW
+
+    o Internal tweaks.
+    
+        CHANGES IN spatstat.core VERSION 1.65-10
+
+OVERVIEW
+
+    o Minor corrections to documentation.
+
+        CHANGES IN spatstat.core VERSION 1.65-9
+
+OVERVIEW
+
+    o We thank Ian Buller for a suggestion.
+
+    o weights permitted in density calculation for line segments.
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o density.psp
+    New argument 'weights'.
+
+        CHANGES IN spatstat.core VERSION 1.65-8
+
+OVERVIEW
+
+    o Minor changes to appease the compiler.
+
+        CHANGES IN spatstat.core VERSION 1.65-7
+
+OVERVIEW
+
+    o We thank Michael Chirico for a contribution.
+
+    o Minor changes to appease the compiler.
+    
+        CHANGES IN spatstat.core VERSION 1.65-6
+
+OVERVIEW
+
+    o We thank Tilman Davies and Pavel Fibich for contributions.
+
+    o Important bug fix in simulation of log-Gaussian Cox processes.
+
+    o Increased speed for large datasets.
+
+    o variance calculations handle larger datasets.
+    
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o vcov.ppm, summary.ppm
+    Variance calculations now handle larger datasets
+    (using sparse arrays).
+    
+    o rSSI
+    Accelerated.
+    
+    o overall speed
+    Changes have been made to the internal code of spatstat 
+    which should accelerate computations involving large datasets.
+
+    o localpcf, localpcfinhom
+    New argument 'rvalue'.
+
+BUG FIXES
+
+    o rLGCP, simulate.kppm
+    Simulation results for log-Gaussian Cox processes were incorrect
+    unless the pixel dimensions and pixel spacings were identical
+    on the horizontal and vertical axes. (If pixel dimensions were not
+    specified, then the results were incorrect whenever the Frame of the
+    simulation window was not a square.) 
+    [Spotted by Tilman Davies.]
+    Fixed.
+    
+    o Vmark
+    Crashed if normalise=TRUE when there was only one column of marks.
+    (Spotted by Pavel Fibich.)
+    Fixed.
+    
+    o nnclean
+    Crashed if k >= npoints(X).
+    Fixed.
+
+    o print.ppm
+    Crashed sometimes when applied to the result of subfits().
+    Fixed.
+    
+    CHANGES IN spatstat.core VERSION 1.65-5
+
+OVERVIEW
+
+    o Minor changes required by CRAN.
+    
+
+        CHANGES IN spatstat.core VERSION 1.65-1
+
+OVERVIEW
+
+    o Added NEWS file.
+
+
+        CHANGES IN spatstat.core VERSION 1.65-0
+
+OVERVIEW
+
+    o Package initialised at version 1.65-0
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o spatstat.core
+    The package 'spatstat.core' has been created from a subset
+    of the code in the original 'spatstat' package version 1.65-0.
+    It contains the core functionality for statistical analysis of
+    spatial data. For an overview, see help("spatstat.core-package")
+
+    o Execution
+    The 'spatstat.core' package is slightly faster than the corresponding
+    code in the 'spatstat' package, because the procedure for calling
+    internal C functions has been streamlined.
+
+
+

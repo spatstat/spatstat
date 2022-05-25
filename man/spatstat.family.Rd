@@ -35,7 +35,8 @@
     \item \code{spatstat.sparse}
     \item \code{spatstat.geom}
     \item \code{spatstat.random}
-    \item \code{spatstat.core}
+    \item \code{spatstat.explore}
+    \item \code{spatstat.model}
     \item \code{spatstat.linnet}
     \item \code{spatstat}
   }
