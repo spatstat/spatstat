@@ -593,6 +593,14 @@ the presence of a bug is obvious, and the bug would not have misled the user.
  \subsection{Partially Incorrect}
  \begin{itemize}
    
+  \item \texttt{rhohat.ppp}:
+    The argument \texttt{subset} was not handled correctly in the internal data.
+    The estimated function \texttt{rho} was correct, but if
+    \texttt{predict.rhohat} was applied,
+    predictions were computed only in the \texttt{subset}, 
+    and were possibly incorrect values.
+    \bugbefore{spatstat 1.65-0}{december 2020}{spatstat.explore 3.0-0}{june 2022}
+
  \item \texttt{density.lpp}:
    The result had the wrong length if \texttt{x} contained duplicated points
     when \texttt{weights} were given and \texttt{at="points"}.

@@ -8,7 +8,7 @@
 
 % \VignetteIndexEntry{Summary of Recent Updates to the Spatstat Family}
 
-% $Revision: 1.53 $ $Date: 2021/11/21 02:03:40 $
+% $Revision: 1.55 $ $Date: 2022/05/26 06:15:54 $
 
 \newcommand{\pkg}[1]{\texttt{#1}}
 \newcommand{\code}[1]{\texttt{#1}}
@@ -88,34 +88,41 @@ mergeSizeTables <- function(a, b, breakupdate, allow.devel=FALSE) {
   }
   return(result)
 }
-## start collating size tables for the spatstat family
-z <- getSizeTable()
-## sub-packages- access via the sub-package
-zgeom <- getSizeTable("spatstat.geom")
-zrandom <- getSizeTable("spatstat.random")
-zcore <- getSizeTable("spatstat.core")
-zlin <- getSizeTable("spatstat.linnet")
-zutils <- getSizeTable("spatstat.utils")
-zdata <- getSizeTable("spatstat.data")
-zsparse <- getSizeTable("spatstat.sparse")
-## merge history of geom, core, linnet after the big split
-Bday <- "2020-12-14"
-z <- mergeSizeTables(z, zgeom, Bday)
-z <- mergeSizeTables(z, zcore, Bday)
-z <- mergeSizeTables(z, zlin, Bday)
-## merge history of other packages after their split dates
-z <- mergeSizeTables(z, zutils, "2017-03-22")
-z <- mergeSizeTables(z, zdata,  "2017-09-23")
-z <- mergeSizeTables(z, zsparse, "2020-11-04")
-z <- mergeSizeTables(z, zrandom, "2022-02-12")
+## Get histories of all sub-packages
+## Package formerly known as 'spatstat'
+z <- getSizeTable() 
+## installed sub-packages - access via the sub-package
+zutils   <- getSizeTable("spatstat.utils")
+zdata    <- getSizeTable("spatstat.data")
+zsparse  <- getSizeTable("spatstat.sparse")
+zgeom    <- getSizeTable("spatstat.geom")
+zrandom  <- getSizeTable("spatstat.random")
+zexplore <- getSizeTable("spatstat.explore")
+zmodel   <- getSizeTable("spatstat.model")
+zlinnet  <- getSizeTable("spatstat.linnet")
+## defunct package core - use copy of package size file stored in spatstat
+zcore    <- getSizeTable("spatstat", "spatstatcoresize.txt")
 ## extension packages - use copy of package size file stored in spatstat
-zlocal <- getSizeTable("spatstat", "spatstatlocalsize.txt")
-zgui <- getSizeTable("spatstat", "spatstatguisize.txt")
-zKnet <- getSizeTable("spatstat", "spatstatKnetsize.txt")
+zlocal   <- getSizeTable("spatstat", "spatstatlocalsize.txt")
+zgui     <- getSizeTable("spatstat", "spatstatguisize.txt")
+zKnet    <- getSizeTable("spatstat", "spatstatKnetsize.txt")
+## Merge histories starting at the 'split dates'
+z <- mergeSizeTables(z, zutils,  "2017-03-22")
+z <- mergeSizeTables(z, zdata,   "2017-09-23")
+z <- mergeSizeTables(z, zsparse, "2020-11-04")
+BigSplitDay <- "2020-12-14"
+z <- mergeSizeTables(z, zgeom,   BigSplitDay)
+z <- mergeSizeTables(z, zcore,   BigSplitDay)
+z <- mergeSizeTables(z, zlinnet, BigSplitDay)
+z <- mergeSizeTables(z, zrandom, "2022-02-12")
+CoreSplitDay <- "2020-05-25"   # size of 'core' drops to 0 on this date
+z <- mergeSizeTables(z, zexplore, CoreSplitDay)
+z <- mergeSizeTables(z, zmodel,   CoreSplitDay)
+## extension packages never overlapped
 z <- mergeSizeTables(z, zlocal)
 z <- mergeSizeTables(z, zgui)
 z <- mergeSizeTables(z, zKnet)
-#
+## Now summarise
 currentcount <- z[nrow(z), counts]
 bookcount    <- z[z$version == "1.42-0", counts]
 changes <- currentcount - bookcount
@@ -181,8 +188,10 @@ AppendVersion <- function(pkg, sizetable, v, allow.devel=FALSE) {
 }
 vtable <- AppendVersion("spatstat.geom", zgeom, vtable)
 vtable <- AppendVersion("spatstat.random", zrandom, vtable)
-vtable <- AppendVersion("spatstat.core", zcore, vtable)
-vtable <- AppendVersion("spatstat.linnet", zlin, vtable)
+vtable <- AppendVersion("spatstat.explore", zexplore, vtable)
+vtable <- AppendVersion("spatstat.model", zmodel, vtable)
+##vtable <- AppendVersion("spatstat.core", zcore, vtable)
+vtable <- AppendVersion("spatstat.linnet", zlinnet, vtable)
 vtable <- AppendVersion("spatstat.sparse", zsparse, vtable)
 vtable <- AppendVersion("spatstat.data", zdata, vtable)
 vtable <- AppendVersion("spatstat.utils", zutils, vtable)
@@ -211,14 +220,15 @@ Typing \code{library(spatstat)} will load the familiar
 
 \subsection{Sub-packages}
 
-    Currently there are eight
+    Currently there are nine
     sub-packages, called 
     \pkg{spatstat.utils},
     \pkg{spatstat.data},
     \pkg{spatstat.sparse},
     \pkg{spatstat.geom},
     \pkg{spatstat.random},
-    \pkg{spatstat.core},
+    \pkg{spatstat.explore},
+    \pkg{spatstat.model},
     \pkg{spatstat.linnet},
     and \pkg{spatstat}.
 
@@ -246,10 +256,11 @@ Typing \code{library(spatstat)} will load the familiar
       The \pkg{spatstat.random} package
       contains functions for random generation of spatial patterns
       and random simulation of models.
-    \item
-      The \pkg{spatstat.core} package
-      contains the main code for statistical analysis of spatial point patterns
-      and other spatial data.
+    \item The \pkg{spatstat.explore} package contains the code for
+      exploratory data analysis and nonparametric analysis
+      of spatial data. 
+    \item The \pkg{spatstat.model} package contains the code for model-fitting,
+      model diagnostics, and formal inference.
     \item
       The \pkg{spatstat.linnet} package
       defines spatial data on a linear network,
@@ -265,7 +276,7 @@ Typing \code{library(spatstat)} will load the familiar
     If you type \code{library(spatstat)} in an \textsf{R} session,
     the system will automatically load 
     \pkg{spatstat.data}, \pkg{spatstat.geom}, \pkg{spatstat.random},
-    \pkg{spatstat.core} and \pkg{spatstat.linnet}.
+    \pkg{spatstat.explore}, \pkg{spatstat.model} and \pkg{spatstat.linnet}.
     It will also silently \textbf{``import''}
     \pkg{spatstat.utils} and \pkg{spatstat.sparse}.
     To access the functions in \pkg{spatstat.utils} directly, you would need to
@@ -296,6 +307,13 @@ the News and Release Notes for each update.
 
 \begin{itemize}
   
+  
+\item The package \texttt{spatstat.core} has been split into two packages called
+    \texttt{spatstat.explore} (for exploratory data analysis)
+    and \texttt{spatstat.model} (for modelling and formal inference).
+
+  \item New dataset \texttt{stonetools}.
+    
    \item Improved approximation of intensity of Gibbs models.
     
    \item Experimental code to represent (theoretical) point process models
@@ -304,10 +322,10 @@ the News and Release Notes for each update.
 
   \item New package \pkg{spatstat.random}.
     
-  \item the original \spst\ package has now been split into 8 sub-packages
+  \item the original \spst\ package has now been split into 9 sub-packages
     (\pkg{spatstat.utils}, \pkg{spatstat.data}, \pkg{spatstat.sparse},
     \pkg{spatstat.geom}, \pkg{spatstat.random},
-    \pkg{spatstat.core}, \pkg{spatstat.linnet}
+    \pkg{spatstat.explore}, \pkg{spatstat.model}, \pkg{spatstat.linnet}
     and \pkg{spatstat}).
 
   \item The interactive graphics functions \texttt{iplot} and \texttt{istat}
@@ -692,6 +710,11 @@ Following is a list of all the functions that have been added,
 starting with the most recent additions.
 
 \begin{itemize}
+  
+\item \texttt{which.min.fair, which.max.fair}:
+  Find the location of the minimum or maximum,
+  and if there are multiple minima or maxima,
+  choose one of them at random.
     
 \item \texttt{hardcoredist}:
     Extract the hard core distance of a point process model.
@@ -1796,9 +1819,15 @@ listed alphabetically.
     Arguments \texttt{...} now determine pixel resolution.
 
   \item \texttt{contour.im}:
-   New argument \texttt{col} specifies the colour of the contour lines.
-   If \texttt{col} is a colour map, then the contours are drawn 
-   in different colours.
+    \begin{itemize}
+    \item 
+      New argument \texttt{col} specifies the colour of the contour lines.
+      If \texttt{col} is a colour map, then the contours are drawn 
+      in different colours.
+    \item New argument \texttt{log} specifies whether the contour lines
+    should be equally spaced on a logarithmic scale.
+    \end{itemize}
+
 
   \item \texttt{convolve.im}: the name of the unit of length is preserved.
    
@@ -2097,7 +2126,6 @@ listed alphabetically.
    \item New argument \code{ignore.hardcore}.
    \end{itemize}
 
-  
   \item \texttt{funxy}:
     \begin{itemize}
     \item 
@@ -2108,7 +2136,9 @@ listed alphabetically.
   \item 
     Functions of class \texttt{"funxy"} can now be applied to
     quadrature schemes.
-    \end{itemize}
+  \item 
+    The result now has a \texttt{unitname}, inherited from the argument \texttt{W}.
+  \end{itemize}
 
 
 %%G
@@ -2220,7 +2250,7 @@ listed alphabetically.
 \item \texttt{intersect.tess}:
   New argument \texttt{keepempty}.
 
-
+\item \texttt{invoke.symbolmap}: new argument \texttt{angleref}.
  
 \item \texttt{iplot}, \texttt{iplot.ppp}, 
   \texttt{iplot.layered}, \texttt{iplot.linnet}, \texttt{iplot.default}:
@@ -2731,6 +2761,8 @@ listed alphabetically.
 
  \item \texttt{plot.im}:
    \begin{itemize}
+   \item New argument \texttt{addcontour} specifies that contour lines should be drawn
+    over the image plot.
    \item  Now handles complex-valued images.
    \item  New argument \texttt{workaround} to avoid a bug in some MacOS
      device drivers that causes the image to be displayed
