@@ -25,6 +25,9 @@ plot(split(bramblecanes))
 
 plot(bronzefilter,markscale=2)
 
+plot(subset(btb, select=spoligotype), cols=2:5,
+     main="Bovine Tuberculosis, by spoligotype")
+
 plot(cells)
 
 plot(chicago, main="Chicago Street Crimes", col="grey",
@@ -36,6 +39,8 @@ chorley.extra$plotit()
 plot(clmfires, which.marks="cause", cols=2:5, cex=0.25,
      main="Castilla-La Mancha forest fires")
 plot(clmfires.extra$clmcov200, main="Covariates for forest fires")
+
+plot(concrete)
 
 plot(copper$Points, main="Copper")
 plot(copper$Lines, add=TRUE)
@@ -124,6 +129,10 @@ points(0,0,pch=16, cex=2)
 text(15,8,"Tree", cex=0.75)
 
 plot(spruces, maxsize=min(nndist(spruces)))
+
+plot(subset(stonetools, select=TYPE),
+     main="Palaeolithic stone tools and bone fragments",
+     cols=2:3, cex=0.5)
 
 plot(swedishpines)
 

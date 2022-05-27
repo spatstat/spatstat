@@ -48,13 +48,14 @@ plot(pcfinhom(japanesepines, fit))
 plot(Linhom(japanesepines))
 
 ## Rescaled K-function
-plot(unmark(bronzefilter))
-plot(Kscaled(bronzefilter))
-fit <- ppm(unmark(bronzefilter), ~x)
+Bronze <- unmark(bronzefilter)
+plot(Bronze)
+plot(Kscaled(Bronze))
+fit <- ppm(Bronze ~x)
 plot(predict(fit))
-plot(unmark(bronzefilter), add=TRUE)
-plot(Kscaled(bronzefilter, fit))
-plot(Lscaled(bronzefilter, fit))
+plot(Bronze, add=TRUE)
+plot(Kscaled(Bronze, fit))
+plot(Lscaled(Bronze, fit))
 
 ## Local indicators of spatial association
 plot(localL(swedishpines))

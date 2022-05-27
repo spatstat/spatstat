@@ -682,6 +682,7 @@ These are now provided in the sub-package \pkg{spatstat.data}.
  \item \texttt{cetaceans}: point patterns of whale and dolphin sightings.
  \item \texttt{concrete}: air bubbles in concrete.
  \item \texttt{btb}: bovine tuberculosis occurrences.
+ \item \texttt{stonetools}: palaeolithic stone tools and bone fragments.
 \end{itemize}
 
 \section{New classes}
@@ -698,10 +699,14 @@ The following new classes of objects may be of use.
   An object of class \texttt{"ssf"} represents a spatial function
   which has been evaluated or sampled at an irregular set of points.
   See \texttt{help(ssf)}.
+\item \texttt{zclustermodel}:
+  Experimental. An object of class \texttt{zclustermodel} represents a
+    Neyman-Scott cluster point process model with specified parameter values
+    (whereas \texttt{kppm} represents such a model fitted to data).
 \item \texttt{zgibbsmodel}:
   Experimental. An object of class \texttt{zgibbsmodel} represents a
     Gibbs point process model with specified parameter values
-    (whereas \texttt{ppm} represents a model fitted to data).
+    (whereas \texttt{ppm} represents such a model fitted to data).
 \end{itemize}
 
 \section{New Functions}
@@ -711,9 +716,9 @@ starting with the most recent additions.
 
 \begin{itemize}
   
-\item \texttt{which.min.fair, which.max.fair}:
-  Find the location of the minimum or maximum,
-  and if there are multiple minima or maxima,
+\item \texttt{which.min.fair, which.max.fair} (in \texttt{spatstat.utils}):
+  Find the location of the minimum or maximum entry in a vector;
+  if there are multiple minima or maxima,
   choose one of them at random.
     
 \item \texttt{hardcoredist}:
@@ -721,7 +726,6 @@ starting with the most recent additions.
 
   \item \texttt{interactionorder}:
     Extract the order of interpoint interaction of a point process model.
-
   
   \item \texttt{zgibbsmodel}:
     Experimental. Create an object of class \texttt{zgibbsmodel}.

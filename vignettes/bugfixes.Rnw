@@ -422,12 +422,12 @@ the presence of a bug is obvious, and the bug would not have misled the user.
  \item \texttt{vcov.mppm}:
     For Gibbs (non-Poisson) models, the variance matrix was
     calculated incorrectly in some cases. 
-   \bugger{1.45-1}{may 2016}{spatstat.core 2.4-1}{may 2022}   
+   \bugin{spatstat 1.45-1}{may 2016}{spatstat.core 2.4-1}{may 2022}   
 
  \item \texttt{vcov.mppm}:
     Results were sometimes incorrect if the two models
     had different interactions (e.g. Strauss vs Poisson).
-   \bugger{1.45-1}{may 2016}{spatstat.core 2.4-1}{may 2022}   
+   \bugin{spatstat 1.45-1}{may 2016}{spatstat.core 2.4-1}{may 2022}   
 
  \item \texttt{distmap.owin}:
    If the window was a binary mask, the distance values were
