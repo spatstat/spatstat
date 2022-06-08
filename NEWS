@@ -1,9 +1,12 @@
 
-        CHANGES IN spatstat VERSION 3.0-0
+        CHANGES IN spatstat VERSION 2.999-999.001
 
 OVERVIEW
 
     o Further split of the spatstat family of packages.
+
+    o When the latest split is completed, all package versions will be set to 3.0-0.
+    Version numbers 2.999-x are developmental.
 
 SIGNIFICANT USER-VISIBLE CHANGES
 
