@@ -6,6 +6,14 @@
 \newcommand{\spatstatAuthors}{\adrian, \rolf and \ege}
 %% Contributors with emails
 \newcommand{\pavel}{Pavel Grabarnik \email{pavel.grabar@issp.serpukhov.su}}
+\newcommand{\dominic}{Dominic Schuhmacher \email{dominic.schuhmacher@mathematik.uni-goettingen.de}, URL \code{http://dominic.schuhmacher.name/}}
+\newcommand{\wei}{Ang Qi Wei \email{aqw07398@hotmail.com}}
+\newcommand{\colette}{Marie-Colette van Lieshout \email{Marie-Colette.van.Lieshout@cwi.nl}}
+\newcommand{\rasmus}{Rasmus Plenge Waagepetersen \email{rw@math.auc.dk}}
+\newcommand{\abdollah}{Abdollah Jalilian \email{jalilian@razi.ac.ir}}
+\newcommand{\ottmar}{Ottmar Cronie \email{ottmar@chalmers.se}}
+\newcommand{\stephenEglen}{Stephen Eglen \email{S.J.Eglen@damtp.cam.ac.uk}}
+\newcommand{\mehdi}{Mehdi Moradi \email{m2.moradi@yahoo.com}}
 % Names with accents
 \newcommand{\Bogsted}{\ifelse{latex}{\out{B\o gsted}}{Bogsted}}
 \newcommand{\Cramer}{\ifelse{latex}{\out{Cram\'er}}{Cramer}}
@@ -25,3 +33,7 @@
 \newcommand{\GibbsInteractionsList}{\code{\link[MPKG]{AreaInter}}, \code{\link[MPKG]{BadGey}}, \code{\link[MPKG]{Concom}}, \code{\link[MPKG]{DiggleGatesStibbard}}, \code{\link[MPKG]{DiggleGratton}}, \code{\link[MPKG]{Fiksel}}, \code{\link[MPKG]{Geyer}}, \code{\link[MPKG]{Hardcore}}, \code{\link[MPKG]{HierHard}}, \code{\link[MPKG]{HierStrauss}}, \code{\link[MPKG]{HierStraussHard}}, \code{\link[MPKG]{Hybrid}}, \code{\link[MPKG]{LennardJones}}, \code{\link[MPKG]{MultiHard}}, \code{\link[MPKG]{MultiStrauss}}, \code{\link[MPKG]{MultiStraussHard}}, \code{\link[MPKG]{OrdThresh}}, \code{\link[MPKG]{Ord}}, \code{\link[MPKG]{Pairwise}}, \code{\link[MPKG]{PairPiece}}, \code{\link[MPKG]{Penttinen}}, \code{\link[MPKG]{Poisson}}, \code{\link[MPKG]{Saturated}}, \code{\link[MPKG]{SatPiece}}, \code{\link[MPKG]{Softcore}}, \code{\link[MPKG]{Strauss}}, \code{\link[MPKG]{StraussHard}} and \code{\link[MPKG]{Triplets}}}
 %% List of interactions recognised by RMH code
 \newcommand{\rmhInteractionsList}{\code{\link[MPKG]{AreaInter}}, \code{\link[MPKG]{BadGey}}, \code{\link[MPKG]{DiggleGatesStibbard}}, \code{\link[MPKG]{DiggleGratton}}, \code{\link[MPKG]{Fiksel}}, \code{\link[MPKG]{Geyer}}, \code{\link[MPKG]{Hardcore}}, \code{\link[MPKG]{Hybrid}}, \code{\link[MPKG]{LennardJones}}, \code{\link[MPKG]{MultiStrauss}}, \code{\link[MPKG]{MultiStraussHard}}, \code{\link[MPKG]{PairPiece}}, \code{\link[MPKG]{Penttinen}}, \code{\link[MPKG]{Poisson}}, \code{\link[MPKG]{Softcore}}, \code{\link[MPKG]{Strauss}}, \code{\link[MPKG]{StraussHard}} and \code{\link[MPKG]{Triplets}}}
+%% Frequent references
+\newcommand{\baddrubaturnbook}{Baddeley, A., Rubak, E. and Turner, R. (2015) \emph{Spatial Point Patterns: Methodology and Applications with R}. Chapman and Hall/CRC Press. }
+
+
