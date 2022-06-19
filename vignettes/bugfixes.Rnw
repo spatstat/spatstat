@@ -587,12 +587,32 @@ the presence of a bug is obvious, and the bug would not have misled the user.
    \item \verb!as.im.data.frame!:
      Results were incorrect for factor-valued data.
     \bugger{1.45-2}{may 2016}{1.63-0}{january 2020}
+
+  \item \texttt{predict.ppm}:
+   Argument \texttt{new.coef} was ignored in calculating the standard error
+   when \texttt{se=TRUE}.
+   \bugin{spatstat 1.29-0}{october 2012}{spatstat.model 3.0-0}{june 2022}
+
+ \item \texttt{predict.ppm}:
+   Argument \texttt{new.coef} was ignored in calculating the standard error
+   (and therefore the width of the interval) when \texttt{type="count"} and
+   (\texttt{interval="confidence"} or \texttt{interval="prediction"}).
+   \bugin{spatstat 1.29-0}{october 2012}{spatstat.model 3.0-0}{june 2022}
+
  \end{itemize}   
 
  %% LEVEL 4: 
  \subsection{Partially Incorrect}
  \begin{itemize}
    
+  \item \texttt{rhohat.lpp}:
+    The argument \texttt{subset} was not handled correctly in the internal data.
+    The estimated function \texttt{rho} was correct, but if
+    \texttt{predict.rhohat} was applied,
+    predictions were computed only in the \texttt{subset}, 
+    and were possibly incorrect values.
+    \bugbefore{spatstat 1.65-0}{december 2020}{spatstat.linnet 3.0-0}{june 2022}
+
   \item \texttt{rhohat.ppp}:
     The argument \texttt{subset} was not handled correctly in the internal data.
     The estimated function \texttt{rho} was correct, but if

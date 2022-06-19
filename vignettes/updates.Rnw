@@ -312,22 +312,33 @@ the News and Release Notes for each update.
     \texttt{spatstat.explore} (for exploratory data analysis)
     and \texttt{spatstat.model} (for modelling and formal inference).
 
-  \item New dataset \texttt{stonetools}.
-    
-   \item Improved approximation of intensity of Gibbs models.
-    
-   \item Experimental code to represent (theoretical) point process models
-    
-   \item  Extract more information about a point process model.
-
-  \item New package \pkg{spatstat.random}.
-    
-  \item the original \spst\ package has now been split into 9 sub-packages
+  \item The original \spst\ package has now been split into 9 sub-packages
     (\pkg{spatstat.utils}, \pkg{spatstat.data}, \pkg{spatstat.sparse},
     \pkg{spatstat.geom}, \pkg{spatstat.random},
     \pkg{spatstat.explore}, \pkg{spatstat.model}, \pkg{spatstat.linnet}
     and \pkg{spatstat}).
 
+  \item New dataset \texttt{stonetools}.
+    
+  \item Regularized model-fitting.
+    
+  \item Weighted measures and weighted integrals.
+    
+  \item Improved approximation of intensity of Gibbs models.
+    
+  \item Experimental code to represent (theoretical) point process models
+    
+  \item  Extract more information about a point process model.
+
+  \item linear network $K$ function and pair correlation function
+    based on Euclidean distance.
+    
+  \item inhomogeneous linear network $J$ function.
+
+  \item Terminal vertices of a network.
+
+  \item A point pattern on a network can be plotted as cross-ticks.
+    
   \item The interactive graphics functions \texttt{iplot} and \texttt{istat}
     have been removed from \spst\ into a new 
     extension package \pkg{spatstat.gui}.
@@ -715,6 +726,24 @@ Following is a list of all the functions that have been added,
 starting with the most recent additions.
 
 \begin{itemize}
+  
+\item \texttt{linearKEuclid, linearpcfEuclid, linearKEuclidInhom, linearpcfEuclidInhom}:
+  Linear network $K$ function and pair correlation function based on Euclidean distances.
+  
+\item \texttt{linearJinhom}:
+  Inhomogeneous $J$ function on a linear network.
+
+\item \texttt{terminalvertices}:
+  Extract the terminal vertices of a linear network.
+
+\item \texttt{bw.relrisk.lpp}:
+    This function replaces \texttt{bw.relrisklpp}
+    and is a method for the generic \texttt{bw.relrisk}.
+  
+\item \texttt{measureWeighted}: weighted version of a measure.
+  
+\item \texttt{harmonicmean, harmonicsum}:
+  The harmonic mean of a set of numbers, calculated robustly.
   
 \item \texttt{which.min.fair, which.max.fair} (in \texttt{spatstat.utils}):
   Find the location of the minimum or maximum entry in a vector;
@@ -1567,7 +1596,12 @@ listed alphabetically.
 \item \texttt{anyDuplicated.ppp}: Accelerated.
   
 \item \texttt{append.psp}: arguments may be \texttt{NULL}.
+
   
+\item \texttt{applynbd}:
+  Now works for point patterns in three dimensions (class \texttt{"pp3"})
+   and point patterns on a network (class \texttt{"lpp"}).
+
  \item \texttt{as.function.tess}:
     New argument \texttt{values} specifies the function values.
 
@@ -1721,6 +1755,15 @@ listed alphabetically.
  \item Additional arguments \verb!...! are now passed to \texttt{density.ppp}.
    \end{itemize}
 
+ \item \texttt{bw.relrisk}:
+   This function is now generic, with methods for
+   class \texttt{"ppp"} and \texttt{"lpp"}.
+   
+ \item \texttt{bw.relrisk.lpp}:
+    When \texttt{method="likelihood"}, the cross-validation criterion
+    is now defined as the \underline{\emph{negative}} likelihood. This is consistent with
+    \texttt{bw.relrisk.ppp}, and ensures that the optimum bandwidth is always
+    found by minimising the cross-validation criterion.
    
   \item \texttt{bw.scott}: 
     \begin{itemize}
@@ -1848,7 +1891,15 @@ listed alphabetically.
     New argument \texttt{details} gives more information about the intersections
     between the segments.
 
-  \item \texttt{crosspairs.pp3}:   
+  \item \texttt{crosspairs.ppp}:   
+    \begin{itemize}
+    \item New argument \texttt{periodic} specifies whether 
+      to use periodic (toroidal) distances. 
+    \item New arguments \texttt{iX}, \texttt{iY} make it possible to eliminate pairs
+    in which the two points are identical.
+    \end{itemize}
+
+ \item \texttt{crosspairs.pp3}:   
    Argument \texttt{what} can take the value \texttt{"ijd"}
 
  \item \texttt{cut.ppp}:
@@ -2215,10 +2266,14 @@ listed alphabetically.
     so the code can handle larger datasets and finer quadrature schemes.
 
  \item \texttt{integral.im}:
-   Accelerated in the case where \texttt{domain} is a tessellation.
+   \begin{itemize}
+   \item New argument \texttt{weight} specifies a weight function for the integration.
+   \item Accelerated in the case where \texttt{domain} is a tessellation.
+   \end{itemize}
    
  \item \texttt{integral.linfun}:
    \begin{itemize}
+   \item New argument \texttt{weight} specifies a weight function for the integration.
    \item    New argument \texttt{delta} controls step length of
    approximation to integral.
  \item New argument \texttt{nd} controls approximate number of sample points
@@ -2229,11 +2284,15 @@ listed alphabetically.
 
  \item \texttt{integral.linim}:
    \begin{itemize}
-   \item    Argument \code{domain} can be a tessellation.
+   \item New argument \texttt{weight} specifies a weight function for the integration.
+   \item Argument \code{domain} can be a tessellation.
    \item Now handles complex-valued functions.
 
    \end{itemize}
 
+ \item \texttt{integral.msr}:
+   New argument \texttt{weight} specifies a weight (integrand) for the integration.
+   
  \item \texttt{integral.ssf}:
    Argument \code{domain} can be a tessellation.
 
@@ -2295,9 +2354,15 @@ listed alphabetically.
 %%K
 
  \item \texttt{Kcross}: 
-   Function labels (shown on the plot legend) have been improved when 
-   \texttt{i = j}.
-   
+   \begin{itemize}
+   \item 
+     Function labels (shown on the plot legend) have been improved when 
+     \texttt{i = j}.
+   \item 
+     Now accepts  the option \texttt{correction="periodic"}
+     to compute the periodic (toroidal) edge correction estimate.
+   \end{itemize}
+
  \item \texttt{Kcross.inhom}, \texttt{Kdot.inhom}, \texttt{Kmulti.inhom}:
    \begin{itemize}
    \item 
@@ -2310,6 +2375,10 @@ listed alphabetically.
     when \texttt{lambbdaX} is a fitted model of class \texttt{"dppm"}.
    \end{itemize}
 
+   
+ \item \texttt{Kdot}:
+   Now accepts  the option \texttt{correction="periodic"}
+   to compute the periodic (toroidal) edge correction estimate.
 
  \item \texttt{Kest}
    \begin{itemize}
@@ -2320,6 +2389,9 @@ listed alphabetically.
     Calculation of isotropic edge correction for polygonal windows
     has changed slightly. Results are believed to be more accurate.
     Computation has been accelerated by about 20 percent in typical cases.
+  \item 
+    Now accepts  the option \texttt{correction="periodic"}
+    to compute the periodic (toroidal) edge correction estimate.
    \end{itemize}
 
 \item \texttt{Kest.fft}:
@@ -2337,6 +2409,9 @@ listed alphabetically.
 
    \end{itemize}
 
+\item \texttt{Kmulti}:
+  Now accepts the option \texttt{correction="periodic"}
+  to compute the periodic (toroidal) edge correction estimate.
     
  \item \texttt{kppm}:
    \begin{itemize}
@@ -2378,6 +2453,14 @@ listed alphabetically.
 \item \texttt{latest.news}: 
   Now prints news documentation for the current major version, by default.
   New argument \texttt{major}.
+
+\item \texttt{Lcross}:
+  Now accepts  the option \texttt{correction="periodic"}
+  to compute the periodic (toroidal) edge correction estimate.
+  
+\item \texttt{Ldot}:
+  Now accepts  the option \texttt{correction="periodic"}
+  to compute the periodic (toroidal) edge correction estimate.
   
  \item \texttt{Lcross.inhom}, \texttt{Ldot.inhom}:
     These functions now allow intensity values to be given by
@@ -2553,16 +2636,30 @@ listed alphabetically.
    Accepts the argument \texttt{weights} which is passed to \texttt{markcorr}.
 
  \item \texttt{markcorr}:
-   New argument \texttt{weights} allows computation of the weighted version
-   of the mark correlation function.
-   Weights 
-   can be an expression
-   to be evaluated, or a function, or a pixel image, or a numeric vector.
+   \begin{itemize}
+   \item 
+     New argument \texttt{weights} allows computation of the weighted version
+     of the mark correlation function.
+     Weights can be an expression
+     to be evaluated, or a function, or a pixel image, or a numeric vector.
+   \item 
+     Now allows negative mark values, when \texttt{normalise=FALSE}.
+   \end{itemize}
 
+\item \texttt{markcrosscorr}:
+       Now allows negative mark values, when \texttt{normalise=FALSE}.
+   
+ \item \texttt{markstat}:
+   Now works for point patterns in three dimensions (class \texttt{"pp3"})
+   and point patterns on a network (class \texttt{"lpp"}).
+   
+\item \texttt{marktable}:
+    Now works for point patterns in three dimensions (class \texttt{"pp3"})
+    and point patterns on a network (class \texttt{"lpp"}).
+   
  \item \texttt{markvario}:
    Accepts the argument \texttt{weights} which is passed to \texttt{markcorr}.
 
-   
  \item \texttt{mincontrast}:
    New argument \texttt{action.bad.values} specifies what action is taken
     when the summary function produces \texttt{NA} or \texttt{NaN}
@@ -2846,6 +2943,8 @@ listed alphabetically.
     the colour arguments \texttt{cols}, \texttt{fg}, \texttt{bg} can now 
     be vectors of colour values, and will be used to determine
     the default colour map for the marks.
+     \item If \texttt{shape="crossticks"}, the points will be drawn as
+       short line segments perpendicular to the network.
      \end{itemize}
 
    \item \texttt{plot.mppm}:
@@ -2957,6 +3056,15 @@ listed alphabetically.
 
   \item \texttt{ppm}:
     \begin{itemize}
+    \item Now supports regularized model-fitting.
+    \item Huang-Ogata approximate maximum likelihood can be applied to logistic fits.
+    \item New argument \texttt{improve.type}. 
+      \begin{itemize}
+      \item Option \texttt{method="ho"} is replaced by \texttt{improve.type="ho"}.
+      \item Regularized model-fitting is performed when \texttt{improve.type="enet"}.
+      \item Huang-Ogata approximate maximum likelihood can be applied to logistic fits
+        by setting \texttt{method="logi"} and \texttt{improve.type="ho"}.
+      \end{itemize}
     \item 
       Argument \code{interaction} can now be a function that makes an interaction,
       such as \code{Poisson}, \code{Hardcore}, \code{MultiHard}.
@@ -3076,6 +3184,9 @@ listed alphabetically.
     
 %%R
    
+  \item Most random generators: now accept \texttt{nsim=0} 
+    and return a zero-length list.
+    
   \item \texttt{rbind.hyperframe}:
     The result now retains the \texttt{row.names}
     of the original arguments.
