@@ -8,7 +8,7 @@
 
 % \VignetteIndexEntry{Summary of Recent Updates to the Spatstat Family}
 
-% $Revision: 1.57 $ $Date: 2022/06/19 05:39:20 $
+% $Revision: 1.58 $ $Date: 2022/06/19 09:17:27 $
 
 \newcommand{\pkg}[1]{\texttt{#1}}
 \newcommand{\code}[1]{\texttt{#1}}
@@ -320,7 +320,7 @@ the News and Release Notes for each update.
 
   \item New dataset \texttt{stonetools}.
     
-  \item Regularized model-fitting.
+  \item Regularized model-fitting in \texttt{ppm} and \texttt{kppm}.
 
   \item Residuals for recursively-partitioned models.
     
@@ -2432,10 +2432,15 @@ listed alphabetically.
  \item \texttt{kppm}:
    \begin{itemize}
    \item 
-    New default settings ensure greater numerical stability of the
-    optimization algorithm against the effects of the scale of the
-    spatial coordinates.  New argument \texttt{stabilize} specifies whether
-    the optimization algorithm should be numerically stabilized.
+     New arguments \texttt{ppm.improve.type} and \texttt{ppm.improve.args}.
+   \item 
+     The first order trend is fitted using a regularized fitting algorithm
+     when \texttt{ppm.improve.type="enet"}.
+   \item 
+     New default settings ensure greater numerical stability of the
+     optimization algorithm against the effects of the scale of the
+     spatial coordinates.  New argument \texttt{stabilize} specifies whether
+     the optimization algorithm should be numerically stabilized.
    \item 
      Fitting a model with \texttt{clusters="LGCP"} no longer requires the
      package \pkg{RandomFields} to be loaded explicitly.
