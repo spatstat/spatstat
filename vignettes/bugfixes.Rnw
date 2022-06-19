@@ -396,6 +396,11 @@ the presence of a bug is obvious, and the bug would not have misled the user.
     and the function values were categorical (factor) values,
     the result was an empty image.
     \bugger{1.42-0}{may 2015}{1.57-0}{october 2018}
+
+  \item \texttt{density.lpp}:
+    If \texttt{weights} were given, the results were completely incorrect
+    if \texttt{leaveoneout=TRUE} (the default) and \texttt{at="points"}.
+    \bugin{spatstat 1.51-0}{may 2017}{spatstat.linnet 3.0-0}{june 2022}
     
   \end{itemize}
   

@@ -1,5 +1,5 @@
 Package: spatstat
-Version: 2.999-999.003
+Version: 2.999-999.005
 Date: 2022-06-19
 Title: Spatial Point Pattern Analysis, Model-Fitting, Simulation, Tests
 Authors@R: c(person("Adrian", "Baddeley", 
@@ -15,7 +15,7 @@ Authors@R: c(person("Adrian", "Baddeley",
 		    email = "rubak@math.aau.dk",
 		    comment=c(ORCID="0000-0002-6675-533X")))
 Maintainer: Adrian Baddeley <Adrian.Baddeley@curtin.edu.au>
-Depends: R (>= 3.5.0), spatstat.data (>= 2.999-999.001), spatstat.geom (>= 2.999-999.002), spatstat.random (>= 2.999-999.001), spatstat.explore (>= 2.999-999.007), spatstat.model (>= 2.999-999.008), spatstat.linnet (>= 2.999-999.002), utils
+Depends: R (>= 3.5.0), spatstat.data (>= 2.999-999.001), spatstat.geom (>= 2.999-999.002), spatstat.random (>= 2.999-999.001), spatstat.explore (>= 2.999-999.007), spatstat.model (>= 2.999-999.009), spatstat.linnet (>= 2.999-999.003), utils
 Imports: spatstat.utils (>= 2.999-999.001)
 Suggests: 
 Additional_repositories: https://spatstat.r-universe.dev

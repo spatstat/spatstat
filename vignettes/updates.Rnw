@@ -8,7 +8,7 @@
 
 % \VignetteIndexEntry{Summary of Recent Updates to the Spatstat Family}
 
-% $Revision: 1.55 $ $Date: 2022/05/26 06:15:54 $
+% $Revision: 1.57 $ $Date: 2022/06/19 05:39:20 $
 
 \newcommand{\pkg}[1]{\texttt{#1}}
 \newcommand{\code}[1]{\texttt{#1}}
@@ -321,6 +321,11 @@ the News and Release Notes for each update.
   \item New dataset \texttt{stonetools}.
     
   \item Regularized model-fitting.
+
+  \item Residuals for recursively-partitioned models.
+    
+  \item Residuals for any observed point pattern and an estimate of
+    its intensity.
     
   \item Weighted measures and weighted integrals.
     
@@ -330,9 +335,11 @@ the News and Release Notes for each update.
     
   \item  Extract more information about a point process model.
 
+  \item kernel smoothing on a linear network.
+    
   \item linear network $K$ function and pair correlation function
     based on Euclidean distance.
-    
+
   \item inhomogeneous linear network $J$ function.
 
   \item Terminal vertices of a network.
@@ -726,7 +733,16 @@ Following is a list of all the functions that have been added,
 starting with the most recent additions.
 
 \begin{itemize}
+
+\item \texttt{Smooth.lpp}: kernel smoothing on a linear network.
   
+\item \texttt{residuals.rppm}:
+  Residual measure for a recursively-partitioned point process model.
+      
+\item \texttt{residualMeasure}:
+  Residual measure for any observed point pattern
+  and any estimate of its intensity.
+      
 \item \texttt{linearKEuclid, linearpcfEuclid, linearKEuclidInhom, linearpcfEuclidInhom}:
   Linear network $K$ function and pair correlation function based on Euclidean distances.
   
