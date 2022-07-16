@@ -255,6 +255,11 @@ the presence of a bug is obvious, and the bug would not have misled the user.
  \subsection{Serious Bugs, Often Completely Wrong, Moderate Impact}
 
  \begin{itemize}
+ \item \texttt{matrixsqrt}, \texttt{matrixinvsqrt}, \texttt{matrixpower}
+    If the result was a complex-valued matrix, the values were completely 
+    incorrect.
+    \bugin{spatstat 1.48-0}{december 2016}{spatstat.sparse 2.1-1}{february 2021}
+    
   \item \texttt{rLGCP}, \texttt{simulate.kppm}:
     Simulation results for log-Gaussian Cox processes were incorrect
     unless the pixel dimensions and pixel spacings were identical

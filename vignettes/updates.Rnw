@@ -8,7 +8,7 @@
 
 % \VignetteIndexEntry{Summary of Recent Updates to the Spatstat Family}
 
-% $Revision: 1.58 $ $Date: 2022/06/19 09:17:27 $
+% $Revision: 1.59 $ $Date: 2022/07/16 08:48:35 $
 
 \newcommand{\pkg}[1]{\texttt{#1}}
 \newcommand{\code}[1]{\texttt{#1}}
@@ -318,6 +318,15 @@ the News and Release Notes for each update.
     \pkg{spatstat.explore}, \pkg{spatstat.model}, \pkg{spatstat.linnet}
     and \pkg{spatstat}).
 
+  \item Periodic edge correction for \textit{K} function.
+
+  \item Changed denominator in \textit{K} function and pair correlation function.
+  \item Bandwidth selection for adaptive kernel estimation of intensity.
+
+  \item U-shaped and inverted-U-shaped curves in \texttt{rhohat}.
+    
+  \item Radial cumulative integral of an image.
+    
   \item New dataset \texttt{stonetools}.
     
   \item Regularized model-fitting in \texttt{ppm} and \texttt{kppm}.
@@ -734,6 +743,12 @@ starting with the most recent additions.
 
 \begin{itemize}
 
+\item \texttt{bw.CvL.adaptive}:
+    Bandwidth selection for adaptive kernel estimation of intensity.
+
+\item \texttt{radcumint}:
+    Radial cumulative integral of an image.
+    
 \item \texttt{Smooth.lpp}: kernel smoothing on a linear network.
   
 \item \texttt{residuals.rppm}:
@@ -1583,10 +1598,11 @@ listed alphabetically.
 %%A
   
 \item \texttt{adaptive.density}:
-  This function can now perform adaptive estimation by two methods: either
-  tessellation-based methods or variable-bandwidth kernel estimation.
-  The calculations are performed by either \texttt{densityVoronoi} or
-  \texttt{densityAdaptiveKernel}.
+  This function can now perform adaptive estimation by three methods: 
+  tessellation-based methods, variable-bandwidth kernel estimation,
+  and nearest-neighbour intensity estimation.
+  The calculations are performed by \texttt{densityVoronoi},
+  \texttt{densityAdaptiveKernel} or \texttt{nndensity}.
   
 \item \texttt{affine.owin}:
   Allows transformation matrix to be singular, if the window is polygonal.
@@ -3259,12 +3275,19 @@ listed alphabetically.
      assuming the intensity is a monotone function of the covariate.
    \item
      New options \texttt{smoother="increasing"} 
-     and \texttt{smoother="decreasing"}.
+     and \texttt{smoother="decreasing"} for estimating
+     a monotone increasing or monotone decreasing curve.
+   \item
+     New options \texttt{smoother="mountain"} 
+     and \texttt{smoother="valley"}
+     for estimating a unimodal function (U-shaped or inverted-U-shaped curve).
    \item 
    New argument \texttt{subset} allows computation for a subset of the data.
    \item
    New argument \texttt{positiveCI} specifies whether confidence limits
    should always be positive. 
+ \item If the covariate is a \texttt{distfun}, the name of the unit of length
+   is saved and displayed on the plot.
    \end{itemize}
    
    \texttt{rhohat.lpp}:
