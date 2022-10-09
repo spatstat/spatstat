@@ -17,9 +17,11 @@
 % Names with accents
 \newcommand{\Bogsted}{\ifelse{latex}{\out{B\o gsted}}{Bogsted}}
 \newcommand{\Cramer}{\ifelse{latex}{\out{Cram\'er}}{Cramer}}
+\newcommand{\Francois}{\ifelse{latex}{\out{Fran\c{c}ois}}{Francois}}
 \newcommand{\Frederic}{\ifelse{latex}{\out{Fr{\'e}d{\'e}ric}}{Frederic}}
 \newcommand{\Hogmander}{\ifelse{latex}{\out{H{\"o}gmander}}{Hogmander}}
 \newcommand{\Jyvaskyla}{\ifelse{latex}{\out{Jyv\"askyl\"a}}{Jyvaskyla}}
+\newcommand{\Lucia}{\ifelse{latex}{\out{Luc\'{\i{}}a}}{Lucia}}
 \newcommand{\Matern}{\ifelse{latex}{\out{Mat\'ern}}{Matern}}
 \newcommand{\Moller}{\ifelse{latex}{\out{M\o ller}}{Moller}}
 \newcommand{\Oehlschlaegel}{\ifelse{latex}{\out{Oehlschl\"{a}gel}}{Oehlschlaegel}}

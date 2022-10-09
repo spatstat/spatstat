@@ -56,6 +56,8 @@ plot(V, main="Pixel image on a linear network")
 
 fanfare("II. Graphics")
 
+par(mar=c(5,4,2,3)+0.1)
+
 plot(letterR, col="green", border="red", lwd=2, main="Polygonal window with colour fill")
 plot(letterR, hatch=TRUE, spacing=0.15, angle=30, main="Polygonal window with line shading")
 plot(letterR, hatch=TRUE, hatchargs=list(texture=8, spacing=0.12),
@@ -118,6 +120,12 @@ V <- as.linim(function(x,y,seg,tp){(y/1000)^2-(x/1000)^3}, L=domain(chicago))
 plot(V, main="Pixel image on a linear network (colour plot)")
 plot(V, style="w", main="Pixel image on a linear network (width plot)")
 persp(V, phi=25, theta=-35, expand=0.2, main="Pixel image on a linear network (perspective plot)")
+
+plot(chicago, cols=1:7, main="Point pattern on a network")
+plot(dendrite, shape="crossticks", cols=2:4, size=8,
+     leg.side="bottom", leg.args=list(lwd=3),
+     main="Point pattern on a network")
+
 
 fanfare("III. Conversion between types")
 
@@ -746,11 +754,12 @@ showoffK <- function(Y, current, ..., fullpicture,rad) {
 	plot(fullpicture,
              main=c("Animation using `applynbd'", "explaining the K function"))
 	points(Y, cex=2)
-        u <- current
-	points(u[1],u[2],pch="+",cex=3)
+        ux <- current[["x"]]
+        uy <- current[["y"]]
+	points(ux,uy,pch="+",cex=3)
 	theta <- seq(0,2*pi,length=100)
-	polygon(u[1]+ rad * cos(theta),u[2]+rad*sin(theta))
-	text(u[1]+rad/3,u[2]+rad/2,Y$n,cex=3)
+	polygon(ux + rad * cos(theta), uy + rad*sin(theta))
+	text(ux+rad/3,uy+rad/2,Y$n,cex=3)
         if(runif(1) < 0.2) Sys.sleep(runif(1, max=0.4))
 	return(npoints(Y))
 }
