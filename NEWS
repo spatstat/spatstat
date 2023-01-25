@@ -1,10 +1,12 @@
 
-        CHANGES IN spatstat VERSION 3.0-2.001
+        CHANGES IN spatstat VERSION 3.0-2.002
 
 OVERVIEW
 
     o Package version information updated.
 
+    o Minor errors corrected in vignettes.
+    
         CHANGES IN spatstat VERSION 3.0-2
 
 OVERVIEW

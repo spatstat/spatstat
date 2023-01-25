@@ -13,7 +13,7 @@ citEntry(entry = "Book",
   paste("Adrian Baddeley, Ege Rubak, Rolf Turner (2015).",
         "Spatial Point Patterns: Methodology and Applications with R.",
         "London: Chapman and Hall/CRC Press, 2015.",
-        "URL https://www.routledge.com/Spatial-Point-Patterns-Methodology-and-Applications-with-R/Baddeley-Rubak-Turner/9781482210200/")
+        "URL https://www.routledge.com/Spatial-Point-Patterns-Methodology-and-Applications-with-R/Baddeley-Rubak-Turner/p/book/9781482210200/")
 )
 
 citEntry(entry = "Article",
@@ -31,8 +31,8 @@ citEntry(entry = "Article",
 
   textVersion  =
   paste("Adrian Baddeley, Rolf Turner, Jorge Mateu, Andrew Bevan (2013).",
-        "Hybrids of Gibbs Point Process Models and Their Implementation.",
-        "Journal of Statistical Software, 55(11), 1-43.",
+        "Hybrids of Gibbs Point Process Models and Their Implementation",
+        "Journal of Statistical Software, 55(11), 1-43",
         "DOI: 10.18637/jss.v055.i11"),
 
   header       = "If you use hybrid models, please also cite:"

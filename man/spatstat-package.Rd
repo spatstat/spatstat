@@ -1930,6 +1930,7 @@
   George Limitsios,
   Andrew Lister,
   Nestor Luambua,
+  Bethany Macdonald,
   Ben Madin,
   Martin Maechler,
   Daniel Manrique-\ifelse{latex}{\out{Casta{\~n}o}}{Castano},

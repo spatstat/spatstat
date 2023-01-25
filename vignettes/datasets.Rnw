@@ -684,7 +684,7 @@ Some analysis of the data uses a rectangle close to the abandoned town
 of Reedy:
 
 <<>>=
-reedy <- owin(c(580, 650), c(6986, 7026))
+reedy <- owin(c(580, 650) * 1000, c(6986, 7026) * 1000)
 @ 
 
 Here are the data in that area:
