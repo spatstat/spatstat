@@ -35,7 +35,7 @@ options(useFancyQuotes=FALSE)
 
 This vignette lists all \emph{important} bugs detected and fixed in the
 \spst\ package since 2010. It also explains how to search the list of
-all recorded bugs in the \spst\ famil of packages.
+all recorded bugs in the \spst\ family of packages.
 
 <<echo=FALSE,results=hide>>=
 nbugs      <- nrow(bugfixes("all",  show=FALSE))
@@ -255,10 +255,20 @@ the presence of a bug is obvious, and the bug would not have misled the user.
  \subsection{Serious Bugs, Often Completely Wrong, Moderate Impact}
 
  \begin{itemize}
- \item \texttt{matrixsqrt}, \texttt{matrixinvsqrt}, \texttt{matrixpower}
+ \item \texttt{pairdist.lpp}:
+   Results could have been completely incorrect, due to an internal bug,
+    if the linear network data was in the non-sparse representation.
+    \bugbefore{spatstat 1.65-0}{december 2020}{spatstat.linnet 3.0-3}{january 2023}
+    
+ \item \texttt{matrixsqrt}, \texttt{matrixinvsqrt}, \texttt{matrixpower}:
     If the result was a complex-valued matrix, the values were completely 
     incorrect.
     \bugin{spatstat 1.48-0}{december 2016}{spatstat.sparse 2.1-1}{february 2021}
+
+  \item \texttt{pcf.ppp}:
+    Estimates were incorrectly scaled (they were incorrectly multiplied
+    by the area of the window.) Spotted by Maximilian Hesselbarth.
+    \bugin{spatstat.explore 3.0-0}{may 2022}{spatstat.explore 3.0-6}{january 2023}
     
   \item \texttt{rLGCP}, \texttt{simulate.kppm}:
     Simulation results for log-Gaussian Cox processes were incorrect
@@ -429,6 +439,12 @@ the presence of a bug is obvious, and the bug would not have misled the user.
     [Spotted by Hank Stevens.]
     \bugger{1.32-0}{august 2013}{2.2-0}{june 2021}
     
+  \item \verb!"[<-.im"!:
+    Incorrect values were assigned in \verb!x[] <- v! 
+    when \texttt{x} and \texttt{v} were both factor-valued
+    but with different sets of levels.
+    \bugbefore{spatstat 1.56-0}{june 2018}{spatstat.geom 3.0-5}{january 2023}
+     
  \item \texttt{vcov.mppm}:
     For Gibbs (non-Poisson) models, the variance matrix was
     calculated incorrectly in some cases. 
@@ -615,6 +631,9 @@ the presence of a bug is obvious, and the bug would not have misled the user.
  \subsection{Partially Incorrect}
  \begin{itemize}
    
+ \item \texttt{rjitter.ppp}: If \texttt{retry=FALSE}, marks were ignored.
+   \bugbefore{spatstat 1.65-0}{december 2020}{spatstat.geom 3.0-5}{january 2023}
+   
   \item \texttt{rhohat.lpp}:
     The argument \texttt{subset} was not handled correctly in the internal data.
     The estimated function \texttt{rho} was correct, but if
@@ -669,6 +688,11 @@ the presence of a bug is obvious, and the bug would not have misled the user.
     for small radius \texttt{r} if the polygon contained many small segments
     or if the polygon was very long and thin.
     \bugger{1.60-0}{june 2019}{1.62-0}{december 2019}.
+    
+ \item \texttt{edge.Ripley}, \texttt{Kest}, \texttt{Kinhom}:    
+    Isotropic edge correction weight was computed incorrectly
+    for a data point lying exactly on a corner of a rectangular window.
+    \bugin{spatstat 1.60-0}{june 2019}{spatstat.explore 3.0-4}{november 2022}
  
  \item \texttt{beachcolours}, \texttt{beachcolourmap}:
    The number of colours was not always equal to \texttt{ncolours}.

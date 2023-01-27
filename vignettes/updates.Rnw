@@ -8,7 +8,7 @@
 
 % \VignetteIndexEntry{Summary of Recent Updates to the Spatstat Family}
 
-% $Revision: 1.59 $ $Date: 2022/07/16 08:48:35 $
+% $Revision: 1.61 $ $Date: 2023/01/27 21:41:45 $
 
 \newcommand{\pkg}[1]{\texttt{#1}}
 \newcommand{\code}[1]{\texttt{#1}}
@@ -317,6 +317,34 @@ the News and Release Notes for each update.
     \pkg{spatstat.geom}, \pkg{spatstat.random},
     \pkg{spatstat.explore}, \pkg{spatstat.model}, \pkg{spatstat.linnet}
     and \pkg{spatstat}).
+
+    
+  \item \texttt{kppm} has been accelerated when 
+    \texttt{method="palm"} or \texttt{"clik2"}.
+
+  \item \texttt{kppm} can save the history of the optimisation algorithm.
+
+  \item Faster algorithms for simulating cluster processes.
+  
+  \item Penalised model-fitting for Neyman-Scott cluster process models.
+
+  \item Index of the strength of clustering
+    in a Neyman-Scott cluster process model.
+    
+  \item Probability of having any siblings.
+
+  \item More information is printed about Neyman-Scott cluster process models.
+  
+  \item Palm intensity diagnostic plot.
+    
+  \item Convert several factors or factor-valued images 
+    to a common set of levels.
+    
+  \item Extension to \texttt{rjitter}
+
+  \item Alternative to \texttt{rjitter}
+
+  \item Quantile function as a function
 
   \item Periodic edge correction for \textit{K} function.
 
@@ -717,6 +745,9 @@ These are now provided in the sub-package \pkg{spatstat.data}.
 The following new classes of objects may be of use.
 
 \begin{itemize}
+\item \texttt{traj}:
+    Trajectory (history of function evaluations) in a model
+    that was fitted by optimisation.
 \item \texttt{metric}: Class of distance metrics.
    An object of class \texttt{metric} represents a distance metric
    between points in two-dimensional space.
@@ -742,6 +773,43 @@ Following is a list of all the functions that have been added,
 starting with the most recent additions.
 
 \begin{itemize}
+  
+\item \texttt{panysib}:
+  Probability that a point in a cluster process has \emph{any} siblings.
+
+\item \texttt{is.poissonclusterprocess}:
+  Detects whether a given model is a Poisson cluster process
+  (which includes Neyman-Scott processes).
+
+\item \texttt{traj}, \texttt{print.traj}, \texttt{plot.traj}, 
+  \texttt{lines.traj}:
+    Extract, print and plot the trajectory of function evaluations.
+    
+\item \texttt{rpoisnonzero}:
+Generate Poisson random variables conditioned to be positive.
+    
+\item \texttt{rpoistrunc}:
+  Generate `truncated' Poisson random variables,
+  conditioned to be greater than or equal to a specified minimum value.
+
+\item \texttt{rclusterBKBC}:
+  (Advanced use) Internal algorithm to simulate any Neyman-Scott cluster
+  process using either the naive, Brix-Kendall, or Baddeley-Chang algorithm.
+    
+\item \texttt{palmdiagnose}, \texttt{plot.palmdiag}:
+  Palm intensity diagnostic plot for cluster process models
+  proposed by Tanaka, Ogata and Stoyan.
+    
+\item \texttt{harmoniseLevels}: 
+  Given several factors or factor-valued pixel images,
+  convert them all to have the same set of factor levels.
+
+\item \texttt{rexplode}: ``Explode'' a point pattern by randomly displacing each
+    group of duplicated points to make a circular pattern
+    around the original location. An alternative to \texttt{rjitter}.
+
+\item \texttt{quantilefun}:
+    Return a function that computes any quantiles of a given dataset.
 
 \item \texttt{bw.CvL.adaptive}:
     Bandwidth selection for adaptive kernel estimation of intensity.
@@ -2448,6 +2516,17 @@ listed alphabetically.
  \item \texttt{kppm}:
    \begin{itemize}
    \item 
+    Computation accelerated when \texttt{method="palm"} or 
+    \texttt{method="clik2"}.
+    [Kindly contributed by Bethany Macdonald.]
+   \item 
+     New argument \texttt{trajectory} specifies whether to save the history
+     of function evaluations performed by the optimization algorithm.
+   \item 
+     New argument \texttt{penalised} supports penalised model-fitting 
+     with a penalty against extremely large or small values 
+     of the cluster scale. 
+   \item 
      New arguments \texttt{ppm.improve.type} and \texttt{ppm.improve.args}.
    \item 
      The first order trend is fitted using a regularized fitting algorithm
@@ -3025,6 +3104,9 @@ listed alphabetically.
     
    \item \texttt{plot.ppp}:
      \begin{itemize}
+     \item  For multitype point patterns, a warning is issued if 
+    the plot legend does not represent every possible type of point
+    due to space restrictions.
      \item  The default colour for the points is now a transparent grey,
        if this is supported by the plot device.
      \item For a point pattern with continuous marks (``real numbers'')
@@ -3052,6 +3134,7 @@ listed alphabetically.
   \item New argument \texttt{multiplot}.
     \end{itemize}
 
+  \item \texttt{plot.palmdiag}: Improved calculation of $y$ axis limits.
     
    \item \texttt{plot.profilepl} ,\texttt{plot.quadratcount}, 
      \texttt{plot.quadrattest}, \texttt{plot.tess}:
@@ -3060,6 +3143,10 @@ listed alphabetically.
 
     \item \texttt{plot.solist}:
       \begin{itemize}
+      \item When \texttt{equal.ribbon=TRUE}, the images may now be factor-valued
+        or character-valued. Character-valued images will be converted
+        to factor-valued images. The common colour map will combine the
+        levels of all the factor images. 
       \item 
         New arguments \texttt{panel.begin.args}, \texttt{panel.end.args}
       \item 
@@ -3071,8 +3158,12 @@ listed alphabetically.
       help file.
       
     \item \texttt{plot.symbolmap}:
-      New argument \texttt{nsymbols} controls the number of symbols plotted.
-
+      \begin{itemize}
+      \item New argument \texttt{warn}.
+      \item Issues a warning if the plot of a discrete symbol map does not
+        represent every possible input value, due to space restrictions.
+      \item New argument \texttt{nsymbols} controls the number of symbols plotted.
+      \end{itemize}
 
    \item \code{ponderosa}:
     In this installed dataset, the function \code{ponderosa.extra\$plotit}
@@ -3167,6 +3258,10 @@ listed alphabetically.
      New argument \texttt{what} determines which value should be calculated:
     the function estimate, the upper/lower confidence limits, or the
     standard error.
+
+  \item \texttt{print.kppm}: Additional characteristics of the fitted model
+    are reported,
+    including the cluster strength \texttt{phi} and the sibling probability.
 
   \item \texttt{print.linim}: More information is printed.
 
@@ -3293,6 +3388,12 @@ listed alphabetically.
    \texttt{rhohat.lpp}:
    New argument \texttt{random} controls placement of dummy points.
 
+ \item \texttt{rjitter.ppp}:  If \texttt{trim=TRUE}, 
+   the displacement radius will be constrained
+   to be less than or equal to the distance from the data point
+   to the window boundary. This guarantees that all displaced points fall
+   inside the window, and accelerates the computation.
+   
    \item \texttt{rlabel}: 
      \begin{itemize}
      \item New argument \texttt{group} specifies that the points are 
@@ -3358,6 +3459,12 @@ listed alphabetically.
   \item The parameter \texttt{nsave} can now be a vector of integers.
     \end{itemize}
     
+  \item \texttt{rNeymanScott}:
+    \begin{itemize}
+    \item Argument \texttt{lmax} has been replaced by \texttt{kappamax}.
+    \item New argument 'mumax'.    
+    \end{itemize}
+
  \item \texttt{rose.default}
    New argument \texttt{weights}.
 
@@ -3367,7 +3474,7 @@ listed alphabetically.
 
  \item \texttt{rotmean}:
    \begin{itemize}
-   \item    New argument \texttt{padzero}. 
+   \item New argument \texttt{padzero}. 
    \item Default behaviour has changed.
    \item Improved algorithm stability.
    \item The result now has the same \texttt{unitname} as the input object.
@@ -3392,9 +3499,11 @@ listed alphabetically.
      If \texttt{lambda} is a list of \texttt{"linim"} or \texttt{"linfun"}
      objects, then the argument \texttt{L} can be omitted.
 
+   \item \texttt{rPoissonCluster}:
+    Argument \texttt{lmax} has been replaced by \texttt{kappamax}.
+    
    \item \texttt{rshift.ppp}, \texttt{rshift.splitppp}: 
      new argument \texttt{nsim}.
-     
      
    \item \texttt{rSSI}: Accelerated.
      
@@ -3415,6 +3524,13 @@ listed alphabetically.
 
    \item \texttt{rThomas, rMatClust, rCauchy, rVarGamma}:
      \begin{itemize}
+     \item 
+       These algorithms have been accelerated by several orders of magnitude
+       in the case where the cluster radius is large.
+     \item 
+       These functions now offer a choice of simulation algorithms.
+    \item 
+      Formal arguments have changed. 
      \item 
        When the model is approximately Poisson, it is simulated using rpoispp. 
        This avoids computations which would require huge amounts of memory. 
@@ -3680,6 +3796,10 @@ listed alphabetically.
    
    \item \texttt{valid.ppm}
    This is now a method for the generic function \texttt{valid}.
+
+   \item \texttt{varcount}:
+     New argument \texttt{relative} supports calculation of the 
+     overdispersion index. 
 
    \item \texttt{vcov.mppm}:
      \begin{itemize}
