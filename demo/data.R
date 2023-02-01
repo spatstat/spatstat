@@ -48,7 +48,7 @@ plot(copper$Lines, add=TRUE)
 plot(demohyper, quote({ plot(Image, main=""); plot(Points, add=TRUE) }),
       parargs=list(mar=rep(1,4)))
 
-plot(dendrite, leg.side="bottom", main="", cex=0.75, cols=2:4)
+plot(dendrite, leg.side="bottom", main="Dendritic spines", cex=0.75, cols=2:4)
 
 plot(demopat)
 
@@ -140,7 +140,9 @@ plot(urkiola, cex=0.5, cols=2:3)
 
 plot(waka, markscale=0.04, main=c("Waka national park", "tree diameters"))
 
-plot(waterstriders)
+plot(waterstriders, main.panel="",
+     equal.scales=TRUE, mar.panel=0, hsep=1,
+     cex=0.75)
 
 par(oldpar)
 options(oldoptions)

@@ -145,6 +145,7 @@ that are supplied with the current installation of \sdat:
 {\tt simdat} & simulated pattern & \nomarks & \nocov & \recto \\
 {\tt sporophores} & fungi & species & \nocov &  \disc \\
 {\tt spruces} & trees & diameter & \nocov &  \recto \\
+{\tt stonetools} & palaeolithic tools & type, depth & \nocov &  \irregpoly \\
 {\tt swedishpines} & trees & \nomarks & \nocov & \recto \\
 {\tt urkiola} & mixed forest & species & \nocov & \irregpoly \\
 {\tt vesicles} & synaptic vesicles & \nomarks & zones & \irregpoly \\
@@ -863,6 +864,19 @@ Sporophores of three species of fungi around a tree.
 plot(sporophores, chars=c(16,1,2), cex=0.6)
 points(0,0,pch=16, cex=2)
 text(15,8,"Tree", cex=0.75)
+@ 
+
+\subsubsection*{\texttt{stonetools}: 
+  Palaeolithic stone tools and bone fragments}
+
+Palaeolithic tools and bone fragments
+uncovered in an archaeological dig
+in Tanzania. Each find is marked by its type (either \texttt{BONE}
+or \texttt{LITHIC}) and by the height $z$ (above a reference level)
+of the location in the soil where it was found.
+
+<<fig=TRUE>>=
+plot(stonetools, which.marks=2, cols=c(2,3), chars=c(1,3), cex=0.5)
 @ 
 
 \subsubsection*{\texttt{spruces}: Spruces in Saxony}
