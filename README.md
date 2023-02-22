@@ -1,7 +1,7 @@
 spatstat
 ========
 
-[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/spatstat)](http://cran.r-project.org/web/packages/spatstat)
+[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/spatstat)](http://CRAN.R-project.org/package=spatstat)
 [![GitHub R package version](https://img.shields.io/github/r-package/v/spatstat/spatstat)](https://github.com/spatstat/spatstat)
 [![Travis-CI Build Status](https://travis-ci.org/spatstat/spatstat.png?branch=master)](https://travis-ci.org/spatstat/spatstat)
 [![codecov.io](https://codecov.io/github/spatstat/spatstat/coverage.svg)](https://codecov.io/github/spatstat/spatstat?branch=covr)
@@ -26,15 +26,15 @@ The original `spatstat` has now been divided into a family of sub-packages:
 
 | Sub-package | CRAN page | GitHub repository | Description |
 | ----------  | --------- | ----------------- | ----------  |
-| `spatstat.utils` | [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/spatstat.utils)](http://cran.r-project.org/web/packages/spatstat.utils) | [![GitHub R package version](https://img.shields.io/github/r-package/v/spatstat/spatstat.utils)](https://github.com/spatstat/spatstat.utils) | Basic utilities |
-| `spatstat.data` | [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/spatstat.data)](http://cran.r-project.org/web/packages/spatstat.data) | [![GitHub R package version](https://img.shields.io/github/r-package/v/spatstat/spatstat.data)](https://github.com/spatstat/spatstat.data) | Datasets |
-| `spatstat.sparse` | [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/spatstat.sparse)](http://cran.r-project.org/web/packages/spatstat.sparse) | [![GitHub R package version](https://img.shields.io/github/r-package/v/spatstat/spatstat.sparse)](https://github.com/spatstat/spatstat.sparse) | Sparse arrays |
-| `spatstat.geom` | [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/spatstat.geom)](http://cran.r-project.org/web/packages/spatstat.geom) | [![GitHub R package version](https://img.shields.io/github/r-package/v/spatstat/spatstat.geom)](https://github.com/spatstat/spatstat.geom) | Spatial data classes; geometrical operations |
-| `spatstat.random` | [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/spatstat.random)](http://cran.r-project.org/web/packages/spatstat.random) | [![GitHub R package version](https://img.shields.io/github/r-package/v/spatstat/spatstat.random)](https://github.com/spatstat/spatstat.random) |  Generation of random patterns |
-| `spatstat.explore` | [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/spatstat.explore)](http://cran.r-project.org/web/packages/spatstat.explore) | [![GitHub R package version](https://img.shields.io/github/r-package/v/spatstat/spatstat.explore)](https://github.com/spatstat/spatstat.explore) | Exploratory Data Analysis of spatial data |
-| `spatstat.model` | [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/spatstat.model)](http://cran.r-project.org/web/packages/spatstat.model) | [![GitHub R package version](https://img.shields.io/github/r-package/v/spatstat/spatstat.model)](https://github.com/spatstat/spatstat.model) |  Parametric modelling and formal inference for spatial data |
-| `spatstat.linnet` | [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/spatstat.linnet)](http://cran.r-project.org/web/packages/spatstat.linnet) | [![GitHub R package version](https://img.shields.io/github/r-package/v/spatstat/spatstat.linnet)](https://github.com/spatstat/spatstat.linnet) | Spatial analysis on a linear network |
-| `spatstat` | [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/spatstat)](http://cran.r-project.org/web/packages/spatstat) | [![GitHub R package version](https://img.shields.io/github/r-package/v/spatstat/spatstat)](https://github.com/spatstat/spatstat) | Umbrella package |
+| `spatstat.utils` | [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/spatstat.utils)](http://CRAN.R-project.org/package=spatstat.utils) | [![GitHub R package version](https://img.shields.io/github/r-package/v/spatstat/spatstat.utils)](https://github.com/spatstat/spatstat.utils) | Basic utilities |
+| `spatstat.data` | [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/spatstat.data)](http://CRAN.R-project.org/package=spatstat.data) | [![GitHub R package version](https://img.shields.io/github/r-package/v/spatstat/spatstat.data)](https://github.com/spatstat/spatstat.data) | Datasets |
+| `spatstat.sparse` | [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/spatstat.sparse)](http://CRAN.R-project.org/package=spatstat.sparse) | [![GitHub R package version](https://img.shields.io/github/r-package/v/spatstat/spatstat.sparse)](https://github.com/spatstat/spatstat.sparse) | Sparse arrays |
+| `spatstat.geom` | [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/spatstat.geom)](http://CRAN.R-project.org/package=spatstat.geom) | [![GitHub R package version](https://img.shields.io/github/r-package/v/spatstat/spatstat.geom)](https://github.com/spatstat/spatstat.geom) | Spatial data classes; geometrical operations |
+| `spatstat.random` | [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/spatstat.random)](http://CRAN.R-project.org/package=spatstat.random) | [![GitHub R package version](https://img.shields.io/github/r-package/v/spatstat/spatstat.random)](https://github.com/spatstat/spatstat.random) |  Generation of random patterns |
+| `spatstat.explore` | [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/spatstat.explore)](http://CRAN.R-project.org/package=spatstat.explore) | [![GitHub R package version](https://img.shields.io/github/r-package/v/spatstat/spatstat.explore)](https://github.com/spatstat/spatstat.explore) | Exploratory Data Analysis of spatial data |
+| `spatstat.model` | [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/spatstat.model)](http://CRAN.R-project.org/package=spatstat.model) | [![GitHub R package version](https://img.shields.io/github/r-package/v/spatstat/spatstat.model)](https://github.com/spatstat/spatstat.model) |  Parametric modelling and formal inference for spatial data |
+| `spatstat.linnet` | [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/spatstat.linnet)](http://CRAN.R-project.org/package=spatstat.linnet) | [![GitHub R package version](https://img.shields.io/github/r-package/v/spatstat/spatstat.linnet)](https://github.com/spatstat/spatstat.linnet) | Spatial analysis on a linear network |
+| `spatstat` | [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/spatstat)](http://CRAN.R-project.org/package=spatstat) | [![GitHub R package version](https://img.shields.io/github/r-package/v/spatstat/spatstat)](https://github.com/spatstat/spatstat) | Umbrella package |
 
 Click the green badge to visit the CRAN page which contains the current
 release of each sub-package. Click the blue badge to visit the GitHub repository
@@ -57,9 +57,9 @@ the user must do that if these extra features are desired.
 
 | Extension package | CRAN page | GitHub repository | Description |
 | ----------------  | --------- | ----------------- | ----------  |
-| `spatstat.gui` | [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/spatstat.gui)](http://cran.r-project.org/web/packages/spatstat.gui)  | [![GitHub R package version](https://img.shields.io/github/r-package/v/spatstat/spatstat.gui)](https://github.com/spatstat/spatstat.gui) | Graphical interface |
-| `spatstat.Knet` | [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/spatstat.Knet)](http://cran.r-project.org/web/packages/spatstat.Knet) | [![GitHub R package version](https://img.shields.io/github/r-package/v/spatstat/spatstat.Knet)](https://github.com/spatstat/spatstat.Knet) | linear networks |
-| `spatstat.local` | [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/spatstat.local)](http://cran.r-project.org/web/packages/spatstat.local) | [![GitHub R package version](https://img.shields.io/github/r-package/v/baddstats/spatstat.local)](https://github.com/baddstats/spatstat.local) | Local (geographically weighted) models |
+| `spatstat.gui` | [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/spatstat.gui)](http://CRAN.R-project.org/package=spatstat.gui)  | [![GitHub R package version](https://img.shields.io/github/r-package/v/spatstat/spatstat.gui)](https://github.com/spatstat/spatstat.gui) | Graphical interface |
+| `spatstat.Knet` | [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/spatstat.Knet)](http://CRAN.R-project.org/package=spatstat.Knet) | [![GitHub R package version](https://img.shields.io/github/r-package/v/spatstat/spatstat.Knet)](https://github.com/spatstat/spatstat.Knet) | linear networks |
+| `spatstat.local` | [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/spatstat.local)](http://CRAN.R-project.org/package=spatstat.local) | [![GitHub R package version](https://img.shields.io/github/r-package/v/baddstats/spatstat.local)](https://github.com/baddstats/spatstat.local) | Local (geographically weighted) models |
 | `spatstat.sphere` | Not yet published | [![GitHub R package version](https://img.shields.io/github/r-package/v/spatstat/spatstat.sphere)](https://github.com/spatstat/spatstat.sphere) | Spherical data |
 
 ## Family portrait 
