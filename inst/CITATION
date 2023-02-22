@@ -1,60 +1,42 @@
-citHeader("To cite spatstat in publications use:")
-
-citEntry(entry = "Book",
-  title        = "Spatial Point Patterns: Methodology and Applications with {R}",
-  author       = personList(as.person("Adrian Baddeley"),
-                            as.person("Ege Rubak"),
-                            as.person("Rolf Turner")),
-  year         = "2015",
-  publisher    = "Chapman and Hall/CRC Press",
-  address      = "London",
-  url="https://www.routledge.com/Spatial-Point-Patterns-Methodology-and-Applications-with-R/Baddeley-Rubak-Turner/p/book/9781482210200/",
-  textVersion  =
-  paste("Adrian Baddeley, Ege Rubak, Rolf Turner (2015).",
-        "Spatial Point Patterns: Methodology and Applications with R.",
-        "London: Chapman and Hall/CRC Press, 2015.",
-        "URL https://www.routledge.com/Spatial-Point-Patterns-Methodology-and-Applications-with-R/Baddeley-Rubak-Turner/p/book/9781482210200/")
-)
-
-citEntry(entry = "Article",
-  title        = "Hybrids of Gibbs Point Process Models and Their Implementation",
-  author       = personList(as.person("Adrian Baddeley"),
-                   as.person("Rolf Turner"),
-                   as.person("Jorge Mateu"),
-                   as.person("Andrew Bevan")),
-  journal      = "Journal of Statistical Software",
-  year         = "2013",
-  volume       = "55",
-  number       = "11",
-  pages        = "1--43",
-  doi         = "10.18637/jss.v055.i11",
-
-  textVersion  =
-  paste("Adrian Baddeley, Rolf Turner, Jorge Mateu, Andrew Bevan (2013).",
-        "Hybrids of Gibbs Point Process Models and Their Implementation",
-        "Journal of Statistical Software, 55(11), 1-43",
-        "DOI: 10.18637/jss.v055.i11"),
-
-  header       = "If you use hybrid models, please also cite:"
-)
-
-citEntry(entry = "Article",
-  title        = "{spatstat}: An {R} Package for Analyzing Spatial Point Patterns",
-  author       = personList(as.person("Adrian Baddeley"),
-                   as.person("Rolf Turner")),
-  journal      = "Journal of Statistical Software",
-  year         = "2005",
-  volume       = "12",
-  number       = "6",
-  pages        = "1--42",
-  doi          = "10.18637/jss.v012.i06",
-
-  textVersion  =
-  paste("Adrian Baddeley, Rolf Turner (2005).",
-        "spatstat: An R Package for Analyzing Spatial Point Patterns.",
-        "Journal of Statistical Software 12(6), 1-42.",
-        "DOI: 10.18637/jss.v012.i06"),
-         
-  header       = "In survey articles, please cite the original paper on spatstat:"
+c(
+  bibentry(bibtype   = "Book",
+           title     =
+             "Spatial Point Patterns: Methodology and Applications with {R}",
+           author    = c(person("Adrian", "Baddeley"),
+                         person("Ege", "Rubak"),
+                         person("Rolf", "Turner")),
+           year      = "2015",
+           publisher = "Chapman and Hall/CRC Press",
+           address   = "London",
+           isbn      = 9781482210200,
+           url       = "https://www.routledge.com/Spatial-Point-Patterns-Methodology-and-Applications-with-R/Baddeley-Rubak-Turner/p/book/9781482210200/",
+           header    = "To cite spatstat in publications, please use:"
+           ),
+  bibentry(bibtype = "Article",
+           title    = "Hybrids of Gibbs Point Process Models and Their Implementation",
+           author   = c(person("Adrian", "Baddeley"),
+                        person("Rolf", "Turner"),
+                        person("Jorge", "Mateu"),
+                        person("Andrew", "Bevan")),
+           journal  = "Journal of Statistical Software",
+           year     = "2013",
+           volume   = "55",
+           number   = "11",
+           pages    = "1--43",
+           doi      = "10.18637/jss.v055.i11",
+           header   = "If you use hybrid models, please also cite:"
+           ),
+  bibentry(bibtype  = "Article",
+           title    = "{spatstat}: An {R} Package for Analyzing Spatial Point Patterns",
+           author   = c(person("Adrian", "Baddeley"),
+                        person("Rolf", "Turner")),
+           journal  = "Journal of Statistical Software",
+           year     = "2005",
+           volume   = "12",
+           number   = "6",
+           pages    = "1--42",
+           doi      = "10.18637/jss.v012.i06",
+           header   = "In survey articles, please also cite the original paper on spatstat:"
+           )
 )
 

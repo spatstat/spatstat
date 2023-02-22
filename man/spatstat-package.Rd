@@ -1188,8 +1188,13 @@
     \code{\link[spatstat.model:methods.kppm]{formula.kppm}}
     \tab Extract trend formula \cr
     \code{\link[spatstat.model]{parameters}} \tab Extract all model parameters \cr
-    \code{\link[spatstat.model]{clusterfield}} \tab Compute offspring density \cr
-    \code{\link[spatstat.model]{clusterradius}} \tab Radius of support of offspring density \cr
+    %% START TEMPORARY CODE
+    \code{\link[spatstat.random]{clusterfield}} \tab Compute offspring density \cr
+    \code{\link[spatstat.random]{clusterradius}} \tab Radius of support of offspring density \cr
+    %% REPLACE BY (later):
+    %% \code{\link[spatstat.model]{clusterfield.kppm}} \tab Compute offspring density \cr
+    %% \code{\link[spatstat.model]{clusterradius.kppm}} \tab Radius of support of offspring density \cr
+    %% END TEMPORARY CODE
     \code{\link[spatstat.model]{Kmodel.kppm}} \tab \eqn{K} function of fitted model \cr
     \code{\link[spatstat.model]{pcfmodel.kppm}} \tab Pair correlation of fitted model 
   }

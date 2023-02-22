@@ -8,7 +8,7 @@
 
 % \VignetteIndexEntry{Summary of Recent Updates to the Spatstat Family}
 
-% $Revision: 1.61 $ $Date: 2023/01/27 21:41:45 $
+% $Revision: 1.62 $ $Date: 2023/02/22 01:53:12 $
 
 \newcommand{\pkg}[1]{\texttt{#1}}
 \newcommand{\code}[1]{\texttt{#1}}
@@ -318,6 +318,24 @@ the News and Release Notes for each update.
     \pkg{spatstat.explore}, \pkg{spatstat.model}, \pkg{spatstat.linnet}
     and \pkg{spatstat}).
 
+    
+  \item Improvements to \texttt{update} methods for point process models.
+
+  \item New \texttt{update} methods for classes \texttt{dppm} and \texttt{rppm}.
+    
+  \item Extension to support for one-dimensional smoothing kernels.
+    
+  \item Generate truncated Poisson random variables.
+
+  \item reciprocal moment of Poisson variable conditioned to be positive.
+    
+  \item Methods for \verb![[! and \verb![[<-! for hyperframes.
+
+  \item Colour map for \textsf{pH} values.
+
+  \item Restrict a colour map to a narrower range of values.
+
+  \item Integral of a one-dimensional density estimate.
     
   \item \texttt{kppm} has been accelerated when 
     \texttt{method="palm"} or \texttt{"clik2"}.
@@ -773,7 +791,29 @@ Following is a list of all the functions that have been added,
 starting with the most recent additions.
 
 \begin{itemize}
+
+\item \texttt{update.dppm}:
+    Update method for determinantal point process models.
+    
+\item \texttt{update.rppm}:
+      Update method for recursively partitioned point process models.
   
+
+    \item \verb![[.hyperframe!, \verb![[<-.hyperframe!:
+    Methods for \verb![[! and \verb![[<-! for hyperframes.
+
+    \item \texttt{pHcolourmap}, \texttt{pHcolour}:
+    Colour map for values of pH
+
+    \item \texttt{restrict.colourmap}:
+    Restrict a colourmap to a narrower range of values.
+
+    \item \texttt{integral.density}:
+    Compute the integral of a one-dimensional kernel density estimate.
+
+    \item \texttt{as.colourmap}:
+    Extract colour information from an object.
+    
 \item \texttt{panysib}:
   Probability that a point in a cluster process has \emph{any} siblings.
 
@@ -792,6 +832,9 @@ Generate Poisson random variables conditioned to be positive.
   Generate `truncated' Poisson random variables,
   conditioned to be greater than or equal to a specified minimum value.
 
+  \item \texttt{recipEnzpois}:
+        Calculate the first reciprocal moment of nonzero Poisson variable.
+        
 \item \texttt{rclusterBKBC}:
   (Advanced use) Internal algorithm to simulate any Neyman-Scott cluster
   process using either the naive, Brix-Kendall, or Baddeley-Chang algorithm.
@@ -3159,6 +3202,8 @@ listed alphabetically.
       
     \item \texttt{plot.symbolmap}:
       \begin{itemize}
+      \item New argument \texttt{colour.only} makes
+        it possible to display only the colour map information in a symbol map.
       \item New argument \texttt{warn}.
       \item Issues a warning if the plot of a discrete symbol map does not
         represent every possible input value, due to space restrictions.
@@ -3266,6 +3311,9 @@ listed alphabetically.
   \item \texttt{print.linim}: More information is printed.
 
   \item \texttt{print.lintess}: Output includes information about marks.
+
+  \item \texttt{print.lppm}: The name of the original point pattern dataset 
+    (to which the model was fitted) is now printed.
     
   \item \texttt{print.quad}: More information is printed.
 
@@ -3539,6 +3587,12 @@ listed alphabetically.
        New argument \texttt{saveparents}.
      \end{itemize}
 
+     
+   \item \texttt{runiflpp}, \texttt{rpoislpp}:
+     The simulation parameters can be determined from an example
+    point pattern, given as the argument \texttt{ex}.
+    
+
    \item \texttt{runifpointOnLines}, \texttt{rpoisppOnLines}:
    	New argument \code{drop}.
      
@@ -3715,6 +3769,9 @@ listed alphabetically.
    \item \texttt{summary.lintess}:
      prints information about marks.
      
+  \item \texttt{summary.lppm}: The name of the original point pattern dataset 
+    (to which the model was fitted) is now printed.
+    
    \item \texttt{summary.mppm}:
      Improved summary of the dependence of the
     interpoint interaction on the covariates.
@@ -3772,6 +3829,7 @@ listed alphabetically.
      \begin{itemize}
      \item Argument \texttt{weights} may have length 1.
      \item New argument \texttt{defaults}.
+     \item Computation accelerated.
      \end{itemize}
 
      
@@ -3828,6 +3886,9 @@ listed alphabetically.
 %%Y
 %%Z
    
+ \item \verb![<-.hyperframe!:
+   Improved error message when the format of the index is not supported.
+     
  \item \verb![<-.im!
    \begin{itemize}
    \item 
