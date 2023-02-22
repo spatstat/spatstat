@@ -625,6 +625,12 @@ the presence of a bug is obvious, and the bug would not have misled the user.
    (\texttt{interval="confidence"} or \texttt{interval="prediction"}).
    \bugin{spatstat 1.29-0}{october 2012}{spatstat.model 3.0-0}{june 2022}
 
+   \item \texttt{unnormdensity}:
+     If \texttt{weights} was a single numerical value 
+     \texttt{w}, the calculation incorrectly
+    assigned the weight for each observation to be \texttt{w/n} where 
+    \texttt{n=length(x)}.
+    \bugalways{spatstat.geom 3.0-7}{march 2023}
  \end{itemize}   
 
  %% LEVEL 4: 

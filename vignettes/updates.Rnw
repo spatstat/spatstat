@@ -8,7 +8,7 @@
 
 % \VignetteIndexEntry{Summary of Recent Updates to the Spatstat Family}
 
-% $Revision: 1.62 $ $Date: 2023/02/22 01:53:12 $
+% $Revision: 1.63 $ $Date: 2023/02/22 02:27:55 $
 
 \newcommand{\pkg}[1]{\texttt{#1}}
 \newcommand{\code}[1]{\texttt{#1}}
@@ -3941,12 +3941,14 @@ listed alphabetically.
     New argument \texttt{clip}.
   \end{itemize}
 
-   \item \verb![.ppp!
-   New argument \texttt{clip} determines whether the window is clipped.
-
-   \item \verb![.ppp!
-   The previously-unused argument \texttt{drop} now determines whether 
-   to remove unused levels of a factor.
+   \item \verb![.ppp!:
+     \begin{itemize}
+     \item 
+       New argument \texttt{clip} determines whether the window is clipped.
+     \item 
+       The previously-unused argument \texttt{drop} now determines whether 
+       to remove unused levels of a factor.
+     \end{itemize}
 
    \item \verb![.pp3!, \verb![.lpp!, \verb![.ppx!, 
      \texttt{subset.ppp, subset.pp3, subset.lpp, subset.ppx}:
