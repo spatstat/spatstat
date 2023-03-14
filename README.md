@@ -76,7 +76,7 @@ separately.
 ## Future development
 
 `spatstat` is the result of 30 years of software development
-and contains over 175,000 lines of code.
+and contains over 180,000 lines of code.
 It is still under
 development, motivated by the needs of researchers in many fields,
 and driven by innovations in statistical science.

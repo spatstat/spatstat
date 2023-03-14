@@ -319,11 +319,19 @@ the News and Release Notes for each update.
     and \pkg{spatstat}).
 
     
+  \item \texttt{linearKinhom} and \texttt{linearpcfinhom} 
+    now automatically estimate the intensity.
+
+  \item \texttt{density.lpp} accepts bandwidth selection rules,
+    and has a simple default bandwidth.
+  
+  \item Pair correlation functions allow more control over smoothing parameters.
+    
+  \item Extension to support for one-dimensional smoothing kernels.
+    
   \item Improvements to \texttt{update} methods for point process models.
 
   \item New \texttt{update} methods for classes \texttt{dppm} and \texttt{rppm}.
-    
-  \item Extension to support for one-dimensional smoothing kernels.
     
   \item Generate truncated Poisson random variables.
 
@@ -1870,6 +1878,8 @@ listed alphabetically.
    
  \item \texttt{bw.abram}:
    \begin{itemize}
+   \item
+     This function is now generic, with a method for class \texttt{ppp}.
    \item 
      New argument \texttt{smoother} determines 
      how the pilot estimate is computed.
@@ -2097,6 +2107,14 @@ listed alphabetically.
 
  \item \texttt{density.lpp}:
    \begin{itemize}
+   \item 
+    Argument \texttt{sigma} can now be a function in the R language,
+    assumed to provide a bandwidth selection rule. This function
+    will be applied to the point pattern \texttt{x} to compute the bandwidth.
+  \item 
+    Argument \texttt{sigma=NULL} 
+    is now accepted. The default value is one-eighth
+    of the length of the shortest side of the bounding box of \texttt{x}.
    \item
     New fast algorithm (up to 1000 times faster) for the default case
     where \texttt{kernel="gaussian"} and \texttt{continuous=TRUE}.
@@ -2133,6 +2151,10 @@ listed alphabetically.
      Accelerated in the cases where weights are given or \texttt{diggle=TRUE}.
    \item New argument \texttt{verbose}.
    \end{itemize}
+   
+   
+ \item \texttt{densityQuick.lpp}:
+   Argument \texttt{X} changed to \texttt{x} for consistency.
 
  \item \texttt{density.psp}:
    \begin{itemize}
@@ -2555,7 +2577,16 @@ listed alphabetically.
 \item \texttt{Kmulti}:
   Now accepts the option \texttt{correction="periodic"}
   to compute the periodic (toroidal) edge correction estimate.
-    
+
+\item \texttt{kernel.moment}:
+  \begin{itemize}
+  \item    New arguments \texttt{mean} and \texttt{sd}.
+  \item Computation accelerated for \texttt{kernel='cosine'} or 
+    \texttt{'optcosine'}.
+  \item All cases are now computed using analytic expressions, for 
+    \texttt{m=0,1,2}.
+  \end{itemize}
+
  \item \texttt{kppm}:
    \begin{itemize}
    \item 
@@ -2673,17 +2704,47 @@ listed alphabetically.
      \item new argument \texttt{ratio}.
      \end{itemize}
      
+     
+   \item \texttt{linearKEuclidInhom}, \texttt{linearpcfEuclidInhom}:
+     Argument \texttt{lambda=NULL}
+     is now interpreted to mean that the intensity
+     should be estimated by kernel smoothing. A warning is issued that this
+     is different from the previous behaviour.
+     
  \item \texttt{linearKinhom}:
    new argument \texttt{normpower}.
    
+ \item \texttt{linearKdot.inhom}, \texttt{linearpcfdot.inhom}
+   Argument \texttt{lambdaI=NULL} or \texttt{lambdadot=NULL} 
+   is now interpreted to mean
+   that the intensity should be estimated by kernel smoothing.
+   
+ \item \texttt{linearKcross.inhom}, \texttt{linearpcfcross.inhom}
+   Argument \texttt{lambdaI=NULL} or \texttt{lambdaJ=NULL} 
+   is now interpreted to mean
+   that the intensity should be estimated by kernel smoothing.
+   
  \item \texttt{linearKinhom}, \texttt{linearpcfinhom}:
    \begin{itemize}
+   \item Argument \texttt{lambda=NULL}
+     is now interpreted to mean that the intensity
+     should be estimated by kernel smoothing. A warning is issued that this
+     is different from the previous behaviour.
    \item Changed behaviour when \texttt{lambda} is a fitted model.
    \item New arguments \texttt{update} and \texttt{leaveoneout}.
    \end{itemize}
    
  \item \texttt{linearpcf}:
    new argument \texttt{normpower}.
+
+ \item \texttt{linearpcfinhom}:
+   New arguments \texttt{adjust.sigma}, \texttt{bw} and \texttt{adjust.bw}.
+
+ \item \texttt{linearpcfcross.inhom}, \texttt{linearpcfdot.inhom}:
+   New arguments \texttt{adjust.sigma}, \texttt{bw} and \texttt{adjust.bw}.
+
+ \item \texttt{linearpcfEuclidInhom}:
+   New arguments \texttt{adjust.sigma}, \texttt{bw} and \texttt{adjust.bw}.
 
 
  \item \texttt{linim}:
@@ -2963,10 +3024,17 @@ listed alphabetically.
    \item Now accepts \texttt{correction="none"}.
    \end{itemize}
 
+ \item \texttt{pcfcross.inhom}, \texttt{pcfdor.inhom}:
+   New arguments \texttt{adjust.sigma} and \texttt{adjust.bw} allow
+   separate adjustment of the one-dimensional smoothing bandwidth \texttt{bw}
+    and the spatial smoothing bandwidth \texttt{sigma}.
 
-   
  \item \texttt{pcfinhom}:
    \begin{itemize}
+   \item  
+     New arguments \texttt{adjust.sigma} and \texttt{adjust.bw} allow
+    separate adjustment of the one-dimensional smoothing bandwidth \texttt{bw}
+    and the spatial smoothing bandwidth \texttt{sigma}.
    \item
 	New argument \code{close} for advanced use.
    \item 
