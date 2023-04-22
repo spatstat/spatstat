@@ -2,9 +2,6 @@
 \usepackage{graphicx}
 \usepackage{Sweave}
 \usepackage{bm}
-\usepackage{anysize}
-
-\marginsize{2cm}{2cm}{2cm}{2cm}
 
 % \VignetteIndexEntry{Bugs Fixed in Spatstat}
 
