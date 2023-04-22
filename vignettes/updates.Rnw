@@ -8,7 +8,7 @@
 
 % \VignetteIndexEntry{Summary of Recent Updates to the Spatstat Family}
 
-% $Revision: 1.63 $ $Date: 2023/02/22 02:27:55 $
+% $Revision: 1.65 $ $Date: 2023/04/22 03:23:30 $
 
 \newcommand{\pkg}[1]{\texttt{#1}}
 \newcommand{\code}[1]{\texttt{#1}}
@@ -91,7 +91,7 @@ mergeSizeTables <- function(a, b, breakupdate, allow.devel=FALSE) {
 ## Get histories of all sub-packages
 ## Package formerly known as 'spatstat'
 z <- getSizeTable() 
-## installed sub-packages - access via the sub-package
+## installed sub-packages - access via the installed sub-packages
 zutils   <- getSizeTable("spatstat.utils")
 zdata    <- getSizeTable("spatstat.data")
 zsparse  <- getSizeTable("spatstat.sparse")
@@ -100,9 +100,10 @@ zrandom  <- getSizeTable("spatstat.random")
 zexplore <- getSizeTable("spatstat.explore")
 zmodel   <- getSizeTable("spatstat.model")
 zlinnet  <- getSizeTable("spatstat.linnet")
-## defunct package core - use copy of package size file stored in spatstat
+## other sub-packages - access via stored copies of package size files
+##       defunct package spatstat.core 
 zcore    <- getSizeTable("spatstat", "spatstatcoresize.txt")
-## extension packages - use copy of package size file stored in spatstat
+##       extension packages 
 zlocal   <- getSizeTable("spatstat", "spatstatlocalsize.txt")
 zgui     <- getSizeTable("spatstat", "spatstatguisize.txt")
 zKnet    <- getSizeTable("spatstat", "spatstatKnetsize.txt")
@@ -118,7 +119,7 @@ z <- mergeSizeTables(z, zrandom, "2022-02-12")
 CoreSplitDay <- "2020-05-25"   # size of 'core' drops to 0 on this date
 z <- mergeSizeTables(z, zexplore, CoreSplitDay)
 z <- mergeSizeTables(z, zmodel,   CoreSplitDay)
-## extension packages never overlapped
+## extension packages: these never overlapped spatstat
 z <- mergeSizeTables(z, zlocal)
 z <- mergeSizeTables(z, zgui)
 z <- mergeSizeTables(z, zKnet)
@@ -308,16 +309,18 @@ the News and Release Notes for each update.
 \begin{itemize}
   
   
-\item The package \texttt{spatstat.core} has been split into two packages called
-    \texttt{spatstat.explore} (for exploratory data analysis)
-    and \texttt{spatstat.model} (for modelling and formal inference).
+%% \item The package \texttt{spatstat.core} has been split into two packages called
+%%    \texttt{spatstat.explore} (for exploratory data analysis)
+%%    and \texttt{spatstat.model} (for modelling and formal inference).
 
-  \item The original \spst\ package has now been split into 9 sub-packages
-    (\pkg{spatstat.utils}, \pkg{spatstat.data}, \pkg{spatstat.sparse},
-    \pkg{spatstat.geom}, \pkg{spatstat.random},
-    \pkg{spatstat.explore}, \pkg{spatstat.model}, \pkg{spatstat.linnet}
-    and \pkg{spatstat}).
+%%   \item The original \spst\ package has now been split into 9 sub-packages
+%%     (\pkg{spatstat.utils}, \pkg{spatstat.data}, \pkg{spatstat.sparse},
+%%     \pkg{spatstat.geom}, \pkg{spatstat.random},
+%%     \pkg{spatstat.explore}, \pkg{spatstat.model}, \pkg{spatstat.linnet}
+%%     and \pkg{spatstat}).
 
+  \item Standard errors are now available for \texttt{ppm} models
+    fitted using \texttt{gam}.
     
   \item \texttt{linearKinhom} and \texttt{linearpcfinhom} 
     now automatically estimate the intensity.
@@ -2273,6 +2276,8 @@ listed alphabetically.
     Now works for \texttt{ppm}, \texttt{kppm}, 
     \texttt{lppm}, \texttt{dppm}, \texttt{rppm} and \texttt{profilepl} objects.
     \item New argument \texttt{nvalues}.
+    \item Standard error calculation (\texttt{se.fit=TRUE}) now works 
+      for models fitted with \texttt{use.gam=TRUE}.
     \end{itemize}
     
  \item \texttt{envelope}:
@@ -3175,7 +3180,10 @@ listed alphabetically.
      \end{itemize}
 
    \item \texttt{plot.mppm}:
-   New argument \texttt{se}.
+     \begin{itemize}
+     \item New argument \texttt{main}.
+     \item New argument \texttt{se}.
+     \end{itemize}
    
    \item \texttt{plot.msr}:
      \begin{itemize}
@@ -3365,6 +3373,8 @@ listed alphabetically.
       resolution of the grid of prediction points.
     \item New argument \code{ignore.hardcore}.
     \item Accelerated for models fitted with \texttt{method="VBlogi"}
+    \item Standard error calculation (\texttt{se=TRUE}) now works 
+      for models fitted with \texttt{use.gam=TRUE}.
     \end{itemize}
 
   \item \texttt{predict.rhohat}:    
