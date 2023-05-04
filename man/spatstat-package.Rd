@@ -647,7 +647,7 @@
       \code{\link[spatstat.geom]{affine.psp}} \tab apply an affine transformation \cr      
       \code{\link[spatstat.geom]{pixellate.psp}} \tab approximate line segment pattern
     by pixel image \cr      
-      \code{\link[spatstat.geom]{as.mask.psp}} \tab approximate line segment pattern
+      \code{\link[spatstat.geom]{psp2mask}} \tab approximate line segment pattern
     by binary mask \cr      
       \code{\link[spatstat.geom]{distmap.psp}} \tab compute the distance map of a line
       segment pattern \cr
