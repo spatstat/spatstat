@@ -302,6 +302,15 @@ the presence of a bug is obvious, and the bug would not have misled the user.
    The output was equal to \texttt{sqrt(sigma)} times the correct answer.
    \bugger{1.41-1}{february 2015}{1.57-0}{october 2018}   
    
+ \item \texttt{density.ppp}:
+   The standard error (calculated when \texttt{se=TRUE})
+   was incorrect for non-Gaussian kernels.
+   \bugbefore{spatstat 1.57-0}{october 2018}{spatstat.explore 3.2-0}{may 2023}
+  
+ \item \texttt{relrisk.ppp}:
+   The standard error (calculated when \texttt{se=TRUE})
+   was incorrect for non-Gaussian kernels.
+   \bugbefore{spatstat 1.57-0}{october 2018}{spatstat.explore 3.2-0}{may 2023}
   
   \item \texttt{rthin}:
    If \texttt{P} was close to 1, the result was sometimes an empty point pattern

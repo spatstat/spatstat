@@ -5,7 +5,7 @@
 
 % \VignetteIndexEntry{Summary of Recent Updates to the Spatstat Family}
 
-% $Revision: 1.65 $ $Date: 2023/04/22 03:23:30 $
+% $Revision: 1.66 $ $Date: 2023/05/11 09:35:17 $
 
 \newcommand{\pkg}[1]{\texttt{#1}}
 \newcommand{\code}[1]{\texttt{#1}}
@@ -316,9 +316,23 @@ the News and Release Notes for each update.
 %%     \pkg{spatstat.explore}, \pkg{spatstat.model}, \pkg{spatstat.linnet}
 %%     and \pkg{spatstat}).
 
-  \item Standard errors are now available for \texttt{ppm} models
+  
+\item Changed the calculation of standard errors in \texttt{density.ppp}
+  and \texttt{relrisk.ppp}.
+
+\item Inline arithmetic for function tables (class \texttt{"fv"}) 
+  and arrays (class \texttt{"fasp"})
+\item 
+  Standard error calculation for \texttt{Smooth.ppp} (experimental)
+\item 
+  multitype pair correlation functions can save numerator and denominator.
+\item 
+  multitype inhomogeneous $J$ functions.
+\item 
+  More support for automatic bandwidth selection.
+
+\item Standard errors are now available for \texttt{ppm} models
     fitted using \texttt{gam}.
-    
   \item \texttt{linearKinhom} and \texttt{linearpcfinhom} 
     now automatically estimate the intensity.
 
@@ -799,7 +813,27 @@ Following is a list of all the functions that have been added,
 starting with the most recent additions.
 
 \begin{itemize}
+\item \texttt{Math.fv}, \texttt{Complex.fv}, \texttt{Summary.fv}, \texttt{Ops.fv}:
+    Methods for arithmetic operations for function tables (class \texttt{"fv"})
+\item \texttt{Math.fasp}, \texttt{Complex.fasp}, \texttt{Summary.fasp}, \texttt{Ops.fasp}:
+    Methods for arithmetic operations for function arrays (class \texttt{"fasp"})
+  \item \texttt{Gcross.inhom}, \texttt{Gdot.inhom}:
+    Multitype $G$ functions for inhomogeneous point processes.
+  \item 
+    \texttt{Jcross.inhom}, \texttt{Jdot.inhom}, \texttt{Jmulti.inhom}:
+    Multitype $J$ functions for inhomogeneous point processes.
+  \item 
+    \texttt{summary.bw.optim}, \texttt{print.summary.bw.optim}:
+    Method for \texttt{summary} of optimised bandwidth objects 
+    (class \texttt{bw.optim}).
+    These are the objects produced by the bandwidth selection functions
+    such as \texttt{bw.diggle}, \texttt{bw.scott}, \texttt{bw.pcf}
 
+\item \texttt{psp2mask}:
+  Function \texttt{as.mask.psp} has been renamed \texttt{psp2mask}.
+  The old function \texttt{as.mask.psp} still exists but will soon be
+  deprecated and later removed.
+  
 \item \texttt{update.dppm}:
     Update method for determinantal point process models.
     
@@ -1756,6 +1790,9 @@ listed alphabetically.
  \item \texttt{as.function.tess}:
     New argument \texttt{values} specifies the function values.
 
+  \item \texttt{as.im}: Many methods for \texttt{as.im}
+    now have argument \texttt{rule.eps}.
+
   \item \texttt{as.im.distfun}:
   New argument \texttt{approx} specifies the choice of algorithm.
 
@@ -1794,8 +1831,17 @@ listed alphabetically.
 \end{itemize}
 
 \item \texttt{as.linim.default}:
+  \begin{itemize}
+  \item 
    New arguments \texttt{delta} and \texttt{nd} control spacing of sample points
    in internal data.
+ \item  New argument \texttt{rule.eps} passed to \texttt{as.mask}.
+  \end{itemize}
+
+\item \texttt{as.linim.linfun}:
+  \begin{itemize}
+ \item  New argument \texttt{rule.eps} passed to \texttt{as.mask}.
+  \end{itemize}
 
  \item \texttt{as.linnet.linnet}:
    New argument \texttt{maxsize}.
@@ -1822,7 +1868,11 @@ listed alphabetically.
       \texttt{x,y} or \texttt{seg,tp}.
     \end{itemize}
 
-\item \texttt{as.owin.default}:
+  \item \texttt{as.mask:}
+    New argument \texttt{rule.eps} specifies what to do when the
+    desired pixel size is not a divisor of the frame size.
+
+  \item \texttt{as.owin.default}:
   \begin{itemize}
   \item Now refuses to convert a \code{box3} to a two-dimensional window.
   \item Now accepts a structure with entries named
@@ -1918,6 +1968,10 @@ listed alphabetically.
     \texttt{bw.relrisk.ppp}, and ensures that the optimum bandwidth is always
     found by minimising the cross-validation criterion.
    
+    
+  \item \texttt{bw.relrisk.ppp}:
+    Additional arguments \texttt{...} are now passed to \texttt{density.ppp}.
+    
   \item \texttt{bw.scott}: 
     \begin{itemize}
     \item 
@@ -1952,7 +2006,12 @@ listed alphabetically.
     Warnings about tied values should not occur any more.
    \end{itemize}
 
-   
+ \item \texttt{cdf.test.ppm}:
+   \begin{itemize}
+   \item 
+     Recognises argument \texttt{rule.eps} passed to \texttt{as.mask}.
+   \end{itemize}
+ 
  \item \texttt{cdf.test.mppm}:
    \begin{itemize}
    \item     Now handles Gibbs models.
@@ -2140,6 +2199,10 @@ listed alphabetically.
    \begin{itemize}
    \item A non-Gaussian kernel can now be specified
    using the argument \texttt{kernel}.
+   \item Standard error calculation is now available with any smoothing kernel.
+   \item The interpretation of \texttt{weights} in the calculation of
+     standard error has changed. New argument \texttt{wtype}
+     controls this interpretation.
  \item Argument \texttt{weights} can now be a pixel image.
  \item Infinite bandwidth \texttt{sigma=Inf} is supported.
    \item
@@ -2173,7 +2236,9 @@ listed alphabetically.
     Increased the default resolution of the pixel images.
     Spatial resolution can now be controlled by the arguments 
     \code{dimyx}, \code{eps}.
-   \end{itemize}
+    \item 
+     Recognises argument \texttt{rule.eps} passed to \texttt{as.mask}.
+     \end{itemize}
     
   \item \texttt{diagnose.ppm}:
     \begin{itemize}
@@ -2203,9 +2268,14 @@ listed alphabetically.
     New argument \texttt{clip}.
 
      \item \texttt{discretise}:
+       \begin{itemize}
+       \item 
            New argument \texttt{move.points}
            determines whether the point coordinates
            are also discretised.
+         \item New argument \texttt{rule.eps}
+       \end{itemize}
+
 
  \item \texttt{discs}:
    \begin{itemize}
@@ -2223,11 +2293,16 @@ listed alphabetically.
 
    
   \item \texttt{distfun}:
-    When the user calls a distance function 
-    that was created by \texttt{distfun},
-    the user may now give a \texttt{ppp} or \texttt{lpp}
-    object for the argument \texttt{x},
-    instead of giving two coordinate vectors \texttt{x} and \texttt{y}.
+    \begin{itemize}
+    \item 
+      When the user calls a distance function 
+      that was created by \texttt{distfun},
+      the user may now give a \texttt{ppp} or \texttt{lpp}
+      object for the argument \texttt{x},
+      instead of giving two coordinate vectors \texttt{x} and \texttt{y}.
+    \item
+      New argument \texttt{rule.eps}
+    \end{itemize}
 
  \item \texttt{distfun.lpp}:
    \begin{itemize}
@@ -2310,6 +2385,8 @@ listed alphabetically.
  \item \texttt{eval.im}:  New argument \texttt{warn}.
    
  \item \texttt{eval.linim}:  New argument \texttt{warn}.
+   
+ \item \texttt{eval.fasp}: automatically generated labels have been improved.
    
  \item \texttt{ewcdf}: 
    \begin{itemize}
@@ -2679,7 +2756,9 @@ listed alphabetically.
     Increased the default resolution of the pixel images.
     Spatial resolution can now be controlled by the arguments 
     \code{dimyx}, \code{eps}.
-  \end{itemize}
+   \item 
+     Recognises argument \texttt{rule.eps} passed to \texttt{as.mask}.
+   \end{itemize}
 
  \item \texttt{leverage.ppm}, \texttt{influence.ppm}, \texttt{dfbetas.ppm}:
    \begin{itemize}
@@ -2961,6 +3040,9 @@ listed alphabetically.
    \item    Computation accelerated.
    \end{itemize}
 
+  
+ \item  \texttt{nnfun}: new argument \texttt{rule.eps}.
+
 
    \texttt{nnfun.lpp}: 
    \begin{itemize}
@@ -2988,6 +3070,11 @@ listed alphabetically.
    
    \item \texttt{owin}: If argument \texttt{mask} is a logical matrix,
     \texttt{NA} entries will be accepted, and converted to \texttt{FALSE}.
+    
+   \item \texttt{owin2mask}:
+    New options \texttt{op="majority"} and \texttt{op="minority"}.
+    If \texttt{op="majority"}, a pixel belongs to the resulting mask if
+    at least half of the pixel area is covered by the window.
     
 %%P
    
@@ -3026,6 +3113,11 @@ listed alphabetically.
    \item Now accepts \texttt{correction="none"}.
    \end{itemize}
 
+   
+ \item \texttt{pcfcross}, \texttt{pcfdot}, \texttt{pcfmulti}:
+   New argument \texttt{ratio} makes it possible to save the numerator and
+   denominator of the function estimates, so that estimates can be pooled.
+    
  \item \texttt{pcfcross.inhom}, \texttt{pcfdor.inhom}:
    New arguments \texttt{adjust.sigma} and \texttt{adjust.bw} allow
    separate adjustment of the one-dimensional smoothing bandwidth \texttt{bw}
@@ -3399,6 +3491,12 @@ listed alphabetically.
     \item Behaviour improved. 
     \item New arguments \texttt{state}, \texttt{tick}, \texttt{showtime}.
     \item New option: \verb!style="tk"!
+    \item New argument \texttt{formula} controls the calculation 
+      of estimated time remaining. 
+    \item 
+      New argument \texttt{savehistory}
+      specifies whether to save the elapsed times
+      when the function was called.
     \end{itemize}
 
     
@@ -3481,6 +3579,15 @@ listed alphabetically.
      \item
        Ratios which are close to 0/0 are handled more effectively,
        reducing the likelihood of strange-looking plots when \texttt{sigma} is very small.
+     \item     Issues a warning if numerical underflow is detected.
+     \item 
+       The interpretation of \texttt{weights} in the calculation of
+       standard error has changed. New argument \texttt{wtype}
+       controls this interpretation.
+     \item 
+       New argument \texttt{fudge} specifies a constant numeric value
+       that will be added to each estimate of point process intensity
+       before calculation of relative risk.
      \end{itemize}
      
    \texttt{rhohat}:
@@ -3506,11 +3613,24 @@ listed alphabetically.
    should always be positive. 
  \item If the covariate is a \texttt{distfun}, the name of the unit of length
    is saved and displayed on the plot.
+ \item New argument \texttt{rule.eps} passed to \texttt{as.mask}.
    \end{itemize}
    
-   \texttt{rhohat.lpp}:
-   New argument \texttt{random} controls placement of dummy points.
+   \item \texttt{rhohat.lpp}:
+     \begin{itemize}
+     \item  New argument \texttt{random} controls placement of dummy points. 
+     \item  New argument \texttt{rule.eps} passed to \texttt{as.mask}.
+    \end{itemize}
 
+   \item \texttt{rhohat.lppm}:
+     \begin{itemize}
+     \item  New argument \texttt{rule.eps} passed to \texttt{as.mask}.
+    \end{itemize}
+
+
+ \item\texttt{rhohat.ppm}:
+   New argument \texttt{rule.eps} passed to \texttt{as.mask}.
+   
  \item \texttt{rjitter.ppp}:  If \texttt{trim=TRUE}, 
    the displacement radius will be constrained
    to be less than or equal to the distance from the data point
@@ -3540,6 +3660,8 @@ listed alphabetically.
        \item 
          This function no longer requires the package \pkg{RandomFields}
          to be loaded explicitly. 
+       \item 
+         Now recognises argument \texttt{rule.eps} passed to \texttt{as.mask}.
        \end{itemize}
 
 
@@ -3762,6 +3884,7 @@ listed alphabetically.
    \item The arguments \texttt{adjust}, \texttt{edge}, \texttt{diggle}
      and \texttt{kernel}
      are now explicit formal arguments.
+   \item     Standard error calculation is now supported (Experimental).
    \end{itemize}
 
  \item \texttt{solist}:
