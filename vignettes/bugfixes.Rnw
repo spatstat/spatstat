@@ -1,9 +1,12 @@
-\documentclass[11pt]{article}
+\documentclass[10pt]{article}
 \usepackage{graphicx}
 \usepackage{Sweave}
 \usepackage{bm}
+\usepackage[bottom=0.5cm, right=1.5cm, left=1.5cm, top=1.5cm]{geometry} 
 
 % \VignetteIndexEntry{Bugs Fixed in Spatstat}
+
+%  $Revision: 1.32 $ $Date: 2023/05/17 01:17:05 $
 
 \newcommand{\pkg}[1]{\texttt{#1}}
 \newcommand{\code}[1]{\texttt{#1}}
@@ -47,6 +50,8 @@ nbugssince <- nrow(bugfixes("book", show=FALSE))
 Thousands of bugs have been detected and fixed in \spst\ since it was
 first released in 2001. We started recording the bug history in 2010.
 
+\subsection{Documentation of bugs}
+
 Bugs that may have affected the user are listed in the 
 package \texttt{NEWS} file, and can be searched
 using the \R\ command \texttt{news} or the \spst\ command \texttt{bugfixes}. 
@@ -76,6 +81,8 @@ bugfixes("all")
 which currently produces a list of \Sexpr{nbugs} bugs,
 of which \Sexpr{nbugssince} were detected after publication of the
 book \cite{baddrubaturn15}.
+
+\subsection{Bugs in the \texttt{spatstat} family of packages}
 
 Recently \spst\ was divided into a family of sub-packages.
 The command \texttt{bugfixes} now covers the bug history in 
@@ -111,7 +118,7 @@ print(vtable, row.names=FALSE)
 @ 
 
 \pagebreak
-\section{Serious bugs}
+\section{List of bugs}
 
 Following is a list of the {\bf most serious bugs}, 
 in decreasing order of potential impact.

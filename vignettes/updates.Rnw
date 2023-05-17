@@ -1,11 +1,12 @@
-\documentclass[11pt]{article}
+\documentclass[10pt]{article}
 \usepackage{graphicx}
 \usepackage{Sweave}
 \usepackage{bm}
+\usepackage[bottom=0.5cm, right=1.5cm, left=1.5cm, top=1.5cm]{geometry} 
 
 % \VignetteIndexEntry{Summary of Recent Updates to the Spatstat Family}
 
-% $Revision: 1.66 $ $Date: 2023/05/11 09:35:17 $
+% $Revision: 1.67 $ $Date: 2023/05/17 01:10:53 $
 
 \newcommand{\pkg}[1]{\texttt{#1}}
 \newcommand{\code}[1]{\texttt{#1}}
@@ -149,7 +150,7 @@ Plot <- function(fmla, ..., dat=z) {
 }
 @ 
 \SweaveOpts{eps=TRUE}
-\setkeys{Gin}{width=0.55\textwidth}
+\setkeys{Gin}{width=0.5\textwidth}
 
 \centerline{
 <<fig=TRUE,echo=FALSE,results=hide>>=
@@ -4183,4 +4184,13 @@ A. Baddeley, E. Rubak, and R. Turner.
 
 \end{thebibliography}
  
+\vspace*{\fill}
+\noindent
+Current total package size: 
+\Sexpr{currentcount[["ndatasets"]]} datasets,
+\Sexpr{currentcount[["nobjects"]]} functions,
+\Sexpr{currentcount[["Rlines"]]} lines of R,
+\Sexpr{currentcount[["srclines"]]} lines of C,
+\Sexpr{currentcode} total lines of code.
+
 \end{document}
