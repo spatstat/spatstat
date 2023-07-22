@@ -6,7 +6,7 @@
 
 % \VignetteIndexEntry{Guide to Function Objects}
 
-% $Revision: 1.67 $ $Date: 2023/05/17 01:10:53 $
+% $Revision: 1.2 $ $Date: 2023/07/22 03:25:01 $
 
 \newcommand{\pkg}[1]{\texttt{#1}}
 \newcommand{\code}[1]{\texttt{#1}}
@@ -194,6 +194,7 @@ E
 This vignette also explains how to plot, manipulate and create \objs\env.
 
 \subsection{Why bother?}
+\label{S:whybother}
 
 Any self-respecting programmer would regard it as a 
 trivial task to organise data in a data frame
@@ -738,6 +739,254 @@ listed in Table~\ref{tab:fvmethods}.
 \label{tab:fvmethods}
 \end{table}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Creating \fv\ objects from raw data}
+
+This section explains how to create \objs\fv\ from raw numerical data.
+This would be useful if you are implementing a completely new kind of
+summary function. 
+
+Subsection~\ref{S:creator} explains how to create an \obj\fv\ 
+by providing the numerical data and the required auxiliary information. 
+Section~\ref{S:as.fv} describes an easier way to convert a data frame
+(or similar object) to an \obj\fv\ without specifying the auxiliary
+information, using default rules for the auxiliary information.
+Section~\ref{S:compileK} describes special tools
+\texttt{compileK, compilepcf, compileCDF} for creating an
+\obj\fv\ from a numeric vector of distance values, using the rules that 
+apply to the \Kfun, or the pair correlation function,
+or the nearest-neighbour distance distribution function.
+
+\subsection{The creator function \fun{fv}}
+\label{S:creator}
+
+\subsubsection{The creator function}
+
+The low-level function \code{fv} is used to create an object of
+class \code{"fv"} from raw numerical data. It has the following syntax:
+\begin{verbatim}
+fv(x, argu = "r", ylab = NULL, valu, fmla = NULL, 
+   alim = NULL, labl = names(x), desc = NULL, 
+   unitname = NULL, fname = NULL, yexp = ylab)
+\end{verbatim}
+
+The arguments are as follows:
+\begin{itemize}
+\item 
+  \code{x} contains the numerical data. It should be a data frame,
+  in which one column gives the values of the function argument for which
+  the function has been evaluated, and at least one other column
+  contains the corresponding values of the function.
+
+  These other columns typically give the values of different versions
+  or estimates of the same function,
+  for example, different estimates of the \Kfun{}  
+  obtained using different edge corrections.
+  However they may also contain the values of related functions
+  such as the derivative or hazard rate.
+\item 
+  \code{argu} specifies the name of the column of
+  \code{x} that contains the values of the function argument
+  (typically \code{argu="r"} but this is not compulsory).
+\item 
+  \code{valu} specifies the name of another column
+  that contains the `recommended' estimate of the function.
+  It will be used to provide function values in those situations where
+  a single column of data is required. For example,
+  \code{envelope} computes its simulation envelopes
+  using the recommended value of the summary function.
+\item 
+  \code{fmla} specifies the default plotting behaviour.
+  It should be a formula, or a string that can be converted to a
+  formula. Variables in the formula are names of columns of \code{x}.
+  See \code{plot.fv} for the interpretation of this
+  formula.
+\item 
+  \code{alim} specifies the recommended range of the
+  function argument. This is used in situations where statistical
+  theory or statistical practice indicates that the computed
+  estimates of the function are not trustworthy outside a certain
+  range of values of the function argument. By default,
+  \code{plot.fv} will restrict the plot to this range.
+\item 
+  \code{fname} is a character string (or a vector of 2 character strings)
+  giving the name of the function itself.
+  For example, the \Kfun{}  would have \code{fname="K"},
+  while the inhomogeneous \Kfun\ has \code{fname=c("K", "inhom")}.
+\item 
+  \code{ylab} is a mathematical expression
+  for the function value, used when labelling an axis
+  of the plot, or when printing a description of the
+  function. It should be an \R{} language object. 
+  For example the \Kfun's mathematical name $K(r)$ is rendered
+  by \code{ylab=quote(K(r))}. 
+\item
+  \code{yexp} is another mathematical expression for the function value.
+  If \code{yexp} is present, then \code{ylab} will be
+  used only for printing, and \code{yexp} will be used for
+  annotating axes in a plot. 
+  (Otherwise \code{yexp} defaults to \code{ylab}).
+\item 
+  \code{labl} is a character vector specifying plot labels
+  for each column of \code{x}. These labels will appear on the
+  plot axes (in non-default plots), legends and printed output.
+  Entries in \code{labl}
+  may contain the string \code{"\%s"} which will be replaced
+  by \code{fname} when plotted or printed. 
+  For example the border-corrected estimate
+  of the \Kfun{}  has label \code{"\%s[bord](r)"} which
+  becomes \code{"K[bord](r)"} when it is used in \texttt{plot.fv} 
+  or \texttt{print.fv}.
+\item 
+  \code{desc} is a character vector containing intelligible
+  explanations of each column of \code{x}. Entries in
+  \code{desc} may contain the string \code{"\%s"} which will be replaced
+  by \code{ylab}. For example the border correction estimate of the
+  \Kfun{}  has description \code{"border correction estimate of \%s"}.
+  This will be replaced by 
+  \code{"border correction estimate of K(r)"} when it is used in 
+  \texttt{print.fv}.
+\item 
+  \code{unitname} is the name of the unit of length 
+  for the \underline{function argument}. Typically the function argument
+  \code{"r"} represents distance between points. The distance values are 
+  typically expressed in terms of a distance unit, such as metres or feet.
+  This unit will be printed on the horizontal axis. 
+  The argument \code{unitname} is an object of
+  class \class{unitname}, or \code{NULL} representing dimensionless values.
+\end{itemize}
+
+\subsubsection{Syntax for \texttt{ylab} and \texttt{yexp}}
+
+Mathematical symbols and notation are supported 
+in \R\ base graphics. The labels on the axes of a graph,
+in the body of the graph, and in graph legends, can all include
+mathematical notation. The notation has to be encoded as an 
+\R\ language expression. The decoding is slightly idiosyncratic,
+and this affects the programming of the class \fv.
+
+The arguments \code{ylab} and \code{yexp} are mathematical 
+expressions for the function value: \texttt{ylab} is used when
+printing a description of the function,
+and \texttt{yexp} is used when labelling an axis. 
+Usually \texttt{ylab} and \texttt{yexp} are the same.
+For example the \Kfun's mathematical name $K(r)$ is rendered
+by \code{ylab=quote(K(r))} and \code{yexp=ylab}.
+An example where they are different is the multitype \Kfun\ $K_{1,2}(r)$ 
+where we set  \code{ylab=quote(Kcross[1,2](r))}
+and 
+\code{yexp=quote(Kcross[list(1,2)](r))}
+to get the most satisfactory behaviour.
+
+A useful programming tip is to use \code{substitute} instead of
+\code{quote} to insert values of variables into an expression,
+e.g. \code{substitute(Kcross[i,j](r), list(i=42,j=97))}
+yields the same as \code{quote(Kcross[42, 97](r))}.)
+
+\subsubsection{Syntax for \texttt{labl}} 
+
+The argument \texttt{labl} is a character vector 
+specifying plot labels
+for each column of \code{x}. These labels will appear on the
+plot axes (in non-default plots), legends and printed output.
+
+Entries in \code{labl}
+may contain the string \code{"\%s"} which will be replaced
+by \code{fname} when plotted or printed. 
+For example the border-corrected estimate
+of the \Kfun{}  has label \code{"\%s[bord](r)"} which
+becomes \code{"K[bord](r)"} when it is used in \texttt{plot.fv} 
+or \texttt{print.fv}. This mechanism allows the code to adjust the
+labels when the object is changed --- for example, to produce the correct
+labels in \code{plot(sqrt(K/pi))} as shown in Section~\ref{S:whybother}.
+
+Things become more complicated if \texttt{fname} is a character vector
+of length 2. In that case the appropriate expression for the border-corrected
+estimate is \verb!"{hat(%s)[%s]^{bord}}(r)"! which becomes
+\verb!{hat(K)[inhom]^{bord}}(r)! when it is used in \texttt{plot.fv}
+or \texttt{print.fv}.
+
+We strongly recommend using the function \fun{makefvlabel} to create the
+appropriate labels. Its syntax is:
+\begin{verbatim}
+   makefvlabel(op=NULL, accent=NULL, fname, sub=NULL, argname="r")
+\end{verbatim}
+where the arguments are character strings:
+\begin{description}
+\item[op] is a prefix or operator such as \code{"var"} (rarely used);
+\item[accent] is an accent that should be applied to the main function symbol, usually \texttt{"hat"} for empirical estimates;
+\item[fname] is the name of the function (usually a single letter or
+  a character vector of length 2);
+\item[sub] is an optional subscript, typically used to discriminate 
+  between different estimates of the function, such as different edge corrections;
+\item[argname] is the name of the function argument.
+\end{description}
+
+Examples:
+<<>>=
+  makefvlabel(NULL, NULL, "K", "pois")
+  makefvlabel(NULL, "hat", "K", "bord")
+  makefvlabel(NULL, "hat", c("K", "inhom"), "bord")
+  makefvlabel("var", "hat", c("K", "inhom"), "bord")
+@ 
+
+\subsubsection{Syntax for \texttt{desc}}
+
+Each entry of \texttt{desc} is a single character string. It may 
+contain a \underline{single} instance of \code{"\%s"}, which will be replaced by
+the function name when required.
+
+\subsection{Conversion function \fun{as.fv}}
+\label{S:as.fv}
+
+\subsection{compileK, compilepcf, compileCDF}
+\label{S:compileK}
+
+Use help files.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Manipulating \fv\ objects}
+
+\begin{itemize}
+\item \verb![.fv!, \verb![<-.fv!
+\item \texttt{subset.fv}
+\item \texttt{bind.fv}, \texttt{cbind.fv}
+  \begin{quote}
+    Use \code{\link{cbind.fv}} to combine several \code{"fv"} objects.
+    Use \code{\link{bind.fv}} to glue additional columns onto an existing
+    \code{"fv"} object.
+  \end{quote}
+\item \texttt{harmonise}
+\item \texttt{collapse}
+\item \texttt{reconcilefv}
+\end{itemize}
+
+\section{Editing the auxiliary information in \fv\ objects}
+
+\subsection{List of functions}
+
+\begin{itemize}
+\item \texttt{rebadge.fv}
+\item \texttt{rebadge.as.crossfun}, \texttt{rebadge.as.dotfun}
+\item \texttt{fvnames}, \verb!fvnames<-!
+\item \texttt{fvlabels}, \verb!fvlabels<-!
+\item \texttt{names.fv}, \verb!names<-.fv!
+\item \texttt{makefvlabel}
+\item \texttt{tweak.fv.entry}
+\item \texttt{prefixfv}
+\end{itemize}
+
+\section{Pooling several function estimates}
+
+\begin{itemize}
+\item \texttt{ratfv}
+\item \texttt{bind.ratfv}
+\item \texttt{conform.ratfv}
+\item \texttt{pool.fv}
+\end{itemize}
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Structure of \objsfvenv}
@@ -950,150 +1199,6 @@ Additional attribute \texttt{einfo} is a list of:
   \texttt{do.pwrong} & logical(1) & \texttt{TRUE} if ``wrong $p$-value'' should be calculated \\
   \texttt{gaveup} &  logical(1) & \texttt{TRUE} if simulations terminated early
 \end{tabular}
-
-\section{Creating \fv\ objects from raw data}
-
-\begin{itemize}
-\item command \texttt{fv}
-\item \texttt{as.fv}
-\item helper commands 
-  \texttt{compileK}, \texttt{compilepcf}, \texttt{compileCDF}
-  for specific types of functions
-\end{itemize}
-
-\subsection{The creator function \fun{fv}}
-
-  The low-level function \code{fv} is used to create an object of
-  class \code{"fv"} from raw numerical data.
-
-<<>>=
-names(formals(fv))
-@ 
-  The data frame \code{x} contains the numerical data.
-  It should have one column
-  (typically but not necessarily named \code{"r"})
-  giving the values of the function argument for which
-  the function has been evaluated; and at least one other column,
-  containing the corresponding values of the function.
-
-  Typically there is more than one column of function values.
-  These columns typically give the values of different versions or estimates
-  of the same function,
-  for example, different estimates of the \Kfun{}  
-  obtained using different edge corrections.
-  However they may also contain the values of related functions
-  such as the derivative or hazard rate.
-
-  \code{argu} specifies the name of the column of
-  \code{x} that contains the values of the function argument
-  (typically \code{argu="r"} but this is not compulsory).
-
-  \code{valu} specifies the name of another column
-  that contains the `recommended' estimate of the function.
-  It will be used to provide function values in those situations where
-  a single column of data is required. For example,
-  \code{envelope} computes its simulation envelopes
-  using the recommended value of the summary function.
-
-  \code{fmla} specifies the default plotting behaviour.
-  It should be a formula, or a string that can be converted to a
-  formula. Variables in the formula are names of columns of \code{x}.
-  See \code{plot.fv} for the interpretation of this
-  formula.
-
-  \code{alim} specifies the recommended range of the
-  function argument. This is used in situations where statistical
-  theory or statistical practice indicates that the computed
-  estimates of the function are not trustworthy outside a certain
-  range of values of the function argument. By default,
-  \code{plot.fv} will restrict the plot to this range.
-
-  \code{fname} is a string giving the name of the function itself.
-  For example, the \Kfun{}  would have \code{fname="K"}.
-  
-  \code{ylab} is a mathematical expression
-  for the function value, used when labelling an axis
-  of the plot, or when printing a description of the
-  function. It should be an \R{} language object. 
-  For example the \Kfun's mathematical name $K(r)$ is rendered
-  by \code{ylab=quote(K(r))}. 
-
-  If \code{yexp} is present, then \code{ylab} will be
-  used only for printing, and \code{yexp} will be used for
-  annotating axes in a plot. (Otherwise \code{yexp} defaults to \code{ylab}).
-  For example the cross-type \Kfun{}  
-  $K_{1,2}(r)$ is rendered by something like
-  \code{ylab=quote(Kcross[1,2](r))}
-  and 
-  \code{yexp=quote(Kcross[list(1,2)](r))}
-  to get the most satisfactory behaviour.
-
-  (A useful tip: use \code{substitute} instead of
-  \code{quote} to insert values of variables into an expression,
-  e.g. \code{substitute(Kcross[i,j](r), list(i=42,j=97))}
-  yields the same as \code{quote(Kcross[42, 97](r))}.)
-
-  \code{labl} is a character vector specifying plot labels
-  for each column of \code{x}. These labels will appear on the
-  plot axes (in non-default plots), legends and printed output.
-  Entries in \code{labl}
-  may contain the string \code{"\%s"} which will be replaced
-  by \code{fname}. For example the border-corrected estimate
-  of the \Kfun{}  has label \code{"\%s[bord](r)"} which
-  becomes \code{"K[bord](r)"}.
-
-  \code{desc} is a character vector containing intelligible
-  explanations of each column of \code{x}. Entries in
-  \code{desc} may contain the string \code{"\%s"} which will be replaced
-  by \code{ylab}. For example the border correction estimate of the
-  \Kfun{}  has description \code{"border correction estimate of \%s"}.
-
-  \textbf{Explain} \texttt{unitname}
-  
-\subsection{as.fv}
-
-\subsection{compileK}
-
-\section{Manipulating \fv\ objects}
-
-\begin{itemize}
-\item \verb![.fv!, \verb![<-.fv!
-\item \texttt{subset.fv}
-\item \texttt{bind.fv}, \texttt{cbind.fv}
-  \begin{quote}
-    Use \code{\link{cbind.fv}} to combine several \code{"fv"} objects.
-    Use \code{\link{bind.fv}} to glue additional columns onto an existing
-    \code{"fv"} object.
-  \end{quote}
-\item \texttt{harmonise}
-\item \texttt{collapse}
-\item \texttt{reconcilefv}
-\end{itemize}
-
-\section{Editing the auxiliary information in \fv\ objects}
-
-\subsection{List of functions}
-
-\begin{itemize}
-\item \texttt{rebadge.fv}
-\item \texttt{rebadge.as.crossfun}, \texttt{rebadge.as.dotfun}
-\item \texttt{fvnames}, \verb!fvnames<-!
-\item \texttt{fvlabels}, \verb!fvlabels<-!
-\item \texttt{names.fv}, \verb!names<-.fv!
-\item \texttt{makefvlabel}
-\item \texttt{tweak.fv.entry}
-\item \texttt{prefixfv}
-\end{itemize}
-
-\section{Pooling several function estimates}
-
-\begin{itemize}
-\item \texttt{ratfv}
-\item \texttt{bind.ratfv}
-\item \texttt{conform.ratfv}
-\item \texttt{pool.fv}
-\end{itemize}
-
 
 \section{Text from the book, to be incorporated}
 
