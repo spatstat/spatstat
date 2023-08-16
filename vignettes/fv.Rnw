@@ -6,7 +6,7 @@
 
 % \VignetteIndexEntry{Guide to Function Objects}
 
-% $Revision: 1.2 $ $Date: 2023/07/22 03:25:01 $
+% $Revision: 1.3 $ $Date: 2023/08/16 02:16:49 $
 
 \newcommand{\pkg}[1]{\texttt{#1}}
 \newcommand{\code}[1]{\texttt{#1}}
@@ -192,6 +192,8 @@ E
 @ 
 
 This vignette also explains how to plot, manipulate and create \objs\env.
+Since envelope objects also belong to class \fv, the vignette first focuses
+on the capabilities of class \fv.
 
 \subsection{Why bother?}
 \label{S:whybother}
@@ -513,11 +515,11 @@ Here we use the name \texttt{lambda}
 so that it will be rendered as the Greek letter $\lambda$ in
 the graphics: the $y$-axis will be labelled $\lambda K(r)$. 
 
-\section{Calculating with \fv\ objects}
+\section{Calculating with an \fv\ object}
 
 \subsection{Arithmetic and mathematical operators}
 
-Arithmetic and mathematical operations on \objs\fv\ 
+Arithmetic and mathematical operations on an \obj\fv\ 
 can be performed by simply writing the arithmetic expression
 involving the name of the object. The following are valid:
 <<eval=FALSE>>=
@@ -537,18 +539,8 @@ auxiliary information.
 The expression can involve a command which returns an \obj\fv:
 <<eval=FALSE>>=
 asin(sqrt(1-Gest(cells)))
-Gest(cells) - Gest(redwood)
 @ 
-
 The auxiliary information will be slightly less elegant in this case.
-
-If there are several \fv\ objects in the expression, they 
-should be `compatible' in the sense that they have the same column names, 
-and the same vector of $r$ values. However, \texttt{eval.fv} will
-attempt to reconcile incompatible objects. 
-(The \spst\ generic function \fun{compatible} determines whether two or more
-objects are compatible, and the generic function \fun{harmonise}
-makes them compatible, if possible.)
 
 These arithmetic and mathematical operations are applied only to the 
 \emph{recommended} columns of function values
@@ -571,13 +563,7 @@ The result \texttt{Kpos} is another \obj\fv\
 in which the function values are all non-negative.
 
 The first argument of \texttt{eval.fv} should be an expression
-involving the \textbf{name} of the \obj\fv, or the \textbf{names}
-of several \objs\fv:
-<<eval=FALSE>>=
-Kcel <- Kest(cells)
-Kred <- Kest(redwood)
-Km <- eval.fv(pmax(Kcel, Kred))
-@ 
+involving the \textbf{name} of the \obj\fv.
 
 By default, the calculation is only applied to the 
 \emph{recommended} columns of function values
@@ -600,40 +586,37 @@ This behaves in a very similar way to \texttt{with.data.frame}.
 For example:
 <<>>= 
 Kr <- Kest(redwood)
-y <- with(Kr, iso - theo)
+z <- with(Kr, iso - theo)
 x <- with(Kr, r)
 @ 
-The results \texttt{x} and \texttt{y} are numeric
+The results \texttt{x} and \texttt{z} are numeric
 vectors, where \texttt{x} contains the values of the distance
-argument $r$, and \texttt{y} contains the difference between
+argument $r$, and \texttt{z} contains the difference between
 the columns \texttt{iso} (isotropic correction estimate) and
 \texttt{theo} (theoretical value for CSR) for the \Kfun{}
 estimate of the redwood seedlings data.  For this to work, we
 have to know that \texttt{Kr} contains columns named \texttt{r},
 \texttt{iso} and \texttt{theo}.  Printing
 the object will reveal this information, as would typing
-\texttt{names(Kr)} or \texttt{colnames(Kr)}.
+\texttt{names(Kr)} or \texttt{colnames(Kr)}. 
 
 The general syntax is \texttt{with(X, expr)} where \texttt{X}
 is an \class{fv} object and \texttt{expr} can be any expression
 involving the names of columns of \texttt{X}. The expression
 can include functions, so long as they are capable of operating
 on numeric vectors.  The expression can also involve the abbreviations
-listed in Table~\ref{tab:fvnames}.
-Thus: \verb!Kcen <- with(Kr, . - theo)! subtracts the
+listed in Table~\ref{tab:fvnames}:
+<<>>=
+Kcen <- with(Kr, . - theo)
+@ 
+subtracts the
 `theoretical' value from all the available edge correction
-estimates.  In this case the result \texttt{Kcen} is an
-\class{fv} object.   You can also get a result which is a
-vector or single number:
+estimates.  The result \texttt{Kcen} is another \class{fv} object.   
+
+You can also get a result which is a vector or single number:
 <<>>=
 with(Kr, max(abs(iso-theo)))
 @ 
-To subtract the theoretical expected value from all the estimated
-function values:
-<<>>=
-Kadjusted <- with(K, . - theo)
-@ 
-Here \texttt{Kadjusted} is another \obj\fv.
 
 \subsection{Extracting data}
 
@@ -720,14 +703,7 @@ listed in Table~\ref{tab:fvmethods}.
   \verb!subset(f, ...)! & extract subset (returns an \class{fv} object) \\
   \texttt{with(f, expr)} & perform calculations with columns of data frame\\
   \texttt{eval.fv(expr)} & perform calculations with several \class{fv} objects \\
-  \verb!cbind(f1, f2, ...)! & combine \class{fv} objects \texttt{f1, f2, ...} \\
   \texttt{bind.fv(f, d)} & combine an \class{fv} object \texttt{f} and data frame \texttt{d} \\
-  \verb!collapse.fv(f1, f2, ...)! & 
-      combine several redundant \class{fv} objects  \\
-  \verb!compatible(f1, f2, ...)! & 
-  check whether \class{fv} objects are compatible  \\
-  \verb!harmonise(f1, f2, ...)! & 
-  make \class{fv} objects compatible  \\
   \texttt{min(f)}, \texttt{max(f)}, \texttt{range(f)} & 
                 range of function values \\
   \texttt{Smooth(f)} & apply smoothing to function values \\
@@ -741,6 +717,102 @@ listed in Table~\ref{tab:fvmethods}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+\section{Calculating with several \fv\ objects}
+
+\subsection{Arithmetic and mathematical operators}
+
+Arithmetic and mathematical operations involving several \objs\fv\ 
+can be performed by simply writing the arithmetic expression
+involving the objects:
+<<eval=FALSE>>=
+Kcel <- Kest(cells)
+Kred <- Kest(redwood)
+Kdif <- Kcel - Kred
+@ 
+These inline calculations are performed by the operators 
+\texttt{Ops.fv} and \texttt{Math.fv}.
+
+The operation is applied to each column of \emph{function values};
+the function argument \texttt{r} will not be affected.
+The result is another \obj\fv\ with the same number of columns,
+with the same column names, but with appropriately adjusted 
+auxiliary information.
+
+The \fv\ objects should be `compatible' 
+in the sense that they have the same column names, 
+and the same vector of $r$ values. However, \texttt{eval.fv} will
+attempt to reconcile incompatible objects. 
+(The \spst\ generic function \fun{compatible} determines whether two or more
+objects are compatible, and the generic function \fun{harmonise}
+makes them compatible, if possible.)
+
+The expression can involve sub-expressions which return \objs\fv:
+<<eval=FALSE>>=
+Kest(cells) - Kest(redwood)
+@ 
+The auxiliary information will be slightly less elegant in this case.
+
+\subsection{Other vectorised operations}
+
+For expressions involving \texttt{pmax} and \texttt{cumsum} (or indeed
+any algebraic expression whatsoever), 
+use the command \texttt{eval.fv} to perform the
+calculation simultaneously for each column of function values.
+<<eval=FALSE>>=
+Kcel <- Kest(cells)
+Kred <- Kest(redwood)
+Kmax <- eval.fv(pmax(Kcel, Kred))
+@ 
+The result \texttt{Kmax} is another \obj\fv.
+
+The first argument of \texttt{eval.fv} should be an expression
+involving the \textbf{names} of the \objs\fv.
+
+By default, the calculation is only applied to the 
+\emph{recommended} columns of function values
+identified by \texttt{fvnames(x, ".")} where \texttt{x} is the \obj\fv.
+This may be overridden by setting \texttt{dotonly=FALSE} in the call
+to \texttt{eval.fv}.
+
+The expression is not permitted to contain sub-expressions
+that evaluate to \objs\fv. However, you can use the argument \texttt{envir} to 
+supply such sub-expressions:
+<<eval=FALSE>>=
+  Kmax <- eval.fm(pmax(Kcel, Kred),
+                  envir=list(Kcel=Kest(cells), Kred=Kest(redwood)))
+@ 
+
+The computations of \texttt{Ops.fv} and \texttt{Math.fv} are implemented
+using \texttt{eval.fv} but there may be slight 
+differences in the handling of the auxiliary information. 
+
+\subsection{Combining objects}
+
+Several \class{fv} objects can be combined using the operations
+listed in Table~\ref{tab:fvmethods.multi}. 
+
+\begin{table}[!h]
+\begin{tabular}[c]{ll}
+  \texttt{eval.fv(expr)} & perform calculations with several \class{fv} objects \\
+  \verb!cbind(f1, f2, ...)! & combine \class{fv} objects \texttt{f1, f2, ...} \\
+  \texttt{bind.fv(f, d)} & combine an \class{fv} object \texttt{f} and data frame \texttt{d} \\
+  \verb!collapse.fv(f1, f2, ...)! & 
+      combine several redundant \class{fv} objects  \\
+  \verb!compatible(f1, f2, ...)! & 
+  check whether \class{fv} objects are compatible  \\
+  \verb!harmonise(f1, f2, ...)! & 
+  make \class{fv} objects compatible  
+\end{tabular}
+\caption{Operations for manipulating 
+  several \class{fv} objects \code{f1}, \code{f2}.}
+\label{tab:fvmethods.multi}
+\end{table}
+
+Use \code{\link{cbind.fv}} to combine several \code{"fv"} objects.
+Use \code{\link{bind.fv}} to glue additional columns onto an existing
+\code{"fv"} object.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Creating \fv\ objects from raw data}
 
 This section explains how to create \objs\fv\ from raw numerical data.
@@ -943,25 +1015,47 @@ the function name when required.
 \subsection{compileK, compilepcf, compileCDF}
 \label{S:compileK}
 
-Use help files.
+\texttt{From help files:}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Low-level functions which calculate the estimated K function and
+     estimated pair correlation function (or any similar functions)
+     from a matrix of pairwise distances and optional weights.
 
-\section{Manipulating \fv\ objects}
+     These low-level functions construct estimates of the K function or
+     pair correlation function, or any similar functions, given only
+     the matrix of pairwise distances and optional weights associated
+     with these distances.
 
-\begin{itemize}
-\item \verb![.fv!, \verb![<-.fv!
-\item \texttt{subset.fv}
-\item \texttt{bind.fv}, \texttt{cbind.fv}
-  \begin{quote}
-    Use \code{\link{cbind.fv}} to combine several \code{"fv"} objects.
-    Use \code{\link{bind.fv}} to glue additional columns onto an existing
-    \code{"fv"} object.
-  \end{quote}
-\item \texttt{harmonise}
-\item \texttt{collapse}
-\item \texttt{reconcilefv}
-\end{itemize}
+     These functions are useful for code development and for teaching,
+     because they perform a common task, and do the housekeeping
+     required to make an object of class \fv\ that represents the
+     estimated function. However, they are not very efficient.
+
+<<>>=
+  args(compileK)
+@      
+
+\begin{verbatim}
+      D: A square matrix giving the distances between all pairs of
+          points.
+
+       r: An equally spaced, finely spaced sequence of distance values.
+\end{verbatim}
+
+<<>>=
+X <- japanesepines
+D <- pairdist(X)
+Wt <- edge.Ripley(X, D)
+lambda <- intensity(X)
+a <- (npoints(X)-1) * lambda
+r <- seq(0, 0.25, by=0.01)
+K <- compileK(D=D, r=r, weights=Wt, denom=a)
+g <- compilepcf(D=D, r=r, weights=Wt, denom= a * 2 * pi * r)
+@ 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+
 
 \section{Editing the auxiliary information in \fv\ objects}
 
