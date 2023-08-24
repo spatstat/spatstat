@@ -140,7 +140,9 @@ as the mathematical notation $\widehat K_{\mbox{\scriptsize iso}}(r)$.
 
 The function argument in an \class{fv} object is usually,
 but not always, called \texttt{r}. (Counterexamples include
-\fun{transect.im} which has function argument \texttt{t}.)
+\fun{transect.im} which returns an \fv\ object with 
+function argument \texttt{t}, and \fun{roc} which returns an \fv\ object 
+with function argument \texttt{p}.)
 
 The command \texttt{plot(K)} is dispatched to the method
 \texttt{plot.fv} to generate the graphic shown above. The plot method
@@ -216,8 +218,11 @@ The class \fv{} is designed to
   of the \Kfun, and so on. 
 \item 
   do the \emph{``book-keeping''} about the different versions
-  of the function, such as generating the mathematical labels 
-  for use in a plot.
+  of the function, such as the names of the different columns.
+\item 
+  perform automatic \emph{plotting} of the function, handling all the details
+  of layout and labelling, including generating the mathematical labels
+  for each curve.
 \item 
   support \emph{calculations} that will be applied automatically
   to all the versions of the function.
@@ -517,6 +522,9 @@ the graphics: the $y$-axis will be labelled $\lambda K(r)$.
 
 \section{Calculating with an \fv\ object}
 
+This section explains how to do calculations involving a single \obj\fv.
+The next section covers calculations involving several \objs\fv.
+
 \subsection{Arithmetic and mathematical operators}
 
 Arithmetic and mathematical operations on an \obj\fv\ 
@@ -538,9 +546,10 @@ auxiliary information.
 
 The expression can involve a command which returns an \obj\fv:
 <<eval=FALSE>>=
-asin(sqrt(1-Gest(cells)))
+sqrt(Kest(cells)/pi)
 @ 
-The auxiliary information will be slightly less elegant in this case.
+The auxiliary information contained in the resulting object
+will be slightly less elegant in this case.
 
 These arithmetic and mathematical operations are applied only to the 
 \emph{recommended} columns of function values
@@ -750,7 +759,8 @@ The expression can involve sub-expressions which return \objs\fv:
 <<eval=FALSE>>=
 Kest(cells) - Kest(redwood)
 @ 
-The auxiliary information will be slightly less elegant in this case.
+The auxiliary information contained in the resulting object
+will be slightly less elegant in this case.
 
 \subsection{Other vectorised operations}
 
@@ -1008,6 +1018,16 @@ Examples:
 Each entry of \texttt{desc} is a single character string. It may 
 contain a \underline{single} instance of \code{"\%s"}, which will be replaced by
 the function name when required.
+
+\hrule
+
+\begin{Large}
+  \begin{center}
+    EDITED UP TO HERE
+  \end{center}
+\end{Large}
+
+\hrule
 
 \subsection{Conversion function \fun{as.fv}}
 \label{S:as.fv}
