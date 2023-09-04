@@ -4,7 +4,7 @@
 \usepackage{bm}
 \usepackage[bottom=0.5cm, right=1.5cm, left=1.5cm, top=1.5cm]{geometry} 
 
-% \VignetteIndexEntry{Guide to Function Objects}
+% \VignetteIndexEntry{Guide to Function Objects in Spatstat}
 
 % $Revision: 1.3 $ $Date: 2023/08/16 02:16:49 $
 
@@ -17,6 +17,7 @@
 
 \newcommand{\fv}{\texttt{"fv"}}
 \newcommand{\env}{\texttt{"envelope"}}
+\newcommand{\rat}{\texttt{"rat"}}
 \newcommand{\obj}[1]{object of class {#1}}
 \newcommand{\objs}[1]{objects of class {#1}}
 \newcommand{\objsfvenv}{\objs\fv{} and \env}
@@ -32,6 +33,19 @@
 \newcommand{\figref}[1]{Figure~\ref{#1}}
 \newcommand{\secref}[1]{Section~\ref{#1}}
 \newcommand{\eqref}[1]{(\ref{#1})}
+
+\newcommand{\editedToHere}{%
+\newpage %
+\hrule %
+% 
+\begin{Large} %
+  \begin{center} %
+    NOT EDITED BEYOND HERE %
+  \end{center} %
+\end{Large} %
+%
+\hrule %
+}
 
 \begin{document}
 \bibliographystyle{plain}
@@ -54,9 +68,9 @@ options(width=100)
 \SweaveOpts{eps=TRUE}
 \setkeys{Gin}{width=0.5\textwidth}
 
-\title{A guide to function objects (class \fv\ and \env)}
+\title{A guide to function objects (class \fv\ and \env) in \spst}
 \author{Adrian Baddeley, Rolf Turner and Ege Rubak}
-\date{\today}
+\date{{\small Draft of \today}}
 \maketitle
 
 \thispagestyle{empty}
@@ -409,6 +423,7 @@ is executed, \texttt{plot.fv} uses this information to determine which
 columns are to be plotted.
 
 \subsection{Plot specified by a formula}
+\label{S:plot.formula}
 
 Different kinds of plots can be specified using a \texttt{formula}
 as the second argument to \texttt{plot.fv}.
@@ -1019,48 +1034,86 @@ Each entry of \texttt{desc} is a single character string. It may
 contain a \underline{single} instance of \code{"\%s"}, which will be replaced by
 the function name when required.
 
-\hrule
-
-\begin{Large}
-  \begin{center}
-    EDITED UP TO HERE
-  \end{center}
-\end{Large}
-
-\hrule
 
 \subsection{Conversion function \fun{as.fv}}
 \label{S:as.fv}
 
+The generic function \texttt{as.fv} converts other kinds of data to an \obj\fv. 
+
+The methods \fun{as.fv.matrix} and \fun{as.fv.data.frame} provide a lazy way
+to convert a table of function data to an \obj\fv. The auxiliary information
+is determined by applying default rules.
+
+Other methods apply to classes of objects which intrinsically contain
+an \obj\fv, and they simply extract the \fv\ object.
+For example, a fitted model of class \class{kppm} contains the 
+summary function (either the $K$ function or the pair correlation function)
+that was used to fit the model; so the method \fun{as.fun.kppm} simply extracts
+this summary function.
+
 \subsection{compileK, compilepcf, compileCDF}
 \label{S:compileK}
 
-\texttt{From help files:}
+A shortcut is provided for programmers wishing to implement 
+a summary function that is similar to 
+Ripley's $K$ function, the pair correlation function $g$,
+the empty space function $F$ or
+the nearest-neighbour distance distribution function $G$.
 
-Low-level functions which calculate the estimated K function and
-     estimated pair correlation function (or any similar functions)
-     from a matrix of pairwise distances and optional weights.
+\subsubsection{$K$ functions and pair correlation functions}
 
-     These low-level functions construct estimates of the K function or
-     pair correlation function, or any similar functions, given only
-     the matrix of pairwise distances and optional weights associated
-     with these distances.
+Programmers who wish to implement a summary function similar to 
+Ripley's $K$ function or the pair correlation function
+can use the commands \texttt{compileK} or \texttt{compilepcf}.
 
-     These functions are useful for code development and for teaching,
-     because they perform a common task, and do the housekeeping
-     required to make an object of class \fv\ that represents the
-     estimated function. However, they are not very efficient.
+These low-level functions construct estimates of the $K$ function or
+pair correlation function, or any similar functions, given only
+the matrix of pairwise distances and optional weights associated
+with these distances.
 
-<<>>=
-  args(compileK)
-@      
+These functions are useful for code development and for teaching,
+because they perform a common task, and do the housekeeping
+required to make an object of class \fv\ that represents the
+estimated function. However, they are not very efficient.
 
-\begin{verbatim}
-      D: A square matrix giving the distances between all pairs of
-          points.
+The basic syntax of \texttt{compileK} and \texttt{compilepcf} is:
 
-       r: An equally spaced, finely spaced sequence of distance values.
-\end{verbatim}
+<<eval=FALSE>>=
+compileK(D, r, weights = NULL, denom = 1, ...)
+compilepcf(D, r, weights = NULL, denom = 1, ...)
+@ 
+
+where
+
+\begin{itemize}
+\item \texttt{D} is a square matrix giving the distances between all pairs of
+  points;
+\item \texttt{r} is a vector of distance values, equally spaced, at which 
+  the summary function should be calculated;
+\item \texttt{weights} is an optional matrix of numerical weights
+  for the pairwise distances;
+\item \texttt{denom} is the denominator for the estimator.
+  It may be a single number, or a numeric
+  vector with the same length as \texttt{r}.
+\end{itemize}
+
+The command \texttt{compileK} calculates the weighted estimate of the
+$K$ function,
+\[
+  K(r) = \frac{1}{v(r)} \sum_i \sum_{j \neq i} w_{i,j} \; 1\{ d_{i,j} \le r\}  
+\]
+and \texttt{compilepcf} calculates the weighted estimate of the pair
+correlation function,
+\[
+  g(r) = \frac{1}{v(r)} \sum_i \sum_{j \neq i} w_{i,j}\; \kappa ( d_{i,j} - r) 
+\]     
+where $d_{i,j}$ is the distance between spatial points $i$ and $j$, with
+corresponding weight $w_{i,j}$, and $v(r)$ is the specified denominator.
+Here $\kappa$ is a fixed-bandwidth smoothing kernel.
+
+For a point pattern in two dimensions, the usual denominator $v(r)$
+is constant for the $K$ function, and proportional to $r$ for the pair
+correlation function:
 
 <<>>=
 X <- japanesepines
@@ -1073,39 +1126,405 @@ K <- compileK(D=D, r=r, weights=Wt, denom=a)
 g <- compilepcf(D=D, r=r, weights=Wt, denom= a * 2 * pi * r)
 @ 
 
+The result of \texttt{compileK} or \texttt{compilepcf} can then
+be edited (as explained in the next section)
+to change the function name and other information as desired.
+
+\subsubsection{Cumulative distribution functions}
+
+Programmers wishing to implement a summary function 
+which is a cumulative distribution function, similar to
+the functions \texttt{Gest} or \texttt{Fest},
+can use the command \texttt{compileCDF}.
+
+The basic syntax of \texttt{compileCDF} is:
+<<eval=FALSE>>=
+compileCDF(D, B, r, ..., han.denom = NULL)
+@ 
+where
+\begin{itemize}
+\item \texttt{D} is a numeric vector of observed distances (such as the distance
+  from each data point to its nearest neighbour);
+\item \texttt{B} is a numeric vector of censoring distances 
+  (such as the distance from each data point to the boundary of the window);
+\item \texttt{r} is a vector of distance values, equally spaced, at which 
+  the summary function should be calculated;
+\item \texttt{han.denom} is the denominator for the Hanisch estimator.
+  It is usually a numeric
+  vector with the same length as \texttt{r}.
+\end{itemize}
+
+An example for the nearest-neighbour distance distribution function $G(r)$:
+<<>>=
+X <- japanesepines
+D <- nndist(X)
+B <- bdist.points(X)
+r <- seq(0, 1, by=0.01)
+h <- eroded.areas(Window(X), r)
+G <- compileCDF(D=D, B=B, r=r, han.denom=h)
+## give it a better name
+G <- rebadge.fv(G, new.fname="G", new.ylab=quote(G(r)))
+@ 
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 
 
+
 \section{Editing the auxiliary information in \fv\ objects}
 
-\subsection{List of functions}
+The ``auxiliary information'' in an  \obj\fv\ consists of the 
+function name, a mathematical expression for the function,
+mathematical expressions for each version of the function contained in a 
+column of data, the choice of which columns will be plotted by default,
+and other information. 
+
+A programmer will often wish to create an \fv\ object first,
+perhaps using some existing code, and then edit the auxiliary information.
+
+The safe way to edit the auxiliary information 
+is to \textbf{use the internal functions in \spst} which support the \fv\ class:
 
 \begin{itemize}
-\item \texttt{rebadge.fv}
-\item \texttt{rebadge.as.crossfun}, \texttt{rebadge.as.dotfun}
-\item \texttt{fvnames}, \verb!fvnames<-!
-\item \texttt{fvlabels}, \verb!fvlabels<-!
-\item \texttt{names.fv}, \verb!names<-.fv!
-\item \texttt{makefvlabel}
-\item \texttt{tweak.fv.entry}
-\item \texttt{prefixfv}
+\item \texttt{rebadge.fv} is a low-level function which 
+  allows the user to change any of the entries in the auxiliary information
+  as desired.
+\item \texttt{rebadge.as.crossfun} and \texttt{rebadge.as.dotfun}
+  are wrappers for \texttt{rebadge.fv} which change the auxiliary information
+  into the form expected for a cross-type or dot-type summary function.
+\item \texttt{fvlabels} extracts the mathematical code for each
+  version of the summary function, and \verb!fvlabels<-! changes the codes.
+\item \texttt{makefvlabel} creates suitable mathematical code
+  for a version of the summary function.
+\item The functions \texttt{fvnames} and \verb!fvnames<-! manage the
+definition of the abbreviations listed in Table~\ref{tab:fvnames}.
+\item The methods \texttt{formula.fv} and \verb!formula<-.fv! manage the
+default plotting formula.
+\item \verb!names<-.fv! changes the names of the columns in the 
+  \fv\ object, and adjusts the internal data accordingly.
+\item \texttt{tweak.fv.entry} 
+  is a very low-level function that changes the auxiliary information
+  about one of the columns of data.
+\item \texttt{prefixfv} is another wrapper for \texttt{rebadge.fv}
+  that adds a prefix to the name of the function.
 \end{itemize}
+
+\subsection{Low-level editing}
+
+\texttt{rebadge.fv} is a low-level function which 
+allows the user to change any of the entries in the auxiliary information
+as desired. It has syntax
+<<eval=FALSE>>=
+rebadge.fv(x, new.ylab, new.fname,
+           tags, new.desc, new.labl,
+           new.yexp=new.ylab, new.dotnames,
+           new.preferred, new.formula, new.tags)
+@ 
+where \texttt{x} is the \obj\fv.
+
+The arguments \texttt{new.fname}, \texttt{new.ylab} and 
+\texttt{new.yexp} (if present) specify new values for the
+function name \texttt{fname} and the mathematical expressions
+for the function, \texttt{ylab} and \texttt{yexp}, described in
+Section~\ref{S:creator}.
+
+The argument \texttt{new.dotnames} specifies a new value for
+the selection of columns that are plotted by default.
+This is a character vector of column names of \texttt{x}
+and is associated with the abbreviation ``\verb!.!'' in 
+Table~\ref{tab:fvnames}.
+
+The argument \texttt{new.preferred} specifies a new value for
+the choice of column that is designated the ``preferred'' column
+and is used in calculations which require a single column of data,
+such as simulation envelopes. 
+This is a single character string which must be a column 
+name of \texttt{x}
+and is associated with the abbreviation ``\verb!.y!'' in 
+Table~\ref{tab:fvnames}.
+
+The argument \texttt{new.formula} specifies a new default plotting formula
+for the summary function. 
+
+The argument \texttt{new.desc} specifies new values for the string
+descriptions of the individual columns, replacing the argument \texttt{desc}
+described in Section~\ref{S:creator}. It should be a character vector 
+with one entry for every column of \texttt{x} (or see below).
+
+The argument \texttt{new.labl} specifies new values for the mathematical labels
+of the individual columns, replacing the argument \texttt{desc}
+described in Section~\ref{S:creator}. It should be a character vector 
+with one entry for every column of \texttt{x} (or see below).
+
+The argument \texttt{tags} can be used to select some of the columns of data
+so that only the auxiliary data for the selected columns will be changed.
+It should be a character vector with entries which match the names
+of columns of \texttt{x}. In that case, \texttt{new.desc} and \texttt{new.labl}
+should have the same length as \texttt{tags}, 
+and they will be taken as replacement values for the selected columns only.
+
+The optional argument \texttt{new.tags} changes the names of the
+columns of \texttt{x} (or the columns selected by \texttt{tags}) to new values.
+
+\subsection{Changing information about one column}
+
+The method \verb!names<-.fv! changes the names of the columns in the 
+\fv\ object, and adjusts the internal data accordingly.
+
+The function \texttt{tweak.fv.entry} 
+is a very low-level function that changes the auxiliary information
+about one of the columns of data. It has syntax
+<<eval=FALSE>>=
+tweak.fv.entry(x, current.tag, new.labl=NULL, new.desc=NULL, new.tag=NULL)
+@ 
+where \texttt{current.tag} is the current name of the column for which
+the information should be changed, \texttt{new.labl} is the new
+mathematical label for the column, \texttt{new.desc} is the 
+new text description of the column, and \texttt{new.tag} is the new 
+name of the column. All these arguments are single strings 
+or \texttt{NULL}. 
+
+\subsection{Special idioms}
+
+A few functions are available for performing special idioms.
+
+The function \texttt{prefixfv} is a wrapper for \texttt{rebadge.fv}
+that adds a prefix to the name of the function, and to all the 
+relevant auxiliary information. It has syntax
+<<eval=FALSE>>=
+prefixfv(x, tagprefix="", descprefix="", lablprefix=tagprefix,
+         whichtags=fvnames(x, "*"))
+@ 
+where \texttt{tagprefix}, \texttt{descprefix} and \texttt{lablprefix}
+are strings that should be added to the beginning
+of the column name, the text description, and the mathematical expression
+for each column of data. The argument \texttt{whichtags} specifies which
+columns of data should be changed; the default is to change all columns.
+
+The function \texttt{rebadge.as.crossfun} changes the auxiliary information
+into the form expected for a bivariate, cross-type summary function,
+analogous to the bivariate $K$-function $K_{i,j}(r)$ between two types of points
+labelled $i$ and $j$ that is computed by the \spst\ function \texttt{Kcross}.
+It has syntax
+<<eval=FALSE>>=
+rebadge.as.crossfun(x, main, sub=NULL, i, j)
+@ 
+where \texttt{main} is the main part of the function name,
+\texttt{sub} is the subscript part of the function name,
+and \texttt{i} and \texttt{j} are the type labels.
+For example
+<<eval=FALSE>>=
+rebadge.as.crossfun(x, "L", i="A", j="B")
+@ 
+would create a function $L_{A,B}(r)$, and
+<<eval=FALSE>>=
+rebadge.as.crossfun(x, "L", "inhom", "A", "B")
+@ 
+would create a function $L_{\mbox{\scriptsize inhom},A,B}(r)$.
+
+Similarly the function \texttt{rebadge.as.dotfun}
+changes the auxiliary information
+into the form expected for a ``one type-to-any type'' summary function,
+analogous to the function $K_{i \bullet}(r)$ 
+that is computed by the \spst\ function \texttt{Kdot}.
+It has syntax
+<<eval=FALSE>>=
+rebadge.as.dotfun(x, main, sub=NULL, i)
+@ 
+
+\subsection{Handling mathematical labels}
+
+The auxiliary information in an \fv\ object includes
+mathematical labels for the different versions of the function,
+which are displayed by \texttt{plot.fv}.
+
+The function \texttt{fvlabels} extracts the mathematical code for each
+version of the summary function from the \fv\ object, 
+and \verb!fvlabels<-! changes the codes.
+
+The mathematical codes are strings 
+which must be recognisable to the \texttt{plotmath}
+code in the \R\ base graphics system which is somewhat idiosyncratic. 
+The strings may also (and usually do)
+include the substring \verb!%s! (appearing once or twice)
+which will be replaced by the 
+function name. For example, if the function name is 
+\texttt{"K"} and the label is \verb!"hat(%s)[iso](r)"! this will be
+parsed as \verb!hat(K)[iso](r)! which is rendered 
+as $\widehat K_{\mbox{\scriptsize iso}}(r)$.
+
+The function \texttt{makefvlabel} creates suitable mathematical code
+for a version of the summary function. Programmers are strongly advised
+to use \texttt{makefvlabel}. 
+
+\subsection{Changing default behaviour}
+
+The default behaviour for plotting an \fv\ object depends
+on its default \texttt{plot formula} and typically on its
+\texttt{dot names}.
+
+The default plot formula is printed when the object is printed,
+and can be extracted using \texttt{formula.fv}.
+<<>>=
+K <- Kest(cells)
+formula(K)
+@ 
+The interpretation of the plot formula is explained 
+in Section~\ref{S:plot.formula}. In the example above, the left hand side
+of the formula uses the abbreviation ``\verb!.!'' which stands
+for ``the default list of columns to be plotted''. This abbreviation can
+be expanded using \texttt{fvnames}:
+<<>>=
+fvnames(K, ".")
+@ 
+which indicates that the columns named
+\texttt{"iso"},
+\texttt{"trans"},
+\texttt{"border"} and
+\texttt{"theo"} will be plotted.
+
+The choice of ``dot names'' can be changed using \verb!fvnames<-!:
+<<>>=
+fvnames(K, ".") <- c("iso", "theo")
+@ 
+
+In general the functions \texttt{fvnames} and \verb!fvnames<-! 
+manage the
+definition of all the abbreviations listed in Table~\ref{tab:fvnames}.
+
 
 \section{Pooling several function estimates}
 
+\subsection{Pooling}
+
+``Pooling'' or combining several datasets into a single dataset
+is a common statistical procedure. If we are only interested in a summary
+statistic of the data, then in some special circumstances, the 
+summary statistic of the pooled dataset can be calculated from the
+summary statistics of the original, separate datasets. For example,
+if we have a set of $n_1$ observations with sample mean $m_1$,
+and another set of $n_2$ observations with sample mean $m_2$,
+then the sample mean of the pooled set of $n_1+n_2$ observations has
+sample mean $(n_1 m_1 + n_2 m_2)/(n_1+n_2)$, a weighted average of the
+sample means of the original datasets. This procedure is loosely called
+``pooling'' the sample mean.
+
+If we have two point pattern datasets, observed in different windows,
+we can ``pool'' the patterns by simply
+treating them as a single point pattern observed in the combined window.
+If we pool two point pattern datasets, the estimated $K$-function of the 
+pooled pattern can be calculated from the estimated $K$-functions 
+$K_1(r)$ and $K_2(r)$ of the original point patterns, if we know the number of
+points in each of the two original patterns. 
+That is, Ripley's $K$-function can be ``pooled''. 
+
+The summary functions used in spatial statistics can be pooled, 
+provided they are able to be expressed as a ratio
+$f(r) = A(r)/B$ or $f(r) = A(r)/B(r)$ where $A(r)$ is the ``numerator''
+and $B$ or $B(r)$ is the ``denominator''. The pooled estimate is the
+ratio of the sum of numerators divided by the sum of denominators.
+For details, see section 16.8.1 of \cite{baddrubaturn15}.
+
+\subsection{Pooling summary functions}
+
+The generic function \texttt{pool} performs pooling of summary statistics
+(including summary functions like the $K$-function).
+In order for this to work correctly, we must know the numerator and 
+denominator for each of the individual summary statistics or summary functions. 
+For this purpose there is a special class \class{rat} (for ``ratio object'').
+An \obj\rat\ contains two attributes named
+\texttt{"numerator"} and \texttt{"denominator"} which contain the 
+numerator and denominator of the ratio. 
+
+For many of the summary functions provided in \spst, 
+if we set the argument \texttt{ratio=TRUE}, the numerator and 
+denominator will be calculated separately and saved in the resulting
+object, which will belong to the class \class{rat} (``ratio object'')
+as well as \fv. 
+<<>>=
+class(Kest(cells))
+class(Kest(cells, ratio=TRUE))
+@ 
+This capability is currently available for the functions 
+\texttt{compileK},
+\texttt{compilepcf},
+\texttt{Finhom},
+\texttt{Gcross.inhom},
+\texttt{Gdot.inhom},
+\texttt{Ginhom},
+\texttt{GmultiInhom},
+\texttt{Jcross.inhom},
+\texttt{Jdot.inhom},
+\texttt{Jinhom},
+\texttt{Jmulti.inhom},
+\texttt{K3est},
+\texttt{Kcross},
+\texttt{Kdot},
+\texttt{Kest},
+\texttt{Kinhom},
+\texttt{Kmulti},
+\texttt{Ksector},
+\texttt{linearKinhom},
+\texttt{linearK},
+\texttt{linearpcfinhom},
+\texttt{linearpcf},
+\texttt{nnorient},
+\texttt{pairorient},
+\texttt{pcfcross},
+\texttt{pcfdot},
+\texttt{pcfmulti},
+\texttt{pcf.ppp} and
+\texttt{Tstat}.
+
+The method \texttt{pool.rat} will pool several objects which all belong
+to the classes \class{fv} and \class{rat}:
+
+<<>>=
+X1 <- runifpoint(50)
+X2 <- runifpoint(50)
+K1 <- Kest(X1, ratio=TRUE)
+K2 <- Kest(X2, ratio=TRUE)
+K <- pool(K1, K2)
+@ 
+
+<<>>=
+Xlist <- runifpoint(50, nsim=6)
+Klist <- lapply(Xlist, Kest, ratio=TRUE)
+K <- do.call(pool, Klist)
+@ 
+
+There is also a fallback method \texttt{pool.fv} 
+which is used when some of the objects do not contain ratio information.
+This method effectively pretends that all the objects have the same
+denominator. 
+
+\subsection{Low level utilities}
+
+Programmers wishing to implement a summary function with 
+ratio information can use the following low-level utilities:
+
 \begin{itemize}
-\item \texttt{ratfv}
-\item \texttt{bind.ratfv}
-\item \texttt{conform.ratfv}
-\item \texttt{pool.fv}
+\item \texttt{ratfv} is the creator function, analogous to \texttt{fv}.
+  Its syntax is
+<<eval=FALSE>>=
+ratfv(df, numer, denom, ..., ratio=TRUE)
+@ 
+where \texttt{df} is a data frame, \texttt{numer} and \texttt{denom}
+are \objs\fv, and additional arguments \verb!...! are passed to \texttt{fv}.
+It is sufficient to specify either \texttt{df} or \texttt{numer},
+in addition to \texttt{denom}.
+\item \texttt{bind.ratfv} glues extra columns onto an existing 
+  \obj\fv and \class{rat}.
+\item \texttt{conform.ratfv} forces the auxiliary information
+  in the numerator and denominator of an \obj\fv and \class{rat}
+  to agree with the auxiliary information of the main object.
 \end{itemize}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Structure of \objsfvenv}
+\section{Structure of \objs\fv}
 
-This section explains the information contained in \objsfvenv.
+This section explains the information contained in \objs\fv.
 
 \subsection{Advice}
 
@@ -1161,13 +1580,14 @@ head(df)
 In this example, the object \texttt{G} contains estimates of
 the nearest-neighbour distance distribution function $G(r)$
 for the \texttt{finpines} dataset. For the distance
-value $r = $ \Sexpr{df[3, "r"]} metres, the estimate of $G(r)$ 
-using the \texttt{han} method is \Sexpr{df[3, "han"]}. 
+value $r = $ \Sexpr{round(df[6, "r"], 9)} metres, the estimate of $G(r)$ 
+using the \texttt{han} method is \Sexpr{round(df[6, "han"],8)}. 
 
 Columns of data can be extracted using the data frame structure.
 To extract the sequence of \texttt{r} values, 
-use \verb!df$r! or \verb!G$r!. To extract the corresponding values of
-\texttt{han}, use \verb!df$han! or \verb!G$han!. 
+use \verb!df$r! or \verb!G$r! or \verb!df[, "r"]!. 
+To extract the corresponding values of
+\texttt{han}, use \verb!df$han! or \verb!G$han! or \verb!df[, "han"]!.
 
 \subsubsection*{Auxiliary information}
 
@@ -1250,92 +1670,12 @@ explanations of each column of the data frame. Entries in
 by \code{ylab}. 
 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Structure of \objs\env}
 
-\subsection{Envelope objects}
+This section explains the information contained in \objs\env.
 
-Objects of class \env\ are returned by the \texttt{envelope} command
-only.
-
-\subsubsection{Structure}
-
-An \obj\env{} is an \obj\fv{} with additional auxiliary information:
-\begin{itemize}
-\item 
-  the names of two of the columns of function values,
-  designated as the upper and lower simulation envelopes of the function,
-  saved in \texttt{attr(, "shade")} and retrievable as 
-  \texttt{fvnames(, .s)}
-\item 
-  details of how the envelopes were computed,
-  saved in \texttt{attr(, "einfo")}
-\item 
-  optionally, the simulated point patterns used to compute the envelopes,
-  saved in \texttt{attr(, "simpatterns")}
-\item 
-  optionally, the simulated summary functions
-  (the summary functions computed for the simulated point patterns)
-  used to compute the envelopes,
-  saved in \texttt{attr(, "simfuns")}
-\end{itemize}
-
-Objects of class \env\ inherit the class \fv, so they can be manipulated
-using methods for class \fv, but there are extra methods for the
-special class \env. 
-
-\subsubsection{The \texttt{einfo} list}
-
-Additional attribute \texttt{einfo} is a list of:
-
-\begin{tabular}{lll}
-  \texttt{call} & character(1) & original function call \\
-  \texttt{Yname} & character(1) & name of original dataset \\
-  \texttt{valname} & character(1) & column name of function values used\\
-  \texttt{csr} & logical(1) & \texttt{TRUE} if simulations based on CSR \\
-  \texttt{csr.theo} & logical (1) & see below\\
-  \texttt{use.theory} & logical (1) & see below\\
-  \texttt{pois} & logical(1) & \texttt{TRUE} if simulations 
-                               are Poisson process\\
-  \texttt{simtype} & character(1) & Type of simulation (see below) \\
-  \texttt{constraints} & character(1) & Additional information (see below) \\
-  \texttt{nrank} & integer(1) & Rank of envelopes \\
-  \texttt{nsim} & integer(1) & Number of simulations for envelope \\
-  \texttt{Nsim} & integer(1) & Total number of simulations\\
-  \texttt{global} & logical(1) & \texttt{TRUE} if global envelopes\\
-  \texttt{ginterval} & numeric(0 or 2) & Domain of function argument for global envelopes \\
-  \texttt{dual} & logical(1) & \texttt{TRUE} if two sets of simulations performed\\
-  \texttt{nsim2} & integer(1) & Number of simulations in second set \\
-  \texttt{VARIANCE} & logical(1) & \texttt{TRUE} if limits are based on standard deviation \\
-  \texttt{nSD} & numeric(1) & Number of standard deviations defining limits \\
-  \texttt{alternative} & character(1) & \texttt{two.sided}, \texttt{less} or \texttt{greater} \\
-  \texttt{scale} & \texttt{NULL} or function & Scaling function for function argument \\
-  \texttt{clamp} & logical(1) & \texttt{TRUE} if one-sided deviations must be positive \\
-  \texttt{use.weights} & logical(1) & \texttt{TRUE} if sample mean is weighted\\
-  \texttt{do.pwrong} & logical(1) & \texttt{TRUE} if ``wrong $p$-value'' should be calculated \\
-  \texttt{gaveup} &  logical(1) & \texttt{TRUE} if simulations terminated early
-\end{tabular}
-
-\section{Text from the book, to be incorporated}
-
-\subsubsection*{Envelopes}
-
-The \spst\ function \fun{envelope} computes simulation envelopes.
-The right panel of \figref{F:ptwiseEnvelopes} was generated by the
-commands
-<<eval=FALSE>>=
-E <- envelope(swp, Kest, nsim=39, fix.n=TRUE)
-plot(E)
-@ 
-The result of \fun{envelope} is an object of class \class{envelope}
-which also belongs to the class \class{fv}. 
-It can be plotted, printed, and manipulated
-using the tools for \class{fv} objects described in \secref{S:fv}.
-See Table~\ref{tab:fvmethods} on page~\pageref{tab:fvmethods}.
-The print method gives a lot of detail:
-<<>>=
-E
-@ 
-
-\subsubsection*{Envelopes}
+\subsection{The \texttt{envelope} command}
 
 The \spst\ function \fun{envelope} performs the
 calculations required for envelopes. It computes the 
@@ -1343,215 +1683,21 @@ summary function for a point pattern dataset, generates
 simulated point patterns, computes the summary functions for the
 simulated patterns, and computes the envelopes of these summary 
 functions. 
+
+<<eval=FALSE>>=
+E <- envelope(swp, Kest, nsim=39, fix.n=TRUE)
+@ 
 The result is an object of class \class{envelope} and \class{fv}
 which can be printed and plotted and manipulated
-using the tools for \class{fv} objects described in \secref{S:fv}.
-(See Table~\ref{tab:fvmethods} on page~\pageref{tab:fvmethods}.)
+using the tools for \class{fv} objects, and by additional tools
+provided for \class{envelope} objects.
+
 The print method gives a lot of detail:
-For example,  \figref{F:envel.ex} was generated by the commands
-<<eval=FALSE>>=
-plot(envelope(redwood, Lest, nsim=39))
-plot(envelope(redwood, Lest, nsim=39, global=TRUE))
+<<>>=
+E
 @ 
-
-<<echo=FALSE,results=hide>>=
-EP <- envelope(redwood, Lest, nsim=39, savefuns=TRUE)
-EG <- envelope(EP, global=TRUE)
-@ 
-\begin{figure}[!htb]
-  \centering
-<<fig=TRUE,echo=FALSE,results=hide>>=
-par(mfrow=c(1,2))
-plot(EP, main="", legend=FALSE)
-plot(EG, main="", legend=FALSE)
-@   
-  \caption{Examples of the \fun{envelope} command.
-    Pointwise (\emph{Left}) and global (\emph{Right})
-    envelopes of Besag's \Lfun\ based on 39 simulations
-    of CSR, and observed \Lfun\ for the \code{redwood} data.
-  }
-  \label{F:envel.ex}
-\end{figure}
-
-The function \fun{envelope} is generic, with methods for class
-\class{ppp}, \class{ppm}, and several other classes.  If \texttt{X}
-is a point pattern, then by default \texttt{envelope(X, ...)}
-constructs pointwise envelopes for the null hypothesis of CSR.
-If \texttt{M} is a fitted point process model, then by default
-\texttt{envelope(M, ...)} constructs pointwise envelopes
-for the null hypothesis represented by the model \texttt{M}.
-The default behaviour is to construct pointwise envelopes from the
-\Kfun{}s of 99 simulations.  Different summary functions, 
-different types of envelopes,
-different null hypotheses, different alternative hypotheses, and
-different simulation procedures are selected using additional
-arguments listed in Table~\ref{tab:envelope.args}.
-\begin{table}[!htb]
-  \centering
-  \begin{tabular}{lll}
-    \textsc{Argument} & \textsc{Default} & \textsc{Meaning} \\ \hline
-    \texttt{Y} & & point pattern data, or fitted model \\
-    \texttt{fun} & \texttt{Kest} & summary function \\
-    \texttt{nsim} & 99 & number of simulations $m$ for test \\
-    \texttt{nrank} & 1 & rank for statistical significance \\
-    \texttt{global} & \texttt{FALSE} & global envelopes \\
-    \texttt{VARIANCE} & \texttt{FALSE} & envelopes based on sample variance \\
-    \texttt{simulate} & & procedure for generating simulated patterns \\
-    \texttt{alternative} & \texttt{two.sided} &  alternative hypothesis \\
-    \texttt{fix.n} & \texttt{FALSE} &  fix number of points \\
-    \texttt{fix.marks} & \texttt{FALSE} & fix number of points of each type \\
-    \texttt{correction} & & edge correction for summary function  \\
-    \texttt{transform} &  & transformation of summary function \\
-    \texttt{ginterval} &  & range of distance values for global envelopes\\
-    \texttt{nsim2} & \texttt{nsim} & number of simulations to estimate mean \\
-    \texttt{savepatterns} & \texttt{FALSE} & store point patterns\\
-    \texttt{savefuns} & \texttt{FALSE} & store summary functions 
-  \end{tabular}
-  \caption{Common arguments for \fun{envelope}.}
-  \label{tab:envelope.args}
-\end{table}
-
-\subsection{Envelopes based on a set of point patterns}
-
-Envelopes can also be computed from a user-supplied list of 
-point patterns, instead of the simulated point patterns
-generated by a chosen simulation procedure. The argument 
-\texttt{simulate} can be a list of point patterns:
-<<eval=FALSE>>=
-Xlist <- runifpoint(42, nsim=99)
-envelope(cells, Kest, nsim=99, simulate=Xlist)
-@ 
-The argument \texttt{simulate} can also be an \class{envelope} object.
-This improves efficiency and consistency if, for example, we are going to 
-calculate the envelopes of several different summary statistics. 
-<<eval=FALSE>>=
-EK <- envelope(cells, Kest, nsim=99, savepatterns=TRUE)
-Ep <- envelope(cells, pcf,  nsim=99, simulate=EK)
-@ 
-In the first call to \texttt{envelope}, the argument 
-\texttt{savepatterns=TRUE} indicates that we want to save the simulated
-point patterns. These are stored in the object \texttt{EK}. Then in the second
-call to \texttt{envelope}, the simulated patterns are extracted from
-\texttt{EK} and used to compute the envelopes of the pair correlation function.
-
-The method \texttt{envelope.envelope} allows envelope calculations
-to be based on an existing \class{envelope} object. The previous example
-could have been done by typing
-<<eval=FALSE>>=
-EK <- envelope(cells, Kest, nsim=99, savepatterns=TRUE)
-Ep <- envelope(EK, pcf)
-@ 
-
-\subsection{Types of envelopes in \spst}
-
-\subsubsection{Pointwise envelopes}
-
-By default, \fun{envelope} computes pointwise envelopes of the
-summary function. The argument \texttt{nsim} controls the number $m$ of
-simulated point patterns. The argument \texttt{nrank} specifies
-the rank $k$ of the critical value amongst the simulated values:
-the envelopes are based on the $k$th largest and $k$th smallest simulated
-values. The default is $k=1$, meaning that the minimum and maximum
-simulated values will be used. For a two-sided test, the 
-significance level is $2k/(m+1)$.
-
-\subsubsection{Simultaneous envelopes}
-
-To obtain simultaneous (global) envelopes, set \texttt{global=TRUE}:
-<<eval=FALSE>>=
-envelope(redwood, Lest, global=TRUE)
-@ 
-The significance level is $k/(m+1) = 1/(1+99) = 0.01$.
-
-As noted in \secref{S:globalEnvelopes}, the outcome of the test
-is affected by transforming the summary function.
-In order to achieve the maximum power of the test,
-it is usually recommended to apply a 
-\emph{variance-stabilising} transformation to the summary function,
-that is, a transformation $H(r) = f(S(r))$ such that the variance of $H(r)$
-\label{pg:var.stab.trans}
-is approximately constant as a function of $r$. 
-The global measure of deviation \eqref{e:MAD} treats
-all fluctuations of the summary function $S$ equally; 
-this could be inappropriate if fluctuations of
-$S(r)$ at some distance $r$ are more informative than at other distances.
-After a variance-stabilising transformation, 
-fluctuations in the summary function at different distances $r$
-have equal scale, so can be treated equally.
-
-An approximate variance-stabilising transformation for the \Kfun{}  
-is the square root, as explained on page~\pageref{e:Lfun}.
-Indeed this was one of the motivations for
-Besag's \cite{besa77d} original proposal of the \Lfun,
-$L(r) = \sqrt{K(r)/\pi}$. Thus we would typically use \texttt{Lest}
-rather than \texttt{Kest} for global envelopes.
-
-For the summary functions $F$ and $G$, an approximate
-variance-stabilising transformation is Fisher's arcsine
-transformation $f(x) = \arcsin \sqrt x$ 
-as explained on page~\pageref{e:FisherArcsin}. Rather than writing a new
-function for the variance-stabilised versions of \texttt{Fest}
-and \texttt{Gest}, we can specify the transformation using the
-argument \texttt{transform}:
-<<eval=FALSE>>=
-fisher <- function(x) { asin(sqrt(x)) }
-envelope(redwood, Fest, global=TRUE, 
-         transform=expression(fisher(.)))
-@ 
-To allow very flexible specification of the transformation, 
-\fun{envelope} uses \fun{with.fv} to evaluate the 
-\texttt{transform} expression. In the syntax of \fun{with.fv},
-the symbol `\texttt{.}' represents the function value,
-in this case the value of the estimate $\widehat F(r)$. 
-  
-\subsubsection{Envelopes based on sample mean \& variance}
-
-Envelopes can be constructed using the sample mean and sample
-variance of the simulations. By default the envelopes consist of the
-sample mean plus or minus 2 times the sample standard deviation.
-This is useful for understanding the variability of the summary
-function. Be aware that these envelopes do not have the same
-significance interpretation as the global envelopes produced
-from ranking absolute deviations.
-
-<<eval=FALSE>>=
-envelope(cells, Kest, nsim=100, VARIANCE=TRUE)
-@ 
-
-\subsubsection{One-sided envelopes}
-
-In \texttt{envelope} methods, the 
-argument \texttt{alternative} is a 
-    character string determining whether the envelopes correspond
-    to a two-sided test (\texttt{alternative="two.sided"}, the default)
-    or a one-sided test with a lower critical boundary
-    (\texttt{alternative="less"}) or a one-sided test
-    with an upper critical boundary (\texttt{alternative="greater"}).
-
-<<cache=TRUE,echo=FALSE,results=hide>>=
-a1 <- envelope(cells, Lest, nsim=19, alternative="less")
-a2 <- envelope(cells, Lest, nsim=19, alternative="greater")
-@     
-\begin{figure}[!htb]
-  \centering
-<<fig=TRUE,echo=FALSE,results=hide>>=
-plot(anylist(a1, a2), 
-     main="", main.panel="", equal.scales=TRUE,
-     mar.panel=c(4,4,1,1), hsep=1, legend=FALSE)
-@   
-  \caption{One-sided envelopes.
-    Grey shading shows the pointwise acceptance region for
-    a one-sided test of CSR against the alternative of
-    regularity (\emph{Left}) or clustering (\emph{Right})
-    based on the \Lfun{}s of 19 simulations of CSR.
-    Thick line shows empirical \Lfun\ for the \code{cells} data.
-  }
-  \label{F:onesided}
-\end{figure}
 
 \subsection{Re-using envelope data}
-
-\subsubsection*{Computing new envelopes}
 
 The method \texttt{envelope.envelope} allows new \fun{envelope} commands to
 be applied to a previously computed \class{envelope} object,
@@ -1583,7 +1729,7 @@ A2 <- envelope(A1, global=TRUE, nsim=19,
                transform=expression(sqrt(./pi)))
 @ 
 
-\subsubsection*{Pooling several envelopes}
+\subsection{Pooling several envelopes}
 
 It is also possible to combine the simulation data
 from several envelope objects 
@@ -1599,8 +1745,64 @@ E1 <- envelope(cells, Kest, nsim=10, savefuns=TRUE)
 E2 <- envelope(cells, Kest, nsim=20, savefuns=TRUE)
 E <- pool(E1, E2)
 @ 
-The method for pooling summary functions is detailed in \secref{S:poolK}.
 
+\subsection{Structure of envelope objects}
+
+An \obj\env{} is an \obj\fv{} with additional auxiliary information:
+\begin{itemize}
+\item 
+  the names of two of the columns of function values,
+  designated as the upper and lower simulation envelopes of the function,
+  saved in \texttt{attr(, "shade")} and retrievable as 
+  \texttt{fvnames(, .s)}
+\item 
+  details of how the envelopes were computed,
+  saved in \texttt{attr(, "einfo")}
+\item 
+  optionally, the simulated point patterns used to compute the envelopes,
+  saved in \texttt{attr(, "simpatterns")}
+\item 
+  optionally, the simulated summary functions
+  (the summary functions computed for the simulated point patterns)
+  used to compute the envelopes,
+  saved in \texttt{attr(, "simfuns")}
+\end{itemize}
+
+Objects of class \env\ inherit the class \fv, so they can be manipulated
+using methods for class \fv, but there are extra methods for the
+special class \env. 
+
+\subsection{The \texttt{einfo} list}
+
+Additional attribute \texttt{einfo} is a list of:
+
+\begin{tabular}{lll}
+  \texttt{call} & character(1) & original function call \\
+  \texttt{Yname} & character(1) & name of original dataset \\
+  \texttt{valname} & character(1) & column name of function values used\\
+  \texttt{csr} & logical(1) & \texttt{TRUE} if simulations based on CSR \\
+  \texttt{csr.theo} & logical (1) & see below\\
+  \texttt{use.theory} & logical (1) & see below\\
+  \texttt{pois} & logical(1) & \texttt{TRUE} if simulations 
+                               are Poisson process\\
+  \texttt{simtype} & character(1) & Type of simulation (see below) \\
+  \texttt{constraints} & character(1) & Additional information (see below) \\
+  \texttt{nrank} & integer(1) & Rank of envelopes \\
+  \texttt{nsim} & integer(1) & Number of simulations for envelope \\
+  \texttt{Nsim} & integer(1) & Total number of simulations\\
+  \texttt{global} & logical(1) & \texttt{TRUE} if global envelopes\\
+  \texttt{ginterval} & numeric(0 or 2) & Domain of function argument for global envelopes \\
+  \texttt{dual} & logical(1) & \texttt{TRUE} if two sets of simulations performed\\
+  \texttt{nsim2} & integer(1) & Number of simulations in second set \\
+  \texttt{VARIANCE} & logical(1) & \texttt{TRUE} if limits are based on standard deviation \\
+  \texttt{nSD} & numeric(1) & Number of standard deviations defining limits \\
+  \texttt{alternative} & character(1) & \texttt{two.sided}, \texttt{less} or \texttt{greater} \\
+  \texttt{scale} & \texttt{NULL} or function & Scaling function for function argument \\
+  \texttt{clamp} & logical(1) & \texttt{TRUE} if one-sided deviations must be positive \\
+  \texttt{use.weights} & logical(1) & \texttt{TRUE} if sample mean is weighted\\
+  \texttt{do.pwrong} & logical(1) & \texttt{TRUE} if ``wrong $p$-value'' should be calculated \\
+  \texttt{gaveup} &  logical(1) & \texttt{TRUE} if simulations terminated early
+\end{tabular}
 
 
 \begin{thebibliography}{1}
