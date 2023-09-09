@@ -1,9 +1,11 @@
 
-        CHANGES IN spatstat VERSION 3.0-6.007
+        CHANGES IN spatstat VERSION 3.0-6.008
 
 OVERVIEW
 
     o New vignette on function objects (class 'fv' and 'envelope')
+    
+    o Updated cross-references to sub-packages.
     
 SIGNIFICANT USER-VISIBLE CHANGES
 
