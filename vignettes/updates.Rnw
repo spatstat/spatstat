@@ -318,6 +318,18 @@ the News and Release Notes for each update.
 %%     and \pkg{spatstat}).
 
   
+\item Improvements to \texttt{envelope} methods.
+  
+\item Conditional simulation for Matern cluster process.
+
+\item Improvements to \texttt{runifpoint} and \texttt{rpoispp}.  
+  
+\item Extension of distance transform algorithm.
+
+\item Improvement to progress reports.
+    
+\item Suppress annoying warnings.
+ 
 \item Changed the calculation of standard errors in \texttt{density.ppp}
   and \texttt{relrisk.ppp}.
 
@@ -814,6 +826,10 @@ Following is a list of all the functions that have been added,
 starting with the most recent additions.
 
 \begin{itemize}
+\item \texttt{compileCDF}:
+      Low level utility for calculating cumulative distribution function
+    of distance variable. 
+
 \item \texttt{Math.fv}, \texttt{Complex.fv}, \texttt{Summary.fv}, \texttt{Ops.fv}:
     Methods for arithmetic operations for function tables (class \texttt{"fv"})
 \item \texttt{Math.fasp}, \texttt{Complex.fasp}, \texttt{Summary.fasp}, \texttt{Ops.fasp}:
@@ -1797,6 +1813,9 @@ listed alphabetically.
   \item \texttt{as.im.distfun}:
   New argument \texttt{approx} specifies the choice of algorithm.
 
+  \item \texttt{as.im.tess}:
+  New argument \texttt{values}.
+
   \item \texttt{as.im.function}:
     \begin{itemize}
     \item   New argument \texttt{strict}.
@@ -2018,6 +2037,9 @@ listed alphabetically.
    \item     Now handles Gibbs models.
    \item     Now recognises \texttt{covariate="x"} or \texttt{"y"}.
    \end{itemize}
+   
+ \item \texttt{circdensity}:
+   Improved output of \texttt{print} method.
     
  \item \texttt{clarkevans}:
     The argument \texttt{correction="all"} is now recognised: it selects
@@ -2313,11 +2335,15 @@ listed alphabetically.
 
     
  \item \texttt{distmap.owin}:
+   \begin{itemize}
+   \item New argument \texttt{connect}.
+   \item 
     Behaviour has been altered so that, when \texttt{X} is a binary mask, the results of
     \texttt{distmap(X, invert=TRUE)} and \texttt{distmap(complement.owin(X))} are identical.
     This affects a few pixels close to the edge of the frame.
-   
- \item \texttt{distmap.ppp}:
+  \end{itemize}
+
+\item \texttt{distmap.ppp}:
    New argument \texttt{clip}.
 
  \item \texttt{distmap.psp}:
@@ -2355,6 +2381,10 @@ listed alphabetically.
     
  \item \texttt{envelope}:
    \begin{itemize}
+   \item 
+     All methods for \texttt{envelope} now accept a summary function 
+    in which the function argument is not named \texttt{r}.
+    This includes functions such as \texttt{transect.im} and \texttt{roc}.
    \item 
      New argument \texttt{clamp} gives greater control
      over one-sided envelopes.
@@ -2922,6 +2952,7 @@ listed alphabetically.
 
  \item \texttt{lppm}:
    \begin{itemize}
+   \item Covariates can be objects of class \texttt{lintess}.
    \item New argument \texttt{random} controls placement of dummy points.
    \item    Computation accelerated.
    \end{itemize}
@@ -3169,6 +3200,10 @@ listed alphabetically.
    \item  Result is now an (invisible) list containing the result
     from executing the plot of each panel.
    \end{itemize}
+   
+   
+ \item \texttt{plot.bermantest}:
+   Improved layout for plots of Berman's \texttt{Z2} test.
 
  \item \texttt{plot.colourmap}:
    \begin{itemize}
@@ -3181,7 +3216,9 @@ listed alphabetically.
     when \texttt{vertical=FALSE}.
    \end{itemize}
 
-
+ \item \texttt{plot.fv}:
+   New argument \texttt{clip.xlim}.
+   
  \item \texttt{plot.im}:
    \begin{itemize}
    \item New argument \texttt{addcontour} specifies that contour lines should be drawn
@@ -3489,6 +3526,8 @@ listed alphabetically.
     
   \item \texttt{progressreport}
     \begin{itemize}
+    \item  The estimated time of completion is also printed, 
+      if the remaining time is longer than 10 minutes.
     \item Behaviour improved. 
     \item New arguments \texttt{state}, \texttt{tick}, \texttt{showtime}.
     \item New option: \verb!style="tk"!
@@ -3671,6 +3710,13 @@ listed alphabetically.
     three dimensions and higher dimensions, when the argument
     \texttt{win} is of class \texttt{box3} or \texttt{boxx}.
 
+   \item \texttt{rMatClust}: 
+     \begin{itemize}
+     \item Can now perform conditional simulation given a
+       fixed number of points.
+     \item New arguments \texttt{n.cond} and \texttt{w.cond}.
+     \end{itemize}
+     
   \item \texttt{rmh}:
     \begin{itemize}
     \item 
@@ -4026,6 +4072,8 @@ listed alphabetically.
 
    \item \texttt{unnormdensity}:
      \begin{itemize}
+     \item Suppress annoying warning messages from \texttt{density.default}.
+           This affects many functions in the \spst\ family of packages.
      \item Argument \texttt{weights} may have length 1.
      \item New argument \texttt{defaults}.
      \item Computation accelerated.

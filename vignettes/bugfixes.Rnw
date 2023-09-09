@@ -1018,6 +1018,11 @@ the presence of a bug is obvious, and the bug would not have misled the user.
     Values were incorrect if X was an empty pattern (\texttt{nsegments(X) = 0}).
      \bugalways{spatstat.geom 2.4-0}{march 2022}
     
+   \item \texttt{envelope} methods:
+    Results were malformed if the name of the function argument 
+    was not \texttt{r}. 
+    \bugalways{spatstat.explore 3.2-3}{september 2023}
+    
 \end{itemize}
 
 \begin{thebibliography}{1}
