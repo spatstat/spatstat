@@ -1,9 +1,10 @@
 %% macro definitions for spatstat man pages
 %% Authors
 \newcommand{\adrian}{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}}
-\newcommand{\rolf}{Rolf Turner \email{r.turner@auckland.ac.nz}}
+\newcommand{\rolf}{Rolf Turner \email{rolfturner@posteo.net}}
 \newcommand{\ege}{Ege Rubak \email{rubak@math.aau.dk}}
 \newcommand{\spatstatAuthors}{\adrian, \rolf and \ege}
+\newcommand{\spatstatAuthorsComma}{\adrian, \rolf, \ege}
 %% Contributors with emails
 \newcommand{\pavel}{Pavel Grabarnik \email{pavel.grabar@issp.serpukhov.su}}
 \newcommand{\dominic}{Dominic Schuhmacher \email{dominic.schuhmacher@mathematik.uni-goettingen.de}, URL \code{http://dominic.schuhmacher.name/}}
@@ -15,6 +16,8 @@
 \newcommand{\stephenEglen}{Stephen Eglen \email{S.J.Eglen@damtp.cam.ac.uk}}
 \newcommand{\mehdi}{Mehdi Moradi \email{m2.moradi@yahoo.com}}
 \newcommand{\yamei}{Ya-Mei Chang \email{yamei628@gmail.com}}
+\newcommand{\martinH}{Martin Hazelton \email{Martin.Hazelton@otago.ac.nz}}
+\newcommand{\tilman}{Tilman Davies \email{Tilman.Davies@otago.ac.nz}}
 % Names with accents
 \newcommand{\Bogsted}{\ifelse{latex}{\out{B\o gsted}}{Bogsted}}
 \newcommand{\Cramer}{\ifelse{latex}{\out{Cram\'er}}{Cramer}}
