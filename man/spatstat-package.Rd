@@ -94,11 +94,11 @@
   This chapter is available free online, as one of the sample chapters
   at the book companion website, \url{https://book.spatstat.org/}.
 
-  For information about handling data in \bold{shapefiles},
-  see Chapter 3, or the Vignette
-  \emph{Handling shapefiles in the spatstat package},
-  installed with \pkg{spatstat}, accessible as
-  \code{vignette('shapefiles')}.
+%  For information about handling data in \bold{shapefiles},
+%  see Chapter 3, or the Vignette
+%  \emph{Handling shapefiles in the spatstat package},
+%  installed with \pkg{spatstat}, accessible as
+%  \code{vignette('shapefiles')}.
 }
 \section{Structure of the spatstat family}{  
   The original \pkg{spatstat} package grew to be very large.

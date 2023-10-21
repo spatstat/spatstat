@@ -6,7 +6,7 @@
 
 % \VignetteIndexEntry{Summary of Recent Updates to the Spatstat Family}
 
-% $Revision: 1.67 $ $Date: 2023/05/17 01:10:53 $
+% $Revision: 1.68 $ $Date: 2023/10/21 09:22:40 $
 
 \newcommand{\pkg}[1]{\texttt{#1}}
 \newcommand{\code}[1]{\texttt{#1}}
@@ -306,7 +306,21 @@ the News and Release Notes for each update.
 
 \begin{itemize}
   
-  
+
+  \item The \spst\ family no longer depends on the packages 
+    \pkg{maptools}, \pkg{sp} and \pkg{RandomFields}.
+
+  \item code for fitting and simulating log-Gaussian Cox models has changed.
+
+  \item New vignette on function objects (class \texttt{"fv"} and 
+    \texttt{"envelope"})
+
+   \item Vignette on shapefiles temporarily removed.
+
+  \item Integration of functions.
+    
+  \item \texttt{clarkevans.test} modified.
+    
 %% \item The package \texttt{spatstat.core} has been split into two packages called
 %%    \texttt{spatstat.explore} (for exploratory data analysis)
 %%    and \texttt{spatstat.model} (for modelling and formal inference).
@@ -826,6 +840,9 @@ Following is a list of all the functions that have been added,
 starting with the most recent additions.
 
 \begin{itemize}
+\item \texttt{integral.fv}:
+  Compute the integral of a function object.
+  
 \item \texttt{compileCDF}:
       Low level utility for calculating cumulative distribution function
     of distance variable. 
@@ -2045,6 +2062,18 @@ listed alphabetically.
     The argument \texttt{correction="all"} is now recognised: it selects
     all the available options. [This is also the default.]
 
+ \item \texttt{clarkevans.test}:
+   \begin{itemize}
+   \item 
+    The asymptotic test is now available for any choice of edge correction.
+  \item 
+    New argument \texttt{method} determines whether to use the asymptotic test
+    or Monte Carlo test. The default has changed to
+    \texttt{method="asymptotic"}.
+  \item 
+    Default edge correction has changed, to avoid bias.
+  \end{itemize}
+  
   \item \texttt{clickpoly}:
     The polygon is now drawn progressively as the user clicks new vertices.
 
@@ -2700,6 +2729,13 @@ listed alphabetically.
  \item \texttt{kppm}:
    \begin{itemize}
    \item 
+     The code for fitting log-Gaussian Cox process models 
+     (\texttt{clusters="LGCP"})
+    has been re-implemented without using the package \pkg{RandomFields}.
+    The current code supports the \texttt{"exponential"}, 
+    \texttt{"gauss"}, \texttt{"stable"},
+    \texttt{"gencauchy"} and \texttt{"matern"} covariance models.
+   \item 
     Computation accelerated when \texttt{method="palm"} or 
     \texttt{method="clik2"}.
     [Kindly contributed by Bethany Macdonald.]
@@ -2802,6 +2838,15 @@ listed alphabetically.
   \item  Virtually all models and edge corrections are now supported,
     using a ``brute force'' algorithm. This can be slow in some cases.
    \end{itemize}
+   
+  \item \texttt{lgcp.estK}, \texttt{lgcp.estpcf}:
+    This code for fitting log-Gaussian Cox process models 
+    has been re-implemented without using the package \pkg{RandomFields}.
+    The current code supports the \texttt{"exponential"}, 
+    \texttt{"gauss"}, \texttt{"stable"},
+    \texttt{"gencauchy"} and \texttt{"matern"} covariance models.
+
+   
 
  \item \texttt{lineardisc}:
    \begin{itemize}
@@ -3696,10 +3741,15 @@ listed alphabetically.
      
      \item \texttt{rLGCP}:
        \begin{itemize}
-       \item Accelerated.
        \item 
-         This function no longer requires the package \pkg{RandomFields}
-         to be loaded explicitly. 
+         This function has been completely re-implemented
+         so that it no longer requires the package \pkg{RandomFields},
+         which is defunct (and sadly missed). 
+       \item 
+         The current implementation supports only the 
+         \texttt{"exponential"}, \texttt{"gauss"},
+         \texttt{"stable"}, \texttt{"gencauchy"} and 
+         \texttt{"matern"} covariance functions.
        \item 
          Now recognises argument \texttt{rule.eps} passed to \texttt{as.mask}.
        \end{itemize}
@@ -3880,18 +3930,23 @@ listed alphabetically.
 
    \item \texttt{simulate.kppm}:
      \begin{itemize}
-       \item Conditional simulation of the model, 
-         given a fixed number of points,
-         is now supported using the new arguments \texttt{n.cond}
-         and \texttt{w.cond}.
-     \item Accelerated for LGCP models.
+     \item
+       For log-Gaussian Cox process models (\texttt{clusters="LGCP"})
+       the simulation algorithm has been completely re-implemented
+       without using the package \pkg{RandomFields}.
+       The current code supports the \texttt{"exponential"}, 
+       \texttt{"gauss"}, \texttt{"stable"},
+       \texttt{"gencauchy"} and \texttt{"matern"} covariance models.
+     \item Conditional simulation of the model, 
+       given a fixed number of points,
+       is now supported using the new arguments \texttt{n.cond}
+       and \texttt{w.cond}.
      \item 
      Additional arguments \verb!...! are now passed to
     the function that performs the simulation.
      \end{itemize}
 
-   
-   \item \texttt{simulate.ppm}:
+      \item \texttt{simulate.ppm}:
      \begin{itemize}
      \item 
    New argument \texttt{w} controls the window of the simulated patterns.

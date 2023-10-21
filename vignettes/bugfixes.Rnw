@@ -436,6 +436,10 @@ the presence of a bug is obvious, and the bug would not have misled the user.
   \subsection{Bugs, Substantially Incorrect, Moderate Impact}
 
   \begin{itemize}
+  \item \texttt{rpoislinetess}:
+    Results were incorrect unless the window was centred at the origin.
+    \bugbefore{spatstat 1.42-0}{may 2015}{spatstat.random 3.2-1}{october 2023}
+    
   \item \texttt{closepairs.ppp}:
     If \texttt{distinct=FALSE} and \texttt{what="all"}, the resulting vectors
     \texttt{yi} and \texttt{yj} contained incorrect values, 
@@ -650,6 +654,15 @@ the presence of a bug is obvious, and the bug would not have misled the user.
  \subsection{Partially Incorrect}
  \begin{itemize}
    
+  \item \texttt{kernel.squint}:
+    The return value was incorrect if the argument \texttt{bw} was given.
+    \bugin{spatstat 1.43-0}{october 2015}{spatstat.explore 3.2-4}{october 2023}
+ 
+  \item \texttt{pcf}
+    The variance approximation was calculated incorrectly (due to a bug 
+    in \texttt{kernel.squint}).
+    \bugin{spatstat 1.43-0}{october 2015}{spatstat.explore 3.2-4}{october 2023}
+ 
  \item \texttt{rjitter.ppp}: If \texttt{retry=FALSE}, marks were ignored.
    \bugbefore{spatstat 1.65-0}{december 2020}{spatstat.geom 3.0-5}{january 2023}
    
