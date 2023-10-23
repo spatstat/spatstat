@@ -1,6 +1,6 @@
 Package: spatstat
-Version: 3.0-6.013
-Date: 2023-10-22
+Version: 3.0-6.014
+Date: 2023-10-23
 Title: Spatial Point Pattern Analysis, Model-Fitting, Simulation, Tests
 Authors@R: c(person("Adrian", "Baddeley", 
                     role = c("aut", "cre"),
@@ -15,11 +15,11 @@ Authors@R: c(person("Adrian", "Baddeley",
 		    email = "rubak@math.aau.dk",
 		    comment=c(ORCID="0000-0002-6675-533X")))
 Maintainer: Adrian Baddeley <Adrian.Baddeley@curtin.edu.au>
-Depends: R (>= 3.5.0), spatstat.data (>= 3.0-1), spatstat.geom (>= 3.2-7), spatstat.random (>= 3.2-1), spatstat.explore (>= 3.2-5), spatstat.model (>= 3.2-7), spatstat.linnet (>= 3.1-2), utils
+Depends: R (>= 3.5.0), spatstat.data (>= 3.0-1), spatstat.geom (>= 3.2-7), spatstat.random (>= 3.2-1), spatstat.explore (>= 3.2-5), spatstat.model (>= 3.2-8), spatstat.linnet (>= 3.1-2), utils
 Imports: spatstat.utils (>= 3.0-3)
 Suggests: 
 Description: Comprehensive open-source toolbox for analysing Spatial Point Patterns. Focused mainly on two-dimensional point patterns, including multitype/marked points, in any spatial region. Also supports three-dimensional point patterns, space-time point patterns in any number of dimensions, point patterns on a linear network, and patterns of other geometrical objects. Supports spatial covariate data such as pixel images. 
-	Contains over 2000 functions for plotting spatial data, exploratory data analysis, model-fitting, simulation, spatial sampling, model diagnostics, and formal inference. 
+	Contains over 3000 functions for plotting spatial data, exploratory data analysis, model-fitting, simulation, spatial sampling, model diagnostics, and formal inference. 
 	Data types include point patterns, line segment patterns, spatial windows, pixel images, tessellations, and linear networks. 
 	Exploratory methods include quadrat counts, K-functions and their simulation envelopes, nearest neighbour distance and empty space statistics, Fry plots, pair correlation function, kernel smoothed intensity, relative risk estimation with cross-validated bandwidth selection, mark correlation functions, segregation indices, mark dependence diagnostics, and kernel estimates of covariate effects. Formal hypothesis tests of random pattern (chi-squared, Kolmogorov-Smirnov, Monte Carlo, Diggle-Cressie-Loosmore-Ford, Dao-Genton, two-stage Monte Carlo) and tests for covariate effects (Cox-Berman-Waller-Lawson, Kolmogorov-Smirnov, ANOVA) are also supported.
 	Parametric models can be fitted to point pattern data using the functions ppm(), kppm(), slrm(), dppm() similar to glm(). Types of models include Poisson, Gibbs and Cox point processes, Neyman-Scott cluster processes, and determinantal point processes. Models may involve dependence on covariates, inter-point interaction, cluster formation and dependence on marks. Models are fitted by maximum likelihood, logistic regression, minimum contrast, and composite likelihood methods. 
