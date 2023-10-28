@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 3.0-6.014
+        CHANGES IN spatstat VERSION 3.0-7
 
 OVERVIEW
 
@@ -19,7 +19,8 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o Vignette 'shapefiles'
     This vignette has been temporarily removed because of its dependence
-    on the defunct packages 'sp' and 'maptools'.
+    on the defunct packages 'sp' and 'maptools'. It will be rewritten
+    and reinstated soon.
     
         CHANGES IN spatstat VERSION 3.0-6
 
