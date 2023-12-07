@@ -198,7 +198,6 @@ X <- X[W]
 If the \texttt{sf} object \texttt{x} contains other columns than the geometry column these are additional variables (`marks') attached to each point.
 
 At the time of writing \texttt{as.ppp(x)} will unfortunately only use the first column of additional data as the \texttt{marks} of the point pattern \texttt{X}.
-
 In that case you can extract the data frame of auxiliary data by 
 \verb!df <- st_drop_geometry(x)! and manually assign them as marks in \pkg{spatstat}:
 
@@ -222,7 +221,7 @@ X <- as.ppp(x_point)
 @ 
 
 
-\subsubsection{Objects of class \texttt{SpatialLines}}
+\subsubsection{Geometries of class \texttt{MULTILINESTRING}}
 \label{spatiallines.2.psp}
 
 A ``line segment'' is the straight line between two points in the plane.
@@ -233,7 +232,7 @@ represents a pattern of line segments, which may or may not be
 connected to each other (like matches which have fallen at random
 on the ground). 
 
-In the \pkg{sp} package, an object of class \texttt{SpatialLines}
+In the \pkg{sf} package, a geometry column of class \texttt{MULTILINESTRING}
 represents a \textbf{list of lists} of \textbf{connected curves}, 
 each curve consisting of a sequence of straight 
 line segments that are joined together (like
@@ -241,17 +240,16 @@ several pieces of a broken bicycle chain.)
 
 So these two data types do not correspond exactly.
 
-The list-of-lists hierarchy in a \texttt{SpatialLines} object 
+The list-of-lists hierarchy in a \texttt{MULTILINESTRING} object 
 is useful when representing internal divisions in a country.
-For example, if \texttt{USA} is an object of class \texttt{SpatialLines}
+For example, if \texttt{USA} is an object of class \texttt{sf} with geometry column of class \texttt{MULTILINESTRING}
 representing the borders of the United States
-of America, then \verb!USA@lines! might be a list of length 52, with 
-\verb!USA@lines[[i]]! representing the borders of the \texttt{i}-th State. 
+of America, then \texttt{USA} have 52 rows representing the 52 states. The geometry column \verb!geo <- st_geometry(USA)! is then a list of length 52, where \verb!geo[[i]]! might represent the borders of the \texttt{i}-th State. 
 The borders of each State consist of several different curved lines. Thus 
-\verb!USA@lines[[i]]@Lines[[j]]! would represent the \texttt{j}th 
-piece of the boundary of the \texttt{i}-th State.
+\verb!geo[[i]][[j]]! would represent the \texttt{j}th 
+piece of the boundary of the \texttt{i}-th State and would be of class \texttt{LINESTRING}.
 
-If \texttt{x} is an object of class \texttt{SpatialLines},
+For an object \texttt{x} of class \texttt{sf} with geometry column of class \texttt{MULTILINESTRING} or \texttt{LINESTRING},
 there are several things that you might want to do:
 \begin{enumerate}
 \item 
@@ -259,27 +257,35 @@ there are several things that you might want to do:
   connected curves) and store them as a single object of class \texttt{psp}.
 \begin{quote}
   To do this, 
-  use \verb!as(x, "psp")! or \texttt{as.psp(x)} to convert it to a 
+  use \texttt{as.psp(x)} to convert it to a 
   spatial line segment pattern. 
 \end{quote}
+Note: Any auxilliary information stored in other columns is automatically attached as marks to the line segments of the \pkg{spatstat} \texttt{psp} object.
 \item 
   convert each connected curve to an object of class \texttt{psp},
   keeping different connected curves separate.
 
-  To do this, type something like the following:
+To do this, type something like the following:
 <<eval=FALSE>>=
-out <- lapply(x@lines, function(z) { lapply(z@Lines, as.psp) })
+out <- lapply(geo, function(z) { lapply(z, as.psp) })
 @ 
 
-(The conversion is performed by \texttt{as.psp.SpatialLines},
-a function in \pkg{maptools}. So the \pkg{maptools} and \pkg{spatstat}
+(The conversion is performed by \texttt{as.psp.MULTILINESTRING},
+a function in \pkg{sf}. So the \pkg{sf} and \pkg{spatstat}
 packages must be loaded in order for this to work.)
+
+Any auxiliary data in other columns can be attached as marks by this command:
+<<eval=FALSE>>=
+dat <- st_drop_geometry(USA)
+for(i in seq(nrow(dat))) 
+  out[[i]] <- lapply(out[[i]], "marks<-", value=dat[i, , drop=FALSE])
+@
 
 The result will be a \textbf{list of lists} of objects of class \texttt{psp}.
 Each one of these objects represents a connected curve,
 although the \pkg{spatstat} package does not know that.
 The list structure will reflect the list structure of the original
-\texttt{SpatialLines} object \texttt{x}. If that's not what you want,
+\texttt{MULTILINESTRING} object \texttt{x}. If that's not what you want,
 then use \verb!curvelist <- do.call("c", out)! or
 <<eval=FALSE>>=
 curvegroup <- lapply(out, function(z) { do.call("superimpose", z)})
@@ -296,53 +302,12 @@ the \texttt{i}-th group of connected curves (for example the
 The window for the spatial line segment pattern can be specified
 as an argument \texttt{window} to the function \texttt{as.psp}.
 
-(The conversion is performed by \texttt{as.psp.SpatialLines}
-or \texttt{as.psp.Lines}, which are functions in \pkg{maptools}.)
-
-\subsubsection{Objects of class \texttt{SpatialLinesDataFrame}}
-
-An object \texttt{x} of class \texttt{SpatialLinesDataFrame}
-is a \texttt{SpatialLines} object with additional data.
-The additional data is stored as a data frame \verb!x@data!
-with one row for each entry in \verb!x@lines!, that is,
-one row for each group of connected curves. 
-
 In the \pkg{spatstat} package, an object of class \texttt{psp}
 (representing a collection of line segments)
 may have a data frame of marks. Note that each \emph{line segment}
 in a \texttt{psp} object may have different mark values. 
-
-If \texttt{x} is an object of class \texttt{SpatialLinesDataFrame},
-there are two things that you might want to do:
-\begin{enumerate}
-\item collect together all the line segments that make up all the
-connected lines, and store them as a single object of class \texttt{psp}.
-\begin{quote}
-  To do this, 
-  use \verb!as(x, "psp")! or \texttt{as.psp(x)} to convert it to a 
-  marked spatial line segment pattern. 
-\end{quote}
-\item keep each connected curve separate, and convert each connected
-curve to an object of class \texttt{psp}.
-To do this, type something like the following:
-<<eval=FALSE>>=
-out <- lapply(x@lines, function(z) { lapply(z@Lines, as.psp) })
-dat <- x@data
-for(i in seq(nrow(dat))) 
-  out[[i]] <- lapply(out[[i]], "marks<-", value=dat[i, , drop=FALSE])
-@ 
-The result is a list-of-lists-of-\texttt{psp}'s. 
-See the previous subsection for explanation on how to 
-change this using \texttt{c()} or \texttt{superimposePSP}.
-\end{enumerate}
-
-(The conversion is performed by \texttt{as.psp.SpatialLines},
-a function in \pkg{maptools}. So the \pkg{maptools} and \pkg{spatstat}
-packages must be loaded in order for this to work.)
-
-In either case, 
-the mark variables attached to a particular \emph{group of connected lines}
-in the \texttt{SpatialLinesDataFrame} object, will be duplicated
+For the converted data the mark variables attached to a particular \emph{group of connected lines}
+in the \texttt{sf} object, will be duplicated
 and attached to each \emph{line segment} in the resulting \texttt{psp} object.
 
 \subsubsection{Objects of class \texttt{SpatialPolygons}}
