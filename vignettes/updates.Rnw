@@ -6,7 +6,7 @@
 
 % \VignetteIndexEntry{Summary of Recent Updates to the Spatstat Family}
 
-% $Revision: 1.68 $ $Date: 2023/10/21 09:22:40 $
+% $Revision: 1.69 $ $Date: 2024/02/01 07:51:49 $
 
 \newcommand{\pkg}[1]{\texttt{#1}}
 \newcommand{\code}[1]{\texttt{#1}}
@@ -310,6 +310,12 @@ the News and Release Notes for each update.
   \item The \spst\ family no longer depends on the packages 
     \pkg{maptools}, \pkg{sp} and \pkg{RandomFields}.
 
+  \item geometry code accelerated.
+    
+  \item Spatially weighted median and quantile of mark values.
+    
+  \item Boyce index.
+    
   \item code for fitting and simulating log-Gaussian Cox models has changed.
 
   \item New vignette on function objects (class \texttt{"fv"} and 
@@ -840,6 +846,14 @@ Following is a list of all the functions that have been added,
 starting with the most recent additions.
 
 \begin{itemize}
+\item \texttt{SpatialMedian.ppp}, \texttt{SpatialQuantile.ppp}:
+  spatially weighted median and quantile of mark values of a point pattern.
+    
+\item \texttt{boyce}: Boyce index and continuous Boyce index.
+  
+\item \texttt{densityAdaptiveKernel.splitppp}:
+  A method for \texttt{densityAdaptiveKernel} for split point patterns.
+  
 \item \texttt{integral.fv}:
   Compute the integral of a function object.
   
@@ -1932,6 +1946,8 @@ listed alphabetically.
   \item \texttt{as.psp}: now permits a data frame of marks
     to have only one column, instead of coercing it to a vector.
     
+  \item \texttt{as.rectangle}: accelerated in many cases.
+    
   \item \texttt{as.solist}:
     The argument \texttt{x} can now be a spatial object;
     \texttt{as.solist(cells)} is the same as \texttt{solist(cells)}.
@@ -1990,6 +2006,8 @@ listed alphabetically.
  \item \texttt{bw.ppl}:
    \begin{itemize}
    \item 
+  New argument \texttt{varcov1} for anisotropic bandwidth selection.
+   \item 
    New arguments \texttt{weights} and \texttt{sigma}.
  \item New argument \texttt{shortcut} allows faster computation.
  \item Additional arguments \verb!...! are now passed to \texttt{density.ppp}.
@@ -2017,6 +2035,9 @@ listed alphabetically.
   \item Now handles point patterns of any dimension.
   \item New arguments \texttt{isotropic} and \texttt{d}.
     \end{itemize}
+
+  \item  \texttt{bw.smoothppp}:
+    New argument \texttt{varcov1} for anisotropic bandwidth selection.
 
   \item \texttt{bw.stoyan}: The rule has been modified so that, 
     if the pattern is empty,
@@ -2310,7 +2331,8 @@ listed alphabetically.
    a hard core.
     \end{itemize}
 
-
+  \item \texttt{diameter.owin}: accelerated when the window is a rectangle.
+    
   \item \texttt{dilation.ppp}:
     Improved geometrical accuracy.
     Now accepts arguments to control resolution of polygonal approximation.
@@ -2613,6 +2635,9 @@ listed alphabetically.
 \item \texttt{interp.im}:
   New argument \texttt{bilinear}.
 
+\item \texttt{intersect.lintess}:
+  Can also compute the intersection between a two-dimensional tessellation
+  and a linear network (yielding a tessellation on the network).
 
 \item \texttt{intersect.tess}:
   New argument \texttt{keepempty}.
@@ -3090,8 +3115,14 @@ listed alphabetically.
    \end{itemize}
 
  \item \texttt{nncross.ppp}:
+   \begin{itemize}
+   \item slightly accelerated.
+   \item new argument \texttt{dmax}.
+   \item 
    When \texttt{X} is a point pattern and \texttt{Y} is a line segment pattern,
     higher order neighbours (\verb!k > 1!) are now supported.
+   \end{itemize}
+
     
  \item \texttt{nndist.pp3}:
    New argument \texttt{by} allows computation of the nearest 
@@ -3145,8 +3176,14 @@ listed alphabetically.
    
 %%O
    
-   \item \texttt{owin}: If argument \texttt{mask} is a logical matrix,
-    \texttt{NA} entries will be accepted, and converted to \texttt{FALSE}.
+   \item \texttt{owin}:
+     \begin{itemize}
+     \item 
+       accelerated in many cases.
+     \item 
+       If argument \texttt{mask} is a logical matrix,
+       \texttt{NA} entries will be accepted, and converted to \texttt{FALSE}.
+     \end{itemize}
     
    \item \texttt{owin2mask}:
     New options \texttt{op="majority"} and \texttt{op="minority"}.

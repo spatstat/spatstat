@@ -6,7 +6,7 @@
 
 % \VignetteIndexEntry{Bugs Fixed in Spatstat}
 
-%  $Revision: 1.32 $ $Date: 2023/05/17 01:17:05 $
+%  $Revision: 1.33 $ $Date: 2024/02/01 07:52:02 $
 
 \newcommand{\pkg}[1]{\texttt{#1}}
 \newcommand{\code}[1]{\texttt{#1}}
@@ -1035,7 +1035,28 @@ the presence of a bug is obvious, and the bug would not have misled the user.
     Results were malformed if the name of the function argument 
     was not \texttt{r}. 
     \bugalways{spatstat.explore 3.2-3}{september 2023}
-    
+
+    \item \texttt{gorillas} dataset:
+      The mark variables \texttt{group} and \texttt{season} were
+      character vectors, when they were intended to be factors
+      (categorical variables) as stated in the help file.
+      \bugalways{spatstat.data 3.0-4}{january 2024}
+      
+   \item \texttt{marginSumsSparse}:
+     If the result of \texttt{marginSumsSparse} was a one-dimensional sparse vector,
+     the entries were incorrectly rearranged so that the non-zero entries
+     were all at the beginning of the vector.
+     \bugalways{spatstat.sparse 3.0-2}{october 2023}
+     
+   \item \texttt{scanLRTS}:
+     Pixel resolution arguments \texttt{dimyx}, \texttt{eps}, \texttt{xy}
+     were not correctly handled.
+     \bugalways{spatstat.explore 3.2-6}{february 2024}
+     
+   \item \texttt{Jest}:
+     Pixel resolution argument \texttt{eps} was ignored.
+     \bugalways{spatstat.explore 3.2-6}{february 2024}
+
 \end{itemize}
 
 \begin{thebibliography}{1}
