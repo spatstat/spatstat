@@ -6,7 +6,7 @@
 
 % \VignetteIndexEntry{Summary of Recent Updates to the Spatstat Family}
 
-% $Revision: 1.69 $ $Date: 2024/02/01 07:51:49 $
+% $Revision: 1.70 $ $Date: 2024/02/02 08:21:49 $
 
 \newcommand{\pkg}[1]{\texttt{#1}}
 \newcommand{\code}[1]{\texttt{#1}}
@@ -3117,7 +3117,7 @@ listed alphabetically.
  \item \texttt{nncross.ppp}:
    \begin{itemize}
    \item slightly accelerated.
-   \item new argument \texttt{dmax}.
+%   \item new argument \texttt{dmax}.
    \item 
    When \texttt{X} is a point pattern and \texttt{Y} is a line segment pattern,
     higher order neighbours (\verb!k > 1!) are now supported.
