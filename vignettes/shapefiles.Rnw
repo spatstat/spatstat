@@ -19,6 +19,7 @@ options(SweaveHooks = list(fig=function() par(mar=c(1,1,1,1))))
 \newcommand{\R}{{\sf R}}
 
 \begin{document}
+\SweaveOpts{concordance=TRUE}
 %\bibliographystyle{plain}
 \thispagestyle{empty}
 
@@ -80,7 +81,7 @@ However, if you are already using \pkg{sp} formats you can convert data from
 \pkg{sp} format to \pkg{sf} format and then to \pkg{spatstat} format.
 
 To read and write files in shapefile format \pkg{sf} uses the system library 
-\texttt{GDAL} and \pkg{sp} uses \pkg{sf} under the hood.
+\texttt{GDAL} and newer versions of \pkg{sp} uses \pkg{sf} under the hood.
 
 \section{Caveat about longitude-latitude coordinates}
 
@@ -221,7 +222,7 @@ X <- as.ppp(x_point)
 @ 
 
 
-\subsubsection{Geometries of class \texttt{MULTILINESTRING}}
+\subsubsection{Geometries of class \texttt{LINESTRING} or \texttt{MULTILINESTRING}}
 \label{spatiallines.2.psp}
 
 A ``line segment'' is the straight line between two points in the plane.
@@ -310,12 +311,13 @@ For the converted data the mark variables attached to a particular \emph{group o
 in the \texttt{sf} object, will be duplicated
 and attached to each \emph{line segment} in the resulting \texttt{psp} object.
 
-\subsubsection{Objects of class \texttt{SpatialPolygons}}
+\subsubsection{Geometries of class \texttt{POLYGON} or \texttt{MULTIPOLYGON}}
 
 First, so that we don't go completely crazy, let's introduce some terminology.
 A \emph{polygon} is a closed curve that is composed of 
 straight line segments. You can draw a polygon
-without lifting your pen from the paper. 
+without lifting your pen from the paper. This is called a \texttt{POLYGON} in 
+\texttt{sf} terminology.
 
 \setkeys{Gin}{width=0.4\textwidth}
 \begin{center}
@@ -330,7 +332,8 @@ is a region in space whose boundary is composed of straight line segments.
 A polygonal region may consist of several unconnected pieces, and each piece
 may have holes. The boundary of a polygonal region
 consists of one or more polygons. To draw the boundary of a polygonal 
-region, you may need to lift and drop the pen several times.
+region, you may need to lift and drop the pen several times. This is called a 
+\texttt{MULTIPOLYGON} in \texttt{sf} terminology.
 
 \setkeys{Gin}{width=0.4\textwidth}
 \begin{center}
@@ -344,15 +347,15 @@ An object of class \texttt{owin} in \pkg{spatstat}
 represents a polygonal region. It is a region of space that is delimited
 by boundaries made of lines.
 
-An object \texttt{x} of class \texttt{SpatialPolygons}
+An object \texttt{x} with geometry column of class \texttt{MULTIPOLYGON}
 represents a \textbf{list of polygonal regions}. For example,
-a single object of class \texttt{SpatialPolygons} could 
+a single geometry column of class \texttt{MULTIPOLYGON} could 
 store information about every State in the United States of America
 (or the United States of Malaysia). Each State would be a separate
 polygonal region (and it might contain holes such as lakes).
 
 There are two things
-that you might want to do with an object of class \texttt{SpatialPolygons}:
+that you might want to do with a geometry column of class \texttt{MULTIPOLYGON}:
 \begin{enumerate}
 \item 
   combine all the polygonal regions together into a single
@@ -361,7 +364,7 @@ that you might want to do with an object of class \texttt{SpatialPolygons}:
     For example, you could combine all the States of the USA together
     and obtain a single object that represents the territory of the USA. 
 
-    To do this, use \verb!as(x, "owin")! or \texttt{as.owin(x)}.
+    To do this, use \texttt{as.owin(x)}.
     The result is a single window (object of class \texttt{"owin"}) 
     in the \pkg{spatstat} package.
   \end{quote}
@@ -373,9 +376,8 @@ that you might want to do with an object of class \texttt{SpatialPolygons}:
   \end{quote}
   To do this, type the following:
 <<eval=FALSE>>=
-regions <- slot(x, "polygons")
-regions <- lapply(regions, function(x) { SpatialPolygons(list(x)) })
-windows <- lapply(regions, as.owin)
+geo <- st_geometry(x)
+windows <- lapply(geo, as.owin)
 @ 
   The result is a list of objects of class \texttt{owin}. 
   Often it would make sense to convert this to a 
@@ -385,8 +387,8 @@ te <- tess(tiles=windows)
 @ 
 \end{enumerate}
 
-(The conversion is performed by \texttt{as.owin.SpatialPolygons},
-a function in \pkg{maptools}. So the \pkg{maptools} and \pkg{spatstat}
+(The conversion is performed by \texttt{as.owin.MULTIPOLYGON},
+a function in \pkg{sf}. So the \pkg{sf} and \pkg{spatstat}
 packages must be loaded in order for this to work.)
 
 {\bf The following is different from what happened in
@@ -398,7 +400,7 @@ Polygon data from shapefiles often contain geometrical inconsistencies
 such as self-intersecting boundaries and overlapping pieces. 
 For example, these can arise from small errors in curve-tracing.
 Geometrical inconsistencies are tolerated in 
-an object of class \texttt{SpatialPolygons} which
+an object with geometry column of class \texttt{MULTIPOLYGON} which
 is a list of lists of polygonal curves.
 However, they are not tolerated in an object of class \texttt{owin},
 because an \texttt{owin} must specify a well-defined region of space.
@@ -410,74 +412,63 @@ and the number of polygons (if you chose option 1).
 To disable the repair process, set 
 \texttt{spatstat.options(fixpolygons=FALSE)}.
 
-\subsubsection{Objects of class \texttt{SpatialPolygonsDataFrame}}
+\subsubsection{Auxiliary information}
 
-What a mouthful!
-
-An object \texttt{x} of class \texttt{SpatialPolygonsDataFrame}
-represents a list of polygonal regions,
+Typically an object \texttt{x} of class \texttt{sf} with geometry column of type 
+(\texttt{MULTI})\texttt{POLYGON} has other columns
 with additional variables attached to
-each region. It includes an object of class \texttt{SpatialPolygons} 
-giving the spatial regions, and a data frame containing the
-additional variables attached to the regions.
-The regions are extracted by
-<<eval=FALSE>>=
-y <- as(x, "SpatialPolygons")
-@ 
-and you then proceed as above to convert the curves to
-\pkg{spatstat} format.
-
+each polygon. 
 The data frame of auxiliary data is extracted by 
-\verb!df <- x@data! or \verb!df <- slot(x, "data")!.
-
-For example:
-
-<<eval=FALSE>>=
-cp      <- as(columbus, "SpatialPolygons")
-cregions <- slot(cp, "polygons")
-cregions <- lapply(cregions, function(x) { SpatialPolygons(list(x)) })
-cwindows <- lapply(cregions, as.owin)
-@ 
+\verb!df <- st_drop_geometry!.
 
 There is currently no facility in \pkg{spatstat} for attaching
-marks to an \texttt{owin} object directly. 
-
-However, \pkg{spatstat} supports objects called \textbf{hyperframes},
-which are like data frames except that the entries can be any type of object.
-Thus we can represent the \texttt{columbus} data in \pkg{spatstat} as
-follows:
+marks to an \texttt{owin} object directly, but if you have collected the 
+separate regions in a tessellation you can attach marks to the tessellation, so 
+the entire workflow becomes:
 <<eval=FALSE>>=
-ch <- hyperframe(window=cwindows)
-ch <- cbind.hyperframe(ch, columbus@data)
+geo <- st_geometry(x)
+df <- st_drop_geometry(x)
+windows <- lapply(geo, as.owin)
+te <- tess(tiles=windows)
+marks(te) <- df
 @ 
 
-Then \texttt{ch} is a hyperframe containing a column of \texttt{owin}
+However, if the regions are kept as a list of \texttt{owin} objects it is 
+possible to take advantage of \pkg{spatstat}'s support of objects called 
+\textbf{hyperframes}, which are like data frames except that the entries can be 
+any type of object. Thus we can represent the data in \pkg{spatstat} as follows:
+<<eval=FALSE>>=
+h <- hyperframe(window=windows)
+h <- cbind.hyperframe(h, df)
+@ 
+
+Then \texttt{h} is a hyperframe containing a column of \texttt{owin}
 objects followed by the columns of auxiliary data.
 
-\subsubsection{Objects of class \texttt{SpatialGridDataFrame}
-  and \texttt{SpatialPixelsDataFrame}}
-
-An object \texttt{x} of class \texttt{SpatialGridDataFrame} represents
-a pixel image on a rectangular grid. It includes a \texttt{SpatialGrid}
-object \texttt{slot(x, "grid")} defining the full rectangular grid of pixels, 
-and a data frame \texttt{slot(x, "data")} containing the pixel values
-(which may include \texttt{NA} values).
-
-The command \texttt{as(x, "im")} converts \texttt{x} to a pixel image
-of class \texttt{"im"}, taking the pixel values from the \emph{first column}
-of the data frame. If the data frame has multiple columns, these 
-have to be converted to separate pixel images in \pkg{spatstat}.
-For example
-<<eval=FALSE>>=
-  y <- as(x, "im")
-  ylist <- lapply(slot(x, "data"), function(z, y) { y[,] <- z; y }, y=y)
-@ 
-
-An object \texttt{x} of class  \texttt{SpatialPixelsDataFrame} 
-represents a \emph{subset} of a pixel image. 
-To convert this to a \pkg{spatstat} object, it should first be converted to
-a \texttt{SpatialGridDataFrame} by \texttt{as(x, "SpatialGridDataFrame")},
-then handled as described above.
+% \subsubsection{Objects of class \texttt{SpatialGridDataFrame}
+%   and \texttt{SpatialPixelsDataFrame}}
+% 
+% An object \texttt{x} of class \texttt{SpatialGridDataFrame} represents
+% a pixel image on a rectangular grid. It includes a \texttt{SpatialGrid}
+% object \texttt{slot(x, "grid")} defining the full rectangular grid of pixels, 
+% and a data frame \texttt{slot(x, "data")} containing the pixel values
+% (which may include \texttt{NA} values).
+% 
+% The command \texttt{as(x, "im")} converts \texttt{x} to a pixel image
+% of class \texttt{"im"}, taking the pixel values from the \emph{first column}
+% of the data frame. If the data frame has multiple columns, these 
+% have to be converted to separate pixel images in \pkg{spatstat}.
+% For example
+% <<eval=FALSE>>=
+%   y <- as(x, "im")
+%   ylist <- lapply(slot(x, "data"), function(z, y) { y[,] <- z; y }, y=y)
+% @ 
+% 
+% An object \texttt{x} of class  \texttt{SpatialPixelsDataFrame} 
+% represents a \emph{subset} of a pixel image. 
+% To convert this to a \pkg{spatstat} object, it should first be converted to
+% a \texttt{SpatialGridDataFrame} by \texttt{as(x, "SpatialGridDataFrame")},
+% then handled as described above.
 
 \end{document}
 
