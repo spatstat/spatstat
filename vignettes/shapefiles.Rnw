@@ -109,7 +109,7 @@ cosine of the latitude of the centre of the region. This will
 approximately preserve areas and distances. 
 This calculation is a simple example of 
 a \emph{geographical projection} and there are some much better 
-projections available. It may be wise to use \pkg{sf}
+projections available. It may be wise to use \verb!st_transform()! in \pkg{sf}
 to perform the appropriate projection for you, and then to convert
 the projected data into \pkg{spatstat} objects.
 
@@ -137,25 +137,19 @@ Here's how to read shapefile data.
 \begin{enumerate}
 \item ensure that the package \pkg{sf} is installed.
 \item start R and load the package: 
-<<>>=
-if(requireNamespace("sf")){
-  library(sf)
-}
+<<eval=FALSE>>=
+library(sf)
 @ 
 \item read the shapefile into an object in the \pkg{sf} package
 using \verb!st_read!, for example
-<<>>=
-if(requireNamespace("sf")){
-  x <- st_read(system.file("shape/nc.shp", package="sf"))
-}
+<<eval=FALSE>>=
+x <- st_read(system.file("shape/nc.shp", package="sf"))
 @ 
 \item 
 This will read in the data as an object of class \texttt{sf}. This is basically a \texttt{data.frame} with a designated geometry column (of class \texttt{sfc}). All other columns contain information/features (marks in \pkg{spatstat} terminology) related to the geometries. For example the geometry column could be a list of polygonal boundaries of the counties of a state and the other columns could contain the name of the county and other registered values of interest. To find out what kind of spatial objects are represented by the dataset,
 inspect the class of the geometry column:
-<<>>=
-if(requireNamespace("sf")){
-  st_geometry_type(x, by_geometry = FALSE)
-}
+<<eval=FALSE>>=
+st_geometry_type(x, by_geometry = FALSE)
 @ 
 There are many possible classes but the ones of main interest here are:
 \begin{itemize}
@@ -178,7 +172,7 @@ in order to convert the data.
 
 A \texttt{sf} object \texttt{x} with geometry column of class \texttt{POINT}
 represents a spatial point pattern.
-Use \verb!as(x, "ppp")! or \texttt{as.ppp(x)} to convert it to a 
+Use \texttt{as.ppp(x)} to convert it to a 
 spatial point pattern in \pkg{spatstat}:
 <<eval=FALSE>>=
 X <- as.ppp(x)
@@ -233,22 +227,28 @@ represents a pattern of line segments, which may or may not be
 connected to each other (like matches which have fallen at random
 on the ground). 
 
-In the \pkg{sf} package, a geometry column of class \texttt{MULTILINESTRING}
-represents a \textbf{list of lists} of \textbf{connected curves}, 
+In the \pkg{sf} package, a geometry column of class \texttt{LINESTRING}
+represents a \textbf{list} of \textbf{connected curves}, 
 each curve consisting of a sequence of straight 
 line segments that are joined together (like
 several pieces of a broken bicycle chain.) 
 
-So these two data types do not correspond exactly.
+For a geometry column of class \texttt{MULTILINESTRING} each element of the top list (the geometry column) is it self a list of connected curves.
 
-The list-of-lists hierarchy in a \texttt{MULTILINESTRING} object 
-is useful when representing internal divisions in a country.
-For example, if \texttt{USA} is an object of class \texttt{sf} with geometry column of class \texttt{MULTILINESTRING}
-representing the borders of the United States
-of America, then \texttt{USA} have 52 rows representing the 52 states. The geometry column \verb!geo <- st_geometry(USA)! is then a list of length 52, where \verb!geo[[i]]! might represent the borders of the \texttt{i}-th State. 
-The borders of each State consist of several different curved lines. Thus 
+\textbf{list of lists}
+
+So the \texttt{spatstat} and \texttt{sf} data types do not correspond exactly.
+
+The list of connected curves in a \texttt{LINESTRING} column may be useful when representing a single river system where each branch of the river may be in its own element of the list (row of the column).
+
+The list-of-lists hierarchy in a \texttt{MULTILINESTRING} column
+is useful when representing river of a continent where each element of the primary list (row in the column) would correspond to a river system and each of these would be a list of the branches of the river system.
+
+For example, if \texttt{Africa} is an object of class \texttt{sf} with geometry column of class \texttt{MULTILINESTRING}
+representing the main rivers of Africa, then \texttt{Africa} will have hundreds of rows representing each of the rivers. The geometry column \verb!geo <- st_geometry(Africa)! is then a list, where \verb!geo[[i]]! might represent the total river system the \texttt{i}-th river (e.g. the Nile). 
+The branches of each river system consist of several different curved lines. Thus 
 \verb!geo[[i]][[j]]! would represent the \texttt{j}th 
-piece of the boundary of the \texttt{i}-th State and would be of class \texttt{LINESTRING}.
+branch of the \texttt{i}-th river and would be of class \texttt{LINESTRING}.
 
 For an object \texttt{x} of class \texttt{sf} with geometry column of class \texttt{MULTILINESTRING} or \texttt{LINESTRING},
 there are several things that you might want to do:
@@ -277,9 +277,10 @@ packages must be loaded in order for this to work.)
 
 Any auxiliary data in other columns can be attached as marks by this command:
 <<eval=FALSE>>=
-dat <- st_drop_geometry(USA)
-for(i in seq(nrow(dat))) 
+dat <- st_drop_geometry(Africa)
+for(i in seq(nrow(dat))){
   out[[i]] <- lapply(out[[i]], "marks<-", value=dat[i, , drop=FALSE])
+}
 @
 
 The result will be a \textbf{list of lists} of objects of class \texttt{psp}.
@@ -297,7 +298,7 @@ is a \texttt{psp} object representing the \texttt{i}-th connected curve.
 In the second case, \texttt{curvegroup[[i]]}
 is a \texttt{psp} object containing all the line segments in
 the \texttt{i}-th group of connected curves (for example the 
-\texttt{i}-th State in the \texttt{USA} example).
+\texttt{i}-th river system -- the Nile -- in the \texttt{Africa} example).
 \end{enumerate}
 
 The window for the spatial line segment pattern can be specified
@@ -405,7 +406,7 @@ is a list of lists of polygonal curves.
 However, they are not tolerated in an object of class \texttt{owin},
 because an \texttt{owin} must specify a well-defined region of space.
 These data inconsistencies must be repaired to prevent technical problems. 
-\pkg{Spatstat} uses polygon-clipping code to automatically convert 
+In \pkg{spatstat} polygon-clipping code is used to automatically convert 
 polygonal lines into valid polygon boundaries. 
 The repair process changes the number of vertices in each polygon,
 and the number of polygons (if you chose option 1).
@@ -419,7 +420,7 @@ Typically an object \texttt{x} of class \texttt{sf} with geometry column of type
 with additional variables attached to
 each polygon. 
 The data frame of auxiliary data is extracted by 
-\verb!df <- st_drop_geometry!.
+\verb!df <- st_drop_geometry(x)!.
 
 There is currently no facility in \pkg{spatstat} for attaching
 marks to an \texttt{owin} object directly, but if you have collected the 
