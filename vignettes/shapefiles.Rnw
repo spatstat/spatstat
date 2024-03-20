@@ -1,0 +1,475 @@
+\documentclass[twoside,11pt]{article}
+
+% \VignetteIndexEntry{Handling shapefiles in the spatstat package}
+
+\SweaveOpts{eps=TRUE}
+
+<<echo=FALSE,results=hide,fig=FALSE>>=
+options(SweaveHooks = list(fig=function() par(mar=c(1,1,1,1))))
+@ 
+
+\usepackage{graphicx}
+\usepackage[colorlinks=true,urlcolor=blue]{hyperref}
+\usepackage{color}
+\usepackage{anysize}
+\marginsize{2cm}{2cm}{2cm}{2cm}
+
+\newcommand{\pkg}[1]{\texttt{#1}}
+\newcommand{\bold}[1]{{\textbf {#1}}}
+\newcommand{\R}{{\sf R}}
+
+\begin{document}
+\SweaveOpts{concordance=TRUE}
+%\bibliographystyle{plain}
+\thispagestyle{empty}
+
+<<echo=FALSE,results=hide,eval=TRUE>>=
+library(spatstat)
+options(useFancyQuotes=FALSE)
+sdate <- read.dcf(file = system.file("DESCRIPTION", package = "spatstat"),
+         fields = "Date")
+sversion <- read.dcf(file = system.file("DESCRIPTION", package = "spatstat"),
+         fields = "Version")
+@ 
+
+\title{Handling shapefiles in the \texttt{spatstat} package}
+\author{Adrian Baddeley, Rolf Turner and Ege Rubak}
+\date{
+\Sexpr{sdate} \\ 
+\pkg{spatstat} version \texttt{\Sexpr{sversion}}
+}
+\maketitle
+
+This vignette explains how to read data into the \pkg{spatstat} package
+from files in the popular `shapefile' format. 
+
+This vignette is part of the documentation included in 
+\pkg{spatstat} version \texttt{\Sexpr{sversion}}.
+The information applies to 
+\pkg{spatstat} versions \texttt{1.36-0} and above.
+
+\section{Shapefiles}
+
+A shapefile represents a list of spatial objects 
+--- a list of points, a list of lines, or a list of polygonal regions --- 
+and each object in the list may have additional variables attached to it.
+
+A dataset stored in shapefile format is actually stored in a
+collection of text files, for example
+\begin{verbatim}
+     mydata.shp
+     mydata.prj
+     mydata.sbn
+     mydata.dbf
+\end{verbatim}
+which all have the same base name \texttt{mydata} but different file extensions.
+To refer to this collection you will always use the filename with the 
+extension \texttt{shp}, for example \texttt{mydata.shp}. 
+
+\section{Helper package}
+\label{S:helpers}
+
+We'll use the \pkg{sf} package to handle shapefile data.
+Previously the now defunct package \pkg{maptools} was used in this vignette together with the older (still functional) \pkg{sp}.
+
+Both \pkg{sf} and \pkg{sp} support a standard set of spatial data types in \R.
+The \pkg{sp} package uses S4 classes and \pkg{sf} uses S3 classes. 
+These standard data types can be handled by many other packages, so it is useful to convert 
+your spatial data into one of the data types supported by \pkg{sf} or \pkg{sp}. 
+With the retirement of \pkg{maptools} there are no direct conversion tools between \pkg{spatstat} data types and \pkg{sp} data types and for this reason we recommend using \pkg{sf} if possible. 
+However, if you are already using \pkg{sp} formats you can convert data from 
+\pkg{sp} format to \pkg{sf} format and then to \pkg{spatstat} format.
+
+To read and write files in shapefile format \pkg{sf} uses the system library 
+\texttt{GDAL} and newer versions of \pkg{sp} uses \pkg{sf} under the hood.
+
+\section{Caveat about longitude-latitude coordinates}
+
+The shapefile format supports geographical coordinates, usually 
+longitude-latitude coordinates, which specify locations on the curved surface of
+the Earth. 
+However, \texttt{spatstat} deals only with spatial data on 
+a flat two-dimensional plane. 
+
+If you follow the recommendation to read in shapefile (or other formats) data 
+with \pkg{sf} and then converting to \pkg{spatstat} format you should encounter 
+an error if you try to convert data in longitude-latitude coordinates directly 
+to \pkg{spatstat} format. However, if you manage to read in longitude-latitude 
+data and convert them into \texttt{spatstat} objects without \pkg{sf},
+longitude and latitude coordinates will most likely be
+treated as $x$ and $y$ coordinates,
+so that the Earth's surface is effectively mapped to a rectangle.
+This mapping distorts distances and areas. 
+
+If your study region is a \emph{small} region of the Earth's surface 
+(about 3 degrees, 180 nautical miles, 200 statute miles, 320 km across) then
+a reasonable approach is to use the latitude and longitude as 
+$x$ and $y$ coordinates, after multiplying the longitude coordinates by the 
+cosine of the latitude of the centre of the region. This will
+approximately preserve areas and distances. 
+This calculation is a simple example of 
+a \emph{geographical projection} and there are some much better 
+projections available. It may be wise to use \verb!st_transform()! in \pkg{sf}
+to perform the appropriate projection for you, and then to convert
+the projected data into \pkg{spatstat} objects.
+
+If your study region is a large part of the sphere, then your data 
+may not be amenable to the techniques provided by \pkg{spatstat}
+because the geometry is fundamentally different.
+Please consider the extension package \pkg{spatstat.sphere}.
+
+\section{How to read shapefiles into \pkg{spatstat}} 
+
+To read shapefile data into \pkg{spatstat}, you follow two steps:
+\begin{enumerate}
+\item 
+  using the facilities of \pkg{sf}, read the shapefiles
+  and store the data in one of the standard formats supported by \pkg{sf}.
+\item
+  convert the \pkg{sf} data type into one of the data types
+  supported by \pkg{spatstat}.
+\end{enumerate}
+
+\subsection{Read shapefiles using \pkg{sf}} 
+
+Here's how to read shapefile data.
+
+\begin{enumerate}
+\item ensure that the package \pkg{sf} is installed.
+\item start R and load the package: 
+<<eval=FALSE>>=
+library(sf)
+@ 
+\item read the shapefile into an object in the \pkg{sf} package
+using \verb!st_read!, for example
+<<eval=FALSE>>=
+x <- st_read(system.file("shape/nc.shp", package="sf"))
+@ 
+\item 
+This will read in the data as an object of class \texttt{sf}. This is basically a \texttt{data.frame} with a designated geometry column (of class \texttt{sfc}). All other columns contain information/features (marks in \pkg{spatstat} terminology) related to the geometries. For example the geometry column could be a list of polygonal boundaries of the counties of a state and the other columns could contain the name of the county and other registered values of interest. To find out what kind of spatial objects are represented by the dataset,
+inspect the class of the geometry column:
+<<eval=FALSE>>=
+st_geometry_type(x, by_geometry = FALSE)
+@ 
+There are many possible classes but the ones of main interest here are:
+\begin{itemize}
+\item \texttt{POINT} (or \texttt{MULTIPOINT}) indicating each row refers to a point (or several points)
+\item \texttt{LINESTRING} (or \texttt{MULTILINESTRING}) indicating each row refers to a collection of sequentially connected straight line segments (or several of these)
+\item \texttt{POLYGON} (or \texttt{MULTIPOLYGON}) indicating each row refers to a polygon which may have holes inside (or several of these)
+\end{itemize}
+\end{enumerate}
+
+\subsection{Convert data to \pkg{spatstat} format}
+
+To convert the dataset to an object in the
+\pkg{spatstat} package, the procedure depends on the 
+type of the geometry column, as explained below. 
+
+Both packages \pkg{sf} and \pkg{spatstat} must be \textbf{loaded}
+in order to convert the data.
+
+\subsubsection{Geometries of class \texttt{POINT}/\texttt{MULTIPOINT}}
+
+A \texttt{sf} object \texttt{x} with geometry column of class \texttt{POINT}
+represents a spatial point pattern.
+Use \texttt{as.ppp(x)} to convert it to a 
+spatial point pattern in \pkg{spatstat}:
+<<eval=FALSE>>=
+X <- as.ppp(x)
+@ 
+
+(The conversion is performed by \texttt{as.ppp.sf}, a function in \pkg{sf}.)
+
+The window for the point pattern will be taken from
+the bounding box of the points. You will probably wish to change this window,
+usually by taking another dataset to provide the window information.
+Use \verb![.ppp! to change the window: if \texttt{X} is a point pattern
+object of class \verb!"ppp"! and \texttt{W} is a window object of class
+\verb!"owin"!, type
+<<eval=FALSE>>=
+X <- X[W]
+@ 
+
+If the \texttt{sf} object \texttt{x} contains other columns than the geometry column these are additional variables (`marks') attached to each point.
+
+At the time of writing \texttt{as.ppp(x)} will unfortunately only use the first column of additional data as the \texttt{marks} of the point pattern \texttt{X}.
+In that case you can extract the data frame of auxiliary data by 
+\verb!df <- st_drop_geometry(x)! and manually assign them as marks in \pkg{spatstat}:
+
+<<eval=FALSE>>=
+df <- st_drop_geometry(x)
+X <- as.ppp(x)
+marks(X) <- df
+@ 
+
+If the class of the geometry column is \texttt{MULTIPOINT} you need to first cast to \texttt{POINT} and then convert as described above:
+<<eval=FALSE>>=
+x_point <- st_cast(x, "POINT")
+X <- as.ppp(x_point)
+@ 
+
+If you have a combination of \texttt{POINT} and \texttt{MULTIPOINT} you may first need an intermediate cast to \texttt{MULTIPOINT} before casting to \texttt{POINT}:
+<<eval=FALSE>>=
+x_multipoint <- st_cast(x, "MULTIPOINT")
+x_point <- st_cast(x, "POINT")
+X <- as.ppp(x_point)
+@ 
+
+
+\subsubsection{Geometries of class \texttt{LINESTRING} or \texttt{MULTILINESTRING}}
+\label{spatiallines.2.psp}
+
+A ``line segment'' is the straight line between two points in the plane.
+
+In the \pkg{spatstat} package, an object of class \texttt{psp}
+(``planar segment pattern'')
+represents a pattern of line segments, which may or may not be
+connected to each other (like matches which have fallen at random
+on the ground). 
+
+In the \pkg{sf} package, a geometry column of class \texttt{LINESTRING}
+represents a \textbf{list} of \textbf{connected curves}, 
+each curve consisting of a sequence of straight 
+line segments that are joined together (like
+several pieces of a broken bicycle chain.) 
+
+For a geometry column of class \texttt{MULTILINESTRING} each element of the top list (the geometry column) is it self a list of connected curves.
+
+\textbf{list of lists}
+
+So the \texttt{spatstat} and \texttt{sf} data types do not correspond exactly.
+
+The list of connected curves in a \texttt{LINESTRING} column may be useful when representing a single river system where each branch of the river may be in its own element of the list (row of the column).
+
+The list-of-lists hierarchy in a \texttt{MULTILINESTRING} column
+is useful when representing river of a continent where each element of the primary list (row in the column) would correspond to a river system and each of these would be a list of the branches of the river system.
+
+For example, if \texttt{Africa} is an object of class \texttt{sf} with geometry column of class \texttt{MULTILINESTRING}
+representing the main rivers of Africa, then \texttt{Africa} will have hundreds of rows representing each of the rivers. The geometry column \verb!geo <- st_geometry(Africa)! is then a list, where \verb!geo[[i]]! might represent the total river system the \texttt{i}-th river (e.g. the Nile). 
+The branches of each river system consist of several different curved lines. Thus 
+\verb!geo[[i]][[j]]! would represent the \texttt{j}th 
+branch of the \texttt{i}-th river and would be of class \texttt{LINESTRING}.
+
+For an object \texttt{x} of class \texttt{sf} with geometry column of class \texttt{MULTILINESTRING} or \texttt{LINESTRING},
+there are several things that you might want to do:
+\begin{enumerate}
+\item 
+  collect together all the line segments (all the segments that make up all the
+  connected curves) and store them as a single object of class \texttt{psp}.
+\begin{quote}
+  To do this, 
+  use \texttt{as.psp(x)} to convert it to a 
+  spatial line segment pattern. 
+\end{quote}
+Note: Any auxilliary information stored in other columns is automatically attached as marks to the line segments of the \pkg{spatstat} \texttt{psp} object.
+\item 
+  convert each connected curve to an object of class \texttt{psp},
+  keeping different connected curves separate.
+
+To do this, type something like the following:
+<<eval=FALSE>>=
+out <- lapply(geo, function(z) { lapply(z, as.psp) })
+@ 
+
+(The conversion is performed by \texttt{as.psp.MULTILINESTRING},
+a function in \pkg{sf}. So the \pkg{sf} and \pkg{spatstat}
+packages must be loaded in order for this to work.)
+
+Any auxiliary data in other columns can be attached as marks by this command:
+<<eval=FALSE>>=
+dat <- st_drop_geometry(Africa)
+for(i in seq(nrow(dat))){
+  out[[i]] <- lapply(out[[i]], "marks<-", value=dat[i, , drop=FALSE])
+}
+@
+
+The result will be a \textbf{list of lists} of objects of class \texttt{psp}.
+Each one of these objects represents a connected curve,
+although the \pkg{spatstat} package does not know that.
+The list structure will reflect the list structure of the original
+\texttt{MULTILINESTRING} object \texttt{x}. If that's not what you want,
+then use \verb!curvelist <- do.call("c", out)! or
+<<eval=FALSE>>=
+curvegroup <- lapply(out, function(z) { do.call("superimpose", z)})
+@ 
+to collapse the list-of-lists-of-\texttt{psp}'s 
+into a list-of-\texttt{psp}'s. In the first case, \texttt{curvelist[[i]]}
+is a \texttt{psp} object representing the \texttt{i}-th connected curve. 
+In the second case, \texttt{curvegroup[[i]]}
+is a \texttt{psp} object containing all the line segments in
+the \texttt{i}-th group of connected curves (for example the 
+\texttt{i}-th river system -- the Nile -- in the \texttt{Africa} example).
+\end{enumerate}
+
+The window for the spatial line segment pattern can be specified
+as an argument \texttt{window} to the function \texttt{as.psp}.
+
+In the \pkg{spatstat} package, an object of class \texttt{psp}
+(representing a collection of line segments)
+may have a data frame of marks. Note that each \emph{line segment}
+in a \texttt{psp} object may have different mark values. 
+For the converted data the mark variables attached to a particular \emph{group of connected lines}
+in the \texttt{sf} object, will be duplicated
+and attached to each \emph{line segment} in the resulting \texttt{psp} object.
+
+\subsubsection{Geometries of class \texttt{POLYGON} or \texttt{MULTIPOLYGON}}
+
+First, so that we don't go completely crazy, let's introduce some terminology.
+A \emph{polygon} is a closed curve that is composed of 
+straight line segments. You can draw a polygon
+without lifting your pen from the paper. This is called a \texttt{POLYGON} in 
+\texttt{sf} terminology.
+
+\setkeys{Gin}{width=0.4\textwidth}
+\begin{center}
+<<echo=FALSE,results=hide,fig=TRUE>>=
+data(chorley)
+plot(as.owin(chorley), lwd=3, main="polygon")
+@ 
+\end{center}
+
+A \emph{polygonal region}
+is a region in space whose boundary is composed of straight line segments.
+A polygonal region may consist of several unconnected pieces, and each piece
+may have holes. The boundary of a polygonal region
+consists of one or more polygons. To draw the boundary of a polygonal 
+region, you may need to lift and drop the pen several times. This is called a 
+\texttt{MULTIPOLYGON} in \texttt{sf} terminology.
+
+\setkeys{Gin}{width=0.4\textwidth}
+\begin{center}
+<<echo=FALSE,results=hide,fig=TRUE>>=
+data(demopat)
+plot(as.owin(demopat), col="blue", main="polygonal region")
+@ 
+\end{center}
+
+An object of class \texttt{owin} in \pkg{spatstat}
+represents a polygonal region. It is a region of space that is delimited
+by boundaries made of lines.
+
+An object \texttt{x} with geometry column of class \texttt{MULTIPOLYGON}
+represents a \textbf{list of polygonal regions}. For example,
+a single geometry column of class \texttt{MULTIPOLYGON} could 
+store information about every State in the United States of America
+(or the United States of Malaysia). Each State would be a separate
+polygonal region (and it might contain holes such as lakes).
+
+There are two things
+that you might want to do with a geometry column of class \texttt{MULTIPOLYGON}:
+\begin{enumerate}
+\item 
+  combine all the polygonal regions together into a single
+  polygonal region, and convert this to a single object of class \texttt{owin}.
+  \begin{quote}
+    For example, you could combine all the States of the USA together
+    and obtain a single object that represents the territory of the USA. 
+
+    To do this, use \texttt{as.owin(x)}.
+    The result is a single window (object of class \texttt{"owin"}) 
+    in the \pkg{spatstat} package.
+  \end{quote}
+\item keep the different polygonal regions separate; convert each 
+  one of the polygonal regions to an object of class \texttt{owin}.
+  \begin{quote}
+    For example, you could keep the States of the USA separate,
+    and convert each State to an object of class \texttt{owin}.
+  \end{quote}
+  To do this, type the following:
+<<eval=FALSE>>=
+geo <- st_geometry(x)
+windows <- lapply(geo, as.owin)
+@ 
+  The result is a list of objects of class \texttt{owin}. 
+  Often it would make sense to convert this to a 
+  tessellation object, by typing
+<<eval=FALSE>>=
+te <- tess(tiles=windows)
+@ 
+\end{enumerate}
+
+(The conversion is performed by \texttt{as.owin.MULTIPOLYGON},
+a function in \pkg{sf}. So the \pkg{sf} and \pkg{spatstat}
+packages must be loaded in order for this to work.)
+
+{\bf The following is different from what happened in
+  previous versions of \pkg{spatstat}} (prior to version \texttt{1.36-0}.)
+
+During the conversion process, the geometry of the polygons
+will be automatically ``repaired'' if needed.
+Polygon data from shapefiles often contain geometrical inconsistencies 
+such as self-intersecting boundaries and overlapping pieces. 
+For example, these can arise from small errors in curve-tracing.
+Geometrical inconsistencies are tolerated in 
+an object with geometry column of class \texttt{MULTIPOLYGON} which
+is a list of lists of polygonal curves.
+However, they are not tolerated in an object of class \texttt{owin},
+because an \texttt{owin} must specify a well-defined region of space.
+These data inconsistencies must be repaired to prevent technical problems. 
+In \pkg{spatstat} polygon-clipping code is used to automatically convert 
+polygonal lines into valid polygon boundaries. 
+The repair process changes the number of vertices in each polygon,
+and the number of polygons (if you chose option 1).
+To disable the repair process, set 
+\texttt{spatstat.options(fixpolygons=FALSE)}.
+
+\subsubsection{Auxiliary information}
+
+Typically an object \texttt{x} of class \texttt{sf} with geometry column of type 
+(\texttt{MULTI})\texttt{POLYGON} has other columns
+with additional variables attached to
+each polygon. 
+The data frame of auxiliary data is extracted by 
+\verb!df <- st_drop_geometry(x)!.
+
+There is currently no facility in \pkg{spatstat} for attaching
+marks to an \texttt{owin} object directly, but if you have collected the 
+separate regions in a tessellation you can attach marks to the tessellation, so 
+the entire workflow becomes:
+<<eval=FALSE>>=
+geo <- st_geometry(x)
+df <- st_drop_geometry(x)
+windows <- lapply(geo, as.owin)
+te <- tess(tiles=windows)
+marks(te) <- df
+@ 
+
+However, if the regions are kept as a list of \texttt{owin} objects it is 
+possible to take advantage of \pkg{spatstat}'s support of objects called 
+\textbf{hyperframes}, which are like data frames except that the entries can be 
+any type of object. Thus we can represent the data in \pkg{spatstat} as follows:
+<<eval=FALSE>>=
+h <- hyperframe(window=windows)
+h <- cbind.hyperframe(h, df)
+@ 
+
+Then \texttt{h} is a hyperframe containing a column of \texttt{owin}
+objects followed by the columns of auxiliary data.
+
+% \subsubsection{Objects of class \texttt{SpatialGridDataFrame}
+%   and \texttt{SpatialPixelsDataFrame}}
+% 
+% An object \texttt{x} of class \texttt{SpatialGridDataFrame} represents
+% a pixel image on a rectangular grid. It includes a \texttt{SpatialGrid}
+% object \texttt{slot(x, "grid")} defining the full rectangular grid of pixels, 
+% and a data frame \texttt{slot(x, "data")} containing the pixel values
+% (which may include \texttt{NA} values).
+% 
+% The command \texttt{as(x, "im")} converts \texttt{x} to a pixel image
+% of class \texttt{"im"}, taking the pixel values from the \emph{first column}
+% of the data frame. If the data frame has multiple columns, these 
+% have to be converted to separate pixel images in \pkg{spatstat}.
+% For example
+% <<eval=FALSE>>=
+%   y <- as(x, "im")
+%   ylist <- lapply(slot(x, "data"), function(z, y) { y[,] <- z; y }, y=y)
+% @ 
+% 
+% An object \texttt{x} of class  \texttt{SpatialPixelsDataFrame} 
+% represents a \emph{subset} of a pixel image. 
+% To convert this to a \pkg{spatstat} object, it should first be converted to
+% a \texttt{SpatialGridDataFrame} by \texttt{as(x, "SpatialGridDataFrame")},
+% then handled as described above.
+
+\end{document}
+
