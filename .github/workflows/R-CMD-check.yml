@@ -46,6 +46,13 @@ jobs:
       - uses: actions/checkout@v4
 
       - uses: r-lib/actions/setup-tinytex@v2
+      - run: tlmgr --version
+
+      - name: Install additional LaTeX packages
+        run: |
+          tlmgr update --self
+          tlmgr install anysize
+          tlmgr list --only-installed
 
       - uses: r-lib/actions/setup-pandoc@v2
 
