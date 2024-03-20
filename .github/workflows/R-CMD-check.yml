@@ -40,9 +40,12 @@ jobs:
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
       R_KEEP_PKG_SOURCE: yes
+      TINYTEX_INSTALLER: TinyTeX
 
     steps:
       - uses: actions/checkout@v4
+
+      - uses: r-lib/actions/setup-tinytex@v2
 
       - uses: r-lib/actions/setup-pandoc@v2
 
