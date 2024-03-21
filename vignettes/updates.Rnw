@@ -6,7 +6,7 @@
 
 % \VignetteIndexEntry{Summary of Recent Updates to the Spatstat Family}
 
-% $Revision: 1.70 $ $Date: 2024/02/02 08:21:49 $
+% $Revision: 1.71 $ $Date: 2024/02/28 07:22:30 $
 
 \newcommand{\pkg}[1]{\texttt{#1}}
 \newcommand{\code}[1]{\texttt{#1}}
@@ -306,6 +306,9 @@ the News and Release Notes for each update.
 
 \begin{itemize}
   
+  \item Some geometry code accelerated.
+  
+  \item Corrected format of \texttt{gorillas} dataset.
 
   \item The \spst\ family no longer depends on the packages 
     \pkg{maptools}, \pkg{sp} and \pkg{RandomFields}.
@@ -846,6 +849,10 @@ Following is a list of all the functions that have been added,
 starting with the most recent additions.
 
 \begin{itemize}
+
+\item \texttt{summary.symbolmap}:
+  Method for \texttt{summary} for symbol maps.
+  
 \item \texttt{SpatialMedian.ppp}, \texttt{SpatialQuantile.ppp}:
   spatially weighted median and quantile of mark values of a point pattern.
     

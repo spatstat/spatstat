@@ -1,10 +1,18 @@
 
-        CHANGES IN spatstat VERSION 3.0-7.002
+        CHANGES IN spatstat VERSION 3.0-7.003
 
 OVERVIEW
 
     o Updated package dependencies and documentation.
 
+    o Vignette on shapefiles updated and reinstated.
+    
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o Vignette 'shapefiles'
+    This vignette has been updated. The new version uses
+    package 'sf' instead of the defunct packages 'sp' and 'maptools'.
+    
         CHANGES IN spatstat VERSION 3.0-7
 
 OVERVIEW
