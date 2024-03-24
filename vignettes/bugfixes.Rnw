@@ -648,6 +648,11 @@ the presence of a bug is obvious, and the bug would not have misled the user.
     assigned the weight for each observation to be \texttt{w/n} where 
     \texttt{n=length(x)}.
     \bugalways{spatstat.geom 3.0-7}{march 2023}
+    
+    \item \texttt{SpatialMedian.ppp}, \texttt{Spatialquantile.ppp}:
+      Argument \texttt{sigma} was ignored in some calculations.
+      \bugin{spatstat.explore 3.2-6}{february 2024}{spatstat.explore 3.2-7}{march 2024}
+      
  \end{itemize}   
 
  %% LEVEL 4: 
@@ -1057,6 +1062,12 @@ the presence of a bug is obvious, and the bug would not have misled the user.
      Pixel resolution argument \texttt{eps} was ignored.
      \bugalways{spatstat.explore 3.2-6}{february 2024}
 
+   \item \texttt{rLGCP}:
+     In certain special cases, an error message about incompatible images
+     was issued, and in the resulting point pattern object \texttt{X},
+     the driving intensity image \texttt{attr(X,"Lambda")}
+     had incorrect dimensions or spatial coordinates.
+     \bugalways{spatstat.random 3.2-3}{march 2024}
 \end{itemize}
 
 \begin{thebibliography}{1}
