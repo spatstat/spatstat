@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 3.0-7.005
+        CHANGES IN spatstat VERSION 3.0-8
 
 OVERVIEW
 
@@ -11,7 +11,7 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o Vignette 'shapefiles'
     This vignette has been updated. The new version uses
-    package 'sf' instead of the defunct packages 'sp' and 'maptools'.
+    package 'sf' instead of the defunct package 'maptools'.
     
         CHANGES IN spatstat VERSION 3.0-7
 
