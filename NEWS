@@ -1,4 +1,24 @@
 
+        CHANGES IN spatstat VERSION 3.0-8.001
+
+OVERVIEW
+
+    o New package 'spatstat.univar'
+
+PACKAGE DEPENDENCE
+
+    o spatstat.univar
+    The new package 'spatstat.univar' has joined the spatstat family.
+    It supports estimation and manipulation of probability distributions
+    of one-dimensional random variables.
+    Some functions have been moved from 'spatstat.geom', 'spatstat.random'
+    and 'spatstat.explore' into the new package 'spatstat.univar'.
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o spatstat.family
+    The list of sub-packages now includes 'spatstat.univar'.
+    
         CHANGES IN spatstat VERSION 3.0-8
 
 OVERVIEW

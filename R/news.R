@@ -38,9 +38,14 @@ latest.news <- function(package=spatstat.family(), doBrowse=FALSE, major=TRUE) {
 class(latest.news) <- "autoexec"
 
 spatstat.family <- function(subpackages=TRUE, extensions=FALSE) {
-  sub <- c("spatstat.utils", "spatstat.data", "spatstat.sparse",
-           "spatstat.geom", "spatstat.random",
-           "spatstat.explore", "spatstat.model",
+  sub <- c("spatstat.utils",
+           "spatstat.data",
+           "spatstat.univar",
+           "spatstat.sparse",
+           "spatstat.geom",
+           "spatstat.random",
+           "spatstat.explore",
+           "spatstat.model",
            "spatstat.linnet",
            "spatstat")
   ext <- c("spatstat.gui", "spatstat.local", "spatstat.Knet")

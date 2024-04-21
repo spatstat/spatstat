@@ -92,6 +92,7 @@ z <- getSizeTable()
 ## installed sub-packages - access via the installed sub-packages
 zutils   <- getSizeTable("spatstat.utils")
 zdata    <- getSizeTable("spatstat.data")
+zunivar  <- getSizeTable("spatstat.univar")
 zsparse  <- getSizeTable("spatstat.sparse")
 zgeom    <- getSizeTable("spatstat.geom")
 zrandom  <- getSizeTable("spatstat.random")
@@ -117,6 +118,7 @@ z <- mergeSizeTables(z, zrandom, "2022-02-12")
 CoreSplitDay <- "2020-05-25"   # size of 'core' drops to 0 on this date
 z <- mergeSizeTables(z, zexplore, CoreSplitDay)
 z <- mergeSizeTables(z, zmodel,   CoreSplitDay)
+z <- mergeSizeTables(z, zunivar,  "2024-04-21")
 ## extension packages: these never overlapped spatstat
 z <- mergeSizeTables(z, zlocal)
 z <- mergeSizeTables(z, zgui)
@@ -193,6 +195,7 @@ vtable <- AppendVersion("spatstat.model", zmodel, vtable)
 vtable <- AppendVersion("spatstat.linnet", zlinnet, vtable)
 vtable <- AppendVersion("spatstat.sparse", zsparse, vtable)
 vtable <- AppendVersion("spatstat.data", zdata, vtable)
+vtable <- AppendVersion("spatstat.univar", zunivar, vtable)
 vtable <- AppendVersion("spatstat.utils", zutils, vtable)
 vtable <- AppendVersion("spatstat.local", zlocal, vtable)
 vtable <- AppendVersion("spatstat.Knet", zKnet, vtable)
@@ -219,10 +222,11 @@ Typing \code{library(spatstat)} will load the familiar
 
 \subsection{Sub-packages}
 
-    Currently there are nine
+    Currently there are ten
     sub-packages, called 
     \pkg{spatstat.utils},
     \pkg{spatstat.data},
+    \pkg{spatstat.univar},
     \pkg{spatstat.sparse},
     \pkg{spatstat.geom},
     \pkg{spatstat.random},
@@ -242,7 +246,11 @@ Typing \code{library(spatstat)} will load the familiar
       for \pkg{spatstat}.
     \item
       The \pkg{spatstat.utils} package
-      contains utility functions for \pkg{spatstat}.
+      contains basic utility functions for \pkg{spatstat}.
+    \item
+      The \pkg{spatstat.univar} package
+      contains functions for estimating and manipulating
+      probability distributions of one-dimensional random variables.
     \item
       The \pkg{spatstat.sparse} package
       contains functions for manipulating sparse arrays

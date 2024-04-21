@@ -32,6 +32,7 @@
   \itemize{
     \item \code{spatstat.utils}
     \item \code{spatstat.data}
+    \item \code{spatstat.univar}
     \item \code{spatstat.sparse}
     \item \code{spatstat.geom}
     \item \code{spatstat.random}
