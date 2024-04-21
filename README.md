@@ -28,6 +28,7 @@ The original `spatstat` has now been divided into a family of sub-packages:
 | ----------  | --------- | ----------------- | ----------  |
 | `spatstat.utils` | [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/spatstat.utils)](http://CRAN.R-project.org/package=spatstat.utils) | [![GitHub R package version](https://img.shields.io/github/r-package/v/spatstat/spatstat.utils)](https://github.com/spatstat/spatstat.utils) | Basic utilities |
 | `spatstat.data` | [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/spatstat.data)](http://CRAN.R-project.org/package=spatstat.data) | [![GitHub R package version](https://img.shields.io/github/r-package/v/spatstat/spatstat.data)](https://github.com/spatstat/spatstat.data) | Datasets |
+| `spatstat.univar` | [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/spatstat.univar)](http://CRAN.R-project.org/package=spatstat.univar) | [![GitHub R package version](https://img.shields.io/github/r-package/v/spatstat/spatstat.univar)](https://github.com/spatstat/spatstat.univar) | ::new:: Univariate probability distributions |
 | `spatstat.sparse` | [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/spatstat.sparse)](http://CRAN.R-project.org/package=spatstat.sparse) | [![GitHub R package version](https://img.shields.io/github/r-package/v/spatstat/spatstat.sparse)](https://github.com/spatstat/spatstat.sparse) | Sparse arrays |
 | `spatstat.geom` | [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/spatstat.geom)](http://CRAN.R-project.org/package=spatstat.geom) | [![GitHub R package version](https://img.shields.io/github/r-package/v/spatstat/spatstat.geom)](https://github.com/spatstat/spatstat.geom) | Spatial data classes; geometrical operations |
 | `spatstat.random` | [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/spatstat.random)](http://CRAN.R-project.org/package=spatstat.random) | [![GitHub R package version](https://img.shields.io/github/r-package/v/spatstat/spatstat.random)](https://github.com/spatstat/spatstat.random) |  Generation of random patterns |
@@ -71,7 +72,7 @@ or imported when you load the `spatstat` umbrella package.
 The blue boxes are extension packages which must be installed and loaded
 separately.
 
-![Spatstat pieces](RepoStuff/newnewnewspatstat.jpg)
+![Spatstat pieces](RepoStuff/new4spatstat.jpg)
 
 ## Future development
 
