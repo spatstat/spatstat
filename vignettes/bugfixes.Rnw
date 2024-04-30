@@ -6,7 +6,7 @@
 
 % \VignetteIndexEntry{Bugs Fixed in Spatstat}
 
-%  $Revision: 1.33 $ $Date: 2024/02/01 07:52:02 $
+%  $Revision: 1.34 $ $Date: 2024/04/30 01:47:22 $
 
 \newcommand{\pkg}[1]{\texttt{#1}}
 \newcommand{\code}[1]{\texttt{#1}}
@@ -1048,7 +1048,8 @@ the presence of a bug is obvious, and the bug would not have misled the user.
       \bugalways{spatstat.data 3.0-4}{january 2024}
       
    \item \texttt{marginSumsSparse}:
-     If the result of \texttt{marginSumsSparse} was a one-dimensional sparse vector,
+     If the result of \texttt{marginSumsSparse} 
+     was a one-dimensional sparse vector,
      the entries were incorrectly rearranged so that the non-zero entries
      were all at the beginning of the vector.
      \bugalways{spatstat.sparse 3.0-2}{october 2023}
@@ -1068,6 +1069,15 @@ the presence of a bug is obvious, and the bug would not have misled the user.
      the driving intensity image \texttt{attr(X,"Lambda")}
      had incorrect dimensions or spatial coordinates.
      \bugalways{spatstat.random 3.2-3}{march 2024}
+     
+   \item \texttt{primefactors}:
+     The default method (\verb!method = "C"!) did not handle numbers
+    greater than the largest integer (\verb!n > .Machine$integer.max!).
+     \bugalways{spatstat.utils 3.0-4}{february 2024}
+
+   \item \texttt{predict.ppm}:
+     Argument \texttt{eps} was ignored in many cases.
+     \bugalways{spatstat.model 3.2-12}{may 2024}
 \end{itemize}
 
 \begin{thebibliography}{1}

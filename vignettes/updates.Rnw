@@ -6,7 +6,7 @@
 
 % \VignetteIndexEntry{Summary of Recent Updates to the Spatstat Family}
 
-% $Revision: 1.71 $ $Date: 2024/02/28 07:22:30 $
+% $Revision: 1.72 $ $Date: 2024/04/30 01:47:14 $
 
 \newcommand{\pkg}[1]{\texttt{#1}}
 \newcommand{\code}[1]{\texttt{#1}}
@@ -282,7 +282,7 @@ Typing \code{library(spatstat)} will load the familiar
     \noindent\textbf{Running:}
     If you type \code{library(spatstat)} in an \textsf{R} session,
     the system will automatically load 
-    \pkg{spatstat.data}, \pkg{spatstat.geom}, \pkg{spatstat.random},
+    \pkg{spatstat.data}, \pkg{spatstat.univar}, \pkg{spatstat.geom}, \pkg{spatstat.random},
     \pkg{spatstat.explore}, \pkg{spatstat.model} and \pkg{spatstat.linnet}.
     It will also silently \textbf{``import''}
     \pkg{spatstat.utils} and \pkg{spatstat.sparse}.
@@ -313,7 +313,15 @@ Here is the text from the `overview' sections of
 the News and Release Notes for each update. 
 
 \begin{itemize}
-  
+
+  \item New package \pkg{spatstat.univar}.
+
+  \item Some functions from \pkg{spatstat.geom}, \pkg{spatstat.random}
+    and \pkg{spatstat.explore} have been moved to \pkg{spatstat.univar}.
+    
+  \item packages \pkg{spatstat.geom}, \pkg{spatstat.random}
+    and \pkg{spatstat.explore} now depend on \pkg{spatstat.univar}.
+    
   \item Some geometry code accelerated.
   
   \item Corrected format of \texttt{gorillas} dataset.
@@ -338,17 +346,6 @@ the News and Release Notes for each update.
     
   \item \texttt{clarkevans.test} modified.
     
-%% \item The package \texttt{spatstat.core} has been split into two packages called
-%%    \texttt{spatstat.explore} (for exploratory data analysis)
-%%    and \texttt{spatstat.model} (for modelling and formal inference).
-
-%%   \item The original \spst\ package has now been split into 9 sub-packages
-%%     (\pkg{spatstat.utils}, \pkg{spatstat.data}, \pkg{spatstat.sparse},
-%%     \pkg{spatstat.geom}, \pkg{spatstat.random},
-%%     \pkg{spatstat.explore}, \pkg{spatstat.model}, \pkg{spatstat.linnet}
-%%     and \pkg{spatstat}).
-
-  
 \item Improvements to \texttt{envelope} methods.
   
 \item Conditional simulation for Matern cluster process.
@@ -858,6 +855,9 @@ starting with the most recent additions.
 
 \begin{itemize}
 
+\item \texttt{default.symbolmap.ppp}:  
+  Algorithm for determining the graphical symbol map used by \texttt{plot.ppp}.
+  
 \item \texttt{summary.symbolmap}:
   Method for \texttt{summary} for symbol maps.
   
@@ -2830,6 +2830,10 @@ listed alphabetically.
   Now prints news documentation for the current major version, by default.
   New argument \texttt{major}.
 
+  \item \texttt{layout.boxes}: Argument \code{aspect} can be 
+    \code{NA} or \code{Inf} indicating that the aspect ratio
+    of the boxes is unconstrained.
+    
 \item \texttt{Lcross}:
   Now accepts  the option \texttt{correction="periodic"}
   to compute the periodic (toroidal) edge correction estimate.
@@ -3475,6 +3479,7 @@ listed alphabetically.
     \item  Now generates a separate plot panel for each column of marks,
     if \texttt{do.col=TRUE}.
   \item New argument \texttt{multiplot}.
+  \item Changed the default values for \code{do.col} and \code{do.labels}.
     \end{itemize}
 
   \item \texttt{plot.palmdiag}: Improved calculation of $y$ axis limits.
@@ -3552,6 +3557,10 @@ listed alphabetically.
       New argument \texttt{emend}, equivalent to \texttt{project}.
     \item 
       New arguments \texttt{subset} and \texttt{clipwin}.
+    \item 
+      New argument \texttt{quad.args} is a list of arguments passed
+      to \texttt{quadscheme} to control the construction of the quadrature 
+      scheme. 
     \end{itemize}
 
   \item \code{ppmInfluence}:
@@ -3971,7 +3980,7 @@ listed alphabetically.
   \item \texttt{shift.im}, \texttt{shift.owin},
     \texttt{shift.ppp}, \texttt{shift.psp}:
     More options for the argument \texttt{origin}.
-
+    
   \item Simulation:
    Several basic simulation algorithms have been accelerated.
    Consequently, simulation outcomes are not identical to 
