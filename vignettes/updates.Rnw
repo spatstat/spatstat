@@ -3315,6 +3315,12 @@ listed alphabetically.
   \item 
     Changed default behaviour for discrete colour maps 
     when \texttt{vertical=FALSE}.
+  \item 
+    New argument \texttt{nticks} controls the number of axis tick marks
+    when the colourmap is defined on a continuous range of numerical values.
+  \item 
+    New argument \texttt{box} controls whether a box will be drawn
+    around the colours.
    \end{itemize}
 
  \item \texttt{plot.fv}:
@@ -3427,8 +3433,14 @@ listed alphabetically.
      are now taken as the defaults for graphical parameters to the plot.
 
    \item \texttt{plot.owin:} 
-     New argument \texttt{use.polypath} controls how to plot
-     a filled polygon when it has holes.
+     \begin{itemize}
+     \item 
+       New argument \texttt{use.polypath} controls how to plot
+       a filled polygon when it has holes.
+     \item 
+       New argument \texttt{adj.main} controls the justification of the text
+       in the main title.
+     \end{itemize}
      
   \item \texttt{plot.profilepl}:
         This function has now been documented, and the graphics improved.
