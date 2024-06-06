@@ -854,6 +854,9 @@ Following is a list of all the functions that have been added,
 starting with the most recent additions.
 
 \begin{itemize}
+  
+\item \texttt{bw.abram.default}: Abramson adaptive bandwidths.
+  Default method for \texttt{bw.abram}, applicable to numerical vectors.
 
 \item \texttt{default.symbolmap.ppp}:  
   Algorithm for determining the graphical symbol map used by \texttt{plot.ppp}.
@@ -1989,7 +1992,11 @@ listed alphabetically.
     to the sub-package \texttt{spatstat.sparse}.
     
  \item \texttt{bind.fv}:
-   New argument \texttt{clip}.
+   \begin{itemize}
+   \item Additional arguments may be functions in the R language.
+   \item New argument \texttt{clip}.
+   \end{itemize}
+
 
  \item \texttt{blur}:
    New argument \texttt{kernel}.
@@ -1998,6 +2005,8 @@ listed alphabetically.
    \begin{itemize}
    \item
      This function is now generic, with a method for class \texttt{ppp}.
+   \item 
+     Default method added.
    \item 
      New argument \texttt{smoother} determines 
      how the pilot estimate is computed.
@@ -2061,6 +2070,11 @@ listed alphabetically.
     
 %%C
     
+ \item \texttt{cbind.fv}:
+   \begin{itemize}
+   \item Additional arguments may be functions in the R language.
+   \end{itemize}
+
   \item \texttt{cbind.hyperframe}:
     \begin{itemize}
     \item 
@@ -3393,6 +3407,12 @@ listed alphabetically.
      bounding box; default is \texttt{FALSE} in all cases.
    \end{itemize}
 
+ 
+ \item \texttt{plot.linnet}:
+   \begin{itemize}
+   \item New argument \texttt{adj.main}.
+   \end{itemize}
+   
  \item \texttt{plot.lintess}:
    \begin{itemize}
    \item Improved plot method, with more options.
@@ -3403,6 +3423,7 @@ listed alphabetically.
 
    \item \texttt{plot.lpp}:
      \begin{itemize}
+   \item New argument \texttt{adj.main}.
      \item New argument \texttt{show.network}.
      \item 
      For a point pattern with continuous marks (``real numbers'')

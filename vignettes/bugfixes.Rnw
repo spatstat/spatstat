@@ -282,6 +282,14 @@ the presence of a bug is obvious, and the bug would not have misled the user.
     simulation window was not a square.) 
    \bugger{1.22-2}{june 2011}{1.65-0}{december 2020}   
 
+ \item \texttt{rLGCP}, \texttt{simulate.kppm}:
+    Simulation results for log-Gaussian Cox processes were incorrect
+    unless the pixel dimensions and pixel spacings were identical
+    on the horizontal and vertical axes. (If pixel dimensions were not
+    specified, then the results were incorrect whenever the Frame of the
+    simulation window was not a square.) 
+   \bugin{spatstat.random 3.2-0}{oct 2023}{spatstat.random 3.2-4}{june 2024}
+      
   \item \texttt{deviance.lppm}, \texttt{pseudoR2.lppm}:
     Results were completely incorrect, due to a coding error.
    \bugger{1.44-0}{december 2015}{1.64-2}{november 2020}   
@@ -653,6 +661,10 @@ the presence of a bug is obvious, and the bug would not have misled the user.
       Argument \texttt{sigma} was ignored in some calculations.
       \bugin{spatstat.explore 3.2-6}{february 2024}{spatstat.explore 3.2-7}{march 2024}
       
+  \item \texttt{weighted.quantile}:
+    Results were incorrect when \texttt{type=2}.
+    \bugbefore{spatstat 1.42-0}{may 2015}{spatstat.univar 2.0-4}{may 2024}
+    
  \end{itemize}   
 
  %% LEVEL 4: 
