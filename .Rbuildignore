@@ -3,9 +3,9 @@ RepoStuff
 RepoStuff/*
 ChangeLogs
 ChangeLogs/ChangeLog*
-.git
-.github
-.gitignore
+\.git$
+\.github$
+\.gitignore$
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^\.travis\.yml$

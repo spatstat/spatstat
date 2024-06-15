@@ -1,9 +1,11 @@
 
-        CHANGES IN spatstat VERSION 3.0-8.005
+        CHANGES IN spatstat VERSION 3.0-8.006
 
 OVERVIEW
 
     o New package 'spatstat.univar'
+
+    o Minor internal improvements.
 
 PACKAGE DEPENDENCE
 
