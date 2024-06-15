@@ -1,15 +1,34 @@
+## Files to ignore in R package build
+##
+## Github repository files
+##
 README.md
-RepoStuff
-RepoStuff/*
-ChangeLogs
-ChangeLogs/ChangeLog*
 \.git$
 \.github$
 \.gitignore$
+ChangeLogs
+ChangeLogs/ChangeLog*
+ChangeLog.txt
+RepoStuff
+RepoStuff/*
+Reproducibility
+Reproducibility/*
+##
+## Files produced by R sessions
+##
 ^.*\.Rproj$
 ^\.Rproj\.user$
+##
+## Scripts and backups for other services
+##
 ^\.travis\.yml$
+^appveyor\.yml$
 \.gcov$
 \.gcda$
 \.gcno$
-^appveyor\.yml$
+##
+## File backups (editors and operating systems)
+##
+.DS_Store
+~$
+
