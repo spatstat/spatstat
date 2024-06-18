@@ -6,7 +6,7 @@
 
 % \VignetteIndexEntry{Summary of Recent Updates to the Spatstat Family}
 
-% $Revision: 1.72 $ $Date: 2024/04/30 01:47:14 $
+% $Revision: 1.73 $ $Date: 2024/06/17 09:33:36 $
 
 \newcommand{\pkg}[1]{\texttt{#1}}
 \newcommand{\code}[1]{\texttt{#1}}
@@ -41,8 +41,13 @@ readSizeTable <- function(fname) {
   return(a)
 }
 getSizeTable <- function(packagename="spatstat", tablename="packagesizes.txt") {
-  fname <- system.file("doc", tablename, package=packagename)
-  readSizeTable(fname)
+  fname <- system.file("info", tablename, package=packagename)
+  out <- readSizeTable(fname)
+  if(is.null(out)) {
+    fname <- system.file("doc", tablename, package=packagename)
+    out <- readSizeTable(fname)
+  }
+  return(out)
 }
 RemoveDevel <- function(sizetable) {
   ## remove entries with fractional version numbers

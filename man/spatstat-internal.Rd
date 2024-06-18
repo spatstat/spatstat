@@ -1,5 +1,6 @@
 \name{spatstat-internal} 
 \title{Internal spatstat functions}
+\alias{spatstat-internal} %DoNotExport
 
 
 
