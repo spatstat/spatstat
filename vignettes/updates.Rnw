@@ -327,6 +327,10 @@ the News and Release Notes for each update.
   \item packages \pkg{spatstat.geom}, \pkg{spatstat.random}
     and \pkg{spatstat.explore} now depend on \pkg{spatstat.univar}.
     
+  \item Digits in the decimal representation of a number.
+
+  \item Easier control over quadrature schemes.
+
   \item Some geometry code accelerated.
   
   \item Corrected format of \texttt{gorillas} dataset.
@@ -859,6 +863,9 @@ Following is a list of all the functions that have been added,
 starting with the most recent additions.
 
 \begin{itemize}
+  
+\item \texttt{firstdigit}, \texttt{lastdigit}, \texttt{ndigits}:
+  digits in the decimal representation of a number.
   
 \item \texttt{bw.abram.default}: Abramson adaptive bandwidths.
   Default method for \texttt{bw.abram}, applicable to numerical vectors.
@@ -2541,7 +2548,18 @@ listed alphabetically.
    \item New argument \code{ignore.hardcore}.
    \end{itemize}
 
-  \item \texttt{funxy}:
+ \item \texttt{fitted.slrm}:
+   \begin{itemize}
+   \item   New argument \texttt{type} allows calculation of fitted
+     probabilities, intensities or link function values.
+   \item 
+      New arguments \texttt{dataonly} and \texttt{leaveoneout}
+      allow calculation of fitted
+      values at the data points only, 
+      using leave-one-out calculation if desired.
+   \end{itemize}
+ 
+ \item \texttt{funxy}:
     \begin{itemize}
     \item 
     When the user calls a function that was created by \texttt{funxy},
@@ -2604,10 +2622,19 @@ listed alphabetically.
    \end{itemize}
    
 %%I
- \item \texttt{identify.psp}: Improved placement of labels.
-   Arguments can be passed to \texttt{text.default}
-   to control the plotting of labels.
+ \item \texttt{identify.ppp}: 
+   Automatically starts a new plot device if none is open.
 
+   \item \texttt{identify.psp}: 
+   \begin{itemize}
+   \item Identified segments are highlighted.
+   \item Automatically starts a new plot device if none is open.
+   \item 
+     Improved placement of labels.
+   \item 
+     Arguments can be passed to \texttt{text.default}
+     to control the plotting of labels.
+   \end{itemize}
    
  \item \texttt{idw}: Standard errors can now be calculated by
    setting \texttt{se=TRUE}.
@@ -3710,10 +3737,19 @@ listed alphabetically.
    \item New argument \texttt{eps} controls the accuracy of the calculation.
    \end{itemize}
    
+ \item \texttt{quantile.ecdf}:
+   \begin{itemize}
+   \item Now supports \texttt{type=4} (linear interpolation).
+   \end{itemize}
+ 
  \item \texttt{quantile.ewcdf}:
+   \begin{itemize}
+   \item Now supports \texttt{type=4} (linear interpolation).
+   \item 
     The function is now normalised to the range \verb![0,1]!
     before the quantiles are computed. 
     This can be suppressed by setting \texttt{normalise=FALSE}.
+   \end{itemize}
 
  \item \texttt{qqplot.ppm}
     Argument \texttt{expr} can now be a list of point patterns,
@@ -4211,6 +4247,9 @@ listed alphabetically.
    \item \texttt{textureplot}: 
      Argument \texttt{x} can now be something acceptable to \texttt{as.im}.
    
+   \item \texttt{thinNetwork}:
+     \texttt{X} can be a pixel image on a network.
+
    \item \texttt{tilenames}, \verb!tilenames<-!:
     These functions are now generic, with methods for \texttt{tess}
     and \texttt{lintess}.
