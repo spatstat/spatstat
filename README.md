@@ -1,14 +1,6 @@
 spatstat
 ========
 
-[![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/spatstat)](http://CRAN.R-project.org/package=spatstat)
-[![GitHub R package version](https://img.shields.io/github/r-package/v/spatstat/spatstat)](https://github.com/spatstat/spatstat)
-[![Travis-CI Build Status](https://travis-ci.org/spatstat/spatstat.png?branch=master)](https://travis-ci.org/spatstat/spatstat)
-[![codecov.io](https://codecov.io/github/spatstat/spatstat/coverage.svg)](https://codecov.io/github/spatstat/spatstat?branch=covr)
-[![appveyor build status](https://ci.appveyor.com/api/projects/status/github/spatstat/spatstat)](https://ci.appveyor.com/api/projects/status/github/spatstat/spatstat)
-
-## What is spatstat?
-
 `spatstat` is a family of R packages for analysing 
 spatial point pattern data (and other kinds of spatial data).
 It has extensive capabilities for exploratory analysis,
@@ -22,7 +14,7 @@ or read the [book](http://book.spatstat.org).
 Originally there was a single package called `spatstat`.
 It grew so large that CRAN required us to split it into pieces.
 
-The original `spatstat` has now been divided into a family of sub-packages:
+The original `spatstat` has now been divided into a family of 10 sub-packages:
 
 | Sub-package | CRAN page | GitHub repository | Description |
 | ----------  | --------- | ----------------- | ----------  |
