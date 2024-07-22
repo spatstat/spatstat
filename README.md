@@ -34,7 +34,7 @@ release of each sub-package. Click the blue badge to visit the GitHub repository
 for the current development version of the sub-package. 
 
 There still exists a package called `spatstat`, which is now an
-**umbrella package** that requires all the sub-packages listed above
+**umbrella package** that requires all the sub-packages listed above,
 and provides introductory guides and vignettes.
 
 You can install and load the new `spatstat` family in virtually the
