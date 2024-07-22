@@ -27,14 +27,15 @@ The original `spatstat` has now been divided into a family of 10 sub-packages:
 | `spatstat.explore` | [![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/spatstat.explore)](http://CRAN.R-project.org/package=spatstat.explore) | [![GitHub R package version](https://img.shields.io/github/r-package/v/spatstat/spatstat.explore)](https://github.com/spatstat/spatstat.explore) | Exploratory Data Analysis of spatial data |
 | `spatstat.model` | [![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/spatstat.model)](http://CRAN.R-project.org/package=spatstat.model) | [![GitHub R package version](https://img.shields.io/github/r-package/v/spatstat/spatstat.model)](https://github.com/spatstat/spatstat.model) |  Parametric modelling and formal inference for spatial data |
 | `spatstat.linnet` | [![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/spatstat.linnet)](http://CRAN.R-project.org/package=spatstat.linnet) | [![GitHub R package version](https://img.shields.io/github/r-package/v/spatstat/spatstat.linnet)](https://github.com/spatstat/spatstat.linnet) | Spatial analysis on a linear network |
-| `spatstat` | [![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/spatstat)](http://CRAN.R-project.org/package=spatstat) | [![GitHub R package version](https://img.shields.io/github/r-package/v/spatstat/spatstat)](https://github.com/spatstat/spatstat) | Umbrella package |
+| `spatstat` | [![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/spatstat)](http://CRAN.R-project.org/package=spatstat) | [![GitHub R package version](https://img.shields.io/github/r-package/v/spatstat/spatstat)](https://github.com/spatstat/spatstat) | Umbrella package: intro, vignettes |
 
 Click the green badge to visit the CRAN page which contains the current
 release of each sub-package. Click the blue badge to visit the GitHub repository
 for the current development version of the sub-package. 
 
 There still exists a package called `spatstat`, which is now an
-**umbrella package** that requires all the sub-packages listed above.
+**umbrella package** that requires all the sub-packages listed above
+and provides introductory guides and vignettes.
 
 You can install and load the new `spatstat` family in virtually the
 same way as you would previously have installed and loaded the old `spatstat` package.
