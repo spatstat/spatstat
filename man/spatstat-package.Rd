@@ -107,6 +107,8 @@
     \item \pkg{spatstat.utils} containing basic utilities
     \item \pkg{spatstat.sparse} containing linear algebra utilities
     \item \pkg{spatstat.data} containing datasets
+    \item \pkg{spatstat.univar} containing functions for estimating
+    probability distributions of random variables
     \item \pkg{spatstat.geom} containing functionality for geometrical
     operations, and defining the main classes of spatial objects
     \item \pkg{spatstat.explore} containing the main functions for exploratory
