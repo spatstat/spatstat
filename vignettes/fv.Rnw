@@ -6,7 +6,7 @@
 
 % \VignetteIndexEntry{Guide to Function Objects in Spatstat}
 
-% $Revision: 1.3 $ $Date: 2023/08/16 02:16:49 $
+% $Revision: 1.5 $ $Date: 2024/07/25 01:50:47 $
 
 \newcommand{\pkg}[1]{\texttt{#1}}
 \newcommand{\code}[1]{\texttt{#1}}
@@ -34,19 +34,6 @@
 \newcommand{\secref}[1]{Section~\ref{#1}}
 \newcommand{\eqref}[1]{(\ref{#1})}
 
-\newcommand{\editedToHere}{%
-\newpage %
-\hrule %
-% 
-\begin{Large} %
-  \begin{center} %
-    NOT EDITED BEYOND HERE %
-  \end{center} %
-\end{Large} %
-%
-\hrule %
-}
-
 \begin{document}
 \bibliographystyle{plain}
 
@@ -70,15 +57,15 @@ options(width=100)
 
 \title{A guide to function objects (class \fv\ and \env) in \spst}
 \author{Adrian Baddeley, Rolf Turner and Ege Rubak}
-\date{{\small Draft of \today}}
+\date{For \spst\ version \texttt{\Sexpr{sversion}}}
 \maketitle
 
 \thispagestyle{empty}
 
 \begin{abstract}
-  This vignette explains how to use and manipulate \objsfvenv.
-  
-  \framebox{\textbf{This vignette is under development!}}
+  This vignette explains how to use and manipulate 
+  function objects (\objs{}\fv) and envelope objects (\objs{}\env)
+  in the \spst\ package.
 \end{abstract}
 
 
@@ -138,11 +125,12 @@ the distance argument $r$, while the other columns contain
 estimates of the value of the function, or the theoretical value
 of the function under CSR, corresponding to these distance values.
 
-More information is given by the print method \texttt{print.fv:}
+More information is given by the print method \texttt{print.fv}, 
+which can be invoked just by typing the name of the object:
 <<>>=
   K
 @ 
-This indicates that the columns in the
+The output indicates that the columns in the
 data frame are named \texttt{r}, \texttt{theo}, \texttt{border},
 \texttt{trans}, and \texttt{iso}, and explains their contents. 
 For example, 
@@ -573,8 +561,9 @@ identified by \texttt{fvnames(, ".")}.
 \subsection{Other vectorised operations}
 
 Functions such as \texttt{pmax} and \texttt{cumsum} apply to vector data,
-but are not recognised as arithmetic or mathematical operators, so they are
-not covered by \texttt{Ops.fv} and \texttt{Math.fv}. 
+but are not recognised as arithmetic or mathematical operators 
+by the \R\ parser,
+so they are not covered by \texttt{Ops.fv} and \texttt{Math.fv}. 
 
 For expressions involving \texttt{pmax} and \texttt{cumsum} (or indeed
 any algebraic expression whatsoever), 
@@ -701,13 +690,14 @@ interpolated linearly between entries in the table.
 
 If one of the other function estimates is required, 
 use the argument \texttt{value} to \fun{as.function} to select it. 
-Several estimates can be chosen:
+<<>>=
+kt <- as.function(Ks, value="trans")
+kt(9)
+@ 
+To retain the option to select any one of the function estimates, type
 <<>>=
 kf <- as.function(Ks, value=".")
-kf(9)
 kf(9, "trans")
-@ 
-  kfun(0.1)
 @ 
 
 \subsection{Special operations}
