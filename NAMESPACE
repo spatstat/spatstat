@@ -50,6 +50,7 @@ export("spatstat.family")
 S3method("plot", "foo")
 S3method("print", "autoexec")
 S3method("print", "bugtable")
+S3method("print", "changetable")
 # ......................................... 
 #      Assignment methods                   
 # ......................................... 

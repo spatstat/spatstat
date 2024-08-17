@@ -20,6 +20,7 @@
 
 \method{print}{autoexec}(x, \dots)
 \method{print}{bugtable}(x, \dots)
+\method{print}{changetable}(x, \dots)
 }
 \details{
   These internal \pkg{spatstat} functions should not be called
