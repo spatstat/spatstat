@@ -32,11 +32,13 @@ import(spatstat.linnet)
 # .................................................. 
 export("beginner")
 export("bugfixes")
+export("changes")
 export("foo")
 export("latest.news")
 export("plot.foo")
 export("print.autoexec")    
 export("print.bugtable")
+export("print.changetable")
 export("spatstat.family")
 
 # .......  Special cases ........... 

@@ -1,9 +1,17 @@
 
-        CHANGES IN spatstat VERSION 3.1-1.002
+        CHANGES IN spatstat VERSION 3.1-1.003
 
 OVERVIEW
 
     o Tweaks to documentation.
+
+    o List the history of all changes made to a function in spatstat.
+
+NEW FUNCTIONS
+
+    o changes
+    Lists the history of all changes that have been made to
+    a particular function in the spatstat family of packages.
 
 
         CHANGES IN spatstat VERSION 3.1-1

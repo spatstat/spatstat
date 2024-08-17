@@ -17,6 +17,7 @@
   \item{sinceversion}{
     Earliest version of \code{package}
     for which bugs should be listed.
+    A character string.
     The default is the current installed version.
   }
   \item{sincedate}{
@@ -74,6 +75,7 @@
   \adrian.
 }
 \seealso{
+  \code{\link{changes}},
   \code{\link{latest.news}},
   \code{\link[utils]{news}}.  
 }

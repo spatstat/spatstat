@@ -6,6 +6,7 @@
 
 \alias{print.autoexec}    
 \alias{print.bugtable}
+\alias{print.changetable}
 
 %%%%%%%
 \description{
