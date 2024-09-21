@@ -367,13 +367,20 @@
 	\code{\link[spatstat.data]{waterstriders}} \tab Insects on water surface 
       }
 
-      \bold{To manipulate a point pattern:}
+      \bold{To display a 2D point pattern:}
 
       \tabular{ll}{
 	\code{\link[spatstat.geom]{plot.ppp}} \tab
 	plot a point pattern (e.g. \code{plot(X)}) \cr
 	\code{spatstat.gui::iplot} \tab
 	plot a point pattern interactively \cr
+	\code{\link[spatstat.geom]{persp.ppp}} \tab
+	perspective plot of marked point pattern
+      }
+
+      \bold{To manipulate a 2D point pattern:}
+
+      \tabular{ll}{
 	\code{\link[spatstat.geom]{edit.ppp}} \tab interactive text editor \cr
 	\code{\link[spatstat.geom]{[.ppp}} \tab
 	extract or replace a subset of a point pattern \cr

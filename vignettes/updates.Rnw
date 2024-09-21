@@ -6,7 +6,7 @@
 
 % \VignetteIndexEntry{Summary of Recent Updates to the Spatstat Family}
 
-% $Revision: 1.73 $ $Date: 2024/06/17 09:33:36 $
+% $Revision: 1.74 $ $Date: 2024/09/09 05:26:36 $
 
 \newcommand{\pkg}[1]{\texttt{#1}}
 \newcommand{\code}[1]{\texttt{#1}}
@@ -326,6 +326,16 @@ the News and Release Notes for each update.
     
   \item packages \pkg{spatstat.geom}, \pkg{spatstat.random}
     and \pkg{spatstat.explore} now depend on \pkg{spatstat.univar}.
+    
+  \item Perspective plot of spatial point pattern with numerical marks.
+    
+  \item Quantiles using linear approximation.
+    
+  \item Extract the knots (jump points) of a weighted CDF.
+
+  \item List the history of all changes made to a function in spatstat.
+    
+  \item More efficient prime factorisation.
     
   \item Digits in the decimal representation of a number.
 
@@ -864,6 +874,18 @@ starting with the most recent additions.
 
 \begin{itemize}
   
+\item \texttt{changes}:
+  Lists the history of all changes that have been made to
+  a particular function in the \texttt{spatstat} family of packages.
+
+\item \texttt{persp.ppp}:  For a spatial point pattern with numeric marks,
+    generate a perspective plot in which each data point is
+    shown as a vertical spike, with height proportional to the mark value.
+  
+\item \texttt{knots.ewcdf}: 
+  Method for generic \texttt{knots} for extracting the jump points of a weighted
+    cumulative distribution function.
+  
 \item \texttt{firstdigit}, \texttt{lastdigit}, \texttt{ndigits}:
   digits in the decimal representation of a number.
   
@@ -1054,9 +1076,20 @@ Generate Poisson random variables conditioned to be positive.
   \item \texttt{mean.ecdf, mean.ewcdf}
     Calculate the mean of an empirical cumulative distribution function.
     
-  \item \texttt{rjitter.ppp}
-    This function was previously called \texttt{rjitter}. It is now a method
-    for the new generic function \texttt{rjitter}.
+  \item \texttt{rjitter.ppp}:
+    \begin{itemize}
+    \item 
+      This function was previously called \texttt{rjitter}. It is now a method
+      for the new generic function \texttt{rjitter}.
+    \item 
+      New argument \texttt{adjust} allows the default radius to be adjusted.
+    \item 
+      The resulting point pattern now has attribute \texttt{radius}.
+    \item 
+      If \texttt{retry=TRUE}, the resulting point pattern now has
+      attribute \texttt{tries} which counts the number of trials that were 
+      required.
+    \end{itemize}
   
   \item \texttt{bufftess}:
     Distance buffer tessellation
@@ -2046,6 +2079,7 @@ listed alphabetically.
    \item 
    New arguments \texttt{weights} and \texttt{sigma}.
  \item New argument \texttt{shortcut} allows faster computation.
+ \item Argument \texttt{shortcut} now defaults to \texttt{TRUE}.
  \item Additional arguments \verb!...! are now passed to \texttt{density.ppp}.
    \end{itemize}
 
@@ -3547,7 +3581,12 @@ listed alphabetically.
   \item Changed the default values for \code{do.col} and \code{do.labels}.
     \end{itemize}
 
-  \item \texttt{plot.palmdiag}: Improved calculation of $y$ axis limits.
+  \item \texttt{plot.palmdiag}: 
+    \begin{itemize}
+    \item Improved calculation of $y$ axis limits.
+    \item Improved rule for automatic placement of legend.
+    \end{itemize}
+
     
    \item \texttt{plot.profilepl} ,\texttt{plot.quadratcount}, 
      \texttt{plot.quadrattest}, \texttt{plot.tess}:
@@ -3982,7 +4021,12 @@ listed alphabetically.
    \item \texttt{rshift.ppp}, \texttt{rshift.splitppp}: 
      new argument \texttt{nsim}.
      
-   \item \texttt{rSSI}: Accelerated.
+   \item \texttt{rSSI}: 
+     \begin{itemize}
+     \item Accelerated.
+     \item New argument \texttt{verbose} specifies whether to
+       print progress reports when \texttt{nsim > 1}.
+     \end{itemize}
      
  \item \texttt{rStrauss, rHardcore, rStraussHard, rDiggleGratton, rDGS, rPenttinen:}
    New argument \texttt{drop}.
