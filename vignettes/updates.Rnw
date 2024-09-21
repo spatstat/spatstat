@@ -6,7 +6,7 @@
 
 % \VignetteIndexEntry{Summary of Recent Updates to the Spatstat Family}
 
-% $Revision: 1.74 $ $Date: 2024/09/09 05:26:36 $
+% $Revision: 1.75 $ $Date: 2024/09/21 23:51:29 $
 
 \newcommand{\pkg}[1]{\texttt{#1}}
 \newcommand{\code}[1]{\texttt{#1}}
@@ -874,7 +874,7 @@ starting with the most recent additions.
 
 \begin{itemize}
   
-\item \texttt{changes}:
+\item \texttt{latest.changes}:
   Lists the history of all changes that have been made to
   a particular function in the \texttt{spatstat} family of packages.
 

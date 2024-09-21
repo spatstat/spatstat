@@ -1,5 +1,5 @@
-\name{changes}
-\alias{changes}
+\name{latest.changes}
+\alias{latest.changes}
 \title{
   List Recent Significant Changes to a Function
 }
@@ -10,7 +10,7 @@
   version of the \pkg{spatstat} family of packages.  
 }
 \usage{
-  changes(x,
+  latest.changes(x,
           sinceversion = NULL, sincedate = NULL,
           package = spatstat.family(), show = TRUE)
 }
@@ -86,6 +86,6 @@
   \baddrubaturnbook
 }
 \examples{
-   changes("plot.symbolmap")
+   latest.changes("plot.symbolmap")
 }
 \keyword{documentation}

@@ -1,12 +1,12 @@
 #'
 #'        changes.R
 #' 
-#'    $Revision: 1.2 $ $Date: 2024/08/17 08:53:02 $
+#'    $Revision: 1.3 $ $Date: 2024/09/21 23:46:42 $
 
-changes <- function(x,
-                    sinceversion=NULL, sincedate=NULL,
-                    package=spatstat.family(),
-                    show=TRUE) {
+latest.changes <- function(x,
+                           sinceversion=NULL, sincedate=NULL,
+                           package=spatstat.family(),
+                           show=TRUE) {
   x <- as.character(x)
   package <- as.character(package)
   is.spat <- package %in% spatstat.family(TRUE, TRUE)

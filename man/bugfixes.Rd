@@ -75,7 +75,7 @@
   \adrian.
 }
 \seealso{
-  \code{\link{changes}},
+  \code{\link{latest.changes}},
   \code{\link{latest.news}},
   \code{\link[utils]{news}}.  
 }
