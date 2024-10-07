@@ -327,6 +327,14 @@ the News and Release Notes for each update.
   \item packages \pkg{spatstat.geom}, \pkg{spatstat.random}
     and \pkg{spatstat.explore} now depend on \pkg{spatstat.univar}.
     
+  \item Relative risk estimation using diffusion.
+
+  \item Smoothing using diffusion.
+    
+  \item Tessellations can have any kind of marks.
+    
+  \item Bandwidth selection by non-random bootstrap.
+    
   \item Perspective plot of spatial point pattern with numerical marks.
     
   \item Quantiles using linear approximation.
@@ -873,6 +881,21 @@ Following is a list of all the functions that have been added,
 starting with the most recent additions.
 
 \begin{itemize}
+
+\item \texttt{relriskHeat}, \texttt{relriskHeat.ppp}:
+    Relative risk estimation using diffusion.
+
+  \item \texttt{bw.relriskHeatppp}:
+    Bandwidth selection for \texttt{relriskHeat.ppp}
+    
+  \item \texttt{SmoothHeat}, \texttt{SmoothHeat.ppp}:
+    Smoothing numerical values observed at points, using diffusion.
+  
+  \item \texttt{blurHeat}, \texttt{blurHeat.im}:
+    Image smoothing using diffusion.
+
+  \item \texttt{bw.taylor}: Bandwidth selection for kernel density estimation
+  using Taylor's non-random bootstrap 
   
 \item \texttt{latest.changes}:
   Lists the history of all changes that have been made to
@@ -2735,7 +2758,12 @@ listed alphabetically.
   and a linear network (yielding a tessellation on the network).
 
 \item \texttt{intersect.tess}:
-  New argument \texttt{keepempty}.
+  \begin{itemize}
+  \item Now handles marks of any kind (vector, list, data frame or hyperframe).
+  \item   New argument \texttt{keepempty}.
+  \end{itemize}
+
+
 
 \item \texttt{invoke.symbolmap}: new argument \texttt{angleref}.
  
@@ -3151,6 +3179,10 @@ listed alphabetically.
 \item \texttt{markcrosscorr}:
        Now allows negative mark values, when \texttt{normalise=FALSE}.
    
+ \item \verb!marks<-.tess!:
+    A tessellation can now have any kind of marks
+    (vector, list, data frame or hyperframe).
+   
  \item \texttt{markstat}:
    Now works for point patterns in three dimensions (class \texttt{"pp3"})
    and point patterns on a network (class \texttt{"lpp"}).
@@ -3171,6 +3203,10 @@ listed alphabetically.
    New  argument \texttt{by} makes it possible to find the minimum or maximum
    nearest neighbour distance between each pair of possible types
    in a multitype pattern.
+
+ \item \texttt{model.images.ppm}:
+    Now recognises arguments passed to \texttt{as.mask}
+    to control the pixel raster for the images.
     
  \item \texttt{mppm}:
    \begin{itemize}
@@ -3369,6 +3405,9 @@ listed alphabetically.
     \item New argument \texttt{savemap}.
     \end{itemize}
 
+  \item \texttt{pixelquad}:
+    Now accepts arguments passed to \texttt{as.mask}
+    to control the pixel resolution.
 
  \item \texttt{plot.anylist}:
    \begin{itemize}
@@ -4283,7 +4322,12 @@ listed alphabetically.
 %%T
      
    \item \texttt{tess}:
-   Argument \texttt{window} is ignored when xgrid, ygrid are given.
+     \begin{itemize}
+     \item A tessellation can now have any kind of marks
+    (vector, list, data frame or hyperframe).
+     \item Argument \texttt{window} is ignored when xgrid, ygrid are given.
+     \end{itemize}
+
 
   \item \texttt{texturemap}:
     Argument \texttt{textures} can be missing or NULL.

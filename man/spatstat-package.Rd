@@ -603,7 +603,9 @@
 	\code{\link[spatstat.geom]{is.im}} \tab test whether an object is a pixel image\cr
 	\code{\link[spatstat.geom]{interp.im}} \tab interpolate a pixel image\cr
 	\code{\link[spatstat.explore]{blur}} \tab apply Gaussian blur to image\cr
+	\code{\link[spatstat.explore]{blurHeat}} \tab apply diffusion blur to image\cr
 	\code{\link[spatstat.explore]{Smooth.im}} \tab apply Gaussian blur to image\cr
+	\code{\link[spatstat.explore]{SmoothHeat.im}} \tab apply diffusion blur to image\cr
 	\code{\link[spatstat.geom]{connected.im}} \tab find connected components \cr
 	\code{\link[spatstat.geom]{compatible.im}} \tab test whether two images have
 	compatible dimensions \cr
@@ -880,7 +882,9 @@
   \tabular{ll}{
     \code{\link[spatstat.explore]{density.ppp}} \tab kernel smoothed density/intensity\cr
     \code{\link[spatstat.explore]{relrisk}} \tab kernel estimate of relative risk\cr
+    \code{\link[spatstat.explore]{relriskHeat}} \tab diffusion estimate of relative risk\cr
     \code{\link[spatstat.explore]{Smooth.ppp}} \tab spatial interpolation of marks  \cr
+    \code{\link[spatstat.explore]{SmoothHeat.ppp}} \tab spatial interpolation of marks  \cr
     \code{\link[spatstat.explore]{bw.diggle}} \tab cross-validated bandwidth selection
                                for \code{\link[spatstat.explore]{density.ppp}}\cr
     \code{\link[spatstat.explore]{bw.ppl}} \tab likelihood cross-validated bandwidth selection
@@ -892,6 +896,8 @@
     \code{\link[spatstat.univar]{bw.abram}} \tab Abramson's rule for adaptive bandwidths\cr
     \code{\link[spatstat.explore]{bw.relrisk}} \tab cross-validated bandwidth selection
                                for \code{\link[spatstat.explore]{relrisk}} \cr
+    \code{\link[spatstat.explore]{bw.relriskHeatppp}} \tab cross-validated bandwidth selection
+                               for \code{\link[spatstat.explore]{relriskHeat.ppp}} \cr
     \code{\link[spatstat.explore]{bw.smoothppp}} \tab cross-validated bandwidth selection
                                for \code{\link[spatstat.explore]{Smooth.ppp}} \cr
     \code{\link[spatstat.explore]{bw.frac}} \tab bandwidth selection using window geometry\cr
