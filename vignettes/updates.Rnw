@@ -192,16 +192,18 @@ AppendVersion <- function(pkg, sizetable, v, allow.devel=FALSE) {
   if(is.null(lastrow)) return(v)
   rbind(v, data.frame(package=pkg, version=lastrow[,"version"], date=as.Date(lastrow[,"date"])))
 }
+vtable <- AppendVersion("spatstat.utils", zutils, vtable)
+vtable <- AppendVersion("spatstat.data", zdata, vtable)
+vtable <- AppendVersion("spatstat.sparse", zsparse, vtable)
+vtable <- AppendVersion("spatstat.univar", zunivar, vtable)
 vtable <- AppendVersion("spatstat.geom", zgeom, vtable)
 vtable <- AppendVersion("spatstat.random", zrandom, vtable)
 vtable <- AppendVersion("spatstat.explore", zexplore, vtable)
 vtable <- AppendVersion("spatstat.model", zmodel, vtable)
-##vtable <- AppendVersion("spatstat.core", zcore, vtable)
 vtable <- AppendVersion("spatstat.linnet", zlinnet, vtable)
-vtable <- AppendVersion("spatstat.sparse", zsparse, vtable)
-vtable <- AppendVersion("spatstat.data", zdata, vtable)
-vtable <- AppendVersion("spatstat.univar", zunivar, vtable)
-vtable <- AppendVersion("spatstat.utils", zutils, vtable)
+## move spatstat to the bottom
+vtable <- rbind(vtable[-1, ], vtable[1, ])
+## add extras
 vtable <- AppendVersion("spatstat.local", zlocal, vtable)
 vtable <- AppendVersion("spatstat.Knet", zKnet, vtable)
 vtable <- AppendVersion("spatstat.gui", zgui, vtable)
@@ -326,6 +328,8 @@ the News and Release Notes for each update.
     
   \item packages \pkg{spatstat.geom}, \pkg{spatstat.random}
     and \pkg{spatstat.explore} now depend on \pkg{spatstat.univar}.
+    
+  \item Boundary-corrected kernel density estimation on the positive half-line.
     
   \item Relative risk estimation using diffusion.
 
@@ -882,6 +886,13 @@ starting with the most recent additions.
 
 \begin{itemize}
 
+\item \texttt{densityBC}:
+  An extension of density.default that includes boundary corrections
+    for truncation of the density to the positive half line.
+
+\item \texttt{densityAdaptiveKernel.default}:
+    Variable-bandwidth boundary-corrected kernel density estimation.
+    
 \item \texttt{relriskHeat}, \texttt{relriskHeat.ppp}:
     Relative risk estimation using diffusion.
 
