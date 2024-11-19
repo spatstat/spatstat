@@ -6,7 +6,7 @@
 
 % \VignetteIndexEntry{Summary of Recent Updates to the Spatstat Family}
 
-% $Revision: 1.75 $ $Date: 2024/09/21 23:51:29 $
+% $Revision: 1.76 $ $Date: 2024/11/18 08:18:36 $
 
 \newcommand{\pkg}[1]{\texttt{#1}}
 \newcommand{\code}[1]{\texttt{#1}}
@@ -328,6 +328,8 @@ the News and Release Notes for each update.
     
   \item packages \pkg{spatstat.geom}, \pkg{spatstat.random}
     and \pkg{spatstat.explore} now depend on \pkg{spatstat.univar}.
+
+  \item Shortest path between two points on a network.
     
   \item Boundary-corrected kernel density estimation on the positive half-line.
     
@@ -338,6 +340,8 @@ the News and Release Notes for each update.
   \item Tessellations can have any kind of marks.
     
   \item Bandwidth selection by non-random bootstrap.
+    
+  \item More control over default colours.
     
   \item Perspective plot of spatial point pattern with numerical marks.
     
@@ -885,6 +889,13 @@ Following is a list of all the functions that have been added,
 starting with the most recent additions.
 
 \begin{itemize}
+
+\item \texttt{default.image.colours}, \texttt{reset.default.image.colours}:
+  control the default colours used for plotting images in \texttt{spatstat}.
+
+\item \texttt{shortestpath}:
+  Find the shortest path between two specified points on a network,
+    and return it as a line segment pattern.
 
 \item \texttt{densityBC}:
   An extension of density.default that includes boundary corrections
