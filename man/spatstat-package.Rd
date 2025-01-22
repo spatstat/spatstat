@@ -1846,6 +1846,7 @@
   made substantial contributions of code.
 
   Additional contributions and suggestions from
+  Mohomed Abraj,
   Monsuru Adepeju,
   Corey Anderson,
   Ang Qi Wei,
@@ -1854,7 +1855,6 @@
   Robert Aue,
   Marcel Austenfeld,
   Sandro Azaele,
-  Malissa Baddeley,
   Guy Bayegnak,
   Colin Beale,
   Melanie Bell,
@@ -1920,6 +1920,7 @@
   Paul Hewson,
   Hamidreza Heydarian,
   Kassel Hingee,
+  Stephanie Hogg,
   Kurt Hornik,
   Philipp Hunziker,
   Jack Hywood,
@@ -2028,6 +2029,7 @@
   Torben Tvedebrink,
   Kevin Ummer,
   Medha Uppala,
+  Malissa Usher,
   Andrew van Burgel,
   Tobias Verbeke,
   Mikko Vihtakari,
@@ -2043,9 +2045,10 @@
   Selene Wong,
   Maxime Woringer,
   Luke Yates,
-  Mike Zamboni
+  Mike Zamboni,
+  Achim Zeileis
   and
-  Achim Zeileis.
+  Tingting Zhan.
 }
 \keyword{spatial}
 \keyword{package}

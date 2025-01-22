@@ -1090,6 +1090,13 @@ the presence of a bug is obvious, and the bug would not have misled the user.
    \item \texttt{predict.ppm}:
      Argument \texttt{eps} was ignored in many cases.
      \bugalways{spatstat.model 3.2-12}{may 2024}
+
+   \item \texttt{lppm}:
+    For models involving covariates of class \texttt{lintess}, the internal
+    structure of the fitted model was corrupted, leading to errors in
+    calculating properties of the fitted model, such as \texttt{predict.lppm}.
+    \bugin{spatstat.linnet 3.1-2}{october 2023}{spatstat.linnet 3.2-5}{january 2025}
+
 \end{itemize}
 
 \begin{thebibliography}{1}

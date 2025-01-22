@@ -70,6 +70,30 @@
   are \emph{not} reported. To include these changes as well,
   set \code{package=spatstat.family(TRUE,TRUE)}.
 }
+\section{Pattern matching}{
+  The first argument \code{x} is interpreted as a pattern to be matched
+  using \code{\link[base]{grepl}}.
+  
+  For example if \code{x = "ppp"}, then this will match any news items
+  that are about \code{ppp}, but will also match any news items
+  about \code{plot.ppp}, \code{print.ppp}, \code{ppplist},
+  \code{pppmatch}, \code{[.ppp} and so on.
+
+  The pattern \code{x = "^ppp"} will match only those strings
+  which begin with \code{"ppp"}, such as \code{ppp}, \code{ppplist},
+  \code{pppmatch}. The symbol \code{^} means the start of the string.
+
+  The pattern \code{x = "^ppp$"} will match only the string
+  \code{"ppp"}. The symbol \code{$} means the end of the string.
+
+  The pattern \code{x = "\\.ppp$"} will match only those strings which
+  end with \code{".ppp"}, such as \code{plot.ppp}, \code{print.ppp},
+  \code{[.ppp}. The symbol \code{.} has a special meaning, but here we
+  want  the character \code{"."},
+  so we use \code{\\} to escape the special
+  meaning, so that \code{\\.} means the character \code{"."},
+  and \code{"\\.ppp$"} means any string ending in \code{".ppp"}.
+}
 \value{
   (Invisibly) a data frame, belonging to the class \code{"changetable"},
   which has a \code{print} method.

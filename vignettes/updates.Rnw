@@ -6,7 +6,7 @@
 
 % \VignetteIndexEntry{Summary of Recent Updates to the Spatstat Family}
 
-% $Revision: 1.76 $ $Date: 2024/11/18 08:18:36 $
+% $Revision: 1.77 $ $Date: 2024/11/20 00:44:21 $
 
 \newcommand{\pkg}[1]{\texttt{#1}}
 \newcommand{\code}[1]{\texttt{#1}}
@@ -329,6 +329,14 @@ the News and Release Notes for each update.
   \item packages \pkg{spatstat.geom}, \pkg{spatstat.random}
     and \pkg{spatstat.explore} now depend on \pkg{spatstat.univar}.
 
+  \item Improvements to plotting of images, and arrays of images.
+
+  \item More control over plotting of colour maps, symbol maps and texture maps.
+
+  \item Hyperframes handle a \texttt{Surv} object as a single column.
+    
+  \item New dataset \texttt{shelling}.
+    
   \item Shortest path between two points on a network.
     
   \item Boundary-corrected kernel density estimation on the positive half-line.
@@ -854,6 +862,7 @@ These are now provided in the sub-package \pkg{spatstat.data}.
  \item \texttt{concrete}: air bubbles in concrete.
  \item \texttt{btb}: bovine tuberculosis occurrences.
  \item \texttt{stonetools}: palaeolithic stone tools and bone fragments.
+ \item \texttt{shelling}: artillery impacts in Ukraine.
 \end{itemize}
 
 \section{New classes}
@@ -890,6 +899,10 @@ starting with the most recent additions.
 
 \begin{itemize}
 
+\item \texttt{rev.colourmap}:
+  Reverses the sequence of colour values in a colour map.
+  A method for the generic \texttt{rev}.
+
 \item \texttt{default.image.colours}, \texttt{reset.default.image.colours}:
   control the default colours used for plotting images in \texttt{spatstat}.
 
@@ -898,7 +911,8 @@ starting with the most recent additions.
     and return it as a line segment pattern.
 
 \item \texttt{densityBC}:
-  An extension of density.default that includes boundary corrections
+  An extension of \texttt{stats::density.default} 
+  that includes boundary corrections
     for truncation of the density to the positive half line.
 
 \item \texttt{densityAdaptiveKernel.default}:
@@ -2694,6 +2708,10 @@ listed alphabetically.
  \item \texttt{hyperframe}: 
    \begin{itemize}
    \item 
+     An object of class \texttt{Surv} from the \texttt{survival} package
+     is now treated as a single column of data
+     (mimicking the behaviour of \texttt{data.frame})
+   \item 
    The formal default value of \texttt{stringsAsFactors}
    has been changed to \texttt{NULL}
    to conform to changes in R. (The actual default value is \texttt{TRUE}
@@ -3417,6 +3435,14 @@ listed alphabetically.
  \item \code{persp.funxy}:
    Improved $z$-axis label.
    
+ \item \code{persp.im}:
+    Now recognises argument \texttt{adj.main}
+    controlling the position of main title.
+   
+ \item \code{persp.ppp}:
+    Now recognises argument \texttt{adj.main}
+    controlling the position of main title.
+   
   \item \texttt{pixellate.ppp}:
     \begin{itemize}
     \item If the pattern is empty, the result is an integer-valued image
@@ -3449,6 +3475,7 @@ listed alphabetically.
 
  \item \texttt{plot.colourmap}:
    \begin{itemize}
+   \item New formal argument \texttt{side}.
    \item Now handles a colour map for a zero-length interval [a,a]
    \item 
    New argument \texttt{increasing} specifies whether the colours are
@@ -3469,7 +3496,16 @@ listed alphabetically.
    
  \item \texttt{plot.im}:
    \begin{itemize}
-   \item New argument \texttt{addcontour} specifies that contour lines should be drawn
+   \item 
+     New argument \texttt{drop.ribbon} determines whether a ribbon
+     will be displayed
+     in the case where the pixel values are all equal.
+     Default behaviour has changed.
+   \item 
+     New argument \texttt{reverse.col} allows the sequence of colours
+     to be reversed.
+   \item 
+     New argument \texttt{addcontour} specifies that contour lines should be drawn
     over the image plot.
    \item  Now handles complex-valued images.
    \item  New argument \texttt{workaround} to avoid a bug in some MacOS
@@ -3487,8 +3523,14 @@ listed alphabetically.
    \end{itemize}
 
  \item \texttt{plot.imlist}:
-   Result is now an (invisible) list containing the result
+   \begin{itemize}
+   \item New argument \texttt{equal.scales}.
+   \item If \texttt{equal.ribbon=TRUE} and \texttt{equal.scales=TRUE},
+         the colour ribbon
+         is now neatly aligned with the plotted images.
+   \item Result is now an (invisible) list containing the results
    from executing the plot of each panel.
+   \end{itemize}
 
  \item \texttt{plot.influence.ppm}:
    New argument \texttt{multiplot}.
@@ -3656,6 +3698,11 @@ listed alphabetically.
 
     \item \texttt{plot.solist}:
       \begin{itemize}
+      \item 
+        Arguments \texttt{adorn.left}, \texttt{adorn.right}, 
+        \texttt{adorn.bottom}, \texttt{adorn.top}
+        may now be objects of class \texttt{colourmap} or \texttt{symbolmap}.
+      \item New argument \texttt{adorn.args}.
       \item When \texttt{equal.ribbon=TRUE}, the images may now be factor-valued
         or character-valued. Character-valued images will be converted
         to factor-valued images. The common colour map will combine the
@@ -3672,6 +3719,7 @@ listed alphabetically.
       
     \item \texttt{plot.symbolmap}:
       \begin{itemize}
+      \item New formal argument \texttt{side}.
       \item New argument \texttt{colour.only} makes
         it possible to display only the colour map information in a symbol map.
       \item New argument \texttt{warn}.
@@ -3680,6 +3728,9 @@ listed alphabetically.
       \item New argument \texttt{nsymbols} controls the number of symbols plotted.
       \end{itemize}
 
+    \item \texttt{plot.texturemap}:
+      new formal argument \texttt{side}.
+      
    \item \code{ponderosa}:
     In this installed dataset, the function \code{ponderosa.extra\$plotit}
     has changed slightly (to accommodate the
@@ -3869,12 +3920,14 @@ listed alphabetically.
      New argument \texttt{mu}.
 
    \item \texttt{rebound.owin}: Now preserves unitnames of the objects.
-
      
    \item \texttt{rescale.owin}, \texttt{rescale.ppp}, \texttt{rescale.psp}:
      The geometrical type of the window is now preserved in all cases.
      (Previously if the window was polygonal but was equivalent to a 
      rectangle, the rescaled window was a rectangle.)
+     
+   \item \texttt{reload.or.compute}:
+     New argument \texttt{exclude} specifies which objects should not be saved.
      
    \item \texttt{rgbim, hsvim}:
    New argument \texttt{A} controls the alpha (transparency) channel.
