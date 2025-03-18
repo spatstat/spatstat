@@ -6,7 +6,7 @@
 
 % \VignetteIndexEntry{Summary of Recent Updates to the Spatstat Family}
 
-% $Revision: 1.77 $ $Date: 2024/11/20 00:44:21 $
+% $Revision: 1.78 $ $Date: 2025/03/18 01:00:10 $
 
 \newcommand{\pkg}[1]{\texttt{#1}}
 \newcommand{\code}[1]{\texttt{#1}}
@@ -151,9 +151,10 @@ This document summarises the most important changes.
 
 <<echo=FALSE,results=hide,fig=FALSE>>=
 options(SweaveHooks=list(fig=function() par(mar=0.2+c(2,4,2,0))))
-Plot <- function(fmla, ..., dat=z) {
+Plot <- function(fmla, ..., dat=z, ylim=NULL) {
   yvals <- eval(as.expression(fmla[[2]]), envir=dat)
-  plot(fmla, ..., data=dat, type="l", xlab="", lwd=2, ylim=c(0, max(yvals)))
+  if(is.null(ylim)) ylim <- c(0, max(yvals))
+  plot(fmla, ..., data=dat, type="l", xlab="", ylim=ylim, lwd=2, las=1)
 }
 @ 
 \SweaveOpts{eps=TRUE}
@@ -246,7 +247,8 @@ Typing \code{library(spatstat)} will load the familiar
     \item 
       The \code{spatstat} package now contains
       only documentation and introductory material.
-      It provides beginner's introductions, vignettes, interactive demonstration
+      It provides beginner's introductions, latest news, 
+      vignettes, interactive demonstration
       scripts, and a few help files summarising the package.
     \item 
       The \pkg{spatstat.data} package now contains all the datasets
@@ -335,7 +337,21 @@ the News and Release Notes for each update.
 
   \item Hyperframes handle a \texttt{Surv} object as a single column.
     
+  \item New dataset \texttt{meningitis}.
+    
   \item New dataset \texttt{shelling}.
+
+  \item Methods for functions which are constant on each tile of a tessellation.
+
+  \item New estimator of pair correlation function.
+
+  \item New methods for bandwidth selection for pair correlation estimation.
+    
+  \item Helper functions for measuring estimator performance.
+    
+  \item Recognise powers of an integer.
+    
+  \item Prime factorisation computation improved.
     
   \item Shortest path between two points on a network.
     
@@ -898,7 +914,30 @@ Following is a list of all the functions that have been added,
 starting with the most recent additions.
 
 \begin{itemize}
+  
+\item \texttt{integral.tessfun}:
+  Integral of a function which is constant on each tile of a tessellation.
+\item \texttt{print.tessfun, plot.tessfun, as.tess.tessfun}:
+  Methods for the class \texttt{"tessfun"} of functions which are constant
+  on each tile of a tessellation.
+\item \texttt{bw.bdh}:
+  Adjust bandwidth of kernel estimate of pair correlation function,
+  to account for inhomogeneity.
 
+\item \texttt{bw.pcfinhom}:
+    Cross-validation rule for selecting bandwidth of kernel estimate
+    of (inhomogeneous) pair correlation function.
+
+\item \texttt{ptwise.envelope, bias.envelope, RMSE.envelope}:
+    Calculate pointwise statistics of the simulated function values
+    in an envelope object.
+\item     \texttt{ISE.envelope, ISB.envelope, IV.envelope}:
+    Integrated squared error, integrated squared bias, integrated variance
+    of the simulated function values in an envelope object.
+\item \texttt{MISE.envelope}:
+    Mean integrated squared error of the simulated function values
+    in an envelope object.
+    
 \item \texttt{rev.colourmap}:
   Reverses the sequence of colour values in a colour map.
   A method for the generic \texttt{rev}.
@@ -2168,12 +2207,18 @@ listed alphabetically.
   \item  \texttt{bw.smoothppp}:
     New argument \texttt{varcov1} for anisotropic bandwidth selection.
 
-  \item \texttt{bw.stoyan}: The rule has been modified so that, 
+  \item \texttt{bw.stoyan}: 
+    \begin{itemize}
+    \item 
+    The rule has been modified so that, 
     if the pattern is empty,
     it is now treated as if it contained 1 point,
     so that a finite bandwidth value is returned.
-    
-%%C
+    \item New argument \texttt{extrapolate} supports a modification
+      of Stoyan's rule.
+  \end{itemize}    
+  
+  %% C
     
  \item \texttt{cbind.fv}:
    \begin{itemize}
@@ -3387,8 +3432,8 @@ listed alphabetically.
    
  \item \texttt{pcf.ppp}:
    \begin{itemize}
-   \item
-	New argument \code{close} for advanced use.
+   \item New option: \texttt{divisor="a"} calculates a new estimator of the pcf
+    with improved performance.
    \item 
      New argument \texttt{ratio} allows several estimates of pcf to be pooled.
    \item 
@@ -3414,6 +3459,8 @@ listed alphabetically.
 
  \item \texttt{pcfinhom}:
    \begin{itemize}
+   \item New option: \texttt{divisor="a"} calculates a new estimator of the pcf
+    with improved performance.
    \item  
      New arguments \texttt{adjust.sigma} and \texttt{adjust.bw} allow
     separate adjustment of the one-dimensional smoothing bandwidth \texttt{bw}
@@ -3492,7 +3539,11 @@ listed alphabetically.
    \end{itemize}
 
  \item \texttt{plot.fv}:
-   New argument \texttt{clip.xlim}.
+   \begin{itemize}
+   \item New argument \texttt{do.plot}.
+   \item 
+     New argument \texttt{clip.xlim}.
+   \end{itemize}
    
  \item \texttt{plot.im}:
    \begin{itemize}
@@ -3730,6 +3781,17 @@ listed alphabetically.
 
     \item \texttt{plot.texturemap}:
       new formal argument \texttt{side}.
+      
+    \item \texttt{plot.yardstick}:
+      \begin{itemize}
+      \item 
+        new argument \texttt{style} allows different styles of
+        plotting a scale bar, including a zebra pattern 
+        (\texttt{style = "zebra"}).
+      \item 
+        New arguments \texttt{zebra.step}, \texttt{zebra.width}, 
+        \texttt{zebra.col}.
+      \end{itemize}
       
    \item \code{ponderosa}:
     In this installed dataset, the function \code{ponderosa.extra\$plotit}
@@ -4117,7 +4179,15 @@ listed alphabetically.
       \texttt{win} when \texttt{f} is a pixel image.
     
    \item \texttt{rpoispp}:
-   Accelerated, when \texttt{lambda} is a pixel image.
+     \begin{itemize}
+     \item 
+        Improved algorithm in the case where the intensity \texttt{lambda} is
+        a function of class \texttt{"tessfun"} representing a function which is
+        constant on each tile of a tessellation.
+     \item 
+       Accelerated, when \texttt{lambda} is a pixel image.
+     \end{itemize}
+
 
    \item \texttt{rpoisppx}:
    	New argument \code{drop}.

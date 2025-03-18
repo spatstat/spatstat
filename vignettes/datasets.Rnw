@@ -8,7 +8,7 @@ options(SweaveHooks=list(fig=function() par(mar=c(1,1,1,1))))
 
 \usepackage{graphicx}
 \usepackage{anysize}
-\marginsize{2cm}{2cm}{2cm}{2cm}
+\marginsize{1.7cm}{1.7cm}{1.7cm}{1.7cm}
 
 \newcommand{\pkg}[1]{\texttt{#1}}
 \newcommand{\bold}[1]{{\textbf {#1}}}
@@ -130,6 +130,8 @@ that are supplied with the current installation of \sdat:
                species & \nocov & \recto \\
 {\tt longleaf} & trees & 
               diameter & \nocov &  \recto \\
+{\tt meningitis} & disease cases & 
+              serotype & population density &  \irregpoly \\
 {\tt mucosa}   & gastric mucosa cells & 
               cell type & \nocov &  \recto \\
 {\tt murchison} & gold deposits & \nomarks & faults, rock type & \irregpoly \\
@@ -142,6 +144,7 @@ that are supplied with the current installation of \sdat:
 {\tt redwoodfull} & saplings & 
               \nomarks & zones & \recto \\
 {\tt shapley} & galaxies & magnitude, recession, SE & \nocov & \convpoly \\
+{\tt shelling} & artillery impacts & \nomarks & \nocov & \irregpoly \\
 {\tt simdat} & simulated pattern & \nomarks & \nocov & \recto \\
 {\tt sporophores} & fungi & species & \nocov &  \disc \\
 {\tt spruces} & trees & diameter & \nocov &  \recto \\
@@ -651,6 +654,20 @@ Locations and diameters of Longleaf pine trees.
 plot(longleaf)
 @ 
 
+\subsubsection*{\texttt{meningitis}: Meningitis Cases}
+
+Spatial locations of cases of invasive meningitis in Germany,
+labelled by serotype. Auxiliary data gives average population density
+in each administrative district.
+  
+<<fig=TRUE>>=
+pa <- function(i) {
+   if(i == 1) list(cols=c("red", "green")) else 
+   list(do.col=TRUE, col=grey(seq(1,0,length=32)))
+}
+plot(meningitis, panel.args=pa)
+@ 
+
 \subsubsection*{\texttt{mucosa}: Gastric Mucosa Cells}
 
 A bivariate inhomogeneous point pattern, giving the locations of
@@ -838,6 +855,15 @@ Sky positions of 4215 galaxies in the Shapley Supercluster
 <<fig=TRUE>>=
 shapley.extra$plotit(main="Shapley")
 @  %$
+
+\subsubsection*{\texttt{shelling}: Artillery shell impacts}
+
+Spatial locations of artillery shell impacts in a field in Ukraine.
+
+<<fig=TRUE>>=
+plot(shelling, pch=3)
+plot(onearrow(830, 400, 830, 530, "N"), add=TRUE)
+@
 
 \subsubsection*{\texttt{simdat}: Simulated data}
 
