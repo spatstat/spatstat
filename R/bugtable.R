@@ -1,7 +1,7 @@
 #'
 #'        bugtable.R
 #' 
-#'    $Revision: 1.10 $ $Date: 2021/09/06 05:28:59 $
+#'    $Revision: 1.16 $ $Date: 2025/03/21 07:17:48 $
 
 bugfixes <- function(sinceversion=NULL, sincedate=NULL,
                      package=spatstat.family(),
@@ -16,6 +16,7 @@ bugfixes <- function(sinceversion=NULL, sincedate=NULL,
   n <- length(package)
   z <- NULL
   for(i in seq_len(n)) {
+    #' extract bug reports for package [i]
     packi <- package[i]
     if("all" %in% list(sinceversion, sincedate)) {
       ## no date constraint - show all news
@@ -33,22 +34,54 @@ bugfixes <- function(sinceversion=NULL, sincedate=NULL,
                                 package=packi),
                            list(SD=sincedate)))
     } else {
-      #' determine a corresponding version number
+      #' Determine a starting version number (for this package i)
+      #' using the arguments 'sincedate' and 'sinceversion'
+      #' (whichever is more restrictive)
+      startversion <- NULL
       if(is.null(sinceversion) && is.null(sincedate)) {
         #' default is latest version
         dfile <- system.file("DESCRIPTION", package=packi)
-        sinceversion <- read.dcf(file=dfile, fields="Version")
+        startversion <- read.dcf(file=dfile, fields="Version")
       } else if(!is.null(sincedate) && is.spat[i]) {
+        #' news items on or after specified date 'sincedate'
         #' read release history table
         fname <- system.file("doc", "packagesizes.txt", package=packi)
-        p <- read.table(fname, header=TRUE, stringsAsFactors=FALSE)
-        #' find earliest package version on or after the given date
-        imin <- with(p, min(which(as.Date(date) >= sincedate)))
-        sinceversion <- p[imin, "version"]
+        if(nchar(fname) > 0) {
+          ## File was found.
+          p <- try(read.table(fname, header=TRUE, stringsAsFactors=FALSE,
+                              col.names=c("date", "version",
+                                          "nhelpfiles", "nobjects", "ndatasets",
+                                          "Rlines", "srclines")))
+          if(!inherits(p, "try-error") && nrow(p) > 0) {
+            #' Table data were read in successfully and are non-empty.
+            #' Find entries on or after the given date
+            rowsAfter <- with(p, which(as.Date(date) >= sincedate))
+            if(length(rowsAfter) > 0) {
+              #' Find earliest entry 
+              imin <- min(rowsAfter)
+              #' Start from this version
+              startversion <- p[imin, "version"]
+            }
+          }
+        }
       }
-      a <- eval(substitute(news(Version >= sv & grepl("^BUG", Category),
-                                package=packi),
-                           list(sv=sinceversion)))
+      if(!is.null(sinceversion)) {
+        ## Argument 'sinceversion' was given
+        if(is.null(startversion) ||
+           as.package_version(sinceversion) > startversion) {
+          ## 'sinceversion' overrides calculated 'startversion'
+          ## for this package
+          startversion <- sinceversion
+        }
+      }
+      if(is.null(startversion)) {
+        #' There is no relevant package history
+        a <- NULL
+      } else {
+        a <- eval(substitute(news(Version >= sv & grepl("^BUG", Category),
+                                  package=packi),
+                             list(sv=startversion)))
+      }
     }
     #' convert format
     if(is.data.frame(a) && nrow(a) > 0) {
@@ -70,7 +103,7 @@ bugfixes <- function(sinceversion=NULL, sincedate=NULL,
                        Version=a$Version,
                        stringsAsFactors=FALSE)
       if(n > 1) zi$Package <- packi
-      z <- if(i == 1) zi else rbind(z, zi)
+      z <- if(is.null(z)) zi else rbind(z, zi)
     } 
   }
   if(is.null(z)) return(NULL)
