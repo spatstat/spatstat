@@ -1,12 +1,20 @@
 
-        CHANGES IN spatstat VERSION 3.3-1.002
+        CHANGES IN spatstat VERSION 3.3-2
 
 OVERVIEW
 
     o Updated version dependencies for spatstat package family.
 
     o Updated documentation.
+
+    o Bug fix in 'bugfixes'
     
+BUG FIXES
+
+    o bugfixes
+    Crashed on some installations due to problems with file permissions.
+    Fixed.
+
 
         CHANGES IN spatstat VERSION 3.3-1
 
