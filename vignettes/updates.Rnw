@@ -349,9 +349,18 @@ the News and Release Notes for each update.
     
   \item Helper functions for measuring estimator performance.
     
+  \item Conditional simulation in \texttt{rLGCP},
+    \texttt{rThomas}, \texttt{rMatClust}, \texttt{rCauchy}, \texttt{rVarGamma}.
+    
   \item Recognise powers of an integer.
     
   \item Prime factorisation computation improved.
+
+  \item More support for \texttt{interpolatedCDF} objects.
+    
+  \item Nonlinear colour maps and symbol maps.
+    
+  \item Simulation of \texttt{zclustermodel} objects.
     
   \item Shortest path between two points on a network.
     
@@ -915,6 +924,10 @@ starting with the most recent additions.
 
 \begin{itemize}
   
+\item \texttt{plot.interpolateCDF}, \texttt{print.interpolatedCDF}:
+  methods for plotting and printing objects of class \texttt{"interpolatedCDF"}.
+\item \texttt{simulate.zclustermodel}: method for simulating 
+  objects of class \texttt{zclustermodel}.
 \item \texttt{integral.tessfun}:
   Integral of a function which is constant on each tile of a tessellation.
 \item \texttt{print.tessfun, plot.tessfun, as.tess.tessfun}:
@@ -2309,9 +2322,16 @@ listed alphabetically.
   \item New argument \texttt{verbose}.
   \end{itemize}
 
-\item \texttt{colourmap}: argument \texttt{col} have have length 1,
-  representing a trivial colour map in which all data values are
-  mapped to the same colour.
+\item \texttt{colourmap}:
+  \begin{itemize}
+  \item 
+    argument \texttt{col} can have length 1,
+    representing a trivial colour map in which all data values are
+    mapped to the same colour.
+  \item 
+    New arguments \texttt{compress}, \texttt{decompress}
+    for nonlinear colour maps.
+  \end{itemize}
   
 \item \texttt{collapse.fv}:
   \begin{itemize}
@@ -2399,6 +2419,8 @@ listed alphabetically.
  \item \texttt{default.rmhcontrol, default.rmhexpand}:
    New argument \texttt{w}.
 
+ \item \texttt{default.symbolmap.ppp}:
+   Argument \texttt{marktransform} renamed \texttt{transform} for consistency.
    
  \item \texttt{densityfun.ppp}:
    The resulting function can now handle query points which lie
@@ -2676,6 +2698,10 @@ listed alphabetically.
      New arguments \texttt{warn.bias} and \texttt{savelambda}.
    \end{itemize}
    
+ \item \texttt{fastFindInterval}:
+   New argument \texttt{left.open} controls whether intervals are
+   left-open and right-closed, or left-closed and right-open.
+   
  \item \texttt{fitted.lppm}:
   New argument \texttt{leaveoneout}
   allows leave-one-out computation of fitted value.
@@ -2788,6 +2814,8 @@ listed alphabetically.
     \item Computation accelerated
     \item New argument \texttt{fun.handles.na}
     \item New argument \texttt{check}
+    \item Improved algorithm avoids violating memory limits, 
+      handles larger datasets. 
     \end{itemize}
     
  \item \texttt{influence.ppm}:
@@ -3241,9 +3269,16 @@ listed alphabetically.
 
 \item \texttt{lurking.ppm}: accelerated.
   
-\item \texttt{lut}: argument \texttt{outputs} may have length 1, 
+\item \texttt{lut}:
+  \begin{itemize}
+  \item 
+    argument \texttt{outputs} may have length 1, 
   representing a lookup table in which all data values are mapped
   to the same output value.
+\item 
+  New arguments \texttt{compress}, \texttt{decompress} for nonlinear
+  lookup tables.
+\end{itemize}
   
 %%M
    
@@ -3536,6 +3571,8 @@ listed alphabetically.
   \item 
     New argument \texttt{box} controls whether a box will be drawn
     around the colours.
+  \item 
+    New argument \texttt{at} determines the position of tick marks on the axis.
    \end{itemize}
 
  \item \texttt{plot.fv}:
@@ -3571,6 +3608,8 @@ listed alphabetically.
   \item Axes are prevented from extending outside the image rectangle.
   \item New argument \texttt{zap}.
   \item Some warnings are suppressed when \texttt{do.plot=FALSE}.
+  \item Return value has attribute \texttt{"at"} giving the position of 
+    the tick marks on the axis next to the colour ribbon.
    \end{itemize}
 
  \item \texttt{plot.imlist}:
@@ -3937,7 +3976,13 @@ listed alphabetically.
     to the sub-package \texttt{spatstat.sparse}.
     
  \item \texttt{quadratcount.ppp}:
-   Computation accelerated in some cases.
+   \begin{itemize}
+   \item    Computation accelerated in some cases.
+   \item New argument \texttt{left.open} controls the treatment of data points
+    which lie on the boundary between two rectangular quadrats.
+   \end{itemize}
+
+
 
  \item \texttt{quadrat.test.ppm}:
    Computation accelerated in some cases.
@@ -4102,6 +4147,12 @@ listed alphabetically.
          \texttt{"matern"} covariance functions.
        \item 
          Now recognises argument \texttt{rule.eps} passed to \texttt{as.mask}.
+       \item 
+         New arguments \texttt{n.cond} and \texttt{w.cond} specify 
+         conditional simulation. Every realisation will have exactly 
+         \texttt{n = n.cond} points,
+         or exactly \texttt{n.cond} points inside window \texttt{w.cond}
+         if it is given.
        \end{itemize}
 
 
@@ -4242,6 +4293,12 @@ listed alphabetically.
        New argument \texttt{poisthresh} controls this behaviour.
      \item 
        New argument \texttt{saveparents}.
+     \item 
+       New arguments \texttt{n.cond} and \texttt{w.cond} specify 
+       conditional simulation. Every realisation will have exactly 
+       \texttt{n = n.cond} points,
+       or exactly \texttt{n.cond} points inside window \texttt{w.cond}
+       if it is given.
      \end{itemize}
 
      
@@ -4448,7 +4505,8 @@ listed alphabetically.
 
   \item \texttt{sumouter}:
     \begin{itemize}
-    \item New argument \texttt{y} allows computation of asymmetric outer products.
+    \item New argument \texttt{y} 
+      allows computation of asymmetric outer products.
     \item This function has now been moved to the 
       sub-package \texttt{spatstat.sparse}
     \end{itemize}
@@ -4461,6 +4519,8 @@ listed alphabetically.
      \texttt{cols}, \texttt{fg}, \texttt{bg} if the argument \texttt{range}
      is given.
    \item New option: \texttt{shape="arrows"}.
+   \item New arguments \texttt{transform}, \texttt{compress}, 
+     \texttt{decompress} for nonlinear symbol maps.
     \end{itemize}
 
 

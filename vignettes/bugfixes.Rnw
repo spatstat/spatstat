@@ -668,7 +668,7 @@ the presence of a bug is obvious, and the bug would not have misled the user.
  \end{itemize}   
 
  %% LEVEL 4: 
- \subsection{Partially Incorrect}
+ \subsection{Partially Incorrect or Minor}
  \begin{itemize}
    
   \item \texttt{kernel.squint}:
