@@ -67,6 +67,57 @@ separately.
 
 ![Spatstat pieces](RepoStuff/new4spatstat.jpg)
 
+## Installation
+
+### Installing the official release
+
+To install the official release of `spatstat` from CRAN, start `R` and type
+
+```R
+install.packages('spatstat', dependencies=TRUE)
+```
+
+### Installing the development version
+
+You can install the development version of `spatstat`
+from the GitHub repositories (which you are visiting now)
+or from  [r-universe](http://spatstat.r-universe.dev).
+
+The easiest way is to install the development version from `r-universe`:
+
+```R
+repo <- c('https://spatstat.r-universe.dev', 'https://cloud.r-project.org')
+install.packages("spatstat", dependencies=TRUE, repos=repo)
+```
+
+## Bug reports 
+
+Users are encouraged to report bugs.
+If you find a bug in a `spatstat` function,
+please identify the sub-package containing that function.
+Visit the GitHub repository for the sub-package, 
+click the `Issues` tab at the top of the page, 
+and press *new issue* to start a new bug report, documentation correction
+or feature request.
+
+**Please do not post questions** on the Issues pages,
+because they are too clunky for correspondence.
+
+## Questions about spatstat
+
+For questions about `spatstat`, first check 
+the question-and-answer website
+[stackoverflow](http://stackoverflow.com/questions/tagged/spatstat).
+If your question is not listed,
+you can either post your question at stackoverflow, or
+email the authors.
+
+## Proposing changes to the code
+
+Feel free to fork `spatstat` or one of its sub-packages,
+make changes to the code,
+and ask us to include them in the package by making a github *pull request*. 
+
 ## Future development
 
 `spatstat` is the result of 30 years of software development
