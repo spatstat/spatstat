@@ -30,8 +30,9 @@ The original `spatstat` has now been divided into a family of 10 sub-packages:
 | `spatstat` | [![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/spatstat)](http://CRAN.R-project.org/package=spatstat) | [![GitHub R package version](https://img.shields.io/github/r-package/v/spatstat/spatstat)](https://github.com/spatstat/spatstat) | Umbrella package: introduction, vignettes, documentation |
 
 Click the green badge to visit the CRAN page which contains the current
-release of each sub-package. Click the blue badge to visit the GitHub repository
-for the current development version of the sub-package. 
+release of each sub-package.
+Click the blue badge to visit the GitHub repository
+for the current development version of the sub-package
 
 There still exists a package called `spatstat`, which is now an
 **umbrella package** that requires all the sub-packages listed above,
@@ -42,6 +43,10 @@ same way as you would previously have installed and loaded the old `spatstat` pa
 When you install the new umbrella package `spatstat`, all the sub-packages listed above will
 be installed. When you load the new umbrella `spatstat` package in an R session,
 all the sub-packages listed above will be loaded or imported.
+
+Each official release has a version number like `1.2-3`, while a development
+version has a number like `1.2-3.004`, which R recognises as a 
+later version than `1.2-3`.
 
 ## Extension packages
 
@@ -77,6 +82,15 @@ To install the official release of `spatstat` from CRAN, start `R` and type
 install.packages('spatstat', dependencies=TRUE)
 ```
 
+This will install the 10 packages depicted in the pink box above.
+To install the extension packages (blue boxes) you need to do the same
+thing for each extension package, e.g.
+
+```R
+install.packages('spatstat.local')
+```
+
+
 ### Installing the development version
 
 You can install the development version of `spatstat`
@@ -88,6 +102,13 @@ The easiest way is to install the development version from `r-universe`:
 ```R
 repo <- c('https://spatstat.r-universe.dev', 'https://cloud.r-project.org')
 install.packages("spatstat", dependencies=TRUE, repos=repo)
+```
+
+and again to install the development version of
+the extension package `spatstat.local`,
+
+```R
+install.packages("spatstat.local", repos=repo)
 ```
 
 ## Bug reports 
@@ -107,9 +128,9 @@ because they are too clunky for correspondence.
 
 For questions about `spatstat`, first check 
 the question-and-answer website
-[stackoverflow](http://stackoverflow.com/questions/tagged/spatstat).
-If your question is not listed,
-you can either post your question at stackoverflow, or
+[stackoverflow](http://stackoverflow.com/questions/tagged/spatstat)
+to see whether your question has already been asked and answered.
+If not, you can either post your question at stackoverflow, or
 email the authors.
 
 ## Proposing changes to the code
