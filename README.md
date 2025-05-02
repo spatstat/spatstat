@@ -83,12 +83,21 @@ install.packages('spatstat', dependencies=TRUE)
 ```
 
 This will install the 10 packages depicted in the pink box above.
+
 To install the extension packages (blue boxes) you need to do the same
 thing for each extension package, e.g.
 
 ```R
 install.packages('spatstat.local')
 ```
+
+To check that the installation has been successful,
+check that the version numbers of the packages
+(which are printed when you load the packages)
+match the version numbers of the official releases
+listed above (green badges). If this is not true, you may need to un-install
+the previous installation of `spatstat`, or check the file permissions
+which apply to the filespace where `R` is installed.
 
 
 ### Installing the development version
@@ -110,6 +119,9 @@ the extension package `spatstat.local`,
 ```R
 install.packages("spatstat.local", repos=repo)
 ```
+
+Check that the installation was successful by comparing version numbers
+as explained above.
 
 ## Bug reports 
 
