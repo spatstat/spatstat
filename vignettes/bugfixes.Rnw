@@ -1096,7 +1096,12 @@ the presence of a bug is obvious, and the bug would not have misled the user.
     structure of the fitted model was corrupted, leading to errors in
     calculating properties of the fitted model, such as \texttt{predict.lppm}.
     \bugin{spatstat.linnet 3.1-2}{october 2023}{spatstat.linnet 3.2-5}{january 2025}
-
+    
+  \item \verb!"[.lpp"!: if the subset index \texttt{i} or \texttt{j} was a
+    window, network segments which crossed the boundary of this window
+    were not correctly handled in some cases.
+    \bugin{spatstat.linnet 3.0-2}{december 2022}{spatstat.linnet 3.2-6}{may 2025}
+ 
 \end{itemize}
 
 \begin{thebibliography}{1}

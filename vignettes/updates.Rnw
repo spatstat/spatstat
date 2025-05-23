@@ -323,13 +323,23 @@ the News and Release Notes for each update.
 
 \begin{itemize}
 
-  \item New package \pkg{spatstat.univar}.
+  \item Shrinkage estimator of relative risk.
 
-  \item Some functions from \pkg{spatstat.geom}, \pkg{spatstat.random}
-    and \pkg{spatstat.explore} have been moved to \pkg{spatstat.univar}.
+  \item Normalised relative risk.
+
+  \item Extensions to cross-validated bandwidth selection for smoothing.
+  
+  \item Conditional simulation (fixed number of points)
+    in log-Gaussian Cox processes and Neyman-Scott cluster processes.
     
-  \item packages \pkg{spatstat.geom}, \pkg{spatstat.random}
-    and \pkg{spatstat.explore} now depend on \pkg{spatstat.univar}.
+  \item Nonlinear colour maps and symbol maps.
+
+  \item Backgrounds for image plots.
+
+  \item \texttt{quadratcount.ppp} supports 
+    left-closed, right-open rectangular tiles. 
+    
+  \item More support for interpolated CDF objects
 
   \item Improvements to plotting of images, and arrays of images.
 
@@ -888,6 +898,7 @@ These are now provided in the sub-package \pkg{spatstat.data}.
  \item \texttt{btb}: bovine tuberculosis occurrences.
  \item \texttt{stonetools}: palaeolithic stone tools and bone fragments.
  \item \texttt{shelling}: artillery impacts in Ukraine.
+ \item \texttt{meningitis}: meningitis cases in Germany.
 \end{itemize}
 
 \section{New classes}
@@ -924,7 +935,7 @@ starting with the most recent additions.
 
 \begin{itemize}
   
-\item \texttt{plot.interpolateCDF}, \texttt{print.interpolatedCDF}:
+\item \texttt{plot.interpolatedCDF}, \texttt{print.interpolatedCDF}:
   methods for plotting and printing objects of class \texttt{"interpolatedCDF"}.
 \item \texttt{simulate.zclustermodel}: method for simulating 
   objects of class \texttt{zclustermodel}.
@@ -2218,7 +2229,10 @@ listed alphabetically.
     \end{itemize}
 
   \item  \texttt{bw.smoothppp}:
-    New argument \texttt{varcov1} for anisotropic bandwidth selection.
+    \begin{itemize}
+    \item New arguments \texttt{train} and \texttt{test} for cross-validation.
+    \item New argument \texttt{varcov1} for anisotropic bandwidth selection.
+    \end{itemize}
 
   \item \texttt{bw.stoyan}: 
     \begin{itemize}
@@ -2324,6 +2338,7 @@ listed alphabetically.
 
 \item \texttt{colourmap}:
   \begin{itemize}
+  \item New arguments \texttt{compress}, \texttt{decompress} for nonlinear colour maps.
   \item 
     argument \texttt{col} can have length 1,
     representing a trivial colour map in which all data values are
@@ -3584,6 +3599,9 @@ listed alphabetically.
    
  \item \texttt{plot.im}:
    \begin{itemize}
+   \item New arguments \texttt{background} and \texttt{clip.background} 
+     allow the user to specify an object that will be plotted before the
+     image \texttt{x}, and will therefore appear underneath it.
    \item 
      New argument \texttt{drop.ribbon} determines whether a ribbon
      will be displayed
@@ -4028,6 +4046,14 @@ listed alphabetically.
 
    \item \texttt{rebound.owin}: Now preserves unitnames of the objects.
      
+   \item \texttt{relrisk.ppp}:
+     \begin{itemize}
+     \item New argument \texttt{shrink} supports Bithell's shrinkage estimator.
+     \item New argument \texttt{normalise} controls whether the estimate 
+       will be normalised so that constant relative risk
+       corresponds to the value 1.
+     \end{itemize}
+
    \item \texttt{rescale.owin}, \texttt{rescale.ppp}, \texttt{rescale.psp}:
      The geometrical type of the window is now preserved in all cases.
      (Previously if the window was polygonal but was equivalent to a 
@@ -4136,6 +4162,11 @@ listed alphabetically.
      
      \item \texttt{rLGCP}:
        \begin{itemize}
+       \item New arguments \texttt{n.cond} and \texttt{w.cond}
+         specify conditional simulation. Every realisation will have
+         exactly \texttt{n.cond} points in total, 
+         or exactly \texttt{n.cond} points inside window \texttt{w.cond}
+         if it is given.
        \item 
          This function has been completely re-implemented
          so that it no longer requires the package \pkg{RandomFields},
@@ -4280,6 +4311,11 @@ listed alphabetically.
 
    \item \texttt{rThomas, rMatClust, rCauchy, rVarGamma}:
      \begin{itemize}
+     \item New arguments \texttt{n.cond} and \texttt{w.cond}
+       specify conditional simulation. Every realisation will have
+       exactly \texttt{n.cond} points in total, 
+       or exactly \texttt{n.cond} points inside window \texttt{w.cond}
+       if it is given.
      \item 
        These algorithms have been accelerated by several orders of magnitude
        in the case where the cluster radius is large.

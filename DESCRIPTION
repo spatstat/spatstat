@@ -1,6 +1,6 @@
 Package: spatstat
-Version: 3.3-2.002
-Date: 2025-05-22
+Version: 3.3-3
+Date: 2025-05-23
 Title: Spatial Point Pattern Analysis, Model-Fitting, Simulation, Tests
 Authors@R: c(person("Adrian", "Baddeley", 
                     role = c("aut", "cre"),
@@ -15,7 +15,7 @@ Authors@R: c(person("Adrian", "Baddeley",
 		    email = "rubak@math.aau.dk",
 		    comment=c(ORCID="0000-0002-6675-533X")))
 Maintainer: Adrian Baddeley <Adrian.Baddeley@curtin.edu.au>
-Depends: R (>= 3.5.0), spatstat.data (>= 3.1-6), spatstat.univar (>= 3.1-3), spatstat.geom (>= 3.4-1), spatstat.random (>= 3.4-1), spatstat.explore (>= 3.4-3), spatstat.model (>= 3.3-6), spatstat.linnet (>= 3.2-5.001), utils
+Depends: R (>= 3.5.0), spatstat.data (>= 3.1-6), spatstat.univar (>= 3.1-3), spatstat.geom (>= 3.4-1), spatstat.random (>= 3.4-1), spatstat.explore (>= 3.4-3), spatstat.model (>= 3.3-6), spatstat.linnet (>= 3.2-6), utils
 Imports: spatstat.utils (>= 3.1-4)
 Suggests: 
 Description: Comprehensive open-source toolbox for analysing Spatial Point Patterns. Focused mainly on two-dimensional point patterns, including multitype/marked points, in any spatial region. Also supports three-dimensional point patterns, space-time point patterns in any number of dimensions, point patterns on a linear network, and patterns of other geometrical objects. Supports spatial covariate data such as pixel images. 
