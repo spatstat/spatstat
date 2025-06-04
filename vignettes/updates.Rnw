@@ -322,7 +322,11 @@ Here is the text from the `overview' sections of
 the News and Release Notes for each update. 
 
 \begin{itemize}
+  
+\item Major extension of code for ROC curves.  
 
+\item Interactively identify tiles of a tessellation.
+  
   \item Shrinkage estimator of relative risk.
 
   \item Normalised relative risk.
@@ -935,6 +939,24 @@ starting with the most recent additions.
 
 \begin{itemize}
   
+\item \texttt{addROC}:
+  Calculate partial ROC curve for adding a new covariate to a model.
+\item \texttt{dropROC}:
+    Calculate partial ROC curve for removing a covariate from a model.
+  \item \texttt{dropply}, \texttt{addapply}:
+    Consider all single-variable additions or deletions in a model.
+    
+\item \texttt{roc.rhohat}, \texttt{roc.cdftest}, \texttt{roc.bermantest}:
+  calculate ROC curve from other kinds of data.
+\item \texttt{roc.im}: calculate ROC curve from a pixel image
+  such as an estimate of intensity.
+\item \texttt{youden}: Youden statistic for ROC curves.
+\item \texttt{identify.tess}: interactively identify tiles of a tessellation.
+\item \texttt{identify.linnet}: interactively identify segments of a network.
+\item \texttt{identify.lintess}: interactively identify tiles of a tessellation
+  on a network.
+\item \texttt{as.linfun.linnet}: create a function on a linear network which
+  maps each network segment to a specified value.
 \item \texttt{plot.interpolatedCDF}, \texttt{print.interpolatedCDF}:
   methods for plotting and printing objects of class \texttt{"interpolatedCDF"}.
 \item \texttt{simulate.zclustermodel}: method for simulating 
@@ -4238,6 +4260,63 @@ listed alphabetically.
     \item Argument \texttt{lmax} has been replaced by \texttt{kappamax}.
     \item New argument 'mumax'.    
     \end{itemize}
+    
+\item \texttt{roc.ppm}, \texttt{roc.kppm}, \texttt{roc.slrm}:
+  \begin{itemize}
+  \item New argument \texttt{baseline} allows calculation of ROC
+    relative to a baseline.
+  \item New argument \texttt{method} determines the estimation method.
+    New options include a kernel smoothing estimate and a monotone estimate.
+  \item New arguments \texttt{CI}, \texttt{alpha} for calculating 
+    confidence intervals.
+  \item New argument \texttt{subset} specifies a sub-region of the
+    spatial domain in which the ROC should be calculated.
+  \item New argument \texttt{leaveoneout} specifies whether to use
+    leave-one-out estimates of intensity at the data points.
+  \end{itemize}
+  
+  \item \texttt{roc.ppp}:
+  \begin{itemize}
+  \item New argument \texttt{baseline} allows calculation of ROC
+    relative to a baseline.
+  \item New argument \texttt{weights} for numerical weights on the data points.
+  \item New argument \texttt{observations} specifies whether to use the
+    exact point coordinates or pixel presence-absence indicators.
+  \item New argument \texttt{method} determines the estimation method.
+    New options include a kernel smoothing estimate and a monotone estimate.
+  \item New arguments \texttt{CI}, \texttt{alpha} for calculating 
+    confidence intervals.
+  \item New argument \texttt{subset} specifies a sub-region of the
+    spatial domain in which the ROC should be calculated.
+  \end{itemize}
+
+  \item \texttt{roc.lpp}:
+  \begin{itemize}
+  \item New argument \texttt{baseline} allows calculation of ROC
+    relative to a baseline.
+  \item New argument \texttt{weights} for numerical weights on the data points.
+  \item New argument \texttt{method} determines the estimation method.
+    New options include a kernel smoothing estimate and a monotone estimate.
+  \item New arguments \texttt{CI}, \texttt{alpha} for calculating 
+    confidence intervals.
+  \item New argument \texttt{subset} specifies a sub-region of the
+    spatial domain in which the ROC should be calculated.
+  \end{itemize}
+
+\item \texttt{roc.lppm}:
+  \begin{itemize}
+  \item New argument \texttt{baseline} allows calculation of ROC
+    relative to a baseline.
+  \item New argument \texttt{method} determines the estimation method.
+    New options include a kernel smoothing estimate and a monotone estimate.
+  \item New arguments \texttt{CI}, \texttt{alpha} for calculating 
+    confidence intervals.
+  \item New argument \texttt{subset} specifies a sub-region of the
+    spatial domain in which the ROC should be calculated.
+  \item New argument \texttt{leaveoneout} specifies whether to use
+    leave-one-out estimates of intensity at the data points.
+  \end{itemize}
+  
 
  \item \texttt{rose.default}
    New argument \texttt{weights}.

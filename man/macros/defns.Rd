@@ -5,20 +5,21 @@
 \newcommand{\ege}{Ege Rubak \email{rubak@math.aau.dk}}
 \newcommand{\spatstatAuthors}{\adrian, \rolf and \ege}
 \newcommand{\spatstatAuthorsComma}{\adrian, \rolf, \ege}
-%% Contributors with emails
-\newcommand{\pavel}{Pavel Grabarnik \email{pavel.grabar@issp.serpukhov.su}}
-\newcommand{\dominic}{Dominic Schuhmacher \email{dominic.schuhmacher@mathematik.uni-goettingen.de}, URL \code{http://dominic.schuhmacher.name/}}
-\newcommand{\wei}{Ang Qi Wei \email{aqw07398@hotmail.com}}
-\newcommand{\colette}{Marie-Colette van Lieshout \email{Marie-Colette.van.Lieshout@cwi.nl}}
-\newcommand{\rasmus}{Rasmus Plenge Waagepetersen \email{rw@math.auc.dk}}
+%% Contributors with emails (alphabetical order)
 \newcommand{\abdollah}{Abdollah Jalilian \email{jalilian@razi.ac.ir}}
-\newcommand{\ottmar}{Ottmar Cronie \email{ottmar@chalmers.se}}
-\newcommand{\stephenEglen}{Stephen Eglen \email{S.J.Eglen@damtp.cam.ac.uk}}
-\newcommand{\mehdi}{Mehdi Moradi \email{m2.moradi@yahoo.com}}
-\newcommand{\yamei}{Ya-Mei Chang \email{yamei628@gmail.com}}
+\newcommand{\colette}{Marie-Colette van Lieshout \email{Marie-Colette.van.Lieshout@cwi.nl}}
+\newcommand{\dominic}{Dominic Schuhmacher \email{dominic.schuhmacher@mathematik.uni-goettingen.de}, URL \code{http://dominic.schuhmacher.name/}}
 \newcommand{\martinH}{Martin Hazelton \email{Martin.Hazelton@otago.ac.nz}}
+\newcommand{\mehdi}{Mehdi Moradi \email{m2.moradi@yahoo.com}}
+\newcommand{\ottmar}{Ottmar Cronie \email{ottmar@chalmers.se}}
+\newcommand{\pavel}{Pavel Grabarnik \email{pavel.grabar@issp.serpukhov.su}}
+\newcommand{\rasmus}{Rasmus Plenge Waagepetersen \email{rw@math.auc.dk}}
+\newcommand{\stephenEglen}{Stephen Eglen \email{S.J.Eglen@damtp.cam.ac.uk}}
+\newcommand{\suman}{Suman Rakshit \email{Suman.Rakshit@curtin.edu.au}}
 \newcommand{\tilman}{Tilman Davies \email{Tilman.Davies@otago.ac.nz}}
-% Names with accents
+\newcommand{\wei}{Ang Qi Wei \email{aqw07398@hotmail.com}}
+\newcommand{\yamei}{Ya-Mei Chang \email{yamei628@gmail.com}}
+% Names with accents (alphabetical order)
 \newcommand{\Bogsted}{\ifelse{latex}{\out{B\o gsted}}{Bogsted}}
 \newcommand{\Cramer}{\ifelse{latex}{\out{Cram\'er}}{Cramer}}
 \newcommand{\Francois}{\ifelse{latex}{\out{Fran\c{c}ois}}{Francois}}
@@ -46,5 +47,9 @@
 \newcommand{\baddchangclustersim}{Baddeley, A. and Chang, Y.-M. (2023) Robust algorithms for simulating cluster point processes. \emph{Journal of Statistical Computation and Simulation} \bold{93}, 1950--1975.}
 \newcommand{\smoothpcfpaper}{Baddeley, A., Davies, T.M. and Hazelton, M.L. (2025) An improved estimator of the pair correlation function of a spatial point process. \emph{Biometrika}, to appear.}
 \newcommand{\smoothpcfpapercite}{Baddeley, Davies and Hazelton (2025)}
+%% ROC paper
+\newcommand{\rocketAuthors}{\adrian, \ege and \suman}
+\newcommand{\rocpapercite}{Baddeley et al (2025)}
+\newcommand{\rocpaper}{Baddeley, A., Rubak, E., Rakshit, S. and Nair, G. (2025) ROC curves for spatial point patterns and presence-absence data. Submitted for publication.}
 
 
