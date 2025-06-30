@@ -36,6 +36,8 @@ plot(owin(), main="Rectangular window")
 plot(letterR, main="Polygonal window")
 plot(as.mask(letterR), main="Binary mask window")
 
+par(mar=c(1,1,2,4)+0.1)
+
 Z <- as.im(function(x,y){ sqrt((x - 1)^2 + (y-1)^2)}, square(2))
 plot(Z, main="Pixel image")
 
@@ -54,6 +56,12 @@ plot(X,
 V <- as.linim(function(x,y,seg,tp){x^2-y^2}, L=simplenet)
 plot(V, main="Pixel image on a linear network")
 
+par(mar=c(1,1,2,5)+0.1)
+L <- infline(p=runif(5), theta=runif(5, max=pi/2))
+Y <- chop.linnet(simplenet, L)
+tilenames(Y) <- letters[seq_len(nobjects(Y))]
+plot(Y, main="Tessellation on a linear network")
+  
 fanfare("II. Graphics")
 
 par(mar=c(5,4,2,3)+0.1)
@@ -73,9 +81,12 @@ plot(longleaf, markscale=0.03, main="markscale=0.03")
 plot(longleaf, markscale=0.09, main="markscale=0.09")           
 par(opa)
 
+par(mar=c(5,4,2,5)+0.1)
 plot(longleaf, pch=21, cex=1,
      bg=colourmap(terrain.colors(128), range=c(0,80)),
      main="colourmap for numeric mark values")
+
+par(mar=c(5,4,2,3)+0.1, xpd=NA)
 
 Z <- as.im(function(x,y) { r <- sqrt(x^2+y^2); r * exp(-r) },
            owin(c(-5,5),c(-5,5)))
@@ -445,15 +456,15 @@ par(mfrow=c(1,3))
 X <- unmark(chicago)
 plot(X, col="green", cols="red", pch=16,
      main="Chicago Street Crimes", cex.main=0.75,
-     show.window=FALSE)
-plot(density(X, 100, distance="e"), main="Kernel density estimate (Euclidean)")
-plot(density(X, 100, distance="p"), main="Kernel density estimate (shortest path)")
+     show.window=FALSE, claim.title.space=TRUE)
+plot(density(X, 100, distance="e"), main=c("Kernel density estimate", "(Euclidean)"))
+plot(density(X, 100, distance="p"), main=c("Kernel density estimate", "(shortest path)"))
 
 plot(X, col="green", cols="red", pch=16,
      main="Chicago Street Crimes", cex.main=0.75,
      show.window=FALSE)
-plot(linearK(X, correction="none"), main="Network K-function", cex.main=0.75)
-plot(linearK(X, correction="Ang"), main="Corrected K-function", cex.main=0.75)
+plot(linearK(X, correction="none"), main="Network K-function")
+plot(linearK(X, correction="Ang"), main="Corrected K-function")
 
 par(mfrow=c(1,1))
 
@@ -688,6 +699,7 @@ X <- dirichlet(runifpoint(10))
 plot(X)
 L <- infline(0.3,0.5)
 plot(owin(), main="L", cex.main=0.75)
+par(xpd=TRUE)
 plot(L, col="red", lwd=2, cex.main=0.75)
 plot(chop.tess(X,L), cex.main=0.75)
 par(parry)

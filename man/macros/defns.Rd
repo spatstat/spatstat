@@ -50,6 +50,6 @@
 %% ROC paper
 \newcommand{\rocketAuthors}{\adrian, \ege and \suman}
 \newcommand{\rocpapercite}{Baddeley et al (2025)}
-\newcommand{\rocpaper}{Baddeley, A., Rubak, E., Rakshit, S. and Nair, G. (2025) ROC curves for spatial point patterns and presence-absence data. Submitted for publication.}
+\newcommand{\rocpaper}{Baddeley, A., Rubak, E., Rakshit, S. and Nair, G. (2025) ROC curves for spatial point patterns and presence-absence data. \url{https://doi.org/10.48550/arXiv.2506.03414}.}
 
 
