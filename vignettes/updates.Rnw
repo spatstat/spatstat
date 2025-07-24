@@ -6,7 +6,7 @@
 
 % \VignetteIndexEntry{Summary of Recent Updates to the Spatstat Family}
 
-% $Revision: 1.78 $ $Date: 2025/03/18 01:00:10 $
+% $Revision: 1.79 $ $Date: 2025/07/24 01:23:03 $
 
 \newcommand{\pkg}[1]{\texttt{#1}}
 \newcommand{\code}[1]{\texttt{#1}}
@@ -23,6 +23,7 @@ x <- read.dcf(file = system.file("DESCRIPTION", package = "spatstat"),
               fields = c("Version", "Date"))
 sversion <- as.character(x[,"Version"])
 sdate    <- as.character(x[,"Date"])
+sdevel   <- length(unlist(package_version(x[,"Version"]))) > 3 
 options(useFancyQuotes=FALSE)
 @ 
 
@@ -58,7 +59,7 @@ RemoveDevel <- function(sizetable) {
   return(st)
 }
 counts <- c("nhelpfiles", "nobjects", "ndatasets", "Rlines", "srclines")
-mergeSizeTables <- function(a, b, breakupdate, allow.devel=FALSE) {
+mergeSizeTables <- function(a, b, breakupdate, allow.devel=sdevel) {
   #' a is the running total for spatstat; b is a sub-package.
   #' breakupdate is the date when the code in b was removed from spatstat
   #' so that the size of 'b' must be added to 'a' for all dates >= breakupdate
@@ -186,7 +187,7 @@ covered \spst\ version \texttt{1.42-0}, released in May 2015.
 <<echo=FALSE,results=hide>>=
 ## Tabulate latest version numbers of packages
 vtable <- data.frame(package="spatstat", version=sversion, date=as.Date(sdate))
-AppendVersion <- function(pkg, sizetable, v, allow.devel=FALSE) {
+AppendVersion <- function(pkg, sizetable, v, allow.devel=sdevel) {
   if(!allow.devel) sizetable <- RemoveDevel(sizetable)
   if(is.null(sizetable)) return(v)
   lastrow <- sizetable[nrow(sizetable), , drop=FALSE]
@@ -316,7 +317,7 @@ Typing \code{library(spatstat)} will load the familiar
 
 %\pagebreak
 
-\section{Precis of all changes}
+\section{Pr{\'e}cis of all changes}
 
 Here is the text from the `overview' sections of 
 the News and Release Notes for each update. 
@@ -325,7 +326,28 @@ the News and Release Notes for each update.
   
 \item Major extension of code for ROC curves.  
 
-\item Interactively identify tiles of a tessellation.
+  \item Youden index.
+  
+\item Missing or unavailable (NA) spatial objects
+  are recognised by \texttt{solist} and \texttt{hyperframe}.
+  
+  \item Shrinkage estimator in \texttt{Smooth.ppp}.
+
+  \item Backgrounds for plots of point patterns.
+
+  \item Connected components of polygonal windows.
+
+  \item Interactively identify tiles of a tessellation.
+  \item Interactively identify segments of a network.
+  \item Interactively identify tiles of a tessellation on a network.
+
+\item New options for defining nearest neighbours.
+
+\item \texttt{im.apply} handles vector-valued functions.
+
+\item Remove small holes from a window.
+  
+  \item Extension to weighted median and weighted quantiles.
   
   \item Shrinkage estimator of relative risk.
 
@@ -945,12 +967,19 @@ starting with the most recent additions.
     Calculate partial ROC curve for removing a covariate from a model.
   \item \texttt{dropply}, \texttt{addapply}:
     Consider all single-variable additions or deletions in a model.
-    
 \item \texttt{roc.rhohat}, \texttt{roc.cdftest}, \texttt{roc.bermantest}:
   calculate ROC curve from other kinds of data.
 \item \texttt{roc.im}: calculate ROC curve from a pixel image
   such as an estimate of intensity.
 \item \texttt{youden}: Youden statistic for ROC curves.
+    
+\item \texttt{fillholes.owin}: remove small holes from a window.
+\item \texttt{NAobject}: create a missing object of a particular class.
+\item \texttt{is.NAobject}: recognise whether an object is a missing object.
+\item \texttt{is.na.hyperframe}: determine which entries in a hyperframe
+  are missing (NA values or NA objects).
+\item \texttt{c.layered}: concatenate layered objects, retaining their plot
+  arguments.
 \item \texttt{identify.tess}: interactively identify tiles of a tessellation.
 \item \texttt{identify.linnet}: interactively identify segments of a network.
 \item \texttt{identify.lintess}: interactively identify tiles of a tessellation
@@ -2383,8 +2412,15 @@ listed alphabetically.
     Now handles a logical-valued image properly.
     Arguments \texttt{...} now determine pixel resolution.
     
-\item \texttt{connected.owin}:    
-    Arguments \texttt{...} now determine pixel resolution.
+\item \texttt{connected.owin}:
+  \begin{itemize}
+  \item New argument \texttt{polygonal} allows calculation of 
+    connected components using polygonal geometry instead of pixel-based
+    algorithm.
+  \item Arguments \texttt{...} now determine pixel resolution.
+  \end{itemize}
+
+
 
   \item \texttt{contour.im}:
     \begin{itemize}
@@ -2399,6 +2435,10 @@ listed alphabetically.
 
   \item \texttt{convolve.im}: the name of the unit of length is preserved.
    
+    
+  \item \texttt{cor.im}, \texttt{cov.im}:
+    Default changed to \texttt{use="complete.obs"}.
+    
   \item \texttt{crossdist.lpp}:
     \begin{itemize}
     \item 
@@ -2800,8 +2840,13 @@ listed alphabetically.
    
      
    \item \texttt{harmonise.im}:
-     The result belongs to classes \texttt{solist} and \texttt{imlist}
+     \begin{itemize}
+     \item Accelerated in the common case where all rasters are identical.
+     \item  The result belongs to classes \texttt{solist} and \texttt{imlist}
      so that it can be plotted.
+
+     \end{itemize}
+
      
  \item \texttt{Hest}:
    \begin{itemize}
@@ -2832,6 +2877,7 @@ listed alphabetically.
 
    \item \texttt{identify.psp}: 
    \begin{itemize}
+   \item New arguments \texttt{paint} and \texttt{paint.args}.
    \item Identified segments are highlighted.
    \item Automatically starts a new plot device if none is open.
    \item 
@@ -2848,6 +2894,7 @@ listed alphabetically.
 
   \item \texttt{im.apply}: 
     \begin{itemize}
+    \item Now handles vector-valued functions.
     \item Computation accelerated
     \item New argument \texttt{fun.handles.na}
     \item New argument \texttt{check}
@@ -3368,6 +3415,8 @@ listed alphabetically.
  \item \texttt{mppm}:
    \begin{itemize}
    \item 
+     Recognises argument \texttt{quad.args}.
+   \item 
      Now handles models with a random effect component.
      (This is covered in \cite[Chap.\ 16]{baddrubaturn15}.)
    \item 
@@ -3416,6 +3465,9 @@ listed alphabetically.
    \end{itemize}
 
     
+ \item \texttt{nndist.ppp}:
+   New argument \texttt{proper}.
+
  \item \texttt{nndist.pp3}:
    New argument \texttt{by} allows computation of the nearest 
      distance to each group of points.
@@ -3621,6 +3673,9 @@ listed alphabetically.
    
  \item \texttt{plot.im}:
    \begin{itemize}
+   \item The position of text next to the colour ribbon can now be
+     controlled by \verb!riblab$side!. 
+   \item Placement of main title improved in some cases.
    \item New arguments \texttt{background} and \texttt{clip.background} 
      allow the user to specify an object that will be plotted before the
      image \texttt{x}, and will therefore appear underneath it.
@@ -3783,6 +3838,9 @@ listed alphabetically.
     
    \item \texttt{plot.ppp}:
      \begin{itemize}
+     \item New arguments \texttt{background} and \texttt{clip.background} allow
+       the user to specify an object that will be plotted before the point 
+       pattern \texttt{x}, and will therefore appear underneath it.
      \item  For multitype point patterns, a warning is issued if 
     the plot legend does not represent every possible type of point
     due to space restrictions.
@@ -4507,6 +4565,9 @@ listed alphabetically.
      
  \item \texttt{Smooth.ppp}:
    \begin{itemize}
+   \item Shrinkage estimate implemented. New arguments
+     \texttt{shrink} and \texttt{shrinktype}.
+   \item Slight change to algorithms for handling very small bandwidths.
    \item A non-Gaussian kernel can now be specified
    using the argument \texttt{kernel}.
    \item Argument \texttt{weights} can now be a pixel image, a function,
@@ -4735,7 +4796,14 @@ listed alphabetically.
 %%Z
    
  \item \verb![<-.hyperframe!:
-   Improved error message when the format of the index is not supported.
+   \begin{itemize}
+   \item In an assignment like \verb!x[i,j] <- NA!, if column \texttt{j}
+     contains spatial objects, the \texttt{NA} value will be coerced to an
+     \texttt{NAobject} of the appropriate class.
+   \item Improved error message when the format of the index is not supported.
+   \end{itemize}
+
+
      
  \item \verb![<-.im!
    \begin{itemize}

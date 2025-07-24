@@ -502,6 +502,8 @@
 	invert (swap inside and outside)\cr
 	\code{\link[spatstat.geom]{simplify.owin}}	\tab
 	approximate a window by a simple polygon  \cr
+	\code{\link[spatstat.geom]{fillholes.owin}}	\tab
+	remove small holes from a window  \cr
 	\code{\link[spatstat.geom]{rotate}} \tab rotate window  \cr
 	\code{\link[spatstat.geom]{flipxy}} \tab swap \eqn{x} and \eqn{y} coordinates  \cr
 	\code{\link[spatstat.geom]{shift} } \tab translate window  \cr
@@ -701,6 +703,8 @@
       \code{\link[spatstat.geom]{delaunay}} \tab compute Delaunay triangulation of points\cr
       \code{\link[spatstat.geom]{as.tess}} \tab convert other data to a tessellation \cr
       \code{\link[spatstat.geom]{plot.tess}} \tab plot a tessellation \cr
+      \code{\link[spatstat.geom]{identify.tess}} \tab interactively identify
+      tiles of a tessellation \cr
       \code{\link[spatstat.geom]{tiles}} \tab extract all the tiles of a tessellation \cr
       \code{\link[spatstat.geom]{[.tess}} \tab extract some tiles of a tessellation \cr
       \code{\link[spatstat.geom]{[<-.tess}} \tab change some tiles of a tessellation \cr
@@ -777,6 +781,8 @@
     \tabular{ll}{
       \code{\link[spatstat.linnet]{linnet}} \tab create a linear network \cr
       \code{\link[spatstat.linnet]{clickjoin}} \tab interactively join vertices in network \cr
+      \code{\link[spatstat.linnet]{identify.linnet}} \tab interactively identify
+      segments of a network \cr
       \code{spatstat.gui::iplot.linnet} \tab interactively plot network \cr
       \code{\link[spatstat.data]{simplenet}} \tab simple example of network \cr
       \code{\link[spatstat.linnet]{lineardisc}} \tab disc in a linear network \cr
@@ -799,6 +805,8 @@
     
     \tabular{ll}{
       \code{\link[spatstat.linnet]{lpp}} \tab create a point pattern on a linear network \cr
+      \code{\link[spatstat.linnet]{identify.lpp}} \tab interactively identify
+      points on a network \cr
       \code{\link[spatstat.linnet]{methods.lpp}} \tab methods for \code{lpp} objects \cr
       \code{\link[spatstat.linnet]{subset.lpp}} \tab method for \code{subset} \cr
       \code{\link[spatstat.linnet]{rpoislpp}} \tab simulate Poisson points on linear network \cr
@@ -1692,7 +1700,13 @@
     \code{\link[spatstat.model]{addvar}} \tab Added variable plot \cr
     \code{\link[spatstat.explore]{rhohat}} \tab Kernel estimate of covariate effect\cr
     \code{\link[spatstat.explore]{rho2hat}} \tab Kernel estimate of covariate effect
-    (bivariate) 
+    (bivariate) \cr
+    \code{\link[spatstat.model]{addROC}} \tab Partial ROC curve for adding a
+    covariate \cr
+    \code{\link[spatstat.model]{dropROC}} \tab Partial ROC curve for removing a
+    covariate \cr
+    \code{\link[spatstat.model]{dropply}} \tab Consider all single-variable
+    deletions from a model 
   }
   
   \bold{Residual diagnostics:}
@@ -1928,6 +1942,7 @@
   Ross Ihaka,
   \ifelse{latex}{\out{\u{C}enk I\c{c}\"{o}s}}{Cenk Icos},
   Aruna Jammalamadaka,
+  Jakob Jentschke,
   Robert John-Chandran,
   Devin Johnson,
   Mahdieh Khanmohammadi,
