@@ -1,0 +1,393 @@
+\documentclass[11pt]{article}
+
+% \VignetteIndexEntry{Missing or unavailable (NA) objects in Spatstat}
+
+\usepackage{graphicx}
+\usepackage{Sweave}
+\usepackage{bm}
+\usepackage{anysize}
+
+\marginsize{2cm}{2cm}{2cm}{2cm}
+
+\newcommand{\pkg}[1]{\texttt{#1}}
+\newcommand{\code}[1]{\texttt{#1}}
+\newcommand{\R}{{\sf R}}
+\newcommand{\spst}{\pkg{spatstat}}
+\newcommand{\spg}{\pkg{spatstat.geom}}
+
+\begin{document}
+\bibliographystyle{plain}
+\thispagestyle{empty}
+
+<<echo=FALSE,results=hide,fig=FALSE>>=
+options(SweaveHooks=list(fig=function() par(mar=c(1,1,1,1))))
+@ 
+\SweaveOpts{eps=TRUE}
+\setkeys{Gin}{width=0.6\textwidth}
+
+<<echo=FALSE,results=hide>>=
+library(spatstat)
+requireversion(spatstat.geom, "3.5-0.003")
+spatstat.options(image.colfun=function(n) { grey(seq(0,1,length=n)) })
+sgversion <- read.dcf(file = system.file("DESCRIPTION", 
+                                         package = "spatstat.geom"),
+                      fields = "Version")
+options(useFancyQuotes=FALSE)
+set.seed(42) # for repeatability
+@ 
+
+\title{Missing or unavailable (NA) objects in \texttt{spatstat}}
+\author{Adrian Baddeley}
+\date{\today\\ For \spg\ version \texttt{\Sexpr{sgversion}}}
+\maketitle
+
+\begin{abstract}
+This document describes experimental new code in \spst\ 
+which supports missing or unavailable (NA) objects.
+\end{abstract}
+
+\tableofcontents
+\newpage
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Introduction}
+
+This document describes a new, experimental feature of \spst\ which supports
+missing or unavailable (``\code{NA}'') spatial objects.
+
+The base \R\ system 
+allows for missing or unavailable entries
+in a numeric vector, logical vector, character vector and so on.
+The value \code{NA} is assigned to these missing
+entries. 
+% Data which include \code{NA} values can be handled by 
+% the vast majority of functions in base \R. 
+
+Similarly the new code in \spst\ allows for missing or unavailable entries
+in a list of \textbf{spatial objects}.
+For example, in a list of spatial point patterns, 
+one of the entries in the list 
+could be designated as missing or unavailable
+--- that is, the entire point pattern is not available.
+This could happen because a microscope slide was broken,
+a patient refused to participate, a simulation algorithm failed
+to generate a realisation, etc.
+
+Additionally the new code in \spst\ allows for missing or unavailable 
+\textbf{entries in a hyperframe}.
+For example, in a hyperframe representing the results of a designed
+experiment, in which the response from each experimental unit is a 
+spatial point pattern, the column of point patterns could include
+entries which are missing or unavailable. There could also be 
+unavailable entries in a column of pixel images, and so on.
+
+There are two ways to indicate that an entry in a list or hyperframe
+is missing/unavailable:
+\begin{enumerate}
+\item a ``missing object'' can be created using the function \code{NAobject}.
+\item in an existing list or hyperframe, the relevant entry can be assigned
+  the value \code{NA}, and this will be coerced to a missing object.
+\end{enumerate}
+
+
+\section{Creating a missing object}
+
+\subsection{A missing object belongs to a particular class}
+
+In base \R, there are \code{NA} values
+of different types. The missing
+entries in a numeric vector are numeric \code{NA} values
+(equal to \verb!NA_real_!) 
+so that the vector is nevertheless treated as
+a vector of numeric values.
+The missing entries in a character vector
+are character \code{NA} values (\verb!NA_character_!), and so on.
+We use a similar approach in \spst: each missing/unavailable object 
+\emph{belongs to a particular class}.
+
+\subsection{Creating a missing object}
+
+In \spst, use the function \code{NAobject} to create a missing or unavailable 
+\textbf{object}.
+
+To create a missing object that belongs to class \code{"foo"},
+use \texttt{NAobject("foo")}. For example, a 
+missing spatial point pattern (class \code{"ppp"}) is created by:
+
+<<>>=
+X <- NAobject("ppp")
+X
+@ 
+
+\noindent
+The printout indicates that \spst\ recognises \code{X}
+as a missing object of class \code{"ppp"}.
+
+A missing or unavailable object of any particular class \code{"foo"}
+is represented in \spst\ by an object of class \code{c("NAobject", "foo")}.
+For example, a missing spatial point pattern (class \code{"ppp"}) is
+represented as an object of class \code{c("NAobject", "ppp")}. This ensures
+that the object is treated as both a point pattern and a missing object
+in appropriate circumstances.
+
+A missing object can be included as an entry in a list:
+
+<<>>=
+pats <- solist(cells, NAobject("ppp"), redwood)
+pats
+@ 
+
+\noindent
+The printout indicates that the second entry in the list is a missing
+point pattern, and the entire list is nevertheless a list of point patterns.
+
+A missing object can be included in a column of a hyperframe:
+
+<<>>=
+m <- hyperframe(X=runif(3), Y=pats)
+m
+@
+
+\section{Recognising a missing object}
+
+\subsection{Testing whether an object is a missing object}
+
+The function \code{is.NAobject} can be used to test whether an
+object is a missing/unavailable object.
+
+<<>>=
+Z <- NAobject("ppp")
+is.NAobject(Z)
+is.NAobject(cells)
+@ 
+
+Of course one could also use \code{inherits}:
+
+<<>>=
+inherits(Z, what="NAobject")
+@ 
+
+\subsection{Missing entries in a list of objects}
+
+The generic function \code{is.na} is used in base \R\ to 
+determine which \textbf{entries} of a vector or matrix are missing values.
+
+Similarly in \spst, for lists which belong to class \code{"solist"},
+\code{"ppplist"}, \code{"imlist"} or \code{"anylist"}, 
+missing entries can be detected using methods for \code{is.na}:
+
+<<>>=
+is.na(pats)
+@ 
+
+For a list that does not belong to one of these special types,
+there may not be a method for \texttt{is.na}. Instead
+one could use \code{lapply} and friends:
+
+<<>>=
+U <- list(cells, Z, cells)
+sapply(U, is.NAobject)
+sapply(U, inherits, what="NAobject")
+@ 
+
+\subsection{Missing entries in a hyperframe}
+
+A missing object can also be included as an entry in a hyperframe:
+
+<<>>=
+h <- hyperframe(z=1:3, p=pats)
+h
+@ 
+
+The generic \code{is.na} has a method for hyperframes, and returns 
+a logical matrix indicating whether each entry of the hyperframe
+is missing:
+
+<<>>=
+is.na(h)
+@ 
+
+\section{Coercion of \code{NA} to \code{NAobject}}
+
+\subsection{Coercion of \code{NA} in base \R}
+
+In base \R, an assignment of the form \verb!x[i] <- NA!
+works for an atomic vector \code{x} of any type. 
+The \code{NA} will be converted (`coerced') to an \code{NA} value of the type 
+appropriate to \code{x}. For example:
+
+<<>>=
+blah <- letters[1:4]
+blah[2] <- NA
+blah
+@ 
+
+\noindent In this case \code{blah} is a character vector,
+so the \code{NA} has been coerced to a character value:
+
+<<>>=
+is.character(blah[2])
+identical(blah[2], NA_character_)
+@ 
+
+\subsection{Coercion of \code{NA} in \spst}
+
+Similarly in \spst\ an assignment of the form \verb!x[i] <- NA! or
+\verb!x[[i]] <- NA! works for a \textbf{list of objects of the same class}.
+The value \code{NA} will be coerced to 
+an \code{"NAobject"} of the appropriate class.
+For example:
+
+<<>>=
+Y <- rpoispp(10, nsim=3)
+Y[[2]] <- NA
+Y
+@
+
+Here \code{Y} is a list of point patterns (objects of class \code{"ppp"})
+so \code{NA} is coerced to \code{NAobject("ppp")}.
+The coercion can occur when the list is created:
+
+<<>>=
+solist(cells, NA, redwood)
+@ 
+
+(Note that, for lists of class \code{"solist"} or \code{"anylist"}, 
+this only works if all of the non-missing entries belong to the same class, 
+so that the intended class is unambiguous.)
+
+Similarly in hyperframes,
+
+<<>>=
+g <- hyperframe(A=letters[1:3], B=rpoispp(10, nsim=3), D=runif(3))
+g
+g[2,2] <- NA
+g
+@ 
+
+Each individual \code{NA} entry will be coerced to the appropriate
+kind of missing value:
+
+<<>>=
+g[3, ] <- NA
+g
+@ 
+
+If an entire column of a hyperframe is replaced by \code{NA}, 
+the result will be an atomic column of logical \code{NA} values
+(since otherwise the intended class of objects is ambiguous):
+
+<<>>=
+g[,2] <- NA
+g
+@ 
+
+
+\section{Handling missing objects}
+
+\subsection{Basic support}
+
+Missing objects are handled by the code for
+\begin{enumerate}
+\item creating lists of class 
+\code{"solist"}, \code{"ppplist"}, \code{"imlist"} or \code{"anylist"}
+\item creating hyperframes
+\item extracting or replacing subsets of
+  a list of class \code{"solist"}, \code{"ppplist"}, \code{"imlist"} 
+  or \code{"anylist"}
+\item extracting or replacing subsets of a hyperframe
+\item printing and plotting 
+\end{enumerate}
+
+There are methods for \code{print}, \code{plot} and \code{summary}
+for the class \code{"NAobject"}. The \code{print} and \code{summary}
+methods simply indicate that the object is missing. The \code{plot}
+method does not generate a plot, and just prints a message that the
+object was missing.
+
+\subsection{Most functions in \spst\ do not recognise \texttt{NA} objects}
+
+Most functions in \spst\ do not
+handle objects of class \code{"NAobject"}. For example the 
+following would generate an \textbf{error}:
+
+<<eval=FALSE>>=
+  X <- NAobject("ppp") 
+  K <- Kest(X)
+@ 
+
+The object \code{X} is recognised as a point pattern, but does not contain
+any of the data that are expected for such an object, so \code{Kest} will 
+fail with some peculiar error message. 
+
+Such eventualities can be handled by checking the object first:
+
+<<>>=
+  X <- NAobject("ppp")
+  K <- if(is.NAobject(X)) NAobject("fv") else Kest(X)
+@ 
+
+
+\subsection{\texttt{solapply} and friends}
+
+\texttt{NA} objects are automatically handled by the \spst\ functions
+ \texttt{solapply},  \texttt{anylapply} and \texttt{with.hyperframe}.
+
+\subsubsection{\texttt{solapply} and \texttt{anylapply}}
+
+The functions \texttt{solapply} and \texttt{anylapply} are wrappers for
+\texttt{lapply}, called in the form
+\begin{verbatim}
+    solapply(X, FUN, ...)
+    anylapply(X, FUN, ...)
+\end{verbatim}
+where \texttt{X} is a list and \texttt{FUN} is a function that will be applied
+to each element of \texttt{X}. The difference is that \texttt{solapply} 
+expects the results to be spatial objects (e.g.\ point patterns, windows), 
+while \texttt{anylapply} allows them to be any kind of object 
+(e.g.\ numbers, matrices, \verb!"fv"! objects).
+
+The functions \texttt{solapply} and \texttt{anylapply} now check whether 
+any elements of \texttt{X} are missing or unavailable, and if so,
+they return an \texttt{NAobject} as the result for each such element.
+The function \texttt{FUN} is only applied to the entries which are not
+missing. 
+
+For example, using the list of point patterns \texttt{pats}
+which contains some missing entries:
+
+<<>>=
+A <- solapply(pats, Window)
+B <- anylapply(pats, Kest)
+D <- solapply(pats, Kest, demote=TRUE)
+E <- anylapply(pats, npoints)
+@ 
+
+These tricks do \textbf{not} work with the base \R\ functions
+\texttt{lapply}, \texttt{sapply} etc.
+
+\subsubsection{\texttt{with.hyperframe}}
+
+The \spst\ function \texttt{with.hyperframe} is a method for the 
+generic \texttt{with}. It evaluates a given expression in each row of the
+hyperframe, and returns a list containing the result for each row.
+
+This function now checks for missing or unavailable entries in the 
+hyperframe, and if they are needed to evaluate the expression, the result
+is returned as an \texttt{NAobject} for each row in which the data are missing.
+
+For example, using the hyperframe \texttt{m} which contains some missing
+entries:
+
+<<>>=
+K <- with(m, Kest(Y))
+m$G <- with(m, Gest(Y))
+m$u <- with(m, clarkevans.test(Y))
+with(m, u$p.value)
+@ 
+
+
+
+
+\end{document}
