@@ -191,23 +191,21 @@ raw data files are available for the datasets
 
 There are also the following spatial data sets which are not 2D point patterns:
 
-\begin{tabular}[c]{l|l|l}
-{\sf name} & {\sf description} & {\sf format} \\ \hline
-{\tt austates} & Australian states & tessellation \\
-{\tt cetaceans} & marine survey & replicated 2D point patterns \\
-{\tt chicago} & crimes & point pattern on linear network \\
-{\tt demohyper} & simulated data & replicated 2D point patterns with covariates\\
-{\tt dendrite} & dendritic spines & point pattern on linear network \\
-{\tt flu} & virus proteins & replicated 2D point patterns \\
-{\tt heather} & heather mosaic & binary image (three versions) \\
-{\tt osteo} & osteocyte lacunae & replicated 3D point patterns with covariates\\
-{\tt pyramidal} & pyramidal neurons & replicated 2D point patterns in 3 groups\\
-{\tt residualspaper} 
-                & data \& code from Baddeley et al (2005) &  
-                       2D point patterns, \R\ function \\
-{\tt simba} & simulated data & replicated 2D point patterns in 2 groups\\
-{\tt spiders} & spider webs & point pattern on linear network \\
-{\tt waterstriders} & insects on water & replicated 2D point patterns\\
+\begin{tabular}[c]{l|l|l|l}
+{\sf name} & {\sf description} & {\sf class} & {\sf format} \\ \hline
+{\tt austates} & Australian states & \texttt{tess} & tessellation \\
+{\tt cetaceans} & marine survey & \texttt{hyperframe} & replicated 2D point patterns \\
+{\tt chicago} & crimes & \texttt{lpp} & point pattern on linear network \\
+{\tt demohyper} & simulated data & \texttt{hyperframe} & replicated 2D point patterns with covariates\\
+{\tt dendrite} & dendritic spines & \texttt{lpp} & point pattern on linear network \\
+{\tt flu} & virus proteins & \texttt{hyperframe} & replicated 2D point patterns \\
+{\tt heather} & heather mosaic & \texttt{solist} & binary image (three versions) \\
+{\tt osteo} & osteocyte lacunae & \texttt{hyperframe} & replicated 3D point patterns with covariates\\
+{\tt pyramidal} & pyramidal neurons & \texttt{hyperframe} & replicated 2D point patterns in 3 groups\\
+{\tt residualspaper} & data \& code & \texttt{list} & 2D point patterns, \R\ function \\
+{\tt simba} & simulated data & \texttt{hyperframe} & replicated 2D point patterns in 2 groups\\
+{\tt spiders} & spider webs & \texttt{lpp} & point pattern on linear network \\
+{\tt waterstriders} & insects on water & \texttt{solist} & replicated 2D point patterns\\
 \hline
 \end{tabular}
 

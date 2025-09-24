@@ -6,7 +6,7 @@
 
 % \VignetteIndexEntry{Summary of Recent Updates to the Spatstat Family}
 
-% $Revision: 1.79 $ $Date: 2025/07/24 01:23:03 $
+% $Revision: 1.80 $ $Date: 2025/09/15 08:22:22 $
 
 \newcommand{\pkg}[1]{\texttt{#1}}
 \newcommand{\code}[1]{\texttt{#1}}
@@ -326,21 +326,39 @@ the News and Release Notes for each update.
   
 \item Major extension of code for ROC curves.  
 
-  \item Youden index.
+\item Improvements to perspective views of images.
+
+\item Missing or unavailable (NA) spatial objects
+  are accepted by \texttt{solist} and \texttt{hyperframe}.
   
 \item Missing or unavailable (NA) spatial objects
-  are recognised by \texttt{solist} and \texttt{hyperframe}.
+  are handled by \texttt{solapply}, \texttt{with.hyperframe}
+  and by many low-level functions.
+
+\item Summary functions handle NA objects.
+
+\item Simulation of a fitted model in a different window is better supported.  
+  
+\item More options when simulating a fixed number of random points.  
+  
+\item Youden index.
   
   \item Shrinkage estimator in \texttt{Smooth.ppp}.
 
   \item Backgrounds for plots of point patterns.
-
   \item Connected components of polygonal windows.
+  \item More options for disc windows.
 
   \item Interactively identify tiles of a tessellation.
   \item Interactively identify segments of a network.
   \item Interactively identify tiles of a tessellation on a network.
+  \item \texttt{spatstatLocator} supports `snap' behaviour (rounding the
+    clicked location to the nearest grid point). 
+  \item \texttt{clickpoly} allows vertices to be `snapped' (rounded to
+    the nearest grid point).
 
+  \item Corrected unit of length in two datasets.
+    
 \item New options for defining nearest neighbours.
 
 \item \texttt{im.apply} handles vector-valued functions.
@@ -978,6 +996,14 @@ starting with the most recent additions.
 \item \texttt{is.NAobject}: recognise whether an object is a missing object.
 \item \texttt{is.na.hyperframe}: determine which entries in a hyperframe
   are missing (NA values or NA objects).
+\item \texttt{as.ppp.NAobject}, \texttt{as.owin.NAobject}, 
+  \texttt{as.im.NAobject}, \texttt{domain.NAobject}, \texttt{Frame.NAobject}, 
+  \texttt{Window.NAobject}, \texttt{marks.NAobject}, \texttt{marks<-.NAobject}:
+  methods for the generics \texttt{as.ppp}, \texttt{as.owin} etc, 
+  which return an \texttt{NAobject}.
+  \item \texttt{npoints.NAobject}, \texttt{nobjects.NAobject}:
+    methods for the generics \texttt{npoints} and \texttt{nobjects},
+    which return an \texttt{NA} integer value.
 \item \texttt{c.layered}: concatenate layered objects, retaining their plot
   arguments.
 \item \texttt{identify.tess}: interactively identify tiles of a tessellation.
@@ -2353,7 +2379,14 @@ listed alphabetically.
   \end{itemize}
   
   \item \texttt{clickpoly}:
-    The polygon is now drawn progressively as the user clicks new vertices.
+    \begin{itemize}
+    \item     The polygon is now drawn progressively as the user clicks new vertices.
+    \item     Allows user-selected locations of vertices to be snapped (rounded)
+    to the nearest grid points. New arguments \texttt{snap.step} and 
+    \texttt{snap.origin}.
+    \end{itemize}
+
+
 
  \item \texttt{closepairs.ppp}:
    New argument \code{periodic}.
@@ -2629,6 +2662,10 @@ listed alphabetically.
        \end{itemize}
 
 
+ \item \texttt{disc}:
+    New argument \texttt{type} allows the user to specify an inscribed polygon
+    or a circumscribed polygon.
+       
  \item \texttt{discs}:
    \begin{itemize}
    \item     Now accepts a single numeric value for \texttt{radii}.
@@ -2869,6 +2906,8 @@ listed alphabetically.
    has been changed to \texttt{NULL}
    to conform to changes in R. (The actual default value is \texttt{TRUE}
    for \texttt{R < 4.1.0} and \texttt{FALSE} for \texttt{R >= 4.1.0}).
+ \item     Removed slight inconsistencies in the internal format
+    produced in different cases.
    \end{itemize}
    
 %%I
@@ -3607,9 +3646,13 @@ listed alphabetically.
    Improved $z$-axis label.
    
  \item \code{persp.im}:
-    Now recognises argument \texttt{adj.main}
-    controlling the position of main title.
-   
+   \begin{itemize}
+   \item     Now recognises argument \texttt{adj.main}
+     controlling the position of main title.
+   \item     Improved appearance when \texttt{apron=TRUE}
+     and the image domain is not a rectangle.
+   \end{itemize}
+
  \item \code{persp.ppp}:
     Now recognises argument \texttt{adj.main}
     controlling the position of main title.
@@ -3815,6 +3858,10 @@ listed alphabetically.
      \item 
        New argument \texttt{adj.main} controls the justification of the text
        in the main title.
+     \item 
+       New argument \texttt{background} specifies an object (or a colour)
+       that will be plotted before \texttt{x} is plotted, and will
+       therefore appear underneath it.
      \end{itemize}
      
   \item \texttt{plot.profilepl}:
@@ -3830,6 +3877,10 @@ listed alphabetically.
     so that it no longer depends on \texttt{plot.linim}, 
     and is much more efficient.
   \item The formal argument list has been extended.
+     \item 
+       New argument \texttt{background} specifies an object (or a colour)
+       that will be plotted before \texttt{x} is plotted, and will
+       therefore appear underneath it.
     \end{itemize}
 
   \item \texttt{plot.pp3}:
@@ -3839,7 +3890,8 @@ listed alphabetically.
    \item \texttt{plot.ppp}:
      \begin{itemize}
      \item New arguments \texttt{background} and \texttt{clip.background} allow
-       the user to specify an object that will be plotted before the point 
+       the user to specify an object (or a colour value)
+       that will be plotted before the point 
        pattern \texttt{x}, and will therefore appear underneath it.
      \item  For multitype point patterns, a warning is issued if 
     the plot legend does not represent every possible type of point
@@ -4176,6 +4228,7 @@ listed alphabetically.
        before calculation of relative risk.
      \end{itemize}
      
+   \item 
    \texttt{rhohat}:
    \begin{itemize}
    \item The result now includes the ``average'' intensity $\overline\rho$.
@@ -4289,7 +4342,10 @@ listed alphabetically.
       has been improved.
     \end{itemize}
 
-  
+  \item \texttt{rmhmodel.ppm}, \texttt{simulate.ppm}:
+    New argument \texttt{newdata} provides support for simulating
+    a fitted model in a different window.
+    
   \item \texttt{rmh.ppm, rmhmodel.ppm, simulate.ppm}:
    A model fitted using the \texttt{Penttinen} interaction can now be simulated.
 
@@ -4312,6 +4368,10 @@ listed alphabetically.
     random proposal points.
   \item The parameter \texttt{nsave} can now be a vector of integers.
     \end{itemize}
+    
+  \item \texttt{rmpoint}:
+          New argument \texttt{fail.action} specifies what to do
+      if the required number of random points cannot be generated. 
     
   \item \texttt{rNeymanScott}:
     \begin{itemize}
@@ -4394,8 +4454,16 @@ listed alphabetically.
 
    
    \item \texttt{rpoint}:
+     \begin{itemize}
+     \item 
       New argument \texttt{forcewin} forces the code to use the window 
       \texttt{win} when \texttt{f} is a pixel image.
+    \item 
+      New argument \texttt{fail.action} specifies what to do
+      if the required number of random points cannot be generated. 
+
+    \end{itemize}
+
     
    \item \texttt{rpoispp}:
      \begin{itemize}
@@ -4478,7 +4546,11 @@ listed alphabetically.
    \item \texttt{runiflpp}, \texttt{rpoislpp}:
      The simulation parameters can be determined from an example
     point pattern, given as the argument \texttt{ex}.
-    
+
+   \item \texttt{runifpoint}:
+    New argument \texttt{fail.action} specifies what to do
+    if the required number of
+    random points cannot be generated. 
 
    \item \texttt{runifpointOnLines}, \texttt{rpoisppOnLines}:
    	New argument \code{drop}.
@@ -4541,6 +4613,8 @@ listed alphabetically.
 
       \item \texttt{simulate.ppm}:
      \begin{itemize}
+     \item  New argument \texttt{newdata} provides support for simulating
+    a fitted model in a different window.
      \item 
    New argument \texttt{w} controls the window of the simulated patterns.
      \item 
@@ -4585,6 +4659,9 @@ listed alphabetically.
    \item     Standard error calculation is now supported (Experimental).
    \end{itemize}
 
+ \item \texttt{solapply}:  If an entry of the list is an 
+   \texttt{NAobject}, the result for that entry will be an \texttt{NAobject}.
+   
  \item \texttt{solist}:
    New argument \verb!.NameBase!
 
@@ -4791,6 +4868,13 @@ listed alphabetically.
 
 
 %%W
+     
+     
+   \item \texttt{with.hyperframe}: 
+     If a column in the hyperframe contains \texttt{NAobject} entries,
+    and if the name of that column is included in the expression
+    being evaluated, then the result of evaluation is an \texttt{NA} or 
+    \texttt{NAobject} in the relevant row.
 %%X
 %%Y
 %%Z
