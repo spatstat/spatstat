@@ -1891,7 +1891,7 @@
   Igor Chernayavsky,
   Y.C. Chin,
   Bjarke Christensen,
-  \Lucia Cobo Sanchez,
+  \Lucia Cobo \Sanchez,
   Jean-\Francois Coeurjolly,
   Kim Colyvas,
   Hadrien Commenges,
