@@ -444,6 +444,16 @@ the presence of a bug is obvious, and the bug would not have misled the user.
   \subsection{Bugs, Substantially Incorrect, Moderate Impact}
 
   \begin{itemize}
+    
+  \item \texttt{fitted.slrm}:
+    Calculation was incorrect when \texttt{leaveoneout=TRUE}
+    and \texttt{type != "intensity"}.
+    \bugbefore{spatstat 1.65-0}{december 2020}{spatstat.model 3.5-0}{november 2025}    
+    
+  \item \texttt{Kmark}:
+    Calculation was incorrect for multitype patterns (categorical marks).
+    \bugbefore{spatstat 1.41-0}{january 2015}{spatstat.explore 3.6-0}{november 2025}
+    
   \item \texttt{rpoislinetess}:
     Results were incorrect unless the window was centred at the origin.
     \bugbefore{spatstat 1.42-0}{may 2015}{spatstat.random 3.2-1}{october 2023}
@@ -668,9 +678,15 @@ the presence of a bug is obvious, and the bug would not have misled the user.
  \end{itemize}   
 
  %% LEVEL 4: 
- \subsection{Partially Incorrect or Minor}
+ \subsection{Partially Incorrect or Having Only Minor Impact}
  \begin{itemize}
-   
+  \item \texttt{intersect.lintess}:
+    Result was incorrect if \texttt{X}
+    was a tessellation and \texttt{Y} was a linear network.
+    \bugbefore{spatstat 1.46-0}{july 2016}{spatstat.linnet 3.3-3}{november 2025}    
+ \item \texttt{incircle}:
+   Gave incorrect results for some irregular windows.
+   \bugin{spatstat 1.14-4}{october 2008}{spatstat.explore 3.6-0}{november 2025}   
   \item \texttt{kernel.squint}:
     The return value was incorrect if the argument \texttt{bw} was given.
     \bugin{spatstat 1.43-0}{october 2015}{spatstat.explore 3.2-4}{october 2023}

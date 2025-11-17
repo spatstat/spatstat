@@ -1,9 +1,11 @@
 
-        CHANGES IN spatstat VERSION 3.4-1.002
+        CHANGES IN spatstat VERSION 3.4-1.003
 
 OVERVIEW
 
     o Updated version dependencies for spatstat package family.
+
+    o Updated documentation.
 
         CHANGES IN spatstat VERSION 3.4-1
 

@@ -326,6 +326,22 @@ the News and Release Notes for each update.
   
 \item Major extension of code for ROC curves.  
 
+\item ROC curves for determinantal point process models.
+    
+\item Extended facilities for spatial logistic regression.
+
+\item Different discretisation rules supported in \texttt{slrm}.
+
+\item Leave-one-pixel-out prediction in \texttt{slrm}.
+  
+\item Generate Gaussian random fields.
+
+\item Lurking variable plot on a network.
+
+\item Quadrat counting on a linear network.
+
+\item More geometrical operations on linear network objects.
+  
 \item Improvements to perspective views of images.
 
 \item Missing or unavailable (NA) spatial objects
@@ -340,6 +356,12 @@ the News and Release Notes for each update.
 \item Simulation of a fitted model in a different window is better supported.  
   
 \item More options when simulating a fixed number of random points.  
+  
+\item \texttt{unnormdensity} returns the smoothing parameters used.  
+  
+\item Find centroids of tiles of a tessellation.
+
+\item More options for converting a tessellation to an image.
   
 \item Youden index.
   
@@ -979,6 +1001,31 @@ starting with the most recent additions.
 
 \begin{itemize}
   
+\item \texttt{as.lintess}:
+  Convert other kinds of data to a tessellation on a network.
+\item \texttt{lurking.lpp}:
+  Lurking variable plot for point pattern on a linear network.
+\item \texttt{lurking.lppm}:
+  Lurking variable plot for point process model on a linear network.
+\item \texttt{flipxy.linnet}:
+  Swap $x$ and $y$ coordinates of a linear network
+\item \texttt{flipxy.lpp}:
+  Swap $x$ and $y$ coordinates of a point pattern on a linear network
+\item \texttt{quadratcount.lpp}
+  Method for quadrat counting on a linear network.
+\item \texttt{roc.dppm}: ROC curve for determinantal point process model.
+\item \texttt{markequal}:     
+  Mark equality function $e(r)$ for multitype point patterns.
+\item \texttt{nnequal}, \texttt{nncount}:
+  Summary functions for multitype point patterns
+    based on the types of nearest neighbours.
+\item \texttt{tolcon}: Tolerance contours for spatial relative risk.
+\item \texttt{rGRFexpo}, \texttt{rGRFgauss}, \texttt{rGRFmatern}, 
+  \texttt{rGRFstable}, \texttt{rGRFgencauchy}:
+  generate a Gaussian random field.
+\item \texttt{tile.centroids}:     
+  Find the centroids of the tiles of a tessellation
+  and return them as a point pattern.
 \item \texttt{addROC}:
   Calculate partial ROC curve for adding a new covariate to a model.
 \item \texttt{dropROC}:
@@ -2107,7 +2154,13 @@ listed alphabetically.
   New argument \texttt{approx} specifies the choice of algorithm.
 
   \item \texttt{as.im.tess}:
-  New argument \texttt{values}.
+    \begin{itemize}
+    \item
+      New argument \texttt{rule.tile} specifies how to determine,
+      for each pixel, the tile of the tessellation that covers the pixel.
+    \item 
+      New argument \texttt{values}.
+    \end{itemize}
 
   \item \texttt{as.im.function}:
     \begin{itemize}
@@ -2828,6 +2881,10 @@ listed alphabetically.
 
  \item \texttt{fitted.slrm}:
    \begin{itemize}
+   \item
+     Argument \texttt{leaveoneout} is no longer ignored when 
+     \texttt{dataonly=FALSE};
+     it now supports ``leave-one-pixel-out'' prediction.
    \item   New argument \texttt{type} allows calculation of fitted
      probabilities, intensities or link function values.
    \item 
@@ -2953,6 +3010,8 @@ listed alphabetically.
    
  \item \texttt{integral.linfun}:
    \begin{itemize}
+   \item Argument \texttt{domain} can be a tessellation on a network
+     (class \texttt{lintess}).
    \item New argument \texttt{weight} specifies a weight function for the integration.
    \item    New argument \texttt{delta} controls step length of
    approximation to integral.
@@ -2964,6 +3023,8 @@ listed alphabetically.
 
  \item \texttt{integral.linim}:
    \begin{itemize}
+   \item Argument \texttt{domain} can be a tessellation on a network
+     (class \texttt{lintess}).
    \item New argument \texttt{weight} specifies a weight function for the integration.
    \item Argument \code{domain} can be a tessellation.
    \item Now handles complex-valued functions.
@@ -3406,10 +3467,20 @@ listed alphabetically.
 %%M
    
  \item \texttt{markconnect}:
-   Accepts the argument \texttt{weights} which is passed to \texttt{markcorr}.
+   \begin{itemize}
+   \item 
+    The result now has an attribute \texttt{smooth.args}
+    containing the smoothing parameters used.
+   \item 
+     Accepts the argument \texttt{weights} 
+     which is passed to \texttt{markcorr}.
+   \end{itemize}
 
  \item \texttt{markcorr}:
    \begin{itemize}
+   \item 
+    The result now has an attribute \texttt{smooth.args}
+    containing the smoothing parameters used.
    \item 
      New argument \texttt{weights} allows computation of the weighted version
      of the mark correlation function.
@@ -3435,7 +3506,14 @@ listed alphabetically.
     and point patterns on a network (class \texttt{"lpp"}).
    
  \item \texttt{markvario}:
-   Accepts the argument \texttt{weights} which is passed to \texttt{markcorr}.
+   \begin{itemize}
+   \item 
+    The result now has an attribute \texttt{smooth.args}
+    containing the smoothing parameters used.
+   \item 
+     Accepts the argument \texttt{weights} 
+     which is passed to \texttt{markcorr}.
+   \end{itemize}
 
  \item \texttt{mincontrast}:
    New argument \texttt{action.bad.values} specifies what action is taken
@@ -3569,10 +3647,16 @@ listed alphabetically.
      \end{itemize}
     
    \item \texttt{owin2mask}:
-    New options \texttt{op="majority"} and \texttt{op="minority"}.
-    If \texttt{op="majority"}, a pixel belongs to the resulting mask if
-    at least half of the pixel area is covered by the window.
-    
+     \begin{itemize}
+     \item 
+       Arguments \texttt{'...'} that are not recognised by \texttt{as.mask}
+       are now silently ignored, rather than causing an error.
+     \item 
+       New options \texttt{op="majority"} and \texttt{op="minority"}.
+       If \texttt{op="majority"}, a pixel belongs to the resulting mask if
+       at least half of the pixel area is covered by the window.
+     \end{itemize}
+     
 %%P
    
  \item \texttt{padimage}:
@@ -4082,6 +4166,14 @@ listed alphabetically.
     the function estimate, the upper/lower confidence limits, or the
     standard error.
 
+  \item \texttt{predict.slrm}:    
+    \begin{itemize}
+    \item New argument \texttt{leaveoneout} 
+       supports ``leave-one-pixel-out'' prediction.
+    \item New argument \texttt{fast} 
+      determines algorithm used when \texttt{leaveoneout=TRUE}.
+    \end{itemize}
+
   \item \texttt{print.kppm}: Additional characteristics of the fitted model
     are reported,
     including the cluster strength \texttt{phi} and the sibling probability.
@@ -4096,6 +4188,8 @@ listed alphabetically.
   \item \texttt{print.quad}: More information is printed.
 
   \item \texttt{print.rmhmodel}: More information is printed.
+
+  \item \texttt{print.slrm}: Prints information about the pixel raster.
     
   \item \texttt{progressreport}
     \begin{itemize}
@@ -4435,6 +4529,13 @@ listed alphabetically.
     leave-one-out estimates of intensity at the data points.
   \end{itemize}
   
+  
+\item \texttt{roc.slrm}:
+  \begin{itemize}
+  \item  Changed interpretation of argument \texttt{leaveoneout=TRUE}.
+    This now performs ``leave-one-pixel-out'' calculation
+    (previously it performed ``leave-one-point-out'' calculation).
+  \end{itemize}
 
  \item \texttt{rose.default}
    New argument \texttt{weights}.
@@ -4627,6 +4728,12 @@ listed alphabetically.
      
    \item \texttt{slrm}:
      \begin{itemize}
+     \item New argument \texttt{ruleAtPoints}
+       controls discretisation rule at data points.
+     \item Arguments \texttt{"..."} are now passed to 
+       \texttt{owin2mask} to determine the
+       polygon-to-raster discretisation rule for a covariate of class 
+       \texttt{owin}.
      \item In the default case (where \texttt{dataAtPoints} is not given)
     all spatial covariates, 
     including the spatial coordinates \texttt{x} and \texttt{y},
@@ -4752,6 +4859,9 @@ listed alphabetically.
    \item \texttt{summary.ppm}:
     New argument \texttt{fine} selects the algorithm for variance estimation.
 
+  \item \texttt{summary.slrm}:
+    Now prints information about the pixel raster.
+    
    \item \texttt{summary.owin}, \texttt{summary.im}:
     The fraction of frame area that is occupied by the window/image
     is now reported.
@@ -4811,6 +4921,9 @@ listed alphabetically.
 
    \item \texttt{unnormdensity}:
      \begin{itemize}
+     \item  The result has an attribute \texttt{smooth.args}
+       containing the smoothing
+       parameters that were used in the calculation.
      \item Suppress annoying warning messages from \texttt{density.default}.
            This affects many functions in the \spst\ family of packages.
      \item Argument \texttt{weights} may have length 1.
