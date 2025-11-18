@@ -6,7 +6,7 @@
 
 % \VignetteIndexEntry{Summary of Recent Updates to the Spatstat Family}
 
-% $Revision: 1.80 $ $Date: 2025/09/15 08:22:22 $
+% $Revision: 1.81 $ $Date: 2025/11/18 01:36:15 $
 
 \newcommand{\pkg}[1]{\texttt{#1}}
 \newcommand{\code}[1]{\texttt{#1}}
@@ -338,7 +338,7 @@ the News and Release Notes for each update.
 
 \item Lurking variable plot on a network.
 
-\item Quadrat counting on a linear network.
+\item Quadrat counting and quadrat tests on a linear network.
 
 \item More geometrical operations on linear network objects.
   
@@ -1013,6 +1013,8 @@ starting with the most recent additions.
   Swap $x$ and $y$ coordinates of a point pattern on a linear network
 \item \texttt{quadratcount.lpp}
   Method for quadrat counting on a linear network.
+\item \texttt{quadrat.test.lpp}, \texttt{quadrat.test.lppm}
+  Methods for quadrat test on a linear network.
 \item \texttt{roc.dppm}: ROC curve for determinantal point process model.
 \item \texttt{markequal}:     
   Mark equality function $e(r)$ for multitype point patterns.
@@ -2797,6 +2799,11 @@ listed alphabetically.
     \item Standard error calculation (\texttt{se.fit=TRUE}) now works 
       for models fitted with \texttt{use.gam=TRUE}.
     \end{itemize}
+    
+  \item \texttt{Emark}:
+    The result now has an attribute \texttt{smooth.args}
+    containing the smoothing parameters used.
+
     
  \item \texttt{envelope}:
    \begin{itemize}
@@ -4979,6 +4986,11 @@ listed alphabetically.
      or infinite.
      \end{itemize}
 
+  \item \texttt{Vmark}:
+    The result now has an attribute \texttt{smooth.args}
+    containing the smoothing parameters used.
+
+     
 
 %%W
      
