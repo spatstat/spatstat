@@ -324,6 +324,10 @@ the News and Release Notes for each update.
 
 \begin{itemize}
   
+\item Replicated point patterns on a linear network.
+  
+\item Diagnostics for a fitted point process model on a linear network.
+  
 \item Major extension of code for ROC curves.  
 
 \item ROC curves for determinantal point process models.
@@ -338,10 +342,16 @@ the News and Release Notes for each update.
 
 \item Lurking variable plot on a network.
 
+\item Partial residual plot on a network.
+
 \item Quadrat counting and quadrat tests on a linear network.
 
 \item More geometrical operations on linear network objects.
   
+\item Partial residuals for cluster process and Cox process models.
+
+\item Extended facilities for spatial logistic regression.
+
 \item Improvements to perspective views of images.
 
 \item Missing or unavailable (NA) spatial objects
@@ -1000,17 +1010,31 @@ Following is a list of all the functions that have been added,
 starting with the most recent additions.
 
 \begin{itemize}
-  
-\item \texttt{as.lintess}:
-  Convert other kinds of data to a tessellation on a network.
-\item \texttt{lurking.lpp}:
-  Lurking variable plot for point pattern on a linear network.
+\item \texttt{parres}: new generic function for partial residual plots.
+\item \texttt{parres.ppm}: the original function \texttt{parres}
+  has become the method \texttt{parres.ppm}.
+\item \texttt{parres.kppm}: partial residual plot for
+  fitted cluster process or Cox process models.
+\item \texttt{diagnose}: new generic function for model diagnostics.
+\item \texttt{diagnose.lppm}:
+  diagnostic plots for point process model on a linear network.
+\item \texttt{parres.lppm}:
+  partial residual plot for point process model on a linear network.
 \item \texttt{lurking.lppm}:
   Lurking variable plot for point process model on a linear network.
+\item \texttt{lurking.lpp}:
+  Lurking variable plot for point pattern on a linear network.
+\item \texttt{residuals.lppm}:
+  residual measure for point process model on a linear network.
+\item \texttt{eem.lppm}:
+  Stoyan-Grabarnik exponential energy weights diagnostic
+  for point process model on a linear network.
 \item \texttt{flipxy.linnet}:
   Swap $x$ and $y$ coordinates of a linear network
 \item \texttt{flipxy.lpp}:
   Swap $x$ and $y$ coordinates of a point pattern on a linear network
+\item \texttt{as.lintess}:
+  Convert other kinds of data to a tessellation on a network.
 \item \texttt{quadratcount.lpp}
   Method for quadrat counting on a linear network.
 \item \texttt{quadrat.test.lpp}, \texttt{quadrat.test.lppm}
@@ -2216,6 +2240,7 @@ listed alphabetically.
    
   \item \texttt{as.linnet.psp}:
     \begin{itemize}
+    \item New arguments \texttt{chop} and \texttt{fuse}.
     \item 
       If the line segment pattern has marks, then the resulting linear network
       also carries these marks in the \verb!$lines! component.
@@ -2681,6 +2706,7 @@ listed alphabetically.
     
   \item \texttt{diagnose.ppm}:
     \begin{itemize}
+    \item This is now a method for the generic \texttt{diagnose}.
     \item 
     Infinite values of \texttt{rbord} are now ignored and treated as zero.
     This ensures that \texttt{diagnose.ppm} has a sensible default
@@ -3359,6 +3385,8 @@ listed alphabetically.
  \item \texttt{linearpcfEuclidInhom}:
    New arguments \texttt{adjust.sigma}, \texttt{bw} and \texttt{adjust.bw}.
 
+ \item \texttt{linequad}:
+   Argument \texttt{Y} can be a linear network.
 
  \item \texttt{linim}:
    \begin{itemize}
@@ -3538,6 +3566,9 @@ listed alphabetically.
     
  \item \texttt{mppm}:
    \begin{itemize}
+   \item 
+     The responses can be point patterns on a linear network
+     (objects of class \texttt{"lpp"}).
    \item 
      Recognises argument \texttt{quad.args}.
    \item 
@@ -4187,7 +4218,12 @@ listed alphabetically.
 
   \item \texttt{print.linim}: More information is printed.
 
-  \item \texttt{print.lintess}: Output includes information about marks.
+  \item \texttt{print.lintess}:
+    \begin{itemize}
+    \item Output improved.
+    \item Output includes information about marks.
+    \end{itemize}
+
 
   \item \texttt{print.lppm}: The name of the original point pattern dataset 
     (to which the model was fitted) is now printed.
@@ -4294,6 +4330,9 @@ listed alphabetically.
      
    \item \texttt{reload.or.compute}:
      New argument \texttt{exclude} specifies which objects should not be saved.
+     
+   \item \texttt{residualMeasure}:
+     More options for argument \texttt{lambda}.
      
    \item \texttt{rgbim, hsvim}:
    New argument \texttt{A} controls the alpha (transparency) channel.
