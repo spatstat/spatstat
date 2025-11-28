@@ -6,7 +6,7 @@
 
 % \VignetteIndexEntry{Summary of Recent Updates to the Spatstat Family}
 
-% $Revision: 1.81 $ $Date: 2025/11/18 01:36:15 $
+% $Revision: 1.82 $ $Date: 2025/11/28 06:32:40 $
 
 \newcommand{\pkg}[1]{\texttt{#1}}
 \newcommand{\code}[1]{\texttt{#1}}
@@ -347,6 +347,8 @@ the News and Release Notes for each update.
 \item Quadrat counting and quadrat tests on a linear network.
 
 \item More geometrical operations on linear network objects.
+
+\item Pixelwise arithmetic on a linear network.
   
 \item Partial residuals for cluster process and Cox process models.
 
@@ -1039,6 +1041,10 @@ starting with the most recent additions.
   Method for quadrat counting on a linear network.
 \item \texttt{quadrat.test.lpp}, \texttt{quadrat.test.lppm}
   Methods for quadrat test on a linear network.
+\item \texttt{harmonise.linim}:
+  Convert several images on a linear network to a common pixel grid.
+\item \texttt{linim.apply}:
+  Apply a function pixelwise to a list of images on a network.
 \item \texttt{roc.dppm}: ROC curve for determinantal point process model.
 \item \texttt{markequal}:     
   Mark equality function $e(r)$ for multitype point patterns.
