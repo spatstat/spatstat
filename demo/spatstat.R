@@ -588,11 +588,9 @@ plot(rCauchy(30, 0.01, 5))
 plot(rVarGamma(30, 2, 0.02, 5))
 plot(rGaussPoisson(30, 0.05, 0.5))
 
-if(require(RandomFields) && RandomFieldsSafe()) {
-  X <- rLGCP("exp", 4, var=0.2, scale=0.1)
-  plot(attr(X, "Lambda"), main="log-Gaussian Cox process")
-  plot(X, add=TRUE, pch=16)
-}
+X <- rLGCP("exp", 4, var=0.2, scale=0.1)
+plot(attr(X, "Lambda"), main="log-Gaussian Cox process")
+plot(X, add=TRUE, pch=16)
 
 plot(rStrauss(200, 0.3, 0.07))
 plot(rDiggleGratton(200,0.03,0.08))
