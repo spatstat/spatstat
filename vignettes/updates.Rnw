@@ -324,6 +324,9 @@ the News and Release Notes for each update.
 
 \begin{itemize}
   
+\item Convert a recursively partitioned point process model
+  to a spatial tessellation.
+  
 \item Replicated point patterns on a linear network.
   
 \item Diagnostics for a fitted point process model on a linear network.
@@ -1012,6 +1015,8 @@ Following is a list of all the functions that have been added,
 starting with the most recent additions.
 
 \begin{itemize}
+\item \texttt{as.tess.rppm}: convert a recursively partitioned 
+  point process model to a spatial tessellation.
 \item \texttt{parres}: new generic function for partial residual plots.
 \item \texttt{parres.ppm}: the original function \texttt{parres}
   has become the method \texttt{parres.ppm}.
