@@ -6,7 +6,7 @@
 
 % \VignetteIndexEntry{Summary of Recent Updates to the Spatstat Family}
 
-% $Revision: 1.82 $ $Date: 2025/11/28 06:32:40 $
+% $Revision: 1.83 $ $Date: 2025/12/20 07:01:56 $
 
 \newcommand{\pkg}[1]{\texttt{#1}}
 \newcommand{\code}[1]{\texttt{#1}}
@@ -166,8 +166,16 @@ Plot <- function(fmla, ..., dat=z, ylim=NULL) {
 Plot((Rlines + srclines)/1000 ~ date, ylab="Lines of code (x 1000)", 
      main="Spatstat growth")
 lines(srclines/1000 ~ date, data=z)
-text(as.Date("2015-01-01"), 9.5, "C code")
-text(as.Date("2015-01-01"), 60, "R code")
+with(z, {
+  polygon(c(date, rev(date)),
+          c(srclines, rep(0, length(srclines)))/1000,
+          angle=45, density=5, col="pink")
+  polygon(c(date, rev(date)),
+          c(srclines+Rlines, rev(srclines))/1000,
+          angle=135, density=5, col="lightblue")
+})
+text(as.Date("2019-01-01"), 11, "C code", col="red")
+text(as.Date("2019-01-01"), 90, "R code", col="blue")
 @ 
 }
 
@@ -323,9 +331,15 @@ Here is the text from the `overview' sections of
 the News and Release Notes for each update. 
 
 \begin{itemize}
+
+\item Waagepetersen's composite likelihood for cluster processes.  
+  
+\item Important changes to mark correlation function.
   
 \item Convert a recursively partitioned point process model
   to a spatial tessellation.
+  
+\item Spatial persistence index and cluster strength index.
   
 \item Replicated point patterns on a linear network.
   
@@ -336,6 +350,8 @@ the News and Release Notes for each update.
 \item ROC curves for determinantal point process models.
     
 \item Extended facilities for spatial logistic regression.
+
+\item Level sets calculated using analytic geometry, for some functions.
 
 \item Different discretisation rules supported in \texttt{slrm}.
 
@@ -1015,8 +1031,13 @@ Following is a list of all the functions that have been added,
 starting with the most recent additions.
 
 \begin{itemize}
+\item \texttt{persist}: spatial persistence index for a cluster process model.
+\item \texttt{clusterstrength}: cluster strength index for
+  a cluster process or Cox process model.
 \item \texttt{as.tess.rppm}: convert a recursively partitioned 
   point process model to a spatial tessellation.
+\item \texttt{formula.rppm}: extract the model formula
+  of a recursively partitioned point process model.
 \item \texttt{parres}: new generic function for partial residual plots.
 \item \texttt{parres.ppm}: the original function \texttt{parres}
   has become the method \texttt{parres.ppm}.
@@ -2184,6 +2205,10 @@ listed alphabetically.
  \item \texttt{as.function.tess}:
     New argument \texttt{values} specifies the function values.
 
+  \item \texttt{as.fv.kppm}:
+    Improved arguments for empirical estimation of pair correlation function
+    when the model was fitted with a non-default value of \texttt{method}.
+
   \item \texttt{as.im}: Many methods for \texttt{as.im}
     now have argument \texttt{rule.eps}.
 
@@ -2829,6 +2854,11 @@ listed alphabetically.
 
   \item \texttt{effectfun}:
     \begin{itemize}
+    \item Improved defaults for a recursive partition model 
+      (class \texttt{"rppm"}).
+      The user only needs to provide values for those covariates which
+      are used in the decision tree. If the entire tree involves only one
+      variable, then \texttt{covname} is not needed.
     \item 
     Now works for \texttt{ppm}, \texttt{kppm}, 
     \texttt{lppm}, \texttt{dppm}, \texttt{rppm} and \texttt{profilepl} objects.
@@ -3054,6 +3084,8 @@ listed alphabetically.
    
  \item \texttt{integral.linfun}:
    \begin{itemize}
+   \item New argument \texttt{exact}. 
+     If \texttt{exact=TRUE}, a more accurate algorithm is used.
    \item Argument \texttt{domain} can be a tessellation on a network
      (class \texttt{lintess}).
    \item New argument \texttt{weight} specifies a weight function for the integration.
@@ -3072,7 +3104,6 @@ listed alphabetically.
    \item New argument \texttt{weight} specifies a weight function for the integration.
    \item Argument \code{domain} can be a tessellation.
    \item Now handles complex-valued functions.
-
    \end{itemize}
 
  \item \texttt{integral.msr}:
@@ -3217,6 +3248,8 @@ listed alphabetically.
 
  \item \texttt{kppm}:
    \begin{itemize}
+   \item New option: \texttt{method="waag"} fits the model by maximising
+    Waagepetersen's (2007) second order composite likelihood
    \item 
      The code for fitting log-Gaussian Cox process models 
      (\texttt{clusters="LGCP"})
@@ -3274,7 +3307,6 @@ listed alphabetically.
   
 %%L
    
-  
 \item \texttt{latest.news}: 
   Now prints news documentation for the current major version, by default.
   New argument \texttt{major}.
@@ -3306,6 +3338,22 @@ listed alphabetically.
    \item \texttt{Lest}, \texttt{Linhom}, \texttt{Ldot},
      \texttt{Lcross}, \texttt{Ldot.inhom}, \texttt{Lcross.inhom}:
      These summary functions now have explicit argument \texttt{"correction"}.
+
+   \item \texttt{levelset}:
+     \begin{itemize}
+     \item This function is now generic and can be applied to pixel images
+       or functions. 
+     \item For some kinds of functions, the level set is calculated
+       more accurately using analytic geometry and returned as a polygonal
+       window. This includes
+       \begin{itemize}
+       \item Functions of class \texttt{"distfun"} created bt \texttt{distfun}
+         where the level set is a dilation of the original object
+       \item Functions of class \texttt{tessfun} created by
+         \texttt{as.function.tess} where the level set is a union of tiles
+         of the tessellation.
+       \end{itemize}
+     \end{itemize}
      
  \item \texttt{leverage.ppm}:
    \begin{itemize}
@@ -3497,8 +3545,31 @@ listed alphabetically.
    \item    Computation accelerated.
    \end{itemize}
 
-\item \texttt{lurking.ppm}: accelerated.
+\item \texttt{lurking.lppm}:
+  \begin{itemize}
+  \item Argument \texttt{covariate} can be a \texttt{function(x,y)}
+    or one of the strings \texttt{"x"} or \texttt{"y"}.
+  \item When the covariate is a cartesian coordinate or a distance function,
+    the unit of length is stated on the horizontal axis label of the plot.
+  \end{itemize}
   
+\item \texttt{lurking.ppm}:
+  \begin{itemize}
+  \item Argument \texttt{covariate} can be a \texttt{function(x,y)}
+    or one of the strings \texttt{"x"} or \texttt{"y"}.
+  \item When the covariate is a cartesian coordinate or a distance function,
+    the unit of length is stated on the horizontal axis label of the plot.
+  \item accelerated.
+  \end{itemize}
+
+\item \texttt{lurking.slrm}:
+  \begin{itemize}
+  \item Argument \texttt{covariate} can be a \texttt{function(x,y)}
+    or one of the strings \texttt{"x"} or \texttt{"y"}.
+  \item When the covariate is a cartesian coordinate or a distance function,
+    the unit of length is stated on the horizontal axis label of the plot.
+  \end{itemize}
+
 \item \texttt{lut}:
   \begin{itemize}
   \item 
@@ -3527,18 +3598,25 @@ listed alphabetically.
    \item 
     The result now has an attribute \texttt{smooth.args}
     containing the smoothing parameters used.
+  \item 
+    New argument \texttt{fadjust}.
    \item 
      New argument \texttt{weights} allows computation of the weighted version
      of the mark correlation function.
      Weights can be an expression
      to be evaluated, or a function, or a pixel image, or a numeric vector.
+     (NOTE: interpretation of \texttt{weights} has changed in 
+     \texttt{spatstat.explore} version \texttt{3.6-1})
    \item 
      Now allows negative mark values, when \texttt{normalise=FALSE}.
    \end{itemize}
 
 \item \texttt{markcrosscorr}:
-       Now allows negative mark values, when \texttt{normalise=FALSE}.
-   
+  \begin{itemize}
+  \item New argument \texttt{weights}.
+  \item Now allows negative mark values, when \texttt{normalise=FALSE}.
+  \end{itemize}
+
  \item \verb!marks<-.tess!:
     A tessellation can now have any kind of marks
     (vector, list, data frame or hyperframe).
@@ -3780,15 +3858,32 @@ listed alphabetically.
    
  \item \code{persp.im}:
    \begin{itemize}
+   \item The pixel values of \texttt{colin} can be colour values.
+     New argument \texttt{valuesAreColours}.
    \item     Now recognises argument \texttt{adj.main}
      controlling the position of main title.
    \item     Improved appearance when \texttt{apron=TRUE}
      and the image domain is not a rectangle.
    \end{itemize}
 
+ \item \code{persp.linim}:
+   \begin{itemize}
+   \item  Improved behaviour close to vertices of the network.
+   \item  New arguments \texttt{extrapolate} and \texttt{zadjust}.
+   \item Argument \texttt{col.base} can be a pixel image, allowing
+     a colour image to be plotted on the horizontal plane at height zero.
+   \end{itemize}
+
  \item \code{persp.ppp}:
-    Now recognises argument \texttt{adj.main}
-    controlling the position of main title.
+   \begin{itemize}
+   \item Now plots the \texttt{zlab} label alongside the vertical scale bar.
+   \item Argument \texttt{col.base} can be a pixel image, which will be
+     rendered as a colour image in perspective view on the horizontal plane.
+   \item New argument \texttt{show.window}.
+   \item 
+     Now recognises argument \texttt{adj.main}
+     controlling the position of main title.
+   \end{itemize}
    
   \item \texttt{pixellate.ppp}:
     \begin{itemize}
@@ -4962,6 +5057,9 @@ listed alphabetically.
    
    \item \texttt{thinNetwork}:
      \texttt{X} can be a pixel image on a network.
+
+    \item \texttt{tileindex}:
+      New arguments \texttt{close.gaps} and \texttt{all.inside}.
 
    \item \texttt{tilenames}, \verb!tilenames<-!:
     These functions are now generic, with methods for \texttt{tess}
