@@ -6,7 +6,7 @@
 
 % \VignetteIndexEntry{Summary of Recent Updates to the Spatstat Family}
 
-% $Revision: 1.83 $ $Date: 2025/12/20 07:01:56 $
+% $Revision: 1.85 $ $Date: 2025/12/20 07:20:25 $
 
 \newcommand{\pkg}[1]{\texttt{#1}}
 \newcommand{\code}[1]{\texttt{#1}}
@@ -134,7 +134,7 @@ currentcount <- z[nrow(z), counts]
 bookcount    <- z[z$version == "1.42-0", counts]
 changes <- currentcount - bookcount
 newobj <- changes[["nobjects"]]
-newdat <- changes[["ndatasets"]] + 1  # counting rule doesn't detect redwood3
+newdat <- changes[["ndatasets"]] + 2  # redwood3, shelling2
 newcode  <- changes[["Rlines"]] + changes[["srclines"]]
 bookcode <- bookcount[["Rlines"]] + bookcount[["srclines"]]
 currentcode <- currentcount[["Rlines"]] + currentcount[["srclines"]]
@@ -155,7 +155,7 @@ options(SweaveHooks=list(fig=function() par(mar=0.2+c(2,4,2,0))))
 Plot <- function(fmla, ..., dat=z, ylim=NULL) {
   yvals <- eval(as.expression(fmla[[2]]), envir=dat)
   if(is.null(ylim)) ylim <- c(0, max(yvals))
-  plot(fmla, ..., data=dat, type="l", xlab="", ylim=ylim, lwd=2, las=1)
+  plot(fmla, ..., data=dat, type="n", xlab="", ylim=ylim, las=1)
 }
 @ 
 \SweaveOpts{eps=TRUE}
@@ -165,7 +165,6 @@ Plot <- function(fmla, ..., dat=z, ylim=NULL) {
 <<fig=TRUE,echo=FALSE,results=hide>>=
 Plot((Rlines + srclines)/1000 ~ date, ylab="Lines of code (x 1000)", 
      main="Spatstat growth")
-lines(srclines/1000 ~ date, data=z)
 with(z, {
   polygon(c(date, rev(date)),
           c(srclines, rep(0, length(srclines)))/1000,
@@ -174,8 +173,10 @@ with(z, {
           c(srclines+Rlines, rev(srclines))/1000,
           angle=135, density=5, col="lightblue")
 })
-text(as.Date("2019-01-01"), 11, "C code", col="red")
 text(as.Date("2019-01-01"), 90, "R code", col="blue")
+text(as.Date("2021-01-01"), 15, "C code", col="red")
+lines((Rlines + srclines)/1000 ~ date, data=z, lwd=3)
+lines(srclines/1000 ~ date, data=z, col="red")
 @ 
 }
 
