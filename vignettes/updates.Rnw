@@ -354,6 +354,8 @@ the News and Release Notes for each update.
 
 \item Level sets calculated using analytic geometry, for some functions.
 
+\item Easier control over transparency of image plots.
+  
 \item Different discretisation rules supported in \texttt{slrm}.
 
 \item Leave-one-pixel-out prediction in \texttt{slrm}.
@@ -3945,6 +3947,7 @@ listed alphabetically.
    
  \item \texttt{plot.im}:
    \begin{itemize}
+   \item New argument \texttt{opacity} controls semi-transparency of colours.
    \item The position of text next to the colour ribbon can now be
      controlled by \verb!riblab$side!. 
    \item Placement of main title improved in some cases.
