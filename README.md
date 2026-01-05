@@ -154,7 +154,7 @@ and ask us to include them in the package by making a github *pull request*.
 ## Future development
 
 `spatstat` is the result of 30 years of software development
-and contains over 190,000 lines of code.
+and contains over 200,000 lines of code.
 It is still under
 development, motivated by the needs of researchers in many fields,
 and driven by innovations in statistical science.
