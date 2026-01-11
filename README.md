@@ -9,7 +9,20 @@ statistical modelling, simulation and statistical inference.
 See the website [www.spatstat.org](http://www.spatstat.org)
 or read the [book](http://book.spatstat.org).
 
-## spatstat has been split into a family of packages
+Contents:
+
+ - [spatstat is a family of packages](#family)
+ - [Extension packages](#extensions)
+ - [Family portrait](#portrait)
+ - [Installing the package](#installing)
+ - [Bug reports](#bugreports)
+ - [Questions](#questions)
+ - [Proposing changes to code](#proposing)
+ - [Future development](#future)
+
+___
+
+## <a name="family"></a> spatstat has been split into a family of packages
 
 Originally there was a single package called `spatstat`.
 It grew so large that CRAN required us to split it into pieces.
@@ -48,7 +61,7 @@ Each official release has a version number like `1.2-3`, while a development
 version has a number like `1.2-3.004`, which R recognises as a 
 later version than `1.2-3`.
 
-## Extension packages
+##  <a name="extensions"></a> Extension packages
 
 Additionally there are **extension packages** which contain more
 functionality. These packages are not automatically installed or loaded;
@@ -61,7 +74,7 @@ the user must do that if these extra features are desired.
 | `spatstat.local` | [![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/spatstat.local)](http://CRAN.R-project.org/package=spatstat.local) | [![GitHub R package version](https://img.shields.io/github/r-package/v/baddstats/spatstat.local)](https://github.com/baddstats/spatstat.local) | Local (geographically weighted) models |
 | `spatstat.sphere` | Not yet published | [![GitHub R package version](https://img.shields.io/github/r-package/v/spatstat/spatstat.sphere)](https://github.com/spatstat/spatstat.sphere) | Spherical data |
 
-## Family portrait 
+##  <a name="portrait"></a> Family portrait 
 
 The pink box marked `spatstat` contains all the code that will be
 installed when you install the `spatstat` umbrella package, and loaded
@@ -72,7 +85,9 @@ separately.
 
 ![Spatstat pieces](RepoStuff/new4spatstat.jpg)
 
-## Installation
+___
+
+## <a name="installing"></a> Installation
 
 ### Installing the official release
 
@@ -123,7 +138,9 @@ install.packages("spatstat.local", repos=repo)
 Check that the installation was successful by comparing version numbers
 as explained above.
 
-## Bug reports 
+___
+
+## <a name="bugreports"></a> Bug reports 
 
 Users are encouraged to report bugs.
 If you find a bug in a `spatstat` function,
@@ -136,7 +153,7 @@ or feature request.
 **Please do not post questions** on the Issues pages,
 because they are too clunky for correspondence.
 
-## Questions about spatstat
+## <a name="questions"></a> Questions about spatstat
 
 For questions about `spatstat`, first check 
 the question-and-answer website
@@ -145,13 +162,13 @@ to see whether your question has already been asked and answered.
 If not, you can either post your question at stackoverflow, or
 email the authors.
 
-## Proposing changes to the code
+## <a name="proposing"></a> Proposing changes to the code
 
 Feel free to fork `spatstat` or one of its sub-packages,
 make changes to the code,
 and ask us to include them in the package by making a github *pull request*. 
 
-## Future development
+## <a name="future"></a> Future development
 
 `spatstat` is the result of 30 years of software development
 and contains over 200,000 lines of code.
