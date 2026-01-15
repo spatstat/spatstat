@@ -9,7 +9,9 @@ statistical modelling, simulation and statistical inference.
 See the website [www.spatstat.org](http://www.spatstat.org)
 or read the [book](http://book.spatstat.org).
 
-Contents:
+___
+
+**Contents**:
 
  - [Package structure](#structure)
  - [Installation](#installing)
@@ -26,7 +28,7 @@ It grew so large that CRAN required us to split it into pieces.
  - [Extension packages](#extensions)
  - [Family portrait](#portrait)
  
-### <a name="family"></a> the `spatstat` family
+### <a name="family"></a> The `spatstat` family
 
 The original `spatstat` package
 has now been divided into a family of 10 sub-packages:
