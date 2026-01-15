@@ -19,16 +19,17 @@ ___
 
 ## <a name="structure"> Package structure
 
- - [`spatstat` is a family of packages](#family)
+Originally there was a single R package called `spatstat`.
+It grew so large that CRAN required us to split it into pieces.
+
+ - [The `spatstat` family](#family)
  - [Extension packages](#extensions)
  - [Family portrait](#portrait)
  
-### <a name="family"></a> spatstat has been split into a family of packages
+### <a name="family"></a> the `spatstat` family
 
-Originally there was a single package called `spatstat`.
-It grew so large that CRAN required us to split it into pieces.
-
-The original `spatstat` has now been divided into a family of 10 sub-packages:
+The original `spatstat` package
+has now been divided into a family of 10 sub-packages:
 
 | Sub-package | CRAN page | GitHub repository | Description |
 | ----------  | --------- | ----------------- | ----------  |
@@ -156,7 +157,7 @@ or feature request.
 **Please do not post questions** on the Issues pages,
 because they are too clunky for correspondence.
 
-## <a name="questions"></a> Questions about spatstat
+### <a name="questions"></a> Questions about spatstat
 
 For questions about `spatstat`, first check 
 the question-and-answer website
@@ -165,15 +166,18 @@ to see whether your question has already been asked and answered.
 If not, you can either post your question at stackoverflow, or
 email the authors.
 
-## <a name="proposing"></a> Proposing changes to the code
+**Please do not post questions on the Issues pages**,
+because they are too clunky for correspondence.
+
+### <a name="proposing"></a> Proposing changes to the code
 
 Feel free to fork `spatstat` or one of its sub-packages,
 make changes to the code,
 and ask us to include them in the package by making a github *pull request*. 
 
-## <a name="future"></a> Future development
+### <a name="future"></a> Future development
 
-`spatstat` is the result of 30 years of software development
+`spatstat` is the result of 35 years of software development
 and contains over 200,000 lines of code.
 It is still under
 development, motivated by the needs of researchers in many fields,
