@@ -23,8 +23,9 @@ ___
 
 Originally there was a single R package called `spatstat`.
 It grew so large that CRAN required us to split it into pieces.
-There are now 10 packages in [the `spatstat` family](#family)
-and additionally 3 [extension packages](#extensions).
+The original `spatstat` package has now been divided into
+10 sub-packages which we call [the `spatstat` family](#family).
+Additionally there are 3 [extension packages](#extensions).
 See the [family portrait](#portrait).
  
 ### <a name="family"></a> The `spatstat` family
