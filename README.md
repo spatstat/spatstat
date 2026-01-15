@@ -11,18 +11,19 @@ or read the [book](http://book.spatstat.org).
 
 Contents:
 
- - [spatstat is a family of packages](#family)
- - [Extension packages](#extensions)
- - [Family portrait](#portrait)
- - [Installing the package](#installing)
- - [Bug reports](#bugreports)
- - [Questions](#questions)
- - [Proposing changes to code](#proposing)
- - [Future development](#future)
+ - [Package structure](#structure)
+ - [Installation](#installing)
+ - [Bug reports, questions, code development](#devel)
 
 ___
 
-## <a name="family"></a> spatstat has been split into a family of packages
+## <a name="structure"> Package structure
+
+ - [`spatstat` is a family of packages](#family)
+ - [Extension packages](#extensions)
+ - [Family portrait](#portrait)
+ 
+### <a name="family"></a> spatstat has been split into a family of packages
 
 Originally there was a single package called `spatstat`.
 It grew so large that CRAN required us to split it into pieces.
@@ -61,7 +62,7 @@ Each official release has a version number like `1.2-3`, while a development
 version has a number like `1.2-3.004`, which R recognises as a 
 later version than `1.2-3`.
 
-##  <a name="extensions"></a> Extension packages
+###  <a name="extensions"></a> Extension packages
 
 Additionally there are **extension packages** which contain more
 functionality. These packages are not automatically installed or loaded;
@@ -74,7 +75,7 @@ the user must do that if these extra features are desired.
 | `spatstat.local` | [![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/spatstat.local)](http://CRAN.R-project.org/package=spatstat.local) | [![GitHub R package version](https://img.shields.io/github/r-package/v/baddstats/spatstat.local)](https://github.com/baddstats/spatstat.local) | Local (geographically weighted) models |
 | `spatstat.sphere` | Not yet published | [![GitHub R package version](https://img.shields.io/github/r-package/v/spatstat/spatstat.sphere)](https://github.com/spatstat/spatstat.sphere) | Spherical data |
 
-##  <a name="portrait"></a> Family portrait 
+###  <a name="portrait"></a> Family portrait 
 
 The pink box marked `spatstat` contains all the code that will be
 installed when you install the `spatstat` umbrella package, and loaded
@@ -140,7 +141,9 @@ as explained above.
 
 ___
 
-## <a name="bugreports"></a> Bug reports 
+## <a name="devel"> Bug reports, questions, code development
+
+### <a name="bugreports"></a> Bug reports 
 
 Users are encouraged to report bugs.
 If you find a bug in a `spatstat` function,
