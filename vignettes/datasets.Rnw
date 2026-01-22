@@ -46,7 +46,8 @@ To flick through a nice display of all the data sets that come with
 \spst\ type \texttt{demo(data)}.  To see information about a given
 data set, type \texttt{help({\em name})} where \emph{name} is the
 name of the data set.  To plot a given data set, 
-type \texttt{plot({\em name})}.
+type \texttt{plot({\em name})}. A nicer plot
+will often be produced by typing \texttt{example(\emph{name})}.
 
 Datasets in \spst\ are ``lazy-loaded'', which means that they can
 be accessed simply by typing their name. Not all packages do this;
@@ -65,9 +66,6 @@ the sub-package \sdat\ is automatically loaded.
 
 \subsection{Point patterns in 2D}
 
-Here is a list of the standard point pattern data sets 
-that are supplied with the current installation of \sdat:
-
 \newcommand{\recto}{\framebox{\hphantom{re}\vphantom{re}}}
 \newcommand{\irregpoly}{\includegraphics*[width=6mm]{irregpoly}}
 \newcommand{\masque}{\includegraphics*[width=6mm]{mask}}
@@ -75,6 +73,14 @@ that are supplied with the current installation of \sdat:
 \newcommand{\disc}{$\bigcirc$}
 \newcommand{\nomarks}{$\cdot$}
 \newcommand{\nocov}{$\cdot$}
+
+Here is a list of the standard point pattern data sets 
+that are supplied with the current installation of \sdat.
+
+The shape of the window containing the point pattern
+is indicated by the symbols \recto\ (rectangle), 
+\disc\ (disc), \convpoly\ (convex polygon), \irregpoly\ (irregular polygon)
+and \masque (binary mask).
 
 \begin{tabular}{l|l|ccc}
 {\sf name} & {\sf description} &
@@ -156,16 +162,11 @@ that are supplied with the current installation of \sdat:
 \hline
 \end{tabular}
 
-\bigskip
-\noindent
-The shape of the window containing the point pattern
-is indicated by the symbols \recto\ (rectangle), 
-\disc\ (disc), \convpoly\ (convex polygon), \irregpoly\ (irregular polygon)
-and \masque (binary mask).
+\subsubsection*{Auxiliary information}
 
-Additional information about the data set \texttt{\em name}
+Additional information about a point pattern data set \texttt{\em name}
 may be stored in a separate list \texttt{{\em name}.extra}.
-Currently these are the available options:
+Currently these are the auxiliary data sets:
 
 \begin{tabular}[!h]{ll}
   {\sc Name} & {\sc Contents} \\ 
@@ -183,11 +184,13 @@ Currently these are the available options:
   \hline
 \end{tabular}
 
-For demonstration and instruction purposes, 
-raw data files are available for the datasets 
-\texttt{vesicles}, \texttt{gorillas} and \texttt{osteo}.
+Additionally, raw data files are available for the datasets 
+\texttt{amacrine}, \texttt{finpines}, \texttt{gorillas},
+\texttt{vesicles} and \texttt{gorillas}.
+See the help files for these datasets for information about the
+raw data files.
 
-\subsection{Other Data Types}
+\subsection{Other Spatial Data Types}
 
 There are also the following spatial data sets which are not 2D point patterns:
 
@@ -211,6 +214,9 @@ There are also the following spatial data sets which are not 2D point patterns:
 
 Additionally there is a dataset \texttt{Kovesi} containing
 several colour maps with perceptually uniform contrast. 
+
+Raw data files are available for the \texttt{osteo} dataset.
+See the help for \texttt{osteo} for information.
 
 \section{Information on each dataset}
 
@@ -706,7 +712,9 @@ reedy <- owin(c(580, 650) * 1000, c(6986, 7026) * 1000)
 Here are the data in that area:
 
 <<fig=TRUE>>=
-plot(murchison$greenstone[reedy], main="Murchison data", col="lightgreen")
+plot(murchison$greenstone[reedy], 
+     main="Detail around Reedy township", 
+     col="lightgreen")
 plot(murchison$gold[reedy], add=TRUE, pch=3, col="blue")
 plot(murchison$faults[reedy], add=TRUE, col="red")
 @ 

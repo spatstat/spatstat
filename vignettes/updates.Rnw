@@ -333,6 +333,8 @@ the News and Release Notes for each update.
 
 \begin{itemize}
 
+\item More support for long vectors (vectors with more than $2^{31}$ entries).
+  
 \item Waagepetersen's composite likelihood for cluster processes.  
   
 \item Important changes to mark correlation function.

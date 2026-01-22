@@ -626,7 +626,7 @@
 	\code{\link[spatstat.geom]{levelset}} \tab level set of an image\cr 
 	\code{\link[spatstat.geom]{solutionset}} \tab region where an expression is true \cr
 	\code{\link[spatstat.geom]{imcov}} \tab covariance image \cr
-	\code{\link[spatstat.geom]{spatcov}} \tab spatial covariance function of image \cr
+	\code{\link[spatstat.explore]{spatcov}} \tab spatial covariance function of image \cr
 	\code{\link[spatstat.geom]{convolve.im}} \tab spatial convolution of images \cr
 	\code{\link[spatstat.explore]{transect.im}} \tab line transect of image \cr
 	\code{\link[spatstat.geom]{pixelcentres}} \tab extract centres of pixels \cr
@@ -807,7 +807,7 @@
       \code{\link[spatstat.linnet]{addVertices}} \tab add new vertices, extending a network \cr
       \code{\link[spatstat.linnet]{thinNetwork}} \tab remove vertices or lines from a network \cr
       \code{\link[spatstat.linnet]{repairNetwork}} \tab repair internal format \cr
-      \code{\link[spatstat.linnet]{terminalertices}} \tab identify terminal vertices \cr
+      \code{\link[spatstat.linnet]{terminalvertices}} \tab identify terminal vertices \cr
       \code{\link[spatstat.linnet]{pixellate.linnet}} \tab approximate by pixel
       image \cr
       \code{\link[spatstat.linnet]{shortestpath}} \tab shortest path between two
@@ -960,7 +960,7 @@
                                 for density estimation\cr
     \code{\link[spatstat.explore]{bw.scott}} \tab Scott's rule of thumb bandwidth
                                 for density estimation\cr
-    \code{\link[spatstat.explore]{bw.taylor}} \tab Taylor's nonrandom bootstrap bandwidth
+    \code{\link[spatstat.univar]{bw.taylor}} \tab Taylor's nonrandom bootstrap bandwidth
                                 for density estimation\cr
     \code{\link[spatstat.univar]{bw.abram}} \tab Abramson's rule for adaptive bandwidths\cr
     \code{\link[spatstat.explore]{bw.relrisk}} \tab cross-validated bandwidth selection
@@ -1007,7 +1007,7 @@
     \code{\link[spatstat.explore]{pcfinhom}} \tab pair correlation for inhomogeneous patterns\cr
     \code{\link[spatstat.explore]{bw.pcfinhom}} \tab Cross-validated bandwidth selection
                                for \code{\link[spatstat.explore]{pcfinhom}} \cr
-    \code{\link[spatstat.explore]{bw.pdh}} \tab Bandwidth adjustment 
+    \code{\link[spatstat.explore]{bw.bdh}} \tab Bandwidth adjustment 
                                for \code{\link[spatstat.explore]{pcfinhom}} \cr
     \code{\link[spatstat.explore]{Finhom}} \tab \eqn{F} for inhomogeneous point patterns \cr
     \code{\link[spatstat.explore]{Ginhom}} \tab \eqn{G} for inhomogeneous point patterns \cr
