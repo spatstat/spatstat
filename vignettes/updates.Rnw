@@ -342,6 +342,8 @@ the News and Release Notes for each update.
 \item Convert a recursively partitioned point process model
   to a spatial tessellation.
   
+\item Signed distance transform and signed distance function.
+  
 \item Spatial persistence index and cluster strength index.
   
 \item Replicated point patterns on a linear network.
@@ -357,6 +359,9 @@ the News and Release Notes for each update.
 \item Level sets calculated using analytic geometry, for some functions.
 
 \item Easier control over transparency of image plots.
+
+\item Scramble the colours when plotting a point pattern 
+  or line segment pattern.
   
 \item Different discretisation rules supported in \texttt{slrm}.
 
@@ -1036,6 +1041,13 @@ Following is a list of all the functions that have been added,
 starting with the most recent additions.
 
 \begin{itemize}
+\item \texttt{default.colourmap}: default colour map for a vector or factor.
+\item \texttt{levelset}: new generic
+\item \texttt{levelset.im}: level set of a pixel image
+\item \texttt{levelset.distfun}: level set of a distance function.
+\item \texttt{levelset.tessfun}: level set of a function created by
+  \texttt{as.function.tess}.
+\item \texttt{difflong}: lagged difference of long vector.
 \item \texttt{persist}: spatial persistence index for a cluster process model.
 \item \texttt{clusterstrength}: cluster strength index for
   a cluster process or Cox process model.
@@ -2651,7 +2663,13 @@ listed alphabetically.
    New argument \texttt{w}.
 
  \item \texttt{default.symbolmap.ppp}:
+   \begin{itemize}
+   \item For a multitype point pattern, \texttt{cols} can be 
+     a \texttt{function(n)} 
+   \item New argument \texttt{scramble.cols}
+   \item 
    Argument \texttt{marktransform} renamed \texttt{transform} for consistency.
+   \end{itemize}
    
  \item \texttt{densityfun.ppp}:
    The resulting function can now handle query points which lie
@@ -2820,10 +2838,13 @@ listed alphabetically.
    \item    New argument \texttt{k} allows computation of $k$-th nearest point.
    \item    Computation accelerated.
    \end{itemize}
-
     
+ \item \texttt{distfun.owin}:
+   New argument \texttt{signed}.
+   
  \item \texttt{distmap.owin}:
    \begin{itemize}
+   \item    New argument \texttt{signed}.
    \item New argument \texttt{connect}.
    \item 
     Behaviour has been altered so that, when \texttt{X} is a binary mask, the results of
@@ -3684,6 +3705,10 @@ listed alphabetically.
     Infinite and \texttt{NA} values are now detected (if \texttt{check=TRUE})
     and are reset to zero, with a warning.
     
+    
+  \item \texttt{multiplicity}:
+    Methods for \texttt{multiplicity} can now handle objects of larger size.
+    
 %%N
    
    \item \texttt{nbfires}:
@@ -3922,6 +3947,7 @@ listed alphabetically.
 
  \item \texttt{plot.colourmap}:
    \begin{itemize}
+   \item New argument \texttt{do.plot}
    \item New formal argument \texttt{side}.
    \item Now handles a colour map for a zero-length interval [a,a]
    \item 
@@ -4103,6 +4129,7 @@ listed alphabetically.
         
   \item \texttt{plot.psp}:
     \begin{itemize}
+     \item New argument \texttt{scramble.cols}
     \item Segments can be plotted with widths proportional to their mark values.
     \item New argument \texttt{style}.
     \item New argument \texttt{col} gives control over the colour map
@@ -4123,6 +4150,7 @@ listed alphabetically.
     
    \item \texttt{plot.ppp}:
      \begin{itemize}
+     \item New argument \texttt{scramble.cols}
      \item New arguments \texttt{background} and \texttt{clip.background} allow
        the user to specify an object (or a colour value)
        that will be plotted before the point 
@@ -4193,6 +4221,7 @@ listed alphabetically.
       
     \item \texttt{plot.symbolmap}:
       \begin{itemize}
+      \item New argument \texttt{do.plot}.
       \item New formal argument \texttt{side}.
       \item New argument \texttt{colour.only} makes
         it possible to display only the colour map information in a symbol map.
@@ -5080,8 +5109,14 @@ listed alphabetically.
   \item \texttt{union.owin}:
    Improved behaviour when there are more than 2 windows.
 
+   
+ \item \texttt{uniquemap}:
+   handles larger objects.
+   
    \item \texttt{unnormdensity}:
      \begin{itemize}
+     \item Argument \texttt{bw} may be \texttt{NULL}
+       (treated as equivalent to being missing).
      \item  The result has an attribute \texttt{smooth.args}
        containing the smoothing
        parameters that were used in the calculation.
