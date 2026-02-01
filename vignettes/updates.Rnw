@@ -6,7 +6,7 @@
 
 % \VignetteIndexEntry{Summary of Recent Updates to the Spatstat Family}
 
-% $Revision: 1.85 $ $Date: 2025/12/20 07:20:25 $
+% $Revision: 1.86 $ $Date: 2026/02/01 01:11:17 $
 
 \newcommand{\pkg}[1]{\texttt{#1}}
 \newcommand{\code}[1]{\texttt{#1}}
@@ -333,6 +333,14 @@ the News and Release Notes for each update.
 
 \begin{itemize}
 
+\item Identify threads in a network
+
+\item Improved algorithm for integrating a function over a network.
+
+\item Summary functions have argument \texttt{rmax}.
+  
+\item Diagnostic functions have argument \texttt{rmax}.
+  
 \item More support for long vectors (vectors with more than $2^{31}$ entries).
   
 \item Waagepetersen's composite likelihood for cluster processes.  
@@ -346,9 +354,15 @@ the News and Release Notes for each update.
   
 \item Spatial persistence index and cluster strength index.
   
+\item Improvements to \texttt{profilepl} and \texttt{effectfun}.
+
+\item Improvements to perspective plot of a function on a network.
+  
 \item Replicated point patterns on a linear network.
   
 \item Diagnostics for a fitted point process model on a linear network.
+  
+\item \texttt{lppm} recognises local coordinates in the model formula.
   
 \item Major extension of code for ROC curves.  
 
@@ -2762,7 +2776,24 @@ listed alphabetically.
     \item 
      Recognises argument \texttt{rule.eps} passed to \texttt{as.mask}.
      \end{itemize}
-    
+
+     
+   \item diagnostic functions:
+     \begin{itemize}
+     \item The following functions have new formal argument \texttt{rmax}:
+       \begin{quote}
+         \texttt{Gcom}, \texttt{Kcom}, \texttt{psstA}, \texttt{psstG}, \texttt{psst}
+       \end{quote}
+     \item The following functions accept argument \texttt{rmax}:
+       \begin{quote}
+         \texttt{Gres}, \texttt{Kres}
+       \end{quote}
+     \item The following functions accept \texttt{correction="all"}:
+       \begin{quote}
+         \texttt{Gcom}, \texttt{Gres}, \texttt{Kcom}, \texttt{Kres}
+       \end{quote}
+
+     \end{itemize}
   \item \texttt{diagnose.ppm}:
     \begin{itemize}
     \item This is now a method for the generic \texttt{diagnose}.
@@ -2885,6 +2916,8 @@ listed alphabetically.
       The user only needs to provide values for those covariates which
       are used in the decision tree. If the entire tree involves only one
       variable, then \texttt{covname} is not needed.
+    \item If a spatial covariate is constant, its value does not need to
+      be provided in the call to \texttt{effectfun}.
     \item 
     Now works for \texttt{ppm}, \texttt{kppm}, 
     \texttt{lppm}, \texttt{dppm}, \texttt{rppm} and \texttt{profilepl} objects.
@@ -2954,10 +2987,16 @@ listed alphabetically.
 %%F
    
  \item \texttt{Fest}:
-   Additional checks for errors in input data.
+   \begin{itemize}
+   \item New argument \texttt{rmax}.
+   \item Additional checks for errors in input data.
+   \end{itemize}
+
+
 
  \item \texttt{Finhom}:
    \begin{itemize}
+   \item New argument \texttt{rmax}.
    \item 
      A warning is issued if bias is likely to occur because of
      undersmoothing.
@@ -2993,7 +3032,10 @@ listed alphabetically.
       values at the data points only, 
       using leave-one-out calculation if desired.
    \end{itemize}
- 
+
+   
+ \item \texttt{FmultiInhom}:  New argument \texttt{rmax}.
+
  \item \texttt{funxy}:
     \begin{itemize}
     \item 
@@ -3011,9 +3053,14 @@ listed alphabetically.
 
 %%G
     
- \item \texttt{Gcross}: 
-   Function labels (shown on the plot legend) have been improved when 
+ \item \texttt{Gcross}:
+   \begin{itemize}
+   \item New argument \texttt{rmax}.
+   \item    Function labels (shown on the plot legend) have been improved when 
    \texttt{i = j}.
+
+   \end{itemize}
+
    
   \item \texttt{Geyer}:
    The saturation parameter \texttt{sat} can now be less than 1.
@@ -3566,6 +3613,8 @@ listed alphabetically.
 
  \item \texttt{lppm}:
    \begin{itemize}
+   \item The model formula may involve the local coordinates
+     \texttt{seg} and \texttt{tp}.
    \item Covariates can be objects of class \texttt{lintess}.
    \item New argument \texttt{random} controls placement of dummy points.
    \item    Computation accelerated.
@@ -5006,11 +5055,10 @@ listed alphabetically.
         This applies to
         \texttt{Fest}, \texttt{F3est}, \texttt{Gest}, 
         \texttt{Gcross}, \texttt{Gdot}, \texttt{Gmulti}, \texttt{G3est},
-        \texttt{Gfox}, \texttt{Gcom}, \texttt{Gres}, \texttt{Hest}, 
+        \texttt{Gfox}, \texttt{Hest}, 
         \texttt{Jest}, \texttt{Jmulti}, \texttt{Jcross}, \texttt{Jdot}, 
         \texttt{Jfox}, \texttt{Kest}, \texttt{Kinhom},
-        \texttt{Kmulti}, \texttt{Kcross}, \texttt{Kdot}, \texttt{Kcom}, 
-        \texttt{Kres}, 
+        \texttt{Kmulti}, \texttt{Kcross}, \texttt{Kdot}, 
 	\texttt{Kmulti.inhom}, \texttt{Kcross.inhom}, 
         \texttt{Kdot.inhom}, \texttt{Kscaled}, \texttt{Ksector}, 
         \texttt{Kmark}, \texttt{K3est}, \texttt{Lscaled}, \texttt{markcorr}, 
@@ -5018,6 +5066,24 @@ listed alphabetically.
 	\texttt{nnorient}, \texttt{pairorient}, \texttt{pcfinhom}, 
         \texttt{pcfcross.inhom}, \texttt{pcfcross}, \texttt{pcf}, 
         \texttt{Tstat}.
+    \end{quote}
+
+  \item summary functions:
+    The following functions have a new argument \texttt{rmax}:
+    \begin{quote}
+        \texttt{Fest}, \texttt{Finhom}, \texttt{FmultiInhom}, 
+        \texttt{Gcross}, \texttt{Gdot}, \texttt{Ginhom},
+        \texttt{Gmulti}, \texttt{GmultiInhom},
+        \texttt{Jest}, \texttt{Jcross}, \texttt{Jdot}, \texttt{Jinhom}, 
+        \texttt{Jmulti},
+        \texttt{Kcross}, \texttt{Kdot}, \texttt{Kinhom}, \texttt{Kmulti}, 
+	\texttt{Kcross.inhom}, \texttt{Kdot.inhom}, \texttt{Kmulti.inhom}, 
+        \texttt{Kmark}, \texttt{Ksector}, 
+        \texttt{markconnect}, \texttt{markcorr}, 
+        \texttt{markcorrint}, \texttt{markcrosscorr}, \texttt{markequal},
+        \texttt{markvario}, \texttt{pcf.ppp}, \texttt{pcfcross}, 
+        \texttt{pcfdot}, \texttt{pcfmulti}, \texttt{pcfinhom}
+        \texttt{pcfcross.inhom}, \texttt{pcfcross}.
     \end{quote}
 
    \item \texttt{summary.distfun}, \texttt{summary.funxy}:
