@@ -64,7 +64,9 @@ all the sub-packages listed above will be loaded or imported.
 
 Each official release has a version number like `1.2-3`, while a development
 version has a number like `1.2-3.004`, which R recognises as a 
-later version than `1.2-3`.
+later version than `1.2-3`. The official releases are updated every 8 weeks
+(the minimum time permitted by CRAN). The development versions are
+updated almost every day.
 
 ###  <a name="extensions"></a> Extension packages
 
