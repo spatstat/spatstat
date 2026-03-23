@@ -54,5 +54,8 @@
 \newcommand{\rocpapercite}{Baddeley et al (2025)}
 \newcommand{\rocpapercitealp}{Baddeley et al, 2025)}
 \newcommand{\rocpaper}{Baddeley, A., Rubak, E., Rakshit, S. and Nair, G. (2025) ROC curves for spatial point patterns and presence-absence data. \doi{10.48550/arXiv.2506.03414}.}
+%% pointweights
+\newcommand{\pointweightsAny}{A numeric or logical valued vector, matrix, data frame, pixel image, \code{function} or \code{expression}, or one of the strings \code{"x"} or \code{"y"} representing the cartesian coordinates. The \code{expression} may involve the variables \code{x,y,marks} representing the coordinates and marks of the point pattern}
+\newcommand{\pointweightsVector}{A numeric or logical valued vector, pixel image, \code{function} or \code{expression}, or one of the strings \code{"x"} or \code{"y"} representing the cartesian coordinates. The \code{expression} may involve the variables \code{x,y,marks} representing the coordinates and marks of the point pattern}
 
 

@@ -6,7 +6,7 @@
 
 % \VignetteIndexEntry{Bugs Fixed in Spatstat}
 
-%  $Revision: 1.35 $ $Date: 2025/03/18 01:00:16 $
+%  $Revision: 1.36 $ $Date: 2026/03/22 03:58:09 $
 
 \newcommand{\pkg}[1]{\texttt{#1}}
 \newcommand{\code}[1]{\texttt{#1}}
@@ -259,6 +259,11 @@ the presence of a bug is obvious, and the bug would not have misled the user.
  \subsection{Serious Bugs, Often Completely Wrong, Moderate Impact}
 
  \begin{itemize}
+ \item \texttt{MinkowskiSum}, operator \verb!%(+)%!:
+   Result was often incorrect for non-convex sets
+    (and was not symmetric in \texttt{A} and \texttt{B}).
+    \bugbefore{spatstat 1.65-0}{december 2020}{spatstat.geom 3.7-2}{march 2026} 
+    
  \item \texttt{pairdist.lpp}:
    Results could have been completely incorrect, due to an internal bug,
     if the linear network data was in the non-sparse representation.
@@ -295,7 +300,8 @@ the presence of a bug is obvious, and the bug would not have misled the user.
    \bugger{1.44-0}{december 2015}{1.64-2}{november 2020}   
 
   \item \texttt{kppm}: 
-    Results were sometimes incorrect for method='clik2' and method='palm'
+    Results were sometimes incorrect for \texttt{method='clik2'}
+    and \texttt{method='palm'}
     because the log composite likelihood was erroneously truncated to
     positive values. Any fitted model for which \verb!logLik(model) = 2.2e-16!
     should be suspected of being incorrect.

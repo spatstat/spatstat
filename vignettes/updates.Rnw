@@ -6,7 +6,7 @@
 
 % \VignetteIndexEntry{Summary of Recent Updates to the Spatstat Family}
 
-% $Revision: 1.86 $ $Date: 2026/02/01 01:11:17 $
+% $Revision: 1.88 $ $Date: 2026/03/22 04:13:24 $
 
 \newcommand{\pkg}[1]{\texttt{#1}}
 \newcommand{\code}[1]{\texttt{#1}}
@@ -332,6 +332,47 @@ Here is the text from the `overview' sections of
 the News and Release Notes for each update. 
 
 \begin{itemize}
+  
+\item New generic \texttt{Lmodel} computes the theoretical $L$-function
+  of a fitted model or theoretical model.
+
+\item \texttt{envelope} method for determinantal point process models.
+
+\item Specify the theoretical value of the summary function 
+  in \texttt{envelope}.
+  
+\item Important changes to default settings for pair correlation functions.
+  
+\item More flexible interpretation of arguments \texttt{lambda = <ppm>}
+  or \texttt{lambda = <lppm>}
+  in inhomogeneous summary statistics
+
+\item New options for multitype pair correlation functions.
+
+\item More options for \texttt{simulate} argument in \texttt{envelope} methods.
+
+\item Extended capability of \texttt{envelope.pp3}
+
+\item Method of T.F. Cox for identifying dense and sparse regions of points.
+  
+\item New class of (theoretical) cluster process models
+
+\item Inhomogeneous Poisson process in 3D.
+
+\item Non-uniform random points in 3D.
+    
+\item Simple Sequential Inhibition in 3D.
+  
+\item Support function, Feret diameter, polar body, Voronoi flower.
+
+\item Merge tiles in a tessellation.
+
+\item Return squared nearest neighbour distances.
+    
+\item Bug fix in Minkowski sum.
+
+\item Summary method for tessellations.
+  
 
 \item Identify threads in a network
 
@@ -1027,6 +1068,9 @@ These are now provided in the sub-package \pkg{spatstat.data}.
 The following new classes of objects may be of use.
 
 \begin{itemize}
+\item \texttt{clusterprocess}:
+  Neyman-Scott-Cox cluster process
+  model with specified values of the parameters.
 \item \texttt{traj}:
     Trajectory (history of function evaluations) in a model
     that was fitted by optimisation.
@@ -1055,6 +1099,50 @@ Following is a list of all the functions that have been added,
 starting with the most recent additions.
 
 \begin{itemize}
+\item \texttt{envelope.dppm}:
+  Method for \texttt{envelope} for fitted models of class \texttt{"dppm"}
+\item \texttt{Lmodel}, \texttt{Lmodel.kppm}, \texttt{Lmodel.dppm}, 
+  \texttt{Lmodel.ppm}, \texttt{Lmodel.detpointprocfamily}:
+  Given a point process model, return a function in the \textsl{R} language
+  which computes the theoretical $L$-function of the model.
+\item \texttt{Kmodel.clustermodel}, \texttt{pcfmodel.clustermodel}, 
+  \texttt{Lmodel.clustermodel}:
+    Calculate the theoretical $K$-function, $L$-function or pair correlation
+    function for a model of class \texttt{"clustermodel"}.
+\item \texttt{coxmap}:
+  Given a point pattern, divide the spatial region into
+  areas where the pattern is dense, sparse or neither,
+  using the method of T.F. Cox (1979).
+\item \texttt{rpoint3}:
+    Random points in three dimensions with any probability density
+\item \texttt{clusterprocess}:
+  Create an object of class \texttt{clusterprocess}.
+\item \texttt{clusterradius.clusterprocess}:
+  Radius of the support of the offspring density of a cluster process model.
+\item \texttt{predict.clusterprocess}:
+  Calculate intensity of a cluster process model
+\item \texttt{print.clusterprocess}:
+  Print a cluster process model
+\item \texttt{reach.clusterprocess}:
+  Distance beyond which the pair correlation is effectively 1.
+\item \texttt{simulate.clusterprocess}
+    Generate simulated realisations of a cluster process model.
+\item \texttt{mergeTiles}: Merge tiles in a tessellation.
+\item \texttt{FeretDiamFun}:
+  Create a function that computes the Feret diameter of a domain at any angle.
+\item \texttt{FeretBox}:
+  Compute the tightest rectangle enclosing a domain at any angle.
+\item \texttt{minFeretDiam}, \texttt{maxFeretDiam}:
+  Minimum or maximum Feret diameter of a domain
+\item \texttt{SupportFun}
+  Create a function that computes the support function of a domain.
+\item \texttt{polarbody}
+  Compute the polar body of a domain.
+\item \texttt{voronoiFlower}
+  Compute the Voronoi flower of a domain.
+\item \texttt{summary.tess}, \texttt{print.summary.tess}
+    Method for \texttt{summary} for tessellations.
+\item \texttt{capitalise}: make the first letter of each word a capital letter.
 \item \texttt{default.colourmap}: default colour map for a vector or factor.
 \item \texttt{levelset}: new generic
 \item \texttt{levelset.im}: level set of a pixel image
@@ -2047,6 +2135,7 @@ Generate Poisson random variables conditioned to be positive.
   \item \texttt{inside.boxx}:
     Test whether multidimensional points lie inside a specified 
     multidimensional box.
+
   \item \texttt{lixellate}:
     Divide each segment of a linear network into smaller segments.
 
@@ -2097,6 +2186,7 @@ Generate Poisson random variables conditioned to be positive.
     a \texttt{dppm} object. 
   \item \texttt{residuals.dppm}: Residual measure for a \texttt{dppm} object.
   \end{itemize}
+
 \item Determinantal Point Process model families:
   \begin{itemize}
   \item \texttt{dppBessel}, \texttt{dppCauchy}, 
@@ -2119,7 +2209,7 @@ Generate Poisson random variables conditioned to be positive.
    Helper functions.
  \end{itemize}
 
- \item \texttt{dg.envelope}:
+\item \texttt{dg.envelope}:
    Simulation envelopes corresponding to Dao-Genton test.
 
  \item \texttt{dg.progress}:
@@ -2567,7 +2657,10 @@ listed alphabetically.
   \item New argument \texttt{verbose}.
   \end{itemize}
 
-\item \texttt{colourmap}:
+ \item \texttt{clusterstrength}: 
+   Now accepts an object of class \texttt{"clustermodel"}.
+
+ \item \texttt{colourmap}:
   \begin{itemize}
   \item New arguments \texttt{compress}, \texttt{decompress} for nonlinear colour maps.
   \item 
@@ -2685,6 +2778,12 @@ listed alphabetically.
    Argument \texttt{marktransform} renamed \texttt{transform} for consistency.
    \end{itemize}
    
+ \item \texttt{densityBC}:
+   \begin{itemize}
+   \item accelerated
+   \item new argument \texttt{xout}
+   \end{itemize}
+   
  \item \texttt{densityfun.ppp}:
    The resulting function can now handle query points which lie
     outside the window of the original data,
@@ -2703,6 +2802,8 @@ listed alphabetically.
 
  \item \texttt{density.lpp}:
    \begin{itemize}
+   \item 
+     Argument \texttt{weights} can be logical valued.
    \item 
     Argument \texttt{sigma} can now be a function in the R language,
     assumed to provide a bandwidth selection rule. This function
@@ -2734,6 +2835,7 @@ listed alphabetically.
    
  \item \texttt{density.ppp}:
    \begin{itemize}
+   \item Argument \texttt{weights} can be logical-valued.
    \item A non-Gaussian kernel can now be specified
    using the argument \texttt{kernel}.
    \item Standard error calculation is now available with any smoothing kernel.
@@ -2884,7 +2986,17 @@ listed alphabetically.
   \end{itemize}
 
 \item \texttt{distmap.ppp}:
-   New argument \texttt{clip}.
+  \begin{itemize}
+  \item 
+    New option \texttt{squared=TRUE} returns the squared distances,
+    reducing computation time.
+  \item 
+    New option \texttt{extras=FALSE} avoids returning additional attributes,
+    reducing computation time.
+  \item    New argument \texttt{clip}.
+  \end{itemize}
+
+
 
  \item \texttt{distmap.psp}:
    New arguments \texttt{extras} and \texttt{clip}.
@@ -2934,6 +3046,13 @@ listed alphabetically.
  \item \texttt{envelope}:
    \begin{itemize}
    \item 
+     Argument \texttt{simulate} can be a point process model of class
+    \texttt{"ppm"}, \texttt{"kppm"}, \texttt{"dppm"}, \texttt{"slrm"}, 
+    \texttt{"clusterprocess"} or \texttt{"detpointprocfamily"}.
+ \item 
+   New argument \texttt{theoryfun} can be used to provide the theoretical value
+   of the summary function.
+   \item 
      All methods for \texttt{envelope} now accept a summary function 
     in which the function argument is not named \texttt{r}.
     This includes functions such as \texttt{transect.im} and \texttt{roc}.
@@ -2958,13 +3077,31 @@ listed alphabetically.
  \item \texttt{envelope.lpp}, \texttt{envelope.lppm}:
    \begin{itemize}
    \item 
+     New argument \texttt{theoryfun} can be used to provide the theoretical value
+     of the summary function.
+
+   \item 
     New arguments \texttt{fix.n} and \texttt{fix.marks}
     allow envelopes to be computed
     using simulations conditional on the observed number of points.   
   \item New arguments \texttt{maxnerr}, \texttt{rejectNA} and \texttt{silent}.
    \end{itemize}
 
+ \item \texttt{envelope.pp3}:
+   \begin{itemize}
+   \item 
+   Marked point patterns are accepted.
+ \item 
+   New arguments \texttt{fix.n} and \texttt{fix.marks} determine whether the 
+   simulated patterns have a fixed or random number of points.
+   \end{itemize}
 
+ \item \texttt{erosion.owin}:
+   when \texttt{shrink.frame=TRUE} (the default), 
+   the  frame of the resulting window
+    is always the erosion of the original frame by distance \texttt{r},
+    as promised in the help file.
+    
  \item \texttt{eval.im}:  New argument \texttt{warn}.
    
  \item \texttt{eval.linim}:  New argument \texttt{warn}.
@@ -3185,6 +3322,10 @@ listed alphabetically.
  \item \texttt{integral.ssf}:
    Argument \code{domain} can be a tessellation.
 
+   
+ \item \texttt{intensity.ppp}: 
+   Argument \texttt{weights} can be logical-valued.
+
 \item \texttt{intensity.ppm}:
   \begin{itemize}
   \item    Intensity approximation is now implemented for
@@ -3262,6 +3403,15 @@ listed alphabetically.
 
  \item \texttt{Kcross.inhom}, \texttt{Kdot.inhom}, \texttt{Kmulti.inhom}:
    \begin{itemize}
+   \item  
+     Interpretation of arguments \texttt{lambdaI}, \texttt{lambdaJ}, 
+     \texttt{lambdaX}, \texttt{lambdadot}
+     has changed when they are fitted point process models. If the model is
+     a multitype point process then it is assumed to be a model for the 
+     entire point pattern \texttt{X}, 
+     while if the model is an unmarked point process
+     then it is assumed to be a model for the relevant subset of the data.
+
    \item 
     These functions now allow intensity values to be given by
     a fitted point process model.
@@ -3485,17 +3635,41 @@ listed alphabetically.
  \item \texttt{linearKinhom}:
    new argument \texttt{normpower}.
    
- \item \texttt{linearKdot.inhom}, \texttt{linearpcfdot.inhom}
+ \item \texttt{linearKdot.inhom}, \texttt{linearpcfdot.inhom}:
+   \begin{itemize}
+   \item 
+      When argument \texttt{lambdaI} or \texttt{lambdadot}
+      is a point process model,
+      the interpretation now depends on whether the model is multitype or
+      unmarked.  A multitype point process model will be interpreted as
+      providing the intensity for each possible type of point. An unmarked point
+      process model will be interpreted as providing the intensity only for the
+      relevant type of point (type \texttt{i} only, 
+      or total intensity for all types of points).
+   \item 
    Argument \texttt{lambdaI=NULL} or \texttt{lambdadot=NULL} 
    is now interpreted to mean
    that the intensity should be estimated by kernel smoothing.
+   \end{itemize}
    
  \item \texttt{linearKcross.inhom}, \texttt{linearpcfcross.inhom}
+   \begin{itemize}
+   \item 
+      When argument \texttt{lambdaI}, \texttt{lambdaJ} or \texttt{lambdadot}
+      is a point process model,
+      the interpretation now depends on whether the model is multitype or
+      unmarked.  A multitype point process model will be interpreted as
+      providing the intensity for each possible type of point. An unmarked point
+      process model will be interpreted as providing the intensity only for the
+      relevant type of point (type \texttt{i} only, type \texttt{j} only, 
+      or total intensity for all types of points).
+   \item 
    Argument \texttt{lambdaI=NULL} or \texttt{lambdaJ=NULL} 
    is now interpreted to mean
    that the intensity should be estimated by kernel smoothing.
-   
- \item \texttt{linearKinhom}, \texttt{linearpcfinhom}:
+ \end{itemize}
+
+\item \texttt{linearKinhom}, \texttt{linearpcfinhom}:
    \begin{itemize}
    \item Argument \texttt{lambda=NULL}
      is now interpreted to mean that the intensity
@@ -3659,7 +3833,7 @@ listed alphabetically.
 %%M
    
  \item \texttt{markconnect}:
-   \begin{itemize}
+   \begin{itemize}  
    \item 
     The result now has an attribute \texttt{smooth.args}
     containing the smoothing parameters used.
@@ -3670,6 +3844,7 @@ listed alphabetically.
 
  \item \texttt{markcorr}:
    \begin{itemize}
+   \item Argument \texttt{weights} can be logical-valued.
    \item 
     The result now has an attribute \texttt{smooth.args}
     containing the smoothing parameters used.
@@ -3688,6 +3863,7 @@ listed alphabetically.
 
 \item \texttt{markcrosscorr}:
   \begin{itemize}
+   \item Argument \texttt{weights} can be logical-valued.
   \item New argument \texttt{weights}.
   \item Now allows negative mark values, when \texttt{normalise=FALSE}.
   \end{itemize}
@@ -3772,6 +3948,14 @@ listed alphabetically.
  \item \texttt{nncorr,nnmean,nnvario}:
    New argument \texttt{na.action}.
    
+ \item \texttt{nncross.default}:
+   \begin{itemize}
+   \item 
+   New option \texttt{squared=TRUE}
+   returns the squared nearest neighbour distances,
+   reducing computation time.
+ \end{itemize}
+ 
  \item \texttt{nncross.lpp}:
    \begin{itemize}
    \item    New argument \texttt{k} allows computation of $k$-th nearest point.
@@ -3780,6 +3964,10 @@ listed alphabetically.
 
  \item \texttt{nncross.ppp}:
    \begin{itemize}
+   \item 
+   New option \texttt{squared=TRUE}
+   returns the squared nearest neighbour distances,
+   reducing computation time.
    \item slightly accelerated.
 %   \item new argument \texttt{dmax}.
    \item 
@@ -3788,8 +3976,20 @@ listed alphabetically.
    \end{itemize}
 
     
+ \item \texttt{nndist.default}:
+   New option \texttt{squared=TRUE}
+   returns the squared nearest neighbour distances,
+   reducing computation time.
+
  \item \texttt{nndist.ppp}:
+   \begin{itemize}
+   \item 
+     New option \texttt{squared=TRUE}
+     returns the squared nearest neighbour distances,
+     reducing computation time.
+   \item 
    New argument \texttt{proper}.
+   \end{itemize}
 
  \item \texttt{nndist.pp3}:
    New argument \texttt{by} allows computation of the nearest 
@@ -3807,6 +4007,11 @@ listed alphabetically.
    \item    Computation accelerated.
    \end{itemize}
 
+ \item \texttt{nnmap.ppp}:
+       New option \texttt{squared=TRUE} returns the squared distances,
+    reducing computation time.
+
+    
  \item \texttt{nnwhich.lpp}:
    \begin{itemize}
    \item    New argument \texttt{k} allows computation of $k$-th nearest point.
@@ -3885,6 +4090,13 @@ listed alphabetically.
    
  \item \texttt{pcf.ppp}:
    \begin{itemize}
+   \item The default value of \texttt{divisor} has changed to \texttt{"a"},
+    so that the new area-based estimator is the default.
+  \item
+    The default value of \texttt{zerocor} is now \texttt{"JonesFoster"}
+    for small patterns and \texttt{"convolution"} for larger patterns.
+  \item 
+    New argument \texttt{nsmall} determines the threshold for large patterns.
    \item New option: \texttt{divisor="a"} calculates a new estimator of the pcf
     with improved performance.
    \item 
@@ -3900,18 +4112,42 @@ listed alphabetically.
    \item Now accepts \texttt{correction="none"}.
    \end{itemize}
 
+ \item \texttt{pcfcross}, \texttt{pcfdot}:
+   Shortened list of formal arguments (other arguments pass to
+   \texttt{pcfmulti}).
    
  \item \texttt{pcfcross}, \texttt{pcfdot}, \texttt{pcfmulti}:
+   \begin{itemize}
+   \item The default estimation method has changed. The new default is
+    based on squared distances (\texttt{divisor="a"}).
+   \item 
    New argument \texttt{ratio} makes it possible to save the numerator and
    denominator of the function estimates, so that estimates can be pooled.
+   \end{itemize}
     
- \item \texttt{pcfcross.inhom}, \texttt{pcfdor.inhom}:
+ \item \texttt{pcfcross.inhom}, \texttt{pcfdot.inhom}:
+   \begin{itemize}
+   \item Shortened list of formal arguments (other arguments pass to
+   \texttt{pcfmulti.inhom}).
+   \item The default estimation method has changed. The new default is
+    based on squared distances (\texttt{divisor="a"}).
+   \item 
    New arguments \texttt{adjust.sigma} and \texttt{adjust.bw} allow
    separate adjustment of the one-dimensional smoothing bandwidth \texttt{bw}
     and the spatial smoothing bandwidth \texttt{sigma}.
+   \end{itemize}
+
 
  \item \texttt{pcfinhom}:
    \begin{itemize}
+   \item The default value of \texttt{divisor} has changed to \texttt{"a"},
+    so that the new area-based estimator is the default.
+  \item
+    The default value of \texttt{zerocor} is now \texttt{"JonesFoster"}
+    for small patterns and \texttt{"convolution"} for larger patterns.
+  \item 
+    New argument \texttt{nsmall} determines the threshold for large patterns.
+  \item Default value of \texttt{normpower} has changed to 2.
    \item New option: \texttt{divisor="a"} calculates a new estimator of the pcf
     with improved performance.
    \item  
@@ -3932,6 +4168,30 @@ listed alphabetically.
    is a fitted model of class \texttt{"dppm"}.
    \end{itemize}
 
+   
+ \item \texttt{pcfmulti}:
+       New arguments \texttt{h}, \texttt{bw.args}, \texttt{adjust}, 
+       \texttt{zerocor}, \texttt{nsmall}, \texttt{gref}, 
+       \texttt{tau}, \texttt{close}.
+       
+ \item \texttt{pcfmulti}:
+   \begin{itemize}
+   \item 
+     Interpretation of arguments \texttt{lambdaI}, \texttt{lambdaJ}, 
+     \texttt{lambdaX}, \texttt{lambdadot}
+     has changed when they are fitted point process models. If the model is
+     a multitype point process then it is assumed to be a model for the 
+     entire point pattern \texttt{X}, 
+     while if the model is an unmarked point process
+     then it is assumed to be a model for the relevant subset of the data.
+   \item 
+       New arguments \texttt{h}, \texttt{bw.args}, \texttt{adjust}, 
+       \texttt{zerocor}, \texttt{nsmall}, \texttt{gref}, 
+       \texttt{tau}, \texttt{close}.
+   \end{itemize}
+   
+ \item \texttt{persist}: Now accepts an object of class \texttt{"clustermodel"}.
+   
  \item \code{persp.funxy}:
    Improved $z$-axis label.
    
@@ -3953,6 +4213,7 @@ listed alphabetically.
      a colour image to be plotted on the horizontal plane at height zero.
    \end{itemize}
 
+   
  \item \code{persp.ppp}:
    \begin{itemize}
    \item Now plots the \texttt{zlab} label alongside the vertical scale bar.
@@ -4424,6 +4685,14 @@ listed alphabetically.
 
   \item \texttt{print.slrm}: Prints information about the pixel raster.
     
+  \item \texttt{print.summary.owin}:
+    Output can now be abbreviated by
+    increasing the value of \texttt{spatstat.options('terse')}
+    
+  \item \texttt{print.summary.psp}:
+    Output can now be abbreviated by
+    increasing the value of \texttt{spatstat.options('terse')}
+    
   \item \texttt{progressreport}
     \begin{itemize}
     \item  The estimated time of completion is also printed, 
@@ -4445,6 +4714,9 @@ listed alphabetically.
     \item     The null model now includes any offset terms, by default.
     \item     New argument \code{keepoffset}.
     \end{itemize}
+    
+    
+  \item \texttt{psib}: Now accepts an object of class \texttt{"clustermodel"}.
 
 %%Q
 
@@ -4505,6 +4777,10 @@ listed alphabetically.
 
    \item \texttt{rebound.owin}: Now preserves unitnames of the objects.
      
+     
+   \item \texttt{relrisk.lpp}:
+     Argument \texttt{weights} can be logical valued.
+
    \item \texttt{relrisk.ppp}:
      \begin{itemize}
      \item New argument \texttt{shrink} supports Bithell's shrinkage estimator.
@@ -4812,6 +5088,15 @@ listed alphabetically.
        Accelerated, when \texttt{lambda} is a pixel image.
      \end{itemize}
 
+   \item \texttt{rpoispp3}:
+     \begin{itemize}
+     \item New argument \texttt{ex} (example point pattern, to be emulated)
+     \item Argument \texttt{lambda} may now be a \texttt{function(x,y,z)}
+       so that an
+       inhomogeneous Poisson process may be simulated.
+     \item New argument \texttt{lmax}.
+     \end{itemize}
+	
 
    \item \texttt{rpoisppx}:
    	New argument \code{drop}.
@@ -4831,6 +5116,9 @@ listed alphabetically.
      
    \item \texttt{rSSI}: 
      \begin{itemize}
+     \item Now supports three-dimensional random point patterns.
+    Argument \texttt{win} can be a window (class \texttt{owin})
+    or a three-dimensional box (class \texttt{box3}).
      \item Accelerated.
      \item New argument \texttt{verbose} specifies whether to
        print progress reports when \texttt{nsim > 1}.
@@ -4892,6 +5180,9 @@ listed alphabetically.
    \item \texttt{runifpointOnLines}, \texttt{rpoisppOnLines}:
    	New argument \code{drop}.
      
+   \item \texttt{runifpoint3}:
+     New argument \texttt{ex} (example point pattern, to be emulated)
+	
    \item \texttt{runifpointx}:
    	New argument \code{drop}.
 	
@@ -5217,8 +5508,13 @@ listed alphabetically.
    This is now a method for the generic function \texttt{valid}.
 
    \item \texttt{varcount}:
-     New argument \texttt{relative} supports calculation of the 
-     overdispersion index. 
+     \begin{itemize}
+     \item 
+       Now accepts an object of class \texttt{"clustermodel"}.
+     \item 
+       New argument \texttt{relative} supports calculation of the 
+       overdispersion index. 
+     \end{itemize}
 
    \item \texttt{vcov.mppm}:
      \begin{itemize}
@@ -5347,8 +5643,8 @@ listed alphabetically.
      
  \item \verb![.solist!:
        Subset index \texttt{i} can now be an \texttt{owin} object.
- \end{itemize}
- 
+
+\end{itemize} 
 
 \begin{thebibliography}{1}
 \bibitem{badd10wshop}
