@@ -1128,6 +1128,7 @@ starting with the most recent additions.
 \item \texttt{simulate.clusterprocess}
     Generate simulated realisations of a cluster process model.
 \item \texttt{mergeTiles}: Merge tiles in a tessellation.
+\item \texttt{mergeTiles.lintess}: Merge tiles in a tessellation on a network.
 \item \texttt{FeretDiamFun}:
   Create a function that computes the Feret diameter of a domain at any angle.
 \item \texttt{FeretBox}:
