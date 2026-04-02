@@ -1,8 +1,10 @@
 
-        CHANGES IN spatstat VERSION 3.5-1.004
+        CHANGES IN spatstat VERSION 3.6-0
 
 OVERVIEW
 
+    o Substantial changes in spatstat.geom and spatstat.explore.
+    
     o Updated version dependencies.
 
     o Updated documentation.
