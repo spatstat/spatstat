@@ -9,6 +9,8 @@ statistical modelling, simulation and statistical inference.
 See the website [www.spatstat.org](http://www.spatstat.org)
 or read the [book](http://book.spatstat.org).
 
+The code is free open source under a GNU licence.
+
 ___
 
 **Contents**:
@@ -23,6 +25,9 @@ ___
 
 Originally there was a single R package called `spatstat`.
 It grew so large that CRAN required us to split it into pieces.
+
+Normal use of `spatstat` is unchanged: after
+installing the code, simply start R and type `library(spatstat)`.
 
 The original `spatstat` package has now been divided into
 10 sub-packages, which we call [the `spatstat` family](#family).
@@ -50,7 +55,13 @@ has now been divided into a family of 10 sub-packages:
 Click the green badge to visit the CRAN page which contains the current
 release of each sub-package.
 Click the blue badge to visit the GitHub repository
-for the current development version of the sub-package
+for the current development version of the sub-package.
+
+Each official release has a version number like `1.2-3`, while a development
+version has a number like `1.2-3.004`, which R recognises as a 
+later version than `1.2-3`. The official releases are updated every 8 weeks
+(the minimum time permitted by CRAN). The development versions are
+updated almost every day.
 
 There still exists a package called `spatstat`, which is now an
 **umbrella package** that requires all the sub-packages listed above,
@@ -62,17 +73,19 @@ When you install the new umbrella package `spatstat`, all the sub-packages liste
 be installed. When you load the new umbrella `spatstat` package in an R session,
 all the sub-packages listed above will be loaded or imported.
 
-Each official release has a version number like `1.2-3`, while a development
-version has a number like `1.2-3.004`, which R recognises as a 
-later version than `1.2-3`. The official releases are updated every 8 weeks
-(the minimum time permitted by CRAN). The development versions are
-updated almost every day.
+All the code in the `spatstat` family is free open source under
+a GNU licence.
 
 ###  <a name="extensions"></a> Extension packages
 
 Additionally there are **extension packages** which contain more
 functionality. These packages are not automatically installed or loaded;
 the user must do that if these extra features are desired.
+
+The code in the extension packages is free open source under a
+GNU licence. However, installing these extension packages may
+require installing other software, which may have a different licence.
+
 
 | Extension package | CRAN page | GitHub repository | Description |
 | ----------------  | --------- | ----------------- | ----------  |
