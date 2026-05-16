@@ -7,6 +7,7 @@
 \newcommand{\spatstatAuthorsComma}{\adrian, \rolf, \ege}
 %% Contributors with emails (alphabetical order)
 \newcommand{\abdollah}{Abdollah Jalilian \email{jalilian@razi.ac.ir}}
+\newcommand{\bethany}{Bethany Macdonald \email{bethany.macdonald@canterbury.ac.nz}}
 \newcommand{\colette}{Marie-Colette van Lieshout \email{Marie-Colette.van.Lieshout@cwi.nl}}
 \newcommand{\dominic}{Dominic Schuhmacher \email{dominic.schuhmacher@mathematik.uni-goettingen.de}, URL \code{http://dominic.schuhmacher.name/}}
 \newcommand{\martinH}{Martin Hazelton \email{Martin.Hazelton@otago.ac.nz}}

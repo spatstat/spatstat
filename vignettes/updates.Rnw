@@ -174,7 +174,7 @@ with(z, {
           angle=135, density=5, col="lightblue")
 })
 text(as.Date("2019-01-01"), 90, "R code", col="blue")
-text(as.Date("2021-01-01"), 15, "C code", col="red")
+text(as.Date("2020-01-01"), 15, "C and C++ code", col="red")
 lines((Rlines + srclines)/1000 ~ date, data=z, lwd=3)
 lines(srclines/1000 ~ date, data=z, col="red")
 @ 
