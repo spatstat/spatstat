@@ -134,8 +134,10 @@
   \code{library(spatstat)}, the other sub-packages listed above will
   automatically be loaded or imported. 
 
-  This help file covers all the functionality and datasets
-  that are provided in the sub-packages listed above.
+  This help file covers the most important functions.
+
+  For more detail about the capabilities in sub-package \pkg{spatstat.xxx}
+  consult the package help file \code{spatstat.xxx-package}.
 }
 \section{Extension packages}{
   Additionally there are several \bold{extension packages:}
@@ -1000,6 +1002,8 @@
     \code{\link[spatstat.explore]{pcf}} \tab 	pair correlation function \cr
     \code{\link[spatstat.explore]{bw.stoyan}} \tab Stoyan's rule of thumb for bandwidth
                                for \code{\link[spatstat.explore]{pcf}} \cr
+    \code{\link[spatstat.explore]{bw.fiksel}} \tab Fiksel's rule of thumb for bandwidth
+                               for \code{\link[spatstat.explore]{pcf}} \cr
     \code{\link[spatstat.explore]{bw.pcf}} \tab Cross-validated bandwidth selection
                                for \code{\link[spatstat.explore]{pcf}} \cr
     \code{\link[spatstat.explore]{Kinhom}} \tab \eqn{K} for inhomogeneous point patterns \cr
@@ -1738,6 +1742,10 @@
     \code{\link[spatstat.random]{quadratresample}} \tab block resampling \cr
     \code{\link[spatstat.geom]{rjitter}} \tab
     apply random displacements to points in a pattern\cr
+    \code{\link[spatstat.random]{rdiffuse}} \tab
+    randomly perturb each point in a point pattern by diffusion\cr
+    \code{\link[spatstat.random]{rUnround}} \tab
+    random un-rounding of a discretised point pattern\cr
     \code{\link[spatstat.random]{rshift}} \tab random shifting of (subsets of) points\cr
     \code{\link[spatstat.random]{rthin}} \tab  random thinning 
   }
@@ -2058,6 +2066,7 @@
   Igor Chernayavsky,
   Y.C. Chin,
   Bjarke Christensen,
+  Lindsay Clark,
   \Lucia Cobo \Sanchez,
   Jean-\Francois Coeurjolly,
   Kim Colyvas,

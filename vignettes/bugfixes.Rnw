@@ -6,7 +6,7 @@
 
 % \VignetteIndexEntry{Bugs Fixed in Spatstat}
 
-%  $Revision: 1.36 $ $Date: 2026/03/22 03:58:09 $
+%  $Revision: 1.37 $ $Date: 2026/05/18 06:38:53 $
 
 \newcommand{\pkg}[1]{\texttt{#1}}
 \newcommand{\code}[1]{\texttt{#1}}
@@ -450,7 +450,12 @@ the presence of a bug is obvious, and the bug would not have misled the user.
   \subsection{Bugs, Substantially Incorrect, Moderate Impact}
 
   \begin{itemize}
-    
+
+  \item \texttt{spatstat.sparse} (numerous calculations):
+    Results were sometimes incorrect for symmetric sparse matrices
+    inheriting class \texttt{"symmetricMatrix"}.
+    \bugin{spatstat.sparse 1.0-0}{may 2020}{spatstat.sparse 3.2-0}{may 2026}    
+   
   \item \texttt{fitted.slrm}:
     Calculation was incorrect when \texttt{leaveoneout=TRUE}
     and \texttt{type != "intensity"}.
