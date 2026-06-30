@@ -1,6 +1,6 @@
 Package: spatstat
-Version: 3.6-1
-Date: 2026-06-02
+Version: 3.6-1.001
+Date: 2026-06-07
 Title: Spatial Point Pattern Analysis, Model-Fitting, Simulation, Tests
 Authors@R: c(person("Adrian", "Baddeley", 
                     role = c("aut", "cre"),

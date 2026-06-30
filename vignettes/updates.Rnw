@@ -26,12 +26,13 @@ sversion <- as.character(x[,"Version"])
 ## recognise fractional version number
 IsDevel <- function(ver) { length(unlist(package_version(ver))) > 3 }
 sdevel   <- IsDevel(x[,"Version"])
+outed <- if(sdevel) "compiled" else "released"
 options(useFancyQuotes=FALSE)
 @ 
 
 \title{Summary of recent updates to \spst}
 \author{Adrian Baddeley, Rolf Turner and Ege Rubak}
-\date{\spst\ version \Sexpr{sversion}, released on \Sexpr{sdate}}
+\date{\spst\ version \Sexpr{sversion}, \Sexpr{outed} on \Sexpr{sdate}}
 \maketitle
 
 \thispagestyle{empty}
@@ -174,10 +175,12 @@ with(z, {
           c(srclines+Rlines, rev(srclines))/1000,
           angle=135, density=5, col="lightblue")
 })
-text(as.Date("2019-01-01"), 90, "R code", col="blue")
+text(as.Date("2020-01-01"), 90, "R code", col="blue")
 text(as.Date("2020-01-01"), 15, "C and C++ code", col="red")
 lines((Rlines + srclines)/1000 ~ date, data=z, lwd=3)
 lines(srclines/1000 ~ date, data=z, col="red")
+abline(v = as.Date("2015-05-27"), lty=3, col="purple", lwd=2)
+text(as.Date("2014-10-01"), 175, "version covered in book", srt=90, col="purple")
 @ 
 }
 
