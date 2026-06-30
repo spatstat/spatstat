@@ -53,15 +53,16 @@ has now been divided into a family of 10 sub-packages:
 | `spatstat` | [![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/spatstat)](http://CRAN.R-project.org/package=spatstat) | [![GitHub R package version](https://img.shields.io/github/r-package/v/spatstat/spatstat)](https://github.com/spatstat/spatstat) | Umbrella package: introduction, vignettes, documentation |
 
 Click the green badge to visit the CRAN page which contains the current
-release of each sub-package.
+_release_ of each sub-package.
 Click the blue badge to visit the GitHub repository
-for the current development version of the sub-package.
+for the current _development version_ of the sub-package.
 
-Each official release has a version number like `1.2-3`, while a development
-version has a number like `1.2-3.004`, which R recognises as a 
-later version than `1.2-3`. The official releases are updated every 8 weeks
-(the minimum time permitted by CRAN). The development versions are
-updated almost every day.
+Each official release has a version number like `1.2-3`,
+while a development version has a number like `1.2-3.004`,
+which R recognises as a later version than `1.2-3`.
+The official releases are updated every 8 weeks
+(the minimum time permitted by CRAN).
+The development code is updated almost every day.
 
 There still exists a package called `spatstat`, which is now an
 **umbrella package** that requires all the sub-packages listed above,
