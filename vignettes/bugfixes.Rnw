@@ -450,7 +450,11 @@ the presence of a bug is obvious, and the bug would not have misled the user.
   \subsection{Bugs, Substantially Incorrect, Moderate Impact}
 
   \begin{itemize}
-
+  \item \texttt{rebound.owin} (Undocumented internal function):
+    For binary mask windows, the pixel coordinates of the input and output
+    were not aligned, even when the new rectangle was the same as the old one.
+    \bugalways{spatstat 1.42-0}{may 2015}{spatstat.geom 3.8-2}{july 2026}
+    
   \item \texttt{spatstat.sparse} (numerous calculations):
     Results were sometimes incorrect for symmetric sparse matrices
     inheriting class \texttt{"symmetricMatrix"}.
@@ -691,6 +695,11 @@ the presence of a bug is obvious, and the bug would not have misled the user.
  %% LEVEL 4: 
  \subsection{Partially Incorrect or Having Only Minor Impact}
  \begin{itemize}
+ \item \texttt{dilation.owin}: 
+    For very small positive distances \texttt{r > 0} the result did not always
+    contain the input region \texttt{w} (and was empty in some extreme cases).
+    \bugbefore{spatstat 1.42-0}{may 2015}{spatstat.geom 3.8-2}{july 2026}
+    
   \item \texttt{intersect.lintess}:
     Result was incorrect if \texttt{X}
     was a tessellation and \texttt{Y} was a linear network.

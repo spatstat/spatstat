@@ -336,6 +336,12 @@ Here is the text from the `overview' sections of
 the News and Release Notes for each update. 
 
 \begin{itemize}
+\item Variance-covariance matrix for determinantal models.
+\item More diagnostics for determinantal models.
+\item Added variable plots for all kinds of models.
+\item Adaptive kernel smoothing of mark values.
+\item Random Dirichlet tessellation avoiding edge effects.
+\item More capabilities for three-dimensional point patterns.
 \item More methods for \texttt{intensity}
 \item More methods for repulsion index \texttt{repul}.
 \item Changed rule for converting bandwidths in pair correlation.
@@ -1123,6 +1129,33 @@ Following is a list of all the functions that have been added,
 starting with the most recent additions.
 
 \begin{itemize}
+\item \texttt{auc.dppm}:
+  Area under the ROC curve for a fitted determinantal point process model.
+  Method for \texttt{auc} for objects of class \texttt{dppm}.
+\item \texttt{parres.dppm}:
+  Partial residuals for a fitted determinantal point process model.
+  Method for \texttt{parres} for objects of class \texttt{dppm}.
+\item \texttt{vcov.dppm}:
+  Variance-covariance matrix for the trend parameters in a
+  fitted determinantal point process model.
+\item \texttt{SmoothAdaptiveKernel.ppp}:
+    Adaptive kernel smoothing of mark values of a point pattern.
+\item \texttt{rpoisDirichletTess}:
+    Dirichlet tessellation induced by a Poisson process on the infinite
+    two-dimensional plane, avoiding edge effects.
+\item \texttt{distbdry}: New generic.
+\item \texttt{distbdry.ppp}: 
+  distance from each point in a 2D point pattern
+  to the boundary of the observation window. 
+  Equivalent to \texttt{bdist.points}.
+\item \texttt{distbdry.pp3}:
+  distance from each point in a 3D point pattern
+  to the boundary of the containing box. 
+\item \texttt{distbdry.lpp}:
+  distance from each data point on a linear network
+  to the nearest terminal vertex.
+\item \texttt{rjitter.pp3}:
+  randomly displace the points in a 3D point pattern.
 \item \texttt{intensity.kppm}: Intensity of a fitted cluster process
   or Cox process model.
 \item \texttt{intensity.lppm}: Intensity of a fitted point process model
@@ -2361,6 +2394,14 @@ listed alphabetically.
   The calculations are performed by \texttt{densityVoronoi},
   \texttt{densityAdaptiveKernel} or \texttt{nndensity}.
   
+  
+\item \texttt{addvar}:
+  \begin{itemize}
+  \item Now accepts point process models of class 
+    \texttt{ppm}, \texttt{kppm}, \texttt{dppm}, \texttt{rppm}, \texttt{lppm}.
+  \item For non-Poisson models, significance bands are computed by simulation.
+  \end{itemize}
+  
 \item \texttt{affine.owin}:
   Allows transformation matrix to be singular, if the window is polygonal.
 
@@ -2382,7 +2423,13 @@ listed alphabetically.
     (models fitted using the argument \texttt{random}).
   \end{itemize}
 
-\item \texttt{anyDuplicated.ppp}: Accelerated.
+\item \texttt{anyDuplicated.ppp}: 
+  \begin{itemize}
+  \item  New argument \texttt{rule} supports different levels of accuracy
+    consistent with the options for \texttt{duplicated.ppp}.
+  \item   Accelerated.
+  \end{itemize}
+
   
 \item \texttt{append.psp}: arguments may be \texttt{NULL}.
 
@@ -3494,6 +3541,10 @@ listed alphabetically.
 
  \item \texttt{Kcross.inhom}, \texttt{Kdot.inhom}, \texttt{Kmulti.inhom}:
    \begin{itemize}
+   \item 
+     Now recognise argument \texttt{ratio}.
+     If \texttt{ratio=TRUE}, the numerator and denominator of each estimate
+     are saved, for use in analysing replicated point patterns.
    \item  
      Interpretation of arguments \texttt{lambdaI}, \texttt{lambdaJ}, 
      \texttt{lambdaX}, \texttt{lambdadot}
@@ -4139,6 +4190,9 @@ listed alphabetically.
    
 %%O
    
+ \item \texttt{objsurf} methods:
+   Arguments \texttt{xlim,ylim} renamed \texttt{par1lim,par2lim}.
+   
    \item \texttt{owin}:
      \begin{itemize}
      \item 
@@ -4178,7 +4232,12 @@ listed alphabetically.
    
    
  \item \texttt{pairs.im}: new argument \texttt{drop}.
-   
+
+ \item \texttt{palmdiagnose}:
+   \begin{itemize}
+   \item Now accepts objects of class \texttt{dppm} as well as \texttt{kppm}.
+   \item New argument \texttt{delta} as an alternative to \texttt{breaks}.
+   \end{itemize}
  \item \texttt{parres}: 
    the argument \texttt{covariate} is allowed to be missing
    if the model only depends on one covariate.
@@ -4228,8 +4287,13 @@ listed alphabetically.
     
  \item \texttt{pcfcross.inhom}, \texttt{pcfdot.inhom}:
    \begin{itemize}
-   \item Shortened list of formal arguments (other arguments pass to
-   \texttt{pcfmulti.inhom}).
+   \item 
+     Now recognise argument \texttt{ratio}.
+    If \texttt{ratio=TRUE}, the numerator and denominator of each estimate
+    are saved, for use in analysing replicated point patterns.
+   \item 
+     Shortened list of formal arguments (other arguments pass to
+     \texttt{pcfmulti.inhom}).
    \item The default value of \texttt{divisor} has temporarily reverted to 
      \texttt{"r"} pending further investigation.
    \item The default estimation method has changed. The new default is
@@ -4463,6 +4527,10 @@ listed alphabetically.
 
  \item \texttt{plot.kppm}:
    \begin{itemize}
+   \item 
+     For models fitted by Palm likelihood or composite likelihood, the plot
+     selected by \texttt{what="statistic"}
+     displays the pair correlation function.
    \item 
    New arguments \texttt{pause} and \texttt{xname}.
  \item 
@@ -4971,6 +5039,9 @@ listed alphabetically.
    \item 
    \texttt{rhohat}:
    \begin{itemize}
+   \item  Methods for \texttt{rhohat} now recognise the argument \texttt{delta}
+    as an alternative to argument \texttt{breaks} when 
+    \texttt{smoother="piecewise"}.
    \item The result now includes the ``average'' intensity $\overline\rho$.
    \item 
      New options \texttt{smoother="piecewise"} 
