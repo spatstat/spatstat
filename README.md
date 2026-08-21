@@ -31,7 +31,7 @@ installing the code, simply start R and type `library(spatstat)`.
 
 The original `spatstat` package has now been divided into
 10 sub-packages, which we call [the `spatstat` family](#family).
-Additionally there are 3 [extension packages](#extensions).
+Additionally there are 5 [extension packages](#extensions).
 See the [family portrait](#portrait).
  
 ### <a name="family"></a> The `spatstat` family
@@ -94,6 +94,7 @@ require installing other software, which may have a different licence.
 | `spatstat.Knet` | [![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/spatstat.Knet)](http://CRAN.R-project.org/package=spatstat.Knet) | [![GitHub R package version](https://img.shields.io/github/r-package/v/spatstat/spatstat.Knet)](https://github.com/spatstat/spatstat.Knet) | linear networks |
 | `spatstat.local` | [![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/spatstat.local)](http://CRAN.R-project.org/package=spatstat.local) | [![GitHub R package version](https://img.shields.io/github/r-package/v/baddstats/spatstat.local)](https://github.com/baddstats/spatstat.local) | Local (geographically weighted) models |
 | `spatstat.sphere` | Not yet published | [![GitHub R package version](https://img.shields.io/github/r-package/v/spatstat/spatstat.sphere)](https://github.com/spatstat/spatstat.sphere) | Spherical data |
+| `spatstat.convert` | Not yet published | [![GitHub R package version](https://img.shields.io/github/r-package/v/spatstat/spatstat.convert)](https://github.com/spatstat/spatstat.convert) | Conversion between data formats |
 
 ###  <a name="portrait"></a> Family portrait 
 
@@ -104,7 +105,7 @@ or imported when you load the `spatstat` umbrella package.
 The blue boxes are extension packages which must be installed and loaded
 separately.
 
-![Spatstat pieces](RepoStuff/new4spatstat.jpg)
+![Spatstat pieces](RepoStuff/new5spatstat.jpg)
 
 ___
 
