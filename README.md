@@ -94,7 +94,7 @@ require installing other software, which may have a different licence.
 | `spatstat.Knet` | [![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/spatstat.Knet)](http://CRAN.R-project.org/package=spatstat.Knet) | [![GitHub R package version](https://img.shields.io/github/r-package/v/spatstat/spatstat.Knet)](https://github.com/spatstat/spatstat.Knet) | linear networks |
 | `spatstat.local` | [![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/spatstat.local)](http://CRAN.R-project.org/package=spatstat.local) | [![GitHub R package version](https://img.shields.io/github/r-package/v/baddstats/spatstat.local)](https://github.com/baddstats/spatstat.local) | Local (geographically weighted) models |
 | `spatstat.sphere` | Not yet published | [![GitHub R package version](https://img.shields.io/github/r-package/v/spatstat/spatstat.sphere)](https://github.com/spatstat/spatstat.sphere) | Spherical data |
-| `spatstat.convert` | Not yet published | [![GitHub R package version](https://img.shields.io/github/r-package/v/spatstat/spatstat.convert)](https://github.com/spatstat/spatstat.convert) | Conversion between data formats |
+| `spatstat.convert` | Submitted to CRAN | [![GitHub R package version](https://img.shields.io/github/r-package/v/spatstat/spatstat.convert)](https://github.com/spatstat/spatstat.convert) | Conversion between data formats |
 
 ###  <a name="portrait"></a> Family portrait 
 
