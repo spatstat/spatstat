@@ -105,7 +105,7 @@ or imported when you load the `spatstat` umbrella package.
 The blue boxes are extension packages which must be installed and loaded
 separately.
 
-![Spatstat pieces](RepoStuff/new5spatstat.jpg)
+![Spatstat pieces](RepoStuff/new6spatstat.jpg)
 
 ___
 
