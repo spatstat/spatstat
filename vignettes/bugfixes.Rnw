@@ -450,6 +450,12 @@ the presence of a bug is obvious, and the bug would not have misled the user.
   \subsection{Bugs, Substantially Incorrect, Moderate Impact}
 
   \begin{itemize}
+  \item \texttt{densityVoronoi.ppp}: 
+     Result was incorrect if the randomly-selected subsample 
+     of the point pattern
+     consisted of exactly one point. This occurred only when the argument 
+     \texttt{f} was very small.
+     \bugbefore{spatstat.explore 3.0-0}{may 2022}{spatstat.explore 3.8-3}{sept 2026}
   \item \texttt{rebound.owin} (Undocumented internal function):
     For binary mask windows, the pixel coordinates of the input and output
     were not aligned, even when the new rectangle was the same as the old one.

@@ -6,7 +6,7 @@
 
 % \VignetteIndexEntry{Summary of Recent Updates to the Spatstat Family}
 
-% $Revision: 1.93 $ $Date: 2026/06/01 23:41:23 $
+% $Revision: 1.95 $ $Date: 2026/09/17 02:31:07 $
 
 \newcommand{\pkg}[1]{\texttt{#1}}
 \newcommand{\code}[1]{\texttt{#1}}
@@ -114,7 +114,12 @@ zcore    <- getSizeTable("spatstat", "spatstatcoresize.txt")
 zlocal   <- getSizeTable("spatstat", "spatstatlocalsize.txt")
 zgui     <- getSizeTable("spatstat", "spatstatguisize.txt")
 zKnet    <- getSizeTable("spatstat", "spatstatKnetsize.txt")
+zconvert <- getSizeTable("spatstat", "spatstatconvertsize.txt")
 ## Merge histories starting at the 'split dates'
+## This applies to sub-packages which were created by forking
+## (progressively copying existing code to a new package and modifying it)
+## At the 'split date' the new package is released and the 
+## duplicated code in the old package is deleted
 z <- mergeSizeTables(z, zutils,  "2017-03-22")
 z <- mergeSizeTables(z, zdata,   "2017-09-23")
 z <- mergeSizeTables(z, zsparse, "2020-11-04")
@@ -131,6 +136,7 @@ z <- mergeSizeTables(z, zunivar,  "2024-04-21")
 z <- mergeSizeTables(z, zlocal)
 z <- mergeSizeTables(z, zgui)
 z <- mergeSizeTables(z, zKnet)
+z <- mergeSizeTables(z, zconvert)
 ## Now summarise
 currentcount <- z[nrow(z), counts]
 bookcount    <- z[z$version == "1.42-0", counts]
@@ -222,6 +228,7 @@ vtable <- rbind(vtable[-1, ], vtable[1, ])
 vtable <- AppendVersion("spatstat.local", zlocal, vtable)
 vtable <- AppendVersion("spatstat.Knet", zKnet, vtable)
 vtable <- AppendVersion("spatstat.gui", zgui, vtable)
+vtable <- AppendVersion("spatstat.convert", zconvert, vtable)
 @ 
 
 The current versions of the \spst\ family of packages
@@ -234,7 +241,8 @@ print(vtable[,c(3,1,2)], row.names=FALSE)
 \section{Package structure}
 
 The original \pkg{spatstat} package grew to be very large.
-It has now been split into a family of packages, to satisfy the requirements of CRAN. 
+It has now been split into a family of packages, 
+to satisfy the requirements of CRAN. 
 
 This should not affect the user:
 existing code will continue to work in the same way.
@@ -316,14 +324,18 @@ Typing \code{library(spatstat)} will load the familiar
     
     There are also extension packages which provide additional capabilities
     and must be loaded explicitly when you need them. 
-    Currently there are three extension packages, with a fourth in development:
+    Currently there are four extension packages, with a fifth in development:
     
     \begin{itemize}
-    \item \pkg{spatstat.local} for local model-fitting, 
-    \item \pkg{spatstat.Knet} provides additional code for
-      analysing point patterns on a network.
-    \item \pkg{spatstat.gui} containing interactive graphics
-      functions,
+    \item \pkg{spatstat.local} for local model-fitting (`geographically
+      weighted regression');
+    \item \pkg{spatstat.Knet} which provides additional code for
+      analysing point patterns on a network;
+    \item \pkg{spatstat.gui} which contains interactive graphics
+      functions;
+    \item \pkg{spatstat.convert} which provides code for converting spatial data
+      between the formats defined in \pkg{spatstat} and the formats
+      defined in the packages \pkg{sp}, \pkg{sf} and \pkg{terra};
     \item \pkg{spatstat.sphere} for analysing point patterns on a sphere
       (under development!)
     \end{itemize}
@@ -336,6 +348,12 @@ Here is the text from the `overview' sections of
 the News and Release Notes for each update. 
 
 \begin{itemize}
+\item Transect of a spatial function.
+\item Transect of an image on a network.
+\item Transect of a function on a network.
+\item \texttt{relrisk.ppp} handles multiple columns of marks.
+\item More utilities for handling indices.
+\item New package \pkg{spatstat.convert}.
 \item Variance-covariance matrix for determinantal models.
 \item More diagnostics for determinantal models.
 \item Added variable plots for all kinds of models.
@@ -1129,6 +1147,21 @@ Following is a list of all the functions that have been added,
 starting with the most recent additions.
 
 \begin{itemize}
+\item \texttt{transect}: New generic.
+\item \texttt{transect.funxy}: 
+  Linear transect for a spatial function (object of class \texttt{"funxy"}).
+\item \texttt{transect.linim}: 
+  Transect of an image on a linear network 
+  (object of class \texttt{"linim"})
+  along a path in the network.
+\item \texttt{transect.linfun}: 
+  Transect of a function on a linear network 
+  (object of class \texttt{"linfun"}) 
+  along a path in the network.
+\item \texttt{positiveIndex} (package \texttt{spatstat.utils}):
+  Convert any kind of index to a vector of positive integers.
+\item \texttt{logicalIndex} (package \texttt{spatstat.utils}):
+  Convert any kind of index to a logical vector.
 \item \texttt{auc.dppm}:
   Area under the ROC curve for a fitted determinantal point process model.
   Method for \texttt{auc} for objects of class \texttt{dppm}.
@@ -2986,6 +3019,10 @@ listed alphabetically.
    
  \item \texttt{densityQuick.lpp}:
    Argument \texttt{X} changed to \texttt{x} for consistency.
+   
+ \item \texttt{densityVoronoi.ppp}:
+       Behaviour improved in cases where \texttt{f} is extremely close to
+       0 or 1.
 
  \item \texttt{density.psp}:
    \begin{itemize}
@@ -4984,6 +5021,7 @@ listed alphabetically.
 
    \item \texttt{relrisk.ppp}:
      \begin{itemize}
+     \item Now handles a point pattern with multiple columns of marks.
      \item Now accepts argument \texttt{rule.pix} passed to \texttt{owin2mask}.
      \item New argument \texttt{shrink} supports Bithell's shrinkage estimator.
      \item New argument \texttt{normalise} controls whether the estimate 
@@ -5002,16 +5040,6 @@ listed alphabetically.
    \item \texttt{residualMeasure}:
      More options for argument \texttt{lambda}.
      
-   \item \texttt{rgbim, hsvim}:
-   New argument \texttt{A} controls the alpha (transparency) channel.
-
-   \item \texttt{rgb2hex, col2hex, paletteindex, is.colour, samecolour,}
-   \texttt{complementarycolour, is.grey, to.grey}
-   These colour tools now handle transparent colours.
-
-   \item \texttt{rgb2hex}:
-   New argument \texttt{maxColorValue}
-
    \item \texttt{relrisk.ppp}:
      \begin{itemize}
      \item 
@@ -5036,6 +5064,16 @@ listed alphabetically.
        before calculation of relative risk.
      \end{itemize}
      
+   \item \texttt{rgbim, hsvim}:
+   New argument \texttt{A} controls the alpha (transparency) channel.
+
+   \item \texttt{rgb2hex, col2hex, paletteindex, is.colour, samecolour,}
+   \texttt{complementarycolour, is.grey, to.grey}
+   These colour tools now handle transparent colours.
+
+   \item \texttt{rgb2hex}:
+   New argument \texttt{maxColorValue}
+
    \item 
    \texttt{rhohat}:
    \begin{itemize}
@@ -5080,6 +5118,8 @@ listed alphabetically.
 
  \item\texttt{rhohat.ppm}:
    New argument \texttt{rule.eps} passed to \texttt{as.mask}.
+
+ \item \texttt{ripras}: argument \texttt{shape} is partially matched.
    
  \item \texttt{rjitter.ppp}:  If \texttt{trim=TRUE}, 
    the displacement radius will be constrained
@@ -5580,6 +5620,9 @@ listed alphabetically.
      \texttt{normalise=FALSE}.
    \end{itemize}
    
+ \item \texttt{spatstat.family}:
+   The list of extension packages now includes \texttt{spatstat.convert}.
+   
    \item \texttt{spatstat.options}
    New options \texttt{fastthin} and \texttt{fastpois} 
    enable fast simulation algorithms.
@@ -5732,7 +5775,12 @@ listed alphabetically.
    \item \texttt{to.grey}
    New argument \texttt{transparent}.
 
-   \item \texttt{transect.im}: new argument \texttt{nsample}.
+   \item \texttt{transect.im}:
+     \begin{itemize}
+     \item This function is now a method for the generic \texttt{transect()}.
+     \item new argument \texttt{nsample}.
+     \end{itemize}
+
 %%U
    
   \item \texttt{union.owin}:

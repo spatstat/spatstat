@@ -1,4 +1,21 @@
 
+        CHANGES IN spatstat VERSION 3.6-2.003
+
+OVERVIEW
+
+    o New extension package 'spatstat.convert'.
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o package 'spatstat.convert'
+    This new extension package provides code for converting spatial data
+    between the formats defined in 'spatstat' and the formats defined in
+    the packages 'sp', 'sf' and 'terra'.
+    
+    o spatstat.family
+    The list of extension packages now includes 'spatstat.convert'.
+    
+
         CHANGES IN spatstat VERSION 3.6-2
 
 OVERVIEW

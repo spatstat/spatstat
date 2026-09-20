@@ -48,7 +48,8 @@ spatstat.family <- function(subpackages=TRUE, extensions=FALSE) {
            "spatstat.model",
            "spatstat.linnet",
            "spatstat")
-  ext <- c("spatstat.gui", "spatstat.local", "spatstat.Knet")
+  ext <- c("spatstat.gui", "spatstat.local",
+           "spatstat.Knet", "spatstat.convert")
   result <- c(if(subpackages) sub else NULL,
               if(extensions) ext else NULL)
   as.character(result)
