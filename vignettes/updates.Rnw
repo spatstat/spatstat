@@ -6,7 +6,7 @@
 
 % \VignetteIndexEntry{Summary of Recent Updates to the Spatstat Family}
 
-% $Revision: 1.95 $ $Date: 2026/09/17 02:31:07 $
+% $Revision: 1.96 $ $Date: 2026/09/22 09:15:14 $
 
 \newcommand{\pkg}[1]{\texttt{#1}}
 \newcommand{\code}[1]{\texttt{#1}}
@@ -348,10 +348,12 @@ Here is the text from the `overview' sections of
 the News and Release Notes for each update. 
 
 \begin{itemize}
+\item Adaptive kernel estimation of relative risk.
 \item Transect of a spatial function.
 \item Transect of an image on a network.
 \item Transect of a function on a network.
 \item \texttt{relrisk.ppp} handles multiple columns of marks.
+\item Extensions to \texttt{relrisk.lpp}
 \item More utilities for handling indices.
 \item New package \pkg{spatstat.convert}.
 \item Variance-covariance matrix for determinantal models.
@@ -1118,7 +1120,11 @@ The following new classes of objects may be of use.
 \begin{itemize}
 \item \texttt{clusterprocess}:
   Neyman-Scott-Cox cluster process
-  model with specified values of the parameters.
+  model with specified values of the parameters
+  (whereas an object of class \texttt{kppm} represents such a model
+  fitted to data).
+\item \texttt{NAobject}: a spatial object that is missing or was not
+  observed. 
 \item \texttt{traj}:
     Trajectory (history of function evaluations) in a model
     that was fitted by optimisation.
@@ -1131,14 +1137,17 @@ The following new classes of objects may be of use.
   An object of class \texttt{"ssf"} represents a spatial function
   which has been evaluated or sampled at an irregular set of points.
   See \texttt{help(ssf)}.
+\end{itemize}
+
+There are also two experimental classes which will be removed:
+\begin{itemize}
 \item \texttt{zclustermodel}:
-  Experimental. An object of class \texttt{zclustermodel} represents a
-    Neyman-Scott cluster point process model with specified parameter values
-    (whereas \texttt{kppm} represents such a model fitted to data).
+  Experimental, deprecated. 
+  An object of class \texttt{zclustermodel} represents a
+    Neyman-Scott cluster point process model with specified parameter values.
 \item \texttt{zgibbsmodel}:
-  Experimental. An object of class \texttt{zgibbsmodel} represents a
-    Gibbs point process model with specified parameter values
-    (whereas \texttt{ppm} represents such a model fitted to data).
+  Experimental, deprecated. An object of class \texttt{zgibbsmodel} represents a
+    Gibbs point process model with specified parameter values.
 \end{itemize}
 
 \section{New Functions}
@@ -1147,6 +1156,10 @@ Following is a list of all the functions that have been added,
 starting with the most recent additions.
 
 \begin{itemize}
+\item \texttt{relriskAdaptiveKernel}: New generic.
+\item \texttt{relriskAdaptiveKernel.ppp}: 
+  Variable-bandwidth kernel estimation of spatial relative risk
+  or spatially-varying probability.
 \item \texttt{transect}: New generic.
 \item \texttt{transect.funxy}: 
   Linear transect for a spatial function (object of class \texttt{"funxy"}).
@@ -5017,11 +5030,16 @@ listed alphabetically.
      
      
    \item \texttt{relrisk.lpp}:
-     Argument \texttt{weights} can be logical valued.
+     \begin{itemize}
+     \item Now handles a point pattern with multiple columns of marks.
+     \item New argument \texttt{weights}
+     \item New argument \texttt{normalise}
+     \end{itemize}
 
    \item \texttt{relrisk.ppp}:
      \begin{itemize}
      \item Now handles a point pattern with multiple columns of marks.
+     \item Argument \texttt{weights} can be logical valued.
      \item Now accepts argument \texttt{rule.pix} passed to \texttt{owin2mask}.
      \item New argument \texttt{shrink} supports Bithell's shrinkage estimator.
      \item New argument \texttt{normalise} controls whether the estimate 
