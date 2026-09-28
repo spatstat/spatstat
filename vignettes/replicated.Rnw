@@ -162,7 +162,7 @@ and 5 replicate point patterns per group.
   and a pixel image covariate. 
 \end{itemize}
 
-\section{Lists of point patterns}
+\section{Lists of objects}
 
 First we need a convenient way to store the \emph{responses}
 from all the units in an experiment.
@@ -186,10 +186,11 @@ It is a list, each of whose entries is a point pattern (object of class
 \verb!"ppp"!). Note that the observation windows of the
 three point patterns are {\tt not\/} identical. 
 
-\subsection{The class \texttt{listof}}
+\subsection{The class \texttt{solist}}
 
 For convenience, the \texttt{waterstriders} dataset also belongs to the
-class \verb!"listof"!. This is a simple mechanism to allow us to
+class \verb!"solist"! (spatial object list). 
+This is a simple mechanism to allow us to
 handle the list neatly --- for example, we can provide
 special methods for printing, plotting and summarising the list.
 
@@ -208,13 +209,13 @@ There's also the summary method:
 summary(waterstriders)
 @ 
 
-\subsection{Creating a \texttt{listof} object}
+\subsection{Creating a \texttt{solist}}
 
 For example, here is a simulated dataset containing three
 independent realisations of the Poisson process with intensity 100.
 
 <<>>=
-X <- listof(rpoispp(100), rpoispp(100), rpoispp(100))
+X <- solist(rpoispp(100), rpoispp(100), rpoispp(100))
 @ 
 
 Then it can be printed and plotted.
@@ -224,8 +225,47 @@ plot(X)
 X
 @ 
 
-To convert an existing list to the class \code{listof}, use
-\code{as.listof}.
+Each element of a \texttt{solist} must be an object which has
+two-dimensional spatial coordinates: for example a point pattern 
+(class \texttt{ppp}), a window (class \texttt{owin}), a pixel image
+(class \texttt{im}) and so on. The different elements of a \texttt{solist}
+can be different types of objects:
+
+<<>>=
+A <- solist(cells, density(cells), quadratcount(cells))
+@ 
+
+To convert an existing list to the class \code{solist}, use
+\code{as.solist}. If some elements of the list are not spatial objects,
+the default action is to terminate with an error. 
+However if \texttt{demote=TRUE}, no error occurs,
+and the result is an \texttt{anylist} as described below.
+
+\subsection{The class \texttt{anylist}}
+
+An \texttt{anylist} is a list of objects
+which do not necessarily contain spatial coordinates.
+This is a convenient trick for handling multiple objects
+which belong to a non-spatial data type.
+For example, the estimated $K$-functions of each of the water strider
+point patterns can be saved as
+
+<<eval=FALSE>>=
+K <- as.anylist(lapply(waterstriders, Kest))
+@ 
+
+Each element \verb!K[[i]]! is a function value table object of class 
+\texttt{"fv"}. These three $K$-functions can be printed, plotted 
+and summarised, for example
+
+<<eval=FALSE>>=
+plot(K)
+@ 
+
+An \texttt{anylist} can be created by the function \texttt{anylist()}.
+To convert an existing list to an \texttt{anylist}, use
+\texttt{as.anylist}.
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Hyperframes}
@@ -356,8 +396,8 @@ H$Y
 @ 
 
 The result of \verb!$! is a vector or factor if the column contains
-atomic values; otherwise it is a list of objects (with class \texttt{"listof"}
-to make it easier to print and plot).
+atomic values; otherwise it is a list of objects (with class \texttt{"solist"}
+or \texttt{"anylist"} to make it easier to print and plot).
 
 Individual columns can also be assigned (overwritten or created)
 using \verb!$<-!:
@@ -403,29 +443,39 @@ you to assign values to a subset of a hyperframe.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Plotting}
 
-\subsection{Plotting a \code{listof} object}
+\subsection{Plotting a \code{solist} object}
 
-The plot method for \code{listof} objects has formal arguments
+The plot method for \code{solist} objects has formal arguments
 
 <<eval=FALSE>>=
-plot.listof(x, ..., main, arrange = TRUE, nrows = NULL, ncols = NULL)
+plot.solist(x, ..., main, arrange = TRUE, nrows = NULL, ncols = NULL,
+            main.panel = NULL, mar.panel = c(2, 1, 1, 2), hsep = 0, vsep = 0, 
+            panel.begin = NULL, panel.end = NULL, panel.args = NULL, 
+            panel.begin.args = NULL, panel.end.args = NULL, panel.vpad = 0.2, 
+            plotcommand = "plot", do.plot = TRUE, adorn.left = NULL, 
+            adorn.right = NULL, adorn.top = NULL, adorn.bottom = NULL, 
+            adorn.size = 0.2, adorn.args = list(), equal.scales = FALSE, 
+            halign = FALSE, valign = FALSE)
 @ 
 
-where \code{main} is a title for the entire page.
+where \code{main} is a title for the entire page, and 
+\code{main.panel} is a character vector of titles for each plot panel.
 
 If \code{arrange=TRUE} then the entries of the list are displayed  
 in separate panels on the same page (with \code{nrows} rows and
 \code{ncols} columns of panels), while if \code{arrange=FALSE} then 
 the entries are just plotted as a series of plot frames.
 
-The extra arguments \verb!...! control the individual plot panels.
-These arguments will be passed to the plot method
+The extra arguments \verb!...! will be passed to the plot method
 that displays each entry of the list. Suitable arguments depend on the
 type of entries.
 
 <<fig=TRUE>>= 
 plot(waterstriders, pch=16, nrows=1)
 @ 
+
+For the meaning of the other arguments, see the help for 
+\texttt{plot.solist}.
 
 \subsection{Plotting a hyperframe}
 
@@ -434,7 +484,8 @@ plot(waterstriders, pch=16, nrows=1)
 If \code{h} is a hyperframe, then the default action of
 \code{plot(h)} is to extract the first column
 of \code{h} and plot each of the entries in a separate panel on 
-one page (actually using the plot method for class \verb!"listof"!). 
+one page (actually using the plot method for class \verb!"solist"!
+or \verb!"anylist"!). 
 
 \SweaveOpts{width=7,height=5}
 \setkeys{Gin}{width=0.9\textwidth}
@@ -457,9 +508,10 @@ H <- hyperframe(X=1:3, Y=list(sin,cos,tan))
 plot(H$Y)
 @ 
 
-The plot can be controlled using the arguments for \code{plot.listof}
-(and, in this case, \code{plot.function}, since \verb!H$Y! consists of 
-functions).
+Since \verb!H$Y! is an \texttt{anylist},
+the plot can be controlled using the arguments for \code{plot.anylist}
+(and, in this case, \code{plot.function}, since each entry is a
+function).
 
 \subsubsection{Complex plots}
 
@@ -473,7 +525,7 @@ plot(h, e)
 where \code{h} is a hyperframe and \code{e} is an \R\ language call 
 or expression that must be evaluated in each row to generate each plot panel.
 
-\SweaveOpts{width=9,height=5}
+\SweaveOpts{width=9,height=4}
 \setkeys{Gin}{width=0.9\textwidth}
 
 <<fig=TRUE>>=
@@ -487,11 +539,11 @@ To plot the $K$-functions of each of the patterns in the
 \code{waterstriders} dataset,
 
 \SweaveOpts{width=6,height=2}
-\setkeys{Gin}{width=0.9\textwidth}
+\setkeys{Gin}{width=0.95\textwidth}
 
 <<fig=TRUE>>=
 H <- hyperframe(Bugs=waterstriders)
-plot(H, quote(plot(Kest(Bugs))), marsize=1)
+plot(H, quote(plot(Kest(Bugs), legend=FALSE)), marsize=2)
 @ 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -537,7 +589,7 @@ with(H, distmap(Bugs))
 @
 
 The result of \code{with.hyperframe} 
-is a list of objects (of class \verb!"listof"!),
+is a list of objects (of class \verb!"solist"! or \verb!"anylist"!),
 or a vector or factor if appropriate.
 
 Notice that (unlike the situation for data frames)
@@ -655,9 +707,16 @@ in the pattern is replaced by a copy of the kernel, and the sum of all
 copies of the kernel is the kernel-smoothed intensity function.
 It is computed by \texttt{density.ppp} separately for each point pattern.
 
+\SweaveOpts{width=6,height=3}
+\setkeys{Gin}{width=0.95\textwidth}
+
 <<fig=TRUE>>=
-plot(simba, quote(plot(density(Points), main="")), nrows=2)
+plot(simba, quote(plot(density(Points), main="")), 
+     main="", nrows=2, marsize=1.5)
 @ 
+
+\SweaveOpts{width=6,height=6}
+\setkeys{Gin}{width=0.7\textwidth}
 
 Covariate effects due to a real-valued spatial covariate (a real-valued
 pixel image) can be investigated
@@ -675,9 +734,12 @@ be constant, then the covariate has no effect on point process intensity
 (and the constant value of $\rho$ is the constant intensity of the
 point process). 
 
+\SweaveOpts{width=6,height=2.5}
+\setkeys{Gin}{width=0.95\textwidth}
+
 <<fig=TRUE>>=
 rhos <- with(demohyper, rhohat(Points, Image))
-plot(rhos)
+plot(rhos, legend=FALSE, main="")
 @ 
 
 \SweaveOpts{width=6,height=4}
@@ -685,7 +747,6 @@ plot(rhos)
 
 \subsection{Exploring interpoint interaction}
 
-Still to be written.
 See Chapter 16 of \cite{baddrubaturn15}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1057,139 +1118,6 @@ fit2
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%#%^!ifdef RANDOMEFFECTS
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\section{Random effects}
-
-\subsection{Mixed effects models}
-
-It is also possible to fit models that include `random effects'.
-Effectively, some of the coefficients
-in the model are assumed to be Normally-distributed random variables
-instead of constants.
-
-\subsubsection{Mixed Poisson model}
-
-Consider the simplest model of a uniform Poisson process which we fitted to
-the 3 point patterns of waterstriders. It might be sensible to assume that
-each pattern is a realisation of a Poisson process, but with 
-{\em random intensity\/}. In each realisation the intensity $\lambda$
-is constant across different locations, but it
-is a different, random value in different realisations.
-This example is called a `mixed Poisson process' and belongs to the
-class of `Cox processes' (Poisson processes with random intensity 
-functions).
-Let's assume further that the log-intensity 
-is a Normal random variable.
-Then the model is a (very degenerate) special case of
-a `log-Gaussian Cox process'. 
-
-To fit such a model we use the standard techniques of mixed effects
-models \cite{lairware82,davigilt95,pinhbate00}.
-The mixed Poisson process which we discussed above would
-be written in standard form
-\begin{equation}
-\label{mixPois}
-   \lambda_i(u) = \exp(\mu + Z_i)
-\end{equation}
-for the $i$th point pattern, where $\mu$ is a parameter to be estimated 
-(the `fixed effect')
-and $Z_i \sim N(0, \sigma^2)$ is a zero-mean Normal random variable
-(the `random effect' for point pattern $i$). In the simplest case we
-would assume that $Z_1, \ldots, Z_n$ are independent.
-The variance $\sigma^2$ of the random effects
-would be estimated. One can also estimate the individual realised values
-$z_i$ of the random effects for each point pattern, although these are
-usually not of such great interest. Since the model includes both
-fixed and random effects, it is called a ``mixed-effects'' model.
-
-\subsubsection{Dependence structure}
-
-When we formulate a random-effects or mixed-effects model, we must 
-specify the dependence structure of the random effects. In the model above
-we assumed that the $Z_i$ are independent for all point patterns $i$. 
-If the experiment consists of two groups, we could alternatively assume
-that $Z_i = Z_j$ whenever $i$ and $j$ belong to the same group. In other words
-all the patterns in one group have the same value of the random effect.
-So the random effect is associated with the group rather than with
-individual patterns. This could be appropriate if, for example, 
-the groups represent different
-batches of a chemical. Each batch is prepared under slightly different 
-conditions so we believe that there are random variations between batches,
-but within a batch we believe that the chemical is well-mixed.
-
-\subsubsection{Random effects are coefficients}
-
-In the mixed Poisson model (\ref{mixPois}), 
-the random effect is an additive constant
-(with a random value) in the log-intensity. In general, a
-random effect is a \emph{coefficient} of one of the covariates.
-For example if $v$ is a real-valued design covariate (e.g. `temperature'), 
-with value $v_i$ for the $i$th point pattern, then we could assume
-\begin{equation}
-\label{ranef2}
-   \lambda_i(u) = \exp(\mu + Z_i v_i)
-\end{equation}
-where $Z_i \sim N(0, \sigma^2)$ are independent for different $i$.
-This model has a random effect in the dependence on $v$.
-
-We could also have a random effect for a spatial covariate $V$.
-Suppose $V_i$ is a real-valued image for the $i$th pattern 
-(so that $V_i(u)$ is the value of some covariate at the location $u$
-for the $i$th case). Then we could assume
-\begin{equation}
-\label{ranef3}
-   \lambda_i(u) = \exp(\mu + Z_i V_i(u))
-\end{equation}
-where $Z_i \sim N(0, \sigma^2)$ are independent for different $i$.
-This kind of random effect would be appropriate if, for example, the 
-images $V_i$ are not `normalised' or `standardised' relative to each 
-other (e.g.\ they are images taken under different illumination). Then the
-coefficients $Z_i$ effectively include the rescaling necessary to standardise
-the images.
-
-\subsection{Fitting a mixed-effects model}
-
-The call to \texttt{mppm} can also include the argument
-\texttt{random}. This should be a formula (with no left-hand side) 
-describing the structure of random effects. 
-
-The formula for random effects
-must be recognisable to \texttt{lme}. It is typically of the form
-\begin{verbatim}
-      ~x1 + ... + xn | g
-\end{verbatim}
-or
-\begin{verbatim}
-      ~x1 + ... + xn | g1/.../gm
-\end{verbatim}
-where \verb!x1 + ... + xn! specifies the covariates for the random effects
-and \texttt{g} or \verb!g1/.../gm! determines the grouping (dependence) 
-structure. Here \code{g} or \code{g1, \ldots, gm} should be factors.
-
-To fit the mixed Poisson model (\ref{mixPois}) to the waterstriders,
-we want to have a random intercept coefficient
-(so \texttt{x} is \texttt{1}) that varies for different point patterns
-(so \texttt{g} is \texttt{id}). 
-The reserved name \code{id} is a factor referring to the individual
-point pattern. Thus
-
-<<>>=
-H <- hyperframe(P=waterstriders)
-mppm(P ~ 1, H, random=~1|id)
-@ 
-
-To fit the mixed effects model (\ref{ranef2}) to the coculture data
-with the \code{AstroIm} covariate, with a random effect associated
-with each well,
-
-<<eval=FALSE>>=
-mppm(Neurons ~ AstroIm, random=~AstroIm|WellNumber)
-@ 
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%#%^!endif
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{Studying the fitted model}
@@ -1290,7 +1218,7 @@ You probably want the smoothed residual field:
 
 <<fig=TRUE>>=
 smor <- with(hyperframe(res=res), Smooth(res, sigma=4))
-plot(smor)
+plot(smor, main="")
 @ 
 
 \subsubsection{Sums of residuals}
@@ -1318,6 +1246,7 @@ totres <- sapply(resids, integral.msr)
 areas <- with(demohyper, area.owin(as.owin(Points)))
 df <- as.data.frame(demohyper[, "Group"])
 df$resids <- totres/areas
+par(mar=rep(2, 4))
 plot(resids~Group, df)
 @ 
 
@@ -1339,10 +1268,13 @@ point patterns, do the following:
 
 For example:
 
+\SweaveOpts{width=6,height=2.5}
+\setkeys{Gin}{width=0.95\textwidth}
+
 <<fig=TRUE>>=
 fit <- mppm(P ~ 1, hyperframe(P=waterstriders))
 sub <- hyperframe(Model=subfits(fit))
-plot(sub, quote(diagnose.ppm(Model)))
+plot(sub, quote(diagnose.ppm(Model)), main="", marsize=1.5)
 @ 
 
 (One could also do this for models fitted separately to the 
@@ -1485,12 +1417,6 @@ B.J. Chen, G.P. Leser, D. Jackson, and R.A. Lamb.
   {M1} protein and influences virus assembly at the site of virus budding.
 \newblock {\em Journal of Virology}, 82:10059--10070, 2008.
 
-%#%^!ifdef RANDOMEFFECTS  
-\bibitem{davigilt95}
-M. Davidian and D.M. Giltinan.
-\newblock {\em Nonlinear Mixed Effects Models for Repeated Measurement Data}.
-\newblock Chapman and Hall, 1995.
-%#%^!endif
 
 \bibitem{digglangbene91}
 P.J. Diggle, N. Lange, and F. M. Benes.
@@ -1499,12 +1425,6 @@ P.J. Diggle, N. Lange, and F. M. Benes.
 \newblock {\em Journal of the {A}merican {S}tatistical {A}ssociation},
   86:618--625, 1991.
 
-%#%^!ifdef RANDOMEFFECTS  
-\bibitem{lairware82}
-N.M. Laird and J.H. Ware.
-\newblock Random-effects models for longitudinal data.
-\newblock {\em Biometrics}, 38:963--974, 1982.
-%#%^!endif
 
 \bibitem{pent84}
 A. Penttinen.
@@ -1513,12 +1433,6 @@ A. Penttinen.
 \newblock Number 7 in {Jyv\"askyl\"a} Studies in Computer Science, Economics
   and Statistics. University of {Jyv\"askyl\"a}, 1984.
 
-%#%^!ifdef RANDOMEFFECTS  
-\bibitem{pinhbate00}
-J.C. Pinheiro and D.M. Bates.
-\newblock {\em Mixed-Effects Models in {S} and {S-PLUS}}.
-\newblock Springer, 2000.
-%#%^!endif
 
 \end{thebibliography}
 

@@ -42,7 +42,7 @@ set.seed(42) # for repeatability
 \maketitle
 
 \begin{abstract}
-This document describes experimental new code in \spst\ 
+This document describes new code in \spst\ 
 which supports missing or unavailable (NA) objects.
 \end{abstract}
 
@@ -53,8 +53,9 @@ which supports missing or unavailable (NA) objects.
 
 \section{Introduction}
 
-This document describes a new, experimental feature of \spst\ which supports
+This document describes a new feature of \spst\ which supports
 missing or unavailable (``\code{NA}'') spatial objects.
+This code was introduced in July 2025.
 
 The base \R\ system 
 allows for missing or unavailable entries
@@ -308,8 +309,8 @@ object was missing.
 
 \subsection{Most functions in \spst\ do not recognise \texttt{NA} objects}
 
-Most functions in \spst\ do not
-handle objects of class \code{"NAobject"}. For example the 
+Many functions in \spst\ do not yet
+handle objects of class \code{"NAobject"}. For example, until recently, the 
 following would generate an \textbf{error}:
 
 <<eval=FALSE>>=
@@ -317,9 +318,10 @@ following would generate an \textbf{error}:
   K <- Kest(X)
 @ 
 
-The object \code{X} is recognised as a point pattern, but does not contain
-any of the data that are expected for such an object, so \code{Kest} will 
-fail with some peculiar error message. 
+The object \code{X} was recognised as a point pattern, 
+but since it does not contain
+any of the data that are expected for such an object, \code{Kest} 
+failed with some peculiar error message. 
 
 Such eventualities can be handled by checking the object first:
 
@@ -328,6 +330,8 @@ Such eventualities can be handled by checking the object first:
   K <- if(is.NAobject(X)) NAobject("fv") else Kest(X)
 @ 
 
+This is no longer necessary for most of the standard summary functions
+such as \texttt{Kest}, which have been upgraded to handle \texttt{NA} objects.
 
 \subsection{\texttt{solapply} and friends}
 
@@ -386,8 +390,5 @@ m$G <- with(m, Gest(Y))
 m$u <- with(m, clarkevans.test(Y))
 with(m, u$p.value)
 @ 
-
-
-
 
 \end{document}
